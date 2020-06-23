@@ -28,7 +28,7 @@
     delete from sm_receipt_head
     where receipt_head_id = #{receiptHeadId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.smartindustry.common.pojo.ReceiptHeadPO">
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.ReceiptHeadPO" useGeneratedKeys="true" keyProperty="receiptHeadId">
     insert into sm_receipt_head (receipt_head_id, order_no, order_type, 
       order_date, supplier, buyer, 
       arrive_date, logistics_company, logistics_no, 

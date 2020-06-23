@@ -18,6 +18,7 @@ import java.util.List;
 public class ReceiptPageVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    private Long receiptId;
     private String receiptNo;
     private Byte status;
     private String orderNo;
@@ -49,6 +50,7 @@ public class ReceiptPageVO implements Serializable {
     public static ReceiptPageVO convert(ReceiptBO bo) {
         ReceiptPageVO vo = new ReceiptPageVO();
 
+        vo.setReceiptId(bo.getReceiptBodyId());
         vo.setReceiptNo(bo.getReceiptNo());
         vo.setStatus(bo.getStatus());
         vo.setOrderNo(bo.getOrderNo());

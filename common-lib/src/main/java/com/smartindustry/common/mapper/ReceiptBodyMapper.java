@@ -12,5 +12,18 @@ import java.util.Map;
  */
 @Mapper
 public interface ReceiptBodyMapper extends BaseMapper<ReceiptBodyPO, Long> {
+    /**
+     * 分页查询
+     *
+     * @param reqData
+     * @return
+     */
     List<ReceiptBO> pageQuery(Map<String, Object> reqData);
+
+    /**
+     * 批量插入
+     *
+     * @param bodyPOs
+     */
+    void batchInsert(List<ReceiptBodyPO> bodyPOs);
 }

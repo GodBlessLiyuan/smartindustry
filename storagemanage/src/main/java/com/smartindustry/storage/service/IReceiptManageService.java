@@ -1,6 +1,7 @@
 package com.smartindustry.storage.service;
 
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.storage.dto.ReceiptDTO;
 
 import java.util.Map;
 
@@ -12,4 +13,6 @@ import java.util.Map;
  */
 public interface IReceiptManageService {
     ResultVO pageQuery(int pageNum, int pageSize, Map<String, Object> reqData);
+
+    ResultVO insert(ReceiptDTO dto);
 }
