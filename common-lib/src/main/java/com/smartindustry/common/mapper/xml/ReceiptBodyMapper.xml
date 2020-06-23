@@ -1,199 +1,225 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.smartindustry.common.mapper.ReceiptBodyMapper">
-  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.ReceiptBodyPO">
-    <id column="receipt_body_id" jdbcType="BIGINT" property="receiptBodyId" />
-    <result column="receipt_head_id" jdbcType="BIGINT" property="receiptHeadId" />
-    <result column="receipt_no" jdbcType="CHAR" property="receiptNo" />
-    <result column="material_num" jdbcType="CHAR" property="materialNum" />
-    <result column="material_type" jdbcType="TINYINT" property="materialType" />
-    <result column="material_desc" jdbcType="CHAR" property="materialDesc" />
-    <result column="order_total" jdbcType="INTEGER" property="orderTotal" />
-    <result column="accept_num" jdbcType="INTEGER" property="acceptNum" />
-    <result column="accept_date" jdbcType="DATE" property="acceptDate" />
-    <result column="good_num" jdbcType="INTEGER" property="goodNum" />
-    <result column="bad_num" jdbcType="INTEGER" property="badNum" />
-    <result column="stock_num" jdbcType="INTEGER" property="stockNum" />
-    <result column="status" jdbcType="TINYINT" property="status" />
-    <result column="dr" jdbcType="TINYINT" property="dr" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    receipt_body_id, receipt_head_id, receipt_no, material_num, material_type, material_desc, 
+    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.ReceiptBodyPO">
+        <id column="receipt_body_id" jdbcType="BIGINT" property="receiptBodyId"/>
+        <result column="receipt_head_id" jdbcType="BIGINT" property="receiptHeadId"/>
+        <result column="receipt_no" jdbcType="CHAR" property="receiptNo"/>
+        <result column="material_num" jdbcType="CHAR" property="materialNum"/>
+        <result column="material_type" jdbcType="TINYINT" property="materialType"/>
+        <result column="material_desc" jdbcType="CHAR" property="materialDesc"/>
+        <result column="order_total" jdbcType="INTEGER" property="orderTotal"/>
+        <result column="accept_num" jdbcType="INTEGER" property="acceptNum"/>
+        <result column="accept_date" jdbcType="DATE" property="acceptDate"/>
+        <result column="good_num" jdbcType="INTEGER" property="goodNum"/>
+        <result column="bad_num" jdbcType="INTEGER" property="badNum"/>
+        <result column="stock_num" jdbcType="INTEGER" property="stockNum"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="dr" jdbcType="TINYINT" property="dr"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        receipt_body_id, receipt_head_id, receipt_no, material_num, material_type, material_desc,
     order_total, accept_num, accept_date, good_num, bad_num, stock_num, `status`, dr
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from sm_receipt_body
-    where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from sm_receipt_body
-    where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.smartindustry.common.pojo.ReceiptBodyPO">
-    insert into sm_receipt_body (receipt_body_id, receipt_head_id, receipt_no, 
-      material_num, material_type, material_desc, 
-      order_total, accept_num, accept_date, 
-      good_num, bad_num, stock_num, 
-      `status`, dr)
-    values (#{receiptBodyId,jdbcType=BIGINT}, #{receiptHeadId,jdbcType=BIGINT}, #{receiptNo,jdbcType=CHAR}, 
-      #{materialNum,jdbcType=CHAR}, #{materialType,jdbcType=TINYINT}, #{materialDesc,jdbcType=CHAR}, 
-      #{orderTotal,jdbcType=INTEGER}, #{acceptNum,jdbcType=INTEGER}, #{acceptDate,jdbcType=DATE}, 
-      #{goodNum,jdbcType=INTEGER}, #{badNum,jdbcType=INTEGER}, #{stockNum,jdbcType=INTEGER}, 
-      #{status,jdbcType=TINYINT}, #{dr,jdbcType=TINYINT})
-  </insert>
-  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.ReceiptBodyPO">
-    insert into sm_receipt_body
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="receiptBodyId != null">
-        receipt_body_id,
-      </if>
-      <if test="receiptHeadId != null">
-        receipt_head_id,
-      </if>
-      <if test="receiptNo != null">
-        receipt_no,
-      </if>
-      <if test="materialNum != null">
-        material_num,
-      </if>
-      <if test="materialType != null">
-        material_type,
-      </if>
-      <if test="materialDesc != null">
-        material_desc,
-      </if>
-      <if test="orderTotal != null">
-        order_total,
-      </if>
-      <if test="acceptNum != null">
-        accept_num,
-      </if>
-      <if test="acceptDate != null">
-        accept_date,
-      </if>
-      <if test="goodNum != null">
-        good_num,
-      </if>
-      <if test="badNum != null">
-        bad_num,
-      </if>
-      <if test="stockNum != null">
-        stock_num,
-      </if>
-      <if test="status != null">
-        `status`,
-      </if>
-      <if test="dr != null">
-        dr,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="receiptBodyId != null">
-        #{receiptBodyId,jdbcType=BIGINT},
-      </if>
-      <if test="receiptHeadId != null">
-        #{receiptHeadId,jdbcType=BIGINT},
-      </if>
-      <if test="receiptNo != null">
-        #{receiptNo,jdbcType=CHAR},
-      </if>
-      <if test="materialNum != null">
-        #{materialNum,jdbcType=CHAR},
-      </if>
-      <if test="materialType != null">
-        #{materialType,jdbcType=TINYINT},
-      </if>
-      <if test="materialDesc != null">
-        #{materialDesc,jdbcType=CHAR},
-      </if>
-      <if test="orderTotal != null">
-        #{orderTotal,jdbcType=INTEGER},
-      </if>
-      <if test="acceptNum != null">
-        #{acceptNum,jdbcType=INTEGER},
-      </if>
-      <if test="acceptDate != null">
-        #{acceptDate,jdbcType=DATE},
-      </if>
-      <if test="goodNum != null">
-        #{goodNum,jdbcType=INTEGER},
-      </if>
-      <if test="badNum != null">
-        #{badNum,jdbcType=INTEGER},
-      </if>
-      <if test="stockNum != null">
-        #{stockNum,jdbcType=INTEGER},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=TINYINT},
-      </if>
-      <if test="dr != null">
-        #{dr,jdbcType=TINYINT},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.ReceiptBodyPO">
-    update sm_receipt_body
-    <set>
-      <if test="receiptHeadId != null">
-        receipt_head_id = #{receiptHeadId,jdbcType=BIGINT},
-      </if>
-      <if test="receiptNo != null">
-        receipt_no = #{receiptNo,jdbcType=CHAR},
-      </if>
-      <if test="materialNum != null">
-        material_num = #{materialNum,jdbcType=CHAR},
-      </if>
-      <if test="materialType != null">
-        material_type = #{materialType,jdbcType=TINYINT},
-      </if>
-      <if test="materialDesc != null">
-        material_desc = #{materialDesc,jdbcType=CHAR},
-      </if>
-      <if test="orderTotal != null">
-        order_total = #{orderTotal,jdbcType=INTEGER},
-      </if>
-      <if test="acceptNum != null">
-        accept_num = #{acceptNum,jdbcType=INTEGER},
-      </if>
-      <if test="acceptDate != null">
-        accept_date = #{acceptDate,jdbcType=DATE},
-      </if>
-      <if test="goodNum != null">
-        good_num = #{goodNum,jdbcType=INTEGER},
-      </if>
-      <if test="badNum != null">
-        bad_num = #{badNum,jdbcType=INTEGER},
-      </if>
-      <if test="stockNum != null">
-        stock_num = #{stockNum,jdbcType=INTEGER},
-      </if>
-      <if test="status != null">
-        `status` = #{status,jdbcType=TINYINT},
-      </if>
-      <if test="dr != null">
-        dr = #{dr,jdbcType=TINYINT},
-      </if>
-    </set>
-    where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.ReceiptBodyPO">
-    update sm_receipt_body
-    set receipt_head_id = #{receiptHeadId,jdbcType=BIGINT},
-      receipt_no = #{receiptNo,jdbcType=CHAR},
-      material_num = #{materialNum,jdbcType=CHAR},
-      material_type = #{materialType,jdbcType=TINYINT},
-      material_desc = #{materialDesc,jdbcType=CHAR},
-      order_total = #{orderTotal,jdbcType=INTEGER},
-      accept_num = #{acceptNum,jdbcType=INTEGER},
-      accept_date = #{acceptDate,jdbcType=DATE},
-      good_num = #{goodNum,jdbcType=INTEGER},
-      bad_num = #{badNum,jdbcType=INTEGER},
-      stock_num = #{stockNum,jdbcType=INTEGER},
-      `status` = #{status,jdbcType=TINYINT},
-      dr = #{dr,jdbcType=TINYINT}
-    where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT}
-  </update>
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sm_receipt_body
+        where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from sm_receipt_body
+        where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.ReceiptBodyPO">
+        insert into sm_receipt_body (receipt_body_id, receipt_head_id, receipt_no,
+                                     material_num, material_type, material_desc,
+                                     order_total, accept_num, accept_date,
+                                     good_num, bad_num, stock_num,
+                                     `status`, dr)
+        values (#{receiptBodyId,jdbcType=BIGINT}, #{receiptHeadId,jdbcType=BIGINT}, #{receiptNo,jdbcType=CHAR},
+                #{materialNum,jdbcType=CHAR}, #{materialType,jdbcType=TINYINT}, #{materialDesc,jdbcType=CHAR},
+                #{orderTotal,jdbcType=INTEGER}, #{acceptNum,jdbcType=INTEGER}, #{acceptDate,jdbcType=DATE},
+                #{goodNum,jdbcType=INTEGER}, #{badNum,jdbcType=INTEGER}, #{stockNum,jdbcType=INTEGER},
+                #{status,jdbcType=TINYINT}, #{dr,jdbcType=TINYINT})
+    </insert>
+    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.ReceiptBodyPO">
+        insert into sm_receipt_body
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="receiptBodyId != null">
+                receipt_body_id,
+            </if>
+            <if test="receiptHeadId != null">
+                receipt_head_id,
+            </if>
+            <if test="receiptNo != null">
+                receipt_no,
+            </if>
+            <if test="materialNum != null">
+                material_num,
+            </if>
+            <if test="materialType != null">
+                material_type,
+            </if>
+            <if test="materialDesc != null">
+                material_desc,
+            </if>
+            <if test="orderTotal != null">
+                order_total,
+            </if>
+            <if test="acceptNum != null">
+                accept_num,
+            </if>
+            <if test="acceptDate != null">
+                accept_date,
+            </if>
+            <if test="goodNum != null">
+                good_num,
+            </if>
+            <if test="badNum != null">
+                bad_num,
+            </if>
+            <if test="stockNum != null">
+                stock_num,
+            </if>
+            <if test="status != null">
+                `status`,
+            </if>
+            <if test="dr != null">
+                dr,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="receiptBodyId != null">
+                #{receiptBodyId,jdbcType=BIGINT},
+            </if>
+            <if test="receiptHeadId != null">
+                #{receiptHeadId,jdbcType=BIGINT},
+            </if>
+            <if test="receiptNo != null">
+                #{receiptNo,jdbcType=CHAR},
+            </if>
+            <if test="materialNum != null">
+                #{materialNum,jdbcType=CHAR},
+            </if>
+            <if test="materialType != null">
+                #{materialType,jdbcType=TINYINT},
+            </if>
+            <if test="materialDesc != null">
+                #{materialDesc,jdbcType=CHAR},
+            </if>
+            <if test="orderTotal != null">
+                #{orderTotal,jdbcType=INTEGER},
+            </if>
+            <if test="acceptNum != null">
+                #{acceptNum,jdbcType=INTEGER},
+            </if>
+            <if test="acceptDate != null">
+                #{acceptDate,jdbcType=DATE},
+            </if>
+            <if test="goodNum != null">
+                #{goodNum,jdbcType=INTEGER},
+            </if>
+            <if test="badNum != null">
+                #{badNum,jdbcType=INTEGER},
+            </if>
+            <if test="stockNum != null">
+                #{stockNum,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="dr != null">
+                #{dr,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.ReceiptBodyPO">
+        update sm_receipt_body
+        <set>
+            <if test="receiptHeadId != null">
+                receipt_head_id = #{receiptHeadId,jdbcType=BIGINT},
+            </if>
+            <if test="receiptNo != null">
+                receipt_no = #{receiptNo,jdbcType=CHAR},
+            </if>
+            <if test="materialNum != null">
+                material_num = #{materialNum,jdbcType=CHAR},
+            </if>
+            <if test="materialType != null">
+                material_type = #{materialType,jdbcType=TINYINT},
+            </if>
+            <if test="materialDesc != null">
+                material_desc = #{materialDesc,jdbcType=CHAR},
+            </if>
+            <if test="orderTotal != null">
+                order_total = #{orderTotal,jdbcType=INTEGER},
+            </if>
+            <if test="acceptNum != null">
+                accept_num = #{acceptNum,jdbcType=INTEGER},
+            </if>
+            <if test="acceptDate != null">
+                accept_date = #{acceptDate,jdbcType=DATE},
+            </if>
+            <if test="goodNum != null">
+                good_num = #{goodNum,jdbcType=INTEGER},
+            </if>
+            <if test="badNum != null">
+                bad_num = #{badNum,jdbcType=INTEGER},
+            </if>
+            <if test="stockNum != null">
+                stock_num = #{stockNum,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                `status` = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="dr != null">
+                dr = #{dr,jdbcType=TINYINT},
+            </if>
+        </set>
+        where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.ReceiptBodyPO">
+        update sm_receipt_body
+        set receipt_head_id = #{receiptHeadId,jdbcType=BIGINT},
+            receipt_no      = #{receiptNo,jdbcType=CHAR},
+            material_num    = #{materialNum,jdbcType=CHAR},
+            material_type   = #{materialType,jdbcType=TINYINT},
+            material_desc   = #{materialDesc,jdbcType=CHAR},
+            order_total     = #{orderTotal,jdbcType=INTEGER},
+            accept_num      = #{acceptNum,jdbcType=INTEGER},
+            accept_date     = #{acceptDate,jdbcType=DATE},
+            good_num        = #{goodNum,jdbcType=INTEGER},
+            bad_num         = #{badNum,jdbcType=INTEGER},
+            stock_num       = #{stockNum,jdbcType=INTEGER},
+            `status`        = #{status,jdbcType=TINYINT},
+            dr              = #{dr,jdbcType=TINYINT}
+        where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT}
+    </update>
+
+    <sql id="ReceiptBO_Column_List">
+        receipt_body_id, receipt_no, material_num, material_type, material_desc, order_total,
+    accept_num, accept_date, good_num, bad_num, stock_num, `status`, dr, order_no, order_type, order_date, supplier,
+    buyer, arrive_date, logistics_company, logistics_no, receipt_way, remark
+    </sql>
+    <resultMap id="ReceiptBOResultMap" type="com.smartindustry.common.bo.ReceiptBO" extends="BaseResultMap">
+        <result column="order_no" jdbcType="CHAR" property="orderNo"/>
+        <result column="order_type" jdbcType="TINYINT" property="orderType"/>
+        <result column="order_date" jdbcType="DATE" property="orderDate"/>
+        <result column="supplier" jdbcType="CHAR" property="supplier"/>
+        <result column="buyer" jdbcType="CHAR" property="buyer"/>
+        <result column="arrive_date" jdbcType="DATE" property="arriveDate"/>
+        <result column="logistics_company" jdbcType="CHAR" property="logisticsCompany"/>
+        <result column="logistics_no" jdbcType="CHAR" property="logisticsNo"/>
+        <result column="receipt_way" jdbcType="TINYINT" property="receiptWay"/>
+        <result column="remark" jdbcType="CHAR" property="remark"/>
+    </resultMap>
+    <select id="pageQuery" resultMap="ReceiptBOResultMap">
+        select
+        <include refid="ReceiptBO_Column_List"/>
+        from sm_receipt_body rb
+        left join sm_receipt_head rh on rb.receipt_head_id = rh.receipt_head_id
+        where rb.dr = 1
+    </select>
 </mapper>

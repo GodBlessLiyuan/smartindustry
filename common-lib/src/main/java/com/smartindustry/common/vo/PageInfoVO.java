@@ -1,0 +1,26 @@
+package com.smartindustry.common.vo;
+
+import lombok.Data;
+
+import java.util.List;
+
+/**
+ * @author: xiahui
+ * @date: Created in 2020/6/23 15:26
+ * @description: 分页信息
+ * @version: 1.0
+ */
+@Data
+public class PageInfoVO<T> {
+    private long total;
+    private List<T> data;
+
+    public PageInfoVO(long total) {
+        this.total = total;
+    }
+
+    public PageInfoVO(long total, List<T> data) {
+        this(total);
+        this.data = data;
+    }
+}
