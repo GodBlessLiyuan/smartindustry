@@ -7,10 +7,10 @@
         <groupId>com.smartindustry</groupId>
         <version>1.0.0</version>
     </parent>
-    <artifactId>receiptmanage</artifactId>
+    <artifactId>storagemanage</artifactId>
     <version>1.0.0</version>
-    <name>receiptmanage</name>
-    <description>receipt manage of smart industry</description>
+    <name>storagemanage</name>
+    <description>storage manage of smart industry</description>
 
     <properties>
         <java.version>1.8</java.version>
@@ -135,7 +135,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.smartindustry.receipt.ReceiptApplication</mainClass>
+                    <mainClass>com.smartindustry.storage.StorageApplication</mainClass>
                     <layout>ZIP</layout>
                     <includes>
                         <include>

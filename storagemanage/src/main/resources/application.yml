@@ -3,10 +3,10 @@ server:
   tomcat:
     uri-encoding: UTF-8
   servlet:
-    context-path: /rm
+    context-path: /sm
 spring:
   application:
-    name: receiptmanage
+    name: storagemanage
   jackson:
     serialization:
       indent-output: true

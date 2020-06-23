@@ -10,7 +10,7 @@
 
     <modules>
         <module>common-lib</module>
-        <module>receiptmanage</module>
+        <module>storagemanage</module>
     </modules>
 
     <name>smartindustry</name>
