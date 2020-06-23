@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.UserAuthorityMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.UserAuthorityPO">
+    <id column="user_authority_id" jdbcType="BIGINT" property="userAuthorityId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="authority_id" jdbcType="BIGINT" property="authorityId" />
+    <result column="code" jdbcType="CHAR" property="code" />
+    <result column="name" jdbcType="CHAR" property="name" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_authority_id, user_id, authority_id, code, `name`
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ba_m_user_authority
+    where user_authority_id = #{userAuthorityId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from ba_m_user_authority
+    where user_authority_id = #{userAuthorityId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.UserAuthorityPO">
+    insert into ba_m_user_authority (user_authority_id, user_id, authority_id, 
+      code, `name`)
+    values (#{userAuthorityId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{authorityId,jdbcType=BIGINT}, 
+      #{code,jdbcType=CHAR}, #{name,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.UserAuthorityPO">
+    insert into ba_m_user_authority
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userAuthorityId != null">
+        user_authority_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="authorityId != null">
+        authority_id,
+      </if>
+      <if test="code != null">
+        code,
+      </if>
+      <if test="name != null">
+        `name`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userAuthorityId != null">
+        #{userAuthorityId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="authorityId != null">
+        #{authorityId,jdbcType=BIGINT},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=CHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.UserAuthorityPO">
+    update ba_m_user_authority
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="authorityId != null">
+        authority_id = #{authorityId,jdbcType=BIGINT},
+      </if>
+      <if test="code != null">
+        code = #{code,jdbcType=CHAR},
+      </if>
+      <if test="name != null">
+        `name` = #{name,jdbcType=CHAR},
+      </if>
+    </set>
+    where user_authority_id = #{userAuthorityId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.UserAuthorityPO">
+    update ba_m_user_authority
+    set user_id = #{userId,jdbcType=BIGINT},
+      authority_id = #{authorityId,jdbcType=BIGINT},
+      code = #{code,jdbcType=CHAR},
+      `name` = #{name,jdbcType=CHAR}
+    where user_authority_id = #{userAuthorityId,jdbcType=BIGINT}
+  </update>
+</mapper>

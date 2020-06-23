@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.PrintLabelMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.PrintLabelPO">
+    <id column="print_label_id" jdbcType="BIGINT" property="printLabelId" />
+    <result column="receipt_body_id" jdbcType="BIGINT" property="receiptBodyId" />
+    <result column="produce_date" jdbcType="DATE" property="produceDate" />
+    <result column="produce_batch" jdbcType="CHAR" property="produceBatch" />
+    <result column="num" jdbcType="INTEGER" property="num" />
+    <result column="origin" jdbcType="TINYINT" property="origin" />
+    <result column="add_time" jdbcType="DATE" property="addTime" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="dr" jdbcType="TINYINT" property="dr" />
+    <result column="relate_label_id" jdbcType="BIGINT" property="relateLabelId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    print_label_id, receipt_body_id, produce_date, produce_batch, num, origin, add_time, 
+    `type`, `status`, dr, relate_label_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sm_print_label
+    where print_label_id = #{printLabelId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sm_print_label
+    where print_label_id = #{printLabelId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.PrintLabelPO">
+    insert into sm_print_label (print_label_id, receipt_body_id, produce_date, 
+      produce_batch, num, origin, 
+      add_time, `type`, `status`, 
+      dr, relate_label_id)
+    values (#{printLabelId,jdbcType=BIGINT}, #{receiptBodyId,jdbcType=BIGINT}, #{produceDate,jdbcType=DATE}, 
+      #{produceBatch,jdbcType=CHAR}, #{num,jdbcType=INTEGER}, #{origin,jdbcType=TINYINT}, 
+      #{addTime,jdbcType=DATE}, #{type,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
+      #{dr,jdbcType=TINYINT}, #{relateLabelId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.PrintLabelPO">
+    insert into sm_print_label
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="printLabelId != null">
+        print_label_id,
+      </if>
+      <if test="receiptBodyId != null">
+        receipt_body_id,
+      </if>
+      <if test="produceDate != null">
+        produce_date,
+      </if>
+      <if test="produceBatch != null">
+        produce_batch,
+      </if>
+      <if test="num != null">
+        num,
+      </if>
+      <if test="origin != null">
+        origin,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+      <if test="type != null">
+        `type`,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="dr != null">
+        dr,
+      </if>
+      <if test="relateLabelId != null">
+        relate_label_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="printLabelId != null">
+        #{printLabelId,jdbcType=BIGINT},
+      </if>
+      <if test="receiptBodyId != null">
+        #{receiptBodyId,jdbcType=BIGINT},
+      </if>
+      <if test="produceDate != null">
+        #{produceDate,jdbcType=DATE},
+      </if>
+      <if test="produceBatch != null">
+        #{produceBatch,jdbcType=CHAR},
+      </if>
+      <if test="num != null">
+        #{num,jdbcType=INTEGER},
+      </if>
+      <if test="origin != null">
+        #{origin,jdbcType=TINYINT},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=DATE},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="dr != null">
+        #{dr,jdbcType=TINYINT},
+      </if>
+      <if test="relateLabelId != null">
+        #{relateLabelId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.PrintLabelPO">
+    update sm_print_label
+    <set>
+      <if test="receiptBodyId != null">
+        receipt_body_id = #{receiptBodyId,jdbcType=BIGINT},
+      </if>
+      <if test="produceDate != null">
+        produce_date = #{produceDate,jdbcType=DATE},
+      </if>
+      <if test="produceBatch != null">
+        produce_batch = #{produceBatch,jdbcType=CHAR},
+      </if>
+      <if test="num != null">
+        num = #{num,jdbcType=INTEGER},
+      </if>
+      <if test="origin != null">
+        origin = #{origin,jdbcType=TINYINT},
+      </if>
+      <if test="addTime != null">
+        add_time = #{addTime,jdbcType=DATE},
+      </if>
+      <if test="type != null">
+        `type` = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="dr != null">
+        dr = #{dr,jdbcType=TINYINT},
+      </if>
+      <if test="relateLabelId != null">
+        relate_label_id = #{relateLabelId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where print_label_id = #{printLabelId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.PrintLabelPO">
+    update sm_print_label
+    set receipt_body_id = #{receiptBodyId,jdbcType=BIGINT},
+      produce_date = #{produceDate,jdbcType=DATE},
+      produce_batch = #{produceBatch,jdbcType=CHAR},
+      num = #{num,jdbcType=INTEGER},
+      origin = #{origin,jdbcType=TINYINT},
+      add_time = #{addTime,jdbcType=DATE},
+      `type` = #{type,jdbcType=TINYINT},
+      `status` = #{status,jdbcType=TINYINT},
+      dr = #{dr,jdbcType=TINYINT},
+      relate_label_id = #{relateLabelId,jdbcType=BIGINT}
+    where print_label_id = #{printLabelId,jdbcType=BIGINT}
+  </update>
+</mapper>

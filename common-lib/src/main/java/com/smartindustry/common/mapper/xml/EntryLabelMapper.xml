@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.EntryLabelMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.EntryLabelPO">
+    <id column="receipt_body_id" jdbcType="BIGINT" property="receiptBodyId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sm_entry_label
+    where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.EntryLabelPO">
+    insert into sm_entry_label (receipt_body_id)
+    values (#{receiptBodyId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.EntryLabelPO">
+    insert into sm_entry_label
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="receiptBodyId != null">
+        receipt_body_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="receiptBodyId != null">
+        #{receiptBodyId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+</mapper>
