@@ -1,6 +1,7 @@
 package com.smartindustry.storage.service;
 
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.storage.dto.LogisticsDTO;
 import com.smartindustry.storage.dto.ReceiptDTO;
 
 import java.util.Map;
@@ -31,6 +32,22 @@ public interface IReceiptManageService {
     ResultVO insert(ReceiptDTO dto);
 
     /**
+     * 查询物流信息
+     *
+     * @param rbId
+     * @return
+     */
+    ResultVO queryLog(Long rbId);
+
+    /**
+     * 编辑物流信息
+     *
+     * @param dto
+     * @return
+     */
+    ResultVO editLog(LogisticsDTO dto);
+
+    /**
      * 查询操作记录
      *
      * @param rbId
@@ -38,4 +55,6 @@ public interface IReceiptManageService {
      * @return
      */
     ResultVO record(Long rbId, byte order);
+
+
 }

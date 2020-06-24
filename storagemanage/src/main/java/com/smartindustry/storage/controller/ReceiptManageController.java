@@ -1,6 +1,7 @@
 package com.smartindustry.storage.controller;
 
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.storage.dto.LogisticsDTO;
 import com.smartindustry.storage.dto.ReceiptDTO;
 import com.smartindustry.storage.service.IReceiptManageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,16 @@ public class ReceiptManageController {
     @RequestMapping("insert")
     public ResultVO insert(@RequestBody ReceiptDTO dto) {
         return service.insert(dto);
+    }
+
+    @RequestMapping("queryLog")
+    public ResultVO queryLog(@RequestParam(value = "rbId") Long rbId) {
+        return service.queryLog(rbId);
+    }
+
+    @RequestMapping("editLog")
+    public ResultVO editLog(@RequestBody LogisticsDTO dto) {
+        return service.editLog(dto);
     }
 
     @RequestMapping("record")

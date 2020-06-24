@@ -13,10 +13,12 @@ import com.smartindustry.common.pojo.ReceiptHeadPO;
 import com.smartindustry.common.pojo.RecordPO;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.storage.dto.LogisticsDTO;
 import com.smartindustry.storage.dto.ReceiptBodyDTO;
 import com.smartindustry.storage.dto.ReceiptDTO;
 import com.smartindustry.storage.dto.ReceiptHeadDTO;
 import com.smartindustry.storage.service.IReceiptManageService;
+import com.smartindustry.storage.vo.LogisticsVO;
 import com.smartindustry.storage.vo.ReceiptPageVO;
 import com.smartindustry.storage.vo.RecordVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,6 +86,18 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         recordMapper.batchInsert(recordPOs);
 
         return new ResultVO(1000);
+    }
+
+    @Override
+    public ResultVO queryLog(Long rbId) {
+        ReceiptBodyPO bodyPO = receiptBodyMapper.selectByPrimaryKey(rbId);
+        ReceiptHeadPO headPO = receiptHeadMapper.selectByPrimaryKey(bodyPO.getReceiptHeadId());
+        return new ResultVO<>(1000, LogisticsVO.convert(headPO));
+    }
+
+    @Override
+    public ResultVO editLog(LogisticsDTO dto) {
+        return null;
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.smartindustry.storage.vo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.smartindustry.common.pojo.RecordPO;
 import lombok.Data;
 
@@ -21,7 +20,6 @@ public class RecordVO implements Serializable {
 
     private String name;
     private Byte type;
-    @JsonProperty("cTime")
     private Date cTime;
 
     /**
