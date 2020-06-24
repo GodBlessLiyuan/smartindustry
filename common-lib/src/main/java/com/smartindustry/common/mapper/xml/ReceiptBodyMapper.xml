@@ -5,7 +5,7 @@
         <id column="receipt_body_id" jdbcType="BIGINT" property="receiptBodyId"/>
         <result column="receipt_head_id" jdbcType="BIGINT" property="receiptHeadId"/>
         <result column="receipt_no" jdbcType="CHAR" property="receiptNo"/>
-        <result column="material_num" jdbcType="CHAR" property="materialNum"/>
+        <result column="material_no" jdbcType="CHAR" property="materialNo"/>
         <result column="material_type" jdbcType="TINYINT" property="materialType"/>
         <result column="material_desc" jdbcType="CHAR" property="materialDesc"/>
         <result column="order_total" jdbcType="INTEGER" property="orderTotal"/>
@@ -18,7 +18,7 @@
         <result column="dr" jdbcType="TINYINT" property="dr"/>
     </resultMap>
     <sql id="Base_Column_List">
-        receipt_body_id, receipt_head_id, receipt_no, material_num, material_type, material_desc,
+        receipt_body_id, receipt_head_id, receipt_no, material_no, material_type, material_desc,
     order_total, accept_num, accept_date, good_num, bad_num, stock_num, `status`, dr
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -34,12 +34,12 @@
     </delete>
     <insert id="insert" parameterType="com.smartindustry.common.pojo.ReceiptBodyPO">
         insert into sm_receipt_body (receipt_body_id, receipt_head_id, receipt_no,
-                                     material_num, material_type, material_desc,
+                                     material_no, material_type, material_desc,
                                      order_total, accept_num, accept_date,
                                      good_num, bad_num, stock_num,
                                      `status`, dr)
         values (#{receiptBodyId,jdbcType=BIGINT}, #{receiptHeadId,jdbcType=BIGINT}, #{receiptNo,jdbcType=CHAR},
-                #{materialNum,jdbcType=CHAR}, #{materialType,jdbcType=TINYINT}, #{materialDesc,jdbcType=CHAR},
+                #{materialNo,jdbcType=CHAR}, #{materialType,jdbcType=TINYINT}, #{materialDesc,jdbcType=CHAR},
                 #{orderTotal,jdbcType=INTEGER}, #{acceptNum,jdbcType=INTEGER}, #{acceptDate,jdbcType=DATE},
                 #{goodNum,jdbcType=INTEGER}, #{badNum,jdbcType=INTEGER}, #{stockNum,jdbcType=INTEGER},
                 #{status,jdbcType=TINYINT}, #{dr,jdbcType=TINYINT})
@@ -56,8 +56,8 @@
             <if test="receiptNo != null">
                 receipt_no,
             </if>
-            <if test="materialNum != null">
-                material_num,
+            <if test="materialNo != null">
+                material_no,
             </if>
             <if test="materialType != null">
                 material_type,
@@ -100,8 +100,8 @@
             <if test="receiptNo != null">
                 #{receiptNo,jdbcType=CHAR},
             </if>
-            <if test="materialNum != null">
-                #{materialNum,jdbcType=CHAR},
+            <if test="materialNo != null">
+                #{materialNo,jdbcType=CHAR},
             </if>
             <if test="materialType != null">
                 #{materialType,jdbcType=TINYINT},
@@ -144,8 +144,8 @@
             <if test="receiptNo != null">
                 receipt_no = #{receiptNo,jdbcType=CHAR},
             </if>
-            <if test="materialNum != null">
-                material_num = #{materialNum,jdbcType=CHAR},
+            <if test="materialNo != null">
+                material_no = #{materialNo,jdbcType=CHAR},
             </if>
             <if test="materialType != null">
                 material_type = #{materialType,jdbcType=TINYINT},
@@ -184,7 +184,7 @@
         update sm_receipt_body
         set receipt_head_id = #{receiptHeadId,jdbcType=BIGINT},
             receipt_no      = #{receiptNo,jdbcType=CHAR},
-            material_num    = #{materialNum,jdbcType=CHAR},
+            material_no     = #{materialNo,jdbcType=CHAR},
             material_type   = #{materialType,jdbcType=TINYINT},
             material_desc   = #{materialDesc,jdbcType=CHAR},
             order_total     = #{orderTotal,jdbcType=INTEGER},
@@ -224,14 +224,14 @@
     </select>
     <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="receiptBodyId">
         insert into sm_receipt_body (receipt_body_id, receipt_head_id, receipt_no,
-        material_num, material_type, material_desc,
+        material_no, material_type, material_desc,
         order_total, accept_num, accept_date,
         good_num, bad_num, stock_num,
         `status`, dr)
         values
         <foreach collection="list" item="po" separator=",">
             (#{po.receiptBodyId,jdbcType=BIGINT}, #{po.receiptHeadId,jdbcType=BIGINT}, #{po.receiptNo,jdbcType=CHAR},
-            #{po.materialNum,jdbcType=CHAR}, #{po.materialType,jdbcType=TINYINT}, #{po.materialDesc,jdbcType=CHAR},
+            #{po.materialNo,jdbcType=CHAR}, #{po.materialType,jdbcType=TINYINT}, #{po.materialDesc,jdbcType=CHAR},
             #{po.orderTotal,jdbcType=INTEGER}, #{po.acceptNum,jdbcType=INTEGER}, #{po.acceptDate,jdbcType=DATE},
             #{po.goodNum,jdbcType=INTEGER}, #{po.badNum,jdbcType=INTEGER}, #{po.stockNum,jdbcType=INTEGER},
             #{po.status,jdbcType=TINYINT}, #{po.dr,jdbcType=TINYINT})

@@ -34,7 +34,7 @@ public class NoUtil<Model, PK extends Serializable> {
      * @return
      */
     public int getNum(String num, int len) {
-        return Integer.parseInt(num.substring(num.length() - len - 1, num.length() - 1));
+        return Integer.parseInt(num.substring(num.length() - len));
     }
 
     /**
