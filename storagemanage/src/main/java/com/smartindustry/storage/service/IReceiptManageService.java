@@ -12,7 +12,30 @@ import java.util.Map;
  * @version: 1.0
  */
 public interface IReceiptManageService {
+    /**
+     * 分页查询
+     *
+     * @param pageNum
+     * @param pageSize
+     * @param reqData
+     * @return
+     */
     ResultVO pageQuery(int pageNum, int pageSize, Map<String, Object> reqData);
 
+    /**
+     * 新增
+     *
+     * @param dto
+     * @return
+     */
     ResultVO insert(ReceiptDTO dto);
+
+    /**
+     * 查询操作记录
+     *
+     * @param rbId
+     * @param order
+     * @return
+     */
+    ResultVO record(Long rbId, byte order);
 }

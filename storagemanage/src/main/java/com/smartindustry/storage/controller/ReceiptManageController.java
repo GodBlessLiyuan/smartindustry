@@ -42,4 +42,9 @@ public class ReceiptManageController {
     public ResultVO insert(@RequestBody ReceiptDTO dto) {
         return service.insert(dto);
     }
+
+    @RequestMapping("record")
+    public ResultVO record(@RequestParam(value = "rbId") Long rbId, @RequestParam(value = "order", required = false, defaultValue = "0") byte order) {
+        return service.record(rbId, order);
+    }
 }
