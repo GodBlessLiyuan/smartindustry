@@ -1,7 +1,9 @@
 package com.smartindustry.storage.util;
 
 import com.smartindustry.common.mapper.ReceiptBodyMapper;
+import com.smartindustry.common.mapper.ReceiptHeadMapper;
 import com.smartindustry.common.pojo.ReceiptBodyPO;
+import com.smartindustry.common.pojo.ReceiptHeadPO;
 import com.smartindustry.common.util.NoUtil;
 
 import java.util.Date;
@@ -13,33 +15,53 @@ import java.util.Date;
  * @version: 1.0
  */
 public class ReceiptNoUtil {
-    private static final String NO_HEAD = "CG";
+    public static final String RECEIPT_HEAD_YP = "YPCG";
+
+    public static final String RECEIPT_BODY_PO = "CG";
+    public static final String RECEIPT_BODY_YP = "YP";
+    public static final String RECEIPT_BODY_RP = "RP";
     private static final int NUM_LEN = 5;
 
-    private static NoUtil<ReceiptBodyPO, Long> util = new NoUtil<>();
+    private static NoUtil<ReceiptHeadPO, Long> headUtil = new NoUtil<>();
+    private static NoUtil<ReceiptBodyPO, Long> bodyUtil = new NoUtil<>();
 
     /**
-     * 获取当前编号值
+     * 生成表头编号
+     *
+     * @param mapper
+     * @param head
+     * @param date
+     * @return
+     */
+    public static String genReceiptHeadNo(ReceiptHeadMapper mapper, String head, Date date) {
+        ReceiptHeadPO po = headUtil.getPO(mapper, head, date);
+        return headUtil.genNum(head, date, null == po ? 1 : headUtil.getNum(po.getOrderNo(), NUM_LEN) + 1, NUM_LEN);
+    }
+
+    /**
+     * 生成表体编号
+     *
+     * @param head
+     * @param date
+     * @param num
+     * @return
+     */
+    public static String genReceiptBodyNo(String head, Date date, int num) {
+        return bodyUtil.genNum(head, date, num, NUM_LEN);
+    }
+
+    /**
+     * 获取表体当前编号值
      *
      * @param mapper
      * @return
      */
-    public static int getReceiptNum(ReceiptBodyMapper mapper, Date date) {
-        ReceiptBodyPO po = util.getPO(mapper, NO_HEAD, date);
+    public static int getReceiptBodyNum(ReceiptBodyMapper mapper, String head, Date date) {
+        ReceiptBodyPO po = bodyUtil.getPO(mapper, head, date);
         if (null == po) {
             return 0;
         }
 
-        return util.getNum(po.getReceiptNo(), NUM_LEN);
-    }
-
-    /**
-     * 生成编号
-     *
-     * @param num
-     * @return
-     */
-    public static String genReceiptNo(Date date, int num) {
-        return util.genNum(NO_HEAD, date, num, NUM_LEN);
+        return bodyUtil.getNum(po.getReceiptNo(), NUM_LEN);
     }
 }

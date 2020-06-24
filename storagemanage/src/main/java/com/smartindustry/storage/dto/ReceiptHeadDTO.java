@@ -1,8 +1,11 @@
 package com.smartindustry.storage.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.smartindustry.common.mapper.ReceiptHeadMapper;
 import com.smartindustry.common.pojo.ReceiptHeadPO;
+import com.smartindustry.storage.util.ReceiptNoUtil;
 import lombok.Data;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -68,8 +71,12 @@ public class ReceiptHeadDTO implements Serializable {
      * @param dto
      * @return
      */
-    public static ReceiptHeadPO buildPO(ReceiptHeadPO po, ReceiptHeadDTO dto) {
-        po.setOrderNo(dto.getONo());
+    public static ReceiptHeadPO createPO(ReceiptHeadMapper mapper, ReceiptHeadPO po, ReceiptHeadDTO dto) {
+        if (StringUtils.isEmpty(dto.getONo())) {
+            po.setOrderNo(ReceiptNoUtil.genReceiptHeadNo(mapper, ReceiptNoUtil.RECEIPT_HEAD_YP, new Date()));
+        } else {
+            po.setOrderNo(dto.getONo());
+        }
         po.setOrderType(dto.getOType());
         po.setOrderDate(dto.getODate());
         po.setSupplier(dto.getSupplier());

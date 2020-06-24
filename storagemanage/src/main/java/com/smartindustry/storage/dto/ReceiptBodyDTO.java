@@ -3,6 +3,7 @@ package com.smartindustry.storage.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.smartindustry.common.mapper.ReceiptBodyMapper;
 import com.smartindustry.common.pojo.ReceiptBodyPO;
+import com.smartindustry.common.pojo.ReceiptHeadPO;
 import com.smartindustry.storage.util.ReceiptNoUtil;
 import lombok.Data;
 
@@ -70,16 +71,17 @@ public class ReceiptBodyDTO implements Serializable {
     /**
      * 创建 pos
      *
-     * @param headId
+     * @param headPO
      * @param dtos
      * @return
      */
-    public static List<ReceiptBodyPO> createPOs(Long headId, List<ReceiptBodyDTO> dtos, ReceiptBodyMapper mapper) {
+    public static List<ReceiptBodyPO> createPOs(ReceiptHeadPO headPO, List<ReceiptBodyDTO> dtos, ReceiptBodyMapper mapper) {
         List<ReceiptBodyPO> pos = new ArrayList<>();
 
-        int curNum = ReceiptNoUtil.getReceiptNum(mapper, new Date());
+        String head = headPO.getOrderType() == 1 ? ReceiptNoUtil.RECEIPT_BODY_PO : headPO.getOrderType() == 2 ? ReceiptNoUtil.RECEIPT_BODY_RP : ReceiptNoUtil.RECEIPT_BODY_YP;
+        int curNum = ReceiptNoUtil.getReceiptBodyNum(mapper, head, new Date());
         for (ReceiptBodyDTO dto : dtos) {
-            pos.add(ReceiptBodyDTO.createPO(headId, dto, ++curNum));
+            pos.add(ReceiptBodyDTO.createPO(headPO.getReceiptHeadId(), dto, head, ++curNum));
         }
         return pos;
     }
@@ -91,10 +93,10 @@ public class ReceiptBodyDTO implements Serializable {
      * @param dto
      * @return
      */
-    private static ReceiptBodyPO createPO(Long headId, ReceiptBodyDTO dto, int num) {
+    private static ReceiptBodyPO createPO(Long headId, ReceiptBodyDTO dto, String head, int num) {
         ReceiptBodyPO po = new ReceiptBodyPO();
         po.setReceiptHeadId(headId);
-        po.setReceiptNo(ReceiptNoUtil.genReceiptNo(new Date(), num));
+        po.setReceiptNo(ReceiptNoUtil.genReceiptBodyNo(head, new Date(), num));
         po.setMaterialNo(dto.getMNo());
         po.setMaterialType(dto.getMType());
         po.setMaterialDesc(dto.getMDesc());

@@ -161,4 +161,12 @@
       remark = #{remark,jdbcType=CHAR}
     where receipt_head_id = #{receiptHeadId,jdbcType=BIGINT}
   </update>
+
+  <select id="queryNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sm_receipt_head
+    where order_no like #{no,jdbcType=CHAR} '%'
+    order by receipt_head_id desc limit 1
+  </select>
 </mapper>

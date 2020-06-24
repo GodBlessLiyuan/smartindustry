@@ -56,10 +56,10 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO insert(ReceiptDTO dto) {
-        ReceiptHeadPO headPO = ReceiptHeadDTO.buildPO(new ReceiptHeadPO(), dto.getHead());
+        ReceiptHeadPO headPO = ReceiptHeadDTO.createPO(receiptHeadMapper, new ReceiptHeadPO(), dto.getHead());
         receiptHeadMapper.insert(headPO);
 
-        List<ReceiptBodyPO> bodyPOs = ReceiptBodyDTO.createPOs(headPO.getReceiptHeadId(), dto.getBody(), receiptBodyMapper);
+        List<ReceiptBodyPO> bodyPOs = ReceiptBodyDTO.createPOs(headPO, dto.getBody(), receiptBodyMapper);
         receiptBodyMapper.batchInsert(bodyPOs);
 
         List<EntryLabelPO> labelPOs = new ArrayList<>();
