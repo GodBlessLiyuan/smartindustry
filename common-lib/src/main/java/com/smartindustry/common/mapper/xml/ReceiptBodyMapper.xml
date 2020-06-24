@@ -236,6 +236,12 @@
             #{po.goodNum,jdbcType=INTEGER}, #{po.badNum,jdbcType=INTEGER}, #{po.stockNum,jdbcType=INTEGER},
             #{po.status,jdbcType=TINYINT}, #{po.dr,jdbcType=TINYINT})
         </foreach>
-
     </insert>
+    <select id="queryNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sm_receipt_body
+        where receipt_no like #{no,jdbcType=CHAR} '%'
+        order by receipt_body_id desc limit 1
+    </select>
 </mapper>

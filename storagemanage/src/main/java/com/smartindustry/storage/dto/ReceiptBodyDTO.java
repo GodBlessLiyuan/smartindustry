@@ -95,7 +95,7 @@ public class ReceiptBodyDTO implements Serializable {
         ReceiptBodyPO po = new ReceiptBodyPO();
         po.setReceiptHeadId(headId);
         po.setReceiptNo(ReceiptNoUtil.genReceiptNo(new Date(), num));
-        po.setMaterialNum(dto.getMNo());
+        po.setMaterialNo(dto.getMNo());
         po.setMaterialType(dto.getMType());
         po.setMaterialDesc(dto.getMDesc());
         po.setOrderTotal(dto.getOTotal());

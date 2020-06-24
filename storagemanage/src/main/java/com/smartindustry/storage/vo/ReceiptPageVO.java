@@ -54,7 +54,7 @@ public class ReceiptPageVO implements Serializable {
         vo.setReceiptNo(bo.getReceiptNo());
         vo.setStatus(bo.getStatus());
         vo.setOrderNo(bo.getOrderNo());
-        vo.setMaterialNo(bo.getMaterialNum());
+        vo.setMaterialNo(bo.getMaterialNo());
         vo.setAcceptNum(bo.getAcceptNum());
         vo.setAcceptDate(bo.getAcceptDate());
         vo.setStockNum(bo.getStockNum());
