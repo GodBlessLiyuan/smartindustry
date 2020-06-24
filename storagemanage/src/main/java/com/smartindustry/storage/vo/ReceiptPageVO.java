@@ -18,14 +18,66 @@ import java.util.List;
 public class ReceiptPageVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private Long receiptId;
-    private String receiptNo;
+    /**
+     * 收料ID
+     */
+    private Long rId;
+    /**
+     * 收料单号
+     */
+    private String rNo;
+    /**
+     * 物料状态
+     */
     private Byte status;
-    private String orderNo;
-    private String materialNo;
-    private Integer acceptNum;
-    private Date acceptDate;
-    private Integer stockNum;
+    /**
+     * 来源单号：（PO号、样品采购单号、对应工单号）
+     */
+    private String oNo;
+    /**
+     * 物料编码
+     */
+    private String mNo;
+    /**
+     * 物料类型
+     */
+    private String mType;
+    /**
+     * 物料描述
+     */
+    private String mDesc;
+    /**
+     * 订单总数
+     */
+    private Integer oTotal;
+    /**
+     * 采购日期
+     */
+    private Date oDate;
+    /**
+     * 供应商名称
+     */
+    private String supplier;
+    /**
+     * 采购员
+     */
+    private String buyer;
+    /**
+     * 计划到货时间
+     */
+    private Date pDate;
+    /**
+     * 接受数量
+     */
+    private Integer aNum;
+    /**
+     * 收料日期
+     */
+    private Date aDate;
+    /**
+     * 实际入库数
+     */
+    private Integer sNum;
 
     /**
      * bos 转 vos
@@ -50,14 +102,14 @@ public class ReceiptPageVO implements Serializable {
     public static ReceiptPageVO convert(ReceiptBO bo) {
         ReceiptPageVO vo = new ReceiptPageVO();
 
-        vo.setReceiptId(bo.getReceiptBodyId());
-        vo.setReceiptNo(bo.getReceiptNo());
+        vo.setRId(bo.getReceiptBodyId());
+        vo.setRNo(bo.getReceiptNo());
         vo.setStatus(bo.getStatus());
-        vo.setOrderNo(bo.getOrderNo());
-        vo.setMaterialNo(bo.getMaterialNo());
-        vo.setAcceptNum(bo.getAcceptNum());
-        vo.setAcceptDate(bo.getAcceptDate());
-        vo.setStockNum(bo.getStockNum());
+        vo.setONo(bo.getOrderNo());
+        vo.setMNo(bo.getMaterialNo());
+        vo.setANum(bo.getAcceptNum());
+        vo.setADate(bo.getAcceptDate());
+        vo.setSNum(bo.getStockNum());
 
         return vo;
     }

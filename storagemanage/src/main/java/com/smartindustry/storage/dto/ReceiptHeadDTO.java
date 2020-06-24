@@ -46,8 +46,8 @@ public class ReceiptHeadDTO implements Serializable {
     /**
      * 预计到货日期
      */
-    @JsonProperty("aDate")
-    private Date aDate;
+    @JsonProperty("pDate")
+    private Date pDate;
     /**
      * 物流公司
      */
@@ -81,7 +81,7 @@ public class ReceiptHeadDTO implements Serializable {
         po.setOrderDate(dto.getODate());
         po.setSupplier(dto.getSupplier());
         po.setBuyer(dto.getBuyer());
-        po.setArriveDate(dto.getADate());
+        po.setArriveDate(dto.getPDate());
         po.setLogisticsCompany(dto.getLoCo());
         po.setLogisticsNo(dto.getLoNo());
         po.setReceiptWay(dto.getWay());

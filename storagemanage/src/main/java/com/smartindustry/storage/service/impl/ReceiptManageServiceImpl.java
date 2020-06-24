@@ -109,7 +109,7 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         recordPO.setType((byte) 2);
         recordPO.setCreateTime(new Date());
         recordMapper.insert(recordPO);
-        
+
         return new ResultVO(1000);
     }
 
