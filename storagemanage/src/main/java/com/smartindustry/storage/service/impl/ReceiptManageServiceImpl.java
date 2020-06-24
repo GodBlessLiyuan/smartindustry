@@ -95,9 +95,22 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         return new ResultVO<>(1000, LogisticsVO.convert(headPO));
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO editLog(LogisticsDTO dto) {
-        return null;
+        ReceiptBodyPO bodyPO = receiptBodyMapper.selectByPrimaryKey(dto.getRbId());
+        ReceiptHeadPO headPO = receiptHeadMapper.selectByPrimaryKey(bodyPO.getReceiptHeadId());
+        receiptHeadMapper.updateByPrimaryKey(LogisticsDTO.buildPO(headPO, dto));
+
+        RecordPO recordPO = new RecordPO();
+        recordPO.setReceiptBodyId(dto.getRbId());
+        recordPO.setUserId((long) 1);
+        recordPO.setName("夏慧");
+        recordPO.setType((byte) 2);
+        recordPO.setCreateTime(new Date());
+        recordMapper.insert(recordPO);
+        
+        return new ResultVO(1000);
     }
 
     @Override

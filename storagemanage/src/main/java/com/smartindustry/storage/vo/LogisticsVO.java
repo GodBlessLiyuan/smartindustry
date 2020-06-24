@@ -33,7 +33,7 @@ public class LogisticsVO implements Serializable {
         vo.setNo(po.getLogisticsNo());
         vo.setWay(po.getReceiptWay());
         vo.setRemark(po.getRemark());
-        
+
         return vo;
     }
 }
