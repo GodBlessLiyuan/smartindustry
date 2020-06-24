@@ -12,8 +12,6 @@ import lombok.Data;
 public class RecordPO implements Serializable {
     private Long recordId;
 
-    private Long receiptBodyId;
-
     private Long userId;
 
     private String name;

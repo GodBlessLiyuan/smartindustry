@@ -16,7 +16,7 @@ public class ReceiptBodyPO implements Serializable {
 
     private String receiptNo;
 
-    private String materialNum;
+    private String materialNo;
 
     private Byte materialType;
 
@@ -35,17 +35,18 @@ public class ReceiptBodyPO implements Serializable {
     private Integer stockNum;
 
     /**
-     * 1：录入标签
-5：IQC检测
-10：QE检测
-15：QE确认
-20：入库
+     * 1��¼���ǩ
+5��IQC���
+10��QE���
+15��QEȷ��
+20���������
+25��������
      */
     private Byte status;
 
     /**
-     * 1：未删除
-2：已删除
+     * 1��δɾ��
+2����ɾ��
      */
     private Byte dr;
 

@@ -1,7 +1,9 @@
 package com.smartindustry.storage.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.smartindustry.common.mapper.ReceiptBodyMapper;
 import com.smartindustry.common.pojo.ReceiptBodyPO;
+import com.smartindustry.storage.util.ReceiptNoUtil;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -72,10 +74,12 @@ public class ReceiptBodyDTO implements Serializable {
      * @param dtos
      * @return
      */
-    public static List<ReceiptBodyPO> createPOs(Long headId, List<ReceiptBodyDTO> dtos) {
+    public static List<ReceiptBodyPO> createPOs(Long headId, List<ReceiptBodyDTO> dtos, ReceiptBodyMapper mapper) {
         List<ReceiptBodyPO> pos = new ArrayList<>();
+
+        int curNum = ReceiptNoUtil.getReceiptNum(mapper, new Date());
         for (ReceiptBodyDTO dto : dtos) {
-            pos.add(ReceiptBodyDTO.createPO(headId, dto));
+            pos.add(ReceiptBodyDTO.createPO(headId, dto, ++curNum));
         }
         return pos;
     }
@@ -87,10 +91,10 @@ public class ReceiptBodyDTO implements Serializable {
      * @param dto
      * @return
      */
-    private static ReceiptBodyPO createPO(Long headId, ReceiptBodyDTO dto) {
+    private static ReceiptBodyPO createPO(Long headId, ReceiptBodyDTO dto, int num) {
         ReceiptBodyPO po = new ReceiptBodyPO();
         po.setReceiptHeadId(headId);
-        po.setReceiptNo(null);
+        po.setReceiptNo(ReceiptNoUtil.genReceiptNo(new Date(), num));
         po.setMaterialNum(dto.getMNo());
         po.setMaterialType(dto.getMType());
         po.setMaterialDesc(dto.getMDesc());

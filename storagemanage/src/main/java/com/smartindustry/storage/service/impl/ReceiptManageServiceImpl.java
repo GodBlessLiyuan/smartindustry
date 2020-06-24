@@ -59,7 +59,7 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         ReceiptHeadPO headPO = ReceiptHeadDTO.buildPO(new ReceiptHeadPO(), dto.getHead());
         receiptHeadMapper.insert(headPO);
 
-        List<ReceiptBodyPO> bodyPOs = ReceiptBodyDTO.createPOs(headPO.getReceiptHeadId(), dto.getBody());
+        List<ReceiptBodyPO> bodyPOs = ReceiptBodyDTO.createPOs(headPO.getReceiptHeadId(), dto.getBody(), receiptBodyMapper);
         receiptBodyMapper.batchInsert(bodyPOs);
 
         List<EntryLabelPO> labelPOs = new ArrayList<>();
