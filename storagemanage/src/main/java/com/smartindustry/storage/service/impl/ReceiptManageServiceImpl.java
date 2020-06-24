@@ -70,12 +70,17 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         }
         entryLabelMapper.batchInsert(labelPOs);
 
-        RecordPO recordPO = new RecordPO();
-        recordPO.setCreateTime(new Date());
-        recordPO.setName("夏慧");
-        recordPO.setUserId((long) 1);
-        recordPO.setType((byte) 1);
-        recordMapper.insert(recordPO);
+        List<RecordPO> recordPOs = new ArrayList<>();
+        for (ReceiptBodyPO bodyPO : bodyPOs) {
+            RecordPO recordPO = new RecordPO();
+            recordPO.setReceiptBodyId(bodyPO.getReceiptBodyId());
+            recordPO.setUserId((long) 1);
+            recordPO.setName("夏慧");
+            recordPO.setType((byte) 1);
+            recordPO.setCreateTime(new Date());
+            recordPOs.add(recordPO);
+        }
+        recordMapper.batchInsert(recordPOs);
 
         return new ResultVO(1000);
     }

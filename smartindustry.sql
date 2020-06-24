@@ -281,6 +281,7 @@ CREATE TABLE sm_receipt_head
 CREATE TABLE sm_record
 (
     record_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    receipt_body_id bigint unsigned NOT NULL,
     user_id bigint unsigned,
     name char(255),
     type tinyint,
@@ -398,6 +399,14 @@ ALTER TABLE sm_qe_confirm
 
 
 ALTER TABLE sm_qe_detect
+    ADD FOREIGN KEY (receipt_body_id)
+        REFERENCES sm_receipt_body (receipt_body_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE sm_record
     ADD FOREIGN KEY (receipt_body_id)
         REFERENCES sm_receipt_body (receipt_body_id)
         ON UPDATE RESTRICT
