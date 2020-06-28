@@ -3,14 +3,8 @@ package com.smartindustry.storage.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.smartindustry.common.bo.ReceiptBO;
-import com.smartindustry.common.mapper.EntryLabelMapper;
-import com.smartindustry.common.mapper.ReceiptBodyMapper;
-import com.smartindustry.common.mapper.ReceiptHeadMapper;
-import com.smartindustry.common.mapper.RecordMapper;
-import com.smartindustry.common.pojo.EntryLabelPO;
-import com.smartindustry.common.pojo.ReceiptBodyPO;
-import com.smartindustry.common.pojo.ReceiptHeadPO;
-import com.smartindustry.common.pojo.RecordPO;
+import com.smartindustry.common.mapper.*;
+import com.smartindustry.common.pojo.*;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.dto.LogisticsDTO;
@@ -19,6 +13,7 @@ import com.smartindustry.storage.dto.ReceiptDTO;
 import com.smartindustry.storage.dto.ReceiptHeadDTO;
 import com.smartindustry.storage.service.IReceiptManageService;
 import com.smartindustry.storage.vo.LogisticsVO;
+import com.smartindustry.storage.vo.PrintLabelVO;
 import com.smartindustry.storage.vo.ReceiptPageVO;
 import com.smartindustry.storage.vo.RecordVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author: xiahui
@@ -48,6 +40,8 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
     private EntryLabelMapper entryLabelMapper;
     @Autowired
     private RecordMapper recordMapper;
+    @Autowired
+    private PrintLabelMapper printLabelMapper;
 
     @Override
     public ResultVO pageQuery(int pageNum, int pageSize, Map<String, Object> reqData) {
@@ -89,10 +83,19 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
     }
 
     @Override
-    public ResultVO queryLog(Long rbId) {
+    public ResultVO record(Long rbId) {
+        Map<String, Object> res = new HashMap<>();
+        List<RecordPO> recordPOs = recordMapper.queryByReceiptBodyId(rbId);
+        res.put("record", RecordVO.convert(recordPOs));
+
         ReceiptBodyPO bodyPO = receiptBodyMapper.selectByPrimaryKey(rbId);
         ReceiptHeadPO headPO = receiptHeadMapper.selectByPrimaryKey(bodyPO.getReceiptHeadId());
-        return new ResultVO<>(1000, LogisticsVO.convert(headPO));
+        res.put("logistics", LogisticsVO.convert(headPO));
+
+        List<PrintLabelPO> printLabelPOs = printLabelMapper.queryByReceiptBodyId(rbId);
+        res.put("print", PrintLabelVO.convert(printLabelPOs));
+
+        return new ResultVO<>(1000, res);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -111,11 +114,5 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         recordMapper.insert(recordPO);
 
         return new ResultVO(1000);
-    }
-
-    @Override
-    public ResultVO record(Long rbId, byte order) {
-        List<RecordPO> pos = recordMapper.queryByReceiptBodyId(rbId, order);
-        return new ResultVO<>(1000, RecordVO.convert(pos));
     }
 }

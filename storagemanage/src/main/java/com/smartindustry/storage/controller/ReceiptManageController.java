@@ -46,18 +46,13 @@ public class ReceiptManageController {
         return service.insert(dto);
     }
 
-    @RequestMapping("queryLog")
-    public ResultVO queryLog(@RequestParam(value = "rbId") Long rbId) {
-        return service.queryLog(rbId);
-    }
-
     @RequestMapping("editLog")
     public ResultVO editLog(@RequestBody LogisticsDTO dto) {
         return service.editLog(dto);
     }
 
     @RequestMapping("record")
-    public ResultVO record(@RequestParam(value = "rbId") Long rbId, @RequestParam(value = "order", required = false, defaultValue = "0") byte order) {
-        return service.record(rbId, order);
+    public ResultVO record(@RequestParam(value = "rbId") Long rbId) {
+        return service.record(rbId);
     }
 }

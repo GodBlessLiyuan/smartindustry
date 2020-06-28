@@ -19,11 +19,10 @@ public interface RecordMapper extends BaseMapper<RecordPO, Long> {
     void batchInsert(List<RecordPO> recordPOs);
 
     /**
-     * 根据 receipt body id 查询， 根据 order 进行排序
+     * 根据 receipt body id 查询
      *
      * @param receiptBodyId
-     * @param order
      * @return
      */
-    List<RecordPO> queryByReceiptBodyId(@Param("receiptBodyId") Long receiptBodyId, @Param("order") byte order);
+    List<RecordPO> queryByReceiptBodyId(@Param("receiptBodyId") Long receiptBodyId);
 }

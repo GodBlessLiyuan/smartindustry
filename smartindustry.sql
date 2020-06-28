@@ -160,6 +160,7 @@ CREATE TABLE sm_print_label
 (
     print_label_id bigint unsigned NOT NULL AUTO_INCREMENT,
     receipt_body_id bigint unsigned NOT NULL,
+    package_id char(32) NOT NULL,
     produce_date date,
     produce_batch char(64),
     num int,
@@ -187,8 +188,10 @@ CREATE TABLE sm_print_label
     dr tinyint COMMENT '1：未删除
 2：已删除',
     relate_label_id bigint unsigned,
+    relate_package_id char(32),
     PRIMARY KEY (print_label_id),
-    UNIQUE (print_label_id)
+    UNIQUE (print_label_id),
+    UNIQUE (package_id)
 );
 
 
@@ -268,7 +271,7 @@ CREATE TABLE sm_receipt_head
     order_date date,
     supplier char(128),
     buyer char(128),
-    arrive_date date,
+    plan_date date,
     logistics_company char(128),
     logistics_no char(32),
     receipt_way tinyint,
@@ -286,6 +289,18 @@ CREATE TABLE sm_record
     name char(255),
     type tinyint,
     create_time datetime,
+    -- 1：录入标签
+    -- 5：IQC检测
+    -- 10：QE检测
+    -- 15：QE确认
+    -- 20：物料入库
+    -- 25：入库完成
+    status tinyint COMMENT '1：录入标签
+5：IQC检测
+10：QE检测
+15：QE确认
+20：物料入库
+25：入库完成',
     PRIMARY KEY (record_id),
     UNIQUE (record_id)
 );

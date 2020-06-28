@@ -32,14 +32,6 @@ public interface IReceiptManageService {
     ResultVO insert(ReceiptDTO dto);
 
     /**
-     * 查询物流信息
-     *
-     * @param rbId
-     * @return
-     */
-    ResultVO queryLog(Long rbId);
-
-    /**
      * 编辑物流信息
      *
      * @param dto
@@ -51,10 +43,9 @@ public interface IReceiptManageService {
      * 查询操作记录
      *
      * @param rbId
-     * @param order
      * @return
      */
-    ResultVO record(Long rbId, byte order);
+    ResultVO record(Long rbId);
 
 
 }

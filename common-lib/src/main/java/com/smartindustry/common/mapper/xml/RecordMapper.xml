@@ -119,13 +119,5 @@
         <include refid="Base_Column_List"/>
         from sm_record
         where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT}
-        <choose>
-            <when test="order == 0">
-                order by create_time desc
-            </when>
-            <otherwise>
-                order by create_time asc
-            </otherwise>
-        </choose>
     </select>
 </mapper>

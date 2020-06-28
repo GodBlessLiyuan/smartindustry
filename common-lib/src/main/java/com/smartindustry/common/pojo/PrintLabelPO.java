@@ -14,6 +14,8 @@ public class PrintLabelPO implements Serializable {
 
     private Long receiptBodyId;
 
+    private String packageId;
+
     private Date produceDate;
 
     private String produceBatch;
@@ -50,6 +52,8 @@ public class PrintLabelPO implements Serializable {
     private Byte dr;
 
     private Long relateLabelId;
+
+    private String relatePackageId;
 
     private static final long serialVersionUID = 1L;
 }
