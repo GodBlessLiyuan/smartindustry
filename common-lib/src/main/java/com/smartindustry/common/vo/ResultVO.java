@@ -26,4 +26,21 @@ public class ResultVO<T> implements Serializable {
         this.status = status;
         this.data = data;
     }
+
+    /**
+     * 构造成功执行的构造参数
+     * @return
+     */
+    public static ResultVO ok(){
+        return new ResultVO(1000);
+    }
+
+    public ResultVO setPageInfoVO(PageInfoVO page){
+        if(page == null){
+            return this;
+        }
+        this.setData((T) page);
+        return this;
+    }
+
 }

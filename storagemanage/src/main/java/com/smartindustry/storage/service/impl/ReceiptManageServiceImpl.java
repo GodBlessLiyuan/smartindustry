@@ -47,7 +47,8 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
     public ResultVO pageQuery(int pageNum, int pageSize, Map<String, Object> reqData) {
         Page<ReceiptBO> page = PageHelper.startPage(pageNum, pageSize);
         List<ReceiptBO> bos = receiptBodyMapper.pageQuery(reqData);
-        return new ResultVO<>(1000, new PageInfoVO<>(page.getTotal(), ReceiptPageVO.convert(bos)));
+
+        return ResultVO.ok().setPageInfoVO(new PageInfoVO<>(page.getTotal(), ReceiptPageVO.convert(bos)));
     }
 
     @Transactional(rollbackFor = Exception.class)
