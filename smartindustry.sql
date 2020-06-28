@@ -183,12 +183,12 @@ CREATE TABLE sm_print_label
 3£ºÒÑÈë¿â
 
 ',
+    relate_label_id bigint unsigned,
+    relate_package_id char(32),
     -- 1£ºÎ´É¾³ý
     -- 2£ºÒÑÉ¾³ý
     dr tinyint COMMENT '1£ºÎ´É¾³ý
 2£ºÒÑÉ¾³ý',
-    relate_label_id bigint unsigned,
-    relate_package_id char(32),
     PRIMARY KEY (print_label_id),
     UNIQUE (print_label_id),
     UNIQUE (package_id)
@@ -276,6 +276,10 @@ CREATE TABLE sm_receipt_head
     logistics_no char(32),
     receipt_way tinyint,
     remark char(255),
+    -- 1£ºÎ´É¾³ý
+    -- 2£ºÒÑÉ¾³ý
+    dr tinyint COMMENT '1£ºÎ´É¾³ý
+2£ºÒÑÉ¾³ý',
     PRIMARY KEY (receipt_head_id),
     UNIQUE (receipt_head_id)
 );

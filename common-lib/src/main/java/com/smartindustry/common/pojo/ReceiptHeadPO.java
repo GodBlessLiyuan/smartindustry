@@ -27,7 +27,7 @@ public class ReceiptHeadPO implements Serializable {
 
     private String buyer;
 
-    private Date arriveDate;
+    private Date planDate;
 
     private String logisticsCompany;
 
@@ -36,6 +36,12 @@ public class ReceiptHeadPO implements Serializable {
     private Byte receiptWay;
 
     private String remark;
+
+    /**
+     * 1：未删除
+2：已删除
+     */
+    private Byte dr;
 
     private static final long serialVersionUID = 1L;
 }

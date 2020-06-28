@@ -84,11 +84,11 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
 
     @Override
     public ResultVO delete(List<Long> rbIds) {
-        List<Long> headIds = receiptBodyMapper.queryHeadIds(rbIds);
         receiptBodyMapper.batchDelete(rbIds);
 
         // 删除表头信息
         new Thread(() -> {
+            List<Long> headIds = receiptBodyMapper.queryHeadIds(rbIds);
             for (Long headId : headIds) {
                 List<ReceiptBodyPO> bodyPOs = receiptBodyMapper.queryByHeadId(headId);
                 if (null == bodyPOs || bodyPOs.size() == 0) {

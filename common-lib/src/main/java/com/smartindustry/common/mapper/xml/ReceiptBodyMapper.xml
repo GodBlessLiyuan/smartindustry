@@ -244,15 +244,14 @@
         where receipt_no like #{no,jdbcType=CHAR} '%'
         order by receipt_body_id desc limit 1
     </select>
-    <delete id="batchDelete" parameterType="java.util.List">
-        delete
-        from sm_receipt_body
+    <update id="batchDelete" parameterType="java.util.List">
+        update sm_receipt_body set dr = 2
         where receipt_body_id in (
         <foreach collection="list" separator="," item="rbId">
             #{rbId,jdbcType=BIGINT}
         </foreach>)
-    </delete>
-    <select id="queryHeadIds" parameterType="java.util.List" resultMap="BaseResultMap">
+    </update>
+    <select id="queryHeadIds" parameterType="java.util.List" resultType="java.lang.Long">
         select distinct receipt_head_id
         from sm_receipt_body
         where receipt_body_id in (

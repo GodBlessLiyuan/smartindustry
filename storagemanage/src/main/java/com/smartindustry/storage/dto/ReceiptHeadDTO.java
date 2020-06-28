@@ -81,11 +81,12 @@ public class ReceiptHeadDTO implements Serializable {
         po.setOrderDate(dto.getODate());
         po.setSupplier(dto.getSupplier());
         po.setBuyer(dto.getBuyer());
-        po.setArriveDate(dto.getPDate());
+        po.setPlanDate(dto.getPDate());
         po.setLogisticsCompany(dto.getLoCo());
         po.setLogisticsNo(dto.getLoNo());
         po.setReceiptWay(dto.getWay());
         po.setRemark(dto.getRemark());
+        po.setDr((byte) 1);
         return po;
     }
 }

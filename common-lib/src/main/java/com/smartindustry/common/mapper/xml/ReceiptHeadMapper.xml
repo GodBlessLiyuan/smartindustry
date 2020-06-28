@@ -8,15 +8,16 @@
         <result column="order_date" jdbcType="DATE" property="orderDate"/>
         <result column="supplier" jdbcType="CHAR" property="supplier"/>
         <result column="buyer" jdbcType="CHAR" property="buyer"/>
-        <result column="arrive_date" jdbcType="DATE" property="arriveDate"/>
+        <result column="plan_date" jdbcType="DATE" property="planDate"/>
         <result column="logistics_company" jdbcType="CHAR" property="logisticsCompany"/>
         <result column="logistics_no" jdbcType="CHAR" property="logisticsNo"/>
         <result column="receipt_way" jdbcType="TINYINT" property="receiptWay"/>
         <result column="remark" jdbcType="CHAR" property="remark"/>
+        <result column="dr" jdbcType="TINYINT" property="dr"/>
     </resultMap>
     <sql id="Base_Column_List">
-        receipt_head_id, order_no, order_type, order_date, supplier, buyer, arrive_date,
-    logistics_company, logistics_no, receipt_way, remark
+        receipt_head_id, order_no, order_type, order_date, supplier, buyer, plan_date, logistics_company,
+    logistics_no, receipt_way, remark, dr
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
@@ -33,12 +34,12 @@
             keyProperty="receiptHeadId">
         insert into sm_receipt_head (receipt_head_id, order_no, order_type,
                                      order_date, supplier, buyer,
-                                     arrive_date, logistics_company, logistics_no,
-                                     receipt_way, remark)
+                                     plan_date, logistics_company, logistics_no,
+                                     receipt_way, remark, dr)
         values (#{receiptHeadId,jdbcType=BIGINT}, #{orderNo,jdbcType=CHAR}, #{orderType,jdbcType=TINYINT},
                 #{orderDate,jdbcType=DATE}, #{supplier,jdbcType=CHAR}, #{buyer,jdbcType=CHAR},
-                #{arriveDate,jdbcType=DATE}, #{logisticsCompany,jdbcType=CHAR}, #{logisticsNo,jdbcType=CHAR},
-                #{receiptWay,jdbcType=TINYINT}, #{remark,jdbcType=CHAR})
+                #{planDate,jdbcType=DATE}, #{logisticsCompany,jdbcType=CHAR}, #{logisticsNo,jdbcType=CHAR},
+                #{receiptWay,jdbcType=TINYINT}, #{remark,jdbcType=CHAR}, #{dr,jdbcType=TINYINT})
     </insert>
     <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.ReceiptHeadPO">
         insert into sm_receipt_head
@@ -61,8 +62,8 @@
             <if test="buyer != null">
                 buyer,
             </if>
-            <if test="arriveDate != null">
-                arrive_date,
+            <if test="planDate != null">
+                plan_date,
             </if>
             <if test="logisticsCompany != null">
                 logistics_company,
@@ -75,6 +76,9 @@
             </if>
             <if test="remark != null">
                 remark,
+            </if>
+            <if test="dr != null">
+                dr,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -96,8 +100,8 @@
             <if test="buyer != null">
                 #{buyer,jdbcType=CHAR},
             </if>
-            <if test="arriveDate != null">
-                #{arriveDate,jdbcType=DATE},
+            <if test="planDate != null">
+                #{planDate,jdbcType=DATE},
             </if>
             <if test="logisticsCompany != null">
                 #{logisticsCompany,jdbcType=CHAR},
@@ -110,6 +114,9 @@
             </if>
             <if test="remark != null">
                 #{remark,jdbcType=CHAR},
+            </if>
+            <if test="dr != null">
+                #{dr,jdbcType=TINYINT},
             </if>
         </trim>
     </insert>
@@ -131,8 +138,8 @@
             <if test="buyer != null">
                 buyer = #{buyer,jdbcType=CHAR},
             </if>
-            <if test="arriveDate != null">
-                arrive_date = #{arriveDate,jdbcType=DATE},
+            <if test="planDate != null">
+                plan_date = #{planDate,jdbcType=DATE},
             </if>
             <if test="logisticsCompany != null">
                 logistics_company = #{logisticsCompany,jdbcType=CHAR},
@@ -146,6 +153,9 @@
             <if test="remark != null">
                 remark = #{remark,jdbcType=CHAR},
             </if>
+            <if test="dr != null">
+                dr = #{dr,jdbcType=TINYINT},
+            </if>
         </set>
         where receipt_head_id = #{receiptHeadId,jdbcType=BIGINT}
     </update>
@@ -156,11 +166,12 @@
             order_date        = #{orderDate,jdbcType=DATE},
             supplier          = #{supplier,jdbcType=CHAR},
             buyer             = #{buyer,jdbcType=CHAR},
-            arrive_date       = #{arriveDate,jdbcType=DATE},
+            plan_date         = #{planDate,jdbcType=DATE},
             logistics_company = #{logisticsCompany,jdbcType=CHAR},
             logistics_no      = #{logisticsNo,jdbcType=CHAR},
             receipt_way       = #{receiptWay,jdbcType=TINYINT},
-            remark            = #{remark,jdbcType=CHAR}
+            remark            = #{remark,jdbcType=CHAR},
+            dr                = #{dr,jdbcType=TINYINT}
         where receipt_head_id = #{receiptHeadId,jdbcType=BIGINT}
     </update>
 
