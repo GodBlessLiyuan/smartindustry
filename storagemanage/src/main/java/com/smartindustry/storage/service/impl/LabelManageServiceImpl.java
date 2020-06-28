@@ -42,7 +42,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
     @Override
     public ResultVO query(Long rbId) {
         List<PrintLabelPO> pos = printLabelMapper.queryByReceiptBodyId(rbId);
-        return new ResultVO<>(1000, PrintLabelVO.convert(pos));
+        return ResultVO.ok().setData(PrintLabelVO.convert(pos));
     }
 
     @Override

@@ -35,6 +35,11 @@ public class ResultVO<T> implements Serializable {
         return new ResultVO(1000);
     }
 
+    public ResultVO setData(T data){
+        this.data = data;
+        return this;
+    }
+
     public ResultVO setPageInfoVO(PageInfoVO page){
         if(page == null){
             return this;
