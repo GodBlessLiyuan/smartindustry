@@ -113,7 +113,7 @@ public class ReceiptPageVO implements Serializable {
         vo.setOdate(bo.getOrderDate());
         vo.setSupplier(bo.getSupplier());
         vo.setBuyer(bo.getBuyer());
-        vo.setPdate(bo.getArriveDate());
+        vo.setPdate(bo.getPlanDate());
         vo.setAnum(bo.getAcceptNum());
         vo.setAdate(bo.getAcceptDate());
         vo.setSnum(bo.getStockNum());

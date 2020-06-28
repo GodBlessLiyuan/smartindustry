@@ -200,8 +200,8 @@
 
     <sql id="ReceiptBO_Column_List">
         receipt_body_id, receipt_no, material_no, material_type, material_desc, order_total,
-    accept_num, accept_date, good_num, bad_num, stock_num, `status`, dr, order_no, order_type, order_date, supplier,
-    buyer, arrive_date, logistics_company, logistics_no, receipt_way, remark
+    accept_num, accept_date, good_num, bad_num, stock_num, `status`, order_no, order_type, order_date, supplier,
+    buyer, plan_date, logistics_company, logistics_no, receipt_way, remark
     </sql>
     <resultMap id="ReceiptBOResultMap" type="com.smartindustry.common.bo.ReceiptBO" extends="BaseResultMap">
         <result column="order_no" jdbcType="CHAR" property="orderNo"/>
@@ -209,7 +209,7 @@
         <result column="order_date" jdbcType="DATE" property="orderDate"/>
         <result column="supplier" jdbcType="CHAR" property="supplier"/>
         <result column="buyer" jdbcType="CHAR" property="buyer"/>
-        <result column="arrive_date" jdbcType="DATE" property="arriveDate"/>
+        <result column="plan_date" jdbcType="DATE" property="planDate"/>
         <result column="logistics_company" jdbcType="CHAR" property="logisticsCompany"/>
         <result column="logistics_no" jdbcType="CHAR" property="logisticsNo"/>
         <result column="receipt_way" jdbcType="TINYINT" property="receiptWay"/>

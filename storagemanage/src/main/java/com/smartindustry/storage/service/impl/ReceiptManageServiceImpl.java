@@ -80,7 +80,7 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         }
         recordMapper.batchInsert(recordPOs);
 
-        return new ResultVO(1000);
+        return ResultVO.ok();
     }
 
     @Override
@@ -98,7 +98,7 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
             }
         }).start();
 
-        return new ResultVO(1000);
+        return ResultVO.ok();
     }
 
     @Override
@@ -135,6 +135,6 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         recordPO.setCreateTime(new Date());
         recordMapper.insert(recordPO);
 
-        return new ResultVO(1000);
+        return ResultVO.ok();
     }
 }

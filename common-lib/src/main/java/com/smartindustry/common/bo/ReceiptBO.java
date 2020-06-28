@@ -28,7 +28,7 @@ public class ReceiptBO extends ReceiptBodyPO {
 
     private String buyer;
 
-    private Date arriveDate;
+    private Date planDate;
 
     private String logisticsCompany;
 
