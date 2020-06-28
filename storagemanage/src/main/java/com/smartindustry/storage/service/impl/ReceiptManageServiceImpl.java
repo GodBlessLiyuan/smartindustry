@@ -74,8 +74,9 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
             recordPO.setReceiptBodyId(bodyPO.getReceiptBodyId());
             recordPO.setUserId((long) 1);
             recordPO.setName("夏慧");
-            recordPO.setType((byte) 1);
+            recordPO.setType("新增");
             recordPO.setCreateTime(new Date());
+            recordPO.setStatus((byte) 1);
             recordPOs.add(recordPO);
         }
         recordMapper.batchInsert(recordPOs);
@@ -131,8 +132,9 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         recordPO.setReceiptBodyId(dto.getRbid());
         recordPO.setUserId((long) 1);
         recordPO.setName("夏慧");
-        recordPO.setType((byte) 2);
+        recordPO.setType("修改");
         recordPO.setCreateTime(new Date());
+        recordPO.setStatus((byte) 1);
         recordMapper.insert(recordPO);
 
         return ResultVO.ok();

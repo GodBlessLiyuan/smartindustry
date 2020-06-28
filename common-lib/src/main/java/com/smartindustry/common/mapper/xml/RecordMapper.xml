@@ -6,11 +6,12 @@
         <result column="receipt_body_id" jdbcType="BIGINT" property="receiptBodyId"/>
         <result column="user_id" jdbcType="BIGINT" property="userId"/>
         <result column="name" jdbcType="CHAR" property="name"/>
-        <result column="type" jdbcType="TINYINT" property="type"/>
+        <result column="type" jdbcType="CHAR" property="type"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
     </resultMap>
     <sql id="Base_Column_List">
-        record_id, receipt_body_id, user_id, `name`, `type`, create_time
+        record_id, receipt_body_id, user_id, `name`, `type`, create_time, `status`
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
@@ -25,9 +26,11 @@
     </delete>
     <insert id="insert" parameterType="com.smartindustry.common.pojo.RecordPO">
         insert into sm_record (record_id, receipt_body_id, user_id,
-                               `name`, `type`, create_time)
+                               `name`, `type`, create_time,
+                               `status`)
         values (#{recordId,jdbcType=BIGINT}, #{receiptBodyId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},
-                #{name,jdbcType=CHAR}, #{type,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP})
+                #{name,jdbcType=CHAR}, #{type,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP},
+                #{status,jdbcType=TINYINT})
     </insert>
     <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.RecordPO">
         insert into sm_record
@@ -50,6 +53,9 @@
             <if test="createTime != null">
                 create_time,
             </if>
+            <if test="status != null">
+                `status`,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="recordId != null">
@@ -65,10 +71,13 @@
                 #{name,jdbcType=CHAR},
             </if>
             <if test="type != null">
-                #{type,jdbcType=TINYINT},
+                #{type,jdbcType=CHAR},
             </if>
             <if test="createTime != null">
                 #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
             </if>
         </trim>
     </insert>
@@ -85,10 +94,13 @@
                 `name` = #{name,jdbcType=CHAR},
             </if>
             <if test="type != null">
-                `type` = #{type,jdbcType=TINYINT},
+                `type` = #{type,jdbcType=CHAR},
             </if>
             <if test="createTime != null">
                 create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                `status` = #{status,jdbcType=TINYINT},
             </if>
         </set>
         where record_id = #{recordId,jdbcType=BIGINT}
@@ -98,8 +110,9 @@
         set receipt_body_id = #{receiptBodyId,jdbcType=BIGINT},
             user_id         = #{userId,jdbcType=BIGINT},
             `name`          = #{name,jdbcType=CHAR},
-            `type`          = #{type,jdbcType=TINYINT},
-            create_time     = #{createTime,jdbcType=TIMESTAMP}
+            `type`          = #{type,jdbcType=CHAR},
+            create_time     = #{createTime,jdbcType=TIMESTAMP},
+            `status`        = #{status,jdbcType=TINYINT}
         where record_id = #{recordId,jdbcType=BIGINT}
     </update>
 
@@ -110,8 +123,8 @@
         values
         <foreach collection="list" item="po" separator=",">
             (#{po.recordId,jdbcType=BIGINT}, #{po.receiptBodyId,jdbcType=BIGINT}, #{po.userId,jdbcType=BIGINT},
-            #{po.name,jdbcType=CHAR}, #{po.type,jdbcType=TINYINT}, #{po.createTime,jdbcType=TIMESTAMP}
-            )
+            #{po.name,jdbcType=CHAR}, #{po.type,jdbcType=CHAR}, #{po.createTime,jdbcType=TIMESTAMP},
+            #{po.status,jdbcType=TINYINT})
         </foreach>
     </insert>
     <select id="queryByReceiptBodyId" parameterType="java.lang.Long" resultMap="BaseResultMap">

@@ -291,7 +291,7 @@ CREATE TABLE sm_record
     receipt_body_id bigint unsigned NOT NULL,
     user_id bigint unsigned,
     name char(255),
-    type tinyint,
+    type char(255),
     create_time datetime,
     -- 1£ºÂ¼Èë±êÇ©
     -- 5£ºIQC¼ì²â

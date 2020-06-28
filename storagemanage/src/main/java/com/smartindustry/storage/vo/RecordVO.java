@@ -19,7 +19,7 @@ public class RecordVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String name;
-    private Byte type;
+    private String type;
     private Date cTime;
 
     /**
