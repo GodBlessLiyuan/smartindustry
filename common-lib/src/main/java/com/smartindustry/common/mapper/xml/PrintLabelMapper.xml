@@ -200,7 +200,7 @@
         where package_id like #{no,jdbcType=CHAR} '%'
         order by print_label_id desc limit 1
     </select>
-    <insert id="batchInsert" parameterType="java.util.List">
+    <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="printLabelId">
         insert into sm_print_label (print_label_id, receipt_body_id, package_id,
         produce_date, produce_batch, num,
         origin, add_time, `type`,

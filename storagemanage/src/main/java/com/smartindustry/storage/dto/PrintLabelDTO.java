@@ -14,7 +14,7 @@ import java.util.Date;
  * @version: 1.0
  */
 @Data
-public class LabelDTO implements Serializable {
+public class PrintLabelDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
 
@@ -56,7 +56,7 @@ public class LabelDTO implements Serializable {
      * @param date
      * @return
      */
-    public static PrintLabelPO createPO(LabelDTO dto, int num, Date date) {
+    public static PrintLabelPO createPO(PrintLabelDTO dto, int num, Date date) {
         PrintLabelPO po = new PrintLabelPO();
         po.setReceiptBodyId(dto.getRbId());
         po.setPackageId(ReceiptNoUtil.genLabelNo(null, date, num));

@@ -18,9 +18,12 @@ import java.util.List;
 public class PrintLabelVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private String packageId;
+    private Long plid;
+    private String pid;
+    private Date pdate;
+    private String pbatch;
     private Integer num;
-    private String linkedId;
+    private String rpid;
     private Date ctime;
 
     /**
@@ -45,9 +48,12 @@ public class PrintLabelVO implements Serializable {
      */
     public static PrintLabelVO convert(PrintLabelPO po) {
         PrintLabelVO vo = new PrintLabelVO();
-        vo.setPackageId(po.getPackageId());
+        vo.setPlid(po.getPrintLabelId());
+        vo.setPid(po.getPackageId());
+        vo.setPdate(po.getProduceDate());
+        vo.setPbatch(po.getProduceBatch());
         vo.setNum(po.getNum());
-        vo.setLinkedId(po.getRelatePackageId());
+        vo.setRpid(po.getRelatePackageId());
         vo.setCtime(po.getAddTime());
         return vo;
     }

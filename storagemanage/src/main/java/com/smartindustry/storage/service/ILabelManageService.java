@@ -1,7 +1,7 @@
 package com.smartindustry.storage.service;
 
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.storage.dto.LabelDTO;
+import com.smartindustry.storage.dto.PrintLabelDTO;
 
 /**
  * @author: xiahui
@@ -10,5 +10,28 @@ import com.smartindustry.storage.dto.LabelDTO;
  * @version: 1.0
  */
 public interface ILabelManageService {
-    ResultVO insert(LabelDTO dto);
+    /**
+     * 查询
+     *
+     * @param rbId
+     * @return
+     */
+    ResultVO query(Long rbId);
+
+    /**
+     * 标签录入
+     *
+     * @param dto
+     * @return
+     */
+    ResultVO insert(PrintLabelDTO dto);
+
+    /**
+     * 录入完成
+     *
+     * @param rbId
+     * @return
+     */
+    ResultVO finish(Long rbId);
+
 }
