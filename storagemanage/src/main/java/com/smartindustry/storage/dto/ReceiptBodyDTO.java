@@ -25,48 +25,39 @@ public class ReceiptBodyDTO implements Serializable {
     /**
      * 物料编码
      */
-    @JsonProperty("mNo")
-    private String mNo;
+    private String mno;
     /**
      * 物料类型
      */
-    @JsonProperty("mType")
-    private Byte mType;
+    private Byte mtype;
     /**
      * 物料描述
      */
-    @JsonProperty("mDesc")
-    private String mDesc;
+    private String mdesc;
     /**
      * 订单总数
      */
-    @JsonProperty("oTotal")
-    private Integer oTotal;
+    private Integer ototal;
     /**
      * 接受数量
      */
-    @JsonProperty("aNum")
-    private Integer aNum;
+    private Integer anum;
     /**
      * 接受日期
      */
-    @JsonProperty("aDate")
-    private Date aDate;
+    private Date adate;
     /**
      * 良品数
      */
-    @JsonProperty("gNum")
-    private Integer gNum;
+    private Integer gnum;
     /**
      * 非良品数
      */
-    @JsonProperty("bNum")
-    private Integer bNum;
+    private Integer bnum;
     /**
      * 入库数量
      */
-    @JsonProperty("sNum")
-    private Integer sNum;
+    private Integer snum;
 
     /**
      * 创建 pos
@@ -97,15 +88,15 @@ public class ReceiptBodyDTO implements Serializable {
         ReceiptBodyPO po = new ReceiptBodyPO();
         po.setReceiptHeadId(headId);
         po.setReceiptNo(ReceiptNoUtil.genReceiptBodyNo(head, new Date(), num));
-        po.setMaterialNo(dto.getMNo());
-        po.setMaterialType(dto.getMType());
-        po.setMaterialDesc(dto.getMDesc());
-        po.setOrderTotal(dto.getOTotal());
-        po.setAcceptNum(dto.getANum());
-        po.setAcceptDate(null == dto.getADate() ? new Date() : dto.getADate());
-        po.setGoodNum(dto.getGNum());
-        po.setBadNum(dto.getBNum());
-        po.setStockNum(dto.getSNum());
+        po.setMaterialNo(dto.getMno());
+        po.setMaterialType(dto.getMtype());
+        po.setMaterialDesc(dto.getMdesc());
+        po.setOrderTotal(dto.getOtotal());
+        po.setAcceptNum(dto.getAnum());
+        po.setAcceptDate(null == dto.getAdate() ? new Date() : dto.getAdate());
+        po.setGoodNum(dto.getGnum());
+        po.setBadNum(dto.getBnum());
+        po.setStockNum(dto.getSnum());
         po.setStatus((byte) 1);
         po.setDr((byte) 1);
 

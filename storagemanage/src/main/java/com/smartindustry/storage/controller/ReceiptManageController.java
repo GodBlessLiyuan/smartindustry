@@ -28,13 +28,15 @@ public class ReceiptManageController {
     @RequestMapping("pageQuery")
     public ResultVO pageQuery(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                               @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                              @RequestParam(value = "no", required = false, defaultValue = "") String no,
                               @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-                              @RequestParam(value = "status", required = false, defaultValue = "0") Byte status) {
+                              @RequestParam(value = "supplier", required = false, defaultValue = "") String supplier,
+                              @RequestParam(value = "status", required = false, defaultValue = "0") Byte status,
+                              @RequestParam(value = "type") Byte type) {
         Map<String, Object> reqData = new HashMap<>(4);
-        reqData.put("orderNo", no);
         reqData.put("keyword", keyword);
+        reqData.put("supplier", supplier);
         reqData.put("status", status);
+        reqData.put("type", type);
 
         return service.pageQuery(pageNum, pageSize, reqData);
     }

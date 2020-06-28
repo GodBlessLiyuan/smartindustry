@@ -21,11 +21,11 @@ public class ReceiptPageVO implements Serializable {
     /**
      * 收料ID
      */
-    private Long rId;
+    private Long rid;
     /**
      * 收料单号
      */
-    private String rNo;
+    private String rno;
     /**
      * 物料状态
      */
@@ -33,27 +33,27 @@ public class ReceiptPageVO implements Serializable {
     /**
      * 来源单号：（PO号、样品采购单号、对应工单号）
      */
-    private String oNo;
+    private String ono;
     /**
      * 物料编码
      */
-    private String mNo;
+    private String mno;
     /**
      * 物料类型
      */
-    private String mType;
+    private Byte mtype;
     /**
      * 物料描述
      */
-    private String mDesc;
+    private String mdesc;
     /**
      * 订单总数
      */
-    private Integer oTotal;
+    private Integer ototal;
     /**
      * 采购日期
      */
-    private Date oDate;
+    private Date odate;
     /**
      * 供应商名称
      */
@@ -65,19 +65,19 @@ public class ReceiptPageVO implements Serializable {
     /**
      * 计划到货时间
      */
-    private Date pDate;
+    private Date pdate;
     /**
      * 接受数量
      */
-    private Integer aNum;
+    private Integer anum;
     /**
      * 收料日期
      */
-    private Date aDate;
+    private Date adate;
     /**
      * 实际入库数
      */
-    private Integer sNum;
+    private Integer snum;
 
     /**
      * bos 转 vos
@@ -102,14 +102,21 @@ public class ReceiptPageVO implements Serializable {
     public static ReceiptPageVO convert(ReceiptBO bo) {
         ReceiptPageVO vo = new ReceiptPageVO();
 
-        vo.setRId(bo.getReceiptBodyId());
-        vo.setRNo(bo.getReceiptNo());
+        vo.setRid(bo.getReceiptBodyId());
+        vo.setRno(bo.getReceiptNo());
         vo.setStatus(bo.getStatus());
-        vo.setONo(bo.getOrderNo());
-        vo.setMNo(bo.getMaterialNo());
-        vo.setANum(bo.getAcceptNum());
-        vo.setADate(bo.getAcceptDate());
-        vo.setSNum(bo.getStockNum());
+        vo.setOno(bo.getOrderNo());
+        vo.setMno(bo.getMaterialNo());
+        vo.setMtype(bo.getMaterialType());
+        vo.setMdesc(bo.getMaterialDesc());
+        vo.setOtotal(bo.getOrderTotal());
+        vo.setOdate(bo.getOrderDate());
+        vo.setSupplier(bo.getSupplier());
+        vo.setBuyer(bo.getBuyer());
+        vo.setPdate(bo.getArriveDate());
+        vo.setAnum(bo.getAcceptNum());
+        vo.setAdate(bo.getAcceptDate());
+        vo.setSnum(bo.getStockNum());
 
         return vo;
     }

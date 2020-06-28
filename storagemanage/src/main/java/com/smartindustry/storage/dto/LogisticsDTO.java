@@ -15,7 +15,7 @@ import java.io.Serializable;
 public class LogisticsDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private Long rbId;
+    private Long rbid;
     private String company;
     private String no;
     private Byte way;
