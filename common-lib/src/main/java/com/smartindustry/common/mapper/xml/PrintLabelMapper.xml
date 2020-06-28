@@ -193,4 +193,26 @@
         from sm_print_label
         where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT}
     </select>
+    <select id="queryNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sm_print_label
+        where package_id like #{no,jdbcType=CHAR} '%'
+        order by print_label_id desc limit 1
+    </select>
+    <insert id="batchInsert" parameterType="java.util.List">
+        insert into sm_print_label (print_label_id, receipt_body_id, package_id,
+        produce_date, produce_batch, num,
+        origin, add_time, `type`,
+        `status`, dr, relate_label_id,
+        relate_package_id)
+        values
+        <foreach collection="list" separator="," item="po">
+            (#{po.printLabelId,jdbcType=BIGINT}, #{po.receiptBodyId,jdbcType=BIGINT}, #{po.packageId,jdbcType=CHAR},
+            #{po.produceDate,jdbcType=DATE}, #{po.produceBatch,jdbcType=CHAR}, #{po.num,jdbcType=INTEGER},
+            #{po.origin,jdbcType=TINYINT}, #{po.addTime,jdbcType=DATE}, #{po.type,jdbcType=TINYINT},
+            #{po.status,jdbcType=TINYINT}, #{po.dr,jdbcType=TINYINT}, #{po.relateLabelId,jdbcType=BIGINT},
+            #{po.relatePackageId,jdbcType=CHAR})
+        </foreach>
+    </insert>
 </mapper>

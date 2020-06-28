@@ -17,4 +17,11 @@ public interface PrintLabelMapper extends BaseMapper<PrintLabelPO, Long> {
      * @return
      */
     List<PrintLabelPO> queryByReceiptBodyId(Long rbId);
+
+    /**
+     * 批量插入
+     *
+     * @param pos
+     */
+    void batchInsert(List<PrintLabelPO> pos);
 }
