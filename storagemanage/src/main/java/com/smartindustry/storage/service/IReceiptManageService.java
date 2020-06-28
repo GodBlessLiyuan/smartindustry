@@ -54,5 +54,5 @@ public interface IReceiptManageService {
      * @param rbId
      * @return
      */
-    ResultVO record(Long rbId);
+    ResultVO record(Long rbId, Byte status);
 }

@@ -131,6 +131,6 @@
         select
         <include refid="Base_Column_List"/>
         from sm_record
-        where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT}
+        where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT} and `status` = #{status,jdbcType=TINYINT}
     </select>
 </mapper>

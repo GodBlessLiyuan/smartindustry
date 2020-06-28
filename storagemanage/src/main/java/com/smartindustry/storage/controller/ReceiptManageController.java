@@ -58,7 +58,7 @@ public class ReceiptManageController {
     }
 
     @RequestMapping("record")
-    public ResultVO record(@RequestParam(value = "rbId") Long rbId) {
-        return service.record(rbId);
+    public ResultVO record(@RequestParam(value = "rbId") Long rbId, @RequestParam(value = "status", required = false, defaultValue = "1") Byte status) {
+        return service.record(rbId, status);
     }
 }

@@ -24,5 +24,5 @@ public interface RecordMapper extends BaseMapper<RecordPO, Long> {
      * @param receiptBodyId
      * @return
      */
-    List<RecordPO> queryByReceiptBodyId(@Param("receiptBodyId") Long receiptBodyId);
+    List<RecordPO> queryByReceiptBodyId(@Param("receiptBodyId") Long receiptBodyId, @Param("status") Byte status);
 }

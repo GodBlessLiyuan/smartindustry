@@ -103,10 +103,10 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
     }
 
     @Override
-    public ResultVO record(Long rbId) {
+    public ResultVO record(Long rbId, Byte status) {
         Map<String, Object> res = new HashMap<>();
         // 操作记录
-        List<RecordPO> recordPOs = recordMapper.queryByReceiptBodyId(rbId);
+        List<RecordPO> recordPOs = recordMapper.queryByReceiptBodyId(rbId, status);
         res.put("record", RecordVO.convert(recordPOs));
 
         // 物流信息
