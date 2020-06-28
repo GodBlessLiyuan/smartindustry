@@ -27,11 +27,11 @@
         from sm_receipt_body
         where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT}
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-        delete
-        from sm_receipt_body
+    <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        update sm_receipt_body
+        set dr = 2
         where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT}
-    </delete>
+    </update>
     <insert id="insert" parameterType="com.smartindustry.common.pojo.ReceiptBodyPO">
         insert into sm_receipt_body (receipt_body_id, receipt_head_id, receipt_no,
                                      material_no, material_type, material_desc,
@@ -243,5 +243,28 @@
         from sm_receipt_body
         where receipt_no like #{no,jdbcType=CHAR} '%'
         order by receipt_body_id desc limit 1
+    </select>
+    <delete id="batchDelete" parameterType="java.util.List">
+        delete
+        from sm_receipt_body
+        where receipt_body_id in (
+        <foreach collection="list" separator="," item="rbId">
+            #{rbId,jdbcType=BIGINT}
+        </foreach>)
+    </delete>
+    <select id="queryHeadIds" parameterType="java.util.List" resultMap="BaseResultMap">
+        select distinct receipt_head_id
+        from sm_receipt_body
+        where receipt_body_id in (
+        <foreach collection="list" separator="," item="rbId">
+            #{rbId,jdbcType=BIGINT}
+        </foreach>
+        )
+    </select>
+    <select id="queryByHeadId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sm_receipt_body
+        where receipt_head_id = #{receiptHeadId,jdbcType=BIGINT} and dr = 1
     </select>
 </mapper>

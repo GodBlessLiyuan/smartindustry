@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -44,6 +45,11 @@ public class ReceiptManageController {
     @RequestMapping("insert")
     public ResultVO insert(@RequestBody ReceiptDTO dto) {
         return service.insert(dto);
+    }
+
+    @RequestMapping("delete")
+    public ResultVO delete(@RequestParam(value = "rbIds[]") List<Long> rbIds) {
+        return service.delete(rbIds);
     }
 
     @RequestMapping("editLog")

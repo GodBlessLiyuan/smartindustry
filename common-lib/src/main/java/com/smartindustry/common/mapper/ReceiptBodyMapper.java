@@ -26,4 +26,27 @@ public interface ReceiptBodyMapper extends BaseMapper<ReceiptBodyPO, Long> {
      * @param bodyPOs
      */
     void batchInsert(List<ReceiptBodyPO> bodyPOs);
+
+    /**
+     * 批量删除
+     *
+     * @param rbIds
+     */
+    void batchDelete(List<Long> rbIds);
+
+    /**
+     * 查询表头ID
+     *
+     * @param rbIds
+     * @return
+     */
+    List<Long> queryHeadIds(List<Long> rbIds);
+
+    /**
+     * 根据表头ID查询数据
+     *
+     * @param headId
+     * @return
+     */
+    List<ReceiptBodyPO> queryByHeadId(Long headId);
 }

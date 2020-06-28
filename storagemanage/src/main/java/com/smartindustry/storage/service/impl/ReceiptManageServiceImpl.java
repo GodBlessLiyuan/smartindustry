@@ -83,15 +83,36 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
     }
 
     @Override
+    public ResultVO delete(List<Long> rbIds) {
+        List<Long> headIds = receiptBodyMapper.queryHeadIds(rbIds);
+        receiptBodyMapper.batchDelete(rbIds);
+
+        // 删除表头信息
+        new Thread(() -> {
+            for (Long headId : headIds) {
+                List<ReceiptBodyPO> bodyPOs = receiptBodyMapper.queryByHeadId(headId);
+                if (null == bodyPOs || bodyPOs.size() == 0) {
+                    receiptHeadMapper.deleteByPrimaryKey(headId);
+                }
+            }
+        }).start();
+
+        return new ResultVO(1000);
+    }
+
+    @Override
     public ResultVO record(Long rbId) {
         Map<String, Object> res = new HashMap<>();
+        // 操作记录
         List<RecordPO> recordPOs = recordMapper.queryByReceiptBodyId(rbId);
         res.put("record", RecordVO.convert(recordPOs));
 
+        // 物流信息
         ReceiptBodyPO bodyPO = receiptBodyMapper.selectByPrimaryKey(rbId);
         ReceiptHeadPO headPO = receiptHeadMapper.selectByPrimaryKey(bodyPO.getReceiptHeadId());
         res.put("logistics", LogisticsVO.convert(headPO));
 
+        // 打印标签
         List<PrintLabelPO> printLabelPOs = printLabelMapper.queryByReceiptBodyId(rbId);
         res.put("print", PrintLabelVO.convert(printLabelPOs));
 
