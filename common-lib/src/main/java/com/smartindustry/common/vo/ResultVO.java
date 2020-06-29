@@ -31,21 +31,12 @@ public class ResultVO<T> implements Serializable {
      * 构造成功执行的构造参数
      * @return
      */
-    public static ResultVO ok(){
-        return new ResultVO(1000);
+    public static ResultVO<Object> ok(){
+        return new ResultVO<Object>(1000);
     }
 
     public ResultVO setData(T data){
         this.data = data;
         return this;
     }
-
-    public ResultVO setPageInfoVO(PageInfoVO page){
-        if(page == null){
-            return this;
-        }
-        this.setData((T) page);
-        return this;
-    }
-
 }

@@ -38,6 +38,6 @@ public class QualityManageServiceImpl implements IQualityManageService {
         List<RecordPO> recordPOs = recordMapper.queryByReceiptBodyId(rbId, status);
         res.put("record", RecordVO.convert(recordPOs));
 
-        return new ResultVO<>(1000, res);
+        return ResultVO.ok().setData(res);
     }
 }

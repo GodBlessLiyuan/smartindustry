@@ -48,7 +48,7 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         Page<ReceiptBO> page = PageHelper.startPage(pageNum, pageSize);
         List<ReceiptBO> bos = receiptBodyMapper.pageQuery(reqData);
 
-        return ResultVO.ok().setPageInfoVO(new PageInfoVO<>(page.getTotal(), ReceiptPageVO.convert(bos)));
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), ReceiptPageVO.convert(bos)));
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -118,7 +118,7 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         List<PrintLabelPO> printLabelPOs = printLabelMapper.queryByReceiptBodyId(rbId);
         res.put("print", PrintLabelVO.convert(printLabelPOs));
 
-        return new ResultVO<>(1000, res);
+        return ResultVO.ok().setData(res);
     }
 
     @Transactional(rollbackFor = Exception.class)
