@@ -48,7 +48,7 @@ public class ReceiptManageController {
     }
 
     @RequestMapping("delete")
-    public ResultVO delete(@RequestParam(value = "rbIds[]") List<Long> rbIds) {
+    public ResultVO delete(@RequestParam(value = "rbids[]") List<Long> rbIds) {
         return receiptManageService.delete(rbIds);
     }
 
@@ -58,7 +58,7 @@ public class ReceiptManageController {
     }
 
     @RequestMapping("record")
-    public ResultVO record(@RequestParam(value = "rbId") Long rbId, @RequestParam(value = "status", required = false, defaultValue = "1") Byte status) {
+    public ResultVO record(@RequestParam(value = "rbid") Long rbId, @RequestParam(value = "status", required = false, defaultValue = "1") Byte status) {
         return receiptManageService.record(rbId, status);
     }
 }

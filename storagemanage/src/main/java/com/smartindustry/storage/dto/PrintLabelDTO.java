@@ -21,7 +21,7 @@ public class PrintLabelDTO implements Serializable {
     /**
      * 收料单ID
      */
-    private Long rbId;
+    private Long rbid;
     /**
      * 来源方式
      */
@@ -58,7 +58,7 @@ public class PrintLabelDTO implements Serializable {
      */
     public static PrintLabelPO createPO(PrintLabelDTO dto, int num, Date date) {
         PrintLabelPO po = new PrintLabelPO();
-        po.setReceiptBodyId(dto.getRbId());
+        po.setReceiptBodyId(dto.getRbid());
         po.setPackageId(ReceiptNoUtil.genLabelNo(null, date, num));
         po.setProduceDate(dto.getPdate());
         po.setProduceBatch(dto.getPbatch());

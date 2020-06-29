@@ -22,7 +22,7 @@ public class LabelManageController {
     private ILabelManageService labelManageService;
 
     @RequestMapping("query")
-    public ResultVO query(@RequestParam(value = "rbId") Long rbId) {
+    public ResultVO query(@RequestParam(value = "rbid") Long rbId) {
         return labelManageService.query(rbId);
     }
 
@@ -32,7 +32,7 @@ public class LabelManageController {
     }
 
     @RequestMapping("finish")
-    public ResultVO finish(@RequestParam(value = "rbId") Long rbId) {
+    public ResultVO finish(@RequestParam(value = "rbid") Long rbId) {
         return labelManageService.finish(rbId);
     }
 }

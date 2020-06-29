@@ -18,8 +18,17 @@ import java.util.List;
 public class RecordVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 操作人
+     */
     private String name;
+    /**
+     * 操作类型
+     */
     private String type;
+    /**
+     * 操作日期
+     */
     private Date cTime;
 
     /**

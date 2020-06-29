@@ -15,9 +15,21 @@ import java.io.Serializable;
 public class LogisticsVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 物流公司名称
+     */
     private String company;
+    /**
+     * 物流单号
+     */
     private String no;
+    /**
+     * 收货方式
+     */
     private Byte way;
+    /**
+     * 备注（采购员等）
+     */
     private String remark;
 
     /**

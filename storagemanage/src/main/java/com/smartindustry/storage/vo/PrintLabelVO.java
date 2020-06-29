@@ -18,12 +18,33 @@ import java.util.List;
 public class PrintLabelVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 打印标签ID
+     */
     private Long plid;
+    /**
+     * packageID
+     */
     private String pid;
+    /**
+     * 生产日期
+     */
     private Date pdate;
+    /**
+     * 生产批号
+     */
     private String pbatch;
+    /**
+     * 打印物料数
+     */
     private Integer num;
+    /**
+     * 关联的packageID
+     */
     private String rpid;
+    /**
+     * 打印时间
+     */
     private Date ctime;
 
     /**

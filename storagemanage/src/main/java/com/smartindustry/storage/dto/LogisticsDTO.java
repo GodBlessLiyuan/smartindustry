@@ -15,10 +15,25 @@ import java.io.Serializable;
 public class LogisticsDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 收料单ID
+     */
     private Long rbid;
+    /**
+     * 物流公司名称
+     */
     private String company;
+    /**
+     * 物流单号
+     */
     private String no;
+    /**
+     * 收货方式
+     */
     private Byte way;
+    /**
+     * 备注（采购员等）i
+     */
     private String remark;
 
     /**

@@ -127,7 +127,7 @@
             #{po.status,jdbcType=TINYINT})
         </foreach>
     </insert>
-    <select id="queryByReceiptBodyId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <select id="queryByReceiptBodyId" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from sm_record
