@@ -29,7 +29,7 @@ public class RecordVO implements Serializable {
      * @return
      */
     public static List<RecordVO> convert(List<RecordPO> pos) {
-        List<RecordVO> vos = new ArrayList<>();
+        List<RecordVO> vos = new ArrayList<>(pos.size());
         for (RecordPO po : pos) {
             vos.add(convert(po));
         }

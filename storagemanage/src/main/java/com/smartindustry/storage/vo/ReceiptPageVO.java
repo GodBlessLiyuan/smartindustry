@@ -86,7 +86,7 @@ public class ReceiptPageVO implements Serializable {
      * @return
      */
     public static List<ReceiptPageVO> convert(List<ReceiptBO> bos) {
-        List<ReceiptPageVO> vos = new ArrayList<>();
+        List<ReceiptPageVO> vos = new ArrayList<>(bos.size());
         for (ReceiptBO bo : bos) {
             vos.add(convert(bo));
         }

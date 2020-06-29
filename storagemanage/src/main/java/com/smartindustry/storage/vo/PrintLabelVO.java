@@ -33,7 +33,7 @@ public class PrintLabelVO implements Serializable {
      * @return
      */
     public static List<PrintLabelVO> convert(List<PrintLabelPO> pos) {
-        List<PrintLabelVO> vos = new ArrayList<>();
+        List<PrintLabelVO> vos = new ArrayList<>(pos.size());
         for (PrintLabelPO po : pos) {
             vos.add(convert(po));
         }

@@ -24,7 +24,7 @@ import java.util.Map;
 @RestController
 public class ReceiptManageController {
     @Autowired
-    private IReceiptManageService service;
+    private IReceiptManageService receiptManageService;
 
     @RequestMapping("pageQuery")
     public ResultVO pageQuery(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
@@ -39,26 +39,26 @@ public class ReceiptManageController {
         reqData.put("status", status);
         reqData.put("type", type);
 
-        return service.pageQuery(pageNum, pageSize, reqData);
+        return receiptManageService.pageQuery(pageNum, pageSize, reqData);
     }
 
     @RequestMapping("insert")
     public ResultVO insert(@RequestBody ReceiptDTO dto) {
-        return service.insert(dto);
+        return receiptManageService.insert(dto);
     }
 
     @RequestMapping("delete")
     public ResultVO delete(@RequestParam(value = "rbIds[]") List<Long> rbIds) {
-        return service.delete(rbIds);
+        return receiptManageService.delete(rbIds);
     }
 
     @RequestMapping("editLog")
     public ResultVO editLog(@RequestBody LogisticsDTO dto) {
-        return service.editLog(dto);
+        return receiptManageService.editLog(dto);
     }
 
     @RequestMapping("record")
     public ResultVO record(@RequestParam(value = "rbId") Long rbId, @RequestParam(value = "status", required = false, defaultValue = "1") Byte status) {
-        return service.record(rbId, status);
+        return receiptManageService.record(rbId, status);
     }
 }
