@@ -1,6 +1,5 @@
 package com.smartindustry.storage.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.smartindustry.common.mapper.ReceiptHeadMapper;
 import com.smartindustry.common.pojo.ReceiptHeadPO;
 import com.smartindustry.storage.util.ReceiptNoUtil;
@@ -23,18 +22,15 @@ public class ReceiptHeadDTO implements Serializable {
     /**
      * 来源订单编号
      */
-    @JsonProperty("oNo")
-    private String oNo;
+    private String ono;
     /**
      * 来源订单类型
      */
-    @JsonProperty("oType")
-    private Byte oType;
+    private Byte otype;
     /**
      * 采购日期
      */
-    @JsonProperty("oDate")
-    private Date oDate;
+    private Date odate;
     /**
      * 供应商
      */
@@ -46,16 +42,15 @@ public class ReceiptHeadDTO implements Serializable {
     /**
      * 预计到货日期
      */
-    @JsonProperty("pDate")
-    private Date pDate;
+    private Date pdate;
     /**
      * 物流公司
      */
-    private String loCo;
+    private String loco;
     /**
      * 物流单号
      */
-    private String loNo;
+    private String lono;
     /**
      * 收货方式
      */
@@ -72,18 +67,18 @@ public class ReceiptHeadDTO implements Serializable {
      * @return
      */
     public static ReceiptHeadPO createPO(ReceiptHeadMapper mapper, ReceiptHeadPO po, ReceiptHeadDTO dto) {
-        if (StringUtils.isEmpty(dto.getONo())) {
+        if (StringUtils.isEmpty(dto.getOno())) {
             po.setOrderNo(ReceiptNoUtil.genReceiptHeadNo(mapper, ReceiptNoUtil.RECEIPT_HEAD_YP, new Date()));
         } else {
-            po.setOrderNo(dto.getONo());
+            po.setOrderNo(dto.getOno());
         }
-        po.setOrderType(dto.getOType());
-        po.setOrderDate(dto.getODate());
+        po.setOrderType(dto.getOtype());
+        po.setOrderDate(dto.getOdate());
         po.setSupplier(dto.getSupplier());
         po.setBuyer(dto.getBuyer());
-        po.setPlanDate(dto.getPDate());
-        po.setLogisticsCompany(dto.getLoCo());
-        po.setLogisticsNo(dto.getLoNo());
+        po.setPlanDate(dto.getPdate());
+        po.setLogisticsCompany(dto.getLoco());
+        po.setLogisticsNo(dto.getLono());
         po.setReceiptWay(dto.getWay());
         po.setRemark(dto.getRemark());
         po.setDr((byte) 1);
