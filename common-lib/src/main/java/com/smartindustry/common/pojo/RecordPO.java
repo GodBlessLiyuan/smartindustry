@@ -2,12 +2,16 @@ package com.smartindustry.common.pojo;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
  * sm_record
- * @author 
+ *
+ * @author
  */
+@AllArgsConstructor
 @Data
 public class RecordPO implements Serializable {
     private Long recordId;
@@ -24,11 +28,11 @@ public class RecordPO implements Serializable {
 
     /**
      * 1：录入标签
-5：IQC检测
-10：QE检测
-15：QE确认
-20：物料入库
-25：入库完成
+     * 5：IQC检测
+     * 10：QE检测
+     * 15：QE确认
+     * 20：物料入库
+     * 25：入库完成
      */
     private Byte status;
 

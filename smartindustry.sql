@@ -11,7 +11,7 @@ DROP TABLE IF EXISTS sm_record;
 DROP TABLE IF EXISTS ba_user;
 DROP TABLE IF EXISTS sm_entry_label;
 DROP TABLE IF EXISTS sm_iqc_detect;
-DROP TABLE IF EXISTS sm_metarial_storage;
+DROP TABLE IF EXISTS sm_material_storage;
 DROP TABLE IF EXISTS sm_print_label;
 DROP TABLE IF EXISTS sm_qe_confirm;
 DROP TABLE IF EXISTS sm_qe_detect;
@@ -117,31 +117,31 @@ CREATE TABLE sm_iqc_detect
 (
     receipt_body_id bigint unsigned NOT NULL,
     remark char(255),
-    -- 1：未检验
-    -- 2：允许良品
-    -- 3：QE驳回重检验
-    status tinyint COMMENT '1：未检验
-2：允许良品
-3：QE驳回重检验',
+    -- 1：允许良品
+    -- 2：QE驳回重检验
+    -- 3：未检验
+    status tinyint COMMENT '1：允许良品
+2：QE驳回重检验
+3：未检验',
     PRIMARY KEY (receipt_body_id),
     UNIQUE (receipt_body_id)
 );
 
 
-CREATE TABLE sm_metarial_storage
+CREATE TABLE sm_material_storage
 (
     storage_id bigint unsigned NOT NULL AUTO_INCREMENT,
     receipt_body_id bigint unsigned NOT NULL,
     storage_no bigint unsigned NOT NULL,
     create_time datetime,
-    -- 1：待入库
+    -- 1：已入库
     -- 2：入库中
-    -- 3：已入库
+    -- 3：待入库
     --
     --
-    status tinyint COMMENT '1：待入库
+    status tinyint COMMENT '1：已入库
 2：入库中
-3：已入库
+3：待入库
 
 ',
     pending_num int,
@@ -173,14 +173,14 @@ CREATE TABLE sm_print_label
     -- 2：非良品
     type tinyint COMMENT '1：良品
 2：非良品',
-    -- 1：待入库
+    -- 1：已入库
     -- 2：入库中
-    -- 3：已入库
+    -- 3：待入库
     --
     --
-    status tinyint COMMENT '1：待入库
+    status tinyint COMMENT '1：已入库
 2：入库中
-3：已入库
+3：待入库
 
 ',
     relate_label_id bigint unsigned,
@@ -199,12 +199,12 @@ CREATE TABLE sm_qe_confirm
 (
     receipt_body_id bigint unsigned NOT NULL,
     remark char(255),
-    -- 1：不良，待确认
-    -- 2：特采
-    -- 3：退供应商
-    status tinyint COMMENT '1：不良，待确认
-2：特采
-3：退供应商',
+    -- 1：特采
+    -- 2：退供应商
+    -- 3：不良，待确认
+    status tinyint COMMENT '1：特采
+2：退供应商
+3：不良，待确认',
     PRIMARY KEY (receipt_body_id),
     UNIQUE (receipt_body_id)
 );
@@ -213,10 +213,10 @@ CREATE TABLE sm_qe_confirm
 CREATE TABLE sm_qe_detect
 (
     receipt_body_id bigint unsigned NOT NULL,
-    -- 1：未检验
-    -- 2：允许良品
-    status tinyint COMMENT '1：未检验
-2：允许良品',
+    -- 1：允许良品
+    -- 3：未检验
+    status tinyint COMMENT '1：允许良品
+3：未检验',
     PRIMARY KEY (receipt_body_id),
     UNIQUE (receipt_body_id)
 );
@@ -395,7 +395,7 @@ ALTER TABLE sm_iqc_detect
 ;
 
 
-ALTER TABLE sm_metarial_storage
+ALTER TABLE sm_material_storage
     ADD FOREIGN KEY (receipt_body_id)
         REFERENCES sm_receipt_body (receipt_body_id)
         ON UPDATE RESTRICT

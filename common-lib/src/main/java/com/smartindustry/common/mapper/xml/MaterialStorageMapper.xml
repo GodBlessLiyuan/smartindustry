@@ -1,142 +1,141 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.smartindustry.common.mapper.MaterialStorageMapper">
-  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.MaterialStoragePO">
-    <id column="storage_id" jdbcType="BIGINT" property="storageId" />
-    <result column="receipt_body_id" jdbcType="BIGINT" property="receiptBodyId" />
-    <result column="storage_no" jdbcType="BIGINT" property="storageNo" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="status" jdbcType="TINYINT" property="status" />
-    <result column="pending_num" jdbcType="INTEGER" property="pendingNum" />
-    <result column="stored_num" jdbcType="INTEGER" property="storedNum" />
-    <result column="storage_time" jdbcType="TIMESTAMP" property="storageTime" />
-    <result column="type" jdbcType="TINYINT" property="type" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    storage_id, receipt_body_id, storage_no, create_time, `status`, pending_num, stored_num, 
+    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.MaterialStoragePO">
+        <id column="storage_id" jdbcType="BIGINT" property="storageId"/>
+        <result column="receipt_body_id" jdbcType="BIGINT" property="receiptBodyId"/>
+        <result column="storage_no" jdbcType="BIGINT" property="storageNo"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="pending_num" jdbcType="INTEGER" property="pendingNum"/>
+        <result column="stored_num" jdbcType="INTEGER" property="storedNum"/>
+        <result column="storage_time" jdbcType="TIMESTAMP" property="storageTime"/>
+        <result column="type" jdbcType="TINYINT" property="type"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        storage_id, receipt_body_id, storage_no, create_time, `status`, pending_num, stored_num,
     storage_time, `type`
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from sm_material_storage
-    where storage_id = #{storageId,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from sm_material_storage
-    where storage_id = #{storageId,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.smartindustry.common.pojo.MaterialStoragePO">
-    insert into sm_material_storage (storage_id, receipt_body_id, storage_no, 
-      create_time, `status`, pending_num, 
-      stored_num, storage_time, `type`
-      )
-    values (#{storageId,jdbcType=BIGINT}, #{receiptBodyId,jdbcType=BIGINT}, #{storageNo,jdbcType=BIGINT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT}, #{pendingNum,jdbcType=INTEGER}, 
-      #{storedNum,jdbcType=INTEGER}, #{storageTime,jdbcType=TIMESTAMP}, #{type,jdbcType=TINYINT}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.MaterialStoragePO">
-    insert into sm_material_storage
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="storageId != null">
-        storage_id,
-      </if>
-      <if test="receiptBodyId != null">
-        receipt_body_id,
-      </if>
-      <if test="storageNo != null">
-        storage_no,
-      </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
-      <if test="status != null">
-        `status`,
-      </if>
-      <if test="pendingNum != null">
-        pending_num,
-      </if>
-      <if test="storedNum != null">
-        stored_num,
-      </if>
-      <if test="storageTime != null">
-        storage_time,
-      </if>
-      <if test="type != null">
-        `type`,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="storageId != null">
-        #{storageId,jdbcType=BIGINT},
-      </if>
-      <if test="receiptBodyId != null">
-        #{receiptBodyId,jdbcType=BIGINT},
-      </if>
-      <if test="storageNo != null">
-        #{storageNo,jdbcType=BIGINT},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=TINYINT},
-      </if>
-      <if test="pendingNum != null">
-        #{pendingNum,jdbcType=INTEGER},
-      </if>
-      <if test="storedNum != null">
-        #{storedNum,jdbcType=INTEGER},
-      </if>
-      <if test="storageTime != null">
-        #{storageTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="type != null">
-        #{type,jdbcType=TINYINT},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.MaterialStoragePO">
-    update sm_material_storage
-    <set>
-      <if test="receiptBodyId != null">
-        receipt_body_id = #{receiptBodyId,jdbcType=BIGINT},
-      </if>
-      <if test="storageNo != null">
-        storage_no = #{storageNo,jdbcType=BIGINT},
-      </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="status != null">
-        `status` = #{status,jdbcType=TINYINT},
-      </if>
-      <if test="pendingNum != null">
-        pending_num = #{pendingNum,jdbcType=INTEGER},
-      </if>
-      <if test="storedNum != null">
-        stored_num = #{storedNum,jdbcType=INTEGER},
-      </if>
-      <if test="storageTime != null">
-        storage_time = #{storageTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="type != null">
-        `type` = #{type,jdbcType=TINYINT},
-      </if>
-    </set>
-    where storage_id = #{storageId,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.MaterialStoragePO">
-    update sm_material_storage
-    set receipt_body_id = #{receiptBodyId,jdbcType=BIGINT},
-      storage_no = #{storageNo,jdbcType=BIGINT},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      `status` = #{status,jdbcType=TINYINT},
-      pending_num = #{pendingNum,jdbcType=INTEGER},
-      stored_num = #{storedNum,jdbcType=INTEGER},
-      storage_time = #{storageTime,jdbcType=TIMESTAMP},
-      `type` = #{type,jdbcType=TINYINT}
-    where storage_id = #{storageId,jdbcType=BIGINT}
-  </update>
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sm_material_storage
+        where storage_id = #{storageId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from sm_material_storage
+        where storage_id = #{storageId,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.MaterialStoragePO">
+        insert into sm_material_storage (storage_id, receipt_body_id, storage_no,
+                                         create_time, `status`, pending_num,
+                                         stored_num, storage_time, `type`)
+        values (#{storageId,jdbcType=BIGINT}, #{receiptBodyId,jdbcType=BIGINT}, #{storageNo,jdbcType=BIGINT},
+                #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT}, #{pendingNum,jdbcType=INTEGER},
+                #{storedNum,jdbcType=INTEGER}, #{storageTime,jdbcType=TIMESTAMP}, #{type,jdbcType=TINYINT})
+    </insert>
+    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.MaterialStoragePO">
+        insert into sm_material_storage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="storageId != null">
+                storage_id,
+            </if>
+            <if test="receiptBodyId != null">
+                receipt_body_id,
+            </if>
+            <if test="storageNo != null">
+                storage_no,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="status != null">
+                `status`,
+            </if>
+            <if test="pendingNum != null">
+                pending_num,
+            </if>
+            <if test="storedNum != null">
+                stored_num,
+            </if>
+            <if test="storageTime != null">
+                storage_time,
+            </if>
+            <if test="type != null">
+                `type`,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="storageId != null">
+                #{storageId,jdbcType=BIGINT},
+            </if>
+            <if test="receiptBodyId != null">
+                #{receiptBodyId,jdbcType=BIGINT},
+            </if>
+            <if test="storageNo != null">
+                #{storageNo,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="pendingNum != null">
+                #{pendingNum,jdbcType=INTEGER},
+            </if>
+            <if test="storedNum != null">
+                #{storedNum,jdbcType=INTEGER},
+            </if>
+            <if test="storageTime != null">
+                #{storageTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.MaterialStoragePO">
+        update sm_material_storage
+        <set>
+            <if test="receiptBodyId != null">
+                receipt_body_id = #{receiptBodyId,jdbcType=BIGINT},
+            </if>
+            <if test="storageNo != null">
+                storage_no = #{storageNo,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                `status` = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="pendingNum != null">
+                pending_num = #{pendingNum,jdbcType=INTEGER},
+            </if>
+            <if test="storedNum != null">
+                stored_num = #{storedNum,jdbcType=INTEGER},
+            </if>
+            <if test="storageTime != null">
+                storage_time = #{storageTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="type != null">
+                `type` = #{type,jdbcType=TINYINT},
+            </if>
+        </set>
+        where storage_id = #{storageId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.MaterialStoragePO">
+        update sm_material_storage
+        set receipt_body_id = #{receiptBodyId,jdbcType=BIGINT},
+            storage_no      = #{storageNo,jdbcType=BIGINT},
+            create_time     = #{createTime,jdbcType=TIMESTAMP},
+            `status`        = #{status,jdbcType=TINYINT},
+            pending_num     = #{pendingNum,jdbcType=INTEGER},
+            stored_num      = #{storedNum,jdbcType=INTEGER},
+            storage_time    = #{storageTime,jdbcType=TIMESTAMP},
+            `type`          = #{type,jdbcType=TINYINT}
+        where storage_id = #{storageId,jdbcType=BIGINT}
+    </update>
 </mapper>
