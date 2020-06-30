@@ -6,7 +6,9 @@
         <result column="receipt_head_id" jdbcType="BIGINT" property="receiptHeadId"/>
         <result column="receipt_no" jdbcType="CHAR" property="receiptNo"/>
         <result column="material_no" jdbcType="CHAR" property="materialNo"/>
+        <result column="material_name" jdbcType="CHAR" property="materialName"/>
         <result column="material_type" jdbcType="TINYINT" property="materialType"/>
+        <result column="material_model" jdbcType="CHAR" property="materialModel"/>
         <result column="material_desc" jdbcType="CHAR" property="materialDesc"/>
         <result column="order_total" jdbcType="INTEGER" property="orderTotal"/>
         <result column="accept_num" jdbcType="INTEGER" property="acceptNum"/>
@@ -18,8 +20,9 @@
         <result column="dr" jdbcType="TINYINT" property="dr"/>
     </resultMap>
     <sql id="Base_Column_List">
-        receipt_body_id, receipt_head_id, receipt_no, material_no, material_type, material_desc,
-    order_total, accept_num, accept_date, good_num, bad_num, stock_num, `status`, dr
+        receipt_body_id, receipt_head_id, receipt_no, material_no, material_name, material_type,
+    material_model, material_desc, order_total, accept_num, accept_date, good_num, bad_num, 
+    stock_num, `status`, dr
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
@@ -34,15 +37,17 @@
     </update>
     <insert id="insert" parameterType="com.smartindustry.common.pojo.ReceiptBodyPO">
         insert into sm_receipt_body (receipt_body_id, receipt_head_id, receipt_no,
-                                     material_no, material_type, material_desc,
-                                     order_total, accept_num, accept_date,
-                                     good_num, bad_num, stock_num,
-                                     `status`, dr)
+                                     material_no, material_name, material_type,
+                                     material_model, material_desc, order_total,
+                                     accept_num, accept_date, good_num,
+                                     bad_num, stock_num, `status`,
+                                     dr)
         values (#{receiptBodyId,jdbcType=BIGINT}, #{receiptHeadId,jdbcType=BIGINT}, #{receiptNo,jdbcType=CHAR},
-                #{materialNo,jdbcType=CHAR}, #{materialType,jdbcType=TINYINT}, #{materialDesc,jdbcType=CHAR},
-                #{orderTotal,jdbcType=INTEGER}, #{acceptNum,jdbcType=INTEGER}, #{acceptDate,jdbcType=DATE},
-                #{goodNum,jdbcType=INTEGER}, #{badNum,jdbcType=INTEGER}, #{stockNum,jdbcType=INTEGER},
-                #{status,jdbcType=TINYINT}, #{dr,jdbcType=TINYINT})
+                #{materialNo,jdbcType=CHAR}, #{materialName,jdbcType=CHAR}, #{materialType,jdbcType=TINYINT},
+                #{materialModel,jdbcType=CHAR}, #{materialDesc,jdbcType=CHAR}, #{orderTotal,jdbcType=INTEGER},
+                #{acceptNum,jdbcType=INTEGER}, #{acceptDate,jdbcType=DATE}, #{goodNum,jdbcType=INTEGER},
+                #{badNum,jdbcType=INTEGER}, #{stockNum,jdbcType=INTEGER}, #{status,jdbcType=TINYINT},
+                #{dr,jdbcType=TINYINT})
     </insert>
     <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.ReceiptBodyPO">
         insert into sm_receipt_body
@@ -59,8 +64,14 @@
             <if test="materialNo != null">
                 material_no,
             </if>
+            <if test="materialName != null">
+                material_name,
+            </if>
             <if test="materialType != null">
                 material_type,
+            </if>
+            <if test="materialModel != null">
+                material_model,
             </if>
             <if test="materialDesc != null">
                 material_desc,
@@ -103,8 +114,14 @@
             <if test="materialNo != null">
                 #{materialNo,jdbcType=CHAR},
             </if>
+            <if test="materialName != null">
+                #{materialName,jdbcType=CHAR},
+            </if>
             <if test="materialType != null">
                 #{materialType,jdbcType=TINYINT},
+            </if>
+            <if test="materialModel != null">
+                #{materialModel,jdbcType=CHAR},
             </if>
             <if test="materialDesc != null">
                 #{materialDesc,jdbcType=CHAR},
@@ -147,8 +164,14 @@
             <if test="materialNo != null">
                 material_no = #{materialNo,jdbcType=CHAR},
             </if>
+            <if test="materialName != null">
+                material_name = #{materialName,jdbcType=CHAR},
+            </if>
             <if test="materialType != null">
                 material_type = #{materialType,jdbcType=TINYINT},
+            </if>
+            <if test="materialModel != null">
+                material_model = #{materialModel,jdbcType=CHAR},
             </if>
             <if test="materialDesc != null">
                 material_desc = #{materialDesc,jdbcType=CHAR},
@@ -185,7 +208,9 @@
         set receipt_head_id = #{receiptHeadId,jdbcType=BIGINT},
             receipt_no      = #{receiptNo,jdbcType=CHAR},
             material_no     = #{materialNo,jdbcType=CHAR},
+            material_name   = #{materialName,jdbcType=CHAR},
             material_type   = #{materialType,jdbcType=TINYINT},
+            material_model  = #{materialModel,jdbcType=CHAR},
             material_desc   = #{materialDesc,jdbcType=CHAR},
             order_total     = #{orderTotal,jdbcType=INTEGER},
             accept_num      = #{acceptNum,jdbcType=INTEGER},

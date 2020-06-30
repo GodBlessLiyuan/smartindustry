@@ -2,11 +2,13 @@ package com.smartindustry.common.pojo;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import lombok.Data;
 
 /**
  * sm_receipt_body
- * @author 
+ *
+ * @author
  */
 @Data
 public class ReceiptBodyPO implements Serializable {
@@ -18,7 +20,11 @@ public class ReceiptBodyPO implements Serializable {
 
     private String materialNo;
 
+    private String materialName;
+
     private Byte materialType;
+
+    private String materialModel;
 
     private String materialDesc;
 
@@ -35,18 +41,18 @@ public class ReceiptBodyPO implements Serializable {
     private Integer stockNum;
 
     /**
-     * 1��¼���ǩ
-5��IQC���
-10��QE���
-15��QEȷ��
-20���������
-25��������
+     * 1：录入标签
+     * 5：IQC检测
+     * 10：QE检测
+     * 15：QE确认
+     * 20：物料入库
+     * 25：入库完成
      */
     private Byte status;
 
     /**
-     * 1��δɾ��
-2����ɾ��
+     * 1：未删除
+     * 2：已删除
      */
     private Byte dr;
 
