@@ -29,7 +29,7 @@ public class RecordVO implements Serializable {
     /**
      * 操作日期
      */
-    private Date cTime;
+    private Date ctime;
 
     /**
      * pos 转 vos
@@ -55,7 +55,7 @@ public class RecordVO implements Serializable {
         RecordVO vo = new RecordVO();
         vo.setName(po.getName());
         vo.setType(po.getType());
-        vo.setCTime(po.getCreateTime());
+        vo.setCtime(po.getCreateTime());
         return vo;
     }
 }

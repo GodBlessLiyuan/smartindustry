@@ -31,6 +31,14 @@ public class ReceiptBodyDTO implements Serializable {
      */
     private Byte mtype;
     /**
+     * 物料名称
+     */
+    private String mname;
+    /**
+     * 物料型号
+     */
+    private String mmodel;
+    /**
      * 物料描述
      */
     private String mdesc;

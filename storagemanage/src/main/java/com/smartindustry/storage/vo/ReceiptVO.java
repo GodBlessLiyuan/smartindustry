@@ -19,8 +19,8 @@ import java.util.List;
 public class ReceiptVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private ReceiptVO.ReceiptHeadVO head = new ReceiptVO.ReceiptHeadVO();
-    private List<ReceiptVO.ReceiptBodyVO> body = new ArrayList<>();
+    private ReceiptHeadVO head = new ReceiptHeadVO();
+    private List<ReceiptBodyVO> body = new ArrayList<>();
 
     /**
      * po 转 vo
