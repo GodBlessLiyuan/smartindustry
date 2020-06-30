@@ -19,9 +19,9 @@ public class ReceiptPageVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 收料ID
+     * 收料表体ID
      */
-    private Long rid;
+    private Long rbid;
     /**
      * 收料单号
      */
@@ -102,7 +102,7 @@ public class ReceiptPageVO implements Serializable {
     public static ReceiptPageVO convert(ReceiptBO bo) {
         ReceiptPageVO vo = new ReceiptPageVO();
 
-        vo.setRid(bo.getReceiptBodyId());
+        vo.setRbid(bo.getReceiptBodyId());
         vo.setRno(bo.getReceiptNo());
         vo.setStatus(bo.getStatus());
         vo.setOno(bo.getOrderNo());
