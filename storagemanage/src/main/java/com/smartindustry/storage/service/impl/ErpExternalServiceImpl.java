@@ -42,6 +42,14 @@ public class ErpExternalServiceImpl implements IErpExternalService {
         bodyVO.setMdesc("测试物料，原料类型");
         bodyVO.setOtotal(5000);
         body.add(bodyVO);
+        ErpOrderVO.ErpOrderBodyVO bodyVO2 = new ErpOrderVO.ErpOrderBodyVO();
+        bodyVO2.setMno("5101000498");
+        bodyVO2.setMtype((byte) 1);
+        bodyVO2.setMname("合体2");
+        bodyVO2.setMmodel("SH0002");
+        bodyVO2.setMdesc("测试物料2，原料类型");
+        bodyVO2.setOtotal(2000);
+        body.add(bodyVO2);
 
         return ResultVO.ok().setData(vo);
     }
