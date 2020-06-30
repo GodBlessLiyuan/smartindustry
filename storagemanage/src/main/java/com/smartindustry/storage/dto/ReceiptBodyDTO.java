@@ -1,6 +1,5 @@
 package com.smartindustry.storage.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.smartindustry.common.mapper.ReceiptBodyMapper;
 import com.smartindustry.common.pojo.ReceiptBodyPO;
 import com.smartindustry.common.pojo.ReceiptHeadPO;
@@ -75,7 +74,7 @@ public class ReceiptBodyDTO implements Serializable {
      * @return
      */
     public static List<ReceiptBodyPO> createPOs(ReceiptHeadPO headPO, List<ReceiptBodyDTO> dtos, ReceiptBodyMapper mapper) {
-        List<ReceiptBodyPO> pos = new ArrayList<>();
+        List<ReceiptBodyPO> pos = new ArrayList<>(dtos.size());
 
         String head = headPO.getOrderType() == 1 ? ReceiptNoUtil.RECEIPT_BODY_PO : headPO.getOrderType() == 2 ? ReceiptNoUtil.RECEIPT_BODY_RP : ReceiptNoUtil.RECEIPT_BODY_YP;
         int curNum = ReceiptNoUtil.getReceiptBodyNum(mapper, head, new Date());

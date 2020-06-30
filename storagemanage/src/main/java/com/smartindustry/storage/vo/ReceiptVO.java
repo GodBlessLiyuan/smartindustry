@@ -64,7 +64,7 @@ public class ReceiptVO implements Serializable {
      * @return
      */
     public static List<ReceiptBodyVO> convert(List<ReceiptBodyPO> pos) {
-        List<ReceiptBodyVO> vos = new ArrayList<>();
+        List<ReceiptBodyVO> vos = new ArrayList<>(pos.size());
         for (ReceiptBodyPO po : pos) {
             vos.add(convert(po));
         }
