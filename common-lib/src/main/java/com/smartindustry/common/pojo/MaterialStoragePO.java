@@ -5,11 +5,11 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * sm_metarial_storage
+ * sm_material_storage
  * @author 
  */
 @Data
-public class MetarialStoragePO implements Serializable {
+public class MaterialStoragePO implements Serializable {
     private Long storageId;
 
     private Long receiptBodyId;

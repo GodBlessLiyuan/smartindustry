@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.smartindustry.common.mapper.MetarialStorageMapper">
-  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.MetarialStoragePO">
+<mapper namespace="com.smartindustry.common.mapper.MaterialStorageMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.MaterialStoragePO">
     <id column="storage_id" jdbcType="BIGINT" property="storageId" />
     <result column="receipt_body_id" jdbcType="BIGINT" property="receiptBodyId" />
     <result column="storage_no" jdbcType="BIGINT" property="storageNo" />
@@ -19,15 +19,15 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from sm_metarial_storage
+    from sm_material_storage
     where storage_id = #{storageId,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from sm_metarial_storage
+    delete from sm_material_storage
     where storage_id = #{storageId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.smartindustry.common.pojo.MetarialStoragePO">
-    insert into sm_metarial_storage (storage_id, receipt_body_id, storage_no, 
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.MaterialStoragePO">
+    insert into sm_material_storage (storage_id, receipt_body_id, storage_no, 
       create_time, `status`, pending_num, 
       stored_num, storage_time, `type`
       )
@@ -36,8 +36,8 @@
       #{storedNum,jdbcType=INTEGER}, #{storageTime,jdbcType=TIMESTAMP}, #{type,jdbcType=TINYINT}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.MetarialStoragePO">
-    insert into sm_metarial_storage
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.MaterialStoragePO">
+    insert into sm_material_storage
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="storageId != null">
         storage_id,
@@ -97,8 +97,8 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.MetarialStoragePO">
-    update sm_metarial_storage
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.MaterialStoragePO">
+    update sm_material_storage
     <set>
       <if test="receiptBodyId != null">
         receipt_body_id = #{receiptBodyId,jdbcType=BIGINT},
@@ -127,8 +127,8 @@
     </set>
     where storage_id = #{storageId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.MetarialStoragePO">
-    update sm_metarial_storage
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.MaterialStoragePO">
+    update sm_material_storage
     set receipt_body_id = #{receiptBodyId,jdbcType=BIGINT},
       storage_no = #{storageNo,jdbcType=BIGINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},

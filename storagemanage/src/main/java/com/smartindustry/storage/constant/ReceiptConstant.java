@@ -70,6 +70,4 @@ public class ReceiptConstant {
     public static final String RECORD_TYPE_IQC_RECHECK = "IQC重检";
     public static final String RECORD_TYPE_STORAGE_INVOICE = "生产入库单";
     public static final String RECORD_TYPE_STORAGE_CONFIRM = "确认入库";
-
-
 }
