@@ -3,6 +3,8 @@ package com.smartindustry.storage.service;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.dto.IqcTestDTO;
 
+import java.util.Map;
+
 /**
  * @author: xiahui
  * @date: Created in 2020/6/23 11:39
@@ -12,12 +14,20 @@ import com.smartindustry.storage.dto.IqcTestDTO;
 public interface IQualityManageService {
 
     /**
+     * 分页查询
+     *
+     * @param reqData
+     * @return
+     */
+    ResultVO pageQuery(int pageNum, int pageSize, Map<String, Object> reqData);
+
+    /**
      * IQC检验
      *
      * @param dto
      * @return
      */
-    ResultVO test(IqcTestDTO dto);
+    ResultVO iqcTest(IqcTestDTO dto);
 
     /**
      * 查询记录

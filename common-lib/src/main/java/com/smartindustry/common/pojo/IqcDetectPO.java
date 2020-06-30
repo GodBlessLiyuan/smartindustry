@@ -1,11 +1,13 @@
 package com.smartindustry.common.pojo;
 
 import java.io.Serializable;
+
 import lombok.Data;
 
 /**
  * sm_iqc_detect
- * @author 
+ *
+ * @author
  */
 @Data
 public class IqcDetectPO implements Serializable {
@@ -14,9 +16,9 @@ public class IqcDetectPO implements Serializable {
     private String remark;
 
     /**
-     * 1：未检验
-2：允许良品
-3：QE驳回重检验
+     * 1：允许良品
+     * 2：QE驳回重检验
+     * 3：未检验
      */
     private Byte status;
 

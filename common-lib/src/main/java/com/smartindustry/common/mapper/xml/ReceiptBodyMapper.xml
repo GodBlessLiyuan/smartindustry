@@ -246,6 +246,13 @@
         from sm_receipt_body rb
         left join sm_receipt_head rh on rb.receipt_head_id = rh.receipt_head_id
         where rb.dr = 1
+        <if test="keyword != null and keyword != ''">and (rb.material_no like '%' #{keyword,jdbcType=CHAR} '%' or
+            rb.material_desc like '%' #{keyword,jdbcType=CHAR} '%' or rh.order_no like '%' #{keyword,jdbcType=CHAR} '%')
+        </if>
+        <if test="supplier != null and supplier != ''">and rh.supplier like '%' #{supplier,jdbcType=CHAR} '%'</if>
+        <if test="status != null and status != 0">and rb.`status` = #{status,jdbcType=TINYINT}</if>
+        <if test="type != null and type != 0">and rh.order_type = #{type,jdbcType=TINYINT}</if>
+        <if test="rno != null and rno != ''">and rb.receipt_no like '%' #{rno,jdbcType=CHAR} '%'</if>
     </select>
     <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="receiptBodyId">
         insert into sm_receipt_body (receipt_body_id, receipt_head_id, receipt_no,

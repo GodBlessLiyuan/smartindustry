@@ -1,12 +1,17 @@
 package com.smartindustry.storage.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.smartindustry.common.bo.ReceiptBO;
 import com.smartindustry.common.mapper.*;
 import com.smartindustry.common.pojo.*;
+import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.ReceiptConstant;
 import com.smartindustry.storage.dto.IqcTestDTO;
 import com.smartindustry.storage.service.IQualityManageService;
 import com.smartindustry.storage.vo.PrintLabelVO;
+import com.smartindustry.storage.vo.ReceiptPageVO;
 import com.smartindustry.storage.vo.RecordVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,9 +44,17 @@ public class QualityManageServiceImpl implements IQualityManageService {
     @Autowired
     private ReceiptBodyMapper receiptBodyMapper;
 
+    @Override
+    public ResultVO pageQuery(int pageNum, int pageSize, Map<String, Object> reqData) {
+        Page<ReceiptBO> page = PageHelper.startPage(pageNum, pageSize);
+        List<ReceiptBO> bos = receiptBodyMapper.pageQuery(reqData);
+
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), ReceiptPageVO.convert(bos)));
+    }
+
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public ResultVO test(IqcTestDTO dto) {
+    public ResultVO iqcTest(IqcTestDTO dto) {
         IqcDetectPO iqcDetectPO = iqcDetectMapper.selectByPrimaryKey(dto.getRbid());
         if (null == iqcDetectPO) {
             return new ResultVO(2000);
@@ -67,15 +80,15 @@ public class QualityManageServiceImpl implements IQualityManageService {
             receiptBodyPO.setGoodNum(dto.getGnum());
             receiptBodyPO.setBadNum(dto.getBnum());
             receiptBodyPO.setStatus(ReceiptConstant.RECEIPT_QE_CONFIRM);
+            receiptBodyMapper.updateByPrimaryKey(receiptBodyPO);
 
             // 操作记录
             recordMapper.insert(new RecordPO(null, dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_ADD, new Date(), ReceiptConstant.RECEIPT_QE_CONFIRM));
         }
 
         // 操作记录
-        recordMapper.insert(new RecordPO(null, dto.getRbid(), 1L, "夏慧",
-                iqcDetectPO.getStatus() == 3 ? ReceiptConstant.RECORD_TYPE_IQC_DETECT : ReceiptConstant.RECORD_TYPE_IQC_RECHECK,
-                new Date(), ReceiptConstant.RECEIPT_IQC_DETECT));
+        String type = ReceiptConstant.IQC_DETECT_WAIT.equals(iqcDetectPO.getStatus()) ? ReceiptConstant.RECORD_TYPE_IQC_DETECT : ReceiptConstant.RECORD_TYPE_IQC_RECHECK;
+        recordMapper.insert(new RecordPO(null, dto.getRbid(), 1L, "夏慧", type, new Date(), ReceiptConstant.RECEIPT_IQC_DETECT));
 
         return ResultVO.ok();
     }

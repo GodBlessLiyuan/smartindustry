@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author: xiahui
  * @date: Created in 2020/6/23 11:39
@@ -21,9 +24,24 @@ public class QualityManageController {
     @Autowired
     private IQualityManageService qualityManageService;
 
-    @RequestMapping("test")
-    public ResultVO test(@RequestBody IqcTestDTO dto) {
-        return qualityManageService.test(dto);
+    @RequestMapping("pageQuery")
+    public ResultVO pageQuery(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                              @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                              @RequestParam(value = "rno", required = false, defaultValue = "") String rno,
+                              @RequestParam(value = "type", required = false, defaultValue = "0") Byte type,
+                              @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+                              @RequestParam(value = "status") Byte status) {
+        Map<String, Object> reqData = new HashMap<>(4);
+        reqData.put("rno", rno);
+        reqData.put("type", type);
+        reqData.put("keyword", keyword);
+        reqData.put("status", status);
+        return qualityManageService.pageQuery(pageNum, pageSize, reqData);
+    }
+
+    @RequestMapping("iqcTest")
+    public ResultVO iqcTest(@RequestBody IqcTestDTO dto) {
+        return qualityManageService.iqcTest(dto);
     }
 
     @RequestMapping("record")
