@@ -12,10 +12,7 @@ import com.smartindustry.storage.dto.ReceiptBodyDTO;
 import com.smartindustry.storage.dto.ReceiptDTO;
 import com.smartindustry.storage.dto.ReceiptHeadDTO;
 import com.smartindustry.storage.service.IReceiptManageService;
-import com.smartindustry.storage.vo.LogisticsVO;
-import com.smartindustry.storage.vo.PrintLabelVO;
-import com.smartindustry.storage.vo.ReceiptPageVO;
-import com.smartindustry.storage.vo.RecordVO;
+import com.smartindustry.storage.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -81,7 +78,7 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         }
         recordMapper.batchInsert(recordPOs);
 
-        return ResultVO.ok();
+        return ResultVO.ok().setData(ReceiptVO.convert(headPO, bodyPOs));
     }
 
     @Override
