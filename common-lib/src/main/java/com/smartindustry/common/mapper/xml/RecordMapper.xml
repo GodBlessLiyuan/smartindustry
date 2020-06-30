@@ -118,8 +118,7 @@
 
     <insert id="batchInsert" parameterType="java.util.List">
         insert into sm_record (record_id, receipt_body_id, user_id,
-        `name`, `type`, create_time
-        )
+        `name`, `type`, create_time, `status`)
         values
         <foreach collection="list" item="po" separator=",">
             (#{po.recordId,jdbcType=BIGINT}, #{po.receiptBodyId,jdbcType=BIGINT}, #{po.userId,jdbcType=BIGINT},
