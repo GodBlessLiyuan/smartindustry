@@ -1,6 +1,7 @@
 package com.smartindustry.storage.dto;
 
 import com.smartindustry.common.pojo.PrintLabelPO;
+import com.smartindustry.storage.constant.ReceiptConstant;
 import com.smartindustry.storage.util.ReceiptNoUtil;
 import lombok.Data;
 
@@ -65,7 +66,7 @@ public class PrintLabelDTO implements Serializable {
         po.setNum(dto.getMnum());
         po.setOrigin(dto.getOrigin());
         po.setAddTime(date);
-        po.setStatus((byte) 1);
+        po.setStatus(ReceiptConstant.LABEL_STORAGE_PENDING);
         po.setDr((byte) 1);
 
         return po;

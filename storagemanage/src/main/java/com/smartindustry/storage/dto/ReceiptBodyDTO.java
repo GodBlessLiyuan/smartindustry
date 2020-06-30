@@ -3,6 +3,7 @@ package com.smartindustry.storage.dto;
 import com.smartindustry.common.mapper.ReceiptBodyMapper;
 import com.smartindustry.common.pojo.ReceiptBodyPO;
 import com.smartindustry.common.pojo.ReceiptHeadPO;
+import com.smartindustry.storage.constant.ReceiptConstant;
 import com.smartindustry.storage.util.ReceiptNoUtil;
 import lombok.Data;
 
@@ -106,7 +107,7 @@ public class ReceiptBodyDTO implements Serializable {
         po.setGoodNum(dto.getGnum());
         po.setBadNum(dto.getBnum());
         po.setStockNum(dto.getSnum());
-        po.setStatus((byte) 1);
+        po.setStatus(ReceiptConstant.RECEIPT_ENTRY_LABEL);
         po.setDr((byte) 1);
 
         return po;

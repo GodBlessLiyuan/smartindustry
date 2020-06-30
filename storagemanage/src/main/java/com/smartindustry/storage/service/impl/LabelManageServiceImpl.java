@@ -3,6 +3,7 @@ package com.smartindustry.storage.service.impl;
 import com.smartindustry.common.mapper.*;
 import com.smartindustry.common.pojo.*;
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.storage.constant.ReceiptConstant;
 import com.smartindustry.storage.dto.PrintLabelDTO;
 import com.smartindustry.storage.service.ILabelManageService;
 import com.smartindustry.storage.util.ReceiptNoUtil;
@@ -71,7 +72,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
         if (null == bodyPO) {
             return new ResultVO(2000);
         }
-        if (bodyPO.getStatus() != 1) {
+        if (!ReceiptConstant.RECEIPT_ENTRY_LABEL.equals(bodyPO.getStatus())) {
             return new ResultVO(2000);
         }
 
@@ -86,34 +87,22 @@ public class LabelManageServiceImpl implements ILabelManageService {
                 // 原材料
                 IqcDetectPO iqcPO = new IqcDetectPO();
                 iqcPO.setReceiptBodyId(rbId);
-                iqcPO.setStatus((byte) 1);
+                iqcPO.setStatus(ReceiptConstant.IQC_DETECT_WAIT);
                 iqcDetectMapper.insert(iqcPO);
             } else {
                 // 半成品/成品
                 QeDetectPO qePO = new QeDetectPO();
                 qePO.setReceiptBodyId(rbId);
-                qePO.setStatus((byte) 1);
+                qePO.setStatus(ReceiptConstant.QE_CONFIRM_WAIT);
                 qeDetectMapper.insert(qePO);
             }
 
-            RecordPO recordPO = new RecordPO();
-            recordPO.setReceiptBodyId(rbId);
-            recordPO.setUserId((long) 1);
-            recordPO.setName("夏慧");
-            recordPO.setType("新增");
-            recordPO.setCreateTime(new Date());
-            recordPO.setStatus((byte) (bodyPO.getMaterialType() == 1 ? 5 : 10));
-            recordMapper.insert(recordPO);
+            Byte status = bodyPO.getMaterialType() == 1 ? ReceiptConstant.RECEIPT_IQC_DETECT : ReceiptConstant.RECEIPT_QE_DETECT;
+            recordMapper.insert(new RecordPO(null, rbId, 1L, "夏慧", ReceiptConstant.RECORD_TYPE_ADD, new Date(), status));
+
         }
 
-        RecordPO recordPO = new RecordPO();
-        recordPO.setReceiptBodyId(rbId);
-        recordPO.setUserId((long) 1);
-        recordPO.setName("夏慧");
-        recordPO.setType("完成录入");
-        recordPO.setCreateTime(new Date());
-        recordPO.setStatus((byte) 1);
-        recordMapper.insert(recordPO);
+        recordMapper.insert(new RecordPO(null, rbId, 1L, "夏慧", ReceiptConstant.RECORD_TYPE_FINISH, new Date(), ReceiptConstant.RECEIPT_ENTRY_LABEL));
 
         return ResultVO.ok();
     }

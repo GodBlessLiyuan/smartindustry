@@ -7,6 +7,7 @@ import com.smartindustry.common.mapper.*;
 import com.smartindustry.common.pojo.*;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.storage.constant.ReceiptConstant;
 import com.smartindustry.storage.dto.LogisticsDTO;
 import com.smartindustry.storage.dto.ReceiptBodyDTO;
 import com.smartindustry.storage.dto.ReceiptDTO;
@@ -65,16 +66,10 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         }
         entryLabelMapper.batchInsert(labelPOs);
 
+        // 操作记录
         List<RecordPO> recordPOs = new ArrayList<>();
         for (ReceiptBodyPO bodyPO : bodyPOs) {
-            RecordPO recordPO = new RecordPO();
-            recordPO.setReceiptBodyId(bodyPO.getReceiptBodyId());
-            recordPO.setUserId((long) 1);
-            recordPO.setName("夏慧");
-            recordPO.setType("新增");
-            recordPO.setCreateTime(new Date());
-            recordPO.setStatus((byte) 1);
-            recordPOs.add(recordPO);
+            recordPOs.add(new RecordPO(null, bodyPO.getReceiptBodyId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_ADD, new Date(), ReceiptConstant.RECEIPT_ENTRY_LABEL));
         }
         recordMapper.batchInsert(recordPOs);
 
@@ -125,14 +120,8 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         ReceiptHeadPO headPO = receiptHeadMapper.selectByPrimaryKey(bodyPO.getReceiptHeadId());
         receiptHeadMapper.updateByPrimaryKey(LogisticsDTO.buildPO(headPO, dto));
 
-        RecordPO recordPO = new RecordPO();
-        recordPO.setReceiptBodyId(dto.getRbid());
-        recordPO.setUserId((long) 1);
-        recordPO.setName("夏慧");
-        recordPO.setType("修改");
-        recordPO.setCreateTime(new Date());
-        recordPO.setStatus((byte) 1);
-        recordMapper.insert(recordPO);
+        recordMapper.insert(new RecordPO(null, dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_MODIFY,
+                new Date(), ReceiptConstant.RECEIPT_ENTRY_LABEL));
 
         return ResultVO.ok();
     }

@@ -1,6 +1,7 @@
 package com.smartindustry.storage.service;
 
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.storage.dto.IqcTestDTO;
 
 /**
  * @author: xiahui
@@ -9,6 +10,15 @@ import com.smartindustry.common.vo.ResultVO;
  * @version: 1.0
  */
 public interface IQualityManageService {
+
+    /**
+     * IQC检验
+     *
+     * @param dto
+     * @return
+     */
+    ResultVO test(IqcTestDTO dto);
+
     /**
      * 查询记录
      *
