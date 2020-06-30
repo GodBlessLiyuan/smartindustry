@@ -249,17 +249,16 @@
     </select>
     <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="receiptBodyId">
         insert into sm_receipt_body (receipt_body_id, receipt_head_id, receipt_no,
-        material_no, material_type, material_desc,
-        order_total, accept_num, accept_date,
-        good_num, bad_num, stock_num,
-        `status`, dr)
+        material_no, material_name, material_type, material_model, material_desc, order_total,
+        accept_num, accept_date, good_num, bad_num, stock_num, `status`, dr)
         values
         <foreach collection="list" item="po" separator=",">
             (#{po.receiptBodyId,jdbcType=BIGINT}, #{po.receiptHeadId,jdbcType=BIGINT}, #{po.receiptNo,jdbcType=CHAR},
-            #{po.materialNo,jdbcType=CHAR}, #{po.materialType,jdbcType=TINYINT}, #{po.materialDesc,jdbcType=CHAR},
-            #{po.orderTotal,jdbcType=INTEGER}, #{po.acceptNum,jdbcType=INTEGER}, #{po.acceptDate,jdbcType=DATE},
-            #{po.goodNum,jdbcType=INTEGER}, #{po.badNum,jdbcType=INTEGER}, #{po.stockNum,jdbcType=INTEGER},
-            #{po.status,jdbcType=TINYINT}, #{po.dr,jdbcType=TINYINT})
+            #{po.materialNo,jdbcType=CHAR}, #{po.materialName,jdbcType=CHAR}, #{po.materialType,jdbcType=TINYINT},
+            #{po.materialModel,jdbcType=CHAR}, #{po.materialDesc,jdbcType=CHAR}, #{po.orderTotal,jdbcType=INTEGER},
+            #{po.acceptNum,jdbcType=INTEGER}, #{po.acceptDate,jdbcType=DATE}, #{po.goodNum,jdbcType=INTEGER},
+            #{po.badNum,jdbcType=INTEGER}, #{po.stockNum,jdbcType=INTEGER}, #{po.status,jdbcType=TINYINT},
+            #{po.dr,jdbcType=TINYINT})
         </foreach>
     </insert>
     <select id="queryNo" parameterType="java.lang.String" resultMap="BaseResultMap">
