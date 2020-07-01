@@ -9,6 +9,7 @@ import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.ReceiptConstant;
 import com.smartindustry.storage.dto.IqcTestDTO;
+import com.smartindustry.storage.dto.QeConfirmDTO;
 import com.smartindustry.storage.service.IQualityManageService;
 import com.smartindustry.storage.util.ReceiptNoUtil;
 import com.smartindustry.storage.vo.PrintLabelVO;
@@ -98,17 +99,45 @@ public class QualityManageServiceImpl implements IQualityManageService {
         return ResultVO.ok();
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
-    public ResultVO record(Long rbId, Byte status) {
-        Map<String, Object> res = new HashMap<>();
-        // 打印标签
-        List<PrintLabelPO> printLabelPOs = printLabelMapper.queryByReceiptBodyId(rbId);
-        res.put("print", PrintLabelVO.convert(printLabelPOs));
-        // 操作记录
-        List<RecordPO> recordPOs = recordMapper.queryByReceiptBodyId(rbId, status);
-        res.put("record", RecordVO.convert(recordPOs));
+    public ResultVO qeConfirm(QeConfirmDTO dto) {
+        QeConfirmPO qeConfirmPO = qeConfirmMapper.selectByPrimaryKey(dto.getRbid());
+        if (null == qeConfirmPO || !ReceiptConstant.QE_CONFIRM_WAIT.equals(qeConfirmPO.getStatus())) {
+            return new ResultVO(2000);
+        }
 
-        return ResultVO.ok().setData(res);
+        if (dto.getStatus() == 1) {
+            // 特采
+            qeConfirmPO.setStatus(ReceiptConstant.QE_CONFIRM_FRANCHISE);
+            qeConfirmPO.setRemark(dto.getRemark());
+            qeConfirmMapper.updateByPrimaryKey(qeConfirmPO);
+
+            ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(dto.getRbid());
+            receiptBodyPO.setGoodNum(dto.getNum());
+            receiptBodyPO.setBadNum(receiptBodyPO.getAcceptNum() - dto.getNum());
+            receiptBodyMapper.updateByPrimaryKey(receiptBodyPO);
+        } else if (dto.getStatus() == 2) {
+            // 驳回
+            qeConfirmMapper.deleteByPrimaryKey(dto.getRbid());
+
+            IqcDetectPO iqcDetectPO = new IqcDetectPO();
+            iqcDetectPO.setStatus(ReceiptConstant.IQC_DETECT_REJECT);
+            iqcDetectPO.setRemark(dto.getRemark());
+            iqcDetectMapper.insert(iqcDetectPO);
+
+            recordMapper.insert(new RecordPO(null, dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_QE_REJECT, new Date(), ReceiptConstant.RECEIPT_IQC_DETECT));
+        } else if (dto.getStatus() == 3) {
+            // 退供应商
+            qeConfirmPO.setRemark(dto.getRemark());
+            qeConfirmPO.setStatus(ReceiptConstant.QE_CONFIRM_RETURN);
+            qeConfirmMapper.updateByPrimaryKey(qeConfirmPO);
+        }
+
+        String status = dto.getStatus() == 1 ? ReceiptConstant.RECORD_TYPE_QE_FRANCHISE : dto.getStatus() == 2 ? ReceiptConstant.RECORD_TYPE_QE_REJECT : ReceiptConstant.RECORD_TYPE_QE_RETURN;
+        recordMapper.insert(new RecordPO(null, dto.getRbid(), 1L, "夏慧", status, new Date(), ReceiptConstant.RECEIPT_QE_CONFIRM));
+
+        return ResultVO.ok();
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -153,6 +182,22 @@ public class QualityManageServiceImpl implements IQualityManageService {
         materialStoragePO.setStoredNum(0);
         materialStorageMapper.insert(materialStoragePO);
 
+        // 操作记录
+        recordMapper.insert(new RecordPO(null, rbId, 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, new Date(), ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
+
         return ResultVO.ok();
+    }
+
+    @Override
+    public ResultVO record(Long rbId, Byte status) {
+        Map<String, Object> res = new HashMap<>();
+        // 打印标签
+        List<PrintLabelPO> printLabelPOs = printLabelMapper.queryByReceiptBodyId(rbId);
+        res.put("print", PrintLabelVO.convert(printLabelPOs));
+        // 操作记录
+        List<RecordPO> recordPOs = recordMapper.queryByReceiptBodyId(rbId, status);
+        res.put("record", RecordVO.convert(recordPOs));
+
+        return ResultVO.ok().setData(res);
     }
 }

@@ -2,6 +2,7 @@ package com.smartindustry.storage.service;
 
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.dto.IqcTestDTO;
+import com.smartindustry.storage.dto.QeConfirmDTO;
 
 import java.util.Map;
 
@@ -30,13 +31,12 @@ public interface IQualityManageService {
     ResultVO iqcTest(IqcTestDTO dto);
 
     /**
-     * 查询记录
+     * QE确认
      *
-     * @param rbId
-     * @param status
+     * @param dto
      * @return
      */
-    ResultVO record(Long rbId, Byte status);
+    ResultVO qeConfirm(QeConfirmDTO dto);
 
     /**
      * 生产入库
@@ -45,4 +45,13 @@ public interface IQualityManageService {
      * @return
      */
     ResultVO storage(Long rbId);
+
+    /**
+     * 查询记录
+     *
+     * @param rbId
+     * @param status
+     * @return
+     */
+    ResultVO record(Long rbId, Byte status);
 }

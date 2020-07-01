@@ -1,7 +1,9 @@
 package com.smartindustry.storage.controller;
 
+import com.smartindustry.common.pojo.QeConfirmPO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.dto.IqcTestDTO;
+import com.smartindustry.storage.dto.QeConfirmDTO;
 import com.smartindustry.storage.service.IQualityManageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,14 +46,18 @@ public class QualityManageController {
         return qualityManageService.iqcTest(dto);
     }
 
-    @RequestMapping("record")
-    public ResultVO record(@RequestParam(value = "rbId") Long rbId, @RequestParam(value = "status", required = false, defaultValue = "1") Byte status) {
-        return qualityManageService.record(rbId, status);
+    @RequestMapping("qeConfirm")
+    public ResultVO qeConfirm(@RequestBody QeConfirmDTO dto) {
+        return qualityManageService.qeConfirm(dto);
     }
 
     @RequestMapping("storage")
-    public ResultVO storage(@RequestParam(value = "rbId") Long rbId) {
-        return qualityManageService.storage(rbId);
+    public ResultVO storage(@RequestParam(value = "rbid") Long rbid) {
+        return qualityManageService.storage(rbid);
     }
 
+    @RequestMapping("record")
+    public ResultVO record(@RequestParam(value = "rbid") Long rbid, @RequestParam(value = "status", required = false, defaultValue = "1") Byte status) {
+        return qualityManageService.record(rbid, status);
+    }
 }
