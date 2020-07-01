@@ -53,6 +53,16 @@ public class ReceiptConstant {
     public static final Byte QE_CONFIRM_WAIT = 3;
 
     /**
+     * 物料入库
+     */
+    //  已入库
+    public static final Byte MATERIAL_STORAGE_FINISH = 1;
+    //  入库中
+    public static final Byte MATERIAL_STORAGE_BEING = 2;
+    //  待入库
+    public static final Byte MATERIAL_STORAGE_PENDING = 3;
+
+    /**
      * 打印标签 状态
      */
     public static final Byte LABEL_STORAGE_FINISH = 1;

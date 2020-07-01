@@ -37,4 +37,12 @@ public interface IQualityManageService {
      * @return
      */
     ResultVO record(Long rbId, Byte status);
+
+    /**
+     * 生产入库
+     *
+     * @param rbId
+     * @return
+     */
+    ResultVO storage(Long rbId);
 }

@@ -40,9 +40,13 @@ public class QualityManageServiceImpl implements IQualityManageService {
     @Autowired
     private IqcDetectMapper iqcDetectMapper;
     @Autowired
+    private QeDetectMapper qeDetectMapper;
+    @Autowired
     private QeConfirmMapper qeConfirmMapper;
     @Autowired
     private ReceiptBodyMapper receiptBodyMapper;
+    @Autowired
+    private MaterialStorageMapper materialStorageMapper;
 
     @Override
     public ResultVO pageQuery(int pageNum, int pageSize, Map<String, Object> reqData) {
@@ -104,5 +108,50 @@ public class QualityManageServiceImpl implements IQualityManageService {
         res.put("record", RecordVO.convert(recordPOs));
 
         return ResultVO.ok().setData(res);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public ResultVO storage(Long rbId) {
+        IqcDetectPO iqcDetectPO = iqcDetectMapper.selectByPrimaryKey(rbId);
+        if (null != iqcDetectPO) {
+            // IQC检验
+            if (!ReceiptConstant.IQC_DETECT_GOOD.equals(iqcDetectPO.getStatus())) {
+                return new ResultVO(2000);
+            }
+            iqcDetectMapper.deleteByPrimaryKey(rbId);
+        } else {
+            // QE确认
+            QeConfirmPO qeConfirmPO = qeConfirmMapper.selectByPrimaryKey(rbId);
+            if (null != qeConfirmPO) {
+                if (!ReceiptConstant.QE_CONFIRM_FRANCHISE.equals(qeConfirmPO.getStatus())) {
+                    return new ResultVO(2000);
+                }
+                qeConfirmMapper.deleteByPrimaryKey(rbId);
+            } else {
+                // QE检验
+                QeDetectPO qeDetectPO = qeDetectMapper.selectByPrimaryKey(rbId);
+                if (null == qeDetectPO || ReceiptConstant.QE_DETECT_GOOD.equals(qeDetectPO.getStatus())) {
+                    return new ResultVO(2000);
+                }
+                qeDetectMapper.deleteByPrimaryKey(rbId);
+            }
+        }
+
+        ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(rbId);
+        receiptBodyPO.setStatus(ReceiptConstant.RECEIPT_MATERIAL_STORAGE);
+        receiptBodyMapper.updateByPrimaryKey(receiptBodyPO);
+
+        // 生成入库单
+        MaterialStoragePO materialStoragePO = new MaterialStoragePO();
+        materialStoragePO.setReceiptBodyId(rbId);
+        materialStoragePO.setStorageNo(null);
+        materialStoragePO.setCreateTime(new Date());
+        materialStoragePO.setStatus(ReceiptConstant.MATERIAL_STORAGE_PENDING);
+        materialStoragePO.setPendingNum(receiptBodyPO.getAcceptNum());
+        materialStoragePO.setStoredNum(0);
+        materialStorageMapper.insert(materialStoragePO);
+
+        return ResultVO.ok();
     }
 }

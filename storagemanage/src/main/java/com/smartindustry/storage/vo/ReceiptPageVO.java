@@ -39,6 +39,10 @@ public class ReceiptPageVO implements Serializable {
      */
     private String mno;
     /**
+     * 物料名称
+     */
+    private String mname;
+    /**
      * 物料类型
      */
     private Byte mtype;
@@ -107,6 +111,7 @@ public class ReceiptPageVO implements Serializable {
         vo.setStatus(bo.getStatus());
         vo.setOno(bo.getOrderNo());
         vo.setMno(bo.getMaterialNo());
+        vo.setMname(bo.getMaterialName());
         vo.setMtype(bo.getMaterialType());
         vo.setMdesc(bo.getMaterialDesc());
         vo.setOtotal(bo.getOrderTotal());

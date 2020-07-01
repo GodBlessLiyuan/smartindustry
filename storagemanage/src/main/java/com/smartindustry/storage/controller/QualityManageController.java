@@ -48,4 +48,10 @@ public class QualityManageController {
     public ResultVO record(@RequestParam(value = "rbId") Long rbId, @RequestParam(value = "status", required = false, defaultValue = "1") Byte status) {
         return qualityManageService.record(rbId, status);
     }
+
+    @RequestMapping("storage")
+    public ResultVO storage(@RequestParam(value = "rbId") Long rbId) {
+        return qualityManageService.storage(rbId);
+    }
+
 }
