@@ -4,7 +4,7 @@
     <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.MaterialStoragePO">
         <id column="storage_id" jdbcType="BIGINT" property="storageId"/>
         <result column="receipt_body_id" jdbcType="BIGINT" property="receiptBodyId"/>
-        <result column="storage_no" jdbcType="BIGINT" property="storageNo"/>
+        <result column="storage_no" jdbcType="CHAR" property="storageNo"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="status" jdbcType="TINYINT" property="status"/>
         <result column="pending_num" jdbcType="INTEGER" property="pendingNum"/>
@@ -31,7 +31,7 @@
         insert into sm_material_storage (storage_id, receipt_body_id, storage_no,
                                          create_time, `status`, pending_num,
                                          stored_num, storage_time, `type`)
-        values (#{storageId,jdbcType=BIGINT}, #{receiptBodyId,jdbcType=BIGINT}, #{storageNo,jdbcType=BIGINT},
+        values (#{storageId,jdbcType=BIGINT}, #{receiptBodyId,jdbcType=BIGINT}, #{storageNo,jdbcType=CHAR},
                 #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT}, #{pendingNum,jdbcType=INTEGER},
                 #{storedNum,jdbcType=INTEGER}, #{storageTime,jdbcType=TIMESTAMP}, #{type,jdbcType=TINYINT})
     </insert>
@@ -74,7 +74,7 @@
                 #{receiptBodyId,jdbcType=BIGINT},
             </if>
             <if test="storageNo != null">
-                #{storageNo,jdbcType=BIGINT},
+                #{storageNo,jdbcType=CHAR},
             </if>
             <if test="createTime != null">
                 #{createTime,jdbcType=TIMESTAMP},
@@ -103,7 +103,7 @@
                 receipt_body_id = #{receiptBodyId,jdbcType=BIGINT},
             </if>
             <if test="storageNo != null">
-                storage_no = #{storageNo,jdbcType=BIGINT},
+                storage_no = #{storageNo,jdbcType=CHAR},
             </if>
             <if test="createTime != null">
                 create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -129,7 +129,7 @@
     <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.MaterialStoragePO">
         update sm_material_storage
         set receipt_body_id = #{receiptBodyId,jdbcType=BIGINT},
-            storage_no      = #{storageNo,jdbcType=BIGINT},
+            storage_no      = #{storageNo,jdbcType=CHAR},
             create_time     = #{createTime,jdbcType=TIMESTAMP},
             `status`        = #{status,jdbcType=TINYINT},
             pending_num     = #{pendingNum,jdbcType=INTEGER},
@@ -138,4 +138,12 @@
             `type`          = #{type,jdbcType=TINYINT}
         where storage_id = #{storageId,jdbcType=BIGINT}
     </update>
+
+    <select id="queryNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sm_material_storage
+        where storage_no like #{no,jdbcType=CHAR} '%'
+        order by storage_id desc limit 1
+    </select>
 </mapper>

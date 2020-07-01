@@ -1,8 +1,10 @@
 package com.smartindustry.storage.util;
 
+import com.smartindustry.common.mapper.MaterialStorageMapper;
 import com.smartindustry.common.mapper.PrintLabelMapper;
 import com.smartindustry.common.mapper.ReceiptBodyMapper;
 import com.smartindustry.common.mapper.ReceiptHeadMapper;
+import com.smartindustry.common.pojo.MaterialStoragePO;
 import com.smartindustry.common.pojo.PrintLabelPO;
 import com.smartindustry.common.pojo.ReceiptBodyPO;
 import com.smartindustry.common.pojo.ReceiptHeadPO;
@@ -22,11 +24,13 @@ public class ReceiptNoUtil {
     public static final String RECEIPT_BODY_PO = "CG";
     public static final String RECEIPT_BODY_YP = "YP";
     public static final String RECEIPT_BODY_RP = "RP";
+    public static final String MATERIAL_STORAGE_PK = "PK";
     private static final int NUM_LEN = 5;
 
     private static NoUtil<ReceiptHeadPO, Long> headUtil = new NoUtil<>();
     private static NoUtil<ReceiptBodyPO, Long> bodyUtil = new NoUtil<>();
     private static NoUtil<PrintLabelPO, Long> labelUtil = new NoUtil<>();
+    private static NoUtil<MaterialStoragePO, Long> storageUtil = new NoUtil<>();
 
     /**
      * 生成表头编号
@@ -93,5 +97,17 @@ public class ReceiptNoUtil {
         }
 
         return labelUtil.getNum(po.getPackageId(), NUM_LEN);
+    }
+
+    /**
+     * 生成入库单编号
+     *
+     * @param head
+     * @param date
+     * @return
+     */
+    public static String genStorageNo(MaterialStorageMapper mapper, String head, Date date) {
+        MaterialStoragePO po = storageUtil.getPO(mapper, head, date);
+        return storageUtil.genNum(head, date, null == po ? 1 : storageUtil.getNum(po.getStorageNo(), NUM_LEN) + 1, NUM_LEN);
     }
 }

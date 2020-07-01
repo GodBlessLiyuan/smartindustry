@@ -16,7 +16,7 @@ public class MaterialStoragePO implements Serializable {
 
     private Long receiptBodyId;
 
-    private Long storageNo;
+    private String storageNo;
 
     private Date createTime;
 

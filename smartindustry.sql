@@ -132,7 +132,7 @@ CREATE TABLE sm_material_storage
 (
     storage_id bigint unsigned NOT NULL AUTO_INCREMENT,
     receipt_body_id bigint unsigned NOT NULL,
-    storage_no bigint unsigned NOT NULL,
+    storage_no char(32) NOT NULL,
     create_time datetime,
     -- 1：已入库
     -- 2：入库中
@@ -152,7 +152,8 @@ CREATE TABLE sm_material_storage
     type tinyint COMMENT '1：良品
 2：非良品',
     PRIMARY KEY (storage_id),
-    UNIQUE (storage_id)
+    UNIQUE (storage_id),
+    UNIQUE (storage_no)
 );
 
 

@@ -10,6 +10,7 @@ import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.ReceiptConstant;
 import com.smartindustry.storage.dto.IqcTestDTO;
 import com.smartindustry.storage.service.IQualityManageService;
+import com.smartindustry.storage.util.ReceiptNoUtil;
 import com.smartindustry.storage.vo.PrintLabelVO;
 import com.smartindustry.storage.vo.ReceiptPageVO;
 import com.smartindustry.storage.vo.RecordVO;
@@ -145,7 +146,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
         // 生成入库单
         MaterialStoragePO materialStoragePO = new MaterialStoragePO();
         materialStoragePO.setReceiptBodyId(rbId);
-        materialStoragePO.setStorageNo(null);
+        materialStoragePO.setStorageNo(ReceiptNoUtil.genStorageNo(materialStorageMapper, ReceiptNoUtil.MATERIAL_STORAGE_PK, new Date()));
         materialStoragePO.setCreateTime(new Date());
         materialStoragePO.setStatus(ReceiptConstant.MATERIAL_STORAGE_PENDING);
         materialStoragePO.setPendingNum(receiptBodyPO.getAcceptNum());
