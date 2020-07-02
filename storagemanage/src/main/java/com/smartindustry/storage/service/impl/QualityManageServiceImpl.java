@@ -199,15 +199,17 @@ public class QualityManageServiceImpl implements IQualityManageService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO storage(Long rbId) {
+        Byte status;    // 操作记录状态
+
         IqcDetectPO iqcDetectPO = iqcDetectMapper.selectByPrimaryKey(rbId);
-        // 操作记录类型
-        Byte status = ReceiptConstant.RECEIPT_IQC_DETECT;
         if (null != iqcDetectPO) {
             // IQC检验
             if (!ReceiptConstant.IQC_DETECT_GOOD.equals(iqcDetectPO.getStatus())) {
                 return new ResultVO(2000);
             }
             iqcDetectMapper.deleteByPrimaryKey(rbId);
+
+            status = ReceiptConstant.RECEIPT_IQC_DETECT;
         } else {
             // QE确认
             QeConfirmPO qeConfirmPO = qeConfirmMapper.selectByPrimaryKey(rbId);
@@ -216,18 +218,24 @@ public class QualityManageServiceImpl implements IQualityManageService {
                     return new ResultVO(2000);
                 }
                 qeConfirmMapper.deleteByPrimaryKey(rbId);
+
                 status = ReceiptConstant.RECEIPT_QE_CONFIRM;
             } else {
                 // QE检验
                 QeDetectPO qeDetectPO = qeDetectMapper.selectByPrimaryKey(rbId);
-                if (null == qeDetectPO || ReceiptConstant.QE_DETECT_GOOD.equals(qeDetectPO.getStatus())) {
+                if (null == qeDetectPO) {
+                    return new ResultVO(2000);
+                }
+                if (ReceiptConstant.QE_DETECT_GOOD.equals(qeDetectPO.getStatus())) {
                     return new ResultVO(2000);
                 }
                 qeDetectMapper.deleteByPrimaryKey(rbId);
+
                 status = ReceiptConstant.RECEIPT_QE_DETECT;
             }
         }
 
+        // 更新物料单
         ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(rbId);
         receiptBodyPO.setStatus(ReceiptConstant.RECEIPT_MATERIAL_STORAGE);
         receiptBodyPO.setStockNum(0);

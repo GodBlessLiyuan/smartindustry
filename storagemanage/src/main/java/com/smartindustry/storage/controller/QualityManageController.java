@@ -31,13 +31,15 @@ public class QualityManageController {
                               @RequestParam(value = "rno", required = false, defaultValue = "") String rno,
                               @RequestParam(value = "type", required = false, defaultValue = "0") Byte type,
                               @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+                              @RequestParam(value = "qaStatus", required = false, defaultValue = "0") Byte qaStatus,
                               @RequestParam(value = "status") Byte status) {
-        Map<String, Object> reqData = new HashMap<>(4);
+        Map<String, Object> reqData = new HashMap<>(8);
         // 质量管理 分页查询查询
         reqData.put("qa", true);
         reqData.put("rno", rno);
         reqData.put("type", type);
         reqData.put("keyword", keyword);
+        reqData.put("qaStatus", qaStatus);
         reqData.put("status", status);
         return qualityManageService.pageQuery(pageNum, pageSize, reqData);
     }

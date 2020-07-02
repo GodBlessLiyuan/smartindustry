@@ -59,7 +59,7 @@ public class QualityPageVO implements Serializable {
      */
     private Byte status;
     /**
-     * 收料日期
+     * 接受日期
      */
     private Date adate;
 
