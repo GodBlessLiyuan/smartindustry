@@ -18,7 +18,11 @@ public class MaterialStoragePO implements Serializable {
 
     private String storageNo;
 
-    private Date createTime;
+    private Integer pendingNum;
+
+    private Integer storedNum;
+
+    private Date storageTime;
 
     /**
      * 1：已入库
@@ -27,17 +31,13 @@ public class MaterialStoragePO implements Serializable {
      */
     private Byte status;
 
-    private Integer pendingNum;
-
-    private Integer storedNum;
-
-    private Date storageTime;
-
     /**
      * 1：良品
      * 2：非良品
      */
     private Byte type;
+
+    private Date createTime;
 
     private static final long serialVersionUID = 1L;
 }

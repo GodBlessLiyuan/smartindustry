@@ -1,6 +1,5 @@
 package com.smartindustry.common.bo;
 
-import com.smartindustry.common.pojo.ReceiptBodyPO;
 import lombok.Data;
 
 import java.util.Date;
@@ -12,7 +11,7 @@ import java.util.Date;
  * @version: 1.0
  */
 @Data
-public class ReceiptBO extends ReceiptBodyPO {
+public class ReceiptBO extends ReceiptBodyBO {
     private String orderNo;
 
     /**

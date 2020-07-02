@@ -1,6 +1,6 @@
 package com.smartindustry.storage.vo;
 
-import com.smartindustry.common.pojo.ReceiptBodyPO;
+import com.smartindustry.common.bo.ReceiptBodyBO;
 import com.smartindustry.common.pojo.ReceiptHeadPO;
 import lombok.Data;
 
@@ -29,10 +29,10 @@ public class ReceiptVO implements Serializable {
      * @param bodyPOs
      * @return
      */
-    public static ReceiptVO convert(ReceiptHeadPO headPO, List<ReceiptBodyPO> bodyPOs) {
+    public static ReceiptVO convert(ReceiptHeadPO headPO, List<ReceiptBodyBO> bodyPOs) {
         ReceiptVO vo = new ReceiptVO();
         vo.setHead(convert(headPO));
-        vo.setBody(convert(bodyPOs));
+        vo.setBody(ReceiptVO.convert(bodyPOs));
         return vo;
     }
 
@@ -63,9 +63,9 @@ public class ReceiptVO implements Serializable {
      * @param pos
      * @return
      */
-    public static List<ReceiptBodyVO> convert(List<ReceiptBodyPO> pos) {
+    public static List<ReceiptBodyVO> convert(List<ReceiptBodyBO> pos) {
         List<ReceiptBodyVO> vos = new ArrayList<>(pos.size());
-        for (ReceiptBodyPO po : pos) {
+        for (ReceiptBodyBO po : pos) {
             vos.add(convert(po));
         }
         return vos;
@@ -74,21 +74,21 @@ public class ReceiptVO implements Serializable {
     /**
      * body po 转 vo
      *
-     * @param po
+     * @param bo
      * @return
      */
-    public static ReceiptBodyVO convert(ReceiptBodyPO po) {
+    public static ReceiptBodyVO convert(ReceiptBodyBO bo) {
         ReceiptBodyVO vo = new ReceiptBodyVO();
-        vo.setRbid(po.getReceiptBodyId());
-        vo.setRno(po.getReceiptNo());
-        vo.setMno(po.getMaterialNo());
-        vo.setMname(po.getMaterialName());
-        vo.setMtype(po.getMaterialType());
-        vo.setMmodel(po.getMaterialModel());
-        vo.setMdesc(po.getMaterialDesc());
-        vo.setOtotal(po.getOrderTotal());
-        vo.setAnum(po.getAcceptNum());
-        vo.setAdate(po.getAcceptDate());
+        vo.setRbid(bo.getReceiptBodyId());
+        vo.setRno(bo.getReceiptNo());
+        vo.setMno(bo.getMaterialNo());
+        vo.setMname(bo.getMaterialName());
+        vo.setMtype(bo.getMaterialType());
+        vo.setMmodel(bo.getMaterialModel());
+        vo.setMdesc(bo.getMaterialDesc());
+        vo.setOtotal(bo.getOrderTotal());
+        vo.setAnum(bo.getAcceptNum());
+        vo.setAdate(bo.getAcceptDate());
         return vo;
     }
 

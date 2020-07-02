@@ -13,11 +13,13 @@
         <result column="logistics_no" jdbcType="CHAR" property="logisticsNo"/>
         <result column="receipt_way" jdbcType="TINYINT" property="receiptWay"/>
         <result column="remark" jdbcType="CHAR" property="remark"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
         <result column="dr" jdbcType="TINYINT" property="dr"/>
     </resultMap>
     <sql id="Base_Column_List">
         receipt_head_id, order_no, order_type, order_date, supplier, buyer, plan_date, logistics_company,
-    logistics_no, receipt_way, remark, dr
+    logistics_no, receipt_way, remark, create_time, update_time, dr
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
@@ -35,11 +37,13 @@
         insert into sm_receipt_head (receipt_head_id, order_no, order_type,
                                      order_date, supplier, buyer,
                                      plan_date, logistics_company, logistics_no,
-                                     receipt_way, remark, dr)
+                                     receipt_way, remark, create_time,
+                                     update_time, dr)
         values (#{receiptHeadId,jdbcType=BIGINT}, #{orderNo,jdbcType=CHAR}, #{orderType,jdbcType=TINYINT},
                 #{orderDate,jdbcType=DATE}, #{supplier,jdbcType=CHAR}, #{buyer,jdbcType=CHAR},
                 #{planDate,jdbcType=DATE}, #{logisticsCompany,jdbcType=CHAR}, #{logisticsNo,jdbcType=CHAR},
-                #{receiptWay,jdbcType=TINYINT}, #{remark,jdbcType=CHAR}, #{dr,jdbcType=TINYINT})
+                #{receiptWay,jdbcType=TINYINT}, #{remark,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP},
+                #{updateTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
     </insert>
     <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.ReceiptHeadPO">
         insert into sm_receipt_head
@@ -76,6 +80,12 @@
             </if>
             <if test="remark != null">
                 remark,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
             </if>
             <if test="dr != null">
                 dr,
@@ -115,6 +125,12 @@
             <if test="remark != null">
                 #{remark,jdbcType=CHAR},
             </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
             <if test="dr != null">
                 #{dr,jdbcType=TINYINT},
             </if>
@@ -153,6 +169,12 @@
             <if test="remark != null">
                 remark = #{remark,jdbcType=CHAR},
             </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
             <if test="dr != null">
                 dr = #{dr,jdbcType=TINYINT},
             </if>
@@ -171,6 +193,8 @@
             logistics_no      = #{logisticsNo,jdbcType=CHAR},
             receipt_way       = #{receiptWay,jdbcType=TINYINT},
             remark            = #{remark,jdbcType=CHAR},
+            create_time       = #{createTime,jdbcType=TIMESTAMP},
+            update_time       = #{updateTime,jdbcType=TIMESTAMP},
             dr                = #{dr,jdbcType=TINYINT}
         where receipt_head_id = #{receiptHeadId,jdbcType=BIGINT}
     </update>

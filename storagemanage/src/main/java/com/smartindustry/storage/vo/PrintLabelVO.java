@@ -75,7 +75,7 @@ public class PrintLabelVO implements Serializable {
         vo.setPbatch(po.getProduceBatch());
         vo.setNum(po.getNum());
         vo.setRpid(po.getRelatePackageId());
-        vo.setCtime(po.getAddTime());
+        vo.setCtime(po.getCreateTime());
         return vo;
     }
 }

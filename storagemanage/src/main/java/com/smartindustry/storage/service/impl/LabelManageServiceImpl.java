@@ -1,5 +1,6 @@
 package com.smartindustry.storage.service.impl;
 
+import com.smartindustry.common.bo.ReceiptBodyBO;
 import com.smartindustry.common.mapper.*;
 import com.smartindustry.common.pojo.*;
 import com.smartindustry.common.vo.ResultVO;
@@ -52,9 +53,8 @@ public class LabelManageServiceImpl implements ILabelManageService {
             // 手动录入
             List<PrintLabelPO> pos = new ArrayList<>();
             int num = ReceiptNoUtil.getLabelNum(printLabelMapper, null, new Date());
-            Date curDate = new Date();
             for (int i = 0; i < dto.getPnum(); i++) {
-                pos.add(PrintLabelDTO.createPO(dto, ++num, curDate, ReceiptConstant.LABEL_ORIGIN_ENTRY));
+                pos.add(PrintLabelDTO.createPO(dto, ++num, ReceiptConstant.LABEL_ORIGIN_ENTRY));
             }
             printLabelMapper.batchInsert(pos);
 
@@ -68,7 +68,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO finish(Long rbId) {
-        ReceiptBodyPO bodyPO = receiptBodyMapper.selectByPrimaryKey(rbId);
+        ReceiptBodyBO bodyPO = receiptBodyMapper.queryByBodyId(rbId);
         if (null == bodyPO) {
             return new ResultVO(2000);
         }

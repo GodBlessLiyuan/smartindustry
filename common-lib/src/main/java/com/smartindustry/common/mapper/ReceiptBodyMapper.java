@@ -1,6 +1,7 @@
 package com.smartindustry.common.mapper;
 
 import com.smartindustry.common.bo.ReceiptBO;
+import com.smartindustry.common.bo.ReceiptBodyBO;
 import com.smartindustry.common.pojo.ReceiptBodyPO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -23,9 +24,9 @@ public interface ReceiptBodyMapper extends BaseMapper<ReceiptBodyPO, Long> {
     /**
      * 批量插入
      *
-     * @param bodyPOs
+     * @param bodyBOs
      */
-    void batchInsert(List<ReceiptBodyPO> bodyPOs);
+    void batchInsert(List<ReceiptBodyBO> bodyBOs);
 
     /**
      * 批量删除
@@ -48,5 +49,13 @@ public interface ReceiptBodyMapper extends BaseMapper<ReceiptBodyPO, Long> {
      * @param headId
      * @return
      */
-    List<ReceiptBodyPO> queryByHeadId(Long headId);
+    List<ReceiptBodyBO> queryByHeadId(Long headId);
+
+    /**
+     * 根据表体ID查询BO
+     *
+     * @param rbId
+     * @return
+     */
+    com.smartindustry.common.bo.ReceiptBodyBO queryByBodyId(Long rbId);
 }

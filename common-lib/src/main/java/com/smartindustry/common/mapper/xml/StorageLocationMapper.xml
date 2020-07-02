@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.StorageLocationMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.StorageLocationPO">
+    <id column="location_no" jdbcType="CHAR" property="locationNo" />
+    <result column="location_code" jdbcType="CHAR" property="locationCode" />
+    <result column="location_name" jdbcType="CHAR" property="locationName" />
+    <result column="location_type" jdbcType="TINYINT" property="locationType" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="dr" jdbcType="TINYINT" property="dr" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    location_no, location_code, location_name, location_type, user_id, create_time, update_time, 
+    dr
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sm_storage_location
+    where location_no = #{locationNo,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from sm_storage_location
+    where location_no = #{locationNo,jdbcType=CHAR}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.StorageLocationPO">
+    insert into sm_storage_location (location_no, location_code, location_name, 
+      location_type, user_id, create_time, 
+      update_time, dr)
+    values (#{locationNo,jdbcType=CHAR}, #{locationCode,jdbcType=CHAR}, #{locationName,jdbcType=CHAR}, 
+      #{locationType,jdbcType=TINYINT}, #{userId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.StorageLocationPO">
+    insert into sm_storage_location
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="locationNo != null">
+        location_no,
+      </if>
+      <if test="locationCode != null">
+        location_code,
+      </if>
+      <if test="locationName != null">
+        location_name,
+      </if>
+      <if test="locationType != null">
+        location_type,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="dr != null">
+        dr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="locationNo != null">
+        #{locationNo,jdbcType=CHAR},
+      </if>
+      <if test="locationCode != null">
+        #{locationCode,jdbcType=CHAR},
+      </if>
+      <if test="locationName != null">
+        #{locationName,jdbcType=CHAR},
+      </if>
+      <if test="locationType != null">
+        #{locationType,jdbcType=TINYINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dr != null">
+        #{dr,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.StorageLocationPO">
+    update sm_storage_location
+    <set>
+      <if test="locationCode != null">
+        location_code = #{locationCode,jdbcType=CHAR},
+      </if>
+      <if test="locationName != null">
+        location_name = #{locationName,jdbcType=CHAR},
+      </if>
+      <if test="locationType != null">
+        location_type = #{locationType,jdbcType=TINYINT},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dr != null">
+        dr = #{dr,jdbcType=TINYINT},
+      </if>
+    </set>
+    where location_no = #{locationNo,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.StorageLocationPO">
+    update sm_storage_location
+    set location_code = #{locationCode,jdbcType=CHAR},
+      location_name = #{locationName,jdbcType=CHAR},
+      location_type = #{locationType,jdbcType=TINYINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      dr = #{dr,jdbcType=TINYINT}
+    where location_no = #{locationNo,jdbcType=CHAR}
+  </update>
+</mapper>

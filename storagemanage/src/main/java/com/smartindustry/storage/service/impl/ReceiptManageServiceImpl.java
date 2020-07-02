@@ -3,6 +3,7 @@ package com.smartindustry.storage.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.smartindustry.common.bo.ReceiptBO;
+import com.smartindustry.common.bo.ReceiptBodyBO;
 import com.smartindustry.common.mapper.*;
 import com.smartindustry.common.pojo.*;
 import com.smartindustry.common.vo.PageInfoVO;
@@ -55,11 +56,11 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         ReceiptHeadPO headPO = ReceiptHeadDTO.createPO(receiptHeadMapper, new ReceiptHeadPO(), dto.getHead());
         receiptHeadMapper.insert(headPO);
 
-        List<ReceiptBodyPO> bodyPOs = ReceiptBodyDTO.createPOs(headPO, dto.getBody(), receiptBodyMapper);
-        receiptBodyMapper.batchInsert(bodyPOs);
+        List<ReceiptBodyBO> bodyBOs = ReceiptBodyDTO.createPOs(headPO, dto.getBody(), receiptBodyMapper);
+        receiptBodyMapper.batchInsert(bodyBOs);
 
         List<EntryLabelPO> labelPOs = new ArrayList<>();
-        for (ReceiptBodyPO bodyPO : bodyPOs) {
+        for (ReceiptBodyBO bodyPO : bodyBOs) {
             EntryLabelPO labelPO = new EntryLabelPO();
             labelPO.setReceiptBodyId(bodyPO.getReceiptBodyId());
             labelPOs.add(labelPO);
@@ -68,12 +69,12 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
 
         // 操作记录
         List<RecordPO> recordPOs = new ArrayList<>();
-        for (ReceiptBodyPO bodyPO : bodyPOs) {
-            recordPOs.add(new RecordPO(null, bodyPO.getReceiptBodyId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_ADD, new Date(), ReceiptConstant.RECEIPT_ENTRY_LABEL));
+        for (ReceiptBodyBO bodyBO : bodyBOs) {
+            recordPOs.add(new RecordPO(null, bodyBO.getReceiptBodyId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_ADD, new Date(), ReceiptConstant.RECEIPT_ENTRY_LABEL));
         }
         recordMapper.batchInsert(recordPOs);
 
-        return ResultVO.ok().setData(ReceiptVO.convert(headPO, bodyPOs));
+        return ResultVO.ok().setData(ReceiptVO.convert(headPO, bodyBOs));
     }
 
     @Override
@@ -84,7 +85,7 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         new Thread(() -> {
             List<Long> headIds = receiptBodyMapper.queryHeadIds(rbIds);
             for (Long headId : headIds) {
-                List<ReceiptBodyPO> bodyPOs = receiptBodyMapper.queryByHeadId(headId);
+                List<ReceiptBodyBO> bodyPOs = receiptBodyMapper.queryByHeadId(headId);
                 if (null == bodyPOs || bodyPOs.size() == 0) {
                     receiptHeadMapper.deleteByPrimaryKey(headId);
                 }

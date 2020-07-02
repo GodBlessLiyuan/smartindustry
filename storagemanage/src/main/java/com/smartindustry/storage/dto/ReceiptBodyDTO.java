@@ -1,7 +1,7 @@
 package com.smartindustry.storage.dto;
 
+import com.smartindustry.common.bo.ReceiptBodyBO;
 import com.smartindustry.common.mapper.ReceiptBodyMapper;
-import com.smartindustry.common.pojo.ReceiptBodyPO;
 import com.smartindustry.common.pojo.ReceiptHeadPO;
 import com.smartindustry.storage.constant.ReceiptConstant;
 import com.smartindustry.storage.util.ReceiptNoUtil;
@@ -74,15 +74,15 @@ public class ReceiptBodyDTO implements Serializable {
      * @param dtos
      * @return
      */
-    public static List<ReceiptBodyPO> createPOs(ReceiptHeadPO headPO, List<ReceiptBodyDTO> dtos, ReceiptBodyMapper mapper) {
-        List<ReceiptBodyPO> pos = new ArrayList<>(dtos.size());
+    public static List<ReceiptBodyBO> createPOs(ReceiptHeadPO headPO, List<ReceiptBodyDTO> dtos, ReceiptBodyMapper mapper) {
+        List<ReceiptBodyBO> bos = new ArrayList<>(dtos.size());
 
         String head = headPO.getOrderType() == 1 ? ReceiptNoUtil.RECEIPT_BODY_PO : headPO.getOrderType() == 2 ? ReceiptNoUtil.RECEIPT_BODY_RP : ReceiptNoUtil.RECEIPT_BODY_YP;
         int curNum = ReceiptNoUtil.getReceiptBodyNum(mapper, head, new Date());
         for (ReceiptBodyDTO dto : dtos) {
-            pos.add(ReceiptBodyDTO.createPO(headPO.getReceiptHeadId(), dto, head, ++curNum));
+            bos.add(ReceiptBodyDTO.createPO(headPO.getReceiptHeadId(), dto, head, ++curNum));
         }
-        return pos;
+        return bos;
     }
 
     /**
@@ -92,24 +92,24 @@ public class ReceiptBodyDTO implements Serializable {
      * @param dto
      * @return
      */
-    private static ReceiptBodyPO createPO(Long headId, ReceiptBodyDTO dto, String head, int num) {
-        ReceiptBodyPO po = new ReceiptBodyPO();
-        po.setReceiptHeadId(headId);
-        po.setReceiptNo(ReceiptNoUtil.genReceiptBodyNo(head, new Date(), num));
-        po.setMaterialNo(dto.getMno());
-        po.setMaterialName(dto.getMname());
-        po.setMaterialType(dto.getMtype());
-        po.setMaterialModel(dto.getMmodel());
-        po.setMaterialDesc(dto.getMdesc());
-        po.setOrderTotal(dto.getOtotal());
-        po.setAcceptNum(dto.getAnum());
-        po.setAcceptDate(null == dto.getAdate() ? new Date() : dto.getAdate());
-        po.setGoodNum(dto.getGnum());
-        po.setBadNum(dto.getBnum());
-        po.setStockNum(dto.getSnum());
-        po.setStatus(ReceiptConstant.RECEIPT_ENTRY_LABEL);
-        po.setDr((byte) 1);
+    private static ReceiptBodyBO createPO(Long headId, ReceiptBodyDTO dto, String head, int num) {
+        ReceiptBodyBO bo = new ReceiptBodyBO();
+        bo.setReceiptHeadId(headId);
+        bo.setReceiptNo(ReceiptNoUtil.genReceiptBodyNo(head, new Date(), num));
+        bo.setMaterialNo(dto.getMno());
+        bo.setMaterialName(dto.getMno());
+        bo.setMaterialType(dto.getMtype());
+        bo.setMaterialModel(dto.getMmodel());
+        bo.setMaterialDesc(dto.getMdesc());
+        bo.setOrderTotal(dto.getOtotal());
+        bo.setAcceptNum(dto.getAnum());
+        bo.setAcceptDate(null == dto.getAdate() ? new Date() : dto.getAdate());
+        bo.setGoodNum(dto.getGnum());
+        bo.setBadNum(dto.getBnum());
+        bo.setStockNum(dto.getSnum());
+        bo.setStatus(ReceiptConstant.RECEIPT_ENTRY_LABEL);
+        bo.setDr((byte) 1);
 
-        return po;
+        return bo;
     }
 }

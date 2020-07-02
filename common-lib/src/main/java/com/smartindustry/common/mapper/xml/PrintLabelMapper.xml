@@ -9,16 +9,17 @@
         <result column="produce_batch" jdbcType="CHAR" property="produceBatch"/>
         <result column="num" jdbcType="INTEGER" property="num"/>
         <result column="origin" jdbcType="TINYINT" property="origin"/>
-        <result column="add_time" jdbcType="DATE" property="addTime"/>
         <result column="type" jdbcType="TINYINT" property="type"/>
         <result column="status" jdbcType="TINYINT" property="status"/>
-        <result column="dr" jdbcType="TINYINT" property="dr"/>
+        <result column="location_no" jdbcType="CHAR" property="locationNo"/>
         <result column="relate_label_id" jdbcType="BIGINT" property="relateLabelId"/>
         <result column="relate_package_id" jdbcType="CHAR" property="relatePackageId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="dr" jdbcType="TINYINT" property="dr"/>
     </resultMap>
     <sql id="Base_Column_List">
         print_label_id, receipt_body_id, package_id, produce_date, produce_batch, num, origin,
-    add_time, `type`, `status`, dr, relate_label_id, relate_package_id
+    `type`, `status`, location_no, relate_label_id, relate_package_id, create_time, dr
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
@@ -34,14 +35,14 @@
     <insert id="insert" parameterType="com.smartindustry.common.pojo.PrintLabelPO">
         insert into sm_print_label (print_label_id, receipt_body_id, package_id,
                                     produce_date, produce_batch, num,
-                                    origin, add_time, `type`,
-                                    `status`, dr, relate_label_id,
-                                    relate_package_id)
+                                    origin, `type`, `status`,
+                                    location_no, relate_label_id, relate_package_id,
+                                    create_time, dr)
         values (#{printLabelId,jdbcType=BIGINT}, #{receiptBodyId,jdbcType=BIGINT}, #{packageId,jdbcType=CHAR},
                 #{produceDate,jdbcType=DATE}, #{produceBatch,jdbcType=CHAR}, #{num,jdbcType=INTEGER},
-                #{origin,jdbcType=TINYINT}, #{addTime,jdbcType=DATE}, #{type,jdbcType=TINYINT},
-                #{status,jdbcType=TINYINT}, #{dr,jdbcType=TINYINT}, #{relateLabelId,jdbcType=BIGINT},
-                #{relatePackageId,jdbcType=CHAR})
+                #{origin,jdbcType=TINYINT}, #{type,jdbcType=TINYINT}, #{status,jdbcType=TINYINT},
+                #{locationNo,jdbcType=CHAR}, #{relateLabelId,jdbcType=BIGINT}, #{relatePackageId,jdbcType=CHAR},
+                #{createTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
     </insert>
     <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.PrintLabelPO">
         insert into sm_print_label
@@ -67,23 +68,26 @@
             <if test="origin != null">
                 origin,
             </if>
-            <if test="addTime != null">
-                add_time,
-            </if>
             <if test="type != null">
                 `type`,
             </if>
             <if test="status != null">
                 `status`,
             </if>
-            <if test="dr != null">
-                dr,
+            <if test="locationNo != null">
+                location_no,
             </if>
             <if test="relateLabelId != null">
                 relate_label_id,
             </if>
             <if test="relatePackageId != null">
                 relate_package_id,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="dr != null">
+                dr,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -108,23 +112,26 @@
             <if test="origin != null">
                 #{origin,jdbcType=TINYINT},
             </if>
-            <if test="addTime != null">
-                #{addTime,jdbcType=DATE},
-            </if>
             <if test="type != null">
                 #{type,jdbcType=TINYINT},
             </if>
             <if test="status != null">
                 #{status,jdbcType=TINYINT},
             </if>
-            <if test="dr != null">
-                #{dr,jdbcType=TINYINT},
+            <if test="locationNo != null">
+                #{locationNo,jdbcType=CHAR},
             </if>
             <if test="relateLabelId != null">
                 #{relateLabelId,jdbcType=BIGINT},
             </if>
             <if test="relatePackageId != null">
                 #{relatePackageId,jdbcType=CHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dr != null">
+                #{dr,jdbcType=TINYINT},
             </if>
         </trim>
     </insert>
@@ -149,23 +156,26 @@
             <if test="origin != null">
                 origin = #{origin,jdbcType=TINYINT},
             </if>
-            <if test="addTime != null">
-                add_time = #{addTime,jdbcType=DATE},
-            </if>
             <if test="type != null">
                 `type` = #{type,jdbcType=TINYINT},
             </if>
             <if test="status != null">
                 `status` = #{status,jdbcType=TINYINT},
             </if>
-            <if test="dr != null">
-                dr = #{dr,jdbcType=TINYINT},
+            <if test="locationNo != null">
+                location_no = #{locationNo,jdbcType=CHAR},
             </if>
             <if test="relateLabelId != null">
                 relate_label_id = #{relateLabelId,jdbcType=BIGINT},
             </if>
             <if test="relatePackageId != null">
                 relate_package_id = #{relatePackageId,jdbcType=CHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dr != null">
+                dr = #{dr,jdbcType=TINYINT},
             </if>
         </set>
         where print_label_id = #{printLabelId,jdbcType=BIGINT}
@@ -178,12 +188,13 @@
             produce_batch     = #{produceBatch,jdbcType=CHAR},
             num               = #{num,jdbcType=INTEGER},
             origin            = #{origin,jdbcType=TINYINT},
-            add_time          = #{addTime,jdbcType=DATE},
             `type`            = #{type,jdbcType=TINYINT},
             `status`          = #{status,jdbcType=TINYINT},
-            dr                = #{dr,jdbcType=TINYINT},
+            location_no       = #{locationNo,jdbcType=CHAR},
             relate_label_id   = #{relateLabelId,jdbcType=BIGINT},
-            relate_package_id = #{relatePackageId,jdbcType=CHAR}
+            relate_package_id = #{relatePackageId,jdbcType=CHAR},
+            create_time       = #{createTime,jdbcType=TIMESTAMP},
+            dr                = #{dr,jdbcType=TINYINT}
         where print_label_id = #{printLabelId,jdbcType=BIGINT}
     </update>
 
@@ -203,16 +214,16 @@
     <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="printLabelId">
         insert into sm_print_label (print_label_id, receipt_body_id, package_id,
         produce_date, produce_batch, num,
-        origin, add_time, `type`,
-        `status`, dr, relate_label_id,
-        relate_package_id)
+        origin, `type`, `status`,
+        location_no, relate_label_id, relate_package_id,
+        create_time, dr)
         values
         <foreach collection="list" separator="," item="po">
             (#{po.printLabelId,jdbcType=BIGINT}, #{po.receiptBodyId,jdbcType=BIGINT}, #{po.packageId,jdbcType=CHAR},
             #{po.produceDate,jdbcType=DATE}, #{po.produceBatch,jdbcType=CHAR}, #{po.num,jdbcType=INTEGER},
-            #{po.origin,jdbcType=TINYINT}, #{po.addTime,jdbcType=DATE}, #{po.type,jdbcType=TINYINT},
-            #{po.status,jdbcType=TINYINT}, #{po.dr,jdbcType=TINYINT}, #{po.relateLabelId,jdbcType=BIGINT},
-            #{po.relatePackageId,jdbcType=CHAR})
+            #{po.origin,jdbcType=TINYINT}, #{po.type,jdbcType=TINYINT}, #{po.status,jdbcType=TINYINT},
+            #{po.locationNo,jdbcType=CHAR}, #{po.relateLabelId,jdbcType=BIGINT}, #{po.relatePackageId,jdbcType=CHAR},
+            #{po.createTime,jdbcType=TIMESTAMP}, #{po.dr,jdbcType=TINYINT})
         </foreach>
     </insert>
 </mapper>
