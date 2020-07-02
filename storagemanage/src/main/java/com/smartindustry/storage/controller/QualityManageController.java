@@ -1,7 +1,7 @@
 package com.smartindustry.storage.controller;
 
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.storage.dto.IqcTestDTO;
+import com.smartindustry.storage.dto.TestDTO;
 import com.smartindustry.storage.dto.QeConfirmDTO;
 import com.smartindustry.storage.service.IQualityManageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +42,9 @@ public class QualityManageController {
         return qualityManageService.pageQuery(pageNum, pageSize, reqData);
     }
 
-    @RequestMapping("iqcTest")
-    public ResultVO iqcTest(@RequestBody IqcTestDTO dto) {
-        return qualityManageService.iqcTest(dto);
+    @RequestMapping("test")
+    public ResultVO test(@RequestBody TestDTO dto) {
+        return qualityManageService.test(dto);
     }
 
     @RequestMapping("qeConfirm")

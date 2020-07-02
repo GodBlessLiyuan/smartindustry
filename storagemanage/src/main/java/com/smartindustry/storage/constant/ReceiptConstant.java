@@ -87,6 +87,7 @@ public class ReceiptConstant {
     public static final String RECORD_TYPE_IQC_DETECT = "IQC检验";
     public static final String RECORD_TYPE_QE_REJECT = "QE驳回";
     public static final String RECORD_TYPE_IQC_RECHECK = "IQC重检";
+    public static final String RECORD_TYPE_QE_DETECT = "QE检验";
     public static final String RECORD_TYPE_QE_FRANCHISE = "QE特采";
     public static final String RECORD_TYPE_QE_RETURN = "QE退供应商";
     public static final String RECORD_TYPE_STORAGE_INVOICE = "生成入库单";

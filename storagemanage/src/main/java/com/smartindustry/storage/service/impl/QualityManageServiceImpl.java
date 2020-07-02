@@ -8,13 +8,12 @@ import com.smartindustry.common.pojo.*;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.ReceiptConstant;
-import com.smartindustry.storage.dto.IqcTestDTO;
+import com.smartindustry.storage.dto.TestDTO;
 import com.smartindustry.storage.dto.QeConfirmDTO;
 import com.smartindustry.storage.service.IQualityManageService;
 import com.smartindustry.storage.util.ReceiptNoUtil;
 import com.smartindustry.storage.vo.PrintLabelVO;
 import com.smartindustry.storage.vo.QualityPageVO;
-import com.smartindustry.storage.vo.ReceiptPageVO;
 import com.smartindustry.storage.vo.RecordVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,44 +56,73 @@ public class QualityManageServiceImpl implements IQualityManageService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public ResultVO iqcTest(IqcTestDTO dto) {
-        IqcDetectPO iqcDetectPO = iqcDetectMapper.selectByPrimaryKey(dto.getRbid());
-        if (null == iqcDetectPO) {
-            return new ResultVO(2000);
-        }
-        if (ReceiptConstant.IQC_DETECT_GOOD.equals(iqcDetectPO.getStatus())) {
-            return new ResultVO(2000);
-        }
-
-        if (dto.getStatus() == 1) {
-            // 允许
-            iqcDetectPO.setStatus(ReceiptConstant.IQC_DETECT_GOOD);
-            iqcDetectMapper.updateByPrimaryKey(iqcDetectPO);
-        } else if (dto.getStatus() == 2) {
-            // 不良
-            iqcDetectMapper.deleteByPrimaryKey(dto.getRbid());
-
-            // QE确认
-            QeConfirmPO qeConfirmPO = new QeConfirmPO();
-            qeConfirmPO.setReceiptBodyId(dto.getRbid());
-            qeConfirmPO.setStatus(ReceiptConstant.QE_CONFIRM_WAIT);
-            qeConfirmMapper.insert(qeConfirmPO);
-
-            // 操作记录
-            recordMapper.insert(new RecordPO(null, dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_ADD, new Date(), ReceiptConstant.RECEIPT_QE_CONFIRM));
-        }
-
+    public ResultVO test(TestDTO dto) {
         ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(dto.getRbid());
+        if (null == receiptBodyPO) {
+            return new ResultVO(2000);
+        }
+
+        // 操作记录
+        String type;
+        Byte status;
+
+        if (ReceiptConstant.RECEIPT_IQC_DETECT.equals(receiptBodyPO.getStatus())) {
+            // IQC检验
+            IqcDetectPO iqcDetectPO = iqcDetectMapper.selectByPrimaryKey(dto.getRbid());
+            if (null == iqcDetectPO) {
+                return new ResultVO(2000);
+            }
+            if (ReceiptConstant.IQC_DETECT_GOOD.equals(iqcDetectPO.getStatus())) {
+                return new ResultVO(2000);
+            }
+
+            status = ReceiptConstant.RECEIPT_IQC_DETECT;
+            type = ReceiptConstant.IQC_DETECT_REJECT.equals(iqcDetectPO.getStatus()) ? ReceiptConstant.RECORD_TYPE_IQC_RECHECK : ReceiptConstant.RECORD_TYPE_IQC_DETECT;
+
+            if (dto.getStatus() == 1) {
+                // 允许
+                iqcDetectPO.setStatus(ReceiptConstant.IQC_DETECT_GOOD);
+                iqcDetectMapper.updateByPrimaryKey(iqcDetectPO);
+            } else if (dto.getStatus() == 2) {
+                // 不良
+                iqcDetectMapper.deleteByPrimaryKey(dto.getRbid());
+
+                // QE确认
+                QeConfirmPO qeConfirmPO = new QeConfirmPO();
+                qeConfirmPO.setReceiptBodyId(dto.getRbid());
+                qeConfirmPO.setStatus(ReceiptConstant.QE_CONFIRM_WAIT);
+                qeConfirmMapper.insert(qeConfirmPO);
+
+                // 收料单状态设为QE确认
+                receiptBodyPO.setStatus(ReceiptConstant.RECEIPT_QE_CONFIRM);
+
+                // QE确认新增操作记录
+                recordMapper.insert(new RecordPO(null, dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_ADD, new Date(), ReceiptConstant.RECEIPT_QE_CONFIRM));
+            }
+        } else if (ReceiptConstant.RECEIPT_QE_DETECT.equals(receiptBodyPO.getStatus())) {
+            // QE检验
+            QeDetectPO qeDetectPO = qeDetectMapper.selectByPrimaryKey(dto.getRbid());
+            if (null == qeDetectPO) {
+                return new ResultVO(2000);
+            }
+            if (ReceiptConstant.QE_DETECT_GOOD.equals(qeDetectPO.getStatus())) {
+                return new ResultVO(2000);
+            }
+            
+            status = ReceiptConstant.RECEIPT_QE_DETECT;
+            type = ReceiptConstant.RECORD_TYPE_QE_DETECT;
+
+        } else {
+            return new ResultVO(2000);
+        }
+
+        // 更新收料单
         receiptBodyPO.setGoodNum(dto.getGnum());
         receiptBodyPO.setBadNum(dto.getBnum());
-        if (dto.getStatus() == 2) {
-            receiptBodyPO.setStatus(ReceiptConstant.RECEIPT_QE_CONFIRM);
-        }
         receiptBodyMapper.updateByPrimaryKey(receiptBodyPO);
 
         // 操作记录
-        String type = ReceiptConstant.IQC_DETECT_WAIT.equals(iqcDetectPO.getStatus()) ? ReceiptConstant.RECORD_TYPE_IQC_DETECT : ReceiptConstant.RECORD_TYPE_IQC_RECHECK;
-        recordMapper.insert(new RecordPO(null, dto.getRbid(), 1L, "夏慧", type, new Date(), ReceiptConstant.RECEIPT_IQC_DETECT));
+        recordMapper.insert(new RecordPO(null, dto.getRbid(), 1L, "夏慧", type, new Date(), status));
 
         return ResultVO.ok();
     }

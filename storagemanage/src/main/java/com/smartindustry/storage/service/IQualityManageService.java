@@ -1,7 +1,7 @@
 package com.smartindustry.storage.service;
 
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.storage.dto.IqcTestDTO;
+import com.smartindustry.storage.dto.TestDTO;
 import com.smartindustry.storage.dto.QeConfirmDTO;
 
 import java.util.Map;
@@ -23,12 +23,12 @@ public interface IQualityManageService {
     ResultVO pageQuery(int pageNum, int pageSize, Map<String, Object> reqData);
 
     /**
-     * IQC检验
+     * IQC或QE检验
      *
      * @param dto
      * @return
      */
-    ResultVO iqcTest(IqcTestDTO dto);
+    ResultVO test(TestDTO dto);
 
     /**
      * QE确认
