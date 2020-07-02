@@ -13,6 +13,7 @@ import com.smartindustry.storage.dto.QeConfirmDTO;
 import com.smartindustry.storage.service.IQualityManageService;
 import com.smartindustry.storage.util.ReceiptNoUtil;
 import com.smartindustry.storage.vo.PrintLabelVO;
+import com.smartindustry.storage.vo.QualityPageVO;
 import com.smartindustry.storage.vo.ReceiptPageVO;
 import com.smartindustry.storage.vo.RecordVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author: xiahui
@@ -54,7 +52,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
         Page<ReceiptBO> page = PageHelper.startPage(pageNum, pageSize);
         List<ReceiptBO> bos = receiptBodyMapper.pageQuery(reqData);
 
-        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), ReceiptPageVO.convert(bos)));
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), QualityPageVO.convert(bos)));
     }
 
     @Transactional(rollbackFor = Exception.class)

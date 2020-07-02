@@ -192,8 +192,8 @@
     accept_date, good_num, bad_num, stock_num, `status`, rb.create_time, rb.dr, material_name, material_type, material_model, material_desc
     </sql>
     <sql id="ReceiptBO_Column_List">
-        receipt_body_id, rb.receipt_head_id, receipt_no, rb.material_no, order_total, accept_num,
-    accept_date, good_num, bad_num, stock_num, `status`, material_name, material_type, material_model, material_desc,
+        rb.receipt_body_id, rb.receipt_head_id, receipt_no, rb.material_no, order_total, accept_num,
+    accept_date, good_num, bad_num, stock_num, rb.`status`, material_name, material_type, material_model, material_desc,
     order_no, order_type, order_date, supplier, buyer, plan_date, logistics_company, logistics_no, receipt_way, remark
     </sql>
     <resultMap id="ReceiptBodyBOResultMap" type="com.smartindustry.common.bo.ReceiptBodyBO" extends="BaseResultMap">
@@ -213,13 +213,30 @@
         <result column="logistics_no" jdbcType="CHAR" property="logisticsNo"/>
         <result column="receipt_way" jdbcType="TINYINT" property="receiptWay"/>
         <result column="remark" jdbcType="CHAR" property="remark"/>
+        <result column="qaStatus" jdbcType="CHAR" property="qaStatus"/>
     </resultMap>
     <select id="pageQuery" resultMap="ReceiptBOResultMap">
         select
         <include refid="ReceiptBO_Column_List"/>
+        <if test="qa">
+            , q.status as qaStatus
+        </if>
         from sm_receipt_body rb
         left join sm_material m on rb.material_no = m.material_no
         left join sm_receipt_head rh on rb.receipt_head_id = rh.receipt_head_id
+        <if test="qa">
+            <choose>
+                <when test="status == 5">
+                    left join sm_iqc_detect q on rb.receipt_body_id = q.receipt_body_id
+                </when>
+                <when test="status == 10">
+                    left join sm_qe_detect q on rb.receipt_body_id = q.receipt_body_id
+                </when>
+                <when test="status == 15">
+                    left join sm_qe_confirm q on rb.receipt_body_id = q.receipt_body_id
+                </when>
+            </choose>
+        </if>
         where rh.dr = 1 and rb.dr = 1
         <if test="keyword != null and keyword != ''">and (rb.material_no like '%' #{keyword,jdbcType=CHAR} '%' or
             m.material_desc like '%' #{keyword,jdbcType=CHAR} '%')

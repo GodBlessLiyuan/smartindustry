@@ -36,4 +36,6 @@ public class ReceiptBO extends ReceiptBodyBO {
     private Byte receiptWay;
 
     private String remark;
+
+    private Byte qaStatus;
 }

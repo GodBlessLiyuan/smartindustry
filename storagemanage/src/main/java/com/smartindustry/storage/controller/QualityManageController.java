@@ -33,6 +33,8 @@ public class QualityManageController {
                               @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
                               @RequestParam(value = "status") Byte status) {
         Map<String, Object> reqData = new HashMap<>(4);
+        // 质量管理 分页查询查询
+        reqData.put("qa", true);
         reqData.put("rno", rno);
         reqData.put("type", type);
         reqData.put("keyword", keyword);
