@@ -245,24 +245,24 @@ public class QualityManageServiceImpl implements IQualityManageService {
             // 良品入库单
             MaterialStoragePO materialStoragePO = new MaterialStoragePO();
             materialStoragePO.setReceiptBodyId(rbId);
-            materialStoragePO.setStorageNo(ReceiptNoUtil.genStorageNo(materialStorageMapper, ReceiptNoUtil.MATERIAL_STORAGE_PK, new Date()));
-            materialStoragePO.setCreateTime(new Date());
-            materialStoragePO.setStatus(ReceiptConstant.MATERIAL_STORAGE_PENDING);
+            materialStoragePO.setStorageNo(ReceiptNoUtil.genStorageNo(materialStorageMapper, ReceiptNoUtil.MATERIAL_STORAGE_LPPK, new Date()));
             materialStoragePO.setPendingNum(receiptBodyPO.getGoodNum());
             materialStoragePO.setStoredNum(0);
+            materialStoragePO.setStatus(ReceiptConstant.MATERIAL_STORAGE_PENDING);
             materialStoragePO.setType(ReceiptConstant.MATERIAL_TYPE_GOOD);
+            materialStoragePO.setCreateTime(new Date());
             materialStorageMapper.insert(materialStoragePO);
         }
         if (receiptBodyPO.getBadNum() > 0) {
             // 非良品入库单
             MaterialStoragePO materialStoragePO = new MaterialStoragePO();
             materialStoragePO.setReceiptBodyId(rbId);
-            materialStoragePO.setStorageNo(ReceiptNoUtil.genStorageNo(materialStorageMapper, ReceiptNoUtil.MATERIAL_STORAGE_PK, new Date()));
-            materialStoragePO.setCreateTime(new Date());
-            materialStoragePO.setStatus(ReceiptConstant.MATERIAL_STORAGE_PENDING);
+            materialStoragePO.setStorageNo(ReceiptNoUtil.genStorageNo(materialStorageMapper, ReceiptNoUtil.MATERIAL_STORAGE_BLPK, new Date()));
             materialStoragePO.setPendingNum(receiptBodyPO.getBadNum());
             materialStoragePO.setStoredNum(0);
+            materialStoragePO.setStatus(ReceiptConstant.MATERIAL_STORAGE_PENDING);
             materialStoragePO.setType(ReceiptConstant.MATERIAL_TYPE_BAD);
+            materialStoragePO.setCreateTime(new Date());
             materialStorageMapper.insert(materialStoragePO);
         }
 
