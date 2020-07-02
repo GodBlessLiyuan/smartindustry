@@ -54,7 +54,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
             int num = ReceiptNoUtil.getLabelNum(printLabelMapper, null, new Date());
             Date curDate = new Date();
             for (int i = 0; i < dto.getPnum(); i++) {
-                pos.add(PrintLabelDTO.createPO(dto, ++num, curDate));
+                pos.add(PrintLabelDTO.createPO(dto, ++num, curDate, ReceiptConstant.LABEL_ORIGIN_ENTRY));
             }
             printLabelMapper.batchInsert(pos);
 
@@ -89,17 +89,22 @@ public class LabelManageServiceImpl implements ILabelManageService {
                 iqcPO.setReceiptBodyId(rbId);
                 iqcPO.setStatus(ReceiptConstant.IQC_DETECT_WAIT);
                 iqcDetectMapper.insert(iqcPO);
+
+                bodyPO.setStatus(ReceiptConstant.RECEIPT_IQC_DETECT);
             } else {
                 // 半成品/成品
                 QeDetectPO qePO = new QeDetectPO();
                 qePO.setReceiptBodyId(rbId);
                 qePO.setStatus(ReceiptConstant.QE_CONFIRM_WAIT);
                 qeDetectMapper.insert(qePO);
+
+                bodyPO.setStatus(ReceiptConstant.RECEIPT_QE_DETECT);
             }
+
+            receiptBodyMapper.updateByPrimaryKey(bodyPO);
 
             Byte status = bodyPO.getMaterialType() == 1 ? ReceiptConstant.RECEIPT_IQC_DETECT : ReceiptConstant.RECEIPT_QE_DETECT;
             recordMapper.insert(new RecordPO(null, rbId, 1L, "夏慧", ReceiptConstant.RECORD_TYPE_ADD, new Date(), status));
-
         }
 
         recordMapper.insert(new RecordPO(null, rbId, 1L, "夏慧", ReceiptConstant.RECORD_TYPE_FINISH, new Date(), ReceiptConstant.RECEIPT_ENTRY_LABEL));

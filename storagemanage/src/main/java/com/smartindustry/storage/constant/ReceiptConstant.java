@@ -69,6 +69,15 @@ public class ReceiptConstant {
     public static final Byte LABEL_STORAGE_BEING = 2;
     public static final Byte LABEL_STORAGE_PENDING = 3;
 
+    public static final Byte LABEL_ORIGIN_SCAN = 1;
+    public static final Byte LABEL_ORIGIN_ENTRY = 2;
+
+    /**
+     * 物料类型： 良品 非良品
+     */
+    public static final Byte MATERIAL_TYPE_GOOD = 1;
+    public static final Byte MATERIAL_TYPE_BAD = 2;
+
     /**
      * 操作记录
      */
@@ -80,6 +89,6 @@ public class ReceiptConstant {
     public static final String RECORD_TYPE_IQC_RECHECK = "IQC重检";
     public static final String RECORD_TYPE_QE_FRANCHISE = "QE特采";
     public static final String RECORD_TYPE_QE_RETURN = "QE退供应商";
-    public static final String RECORD_TYPE_STORAGE_INVOICE = "生产入库单";
+    public static final String RECORD_TYPE_STORAGE_INVOICE = "生成入库单";
     public static final String RECORD_TYPE_STORAGE_CONFIRM = "确认入库";
 }

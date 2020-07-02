@@ -77,20 +77,23 @@ public class QualityManageServiceImpl implements IQualityManageService {
             // 不良
             iqcDetectMapper.deleteByPrimaryKey(dto.getRbid());
 
+            // QE确认
             QeConfirmPO qeConfirmPO = new QeConfirmPO();
             qeConfirmPO.setReceiptBodyId(dto.getRbid());
             qeConfirmPO.setStatus(ReceiptConstant.QE_CONFIRM_WAIT);
             qeConfirmMapper.insert(qeConfirmPO);
 
-            ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(dto.getRbid());
-            receiptBodyPO.setGoodNum(dto.getGnum());
-            receiptBodyPO.setBadNum(dto.getBnum());
-            receiptBodyPO.setStatus(ReceiptConstant.RECEIPT_QE_CONFIRM);
-            receiptBodyMapper.updateByPrimaryKey(receiptBodyPO);
-
             // 操作记录
             recordMapper.insert(new RecordPO(null, dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_ADD, new Date(), ReceiptConstant.RECEIPT_QE_CONFIRM));
         }
+
+        ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(dto.getRbid());
+        receiptBodyPO.setGoodNum(dto.getGnum());
+        receiptBodyPO.setBadNum(dto.getBnum());
+        if (dto.getStatus() == 2) {
+            receiptBodyPO.setStatus(ReceiptConstant.RECEIPT_QE_CONFIRM);
+        }
+        receiptBodyMapper.updateByPrimaryKey(receiptBodyPO);
 
         // 操作记录
         String type = ReceiptConstant.IQC_DETECT_WAIT.equals(iqcDetectPO.getStatus()) ? ReceiptConstant.RECORD_TYPE_IQC_DETECT : ReceiptConstant.RECORD_TYPE_IQC_RECHECK;
@@ -107,24 +110,27 @@ public class QualityManageServiceImpl implements IQualityManageService {
             return new ResultVO(2000);
         }
 
+        ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(dto.getRbid());
         if (dto.getStatus() == 1) {
             // 特采
             qeConfirmPO.setStatus(ReceiptConstant.QE_CONFIRM_FRANCHISE);
             qeConfirmPO.setRemark(dto.getRemark());
             qeConfirmMapper.updateByPrimaryKey(qeConfirmPO);
 
-            ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(dto.getRbid());
             receiptBodyPO.setGoodNum(dto.getNum());
             receiptBodyPO.setBadNum(receiptBodyPO.getAcceptNum() - dto.getNum());
-            receiptBodyMapper.updateByPrimaryKey(receiptBodyPO);
         } else if (dto.getStatus() == 2) {
             // 驳回
             qeConfirmMapper.deleteByPrimaryKey(dto.getRbid());
 
+            // IQC 检验
             IqcDetectPO iqcDetectPO = new IqcDetectPO();
+            iqcDetectPO.setReceiptBodyId(dto.getRbid());
             iqcDetectPO.setStatus(ReceiptConstant.IQC_DETECT_REJECT);
             iqcDetectPO.setRemark(dto.getRemark());
             iqcDetectMapper.insert(iqcDetectPO);
+
+            receiptBodyPO.setStatus(ReceiptConstant.RECEIPT_IQC_DETECT);
 
             recordMapper.insert(new RecordPO(null, dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_QE_REJECT, new Date(), ReceiptConstant.RECEIPT_IQC_DETECT));
         } else if (dto.getStatus() == 3) {
@@ -132,7 +138,11 @@ public class QualityManageServiceImpl implements IQualityManageService {
             qeConfirmPO.setRemark(dto.getRemark());
             qeConfirmPO.setStatus(ReceiptConstant.QE_CONFIRM_RETURN);
             qeConfirmMapper.updateByPrimaryKey(qeConfirmPO);
+
+            receiptBodyPO.setGoodNum(0);
+            receiptBodyPO.setBadNum(receiptBodyPO.getAcceptNum());
         }
+        receiptBodyMapper.updateByPrimaryKey(receiptBodyPO);
 
         String status = dto.getStatus() == 1 ? ReceiptConstant.RECORD_TYPE_QE_FRANCHISE : dto.getStatus() == 2 ? ReceiptConstant.RECORD_TYPE_QE_REJECT : ReceiptConstant.RECORD_TYPE_QE_RETURN;
         recordMapper.insert(new RecordPO(null, dto.getRbid(), 1L, "夏慧", status, new Date(), ReceiptConstant.RECEIPT_QE_CONFIRM));
@@ -144,6 +154,8 @@ public class QualityManageServiceImpl implements IQualityManageService {
     @Override
     public ResultVO storage(Long rbId) {
         IqcDetectPO iqcDetectPO = iqcDetectMapper.selectByPrimaryKey(rbId);
+        // 操作记录类型
+        Byte status = ReceiptConstant.RECEIPT_IQC_DETECT;
         if (null != iqcDetectPO) {
             // IQC检验
             if (!ReceiptConstant.IQC_DETECT_GOOD.equals(iqcDetectPO.getStatus())) {
@@ -158,6 +170,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
                     return new ResultVO(2000);
                 }
                 qeConfirmMapper.deleteByPrimaryKey(rbId);
+                status = ReceiptConstant.RECEIPT_QE_CONFIRM;
             } else {
                 // QE检验
                 QeDetectPO qeDetectPO = qeDetectMapper.selectByPrimaryKey(rbId);
@@ -165,24 +178,42 @@ public class QualityManageServiceImpl implements IQualityManageService {
                     return new ResultVO(2000);
                 }
                 qeDetectMapper.deleteByPrimaryKey(rbId);
+                status = ReceiptConstant.RECEIPT_QE_DETECT;
             }
         }
 
         ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(rbId);
         receiptBodyPO.setStatus(ReceiptConstant.RECEIPT_MATERIAL_STORAGE);
+        receiptBodyPO.setStockNum(0);
         receiptBodyMapper.updateByPrimaryKey(receiptBodyPO);
 
-        // 生成入库单
-        MaterialStoragePO materialStoragePO = new MaterialStoragePO();
-        materialStoragePO.setReceiptBodyId(rbId);
-        materialStoragePO.setStorageNo(ReceiptNoUtil.genStorageNo(materialStorageMapper, ReceiptNoUtil.MATERIAL_STORAGE_PK, new Date()));
-        materialStoragePO.setCreateTime(new Date());
-        materialStoragePO.setStatus(ReceiptConstant.MATERIAL_STORAGE_PENDING);
-        materialStoragePO.setPendingNum(receiptBodyPO.getAcceptNum());
-        materialStoragePO.setStoredNum(0);
-        materialStorageMapper.insert(materialStoragePO);
+        if (receiptBodyPO.getGoodNum() > 0) {
+            // 良品入库单
+            MaterialStoragePO materialStoragePO = new MaterialStoragePO();
+            materialStoragePO.setReceiptBodyId(rbId);
+            materialStoragePO.setStorageNo(ReceiptNoUtil.genStorageNo(materialStorageMapper, ReceiptNoUtil.MATERIAL_STORAGE_PK, new Date()));
+            materialStoragePO.setCreateTime(new Date());
+            materialStoragePO.setStatus(ReceiptConstant.MATERIAL_STORAGE_PENDING);
+            materialStoragePO.setPendingNum(receiptBodyPO.getGoodNum());
+            materialStoragePO.setStoredNum(0);
+            materialStoragePO.setType(ReceiptConstant.MATERIAL_TYPE_GOOD);
+            materialStorageMapper.insert(materialStoragePO);
+        }
+        if (receiptBodyPO.getBadNum() > 0) {
+            // 非良品入库单
+            MaterialStoragePO materialStoragePO = new MaterialStoragePO();
+            materialStoragePO.setReceiptBodyId(rbId);
+            materialStoragePO.setStorageNo(ReceiptNoUtil.genStorageNo(materialStorageMapper, ReceiptNoUtil.MATERIAL_STORAGE_PK, new Date()));
+            materialStoragePO.setCreateTime(new Date());
+            materialStoragePO.setStatus(ReceiptConstant.MATERIAL_STORAGE_PENDING);
+            materialStoragePO.setPendingNum(receiptBodyPO.getBadNum());
+            materialStoragePO.setStoredNum(0);
+            materialStoragePO.setType(ReceiptConstant.MATERIAL_TYPE_BAD);
+            materialStorageMapper.insert(materialStoragePO);
+        }
 
         // 操作记录
+        recordMapper.insert(new RecordPO(null, rbId, 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, new Date(), status));
         recordMapper.insert(new RecordPO(null, rbId, 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, new Date(), ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
 
         return ResultVO.ok();

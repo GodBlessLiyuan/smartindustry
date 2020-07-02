@@ -23,10 +23,6 @@ public class PrintLabelDTO implements Serializable {
      * 收料单ID
      */
     private Long rbid;
-    /**
-     * 来源方式
-     */
-    private Byte origin;
 
     /**
      * 扫描条形码
@@ -57,14 +53,14 @@ public class PrintLabelDTO implements Serializable {
      * @param date
      * @return
      */
-    public static PrintLabelPO createPO(PrintLabelDTO dto, int num, Date date) {
+    public static PrintLabelPO createPO(PrintLabelDTO dto, int num, Date date, Byte origin) {
         PrintLabelPO po = new PrintLabelPO();
         po.setReceiptBodyId(dto.getRbid());
         po.setPackageId(ReceiptNoUtil.genLabelNo(null, date, num));
         po.setProduceDate(dto.getPdate());
         po.setProduceBatch(dto.getPbatch());
         po.setNum(dto.getMnum());
-        po.setOrigin(dto.getOrigin());
+        po.setOrigin(origin);
         po.setAddTime(date);
         po.setStatus(ReceiptConstant.LABEL_STORAGE_PENDING);
         po.setDr((byte) 1);

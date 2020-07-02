@@ -1,4 +1,4 @@
-SET SESSION FOREIGN_KEY_CHECKS=0;
+SET SESSION FOREIGN_KEY_CHECKS = 0;
 
 /* Drop Tables */
 
@@ -19,19 +19,17 @@ DROP TABLE IF EXISTS sm_receipt_body;
 DROP TABLE IF EXISTS sm_receipt_head;
 
 
-
-
 /* Create Tables */
 
 CREATE TABLE ba_authority
 (
     authority_id bigint unsigned NOT NULL AUTO_INCREMENT,
-    code char(255) NOT NULL,
-    name char(255) NOT NULL,
-    create_time datetime,
+    code         char(255)       NOT NULL,
+    name         char(255)       NOT NULL,
+    create_time  datetime,
     -- 1：未删除
     -- 2：已删除
-    dr tinyint COMMENT '1：未删除
+    dr           tinyint COMMENT '1：未删除
 2：已删除',
     PRIMARY KEY (authority_id),
     UNIQUE (authority_id),
@@ -42,10 +40,10 @@ CREATE TABLE ba_authority
 CREATE TABLE ba_m_user_authority
 (
     user_authority_id bigint unsigned NOT NULL AUTO_INCREMENT,
-    user_id bigint unsigned NOT NULL,
-    authority_id bigint unsigned NOT NULL,
-    code char(255),
-    name char(255),
+    user_id           bigint unsigned NOT NULL,
+    authority_id      bigint unsigned NOT NULL,
+    code              char(255),
+    name              char(255),
     PRIMARY KEY (user_authority_id),
     UNIQUE (user_authority_id)
 );
@@ -53,13 +51,13 @@ CREATE TABLE ba_m_user_authority
 
 CREATE TABLE ba_role
 (
-    role_id bigint unsigned NOT NULL AUTO_INCREMENT,
-    code char(255) NOT NULL,
-    name char(255) NOT NULL,
+    role_id     bigint unsigned NOT NULL AUTO_INCREMENT,
+    code        char(255)       NOT NULL,
+    name        char(255)       NOT NULL,
     create_time datetime,
     -- 1：未删除
     -- 2：已删除
-    dr tinyint COMMENT '1：未删除
+    dr          tinyint COMMENT '1：未删除
 2：已删除',
     PRIMARY KEY (role_id),
     UNIQUE (role_id),
@@ -70,8 +68,8 @@ CREATE TABLE ba_role
 CREATE TABLE ba_role_authority
 (
     role_authority_id bigint unsigned NOT NULL AUTO_INCREMENT,
-    role_id bigint unsigned NOT NULL,
-    authority_id bigint unsigned NOT NULL,
+    role_id           bigint unsigned NOT NULL,
+    authority_id      bigint unsigned NOT NULL,
     PRIMARY KEY (role_authority_id),
     UNIQUE (role_authority_id),
     UNIQUE (role_id),
@@ -81,13 +79,13 @@ CREATE TABLE ba_role_authority
 
 CREATE TABLE ba_user
 (
-    user_id bigint unsigned NOT NULL AUTO_INCREMENT,
-    username char(255) NOT NULL,
-    password char(255) NOT NULL,
+    user_id     bigint unsigned NOT NULL AUTO_INCREMENT,
+    username    char(255)       NOT NULL,
+    password    char(255)       NOT NULL,
     create_time datetime,
     -- 1：未删除
     -- 2：已删除
-    dr tinyint COMMENT '1：未删除
+    dr          tinyint COMMENT '1：未删除
 2：已删除',
     PRIMARY KEY (user_id),
     UNIQUE (user_id),
@@ -98,8 +96,8 @@ CREATE TABLE ba_user
 CREATE TABLE ba_user_role
 (
     user_role_id bigint unsigned NOT NULL AUTO_INCREMENT,
-    user_id bigint unsigned NOT NULL,
-    role_id bigint unsigned NOT NULL,
+    user_id      bigint unsigned NOT NULL,
+    role_id      bigint unsigned NOT NULL,
     PRIMARY KEY (user_role_id),
     UNIQUE (user_role_id)
 );
@@ -116,11 +114,11 @@ CREATE TABLE sm_entry_label
 CREATE TABLE sm_iqc_detect
 (
     receipt_body_id bigint unsigned NOT NULL,
-    remark char(255),
+    remark          char(255),
     -- 1：允许良品
     -- 2：QE驳回重检验
     -- 3：未检验
-    status tinyint COMMENT '1：允许良品
+    status          tinyint COMMENT '1：允许良品
 2：QE驳回重检验
 3：未检验',
     PRIMARY KEY (receipt_body_id),
@@ -130,26 +128,26 @@ CREATE TABLE sm_iqc_detect
 
 CREATE TABLE sm_material_storage
 (
-    storage_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    storage_id      bigint unsigned NOT NULL AUTO_INCREMENT,
     receipt_body_id bigint unsigned NOT NULL,
-    storage_no char(32) NOT NULL,
-    create_time datetime,
+    storage_no      char(32)        NOT NULL,
+    create_time     datetime,
     -- 1：已入库
     -- 2：入库中
     -- 3：待入库
     --
     --
-    status tinyint COMMENT '1：已入库
+    status          tinyint COMMENT '1：已入库
 2：入库中
 3：待入库
 
 ',
-    pending_num int,
-    stored_num int,
-    storage_time datetime,
+    pending_num     int,
+    stored_num      int,
+    storage_time    datetime,
     -- 1：良品
     -- 2：非良品
-    type tinyint COMMENT '1：良品
+    type            tinyint COMMENT '1：良品
 2：非良品',
     PRIMARY KEY (storage_id),
     UNIQUE (storage_id),
@@ -159,36 +157,36 @@ CREATE TABLE sm_material_storage
 
 CREATE TABLE sm_print_label
 (
-    print_label_id bigint unsigned NOT NULL AUTO_INCREMENT,
-    receipt_body_id bigint unsigned NOT NULL,
-    package_id char(32) NOT NULL,
-    produce_date date,
-    produce_batch char(64),
-    num int,
+    print_label_id    bigint unsigned NOT NULL AUTO_INCREMENT,
+    receipt_body_id   bigint unsigned NOT NULL,
+    package_id        char(32)        NOT NULL,
+    produce_date      date,
+    produce_batch     char(64),
+    num               int,
     -- 1：扫描
     -- 2：打印
-    origin tinyint NOT NULL COMMENT '1：扫描
+    origin            tinyint         NOT NULL COMMENT '1：扫描
 2：打印',
-    add_time date,
+    add_time          date,
     -- 1：良品
     -- 2：非良品
-    type tinyint COMMENT '1：良品
+    type              tinyint COMMENT '1：良品
 2：非良品',
     -- 1：已入库
     -- 2：入库中
     -- 3：待入库
     --
     --
-    status tinyint COMMENT '1：已入库
+    status            tinyint COMMENT '1：已入库
 2：入库中
 3：待入库
 
 ',
-    relate_label_id bigint unsigned,
+    relate_label_id   bigint unsigned,
     relate_package_id char(32),
     -- 1：未删除
     -- 2：已删除
-    dr tinyint COMMENT '1：未删除
+    dr                tinyint COMMENT '1：未删除
 2：已删除',
     PRIMARY KEY (print_label_id),
     UNIQUE (print_label_id),
@@ -199,11 +197,11 @@ CREATE TABLE sm_print_label
 CREATE TABLE sm_qe_confirm
 (
     receipt_body_id bigint unsigned NOT NULL,
-    remark char(255),
+    remark          char(255),
     -- 1：特采
     -- 2：退供应商
     -- 3：不良，待确认
-    status tinyint COMMENT '1：特采
+    status          tinyint COMMENT '1：特采
 2：退供应商
 3：不良，待确认',
     PRIMARY KEY (receipt_body_id),
@@ -216,7 +214,7 @@ CREATE TABLE sm_qe_detect
     receipt_body_id bigint unsigned NOT NULL,
     -- 1：允许良品
     -- 3：未检验
-    status tinyint COMMENT '1：允许良品
+    status          tinyint COMMENT '1：允许良品
 3：未检验',
     PRIMARY KEY (receipt_body_id),
     UNIQUE (receipt_body_id)
@@ -227,25 +225,25 @@ CREATE TABLE sm_receipt_body
 (
     receipt_body_id bigint unsigned NOT NULL AUTO_INCREMENT,
     receipt_head_id bigint unsigned NOT NULL,
-    receipt_no char(32) NOT NULL,
-    material_no char(32),
-    material_name char(255),
-    material_type tinyint,
-    material_model char(255),
-    material_desc char(255),
-    order_total int,
-    accept_num int,
-    accept_date date,
-    good_num int,
-    bad_num int,
-    stock_num int,
+    receipt_no      char(32)        NOT NULL,
+    material_no     char(32),
+    material_name   char(255),
+    material_type   tinyint,
+    material_model  char(255),
+    material_desc   char(255),
+    order_total     int,
+    accept_num      int,
+    accept_date     date,
+    good_num        int,
+    bad_num         int,
+    stock_num       int,
     -- 1：录入标签
     -- 5：IQC检测
     -- 10：QE检测
     -- 15：QE确认
     -- 20：物料入库
     -- 25：入库完成
-    status tinyint COMMENT '1：录入标签
+    status          tinyint COMMENT '1：录入标签
 5：IQC检测
 10：QE检测
 15：QE确认
@@ -253,7 +251,7 @@ CREATE TABLE sm_receipt_body
 25：入库完成',
     -- 1：未删除
     -- 2：已删除
-    dr tinyint COMMENT '1：未删除
+    dr              tinyint COMMENT '1：未删除
 2：已删除',
     PRIMARY KEY (receipt_body_id),
     UNIQUE (receipt_body_id),
@@ -263,25 +261,25 @@ CREATE TABLE sm_receipt_body
 
 CREATE TABLE sm_receipt_head
 (
-    receipt_head_id bigint unsigned NOT NULL AUTO_INCREMENT,
-    order_no char(32) NOT NULL,
+    receipt_head_id   bigint unsigned NOT NULL AUTO_INCREMENT,
+    order_no          char(32)        NOT NULL,
     -- 1：PO单收料
     -- 2：样品采购
     -- 3：生产退料
-    order_type tinyint NOT NULL COMMENT '1：PO单收料
+    order_type        tinyint         NOT NULL COMMENT '1：PO单收料
 2：样品采购
 3：生产退料',
-    order_date date,
-    supplier char(128),
-    buyer char(128),
-    plan_date date,
+    order_date        date,
+    supplier          char(128),
+    buyer             char(128),
+    plan_date         date,
     logistics_company char(128),
-    logistics_no char(32),
-    receipt_way tinyint,
-    remark char(255),
+    logistics_no      char(32),
+    receipt_way       tinyint,
+    remark            char(255),
     -- 1：未删除
     -- 2：已删除
-    dr tinyint COMMENT '1：未删除
+    dr                tinyint COMMENT '1：未删除
 2：已删除',
     PRIMARY KEY (receipt_head_id),
     UNIQUE (receipt_head_id)
@@ -290,19 +288,19 @@ CREATE TABLE sm_receipt_head
 
 CREATE TABLE sm_record
 (
-    record_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    record_id       bigint unsigned NOT NULL AUTO_INCREMENT,
     receipt_body_id bigint unsigned NOT NULL,
-    user_id bigint unsigned,
-    name char(255),
-    type char(255),
-    create_time datetime,
+    user_id         bigint unsigned,
+    name            char(255),
+    type            char(255),
+    create_time     datetime,
     -- 1：录入标签
     -- 5：IQC检测
     -- 10：QE检测
     -- 15：QE确认
     -- 20：物料入库
     -- 25：入库完成
-    status tinyint COMMENT '1：录入标签
+    status          tinyint COMMENT '1：录入标签
 5：IQC检测
 10：QE检测
 15：QE确认
@@ -311,7 +309,6 @@ CREATE TABLE sm_record
     PRIMARY KEY (record_id),
     UNIQUE (record_id)
 );
-
 
 
 /* Create Foreign Keys */

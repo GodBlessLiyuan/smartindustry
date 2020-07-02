@@ -1,6 +1,5 @@
 package com.smartindustry.storage.controller;
 
-import com.smartindustry.common.pojo.QeConfirmPO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.dto.IqcTestDTO;
 import com.smartindustry.storage.dto.QeConfirmDTO;
