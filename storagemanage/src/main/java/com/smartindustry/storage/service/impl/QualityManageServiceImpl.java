@@ -108,7 +108,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
             if (ReceiptConstant.QE_DETECT_GOOD.equals(qeDetectPO.getStatus())) {
                 return new ResultVO(2000);
             }
-            
+
             status = ReceiptConstant.RECEIPT_QE_DETECT;
             type = ReceiptConstant.RECORD_TYPE_QE_DETECT;
 
@@ -130,22 +130,38 @@ public class QualityManageServiceImpl implements IQualityManageService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO qeConfirm(QeConfirmDTO dto) {
-        QeConfirmPO qeConfirmPO = qeConfirmMapper.selectByPrimaryKey(dto.getRbid());
-        if (null == qeConfirmPO || !ReceiptConstant.QE_CONFIRM_WAIT.equals(qeConfirmPO.getStatus())) {
+        ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(dto.getRbid());
+        if (null == receiptBodyPO) {
+            return new ResultVO(2000);
+        }
+        if (!ReceiptConstant.RECEIPT_QE_CONFIRM.equals(receiptBodyPO.getStatus())) {
             return new ResultVO(2000);
         }
 
-        ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(dto.getRbid());
-        if (dto.getStatus() == 1) {
+        QeConfirmPO qeConfirmPO = qeConfirmMapper.selectByPrimaryKey(dto.getRbid());
+        if (null == qeConfirmPO) {
+            return new ResultVO(2000);
+        }
+        if (!ReceiptConstant.QE_CONFIRM_WAIT.equals(qeConfirmPO.getStatus())) {
+            return new ResultVO(2000);
+        }
+
+        String type;    // 操作记录类型
+
+        if (ReceiptConstant.QE_CONFIRM_FRANCHISE.equals(dto.getStatus())) {
             // 特采
+            type = ReceiptConstant.RECORD_TYPE_QE_FRANCHISE;
+
             qeConfirmPO.setStatus(ReceiptConstant.QE_CONFIRM_FRANCHISE);
             qeConfirmPO.setRemark(dto.getRemark());
             qeConfirmMapper.updateByPrimaryKey(qeConfirmPO);
 
             receiptBodyPO.setGoodNum(dto.getNum());
             receiptBodyPO.setBadNum(receiptBodyPO.getAcceptNum() - dto.getNum());
-        } else if (dto.getStatus() == 2) {
+        } else if (ReceiptConstant.IQC_DETECT_REJECT.equals(dto.getStatus())) {
             // 驳回
+            type = ReceiptConstant.RECORD_TYPE_QE_REJECT;
+
             qeConfirmMapper.deleteByPrimaryKey(dto.getRbid());
 
             // IQC 检验
@@ -158,19 +174,24 @@ public class QualityManageServiceImpl implements IQualityManageService {
             receiptBodyPO.setStatus(ReceiptConstant.RECEIPT_IQC_DETECT);
 
             recordMapper.insert(new RecordPO(null, dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_QE_REJECT, new Date(), ReceiptConstant.RECEIPT_IQC_DETECT));
-        } else if (dto.getStatus() == 3) {
+        } else if (ReceiptConstant.QE_CONFIRM_RETURN.equals(dto.getStatus())) {
             // 退供应商
+            type = ReceiptConstant.RECORD_TYPE_QE_RETURN;
+
             qeConfirmPO.setRemark(dto.getRemark());
             qeConfirmPO.setStatus(ReceiptConstant.QE_CONFIRM_RETURN);
             qeConfirmMapper.updateByPrimaryKey(qeConfirmPO);
 
             receiptBodyPO.setGoodNum(0);
             receiptBodyPO.setBadNum(receiptBodyPO.getAcceptNum());
+        } else {
+            return new ResultVO(2000);
         }
-        receiptBodyMapper.updateByPrimaryKey(receiptBodyPO);
 
-        String status = dto.getStatus() == 1 ? ReceiptConstant.RECORD_TYPE_QE_FRANCHISE : dto.getStatus() == 2 ? ReceiptConstant.RECORD_TYPE_QE_REJECT : ReceiptConstant.RECORD_TYPE_QE_RETURN;
-        recordMapper.insert(new RecordPO(null, dto.getRbid(), 1L, "夏慧", status, new Date(), ReceiptConstant.RECEIPT_QE_CONFIRM));
+        // 更新收料单
+        receiptBodyMapper.updateByPrimaryKey(receiptBodyPO);
+        // 操作记录
+        recordMapper.insert(new RecordPO(null, dto.getRbid(), 1L, "夏慧", type, new Date(), ReceiptConstant.RECEIPT_QE_CONFIRM));
 
         return ResultVO.ok();
     }
