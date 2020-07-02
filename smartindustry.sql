@@ -203,7 +203,7 @@ CREATE TABLE sm_print_label
 3£º´ýÈë¿â
 
 ',
-    location_no char(32) NOT NULL,
+    location_no char(32),
     relate_label_id bigint unsigned,
     relate_package_id char(32),
     create_time datetime,

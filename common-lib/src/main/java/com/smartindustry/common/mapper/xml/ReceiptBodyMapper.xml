@@ -187,12 +187,22 @@
         where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT}
     </update>
 
+    <sql id="ReceiptBodyBO_Column_List">
+        receipt_body_id, rb.receipt_head_id, receipt_no, rb.material_no, order_total, accept_num,
+    accept_date, good_num, bad_num, stock_num, `status`, rb.create_time, rb.dr, material_name, material_type, material_model, material_desc
+    </sql>
     <sql id="ReceiptBO_Column_List">
         receipt_body_id, rb.receipt_head_id, receipt_no, rb.material_no, order_total, accept_num,
     accept_date, good_num, bad_num, stock_num, `status`, material_name, material_type, material_model, material_desc,
     order_no, order_type, order_date, supplier, buyer, plan_date, logistics_company, logistics_no, receipt_way, remark
     </sql>
-    <resultMap id="ReceiptBOResultMap" type="com.smartindustry.common.bo.ReceiptBO" extends="BaseResultMap">
+    <resultMap id="ReceiptBodyBOResultMap" type="com.smartindustry.common.bo.ReceiptBodyBO" extends="BaseResultMap">
+        <result column="material_name" jdbcType="CHAR" property="materialName"/>
+        <result column="material_type" jdbcType="TINYINT" property="materialType"/>
+        <result column="material_model" jdbcType="CHAR" property="materialModel"/>
+        <result column="material_desc" jdbcType="CHAR" property="materialDesc"/>
+    </resultMap>
+    <resultMap id="ReceiptBOResultMap" type="com.smartindustry.common.bo.ReceiptBO" extends="ReceiptBodyBOResultMap">
         <result column="order_no" jdbcType="CHAR" property="orderNo"/>
         <result column="order_type" jdbcType="TINYINT" property="orderType"/>
         <result column="order_date" jdbcType="DATE" property="orderDate"/>
@@ -203,10 +213,6 @@
         <result column="logistics_no" jdbcType="CHAR" property="logisticsNo"/>
         <result column="receipt_way" jdbcType="TINYINT" property="receiptWay"/>
         <result column="remark" jdbcType="CHAR" property="remark"/>
-        <result column="material_name" jdbcType="CHAR" property="materialName"/>
-        <result column="material_type" jdbcType="TINYINT" property="materialType"/>
-        <result column="material_model" jdbcType="CHAR" property="materialModel"/>
-        <result column="material_desc" jdbcType="CHAR" property="materialDesc"/>
     </resultMap>
     <select id="pageQuery" resultMap="ReceiptBOResultMap">
         select
@@ -264,5 +270,12 @@
         <include refid="Base_Column_List"/>
         from sm_receipt_body
         where receipt_head_id = #{receiptHeadId,jdbcType=BIGINT} and dr = 1
+    </select>
+    <select id="queryByBodyId" parameterType="java.lang.Long" resultMap="ReceiptBodyBOResultMap">
+        select
+        <include refid="ReceiptBodyBO_Column_List"/>
+        from sm_receipt_body rb
+        left join sm_material m on rb.material_no = m.material_no
+        where rb.receipt_body_id = #{rbId,jdbcType=BIGINT} and rb.dr = 1
     </select>
 </mapper>

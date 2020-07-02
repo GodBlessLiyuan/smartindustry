@@ -57,5 +57,5 @@ public interface ReceiptBodyMapper extends BaseMapper<ReceiptBodyPO, Long> {
      * @param rbId
      * @return
      */
-    com.smartindustry.common.bo.ReceiptBodyBO queryByBodyId(Long rbId);
+    ReceiptBodyBO queryByBodyId(Long rbId);
 }
