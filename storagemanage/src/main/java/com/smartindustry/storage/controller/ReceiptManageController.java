@@ -31,11 +31,13 @@ public class ReceiptManageController {
                               @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
                               @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
                               @RequestParam(value = "supplier", required = false, defaultValue = "") String supplier,
+                              @RequestParam(value = "ono", required = false, defaultValue = "") String ono,
                               @RequestParam(value = "status", required = false, defaultValue = "0") Byte status,
                               @RequestParam(value = "type") Byte type) {
-        Map<String, Object> reqData = new HashMap<>(4);
+        Map<String, Object> reqData = new HashMap<>(8);
         reqData.put("keyword", keyword);
         reqData.put("supplier", supplier);
+        reqData.put("ono", ono);
         reqData.put("status", status);
         reqData.put("type", type);
 

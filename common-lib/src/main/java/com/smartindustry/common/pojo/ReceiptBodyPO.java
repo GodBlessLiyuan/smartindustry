@@ -20,14 +20,6 @@ public class ReceiptBodyPO implements Serializable {
 
     private String materialNo;
 
-    private String materialName;
-
-    private Byte materialType;
-
-    private String materialModel;
-
-    private String materialDesc;
-
     private Integer orderTotal;
 
     private Integer acceptNum;
@@ -49,6 +41,8 @@ public class ReceiptBodyPO implements Serializable {
      * 25：入库完成
      */
     private Byte status;
+
+    private Date createTime;
 
     /**
      * 1：未删除

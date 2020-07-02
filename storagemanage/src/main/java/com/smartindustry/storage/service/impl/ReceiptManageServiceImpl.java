@@ -60,9 +60,9 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         receiptBodyMapper.batchInsert(bodyBOs);
 
         List<EntryLabelPO> labelPOs = new ArrayList<>();
-        for (ReceiptBodyBO bodyPO : bodyBOs) {
+        for (ReceiptBodyBO bodyBO : bodyBOs) {
             EntryLabelPO labelPO = new EntryLabelPO();
-            labelPO.setReceiptBodyId(bodyPO.getReceiptBodyId());
+            labelPO.setReceiptBodyId(bodyBO.getReceiptBodyId());
             labelPOs.add(labelPO);
         }
         entryLabelMapper.batchInsert(labelPOs);

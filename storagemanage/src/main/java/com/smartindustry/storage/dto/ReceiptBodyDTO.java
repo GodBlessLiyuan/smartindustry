@@ -97,7 +97,7 @@ public class ReceiptBodyDTO implements Serializable {
         bo.setReceiptHeadId(headId);
         bo.setReceiptNo(ReceiptNoUtil.genReceiptBodyNo(head, new Date(), num));
         bo.setMaterialNo(dto.getMno());
-        bo.setMaterialName(dto.getMno());
+        bo.setMaterialName(dto.getMname());
         bo.setMaterialType(dto.getMtype());
         bo.setMaterialModel(dto.getMmodel());
         bo.setMaterialDesc(dto.getMdesc());
@@ -108,8 +108,8 @@ public class ReceiptBodyDTO implements Serializable {
         bo.setBadNum(dto.getBnum());
         bo.setStockNum(dto.getSnum());
         bo.setStatus(ReceiptConstant.RECEIPT_ENTRY_LABEL);
+        bo.setCreateTime(new Date());
         bo.setDr((byte) 1);
-
         return bo;
     }
 }

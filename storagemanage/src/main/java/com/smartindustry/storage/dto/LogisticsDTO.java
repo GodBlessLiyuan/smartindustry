@@ -4,6 +4,7 @@ import com.smartindustry.common.pojo.ReceiptHeadPO;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author: xiahui
@@ -48,6 +49,7 @@ public class LogisticsDTO implements Serializable {
         po.setLogisticsNo(dto.getNo());
         po.setReceiptWay(dto.getWay());
         po.setRemark(dto.getRemark());
+        po.setUpdateTime(new Date());
         return po;
     }
 }

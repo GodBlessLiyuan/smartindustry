@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.smartindustry.common.mapper.ReceiptBodyMapper">
-    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.ReceiptBodyBO">
+    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.ReceiptBodyPO">
         <id column="receipt_body_id" jdbcType="BIGINT" property="receiptBodyId"/>
         <result column="receipt_head_id" jdbcType="BIGINT" property="receiptHeadId"/>
         <result column="receipt_no" jdbcType="CHAR" property="receiptNo"/>
@@ -31,7 +31,7 @@
         set dr = 2
         where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT}
     </update>
-    <insert id="insert" parameterType="com.smartindustry.common.pojo.ReceiptBodyBO">
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.ReceiptBodyPO">
         insert into sm_receipt_body (receipt_body_id, receipt_head_id, receipt_no,
                                      material_no, order_total, accept_num,
                                      accept_date, good_num, bad_num,
@@ -43,7 +43,7 @@
                 #{stockNum,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP},
                 #{dr,jdbcType=TINYINT})
     </insert>
-    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.ReceiptBodyBO">
+    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.ReceiptBodyPO">
         insert into sm_receipt_body
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="receiptBodyId != null">
@@ -128,7 +128,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.ReceiptBodyBO">
+    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.ReceiptBodyPO">
         update sm_receipt_body
         <set>
             <if test="receiptHeadId != null">
@@ -170,7 +170,7 @@
         </set>
         where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.ReceiptBodyBO">
+    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.ReceiptBodyPO">
         update sm_receipt_body
         set receipt_head_id = #{receiptHeadId,jdbcType=BIGINT},
             receipt_no      = #{receiptNo,jdbcType=CHAR},
@@ -188,9 +188,9 @@
     </update>
 
     <sql id="ReceiptBO_Column_List">
-        receipt_body_id, receipt_no, material_no, material_type, material_desc, order_total,
-    accept_num, accept_date, good_num, bad_num, stock_num, `status`, order_no, order_type, order_date, supplier,
-    buyer, plan_date, logistics_company, logistics_no, receipt_way, remark
+        receipt_body_id, rb.receipt_head_id, receipt_no, rb.material_no, order_total, accept_num,
+    accept_date, good_num, bad_num, stock_num, `status`, material_name, material_type, material_model, material_desc,
+    order_no, order_type, order_date, supplier, buyer, plan_date, logistics_company, logistics_no, receipt_way, remark
     </sql>
     <resultMap id="ReceiptBOResultMap" type="com.smartindustry.common.bo.ReceiptBO" extends="BaseResultMap">
         <result column="order_no" jdbcType="CHAR" property="orderNo"/>
@@ -203,17 +203,23 @@
         <result column="logistics_no" jdbcType="CHAR" property="logisticsNo"/>
         <result column="receipt_way" jdbcType="TINYINT" property="receiptWay"/>
         <result column="remark" jdbcType="CHAR" property="remark"/>
+        <result column="material_name" jdbcType="CHAR" property="materialName"/>
+        <result column="material_type" jdbcType="TINYINT" property="materialType"/>
+        <result column="material_model" jdbcType="CHAR" property="materialModel"/>
+        <result column="material_desc" jdbcType="CHAR" property="materialDesc"/>
     </resultMap>
     <select id="pageQuery" resultMap="ReceiptBOResultMap">
         select
         <include refid="ReceiptBO_Column_List"/>
         from sm_receipt_body rb
+        left join sm_material m on rb.material_no = m.material_no
         left join sm_receipt_head rh on rb.receipt_head_id = rh.receipt_head_id
-        where rb.dr = 1
+        where rh.dr = 1 and rb.dr = 1
         <if test="keyword != null and keyword != ''">and (rb.material_no like '%' #{keyword,jdbcType=CHAR} '%' or
-            rb.material_desc like '%' #{keyword,jdbcType=CHAR} '%' or rh.order_no like '%' #{keyword,jdbcType=CHAR} '%')
+            m.material_desc like '%' #{keyword,jdbcType=CHAR} '%')
         </if>
         <if test="supplier != null and supplier != ''">and rh.supplier like '%' #{supplier,jdbcType=CHAR} '%'</if>
+        <if test="ono != null and ono != ''">and rh.order_no like '%' #{ono,jdbcType=CHAR} '%'</if>
         <if test="status != null and status != 0">and rb.`status` = #{status,jdbcType=TINYINT}</if>
         <if test="type != null and type != 0">and rh.order_type = #{type,jdbcType=TINYINT}</if>
         <if test="rno != null and rno != ''">and rb.receipt_no like '%' #{rno,jdbcType=CHAR} '%'</if>

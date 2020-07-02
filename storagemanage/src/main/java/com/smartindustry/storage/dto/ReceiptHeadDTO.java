@@ -81,6 +81,7 @@ public class ReceiptHeadDTO implements Serializable {
         po.setLogisticsNo(dto.getLono());
         po.setReceiptWay(dto.getWay());
         po.setRemark(dto.getRemark());
+        po.setCreateTime(new Date());
         po.setDr((byte) 1);
         return po;
     }

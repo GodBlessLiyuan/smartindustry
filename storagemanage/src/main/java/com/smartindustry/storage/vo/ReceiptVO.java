@@ -26,13 +26,13 @@ public class ReceiptVO implements Serializable {
      * po 转 vo
      *
      * @param headPO
-     * @param bodyPOs
+     * @param bodyBOs
      * @return
      */
-    public static ReceiptVO convert(ReceiptHeadPO headPO, List<ReceiptBodyBO> bodyPOs) {
+    public static ReceiptVO convert(ReceiptHeadPO headPO, List<ReceiptBodyBO> bodyBOs) {
         ReceiptVO vo = new ReceiptVO();
         vo.setHead(convert(headPO));
-        vo.setBody(ReceiptVO.convert(bodyPOs));
+        vo.setBody(ReceiptVO.convert(bodyBOs));
         return vo;
     }
 
@@ -60,13 +60,13 @@ public class ReceiptVO implements Serializable {
     /**
      * body pos 转 vos
      *
-     * @param pos
+     * @param bos
      * @return
      */
-    public static List<ReceiptBodyVO> convert(List<ReceiptBodyBO> pos) {
-        List<ReceiptBodyVO> vos = new ArrayList<>(pos.size());
-        for (ReceiptBodyBO po : pos) {
-            vos.add(convert(po));
+    public static List<ReceiptBodyVO> convert(List<ReceiptBodyBO> bos) {
+        List<ReceiptBodyVO> vos = new ArrayList<>(bos.size());
+        for (ReceiptBodyBO bo : bos) {
+            vos.add(convert(bo));
         }
         return vos;
     }
