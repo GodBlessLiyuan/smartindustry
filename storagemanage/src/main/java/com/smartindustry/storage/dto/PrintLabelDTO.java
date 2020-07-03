@@ -23,6 +23,10 @@ public class PrintLabelDTO implements Serializable {
      * 收料单ID
      */
     private Long rbid;
+    /**
+     * 物料编码
+     */
+    private String mno;
 
     /**
      * 扫描条形码
@@ -60,8 +64,8 @@ public class PrintLabelDTO implements Serializable {
         po.setProduceBatch(dto.getPbatch());
         po.setNum(dto.getMnum());
         po.setOrigin(origin);
+        po.setMaterialNo(dto.getMno());
         po.setCreateTime(new Date());
-        po.setStatus(ReceiptConstant.LABEL_STORAGE_PENDING);
         po.setDr((byte) 1);
 
         return po;

@@ -157,12 +157,10 @@ CREATE TABLE sm_material_storage
     stored_num int,
     storage_time datetime,
     -- 1：已入库
-    -- 2：入库中
     -- 3：待入库
     --
     --
     status tinyint COMMENT '1：已入库
-2：入库中
 3：待入库
 
 ',
@@ -189,28 +187,16 @@ CREATE TABLE sm_print_label
     -- 2：打印
     origin tinyint NOT NULL COMMENT '1：扫描
 2：打印',
-    -- 1：良品
-    -- 2：非良品
-    type tinyint COMMENT '1：良品
-2：非良品',
-    -- 1：已入库
-    -- 2：入库中
-    -- 3：待入库
-    --
-    --
-    status tinyint COMMENT '1：已入库
-2：入库中
-3：待入库
-
-',
+    material_no char(32) NOT NULL,
     location_no char(32),
+    storage_id bigint unsigned,
     relate_label_id bigint unsigned,
     relate_package_id char(32),
     create_time datetime,
-    -- 1：未删除
-    -- 2：已删除
-    dr tinyint COMMENT '1：未删除
-2：已删除',
+    -- 1：未废弃
+    -- 2：已废弃
+    dr tinyint COMMENT '1：未废弃
+2：已废弃',
     PRIMARY KEY (print_label_id),
     UNIQUE (print_label_id),
     UNIQUE (package_id)
@@ -248,6 +234,13 @@ CREATE TABLE sm_receipt_body
 (
     receipt_body_id bigint unsigned NOT NULL AUTO_INCREMENT,
     receipt_head_id bigint unsigned NOT NULL,
+    order_no char(32),
+    -- 1：PO单收料
+    -- 2：样品采购
+    -- 3：生产退料
+    order_type tinyint COMMENT '1：PO单收料
+2：样品采购
+3：生产退料',
     receipt_no char(32) NOT NULL,
     material_no char(32) NOT NULL,
     order_total int,
@@ -315,6 +308,7 @@ CREATE TABLE sm_record
 (
     record_id bigint unsigned NOT NULL AUTO_INCREMENT,
     receipt_body_id bigint unsigned NOT NULL,
+    storage_id bigint unsigned,
     user_id bigint unsigned,
     name char(255),
     type char(255),
@@ -421,9 +415,33 @@ ALTER TABLE sm_storage_location
 ;
 
 
+ALTER TABLE sm_print_label
+    ADD FOREIGN KEY (material_no)
+        REFERENCES sm_material (material_no)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
 ALTER TABLE sm_receipt_body
     ADD FOREIGN KEY (material_no)
         REFERENCES sm_material (material_no)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE sm_print_label
+    ADD FOREIGN KEY (storage_id)
+        REFERENCES sm_material_storage (storage_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE sm_record
+    ADD FOREIGN KEY (storage_id)
+        REFERENCES sm_material_storage (storage_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;

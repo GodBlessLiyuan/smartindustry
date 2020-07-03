@@ -4,6 +4,8 @@
     <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.ReceiptBodyPO">
         <id column="receipt_body_id" jdbcType="BIGINT" property="receiptBodyId"/>
         <result column="receipt_head_id" jdbcType="BIGINT" property="receiptHeadId"/>
+        <result column="order_no" jdbcType="CHAR" property="orderNo"/>
+        <result column="order_type" jdbcType="TINYINT" property="orderType"/>
         <result column="receipt_no" jdbcType="CHAR" property="receiptNo"/>
         <result column="material_no" jdbcType="CHAR" property="materialNo"/>
         <result column="order_total" jdbcType="INTEGER" property="orderTotal"/>
@@ -17,8 +19,9 @@
         <result column="dr" jdbcType="TINYINT" property="dr"/>
     </resultMap>
     <sql id="Base_Column_List">
-        receipt_body_id, receipt_head_id, receipt_no, material_no, order_total, accept_num,
-    accept_date, good_num, bad_num, stock_num, `status`, create_time, dr
+        receipt_body_id, receipt_head_id, order_no, order_type, receipt_no, material_no,
+    order_total, accept_num, accept_date, good_num, bad_num, stock_num, `status`, create_time, 
+    dr
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
@@ -32,16 +35,16 @@
         where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT}
     </update>
     <insert id="insert" parameterType="com.smartindustry.common.pojo.ReceiptBodyPO">
-        insert into sm_receipt_body (receipt_body_id, receipt_head_id, receipt_no,
-                                     material_no, order_total, accept_num,
-                                     accept_date, good_num, bad_num,
-                                     stock_num, `status`, create_time,
-                                     dr)
-        values (#{receiptBodyId,jdbcType=BIGINT}, #{receiptHeadId,jdbcType=BIGINT}, #{receiptNo,jdbcType=CHAR},
-                #{materialNo,jdbcType=CHAR}, #{orderTotal,jdbcType=INTEGER}, #{acceptNum,jdbcType=INTEGER},
-                #{acceptDate,jdbcType=DATE}, #{goodNum,jdbcType=INTEGER}, #{badNum,jdbcType=INTEGER},
-                #{stockNum,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP},
-                #{dr,jdbcType=TINYINT})
+        insert into sm_receipt_body (receipt_body_id, receipt_head_id, order_no,
+                                     order_type, receipt_no, material_no,
+                                     order_total, accept_num, accept_date,
+                                     good_num, bad_num, stock_num,
+                                     `status`, create_time, dr)
+        values (#{receiptBodyId,jdbcType=BIGINT}, #{receiptHeadId,jdbcType=BIGINT}, #{orderNo,jdbcType=CHAR},
+                #{orderType,jdbcType=TINYINT}, #{receiptNo,jdbcType=CHAR}, #{materialNo,jdbcType=CHAR},
+                #{orderTotal,jdbcType=INTEGER}, #{acceptNum,jdbcType=INTEGER}, #{acceptDate,jdbcType=DATE},
+                #{goodNum,jdbcType=INTEGER}, #{badNum,jdbcType=INTEGER}, #{stockNum,jdbcType=INTEGER},
+                #{status,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
     </insert>
     <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.ReceiptBodyPO">
         insert into sm_receipt_body
@@ -51,6 +54,12 @@
             </if>
             <if test="receiptHeadId != null">
                 receipt_head_id,
+            </if>
+            <if test="orderNo != null">
+                order_no,
+            </if>
+            <if test="orderType != null">
+                order_type,
             </if>
             <if test="receiptNo != null">
                 receipt_no,
@@ -93,6 +102,12 @@
             <if test="receiptHeadId != null">
                 #{receiptHeadId,jdbcType=BIGINT},
             </if>
+            <if test="orderNo != null">
+                #{orderNo,jdbcType=CHAR},
+            </if>
+            <if test="orderType != null">
+                #{orderType,jdbcType=TINYINT},
+            </if>
             <if test="receiptNo != null">
                 #{receiptNo,jdbcType=CHAR},
             </if>
@@ -134,6 +149,12 @@
             <if test="receiptHeadId != null">
                 receipt_head_id = #{receiptHeadId,jdbcType=BIGINT},
             </if>
+            <if test="orderNo != null">
+                order_no = #{orderNo,jdbcType=CHAR},
+            </if>
+            <if test="orderType != null">
+                order_type = #{orderType,jdbcType=TINYINT},
+            </if>
             <if test="receiptNo != null">
                 receipt_no = #{receiptNo,jdbcType=CHAR},
             </if>
@@ -173,6 +194,8 @@
     <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.ReceiptBodyPO">
         update sm_receipt_body
         set receipt_head_id = #{receiptHeadId,jdbcType=BIGINT},
+            order_no        = #{orderNo,jdbcType=CHAR},
+            order_type      = #{orderType,jdbcType=TINYINT},
             receipt_no      = #{receiptNo,jdbcType=CHAR},
             material_no     = #{materialNo,jdbcType=CHAR},
             order_total     = #{orderTotal,jdbcType=INTEGER},
@@ -188,13 +211,13 @@
     </update>
 
     <sql id="ReceiptBodyBO_Column_List">
-        receipt_body_id, rb.receipt_head_id, receipt_no, rb.material_no, order_total, accept_num,
+        receipt_body_id, rb.receipt_head_id, rb.order_no, rb.order_typet, receipt_no, rb.material_no, order_total, accept_num,
     accept_date, good_num, bad_num, stock_num, `status`, rb.create_time, rb.dr, material_name, material_type, material_model, material_desc
     </sql>
     <sql id="ReceiptBO_Column_List">
-        rb.receipt_body_id, rb.receipt_head_id, receipt_no, rb.material_no, order_total, accept_num,
+        rb.receipt_body_id, rb.receipt_head_id, rb.order_no, rb.order_type, receipt_no, rb.material_no, order_total, accept_num,
     accept_date, good_num, bad_num, stock_num, rb.`status`, material_name, material_type, material_model, material_desc,
-    rh.order_no, rh.order_type, rh.order_date, rh.supplier, rh.buyer, rh.plan_date, rh.logistics_company, rh.logistics_no, rh.receipt_way, rh.remark
+    rh.order_date, rh.supplier, rh.buyer, rh.plan_date, rh.logistics_company, rh.logistics_no, rh.receipt_way, rh.remark
     </sql>
     <resultMap id="ReceiptBodyBOResultMap" type="com.smartindustry.common.bo.ReceiptBodyBO" extends="BaseResultMap">
         <result column="material_name" jdbcType="CHAR" property="materialName"/>
@@ -203,8 +226,6 @@
         <result column="material_desc" jdbcType="CHAR" property="materialDesc"/>
     </resultMap>
     <resultMap id="ReceiptBOResultMap" type="com.smartindustry.common.bo.ReceiptBO" extends="ReceiptBodyBOResultMap">
-        <result column="order_no" jdbcType="CHAR" property="orderNo"/>
-        <result column="order_type" jdbcType="TINYINT" property="orderType"/>
         <result column="order_date" jdbcType="DATE" property="orderDate"/>
         <result column="supplier" jdbcType="CHAR" property="supplier"/>
         <result column="buyer" jdbcType="CHAR" property="buyer"/>
@@ -249,15 +270,18 @@
         <if test="qa and qaStatus != null and qaStatus != 0">and q.status = #{qaStatus,jdbcType=TINYINT}</if>
     </select>
     <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="receiptBodyId">
-        insert into sm_receipt_body (receipt_body_id, receipt_head_id, receipt_no, material_no, order_total, accept_num,
-        accept_date, good_num, bad_num, stock_num, `status`, create_time, dr)
+        insert into sm_receipt_body (receipt_body_id, receipt_head_id, order_no,
+        order_type, receipt_no, material_no,
+        order_total, accept_num, accept_date,
+        good_num, bad_num, stock_num,
+        `status`, create_time, dr)
         values
         <foreach collection="list" item="bo" separator=",">
-            (#{bo.receiptBodyId,jdbcType=BIGINT}, #{bo.receiptHeadId,jdbcType=BIGINT}, #{bo.receiptNo,jdbcType=CHAR},
-            #{bo.materialNo,jdbcType=CHAR}, #{bo.orderTotal,jdbcType=INTEGER}, #{bo.acceptNum,jdbcType=INTEGER},
-            #{bo.acceptDate,jdbcType=DATE}, #{bo.goodNum,jdbcType=INTEGER}, #{bo.badNum,jdbcType=INTEGER},
-            #{bo.stockNum,jdbcType=INTEGER}, #{bo.status,jdbcType=TINYINT}, #{bo.createTime,jdbcType=TIMESTAMP},
-            #{bo.dr,jdbcType=TINYINT})
+            (#{bo.receiptBodyId,jdbcType=BIGINT}, #{bo.receiptHeadId,jdbcType=BIGINT}, #{bo.orderNo,jdbcType=CHAR},
+            #{bo.orderType,jdbcType=TINYINT}, #{bo.receiptNo,jdbcType=CHAR}, #{bo.materialNo,jdbcType=CHAR},
+            #{bo.orderTotal,jdbcType=INTEGER}, #{bo.acceptNum,jdbcType=INTEGER}, #{bo.acceptDate,jdbcType=DATE},
+            #{bo.goodNum,jdbcType=INTEGER}, #{bo.badNum,jdbcType=INTEGER}, #{bo.stockNum,jdbcType=INTEGER},
+            #{bo.status,jdbcType=TINYINT}, #{bo.createTime,jdbcType=TIMESTAMP}, #{bo.dr,jdbcType=TINYINT})
         </foreach>
     </insert>
     <select id="queryNo" parameterType="java.lang.String" resultMap="BaseResultMap">

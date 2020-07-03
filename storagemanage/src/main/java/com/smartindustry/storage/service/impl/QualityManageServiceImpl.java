@@ -97,7 +97,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
                 receiptBodyPO.setStatus(ReceiptConstant.RECEIPT_QE_CONFIRM);
 
                 // QE确认新增操作记录
-                recordMapper.insert(new RecordPO(null, dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_ADD, new Date(), ReceiptConstant.RECEIPT_QE_CONFIRM));
+                recordMapper.insert(new RecordPO(dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_ADD, ReceiptConstant.RECEIPT_QE_CONFIRM));
             }
         } else if (ReceiptConstant.RECEIPT_QE_DETECT.equals(receiptBodyPO.getStatus())) {
             // QE检验
@@ -122,7 +122,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
         receiptBodyMapper.updateByPrimaryKey(receiptBodyPO);
 
         // 操作记录
-        recordMapper.insert(new RecordPO(null, dto.getRbid(), 1L, "夏慧", type, new Date(), status));
+        recordMapper.insert(new RecordPO(dto.getRbid(), 1L, "夏慧", type, status));
 
         return ResultVO.ok();
     }
@@ -173,7 +173,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
 
             receiptBodyPO.setStatus(ReceiptConstant.RECEIPT_IQC_DETECT);
 
-            recordMapper.insert(new RecordPO(null, dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_QE_REJECT, new Date(), ReceiptConstant.RECEIPT_IQC_DETECT));
+            recordMapper.insert(new RecordPO(dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_QE_REJECT, ReceiptConstant.RECEIPT_IQC_DETECT));
         } else if (ReceiptConstant.QE_CONFIRM_RETURN.equals(dto.getStatus())) {
             // 退供应商
             type = ReceiptConstant.RECORD_TYPE_QE_RETURN;
@@ -191,7 +191,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
         // 更新收料单
         receiptBodyMapper.updateByPrimaryKey(receiptBodyPO);
         // 操作记录
-        recordMapper.insert(new RecordPO(null, dto.getRbid(), 1L, "夏慧", type, new Date(), ReceiptConstant.RECEIPT_QE_CONFIRM));
+        recordMapper.insert(new RecordPO(dto.getRbid(), 1L, "夏慧", type, ReceiptConstant.RECEIPT_QE_CONFIRM));
 
         return ResultVO.ok();
     }
@@ -267,8 +267,8 @@ public class QualityManageServiceImpl implements IQualityManageService {
         }
 
         // 操作记录
-        recordMapper.insert(new RecordPO(null, rbId, 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, new Date(), status));
-        recordMapper.insert(new RecordPO(null, rbId, 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, new Date(), ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
+        recordMapper.insert(new RecordPO(rbId, 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, status));
+        recordMapper.insert(new RecordPO(rbId, 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
 
         return ResultVO.ok();
     }

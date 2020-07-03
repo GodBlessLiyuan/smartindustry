@@ -63,12 +63,8 @@ public class ReceiptConstant {
     public static final Byte MATERIAL_STORAGE_PENDING = 3;
 
     /**
-     * 打印标签 状态
+     * 打印标签 类型
      */
-    public static final Byte LABEL_STORAGE_FINISH = 1;
-    public static final Byte LABEL_STORAGE_BEING = 2;
-    public static final Byte LABEL_STORAGE_PENDING = 3;
-
     public static final Byte LABEL_ORIGIN_SCAN = 1;
     public static final Byte LABEL_ORIGIN_ENTRY = 2;
 

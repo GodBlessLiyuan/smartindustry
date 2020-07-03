@@ -70,7 +70,7 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         // 操作记录
         List<RecordPO> recordPOs = new ArrayList<>();
         for (ReceiptBodyBO bodyBO : bodyBOs) {
-            recordPOs.add(new RecordPO(null, bodyBO.getReceiptBodyId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_ADD, new Date(), ReceiptConstant.RECEIPT_ENTRY_LABEL));
+            recordPOs.add(new RecordPO(bodyBO.getReceiptBodyId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_ADD, ReceiptConstant.RECEIPT_ENTRY_LABEL));
         }
         recordMapper.batchInsert(recordPOs);
 
@@ -121,8 +121,7 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         ReceiptHeadPO headPO = receiptHeadMapper.selectByPrimaryKey(bodyPO.getReceiptHeadId());
         receiptHeadMapper.updateByPrimaryKey(LogisticsDTO.buildPO(headPO, dto));
 
-        recordMapper.insert(new RecordPO(null, dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_MODIFY,
-                new Date(), ReceiptConstant.RECEIPT_ENTRY_LABEL));
+        recordMapper.insert(new RecordPO(dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_MODIFY, ReceiptConstant.RECEIPT_ENTRY_LABEL));
 
         return ResultVO.ok();
     }

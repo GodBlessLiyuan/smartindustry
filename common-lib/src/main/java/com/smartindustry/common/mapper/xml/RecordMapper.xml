@@ -4,6 +4,7 @@
     <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.RecordPO">
         <id column="record_id" jdbcType="BIGINT" property="recordId"/>
         <result column="receipt_body_id" jdbcType="BIGINT" property="receiptBodyId"/>
+        <result column="storage_id" jdbcType="BIGINT" property="storageId"/>
         <result column="user_id" jdbcType="BIGINT" property="userId"/>
         <result column="name" jdbcType="CHAR" property="name"/>
         <result column="type" jdbcType="CHAR" property="type"/>
@@ -11,7 +12,7 @@
         <result column="status" jdbcType="TINYINT" property="status"/>
     </resultMap>
     <sql id="Base_Column_List">
-        record_id, receipt_body_id, user_id, `name`, `type`, create_time, `status`
+        record_id, receipt_body_id, storage_id, user_id, `name`, `type`, create_time, `status`
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
@@ -25,11 +26,12 @@
         where record_id = #{recordId,jdbcType=BIGINT}
     </delete>
     <insert id="insert" parameterType="com.smartindustry.common.pojo.RecordPO">
-        insert into sm_record (record_id, receipt_body_id, user_id,
-                               `name`, `type`, create_time,
+        insert into sm_record (record_id, receipt_body_id, storage_id,
+                               user_id, `name`, `type`, create_time,
                                `status`)
-        values (#{recordId,jdbcType=BIGINT}, #{receiptBodyId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},
-                #{name,jdbcType=CHAR}, #{type,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP},
+        values (#{recordId,jdbcType=BIGINT}, #{receiptBodyId,jdbcType=BIGINT}, #{storageId,jdbcType=BIGINT},
+                #{userId,jdbcType=BIGINT}, #{name,jdbcType=CHAR}, #{type,jdbcType=CHAR},
+                #{createTime,jdbcType=TIMESTAMP},
                 #{status,jdbcType=TINYINT})
     </insert>
     <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.RecordPO">
@@ -40,6 +42,9 @@
             </if>
             <if test="receiptBodyId != null">
                 receipt_body_id,
+            </if>
+            <if test="storageId != null">
+                storage_id,
             </if>
             <if test="userId != null">
                 user_id,
@@ -64,6 +69,9 @@
             <if test="receiptBodyId != null">
                 #{receiptBodyId,jdbcType=BIGINT},
             </if>
+            <if test="storageId != null">
+                #{storageId,jdbcType=BIGINT},
+            </if>
             <if test="userId != null">
                 #{userId,jdbcType=BIGINT},
             </if>
@@ -87,6 +95,9 @@
             <if test="receiptBodyId != null">
                 receipt_body_id = #{receiptBodyId,jdbcType=BIGINT},
             </if>
+            <if test="storageId != null">
+                storage_id = #{storageId,jdbcType=BIGINT},
+            </if>
             <if test="userId != null">
                 user_id = #{userId,jdbcType=BIGINT},
             </if>
@@ -108,6 +119,7 @@
     <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.RecordPO">
         update sm_record
         set receipt_body_id = #{receiptBodyId,jdbcType=BIGINT},
+            storage_id      = #{storageId,jdbcType=BIGINT},
             user_id         = #{userId,jdbcType=BIGINT},
             `name`          = #{name,jdbcType=CHAR},
             `type`          = #{type,jdbcType=CHAR},

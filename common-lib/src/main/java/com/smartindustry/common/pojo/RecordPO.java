@@ -18,6 +18,8 @@ public class RecordPO implements Serializable {
 
     private Long receiptBodyId;
 
+    private Long storageId;
+
     private Long userId;
 
     private String name;
@@ -37,4 +39,18 @@ public class RecordPO implements Serializable {
     private Byte status;
 
     private static final long serialVersionUID = 1L;
+
+    public RecordPO(Long receiptBodyId, Long userId, String name, String type, Byte status) {
+        this(receiptBodyId, null, userId, name, type, status);
+    }
+
+    public RecordPO(Long receiptBodyId, Long storageId, Long userId, String name, String type, Byte status) {
+        this.receiptBodyId = receiptBodyId;
+        this.storageId = storageId;
+        this.userId = userId;
+        this.name = name;
+        this.type = type;
+        this.createTime = new Date();
+        this.status = status;
+    }
 }

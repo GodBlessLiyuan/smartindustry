@@ -80,7 +80,7 @@ public class ReceiptBodyDTO implements Serializable {
         String head = headPO.getOrderType() == 1 ? ReceiptNoUtil.RECEIPT_BODY_PO : headPO.getOrderType() == 2 ? ReceiptNoUtil.RECEIPT_BODY_RP : ReceiptNoUtil.RECEIPT_BODY_YP;
         int curNum = ReceiptNoUtil.getReceiptBodyNum(mapper, head, new Date());
         for (ReceiptBodyDTO dto : dtos) {
-            bos.add(ReceiptBodyDTO.createPO(headPO.getReceiptHeadId(), dto, head, ++curNum));
+            bos.add(ReceiptBodyDTO.createPO(headPO, dto, ReceiptNoUtil.genReceiptBodyNo(head, new Date(), ++curNum)));
         }
         return bos;
     }
@@ -88,14 +88,16 @@ public class ReceiptBodyDTO implements Serializable {
     /**
      * 创建 po
      *
-     * @param headId
+     * @param headPO
      * @param dto
      * @return
      */
-    private static ReceiptBodyBO createPO(Long headId, ReceiptBodyDTO dto, String head, int num) {
+    private static ReceiptBodyBO createPO(ReceiptHeadPO headPO, ReceiptBodyDTO dto, String no) {
         ReceiptBodyBO bo = new ReceiptBodyBO();
-        bo.setReceiptHeadId(headId);
-        bo.setReceiptNo(ReceiptNoUtil.genReceiptBodyNo(head, new Date(), num));
+        bo.setReceiptHeadId(headPO.getReceiptHeadId());
+        bo.setOrderNo(headPO.getOrderNo());
+        bo.setOrderType(headPO.getOrderType());
+        bo.setReceiptNo(no);
         bo.setMaterialNo(dto.getMno());
         bo.setMaterialName(dto.getMname());
         bo.setMaterialType(dto.getMtype());

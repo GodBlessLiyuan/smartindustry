@@ -2,19 +2,26 @@ package com.smartindustry.common.pojo;
 
 import java.io.Serializable;
 import java.util.Date;
-
 import lombok.Data;
 
 /**
  * sm_receipt_body
- *
- * @author
+ * @author 
  */
 @Data
 public class ReceiptBodyPO implements Serializable {
     private Long receiptBodyId;
 
     private Long receiptHeadId;
+
+    private String orderNo;
+
+    /**
+     * 1：PO单收料
+2：样品采购
+3：生产退料
+     */
+    private Byte orderType;
 
     private String receiptNo;
 
@@ -34,11 +41,11 @@ public class ReceiptBodyPO implements Serializable {
 
     /**
      * 1：录入标签
-     * 5：IQC检测
-     * 10：QE检测
-     * 15：QE确认
-     * 20：物料入库
-     * 25：入库完成
+5：IQC检测
+10：QE检测
+15：QE确认
+20：物料入库
+25：入库完成
      */
     private Byte status;
 
@@ -46,7 +53,7 @@ public class ReceiptBodyPO implements Serializable {
 
     /**
      * 1：未删除
-     * 2：已删除
+2：已删除
      */
     private Byte dr;
 
