@@ -67,4 +67,9 @@ public class MaterialStorageController {
     public ResultVO storage(@RequestBody MaterialStorageDTO dto) throws Exception {
         return materialStorageService.storage(dto);
     }
+
+    @RequestMapping("detail")
+    public ResultVO detail(@RequestParam("sid") Long sid) {
+        return materialStorageService.detail(sid);
+    }
 }

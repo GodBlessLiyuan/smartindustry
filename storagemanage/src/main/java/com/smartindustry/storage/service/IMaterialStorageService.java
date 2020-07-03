@@ -46,4 +46,12 @@ public interface IMaterialStorageService {
      * @return
      */
     ResultVO storage(MaterialStorageDTO dto) throws Exception;
+
+    /**
+     * 详情
+     *
+     * @param sid
+     * @return
+     */
+    ResultVO detail(Long sid);
 }

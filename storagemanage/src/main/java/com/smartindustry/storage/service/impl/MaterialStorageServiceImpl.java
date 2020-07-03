@@ -125,4 +125,15 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
 
         return ResultVO.ok();
     }
+
+    @Override
+    public ResultVO detail(Long sid) {
+        MaterialStoragePO materialStoragePO = materialStorageMapper.selectByPrimaryKey(sid);
+        if (null == materialStoragePO) {
+            return new ResultVO(2000);
+        }
+        
+
+        return null;
+    }
 }
