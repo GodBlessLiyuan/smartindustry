@@ -64,7 +64,7 @@ public class MaterialStorageController {
     }
 
     @RequestMapping("storage")
-    public ResultVO storage(@RequestBody MaterialStorageDTO dto) {
+    public ResultVO storage(@RequestBody MaterialStorageDTO dto) throws Exception {
         return materialStorageService.storage(dto);
     }
 }

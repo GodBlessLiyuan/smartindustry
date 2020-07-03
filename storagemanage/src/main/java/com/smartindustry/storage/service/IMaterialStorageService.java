@@ -45,5 +45,5 @@ public interface IMaterialStorageService {
      * @param dto
      * @return
      */
-    ResultVO storage(MaterialStorageDTO dto);
+    ResultVO storage(MaterialStorageDTO dto) throws Exception;
 }

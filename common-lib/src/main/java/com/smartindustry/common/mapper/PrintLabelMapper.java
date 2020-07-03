@@ -35,4 +35,19 @@ public interface PrintLabelMapper extends BaseMapper<PrintLabelPO, Long> {
      * @return
      */
     PrintLabelBO queryByRbidAndPid(@Param("rbid") Long rbid, @Param("pid") String pid);
+
+    /**
+     * 根据Ids查询
+     *
+     * @param plids
+     * @return
+     */
+    List<PrintLabelPO> queryByIds(List<Long> plids);
+
+    /**
+     * 批量更新
+     *
+     * @param labelPOs
+     */
+    void batchUpdate(List<PrintLabelPO> labelPOs);
 }
