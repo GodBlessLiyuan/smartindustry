@@ -15,7 +15,7 @@ import java.util.List;
  * @version: 1.0
  */
 @Data
-public class MaterialStoragePageVO implements Serializable {
+public class StoragePageVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -77,8 +77,8 @@ public class MaterialStoragePageVO implements Serializable {
      * @param bos
      * @return
      */
-    public static List<MaterialStoragePageVO> convert(List<MaterialStorageBO> bos) {
-        List<MaterialStoragePageVO> vos = new ArrayList<>();
+    public static List<StoragePageVO> convert(List<MaterialStorageBO> bos) {
+        List<StoragePageVO> vos = new ArrayList<>();
         for (MaterialStorageBO bo : bos) {
             vos.add(convert(bo));
         }
@@ -91,8 +91,8 @@ public class MaterialStoragePageVO implements Serializable {
      * @param bo
      * @return
      */
-    public static MaterialStoragePageVO convert(MaterialStorageBO bo) {
-        MaterialStoragePageVO vo = new MaterialStoragePageVO();
+    public static StoragePageVO convert(MaterialStorageBO bo) {
+        StoragePageVO vo = new StoragePageVO();
         vo.setSid(bo.getStorageId());
         vo.setRid(bo.getReceiptBodyId());
         vo.setSno(bo.getStorageNo());

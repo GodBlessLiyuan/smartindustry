@@ -7,13 +7,12 @@ import com.smartindustry.common.bo.PrintLabelBO;
 import com.smartindustry.common.mapper.MaterialStorageMapper;
 import com.smartindustry.common.mapper.PrintLabelMapper;
 import com.smartindustry.common.mapper.StorageLocationMapper;
-import com.smartindustry.common.pojo.PrintLabelPO;
 import com.smartindustry.common.pojo.StorageLocationPO;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.dto.MaterialStorageDTO;
 import com.smartindustry.storage.service.IMaterialStorageService;
-import com.smartindustry.storage.vo.MaterialStoragePageVO;
+import com.smartindustry.storage.vo.StoragePageVO;
 import com.smartindustry.storage.vo.StorageLabelVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,7 +40,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         Page<MaterialStorageBO> page = PageHelper.startPage(pageNum, pageSize);
         List<MaterialStorageBO> bos = materialStorageMapper.pageQuery(reqData);
 
-        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), MaterialStoragePageVO.convert(bos)));
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), StoragePageVO.convert(bos)));
     }
 
     @Override
