@@ -11,6 +11,7 @@ import com.smartindustry.common.pojo.PrintLabelPO;
 import com.smartindustry.common.pojo.StorageLocationPO;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.storage.dto.MaterialStorageDTO;
 import com.smartindustry.storage.service.IMaterialStorageService;
 import com.smartindustry.storage.vo.MaterialStoragePageVO;
 import com.smartindustry.storage.vo.StorageLabelVO;
@@ -61,5 +62,10 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         }
 
         return ResultVO.ok().setData(StorageLabelVO.convert(bo));
+    }
+
+    @Override
+    public ResultVO storage(MaterialStorageDTO dto) {
+        return null;
     }
 }

@@ -227,9 +227,10 @@
         </foreach>
     </insert>
     <select id="queryByRbidAndPid" resultType="com.smartindustry.common.bo.PrintLabelBO">
-        select pl.package_id   as packageId,
-               m.material_no   as materialNo,
-               m.material_desc as materialDesc,
+        select pl.print_label_id as printLabelId,
+               pl.package_id     as packageId,
+               m.material_no     as materialNo,
+               m.material_desc   as materialDesc,
                pl.num
         from sm_print_label pl
                  left join sm_receipt_body rb on pl.receipt_body_id = rb.receipt_body_id

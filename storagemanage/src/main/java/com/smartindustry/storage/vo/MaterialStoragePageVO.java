@@ -23,6 +23,10 @@ public class MaterialStoragePageVO implements Serializable {
      */
     private Long sid;
     /**
+     * 收料单ID
+     */
+    private Long rid;
+    /**
      * 入库单号
      */
     private String sno;
@@ -90,6 +94,7 @@ public class MaterialStoragePageVO implements Serializable {
     public static MaterialStoragePageVO convert(MaterialStorageBO bo) {
         MaterialStoragePageVO vo = new MaterialStoragePageVO();
         vo.setSid(bo.getStorageId());
+        vo.setRid(bo.getReceiptBodyId());
         vo.setSno(bo.getStorageNo());
         vo.setRno(bo.getReceiptNo());
         vo.setRtype(bo.getOrderType());

@@ -16,6 +16,10 @@ public class StorageLabelVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 打印标签ID
+     */
+    private Long plid;
+    /**
      * PID
      */
     private String pid;
@@ -34,6 +38,7 @@ public class StorageLabelVO implements Serializable {
 
     public static StorageLabelVO convert(PrintLabelBO bo) {
         StorageLabelVO vo = new StorageLabelVO();
+        vo.setPlid(bo.getPrintLabelId());
         vo.setPid(bo.getPackageId());
         vo.setMno(bo.getMaterialNo());
         vo.setMdesc(bo.getMaterialDesc());

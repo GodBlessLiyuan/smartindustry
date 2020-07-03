@@ -1,6 +1,7 @@
 package com.smartindustry.storage.service;
 
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.storage.dto.MaterialStorageDTO;
 
 import java.util.Map;
 
@@ -37,4 +38,12 @@ public interface IMaterialStorageService {
      * @return
      */
     ResultVO label(Long rbid, String pid);
+
+    /**
+     * 入库
+     *
+     * @param dto
+     * @return
+     */
+    ResultVO storage(MaterialStorageDTO dto);
 }
