@@ -31,6 +31,11 @@ public class LabelManageController {
         return labelManageService.insert(dto);
     }
 
+    @RequestMapping("delete")
+    public ResultVO delete(@RequestParam(value = "rbid") Long rbId, @RequestParam(value = "plid") Long plId) {
+        return labelManageService.delete(rbId, plId);
+    }
+
     @RequestMapping("finish")
     public ResultVO finish(@RequestParam(value = "rbid") Long rbId) {
         return labelManageService.finish(rbId);

@@ -9,6 +9,7 @@ import com.smartindustry.storage.dto.PrintLabelDTO;
 import com.smartindustry.storage.service.ILabelManageService;
 import com.smartindustry.storage.util.ReceiptNoUtil;
 import com.smartindustry.storage.vo.PrintLabelVO;
+import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -62,6 +63,21 @@ public class LabelManageServiceImpl implements ILabelManageService {
         }
 
         // 扫描录入
+        return ResultVO.ok();
+    }
+
+    @Override
+    public ResultVO delete(Long rbId, Long plId) {
+        ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(rbId);
+        if (null == receiptBodyPO) {
+            return new ResultVO(2000);
+        }
+        if (!ReceiptConstant.RECEIPT_ENTRY_LABEL.equals(receiptBodyPO.getStatus())) {
+            return new ResultVO(2000);
+        }
+
+        printLabelMapper.deleteByPrimaryKey(plId);
+
         return ResultVO.ok();
     }
 

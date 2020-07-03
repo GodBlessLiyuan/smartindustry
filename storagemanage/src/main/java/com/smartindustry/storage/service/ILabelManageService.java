@@ -27,11 +27,18 @@ public interface ILabelManageService {
     ResultVO insert(PrintLabelDTO dto);
 
     /**
+     * 删除
+     *
+     * @param plId
+     * @return
+     */
+    ResultVO delete(Long rbId, Long plId);
+
+    /**
      * 录入完成
      *
      * @param rbId
      * @return
      */
     ResultVO finish(Long rbId);
-
 }
