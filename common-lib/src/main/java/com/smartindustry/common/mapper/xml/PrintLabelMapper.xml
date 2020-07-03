@@ -226,4 +226,17 @@
             #{po.createTime,jdbcType=TIMESTAMP}, #{po.dr,jdbcType=TINYINT})
         </foreach>
     </insert>
+    <select id="queryByRbidAndPid" resultType="com.smartindustry.common.bo.PrintLabelBO">
+        select pl.package_id   as packageId,
+               m.material_no   as materialNo,
+               m.material_desc as materialDesc,
+               pl.num
+        from sm_print_label pl
+                 left join sm_receipt_body rb on pl.receipt_body_id = rb.receipt_body_id
+                 left join sm_material m on rb.material_no = m.material_no
+        where pl.receipt_body_id = #{rbid,jdbcType=BIGINT}
+          and pl.package_id = #{pid,jdbcType=CHAR}
+          and pl.dr = 1
+          and pl.`status` = 3
+    </select>
 </mapper>

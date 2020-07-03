@@ -1,7 +1,9 @@
 package com.smartindustry.common.mapper;
 
+import com.smartindustry.common.bo.PrintLabelBO;
 import com.smartindustry.common.pojo.PrintLabelPO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -24,4 +26,13 @@ public interface PrintLabelMapper extends BaseMapper<PrintLabelPO, Long> {
      * @param pos
      */
     void batchInsert(List<PrintLabelPO> pos);
+
+    /**
+     * 根据 rbid 和 pid 查询
+     *
+     * @param rbid
+     * @param pid
+     * @return
+     */
+    PrintLabelBO queryByRbidAndPid(@Param("rbid") Long rbid, @Param("pid") String pid);
 }

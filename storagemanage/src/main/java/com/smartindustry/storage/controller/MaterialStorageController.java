@@ -50,4 +50,14 @@ public class MaterialStorageController {
         reqData.put("type", type);
         return materialStorageService.pageQuery(pageNum, pageSize, reqData);
     }
+
+    @RequestMapping("location")
+    public ResultVO location(@RequestParam(value = "lno") String lno) {
+        return materialStorageService.location(lno);
+    }
+
+    @RequestMapping("label")
+    public ResultVO label(@RequestParam("rbid") Long rbid, @RequestParam("pid") String pid) {
+        return materialStorageService.label(rbid, pid);
+    }
 }
