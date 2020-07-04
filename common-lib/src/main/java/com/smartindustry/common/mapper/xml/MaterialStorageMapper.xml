@@ -27,7 +27,8 @@
         from sm_material_storage
         where storage_id = #{storageId,jdbcType=BIGINT}
     </delete>
-    <insert id="insert" parameterType="com.smartindustry.common.pojo.MaterialStoragePO">
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.MaterialStoragePO" useGeneratedKeys="true"
+            keyProperty="storageId">
         insert into sm_material_storage (storage_id, receipt_body_id, storage_no,
                                          pending_num, stored_num, storage_time,
                                          `status`, `type`, create_time)
@@ -141,7 +142,7 @@
 
     <sql id="StorageBO_Column_List">
         storage_id, ms.receipt_body_id, storage_no, pending_num, stored_num, storage_time, ms.`status`,
-    ms.`type`, ms.create_time, receipt_no, order_type, m.material_no, material_type, material_desc
+    ms.`type`, ms.create_time, receipt_no, rb.order_type, m.material_no, material_type, material_desc
     </sql>
     <resultMap id="StorageBOResultMap" type="com.smartindustry.common.bo.MaterialStorageBO" extends="BaseResultMap">
         <result column="receipt_no" jdbcType="CHAR" property="receiptNo"/>
@@ -155,11 +156,10 @@
         <include refid="StorageBO_Column_List"/>
         from sm_material_storage ms
         left join sm_receipt_body rb on ms.receipt_body_id = rb.receipt_body_id
-        left join sm_receipt_head rh on rb.receipt_head_id = rh.receipt_head_id
         left join sm_material m on rb.material_no = m.material_no
         <where>
             <if test="rno != null and rno != ''">and rb.receipt_no like '%' #{rno,jdbcType=CHAR} '%'</if>
-            <if test="rtype != null and rtype != 0">and rh.order_type = #{rtype,jdbcType=TINYINT}</if>
+            <if test="rtype != null and rtype != 0">and rb.order_type = #{rtype,jdbcType=TINYINT}</if>
             <if test="mtype != null and mtype != 0">and m.material_type = #{mtype,jdbcType=TINYINT}</if>
             <if test="status != null and status != 0">and ms.`status` = #{status,jdbcType=TINYINT}</if>
             <if test="type != null and type != 0">and ms.`type` = #{type,jdbcType=TINYINT}</if>

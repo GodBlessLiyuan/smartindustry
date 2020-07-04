@@ -234,32 +234,26 @@
                m.material_desc   as materialDesc,
                pl.num
         from sm_print_label pl
-                 left join sm_receipt_body rb on pl.receipt_body_id = rb.receipt_body_id
-                 left join sm_material m on rb.material_no = m.material_no
+                 left join sm_material m on pl.material_no = m.material_no
         where pl.receipt_body_id = #{rbid,jdbcType=BIGINT}
           and pl.package_id = #{pid,jdbcType=CHAR}
           and pl.dr = 1
-          and pl.`status` = 3
+          and pl.storage_id is null
     </select>
     <select id="queryByIds" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from sm_print_label
-        where dr = 1 and `status` = 3 and print_label_id in
+        where dr = 1 and storage_id is null and print_label_id in
         <foreach collection="list" item="plid" open="(" separator="," close=")">
             #{plid,jdbcType=BIGINT}
         </foreach>
     </select>
     <update id="batchUpdate" parameterType="java.util.List">
         update sm_print_label
-        set `type` = case print_label_id
+        set storage_id = case print_label_id
         <foreach collection="list" item="po">
-            when #{po.printLabelId,jdbcType=BIGINT} then #{po.type,jdbcType=TINYINT}
-        </foreach>
-        end,
-        `status` = case print_label_id
-        <foreach collection="list" item="po">
-            when #{po.printLabelId,jdbcType=BIGINT} then #{po.status,jdbcType=TINYINT}
+            when #{po.printLabelId,jdbcType=BIGINT} then #{po.storageId,jdbcType=CHAR}
         </foreach>
         end,
         location_no = case print_label_id

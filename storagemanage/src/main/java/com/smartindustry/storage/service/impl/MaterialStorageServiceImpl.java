@@ -98,6 +98,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
 
             for (PrintLabelPO labelPO : labelPOs) {
                 labelPO.setLocationNo(detailDTO.getLno());
+                labelPO.setStorageId(materialStoragePO.getStorageId());
                 total += labelPO.getNum();
             }
 
@@ -119,7 +120,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         receiptBodyMapper.updateByPrimaryKey(receiptBodyPO);
 
         // 操作记录
-        recordMapper.insert(new RecordPO(dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_CONFIRM, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
+        recordMapper.insert(new RecordPO(dto.getRbid(), materialStoragePO.getStorageId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_CONFIRM, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
 
         return ResultVO.ok();
     }

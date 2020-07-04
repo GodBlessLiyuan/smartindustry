@@ -252,6 +252,8 @@ public class QualityManageServiceImpl implements IQualityManageService {
             materialStoragePO.setType(ReceiptConstant.MATERIAL_TYPE_GOOD);
             materialStoragePO.setCreateTime(new Date());
             materialStorageMapper.insert(materialStoragePO);
+
+            recordMapper.insert(new RecordPO(rbId, materialStoragePO.getStorageId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
         }
         if (receiptBodyPO.getBadNum() > 0) {
             // 非良品入库单
@@ -264,11 +266,12 @@ public class QualityManageServiceImpl implements IQualityManageService {
             materialStoragePO.setType(ReceiptConstant.MATERIAL_TYPE_BAD);
             materialStoragePO.setCreateTime(new Date());
             materialStorageMapper.insert(materialStoragePO);
+
+            recordMapper.insert(new RecordPO(rbId, materialStoragePO.getStorageId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
         }
 
         // 操作记录
         recordMapper.insert(new RecordPO(rbId, 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, status));
-        recordMapper.insert(new RecordPO(rbId, 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
 
         return ResultVO.ok();
     }
