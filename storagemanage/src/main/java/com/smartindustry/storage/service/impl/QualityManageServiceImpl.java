@@ -8,8 +8,9 @@ import com.smartindustry.common.pojo.*;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.ReceiptConstant;
-import com.smartindustry.storage.dto.TestDTO;
+import com.smartindustry.storage.dto.IqcTestDTO;
 import com.smartindustry.storage.dto.QeConfirmDTO;
+import com.smartindustry.storage.dto.QeTestDTO;
 import com.smartindustry.storage.service.IQualityManageService;
 import com.smartindustry.storage.util.ReceiptNoUtil;
 import com.smartindustry.storage.vo.PrintLabelVO;
@@ -56,7 +57,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public ResultVO iqcTest(TestDTO dto) {
+    public ResultVO iqcTest(IqcTestDTO dto) {
         ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(dto.getRbid());
         if (null == receiptBodyPO) {
             return new ResultVO(2000);
@@ -106,6 +107,11 @@ public class QualityManageServiceImpl implements IQualityManageService {
         recordMapper.insert(new RecordPO(dto.getRbid(), 1L, "夏慧", type, ReceiptConstant.RECEIPT_IQC_DETECT));
 
         return ResultVO.ok();
+    }
+
+    @Override
+    public ResultVO qeTest(QeTestDTO dto) {
+        return null;
     }
 
     @Transactional(rollbackFor = Exception.class)

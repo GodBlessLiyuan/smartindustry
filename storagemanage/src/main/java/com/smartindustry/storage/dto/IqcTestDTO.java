@@ -7,11 +7,11 @@ import java.io.Serializable;
 /**
  * @author: xiahui
  * @date: Created in 2020/6/30 14:48
- * @description: 质量检验 DTO
+ * @description: IQC检验 DTO
  * @version: 1.0
  */
 @Data
-public class TestDTO implements Serializable {
+public class IqcTestDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

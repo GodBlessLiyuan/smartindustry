@@ -1,8 +1,9 @@
 package com.smartindustry.storage.service;
 
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.storage.dto.TestDTO;
+import com.smartindustry.storage.dto.IqcTestDTO;
 import com.smartindustry.storage.dto.QeConfirmDTO;
+import com.smartindustry.storage.dto.QeTestDTO;
 
 import java.util.Map;
 
@@ -28,7 +29,15 @@ public interface IQualityManageService {
      * @param dto
      * @return
      */
-    ResultVO iqcTest(TestDTO dto);
+    ResultVO iqcTest(IqcTestDTO dto);
+
+    /**
+     * QE 检验
+     *
+     * @param dto
+     * @return
+     */
+    ResultVO qeTest(QeTestDTO dto);
 
     /**
      * QE确认
