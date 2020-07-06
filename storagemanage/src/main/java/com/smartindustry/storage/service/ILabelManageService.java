@@ -1,6 +1,7 @@
 package com.smartindustry.storage.service;
 
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.storage.dto.LabelSplitDTO;
 import com.smartindustry.storage.dto.PrintLabelDTO;
 
 /**
@@ -41,4 +42,12 @@ public interface ILabelManageService {
      * @return
      */
     ResultVO finish(Long rbId);
+
+    /**
+     * 标签拆分
+     *
+     * @param dto
+     * @return
+     */
+    ResultVO split(LabelSplitDTO dto);
 }

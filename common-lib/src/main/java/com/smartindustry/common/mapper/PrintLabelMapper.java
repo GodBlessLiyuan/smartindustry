@@ -50,4 +50,13 @@ public interface PrintLabelMapper extends BaseMapper<PrintLabelPO, Long> {
      * @param labelPOs
      */
     void batchUpdate(List<PrintLabelPO> labelPOs);
+
+    /**
+     * 根据 pid 和 dr 进行查询
+     *
+     * @param pid
+     * @param dr
+     * @return
+     */
+    PrintLabelPO queryByIdAndDr(@Param("pid") String pid, @Param("dr") byte dr);
 }

@@ -1,6 +1,7 @@
 package com.smartindustry.storage.controller;
 
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.storage.constant.ReceiptConstant;
 import com.smartindustry.storage.dto.TestDTO;
 import com.smartindustry.storage.dto.QeConfirmDTO;
 import com.smartindustry.storage.service.IQualityManageService;
@@ -33,6 +34,10 @@ public class QualityManageController {
                               @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
                               @RequestParam(value = "qaStatus", required = false, defaultValue = "0") Byte qaStatus,
                               @RequestParam(value = "status") Byte status) {
+        if (!ReceiptConstant.RECEIPT_IQC_DETECT.equals(status) && !ReceiptConstant.RECEIPT_QE_DETECT.equals(status) && !ReceiptConstant.RECEIPT_QE_CONFIRM.equals(status)) {
+            return new ResultVO(2000);
+        }
+
         Map<String, Object> reqData = new HashMap<>(8);
         // 质量管理 分页查询查询
         reqData.put("qa", true);
@@ -44,9 +49,9 @@ public class QualityManageController {
         return qualityManageService.pageQuery(pageNum, pageSize, reqData);
     }
 
-    @RequestMapping("test")
-    public ResultVO test(@RequestBody TestDTO dto) {
-        return qualityManageService.test(dto);
+    @RequestMapping("iqcTest")
+    public ResultVO iqcTest(@RequestBody TestDTO dto) {
+        return qualityManageService.iqcTest(dto);
     }
 
     @RequestMapping("qeConfirm")

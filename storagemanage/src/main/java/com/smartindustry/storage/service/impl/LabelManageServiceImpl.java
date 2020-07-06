@@ -5,6 +5,7 @@ import com.smartindustry.common.mapper.*;
 import com.smartindustry.common.pojo.*;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.ReceiptConstant;
+import com.smartindustry.storage.dto.LabelSplitDTO;
 import com.smartindustry.storage.dto.PrintLabelDTO;
 import com.smartindustry.storage.service.ILabelManageService;
 import com.smartindustry.storage.util.ReceiptNoUtil;
@@ -124,6 +125,46 @@ public class LabelManageServiceImpl implements ILabelManageService {
         }
 
         recordMapper.insert(new RecordPO(rbId, 1L, "夏慧", ReceiptConstant.RECORD_TYPE_FINISH, ReceiptConstant.RECEIPT_ENTRY_LABEL));
+
+        return ResultVO.ok();
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public ResultVO split(LabelSplitDTO dto) {
+        PrintLabelPO labelPO = printLabelMapper.queryByIdAndDr(dto.getPid(), (byte) 1);
+        if (null == labelPO) {
+            return new ResultVO(2000);
+        }
+        if (dto.getBnum() + dto.getGnum() != labelPO.getNum()) {
+            return new ResultVO(2000);
+        }
+
+        // 废弃已有的打印标签
+        labelPO.setDr((byte) 2);
+        printLabelMapper.updateByPrimaryKey(labelPO);
+
+        // 生产新的打印标签
+        Long existId = labelPO.getPrintLabelId();
+        int num = ReceiptNoUtil.getLabelNum(printLabelMapper, null, new Date());
+        if (dto.getGnum() > 0) {
+            labelPO.setPrintLabelId(null);
+            labelPO.setPackageId(ReceiptNoUtil.genLabelNo(null, new Date(), ++num));
+            labelPO.setNum(dto.getGnum());
+            labelPO.setType(ReceiptConstant.LABEL_TYPE_GOOD);
+            labelPO.setRelateLabelId(existId);
+            labelPO.setRelatePackageId(dto.getPid());
+            labelPO.setDr((byte) 1);
+            labelPO.setCreateTime(new Date());
+            printLabelMapper.insert(labelPO);
+        }
+        if (dto.getBnum() > 0) {
+            labelPO.setPrintLabelId(null);
+            labelPO.setPackageId(ReceiptNoUtil.genLabelNo(null, new Date(), ++num));
+            labelPO.setNum(dto.getBnum());
+            labelPO.setType(ReceiptConstant.LABEL_TYPE_BAD);
+            printLabelMapper.insert(labelPO);
+        }
 
         return ResultVO.ok();
     }

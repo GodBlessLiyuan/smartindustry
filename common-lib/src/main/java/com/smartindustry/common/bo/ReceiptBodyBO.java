@@ -16,4 +16,5 @@ public class ReceiptBodyBO extends ReceiptBodyPO {
     private Byte materialType;
     private String materialModel;
     private String materialDesc;
+    private Byte testType;
 }

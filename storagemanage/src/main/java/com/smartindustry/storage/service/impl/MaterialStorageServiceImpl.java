@@ -73,15 +73,18 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO storage(MaterialStorageDTO dto) throws Exception {
+        MaterialStoragePO materialStoragePO = materialStorageMapper.selectByPrimaryKey(dto.getSid());
+        if (null == materialStoragePO) {
+            return new ResultVO(2000);
+        }
+        if (!materialStoragePO.getPendingNum().equals(materialStoragePO.getStoredNum())) {
+            return new ResultVO(2000);
+        }
         ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(dto.getRbid());
         if (null == receiptBodyPO) {
             return new ResultVO(2000);
         }
         if (!ReceiptConstant.RECEIPT_MATERIAL_STORAGE.equals(receiptBodyPO.getStatus())) {
-            return new ResultVO(2000);
-        }
-        MaterialStoragePO materialStoragePO = materialStorageMapper.selectByPrimaryKey(dto.getSid());
-        if (null == materialStoragePO) {
             return new ResultVO(2000);
         }
         if (ReceiptConstant.MATERIAL_STORAGE_FINISH.equals(materialStoragePO.getStatus())) {

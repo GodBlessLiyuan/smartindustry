@@ -5,10 +5,7 @@ import com.smartindustry.storage.dto.LogisticsDTO;
 import com.smartindustry.storage.dto.ReceiptDTO;
 import com.smartindustry.storage.service.IReceiptManageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -44,7 +41,7 @@ public class ReceiptManageController {
         return receiptManageService.pageQuery(pageNum, pageSize, reqData);
     }
 
-    @RequestMapping("insert")
+    @PostMapping("insert")
     public ResultVO insert(@RequestBody ReceiptDTO dto) {
         return receiptManageService.insert(dto);
     }
@@ -54,7 +51,7 @@ public class ReceiptManageController {
         return receiptManageService.delete(rbIds);
     }
 
-    @RequestMapping("editLog")
+    @PostMapping("editLog")
     public ResultVO editLog(@RequestBody LogisticsDTO dto) {
         return receiptManageService.editLog(dto);
     }

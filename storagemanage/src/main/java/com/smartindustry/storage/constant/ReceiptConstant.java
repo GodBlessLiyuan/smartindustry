@@ -67,6 +67,8 @@ public class ReceiptConstant {
      */
     public static final Byte LABEL_ORIGIN_SCAN = 1;
     public static final Byte LABEL_ORIGIN_ENTRY = 2;
+    public static final Byte LABEL_TYPE_GOOD = 1;
+    public static final Byte LABEL_TYPE_BAD = 2;
 
     /**
      * 物料类型： 良品 非良品

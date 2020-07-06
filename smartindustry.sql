@@ -137,6 +137,7 @@ CREATE TABLE sm_material
     material_type tinyint NOT NULL,
     material_model char(255),
     material_desc char(255),
+    test_type tinyint,
     create_time datetime,
     update_time datetime,
     -- 1：未删除
@@ -157,10 +158,12 @@ CREATE TABLE sm_material_storage
     stored_num int,
     storage_time datetime,
     -- 1：已入库
+    -- 2：入库中
     -- 3：待入库
     --
     --
     status tinyint COMMENT '1：已入库
+2：入库中
 3：待入库
 
 ',
@@ -183,6 +186,10 @@ CREATE TABLE sm_print_label
     produce_date date,
     produce_batch char(64),
     num int,
+    -- 1：良品
+    -- 2：非良品
+    type tinyint COMMENT '1：良品
+2：非良品',
     -- 1：扫描
     -- 2：打印
     origin tinyint NOT NULL COMMENT '1：扫描

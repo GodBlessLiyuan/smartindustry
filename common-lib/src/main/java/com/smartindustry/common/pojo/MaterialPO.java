@@ -20,6 +20,8 @@ public class MaterialPO implements Serializable {
 
     private String materialDesc;
 
+    private Byte testType;
+
     private Date createTime;
 
     private Date updateTime;

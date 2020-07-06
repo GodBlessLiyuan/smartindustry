@@ -23,12 +23,12 @@ public interface IQualityManageService {
     ResultVO pageQuery(int pageNum, int pageSize, Map<String, Object> reqData);
 
     /**
-     * IQC或QE检验
+     * IQC检验
      *
      * @param dto
      * @return
      */
-    ResultVO test(TestDTO dto);
+    ResultVO iqcTest(TestDTO dto);
 
     /**
      * QE确认

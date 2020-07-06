@@ -1,6 +1,7 @@
 package com.smartindustry.storage.controller;
 
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.storage.dto.LabelSplitDTO;
 import com.smartindustry.storage.dto.PrintLabelDTO;
 import com.smartindustry.storage.service.ILabelManageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,5 +40,10 @@ public class LabelManageController {
     @RequestMapping("finish")
     public ResultVO finish(@RequestParam(value = "rbid") Long rbId) {
         return labelManageService.finish(rbId);
+    }
+
+    @RequestMapping("split")
+    public ResultVO split(@RequestBody LabelSplitDTO dto) {
+        return labelManageService.split(dto);
     }
 }

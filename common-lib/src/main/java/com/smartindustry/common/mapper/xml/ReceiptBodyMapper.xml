@@ -211,12 +211,12 @@
     </update>
 
     <sql id="ReceiptBodyBO_Column_List">
-        receipt_body_id, rb.receipt_head_id, rb.order_no, rb.order_typet, receipt_no, rb.material_no, order_total, accept_num,
-    accept_date, good_num, bad_num, stock_num, `status`, rb.create_time, rb.dr, material_name, material_type, material_model, material_desc
+        receipt_body_id, rb.receipt_head_id, rb.order_no, rb.order_type, receipt_no, rb.material_no, order_total, accept_num,
+    accept_date, good_num, bad_num, stock_num, `status`, rb.create_time, rb.dr, material_name, material_type, material_model, material_desc, test_type
     </sql>
     <sql id="ReceiptBO_Column_List">
         rb.receipt_body_id, rb.receipt_head_id, rb.order_no, rb.order_type, receipt_no, rb.material_no, order_total, accept_num,
-    accept_date, good_num, bad_num, stock_num, rb.`status`, material_name, material_type, material_model, material_desc,
+    accept_date, good_num, bad_num, stock_num, rb.`status`, material_name, material_type, material_model, material_desc, test_type,
     rh.order_date, rh.supplier, rh.buyer, rh.plan_date, rh.logistics_company, rh.logistics_no, rh.receipt_way, rh.remark
     </sql>
     <resultMap id="ReceiptBodyBOResultMap" type="com.smartindustry.common.bo.ReceiptBodyBO" extends="BaseResultMap">
@@ -224,6 +224,7 @@
         <result column="material_type" jdbcType="TINYINT" property="materialType"/>
         <result column="material_model" jdbcType="CHAR" property="materialModel"/>
         <result column="material_desc" jdbcType="CHAR" property="materialDesc"/>
+        <result column="test_type" jdbcType="TINYINT" property="testType"/>
     </resultMap>
     <resultMap id="ReceiptBOResultMap" type="com.smartindustry.common.bo.ReceiptBO" extends="ReceiptBodyBOResultMap">
         <result column="order_date" jdbcType="DATE" property="orderDate"/>
