@@ -70,6 +70,16 @@ public class MaterialStorageController {
         return materialStorageService.edit(dto);
     }
 
+    @RequestMapping("delete")
+    public ResultVO delete(@RequestBody StorageDetailDTO dto) {
+        return materialStorageService.delete(dto);
+    }
+
+    @RequestMapping("save")
+    public ResultVO save(@RequestBody StorageGroupDTO dto) {
+        return materialStorageService.save(dto);
+    }
+
     @RequestMapping("storage")
     public ResultVO storage(@RequestBody MaterialStorageDTO dto) throws Exception {
         return materialStorageService.storage(dto);

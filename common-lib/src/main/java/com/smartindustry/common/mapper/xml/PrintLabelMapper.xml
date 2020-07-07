@@ -283,4 +283,13 @@
         from sm_print_label
         where package_id = #{pid,jdbcType=CHAR} and dr = #{dr,jdbcType=TINYINT}
     </select>
+    <update id="updateSidAndlnoByIds">
+        update sm_print_label
+        set location_no = #{lno,jdbcType=CHAR},
+        storage_id = #{sid,jdbcType=BIGINT}
+        where print_label_id in
+        <foreach collection="list" item="plid" open="(" separator="," close=")">
+            #{plid,jdbcType=BIGINT}
+        </foreach>
+    </update>
 </mapper>

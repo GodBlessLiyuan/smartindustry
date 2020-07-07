@@ -166,8 +166,8 @@ public class LabelManageServiceImpl implements ILabelManageService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO split(LabelSplitDTO dto) {
-        PrintLabelPO labelPO = printLabelMapper.queryByPidAndDr(dto.getPid(), (byte) 1);
-        if (null == labelPO) {
+        PrintLabelPO labelPO = printLabelMapper.selectByPrimaryKey(dto.getPlid());
+        if (null == labelPO || labelPO.getDr() != 1) {
             return new ResultVO(2000);
         }
         if (dto.getBnum() + dto.getGnum() != labelPO.getNum()) {
@@ -179,15 +179,15 @@ public class LabelManageServiceImpl implements ILabelManageService {
         printLabelMapper.updateByPrimaryKey(labelPO);
 
         // 生产新的打印标签
-        Long existId = labelPO.getPrintLabelId();
+        String existPid = labelPO.getPackageId();
         int num = ReceiptNoUtil.getLabelNum(printLabelMapper, null, new Date());
         if (dto.getGnum() > 0) {
             labelPO.setPrintLabelId(null);
             labelPO.setPackageId(ReceiptNoUtil.genLabelNo(null, new Date(), ++num));
             labelPO.setNum(dto.getGnum());
             labelPO.setType(ReceiptConstant.LABEL_TYPE_GOOD);
-            labelPO.setRelateLabelId(existId);
-            labelPO.setRelatePackageId(dto.getPid());
+            labelPO.setRelateLabelId(dto.getPlid());
+            labelPO.setRelatePackageId(existPid);
             labelPO.setDr((byte) 1);
             labelPO.setCreateTime(new Date());
             printLabelMapper.insert(labelPO);

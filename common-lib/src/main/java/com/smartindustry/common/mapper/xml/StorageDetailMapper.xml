@@ -1,71 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.smartindustry.common.mapper.StorageDetailMapper">
-  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.StorageDetailPO">
-    <id column="storage_detail_id" jdbcType="BIGINT" property="storageDetailId" />
-    <result column="storage_group_id" jdbcType="BIGINT" property="storageGroupId" />
-    <result column="print_label_id" jdbcType="BIGINT" property="printLabelId" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    storage_detail_id, storage_group_id, print_label_id
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from sm_storage_detail
-    where storage_detail_id = #{storageDetailId,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from sm_storage_detail
-    where storage_detail_id = #{storageDetailId,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.smartindustry.common.pojo.StorageDetailPO">
-    insert into sm_storage_detail (storage_detail_id, storage_group_id, print_label_id
-      )
-    values (#{storageDetailId,jdbcType=BIGINT}, #{storageGroupId,jdbcType=BIGINT}, #{printLabelId,jdbcType=BIGINT}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.StorageDetailPO">
-    insert into sm_storage_detail
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="storageDetailId != null">
-        storage_detail_id,
-      </if>
-      <if test="storageGroupId != null">
-        storage_group_id,
-      </if>
-      <if test="printLabelId != null">
-        print_label_id,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="storageDetailId != null">
-        #{storageDetailId,jdbcType=BIGINT},
-      </if>
-      <if test="storageGroupId != null">
-        #{storageGroupId,jdbcType=BIGINT},
-      </if>
-      <if test="printLabelId != null">
-        #{printLabelId,jdbcType=BIGINT},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.StorageDetailPO">
-    update sm_storage_detail
-    <set>
-      <if test="storageGroupId != null">
-        storage_group_id = #{storageGroupId,jdbcType=BIGINT},
-      </if>
-      <if test="printLabelId != null">
-        print_label_id = #{printLabelId,jdbcType=BIGINT},
-      </if>
-    </set>
-    where storage_detail_id = #{storageDetailId,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.StorageDetailPO">
-    update sm_storage_detail
-    set storage_group_id = #{storageGroupId,jdbcType=BIGINT},
-      print_label_id = #{printLabelId,jdbcType=BIGINT}
-    where storage_detail_id = #{storageDetailId,jdbcType=BIGINT}
-  </update>
+    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.StorageDetailPO">
+        <id column="storage_detail_id" jdbcType="BIGINT" property="storageDetailId"/>
+        <result column="storage_group_id" jdbcType="BIGINT" property="storageGroupId"/>
+        <result column="print_label_id" jdbcType="BIGINT" property="printLabelId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        storage_detail_id, storage_group_id, print_label_id
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sm_storage_detail
+        where storage_detail_id = #{storageDetailId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from sm_storage_detail
+        where storage_detail_id = #{storageDetailId,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.StorageDetailPO">
+        insert into sm_storage_detail (storage_detail_id, storage_group_id, print_label_id)
+        values (#{storageDetailId,jdbcType=BIGINT}, #{storageGroupId,jdbcType=BIGINT}, #{printLabelId,jdbcType=BIGINT})
+    </insert>
+    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.StorageDetailPO">
+        insert into sm_storage_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="storageDetailId != null">
+                storage_detail_id,
+            </if>
+            <if test="storageGroupId != null">
+                storage_group_id,
+            </if>
+            <if test="printLabelId != null">
+                print_label_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="storageDetailId != null">
+                #{storageDetailId,jdbcType=BIGINT},
+            </if>
+            <if test="storageGroupId != null">
+                #{storageGroupId,jdbcType=BIGINT},
+            </if>
+            <if test="printLabelId != null">
+                #{printLabelId,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.StorageDetailPO">
+        update sm_storage_detail
+        <set>
+            <if test="storageGroupId != null">
+                storage_group_id = #{storageGroupId,jdbcType=BIGINT},
+            </if>
+            <if test="printLabelId != null">
+                print_label_id = #{printLabelId,jdbcType=BIGINT},
+            </if>
+        </set>
+        where storage_detail_id = #{storageDetailId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.StorageDetailPO">
+        update sm_storage_detail
+        set storage_group_id = #{storageGroupId,jdbcType=BIGINT},
+            print_label_id   = #{printLabelId,jdbcType=BIGINT}
+        where storage_detail_id = #{storageDetailId,jdbcType=BIGINT}
+    </update>
+
+    <sql id="Bo_Column_List">
+        storage_detail_id, storage_group_id, print_label_id, num
+    </sql>
+    <resultMap id="BoResultMap" type="com.smartindustry.common.bo.StorageDetailBO" extends="BaseResultMap">
+        <result column="num" jdbcType="INTEGER" property="num"/>
+    </resultMap>
+    <select id="queryByGroupId" parameterType="java.lang.Long" resultMap="BoResultMap">
+        select
+        <include refid="Bo_Column_List"/>
+        from sm_storage_detail sd
+        left join sm_print_label pl on sd.print_label_id = pl.print_label_id
+        where storage_group_id = #{storageGroupId,jdbcType=BIGINT}
+    </select>
 </mapper>

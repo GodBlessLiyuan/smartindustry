@@ -15,9 +15,9 @@ public class LabelSplitDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 已有PID
+     * 标签ID
      */
-    private String pid;
+    private Long plid;
     /**
      * 良品包装数量
      */

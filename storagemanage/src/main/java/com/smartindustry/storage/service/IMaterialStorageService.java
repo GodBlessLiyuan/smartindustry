@@ -48,6 +48,22 @@ public interface IMaterialStorageService {
     ResultVO edit(StorageDetailDTO dto);
 
     /**
+     * 删除
+     *
+     * @param dto
+     * @return
+     */
+    ResultVO delete(StorageDetailDTO dto);
+
+    /**
+     * 保存
+     *
+     * @param dto
+     * @return
+     */
+    ResultVO save(StorageGroupDTO dto);
+
+    /**
      * 入库
      *
      * @param dto

@@ -15,10 +15,6 @@ public class StorageGroupDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 物料入库组ID
-     */
-    private Long sgid;
-    /**
      * 入库单ID
      */
     private Long sid;
@@ -26,6 +22,14 @@ public class StorageGroupDTO implements Serializable {
      * 收料单ID
      */
     private Long rbid;
+    /**
+     * 物料入库组ID
+     */
+    private Long sgid;
+    /**
+     * 库位编号
+     */
+    private String lno;
     /**
      * 打印标签PID
      */

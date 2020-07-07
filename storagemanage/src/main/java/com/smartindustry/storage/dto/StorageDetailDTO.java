@@ -15,10 +15,6 @@ public class StorageDetailDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 1:修改 2:删除
-     */
-    private Byte type;
-    /**
      * 入库单Id
      */
     private Long sid;
