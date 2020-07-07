@@ -1,7 +1,6 @@
 package com.smartindustry.storage.controller;
 
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.storage.dto.MaterialStorageDTO;
 import com.smartindustry.storage.dto.StorageDetailDTO;
 import com.smartindustry.storage.dto.StorageGroupDTO;
 import com.smartindustry.storage.service.IMaterialStorageService;
@@ -81,8 +80,8 @@ public class MaterialStorageController {
     }
 
     @RequestMapping("storage")
-    public ResultVO storage(@RequestBody MaterialStorageDTO dto) throws Exception {
-        return materialStorageService.storage(dto);
+    public ResultVO storage(@RequestParam(value = "sid") Long sid) {
+        return materialStorageService.storage(sid);
     }
 
     @RequestMapping("detail")

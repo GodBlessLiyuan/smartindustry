@@ -185,8 +185,8 @@ CREATE TABLE sm_print_label
     print_label_id bigint unsigned NOT NULL AUTO_INCREMENT,
     receipt_body_id bigint unsigned NOT NULL,
     package_id char(32) NOT NULL,
-    produce_date date,
-    produce_batch char(64),
+    produce_date char(32),
+    produce_batch char(32),
     num int,
     -- 1£ºÁ¼Æ·
     -- 2£º·ÇÁ¼Æ·

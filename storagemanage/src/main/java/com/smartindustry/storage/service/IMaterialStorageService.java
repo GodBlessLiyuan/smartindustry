@@ -1,7 +1,6 @@
 package com.smartindustry.storage.service;
 
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.storage.dto.MaterialStorageDTO;
 import com.smartindustry.storage.dto.StorageDetailDTO;
 import com.smartindustry.storage.dto.StorageGroupDTO;
 
@@ -66,10 +65,10 @@ public interface IMaterialStorageService {
     /**
      * 入库
      *
-     * @param dto
+     * @param sid
      * @return
      */
-    ResultVO storage(MaterialStorageDTO dto) throws Exception;
+    ResultVO storage(Long sid);
 
     /**
      * 详情
