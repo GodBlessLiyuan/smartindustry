@@ -20,6 +20,24 @@ public interface ILabelManageService {
     ResultVO query(Long rbId);
 
     /**
+     * 根据 PID 查询
+     *
+     * @param rbId
+     * @param pid
+     * @return
+     */
+    ResultVO queryPid(Long rbId, String pid);
+
+    /**
+     * 重新打印
+     *
+     * @param plId
+     * @param num
+     * @return
+     */
+    ResultVO reprint(Long plId, Integer num);
+
+    /**
      * 标签录入
      *
      * @param dto

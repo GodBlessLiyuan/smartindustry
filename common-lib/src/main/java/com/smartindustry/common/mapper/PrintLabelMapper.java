@@ -58,5 +58,5 @@ public interface PrintLabelMapper extends BaseMapper<PrintLabelPO, Long> {
      * @param dr
      * @return
      */
-    PrintLabelPO queryByIdAndDr(@Param("pid") String pid, @Param("dr") byte dr);
+    PrintLabelPO queryByPidAndDr(@Param("pid") String pid, @Param("dr") byte dr);
 }

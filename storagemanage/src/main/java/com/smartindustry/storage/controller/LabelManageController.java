@@ -27,6 +27,16 @@ public class LabelManageController {
         return labelManageService.query(rbId);
     }
 
+    @RequestMapping("queryPid")
+    public ResultVO queryPid(@RequestParam(value = "rbid") Long rbId, @RequestParam(value = "pid") String pid) {
+        return labelManageService.queryPid(rbId, pid);
+    }
+
+    @RequestMapping("reprint")
+    public ResultVO reprint(@RequestParam(value = "plid") Long plId, @RequestParam(value = "num") Integer num) {
+        return labelManageService.reprint(plId, num);
+    }
+
     @RequestMapping("insert")
     public ResultVO insert(@RequestBody PrintLabelDTO dto) {
         return labelManageService.insert(dto);

@@ -10,7 +10,6 @@ import com.smartindustry.storage.dto.PrintLabelDTO;
 import com.smartindustry.storage.service.ILabelManageService;
 import com.smartindustry.storage.util.ReceiptNoUtil;
 import com.smartindustry.storage.vo.PrintLabelVO;
-import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -47,6 +46,41 @@ public class LabelManageServiceImpl implements ILabelManageService {
     public ResultVO query(Long rbId) {
         List<PrintLabelPO> pos = printLabelMapper.queryByReceiptBodyId(rbId);
         return ResultVO.ok().setData(PrintLabelVO.convert(pos));
+    }
+
+    @Override
+    public ResultVO queryPid(Long rbId, String pid) {
+        PrintLabelPO po = printLabelMapper.queryByRbidAndPid(rbId, pid);
+        if (null == po) {
+            return new ResultVO(2000);
+        }
+        return ResultVO.ok().setData(PrintLabelVO.convert(po));
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public ResultVO reprint(Long plId, Integer num) {
+        PrintLabelPO labelPO = printLabelMapper.selectByPrimaryKey(plId);
+        if (null == labelPO || labelPO.getDr() != 1) {
+            return new ResultVO(2000);
+        }
+
+        labelPO.setDr((byte) 2);
+        printLabelMapper.updateByPrimaryKey(labelPO);
+
+        String existPid = labelPO.getPackageId();
+
+        int curNum = ReceiptNoUtil.getLabelNum(printLabelMapper, null, new Date());
+        labelPO.setPrintLabelId(null);
+        labelPO.setPackageId(ReceiptNoUtil.genLabelNo(null, new Date(), ++curNum));
+        labelPO.setNum(num);
+        labelPO.setRelateLabelId(plId);
+        labelPO.setRelatePackageId(existPid);
+        labelPO.setDr((byte) 1);
+        labelPO.setCreateTime(new Date());
+        printLabelMapper.insert(labelPO);
+
+        return ResultVO.ok();
     }
 
     @Override
@@ -132,7 +166,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO split(LabelSplitDTO dto) {
-        PrintLabelPO labelPO = printLabelMapper.queryByIdAndDr(dto.getPid(), (byte) 1);
+        PrintLabelPO labelPO = printLabelMapper.queryByPidAndDr(dto.getPid(), (byte) 1);
         if (null == labelPO) {
             return new ResultVO(2000);
         }

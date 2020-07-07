@@ -277,7 +277,7 @@
             #{po.printLabelId,jdbcType=BIGINT}
         </foreach>
     </update>
-    <select id="queryByIdAndDr" resultMap="BaseResultMap">
+    <select id="queryByPidAndDr" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from sm_print_label
