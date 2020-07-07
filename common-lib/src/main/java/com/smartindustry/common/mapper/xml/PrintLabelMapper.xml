@@ -5,7 +5,7 @@
         <id column="print_label_id" jdbcType="BIGINT" property="printLabelId"/>
         <result column="receipt_body_id" jdbcType="BIGINT" property="receiptBodyId"/>
         <result column="package_id" jdbcType="CHAR" property="packageId"/>
-        <result column="produce_date" jdbcType="DATE" property="produceDate"/>
+        <result column="produce_date" jdbcType="CHAR" property="produceDate"/>
         <result column="produce_batch" jdbcType="CHAR" property="produceBatch"/>
         <result column="num" jdbcType="INTEGER" property="num"/>
         <result column="type" jdbcType="TINYINT" property="type"/>
@@ -41,7 +41,7 @@
                                     location_no, storage_id, relate_label_id,
                                     relate_package_id, create_time, dr)
         values (#{printLabelId,jdbcType=BIGINT}, #{receiptBodyId,jdbcType=BIGINT}, #{packageId,jdbcType=CHAR},
-                #{produceDate,jdbcType=DATE}, #{produceBatch,jdbcType=CHAR}, #{num,jdbcType=INTEGER},
+                #{produceDate,jdbcType=CHAR}, #{produceBatch,jdbcType=CHAR}, #{num,jdbcType=INTEGER},
                 #{type,jdbcType=TINYINT}, #{origin,jdbcType=TINYINT}, #{materialNo,jdbcType=CHAR},
                 #{locationNo,jdbcType=CHAR}, #{storageId,jdbcType=BIGINT}, #{relateLabelId,jdbcType=BIGINT},
                 #{relatePackageId,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
@@ -106,7 +106,7 @@
                 #{packageId,jdbcType=CHAR},
             </if>
             <if test="produceDate != null">
-                #{produceDate,jdbcType=DATE},
+                #{produceDate,jdbcType=CHAR},
             </if>
             <if test="produceBatch != null">
                 #{produceBatch,jdbcType=CHAR},
@@ -153,7 +153,7 @@
                 package_id = #{packageId,jdbcType=CHAR},
             </if>
             <if test="produceDate != null">
-                produce_date = #{produceDate,jdbcType=DATE},
+                produce_date = #{produceDate,jdbcType=CHAR},
             </if>
             <if test="produceBatch != null">
                 produce_batch = #{produceBatch,jdbcType=CHAR},
@@ -195,7 +195,7 @@
         update sm_print_label
         set receipt_body_id   = #{receiptBodyId,jdbcType=BIGINT},
             package_id        = #{packageId,jdbcType=CHAR},
-            produce_date      = #{produceDate,jdbcType=DATE},
+            produce_date      = #{produceDate,jdbcType=CHAR},
             produce_batch     = #{produceBatch,jdbcType=CHAR},
             num               = #{num,jdbcType=INTEGER},
             `type`            = #{type,jdbcType=TINYINT},

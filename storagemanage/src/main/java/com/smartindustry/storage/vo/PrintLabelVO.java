@@ -29,7 +29,7 @@ public class PrintLabelVO implements Serializable {
     /**
      * 生产日期
      */
-    private Date pdate;
+    private String pdate;
     /**
      * 生产批号
      */

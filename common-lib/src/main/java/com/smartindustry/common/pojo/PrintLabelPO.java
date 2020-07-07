@@ -18,7 +18,7 @@ public class PrintLabelPO implements Serializable {
 
     private String packageId;
 
-    private Date produceDate;
+    private String produceDate;
 
     private String produceBatch;
 
