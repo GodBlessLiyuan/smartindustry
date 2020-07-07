@@ -2,6 +2,8 @@ package com.smartindustry.storage.service;
 
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.dto.MaterialStorageDTO;
+import com.smartindustry.storage.dto.StorageDetailDTO;
+import com.smartindustry.storage.dto.StorageGroupDTO;
 
 import java.util.Map;
 
@@ -33,11 +35,17 @@ public interface IMaterialStorageService {
     /**
      * 打印标签查询
      *
-     * @param rbid
-     * @param pid
      * @return
      */
-    ResultVO label(Long rbid, String pid);
+    ResultVO label(StorageGroupDTO dto);
+
+    /**
+     * 编辑
+     *
+     * @param dto
+     * @return
+     */
+    ResultVO edit(StorageDetailDTO dto);
 
     /**
      * 入库

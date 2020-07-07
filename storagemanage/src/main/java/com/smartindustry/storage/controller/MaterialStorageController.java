@@ -2,6 +2,8 @@ package com.smartindustry.storage.controller;
 
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.dto.MaterialStorageDTO;
+import com.smartindustry.storage.dto.StorageDetailDTO;
+import com.smartindustry.storage.dto.StorageGroupDTO;
 import com.smartindustry.storage.service.IMaterialStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -59,8 +61,13 @@ public class MaterialStorageController {
     }
 
     @RequestMapping("label")
-    public ResultVO label(@RequestParam("rbid") Long rbid, @RequestParam("pid") String pid) {
-        return materialStorageService.label(rbid, pid);
+    public ResultVO label(@RequestBody StorageGroupDTO dto) {
+        return materialStorageService.label(dto);
+    }
+
+    @RequestMapping("edit")
+    public ResultVO edit(@RequestBody StorageDetailDTO dto) {
+        return materialStorageService.edit(dto);
     }
 
     @RequestMapping("storage")

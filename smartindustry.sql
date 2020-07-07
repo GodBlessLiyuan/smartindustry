@@ -8,7 +8,9 @@ DROP TABLE IF EXISTS ba_authority;
 DROP TABLE IF EXISTS ba_user_role;
 DROP TABLE IF EXISTS ba_role;
 DROP TABLE IF EXISTS sm_record;
+DROP TABLE IF EXISTS sm_storage_detail;
 DROP TABLE IF EXISTS sm_print_label;
+DROP TABLE IF EXISTS sm_storage_group;
 DROP TABLE IF EXISTS sm_storage_location;
 DROP TABLE IF EXISTS ba_user;
 DROP TABLE IF EXISTS sm_entry_label;
@@ -337,6 +339,27 @@ CREATE TABLE sm_record
 );
 
 
+CREATE TABLE sm_storage_detail
+(
+    storage_detail_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    storage_group_id bigint unsigned NOT NULL,
+    print_label_id bigint unsigned NOT NULL,
+    PRIMARY KEY (storage_detail_id),
+    UNIQUE (storage_detail_id),
+    UNIQUE (print_label_id)
+);
+
+
+CREATE TABLE sm_storage_group
+(
+    storage_group_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    storage_id bigint unsigned NOT NULL,
+    location_no char(32),
+    PRIMARY KEY (storage_group_id),
+    UNIQUE (storage_group_id)
+);
+
+
 CREATE TABLE sm_storage_location
 (
     location_no char(32) NOT NULL,
@@ -454,8 +477,24 @@ ALTER TABLE sm_record
 ;
 
 
+ALTER TABLE sm_storage_group
+    ADD FOREIGN KEY (storage_id)
+        REFERENCES sm_material_storage (storage_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
 ALTER TABLE sm_print_label
     ADD FOREIGN KEY (relate_label_id)
+        REFERENCES sm_print_label (print_label_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE sm_storage_detail
+    ADD FOREIGN KEY (print_label_id)
         REFERENCES sm_print_label (print_label_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
@@ -526,7 +565,23 @@ ALTER TABLE sm_receipt_body
 ;
 
 
+ALTER TABLE sm_storage_detail
+    ADD FOREIGN KEY (storage_group_id)
+        REFERENCES sm_storage_group (storage_group_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
 ALTER TABLE sm_print_label
+    ADD FOREIGN KEY (location_no)
+        REFERENCES sm_storage_location (location_no)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE sm_storage_group
     ADD FOREIGN KEY (location_no)
         REFERENCES sm_storage_location (location_no)
         ON UPDATE RESTRICT
