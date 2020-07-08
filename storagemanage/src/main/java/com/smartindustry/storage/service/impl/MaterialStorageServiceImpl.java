@@ -94,6 +94,21 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         detailPO.setPrintLabelId(bo.getPrintLabelId());
         storageDetailMapper.insert(detailPO);
 
+        if (null != materialStoragePO.getStorageNo()) {
+            // 打印标签
+            PrintLabelPO printLabelPO = printLabelMapper.selectByPrimaryKey(bo.getPrintLabelId());
+            printLabelPO.setLocationNo(materialStoragePO.getStorageNo());
+            printLabelPO.setStorageId(dto.getSid());
+            printLabelMapper.updateByPrimaryKey(printLabelPO);
+            // 入库单
+            materialStoragePO.setStoredNum(materialStoragePO.getStoredNum() + printLabelPO.getNum());
+            materialStorageMapper.updateByPrimaryKey(materialStoragePO);
+            // 收料单
+            ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(dto.getRbid());
+            receiptBodyPO.setStockNum(receiptBodyPO.getStockNum() + printLabelPO.getNum());
+            receiptBodyMapper.updateByPrimaryKey(receiptBodyPO);
+        }
+
         return ResultVO.ok().setData(StorageLabelVO.convert(bo, dto.getSgid()));
     }
 

@@ -121,7 +121,7 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         ReceiptHeadPO headPO = receiptHeadMapper.selectByPrimaryKey(bodyPO.getReceiptHeadId());
         receiptHeadMapper.updateByPrimaryKey(LogisticsDTO.buildPO(headPO, dto));
 
-        recordMapper.insert(new RecordPO(dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_MODIFY, ReceiptConstant.RECEIPT_ENTRY_LABEL));
+//        recordMapper.insert(new RecordPO(dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_MODIFY, ReceiptConstant.RECEIPT_ENTRY_LABEL));
 
         return ResultVO.ok();
     }

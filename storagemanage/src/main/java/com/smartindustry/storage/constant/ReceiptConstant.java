@@ -80,7 +80,7 @@ public class ReceiptConstant {
      * 操作记录
      */
     public static final String RECORD_TYPE_ADD = "新增";
-    public static final String RECORD_TYPE_MODIFY = "修改";
+//    public static final String RECORD_TYPE_MODIFY = "修改";
     public static final String RECORD_TYPE_FINISH = "完成录入";
     public static final String RECORD_TYPE_IQC_DETECT = "IQC检验";
     public static final String RECORD_TYPE_QE_REJECT = "QE驳回";
