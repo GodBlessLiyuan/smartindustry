@@ -220,7 +220,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         // 打印标签
         List<StorageDetailBO> storageDetailBOs = storageDetailMapper.queryByGroupId(storageGroupPO.getStorageGroupId());
         int num = 0;
-        List<Long> plIds = new ArrayList<>();
+        List<Long> plIds = new ArrayList<>(storageDetailBOs.size());
         for (StorageDetailBO bo : storageDetailBOs) {
             num += bo.getNum();
             plIds.add(bo.getPrintLabelId());

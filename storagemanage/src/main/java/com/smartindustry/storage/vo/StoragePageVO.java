@@ -78,7 +78,7 @@ public class StoragePageVO implements Serializable {
      * @return
      */
     public static List<StoragePageVO> convert(List<MaterialStorageBO> bos) {
-        List<StoragePageVO> vos = new ArrayList<>();
+        List<StoragePageVO> vos = new ArrayList<>(bos.size());
         for (MaterialStorageBO bo : bos) {
             vos.add(convert(bo));
         }

@@ -87,7 +87,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
     public ResultVO insert(PrintLabelDTO dto) {
         if (StringUtils.isEmpty(dto.getScode())) {
             // 手动录入
-            List<PrintLabelPO> pos = new ArrayList<>();
+            List<PrintLabelPO> pos = new ArrayList<>(dto.getPnum());
             int num = ReceiptNoUtil.getLabelNum(printLabelMapper, null, new Date());
             for (int i = 0; i < dto.getPnum(); i++) {
                 pos.add(PrintLabelDTO.createPO(dto, ++num, ReceiptConstant.LABEL_ORIGIN_ENTRY));

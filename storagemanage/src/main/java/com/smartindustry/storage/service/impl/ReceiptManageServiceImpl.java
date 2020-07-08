@@ -59,7 +59,7 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         List<ReceiptBodyBO> bodyBOs = ReceiptBodyDTO.createPOs(headPO, dto.getBody(), receiptBodyMapper);
         receiptBodyMapper.batchInsert(bodyBOs);
 
-        List<EntryLabelPO> labelPOs = new ArrayList<>();
+        List<EntryLabelPO> labelPOs = new ArrayList<>(bodyBOs.size());
         for (ReceiptBodyBO bodyBO : bodyBOs) {
             EntryLabelPO labelPO = new EntryLabelPO();
             labelPO.setReceiptBodyId(bodyBO.getReceiptBodyId());
@@ -68,7 +68,7 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         entryLabelMapper.batchInsert(labelPOs);
 
         // 操作记录
-        List<RecordPO> recordPOs = new ArrayList<>();
+        List<RecordPO> recordPOs = new ArrayList<>(bodyBOs.size());
         for (ReceiptBodyBO bodyBO : bodyBOs) {
             recordPOs.add(new RecordPO(bodyBO.getReceiptBodyId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_ADD, ReceiptConstant.RECEIPT_ENTRY_LABEL));
         }
