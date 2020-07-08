@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS ba_role_authority;
 DROP TABLE IF EXISTS ba_authority;
 DROP TABLE IF EXISTS ba_user_role;
 DROP TABLE IF EXISTS ba_role;
+DROP TABLE IF EXISTS sm_label_record;
 DROP TABLE IF EXISTS sm_record;
 DROP TABLE IF EXISTS sm_storage_detail;
 DROP TABLE IF EXISTS sm_print_label;
@@ -129,6 +130,18 @@ CREATE TABLE sm_iqc_detect
 3£ºÎ´¼ìÑé',
     PRIMARY KEY (receipt_body_id),
     UNIQUE (receipt_body_id)
+);
+
+
+CREATE TABLE sm_label_record
+(
+    label_record_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    print_label_id bigint unsigned NOT NULL,
+    user_id bigint unsigned NOT NULL,
+    name char(255),
+    create_time datetime,
+    PRIMARY KEY (label_record_id),
+    UNIQUE (label_record_id)
 );
 
 
@@ -296,7 +309,7 @@ CREATE TABLE sm_receipt_head
     buyer char(128),
     plan_date date,
     logistics_company char(128),
-    logistics_no char(32),
+    logistics_no char(64),
     -- 1£ºµ½¸¶
     -- 2£º¼Ä¸¶
     receipt_way tinyint COMMENT '1£ºµ½¸¶
@@ -429,6 +442,14 @@ ALTER TABLE ba_user_role
 ;
 
 
+ALTER TABLE sm_label_record
+    ADD FOREIGN KEY (user_id)
+        REFERENCES ba_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
 ALTER TABLE sm_record
     ADD FOREIGN KEY (user_id)
         REFERENCES ba_user (user_id)
@@ -480,6 +501,14 @@ ALTER TABLE sm_record
 ALTER TABLE sm_storage_group
     ADD FOREIGN KEY (storage_id)
         REFERENCES sm_material_storage (storage_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE sm_label_record
+    ADD FOREIGN KEY (print_label_id)
+        REFERENCES sm_print_label (print_label_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;

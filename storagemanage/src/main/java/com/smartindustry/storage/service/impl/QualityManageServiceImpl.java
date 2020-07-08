@@ -2,6 +2,7 @@ package com.smartindustry.storage.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.smartindustry.common.bo.LabelRecordBO;
 import com.smartindustry.common.bo.ReceiptBO;
 import com.smartindustry.common.mapper.*;
 import com.smartindustry.common.pojo.*;
@@ -13,6 +14,7 @@ import com.smartindustry.storage.dto.QeConfirmDTO;
 import com.smartindustry.storage.dto.QeTestDTO;
 import com.smartindustry.storage.service.IQualityManageService;
 import com.smartindustry.storage.util.ReceiptNoUtil;
+import com.smartindustry.storage.vo.LabelRecordVO;
 import com.smartindustry.storage.vo.PrintLabelVO;
 import com.smartindustry.storage.vo.QualityPageVO;
 import com.smartindustry.storage.vo.RecordVO;
@@ -35,8 +37,6 @@ public class QualityManageServiceImpl implements IQualityManageService {
     @Autowired
     private RecordMapper recordMapper;
     @Autowired
-    private PrintLabelMapper printLabelMapper;
-    @Autowired
     private IqcDetectMapper iqcDetectMapper;
     @Autowired
     private QeDetectMapper qeDetectMapper;
@@ -46,6 +46,8 @@ public class QualityManageServiceImpl implements IQualityManageService {
     private ReceiptBodyMapper receiptBodyMapper;
     @Autowired
     private MaterialStorageMapper materialStorageMapper;
+    @Autowired
+    private LabelRecordMapper labelRecordMapper;
 
     @Override
     public ResultVO pageQuery(int pageNum, int pageSize, Map<String, Object> reqData) {
@@ -267,8 +269,8 @@ public class QualityManageServiceImpl implements IQualityManageService {
     public ResultVO record(Long rbId, Byte status) {
         Map<String, Object> res = new HashMap<>();
         // 打印标签
-        List<PrintLabelPO> printLabelPOs = printLabelMapper.queryByReceiptBodyId(rbId);
-        res.put("print", PrintLabelVO.convert(printLabelPOs));
+        List<LabelRecordBO> labelRecordBOs = labelRecordMapper.queryByReceiptBodyId(rbId);
+        res.put("print", LabelRecordVO.convert(labelRecordBOs));
         // 操作记录
         List<RecordPO> recordPOs = recordMapper.queryByReceiptBodyId(rbId, status);
         res.put("record", RecordVO.convert(recordPOs));

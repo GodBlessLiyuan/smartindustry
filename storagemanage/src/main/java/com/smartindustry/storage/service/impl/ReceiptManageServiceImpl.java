@@ -2,6 +2,7 @@ package com.smartindustry.storage.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.smartindustry.common.bo.LabelRecordBO;
 import com.smartindustry.common.bo.ReceiptBO;
 import com.smartindustry.common.bo.ReceiptBodyBO;
 import com.smartindustry.common.mapper.*;
@@ -40,7 +41,7 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
     @Autowired
     private RecordMapper recordMapper;
     @Autowired
-    private PrintLabelMapper printLabelMapper;
+    private LabelRecordMapper labelRecordMapper;
 
     @Override
     public ResultVO pageQuery(int pageNum, int pageSize, Map<String, Object> reqData) {
@@ -108,8 +109,8 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         res.put("logistics", LogisticsVO.convert(headPO));
 
         // 打印标签
-        List<PrintLabelPO> printLabelPOs = printLabelMapper.queryByReceiptBodyId(rbId);
-        res.put("print", PrintLabelVO.convert(printLabelPOs));
+        List<LabelRecordBO> labelRecordBOs = labelRecordMapper.queryByReceiptBodyId(rbId);
+        res.put("print", LabelRecordVO.convert(labelRecordBOs));
 
         return ResultVO.ok().setData(res);
     }
