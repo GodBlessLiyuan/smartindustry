@@ -67,5 +67,5 @@ public interface PrintLabelMapper extends BaseMapper<PrintLabelPO, Long> {
      * @param lno
      * @param plIds
      */
-    void updateSidAndlnoByIds(Long sid, String lno, List<Long> plIds);
+    void updateSidAndlnoByIds(@Param("sid") Long sid, @Param("lno") String lno, @Param("plIds") List<Long> plIds);
 }

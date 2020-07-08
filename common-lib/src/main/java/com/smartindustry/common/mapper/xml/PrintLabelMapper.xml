@@ -214,7 +214,7 @@
         select
         <include refid="Base_Column_List"/>
         from sm_print_label
-        where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT}
+        where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT} and dr = 1
     </select>
     <select id="queryNo" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
@@ -288,7 +288,7 @@
         set location_no = #{lno,jdbcType=CHAR},
         storage_id = #{sid,jdbcType=BIGINT}
         where print_label_id in
-        <foreach collection="list" item="plid" open="(" separator="," close=")">
+        <foreach collection="plIds" item="plid" open="(" separator="," close=")">
             #{plid,jdbcType=BIGINT}
         </foreach>
     </update>
