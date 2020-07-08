@@ -32,3 +32,4 @@ logging:
       smartindustry:
         common:
           mapper: debug
+  config: classpath:logback-spring-test.xml
