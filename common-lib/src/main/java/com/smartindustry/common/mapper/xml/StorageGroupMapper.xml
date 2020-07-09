@@ -68,4 +68,30 @@
             location_no = #{locationNo,jdbcType=CHAR}
         where storage_group_id = #{storageGroupId,jdbcType=BIGINT}
     </update>
+
+    <resultMap id="GroupBOResultMap" type="com.smartindustry.common.bo.StorageGroupBO" extends="BaseResultMap">
+        <collection property="detail" column="storage_detail_id" ofType="com.smartindustry.common.bo.StorageDetailBO">
+            <id column="storage_detail_id" jdbcType="BIGINT" property="storageDetailId"/>
+            <result column="print_label_id" jdbcType="BIGINT" property="printLabelId"/>
+            <result column="package_id" jdbcType="BIGINT" property="packageId"/>
+            <result column="material_no" jdbcType="CHAR" property="materialNo"/>
+            <result column="material_desc" jdbcType="CHAR" property="materialDesc"/>
+            <result column="num" jdbcType="INTEGER" property="num"/>
+        </collection>
+    </resultMap>
+    <select id="queryBySid" parameterType="java.lang.Long" resultMap="GroupBOResultMap">
+        select sg.storage_group_id,
+               sg.location_no,
+               sd.storage_detail_id,
+               pl.print_label_id,
+               pl.package_id,
+               pl.num,
+               m.material_no,
+               m.material_desc
+        from sm_storage_group sg
+                 left join sm_storage_detail sd on sg.storage_group_id = sd.storage_group_id
+                 left join sm_print_label pl on sd.print_label_id = pl.print_label_id
+                 left join sm_material m on pl.material_no = m.material_no
+        where sg.storage_id = #{storageId,jdbcType=BIGINT}
+    </select>
 </mapper>

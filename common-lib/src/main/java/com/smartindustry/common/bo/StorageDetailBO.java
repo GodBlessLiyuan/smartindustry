@@ -12,5 +12,8 @@ import lombok.Data;
 @Data
 public class StorageDetailBO extends StorageDetailPO {
 
+    private String packageId;
+    private String materialNo;
+    private String materialDesc;
     private Integer num;
 }

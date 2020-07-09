@@ -106,5 +106,6 @@
         from sm_label_record lr
         left join sm_print_label pl on lr.print_label_id = pl.print_label_id
         where pl.receipt_body_id = #{receiptBodyId,jdbcType=BIGINT}
+        order by lr.create_time desc
     </select>
 </mapper>

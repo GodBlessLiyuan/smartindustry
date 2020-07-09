@@ -2,9 +2,7 @@ package com.smartindustry.storage.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.smartindustry.common.bo.MaterialStorageBO;
-import com.smartindustry.common.bo.PrintLabelBO;
-import com.smartindustry.common.bo.StorageDetailBO;
+import com.smartindustry.common.bo.*;
 import com.smartindustry.common.mapper.*;
 import com.smartindustry.common.pojo.*;
 import com.smartindustry.common.vo.PageInfoVO;
@@ -13,6 +11,7 @@ import com.smartindustry.storage.constant.ReceiptConstant;
 import com.smartindustry.storage.dto.StorageDetailDTO;
 import com.smartindustry.storage.dto.StorageGroupDTO;
 import com.smartindustry.storage.service.IMaterialStorageService;
+import com.smartindustry.storage.vo.StorageDetailVO;
 import com.smartindustry.storage.vo.StorageLabelVO;
 import com.smartindustry.storage.vo.StoragePageVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,7 +93,8 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         detailPO.setPrintLabelId(bo.getPrintLabelId());
         storageDetailMapper.insert(detailPO);
 
-        if (null != materialStoragePO.getStorageNo()) {
+        StorageGroupPO storageGroupPO = storageGroupMapper.selectByPrimaryKey(detailPO.getStorageGroupId());
+        if (null != storageGroupPO.getLocationNo()) {
             // 打印标签
             PrintLabelPO printLabelPO = printLabelMapper.selectByPrimaryKey(bo.getPrintLabelId());
             printLabelPO.setLocationNo(materialStoragePO.getStorageNo());
@@ -124,12 +124,16 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         }
         if (!StringUtils.isEmpty(storageGroupPO.getLocationNo())) {
             // 修改入库单及打印标签
+            MaterialStoragePO materialStoragePO = materialStorageMapper.selectByPrimaryKey(dto.getSid());
+            if (null == materialStoragePO) {
+                return new ResultVO(2000);
+            }
             PrintLabelPO oldLabelPO = printLabelMapper.selectByPrimaryKey(storageDetailPO.getPrintLabelId());
             if (null == oldLabelPO) {
                 return new ResultVO(2000);
             }
-            MaterialStoragePO materialStoragePO = materialStorageMapper.selectByPrimaryKey(dto.getSid());
-            if (null == materialStoragePO) {
+            ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(materialStoragePO.getReceiptBodyId());
+            if (null == receiptBodyPO) {
                 return new ResultVO(2000);
             }
 
@@ -140,6 +144,10 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
             }
             materialStoragePO.setStoredNum(materialStoragePO.getStoredNum() + newLabelPO.getNum() - oldLabelPO.getNum());
             materialStorageMapper.updateByPrimaryKey(materialStoragePO);
+
+            // 收料单
+            receiptBodyPO.setStockNum(receiptBodyPO.getStockNum() + newLabelPO.getNum() - oldLabelPO.getNum());
+            receiptBodyMapper.updateByPrimaryKey(receiptBodyPO);
 
             // 新打印标签
             newLabelPO.setStorageId(dto.getSid());
@@ -286,8 +294,13 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         if (null == materialStoragePO) {
             return new ResultVO(2000);
         }
+        ReceiptBodyBO receiptBodyBO = receiptBodyMapper.queryByBodyId(materialStoragePO.getReceiptBodyId());
+        if (null == receiptBodyBO) {
+            return new ResultVO(2000);
+        }
 
+        List<StorageGroupBO> storageGroupBOs = storageGroupMapper.queryBySid(materialStoragePO.getStorageId());
 
-        return null;
+        return ResultVO.ok().setData(StorageDetailVO.convert(materialStoragePO, receiptBodyBO, storageGroupBOs));
     }
 }
