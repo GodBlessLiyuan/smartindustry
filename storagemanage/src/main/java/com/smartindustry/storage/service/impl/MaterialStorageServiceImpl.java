@@ -2,9 +2,9 @@ package com.smartindustry.storage.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.smartindustry.common.bo.*;
-import com.smartindustry.common.mapper.*;
-import com.smartindustry.common.pojo.*;
+import com.smartindustry.common.bo.sm.*;
+import com.smartindustry.common.mapper.sm.*;
+import com.smartindustry.common.pojo.sm.*;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.ReceiptConstant;

@@ -1,8 +1,8 @@
 package com.smartindustry.storage.dto;
 
-import com.smartindustry.common.bo.ReceiptBodyBO;
-import com.smartindustry.common.mapper.ReceiptBodyMapper;
-import com.smartindustry.common.pojo.ReceiptHeadPO;
+import com.smartindustry.common.bo.sm.ReceiptBodyBO;
+import com.smartindustry.common.mapper.sm.ReceiptBodyMapper;
+import com.smartindustry.common.pojo.sm.ReceiptHeadPO;
 import com.smartindustry.storage.constant.ReceiptConstant;
 import com.smartindustry.storage.util.ReceiptNoUtil;
 import lombok.Data;

@@ -1,15 +1,12 @@
 package com.smartindustry.storage.vo;
 
-import com.smartindustry.common.bo.PrintLabelBO;
-import com.smartindustry.common.bo.ReceiptBodyBO;
-import com.smartindustry.common.bo.StorageDetailBO;
-import com.smartindustry.common.bo.StorageGroupBO;
-import com.smartindustry.common.pojo.MaterialStoragePO;
-import com.smartindustry.common.pojo.StorageDetailPO;
+import com.smartindustry.common.bo.sm.ReceiptBodyBO;
+import com.smartindustry.common.bo.sm.StorageDetailBO;
+import com.smartindustry.common.bo.sm.StorageGroupBO;
+import com.smartindustry.common.pojo.sm.MaterialStoragePO;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.List;
 

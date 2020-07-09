@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.sm.PrintLabelMapper">
+    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.sm.PrintLabelPO">
+        <id column="print_label_id" jdbcType="BIGINT" property="printLabelId"/>
+        <result column="receipt_body_id" jdbcType="BIGINT" property="receiptBodyId"/>
+        <result column="package_id" jdbcType="CHAR" property="packageId"/>
+        <result column="produce_date" jdbcType="CHAR" property="produceDate"/>
+        <result column="produce_batch" jdbcType="CHAR" property="produceBatch"/>
+        <result column="num" jdbcType="INTEGER" property="num"/>
+        <result column="type" jdbcType="TINYINT" property="type"/>
+        <result column="origin" jdbcType="TINYINT" property="origin"/>
+        <result column="material_no" jdbcType="CHAR" property="materialNo"/>
+        <result column="location_no" jdbcType="CHAR" property="locationNo"/>
+        <result column="storage_id" jdbcType="BIGINT" property="storageId"/>
+        <result column="relate_label_id" jdbcType="BIGINT" property="relateLabelId"/>
+        <result column="relate_package_id" jdbcType="CHAR" property="relatePackageId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="dr" jdbcType="TINYINT" property="dr"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        print_label_id, receipt_body_id, package_id, produce_date, produce_batch, num, `type`,
+    origin, material_no, location_no, storage_id, relate_label_id, relate_package_id, 
+    create_time, dr
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sm_print_label
+        where print_label_id = #{printLabelId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from sm_print_label
+        where print_label_id = #{printLabelId,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.PrintLabelPO">
+        insert into sm_print_label (print_label_id, receipt_body_id, package_id,
+                                    produce_date, produce_batch, num,
+                                    `type`, origin, material_no,
+                                    location_no, storage_id, relate_label_id,
+                                    relate_package_id, create_time, dr)
+        values (#{printLabelId,jdbcType=BIGINT}, #{receiptBodyId,jdbcType=BIGINT}, #{packageId,jdbcType=CHAR},
+                #{produceDate,jdbcType=CHAR}, #{produceBatch,jdbcType=CHAR}, #{num,jdbcType=INTEGER},
+                #{type,jdbcType=TINYINT}, #{origin,jdbcType=TINYINT}, #{materialNo,jdbcType=CHAR},
+                #{locationNo,jdbcType=CHAR}, #{storageId,jdbcType=BIGINT}, #{relateLabelId,jdbcType=BIGINT},
+                #{relatePackageId,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
+    </insert>
+    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.sm.PrintLabelPO">
+        insert into sm_print_label
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="printLabelId != null">
+                print_label_id,
+            </if>
+            <if test="receiptBodyId != null">
+                receipt_body_id,
+            </if>
+            <if test="packageId != null">
+                package_id,
+            </if>
+            <if test="produceDate != null">
+                produce_date,
+            </if>
+            <if test="produceBatch != null">
+                produce_batch,
+            </if>
+            <if test="num != null">
+                num,
+            </if>
+            <if test="type != null">
+                `type`,
+            </if>
+            <if test="origin != null">
+                origin,
+            </if>
+            <if test="materialNo != null">
+                material_no,
+            </if>
+            <if test="locationNo != null">
+                location_no,
+            </if>
+            <if test="storageId != null">
+                storage_id,
+            </if>
+            <if test="relateLabelId != null">
+                relate_label_id,
+            </if>
+            <if test="relatePackageId != null">
+                relate_package_id,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="dr != null">
+                dr,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="printLabelId != null">
+                #{printLabelId,jdbcType=BIGINT},
+            </if>
+            <if test="receiptBodyId != null">
+                #{receiptBodyId,jdbcType=BIGINT},
+            </if>
+            <if test="packageId != null">
+                #{packageId,jdbcType=CHAR},
+            </if>
+            <if test="produceDate != null">
+                #{produceDate,jdbcType=CHAR},
+            </if>
+            <if test="produceBatch != null">
+                #{produceBatch,jdbcType=CHAR},
+            </if>
+            <if test="num != null">
+                #{num,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=TINYINT},
+            </if>
+            <if test="origin != null">
+                #{origin,jdbcType=TINYINT},
+            </if>
+            <if test="materialNo != null">
+                #{materialNo,jdbcType=CHAR},
+            </if>
+            <if test="locationNo != null">
+                #{locationNo,jdbcType=CHAR},
+            </if>
+            <if test="storageId != null">
+                #{storageId,jdbcType=BIGINT},
+            </if>
+            <if test="relateLabelId != null">
+                #{relateLabelId,jdbcType=BIGINT},
+            </if>
+            <if test="relatePackageId != null">
+                #{relatePackageId,jdbcType=CHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dr != null">
+                #{dr,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.sm.PrintLabelPO">
+        update sm_print_label
+        <set>
+            <if test="receiptBodyId != null">
+                receipt_body_id = #{receiptBodyId,jdbcType=BIGINT},
+            </if>
+            <if test="packageId != null">
+                package_id = #{packageId,jdbcType=CHAR},
+            </if>
+            <if test="produceDate != null">
+                produce_date = #{produceDate,jdbcType=CHAR},
+            </if>
+            <if test="produceBatch != null">
+                produce_batch = #{produceBatch,jdbcType=CHAR},
+            </if>
+            <if test="num != null">
+                num = #{num,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                `type` = #{type,jdbcType=TINYINT},
+            </if>
+            <if test="origin != null">
+                origin = #{origin,jdbcType=TINYINT},
+            </if>
+            <if test="materialNo != null">
+                material_no = #{materialNo,jdbcType=CHAR},
+            </if>
+            <if test="locationNo != null">
+                location_no = #{locationNo,jdbcType=CHAR},
+            </if>
+            <if test="storageId != null">
+                storage_id = #{storageId,jdbcType=BIGINT},
+            </if>
+            <if test="relateLabelId != null">
+                relate_label_id = #{relateLabelId,jdbcType=BIGINT},
+            </if>
+            <if test="relatePackageId != null">
+                relate_package_id = #{relatePackageId,jdbcType=CHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dr != null">
+                dr = #{dr,jdbcType=TINYINT},
+            </if>
+        </set>
+        where print_label_id = #{printLabelId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.sm.PrintLabelPO">
+        update sm_print_label
+        set receipt_body_id   = #{receiptBodyId,jdbcType=BIGINT},
+            package_id        = #{packageId,jdbcType=CHAR},
+            produce_date      = #{produceDate,jdbcType=CHAR},
+            produce_batch     = #{produceBatch,jdbcType=CHAR},
+            num               = #{num,jdbcType=INTEGER},
+            `type`            = #{type,jdbcType=TINYINT},
+            origin            = #{origin,jdbcType=TINYINT},
+            material_no       = #{materialNo,jdbcType=CHAR},
+            location_no       = #{locationNo,jdbcType=CHAR},
+            storage_id        = #{storageId,jdbcType=BIGINT},
+            relate_label_id   = #{relateLabelId,jdbcType=BIGINT},
+            relate_package_id = #{relatePackageId,jdbcType=CHAR},
+            create_time       = #{createTime,jdbcType=TIMESTAMP},
+            dr                = #{dr,jdbcType=TINYINT}
+        where print_label_id = #{printLabelId,jdbcType=BIGINT}
+    </update>
+
+    <select id="queryByReceiptBodyId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sm_print_label
+        where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT} and dr = 1
+    </select>
+    <select id="queryNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sm_print_label
+        where package_id like #{no,jdbcType=CHAR} '%'
+        order by print_label_id desc limit 1
+    </select>
+    <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="printLabelId">
+        insert into sm_print_label (print_label_id, receipt_body_id, package_id,
+        produce_date, produce_batch, num,
+        `type`, origin, material_no,
+        location_no, storage_id, relate_label_id,
+        relate_package_id, create_time, dr)
+        values
+        <foreach collection="list" separator="," item="po">
+            (#{po.printLabelId,jdbcType=BIGINT}, #{po.receiptBodyId,jdbcType=BIGINT}, #{po.packageId,jdbcType=CHAR},
+            #{po.produceDate,jdbcType=DATE}, #{po.produceBatch,jdbcType=CHAR}, #{po.num,jdbcType=INTEGER},
+            #{po.type,jdbcType=TINYINT}, #{po.origin,jdbcType=TINYINT}, #{po.materialNo,jdbcType=CHAR},
+            #{po.locationNo,jdbcType=CHAR}, #{po.storageId,jdbcType=BIGINT}, #{po.relateLabelId,jdbcType=BIGINT},
+            #{po.relatePackageId,jdbcType=CHAR}, #{po.createTime,jdbcType=TIMESTAMP}, #{po.dr,jdbcType=TINYINT})
+        </foreach>
+    </insert>
+    <select id="queryByRbidAndPid" resultType="com.smartindustry.common.bo.sm.PrintLabelBO">
+        select pl.print_label_id as printLabelId,
+               pl.package_id     as packageId,
+               m.material_no     as materialNo,
+               m.material_desc   as materialDesc,
+               pl.num
+        from sm_print_label pl
+                 left join sm_material m on pl.material_no = m.material_no
+        where pl.receipt_body_id = #{rbid,jdbcType=BIGINT}
+          and pl.package_id = #{pid,jdbcType=CHAR}
+          and pl.dr = 1
+          and pl.storage_id is null
+    </select>
+    <select id="queryByIds" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sm_print_label
+        where dr = 1 and storage_id is null and print_label_id in
+        <foreach collection="list" item="plid" open="(" separator="," close=")">
+            #{plid,jdbcType=BIGINT}
+        </foreach>
+    </select>
+    <update id="batchUpdate" parameterType="java.util.List">
+        update sm_print_label
+        set storage_id = case print_label_id
+        <foreach collection="list" item="po">
+            when #{po.printLabelId,jdbcType=BIGINT} then #{po.storageId,jdbcType=CHAR}
+        </foreach>
+        end,
+        location_no = case print_label_id
+        <foreach collection="list" item="po">
+            when #{po.printLabelId,jdbcType=BIGINT} then #{po.locationNo,jdbcType=CHAR}
+        </foreach>
+        end
+        where print_label_id in
+        <foreach collection="list" item="po" open="(" separator="," close=")">
+            #{po.printLabelId,jdbcType=BIGINT}
+        </foreach>
+    </update>
+    <select id="queryByPidAndDr" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sm_print_label
+        where package_id = #{pid,jdbcType=CHAR} and dr = #{dr,jdbcType=TINYINT}
+    </select>
+    <update id="updateSidAndlnoByIds">
+        update sm_print_label
+        set location_no = #{lno,jdbcType=CHAR},
+        storage_id = #{sid,jdbcType=BIGINT}
+        where print_label_id in
+        <foreach collection="plIds" item="plid" open="(" separator="," close=")">
+            #{plid,jdbcType=BIGINT}
+        </foreach>
+    </update>
+</mapper>

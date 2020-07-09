@@ -1,6 +1,6 @@
 package com.smartindustry.storage.vo;
 
-import com.smartindustry.common.bo.MaterialStorageBO;
+import com.smartindustry.common.bo.sm.MaterialStorageBO;
 import lombok.Data;
 
 import java.io.Serializable;

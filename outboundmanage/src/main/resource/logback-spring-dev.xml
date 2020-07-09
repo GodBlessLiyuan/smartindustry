@@ -3,7 +3,7 @@
 
 <configuration>
 
-    <property name="LOG_PATH" value="/data/ftp/smartftp/log/smartindustry" />
+    <property name="LOG_PATH" value="/data/ftp/smartftp/log/smartindustry/outboundmanage" />
 
     <!--输出日志到控制台-->
     <appender name="consoleLog" class="ch.qos.logback.core.ConsoleAppender">

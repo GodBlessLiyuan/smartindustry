@@ -1,6 +1,6 @@
 package com.smartindustry.storage.vo;
 
-import com.smartindustry.common.bo.LabelRecordBO;
+import com.smartindustry.common.bo.sm.LabelRecordBO;
 import lombok.Data;
 
 import java.io.Serializable;

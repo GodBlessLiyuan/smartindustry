@@ -1,7 +1,7 @@
 package com.smartindustry.storage.dto;
 
-import com.smartindustry.common.mapper.ReceiptHeadMapper;
-import com.smartindustry.common.pojo.ReceiptHeadPO;
+import com.smartindustry.common.mapper.sm.ReceiptHeadMapper;
+import com.smartindustry.common.pojo.sm.ReceiptHeadPO;
 import com.smartindustry.storage.util.ReceiptNoUtil;
 import lombok.Data;
 import org.springframework.util.StringUtils;

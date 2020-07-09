@@ -1,8 +1,8 @@
 package com.smartindustry.storage.service.impl;
 
-import com.smartindustry.common.bo.ReceiptBodyBO;
-import com.smartindustry.common.mapper.*;
-import com.smartindustry.common.pojo.*;
+import com.smartindustry.common.bo.sm.ReceiptBodyBO;
+import com.smartindustry.common.mapper.sm.*;
+import com.smartindustry.common.pojo.sm.*;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.ReceiptConstant;
 import com.smartindustry.storage.dto.LabelSplitDTO;

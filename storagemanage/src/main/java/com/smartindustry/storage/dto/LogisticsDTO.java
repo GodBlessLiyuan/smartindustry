@@ -1,6 +1,6 @@
 package com.smartindustry.storage.dto;
 
-import com.smartindustry.common.pojo.ReceiptHeadPO;
+import com.smartindustry.common.pojo.sm.ReceiptHeadPO;
 import lombok.Data;
 
 import java.io.Serializable;

@@ -1,6 +1,6 @@
 package com.smartindustry.storage.vo;
 
-import com.smartindustry.common.bo.ReceiptBO;
+import com.smartindustry.common.bo.sm.ReceiptBO;
 import lombok.Data;
 
 import java.io.Serializable;

@@ -1,7 +1,7 @@
 package com.smartindustry.storage.vo;
 
-import com.smartindustry.common.bo.ReceiptBodyBO;
-import com.smartindustry.common.pojo.ReceiptHeadPO;
+import com.smartindustry.common.bo.sm.ReceiptBodyBO;
+import com.smartindustry.common.pojo.sm.ReceiptHeadPO;
 import lombok.Data;
 
 import java.io.Serializable;

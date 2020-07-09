@@ -1,7 +1,6 @@
 package com.smartindustry.storage.dto;
 
-import com.smartindustry.common.pojo.PrintLabelPO;
-import com.smartindustry.storage.constant.ReceiptConstant;
+import com.smartindustry.common.pojo.sm.PrintLabelPO;
 import com.smartindustry.storage.util.ReceiptNoUtil;
 import lombok.Data;
 

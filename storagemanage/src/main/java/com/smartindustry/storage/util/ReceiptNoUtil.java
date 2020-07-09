@@ -1,13 +1,13 @@
 package com.smartindustry.storage.util;
 
-import com.smartindustry.common.mapper.MaterialStorageMapper;
-import com.smartindustry.common.mapper.PrintLabelMapper;
-import com.smartindustry.common.mapper.ReceiptBodyMapper;
-import com.smartindustry.common.mapper.ReceiptHeadMapper;
-import com.smartindustry.common.pojo.MaterialStoragePO;
-import com.smartindustry.common.pojo.PrintLabelPO;
-import com.smartindustry.common.pojo.ReceiptBodyPO;
-import com.smartindustry.common.pojo.ReceiptHeadPO;
+import com.smartindustry.common.mapper.sm.MaterialStorageMapper;
+import com.smartindustry.common.mapper.sm.PrintLabelMapper;
+import com.smartindustry.common.mapper.sm.ReceiptBodyMapper;
+import com.smartindustry.common.mapper.sm.ReceiptHeadMapper;
+import com.smartindustry.common.pojo.sm.MaterialStoragePO;
+import com.smartindustry.common.pojo.sm.PrintLabelPO;
+import com.smartindustry.common.pojo.sm.ReceiptBodyPO;
+import com.smartindustry.common.pojo.sm.ReceiptHeadPO;
 import com.smartindustry.common.util.NoUtil;
 
 import java.util.Date;
