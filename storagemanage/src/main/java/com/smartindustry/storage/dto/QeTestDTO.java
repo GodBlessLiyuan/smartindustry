@@ -19,7 +19,7 @@ public class QeTestDTO implements Serializable {
      */
     private Long rbid;
     /**
-     * 1:允许，2:特采，3:退供应商
+     * 1:允许，4:特采，5:退供应商
      */
     private Byte status;
     /**

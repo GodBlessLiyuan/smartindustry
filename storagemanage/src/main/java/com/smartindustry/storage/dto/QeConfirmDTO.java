@@ -19,7 +19,7 @@ public class QeConfirmDTO implements Serializable {
      */
     private Long rbid;
     /**
-     * 1:特采，2:驳回，3:退供应商
+     * 2:驳回，4:特采，5:退供应商
      */
     private Byte status;
     /**

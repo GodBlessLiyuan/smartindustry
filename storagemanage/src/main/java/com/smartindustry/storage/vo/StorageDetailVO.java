@@ -106,18 +106,45 @@ public class StorageDetailVO implements Serializable {
 
     @Data
     private static class GroupVO {
+        /**
+         * 分组ID
+         */
         private Long sgid;
+        /**
+         * 库位
+         */
         private String lno;
+        /**
+         * 详情数据
+         */
         private List<DetailVO> detail = new ArrayList<>();
     }
 
     @Data
     private static class DetailVO {
+        /**
+         * 详情ID
+         */
         private Long sdid;
+        /**
+         * 标签ID
+         */
         private Long plid;
+        /**
+         * 标签PID
+         */
         private String pid;
+        /**
+         * 物料编码
+         */
         private String mno;
+        /**
+         * 物料描述
+         */
         private String mdesc;
+        /**
+         * 数量
+         */
         private Integer num;
     }
 }

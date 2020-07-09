@@ -112,6 +112,22 @@ public class QualityManageServiceImpl implements IQualityManageService {
 
     @Override
     public ResultVO qeTest(QeTestDTO dto) {
+        ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(dto.getRbid());
+        if (null == receiptBodyPO) {
+            return new ResultVO(2000);
+        }
+        if (!ReceiptConstant.RECEIPT_QE_DETECT.equals(receiptBodyPO.getStatus())) {
+            return new ResultVO(2000);
+        }
+        
+        // QE 检测
+        QeDetectPO qeDetectPO = qeDetectMapper.selectByPrimaryKey(dto.getRbid());
+        if(null == qeDetectPO) {
+            return new ResultVO(2000);
+        }
+        if (ReceiptConstant.IQC_DETECT_GOOD.equals(qeDetectPO.getStatus())) {
+            return new ResultVO(2000);
+        }
         return null;
     }
 
