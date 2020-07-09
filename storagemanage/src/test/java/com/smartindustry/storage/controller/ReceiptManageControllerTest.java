@@ -84,6 +84,7 @@ public class ReceiptManageControllerTest extends BaseTest {
 
         reqData = reqData.replaceAll("\t|\n", "");
 
+
         MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/receipt/insert")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(reqData)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();

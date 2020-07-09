@@ -229,12 +229,14 @@ CREATE TABLE sm_qe_confirm
 (
     receipt_body_id bigint unsigned NOT NULL,
     remark char(255),
-    -- 1：特采
-    -- 2：退供应商
+    -- 1：允许
     -- 3：不良，待确认
-    status tinyint COMMENT '1：特采
-2：退供应商
-3：不良，待确认',
+    -- 4：特采
+    -- 5：退供应商
+    status tinyint COMMENT '1：允许
+3：不良，待确认
+4：特采
+5：退供应商',
     PRIMARY KEY (receipt_body_id),
     UNIQUE (receipt_body_id)
 );
@@ -243,10 +245,15 @@ CREATE TABLE sm_qe_confirm
 CREATE TABLE sm_qe_detect
 (
     receipt_body_id bigint unsigned NOT NULL,
+    remark char(255),
     -- 1：允许良品
     -- 3：未检验
+    -- 4：特采
+    -- 5：退供应商
     status tinyint COMMENT '1：允许良品
-3：未检验',
+3：未检验
+4：特采
+5：退供应商',
     PRIMARY KEY (receipt_body_id),
     UNIQUE (receipt_body_id)
 );

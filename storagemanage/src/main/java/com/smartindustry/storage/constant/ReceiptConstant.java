@@ -28,33 +28,25 @@ public class ReceiptConstant {
      * IQC检验 状态
      */
     //  允许良品
-    public static final Byte IQC_DETECT_GOOD = 1;
+    public static final Byte IQC_ALLOW = 1;
     //  QE驳回重检验
-    public static final Byte IQC_DETECT_REJECT = 2;
+    public static final Byte IQC_REJECT = 2;
     //  未检验
-    public static final Byte IQC_DETECT_WAIT = 3;
+    public static final Byte IQC_WAIT = 3;
 
     /**
-     * QE检验 状态
+     * QE确认|检验 状态
      */
     //  允许
-    public static final Byte QE_DETECT_GOOD = 1;
+    public static final Byte QE_ALLOW = 1;
+    // 驳回
+    public static final Byte QE_REJECT = 2;
     //  未检验
-    public static final Byte QE_DETECT_WAIT = 3;
+    public static final Byte QE_WAIT = 3;
     //  特采
-    public static final Byte QE_DETECT_FRANCHISE = 4;
+    public static final Byte QE_FRANCHISE = 4;
     //  退供应商
-    public static final Byte QE_DETECT_RETURN = 5;
-
-    /**
-     * QE确认 状态
-     **/
-    //  不良，待确认
-    public static final Byte QE_CONFIRM_WAIT = 3;
-    //  特采
-    public static final Byte QE_CONFIRM_FRANCHISE = 4;
-    //  退供应商
-    public static final Byte QE_CONFIRM_RETURN = 5;
+    public static final Byte QE_RETURN = 5;
 
     /**
      * 物料入库
@@ -84,7 +76,6 @@ public class ReceiptConstant {
      * 操作记录
      */
     public static final String RECORD_TYPE_ADD = "新增";
-    //    public static final String RECORD_TYPE_MODIFY = "修改";
     public static final String RECORD_TYPE_FINISH = "完成录入";
     public static final String RECORD_TYPE_IQC_DETECT = "IQC检验";
     public static final String RECORD_TYPE_QE_REJECT = "QE驳回";

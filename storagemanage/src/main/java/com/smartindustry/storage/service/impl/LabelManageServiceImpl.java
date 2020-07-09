@@ -138,7 +138,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
                 // 原材料
                 IqcDetectPO iqcPO = new IqcDetectPO();
                 iqcPO.setReceiptBodyId(rbId);
-                iqcPO.setStatus(ReceiptConstant.IQC_DETECT_WAIT);
+                iqcPO.setStatus(ReceiptConstant.IQC_WAIT);
                 iqcDetectMapper.insert(iqcPO);
 
                 bodyPO.setStatus(ReceiptConstant.RECEIPT_IQC_DETECT);
@@ -146,7 +146,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
                 // 半成品/成品
                 QeDetectPO qePO = new QeDetectPO();
                 qePO.setReceiptBodyId(rbId);
-                qePO.setStatus(ReceiptConstant.QE_CONFIRM_WAIT);
+                qePO.setStatus(ReceiptConstant.QE_WAIT);
                 qeDetectMapper.insert(qePO);
 
                 bodyPO.setStatus(ReceiptConstant.RECEIPT_QE_DETECT);

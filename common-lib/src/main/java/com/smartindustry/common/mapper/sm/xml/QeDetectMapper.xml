@@ -1,58 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.smartindustry.common.mapper.sm.QeDetectMapper">
-  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.sm.QeDetectPO">
-    <id column="receipt_body_id" jdbcType="BIGINT" property="receiptBodyId" />
-    <result column="status" jdbcType="TINYINT" property="status" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    receipt_body_id, `status`
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from sm_qe_detect
-    where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from sm_qe_detect
-    where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.QeDetectPO">
-    insert into sm_qe_detect (receipt_body_id, `status`)
-    values (#{receiptBodyId,jdbcType=BIGINT}, #{status,jdbcType=TINYINT})
-  </insert>
-  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.sm.QeDetectPO">
-    insert into sm_qe_detect
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="receiptBodyId != null">
-        receipt_body_id,
-      </if>
-      <if test="status != null">
-        `status`,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="receiptBodyId != null">
-        #{receiptBodyId,jdbcType=BIGINT},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=TINYINT},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.sm.QeDetectPO">
-    update sm_qe_detect
-    <set>
-      <if test="status != null">
-        `status` = #{status,jdbcType=TINYINT},
-      </if>
-    </set>
-    where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.sm.QeDetectPO">
-    update sm_qe_detect
-    set `status` = #{status,jdbcType=TINYINT}
-    where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT}
-  </update>
+    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.sm.QeDetectPO">
+        <id column="receipt_body_id" jdbcType="BIGINT" property="receiptBodyId"/>
+        <result column="remark" jdbcType="CHAR" property="remark"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        receipt_body_id, remark, `status`
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sm_qe_detect
+        where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from sm_qe_detect
+        where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.QeDetectPO">
+        insert into sm_qe_detect (receipt_body_id, remark, `status`)
+        values (#{receiptBodyId,jdbcType=BIGINT}, #{remark,jdbcType=CHAR}, #{status,jdbcType=TINYINT})
+    </insert>
+    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.sm.QeDetectPO">
+        insert into sm_qe_detect
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="receiptBodyId != null">
+                receipt_body_id,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="status != null">
+                `status`,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="receiptBodyId != null">
+                #{receiptBodyId,jdbcType=BIGINT},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=CHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.sm.QeDetectPO">
+        update sm_qe_detect
+        <set>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=CHAR},
+            </if>
+            <if test="status != null">
+                `status` = #{status,jdbcType=TINYINT},
+            </if>
+        </set>
+        where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.sm.QeDetectPO">
+        update sm_qe_detect
+        set remark   = #{remark,jdbcType=CHAR},
+            `status` = #{status,jdbcType=TINYINT}
+        where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT}
+    </update>
 </mapper>
