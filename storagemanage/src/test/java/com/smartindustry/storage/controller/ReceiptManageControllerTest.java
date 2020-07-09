@@ -1,11 +1,13 @@
 package com.smartindustry.storage.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.smartindustry.common.bo.sm.ReceiptBO;
 import com.smartindustry.common.mapper.sm.ReceiptBodyMapper;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.dto.ReceiptDTO;
 import com.smartindustry.storage.service.IReceiptManageService;
+import com.smartindustry.storage.vo.ReceiptVO;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -89,7 +91,8 @@ public class ReceiptManageControllerTest extends BaseTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(reqData)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
-        res = null;
+        ResultVO<ReceiptVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+        assertEquals(java.util.Optional.of(1000), resultVO.getStatus());
     }
 
     @Test

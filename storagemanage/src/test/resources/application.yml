@@ -14,14 +14,14 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+08
   datasource:
-    url: jdbc:h2:mem:smartindustry?MODE=MYSQL;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false
-    username: sa
-    password: sa
-    driver-class-name: org.h2.Driver
-    schema-username: sa
-    schema-password: sa
-    initialization-mode: always
-    platform: h2
+    url: jdbc:mysql://192.168.10.3:3306/smartindustry?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    username: root
+    password: 1234qwer
+    driver-class-name: com.mysql.cj.jdbc.Driver
+#    schema-username: sa
+#    schema-password: sa
+    initialization-mode: never
+#    platform:
     schema: classpath:schema.sql
 #    data: classpath:data.sql
   servlet:

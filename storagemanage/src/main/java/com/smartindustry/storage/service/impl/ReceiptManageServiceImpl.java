@@ -124,7 +124,7 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         ReceiptBodyPO bodyPO = receiptBodyMapper.selectByPrimaryKey(dto.getRbid());
         ReceiptHeadPO headPO = receiptHeadMapper.selectByPrimaryKey(bodyPO.getReceiptHeadId());
         receiptHeadMapper.updateByPrimaryKey(LogisticsDTO.buildPO(headPO, dto));
-        
+
         return ResultVO.ok();
     }
 }
