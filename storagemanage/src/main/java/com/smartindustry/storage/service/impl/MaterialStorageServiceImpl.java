@@ -16,6 +16,7 @@ import com.smartindustry.storage.constant.ReceiptConstant;
 import com.smartindustry.storage.dto.StorageDetailDTO;
 import com.smartindustry.storage.dto.StorageGroupDTO;
 import com.smartindustry.storage.service.IMaterialStorageService;
+import com.smartindustry.storage.vo.RecordVO;
 import com.smartindustry.storage.vo.StorageDetailVO;
 import com.smartindustry.storage.vo.StorageLabelVO;
 import com.smartindustry.storage.vo.StoragePageVO;
@@ -172,10 +173,10 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
 
             // 旧打印标签
             // 旧标签
-            List<Long> plids = new ArrayList<>(1);
-            plids.add(oldLabelPO.getPrintLabelId());
-            printLabelMapper.updateLnoByIds(null, plids);
-            receiptLabelMapper.updateSidByPlids(null, plids);
+            List<Long> oldPlids = new ArrayList<>(1);
+            oldPlids.add(oldLabelPO.getPrintLabelId());
+            printLabelMapper.updateLnoByIds(null, oldPlids);
+            receiptLabelMapper.updateSidByPlids(null, oldPlids);
         }
 
         // 修改入库详情
@@ -323,5 +324,11 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         List<StorageGroupBO> storageGroupBOs = storageGroupMapper.queryBySid(storagePO.getStorageId());
 
         return ResultVO.ok().setData(StorageDetailVO.convert(storagePO, receiptBodyBO, storageGroupBOs));
+    }
+
+    @Override
+    public ResultVO record(Byte sid) {
+        List<RecordPO> recordPOs = recordMapper.queryBySid(sid);
+        return ResultVO.ok().setData(RecordVO.convert(recordPOs));
     }
 }

@@ -88,4 +88,9 @@ public class MaterialStorageController {
     public ResultVO detail(@RequestParam("sid") Long sid) {
         return materialStorageService.detail(sid);
     }
+
+    @RequestMapping("record")
+    public ResultVO record(@RequestParam(value = "sid") Byte sid) {
+        return materialStorageService.record(sid);
+    }
 }

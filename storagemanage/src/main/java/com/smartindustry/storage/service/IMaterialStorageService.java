@@ -77,4 +77,12 @@ public interface IMaterialStorageService {
      * @return
      */
     ResultVO detail(Long sid);
+
+    /**
+     * 查询操作记录
+     *
+     * @param sid
+     * @return
+     */
+    ResultVO record(Byte sid);
 }

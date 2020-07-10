@@ -144,4 +144,11 @@
         from sm_record
         where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT} and `status` = #{status,jdbcType=TINYINT}
     </select>
+    <select id="queryBySid" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sm_record
+        where storage_id = #{sid,jdbcType=BIGINT}
+        order by create_time desc
+    </select>
 </mapper>
