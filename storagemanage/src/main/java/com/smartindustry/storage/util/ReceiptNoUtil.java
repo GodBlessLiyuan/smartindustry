@@ -1,10 +1,10 @@
 package com.smartindustry.storage.util;
 
-import com.smartindustry.common.mapper.sm.MaterialStorageMapper;
+import com.smartindustry.common.mapper.sm.StorageMapper;
 import com.smartindustry.common.mapper.si.PrintLabelMapper;
 import com.smartindustry.common.mapper.sm.ReceiptBodyMapper;
 import com.smartindustry.common.mapper.sm.ReceiptHeadMapper;
-import com.smartindustry.common.pojo.sm.MaterialStoragePO;
+import com.smartindustry.common.pojo.sm.StoragePO;
 import com.smartindustry.common.pojo.si.PrintLabelPO;
 import com.smartindustry.common.pojo.sm.ReceiptBodyPO;
 import com.smartindustry.common.pojo.sm.ReceiptHeadPO;
@@ -31,7 +31,7 @@ public class ReceiptNoUtil {
     private static NoUtil<ReceiptHeadPO, Long> headUtil = new NoUtil<>();
     private static NoUtil<ReceiptBodyPO, Long> bodyUtil = new NoUtil<>();
     private static NoUtil<PrintLabelPO, Long> labelUtil = new NoUtil<>();
-    private static NoUtil<MaterialStoragePO, Long> storageUtil = new NoUtil<>();
+    private static NoUtil<StoragePO, Long> storageUtil = new NoUtil<>();
 
     /**
      * 生成表头编号
@@ -107,8 +107,8 @@ public class ReceiptNoUtil {
      * @param date
      * @return
      */
-    public static String genStorageNo(MaterialStorageMapper mapper, String head, Date date) {
-        MaterialStoragePO po = storageUtil.getPO(mapper, head, date);
+    public static String genStorageNo(StorageMapper mapper, String head, Date date) {
+        StoragePO po = storageUtil.getPO(mapper, head, date);
         return storageUtil.genNum(head, date, null == po ? 1 : storageUtil.getNum(po.getStorageNo(), NUM_LEN) + 1, NUM_LEN);
     }
 }

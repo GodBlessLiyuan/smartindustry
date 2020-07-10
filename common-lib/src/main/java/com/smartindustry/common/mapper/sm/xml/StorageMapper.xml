@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.smartindustry.common.mapper.sm.MaterialStorageMapper">
-    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.sm.MaterialStoragePO">
+<mapper namespace="com.smartindustry.common.mapper.sm.StorageMapper">
+    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.sm.StoragePO">
         <id column="storage_id" jdbcType="BIGINT" property="storageId"/>
         <result column="receipt_body_id" jdbcType="BIGINT" property="receiptBodyId"/>
         <result column="storage_no" jdbcType="CHAR" property="storageNo"/>
@@ -27,7 +27,7 @@
         from sm_material_storage
         where storage_id = #{storageId,jdbcType=BIGINT}
     </delete>
-    <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.MaterialStoragePO" useGeneratedKeys="true"
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.StoragePO" useGeneratedKeys="true"
             keyProperty="storageId">
         insert into sm_material_storage (storage_id, receipt_body_id, storage_no,
                                          pending_num, stored_num, storage_time,
@@ -36,7 +36,7 @@
                 #{pendingNum,jdbcType=INTEGER}, #{storedNum,jdbcType=INTEGER}, #{storageTime,jdbcType=TIMESTAMP},
                 #{status,jdbcType=TINYINT}, #{type,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP})
     </insert>
-    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.sm.MaterialStoragePO">
+    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.sm.StoragePO">
         insert into sm_material_storage
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="storageId != null">
@@ -97,7 +97,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.sm.MaterialStoragePO">
+    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.sm.StoragePO">
         update sm_material_storage
         <set>
             <if test="receiptBodyId != null">
@@ -127,7 +127,7 @@
         </set>
         where storage_id = #{storageId,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.sm.MaterialStoragePO">
+    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.sm.StoragePO">
         update sm_material_storage
         set receipt_body_id = #{receiptBodyId,jdbcType=BIGINT},
             storage_no      = #{storageNo,jdbcType=CHAR},
@@ -144,7 +144,7 @@
         storage_id, ms.receipt_body_id, storage_no, pending_num, stored_num, storage_time, ms.`status`,
     ms.`type`, ms.create_time, receipt_no, rb.order_type, m.material_no, material_type, material_desc
     </sql>
-    <resultMap id="StorageBOResultMap" type="com.smartindustry.common.bo.sm.MaterialStorageBO" extends="BaseResultMap">
+    <resultMap id="StorageBOResultMap" type="com.smartindustry.common.bo.sm.StorageBO" extends="BaseResultMap">
         <result column="receipt_no" jdbcType="CHAR" property="receiptNo"/>
         <result column="order_type" jdbcType="TINYINT" property="orderType"/>
         <result column="material_no" jdbcType="CHAR" property="materialNo"/>

@@ -2,14 +2,16 @@ package com.smartindustry.common.pojo.sm;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import lombok.Data;
 
 /**
  * sm_material_storage
- * @author 
+ *
+ * @author
  */
 @Data
-public class MaterialStoragePO implements Serializable {
+public class StoragePO implements Serializable {
     private Long storageId;
 
     private Long receiptBodyId;
@@ -24,15 +26,13 @@ public class MaterialStoragePO implements Serializable {
 
     /**
      * 1：已入库
-3：待入库
-
-
+     * 3：待入库
      */
     private Byte status;
 
     /**
      * 1：良品
-2：非良品
+     * 2：非良品
      */
     private Byte type;
 

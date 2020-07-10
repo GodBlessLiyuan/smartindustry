@@ -20,8 +20,7 @@
         from sm_storage_group
         where storage_group_id = #{storageGroupId,jdbcType=BIGINT}
     </delete>
-    <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.StorageGroupPO" useGeneratedKeys="true"
-            keyProperty="storageGroupId">
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.StorageGroupPO">
         insert into sm_storage_group (storage_group_id, storage_id, location_no)
         values (#{storageGroupId,jdbcType=BIGINT}, #{storageId,jdbcType=BIGINT}, #{locationNo,jdbcType=CHAR})
     </insert>

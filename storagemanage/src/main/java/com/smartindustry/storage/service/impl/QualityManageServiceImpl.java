@@ -45,7 +45,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
     @Autowired
     private ReceiptBodyMapper receiptBodyMapper;
     @Autowired
-    private MaterialStorageMapper materialStorageMapper;
+    private StorageMapper storageMapper;
     @Autowired
     private LabelRecordMapper labelRecordMapper;
 
@@ -279,31 +279,31 @@ public class QualityManageServiceImpl implements IQualityManageService {
 
         if (receiptBodyPO.getGoodNum() > 0) {
             // 良品入库单
-            MaterialStoragePO materialStoragePO = new MaterialStoragePO();
-            materialStoragePO.setReceiptBodyId(rbId);
-            materialStoragePO.setStorageNo(ReceiptNoUtil.genStorageNo(materialStorageMapper, ReceiptNoUtil.MATERIAL_STORAGE_LPPK, new Date()));
-            materialStoragePO.setPendingNum(receiptBodyPO.getGoodNum());
-            materialStoragePO.setStoredNum(0);
-            materialStoragePO.setStatus(ReceiptConstant.MATERIAL_STORAGE_PENDING);
-            materialStoragePO.setType(ReceiptConstant.MATERIAL_TYPE_GOOD);
-            materialStoragePO.setCreateTime(new Date());
-            materialStorageMapper.insert(materialStoragePO);
+            StoragePO storagePO = new StoragePO();
+            storagePO.setReceiptBodyId(rbId);
+            storagePO.setStorageNo(ReceiptNoUtil.genStorageNo(storageMapper, ReceiptNoUtil.MATERIAL_STORAGE_LPPK, new Date()));
+            storagePO.setPendingNum(receiptBodyPO.getGoodNum());
+            storagePO.setStoredNum(0);
+            storagePO.setStatus(ReceiptConstant.MATERIAL_STORAGE_PENDING);
+            storagePO.setType(ReceiptConstant.MATERIAL_TYPE_GOOD);
+            storagePO.setCreateTime(new Date());
+            storageMapper.insert(storagePO);
 
-            recordMapper.insert(new RecordPO(rbId, materialStoragePO.getStorageId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
+            recordMapper.insert(new RecordPO(rbId, storagePO.getStorageId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
         }
         if (receiptBodyPO.getBadNum() > 0) {
             // 非良品入库单
-            MaterialStoragePO materialStoragePO = new MaterialStoragePO();
-            materialStoragePO.setReceiptBodyId(rbId);
-            materialStoragePO.setStorageNo(ReceiptNoUtil.genStorageNo(materialStorageMapper, ReceiptNoUtil.MATERIAL_STORAGE_BLPK, new Date()));
-            materialStoragePO.setPendingNum(receiptBodyPO.getBadNum());
-            materialStoragePO.setStoredNum(0);
-            materialStoragePO.setStatus(ReceiptConstant.MATERIAL_STORAGE_PENDING);
-            materialStoragePO.setType(ReceiptConstant.MATERIAL_TYPE_BAD);
-            materialStoragePO.setCreateTime(new Date());
-            materialStorageMapper.insert(materialStoragePO);
+            StoragePO storagePO = new StoragePO();
+            storagePO.setReceiptBodyId(rbId);
+            storagePO.setStorageNo(ReceiptNoUtil.genStorageNo(storageMapper, ReceiptNoUtil.MATERIAL_STORAGE_BLPK, new Date()));
+            storagePO.setPendingNum(receiptBodyPO.getBadNum());
+            storagePO.setStoredNum(0);
+            storagePO.setStatus(ReceiptConstant.MATERIAL_STORAGE_PENDING);
+            storagePO.setType(ReceiptConstant.MATERIAL_TYPE_BAD);
+            storagePO.setCreateTime(new Date());
+            storageMapper.insert(storagePO);
 
-            recordMapper.insert(new RecordPO(rbId, materialStoragePO.getStorageId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
+            recordMapper.insert(new RecordPO(rbId, storagePO.getStorageId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
         }
 
         // 操作记录

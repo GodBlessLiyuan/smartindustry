@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.sm.ReceiptLabelMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.sm.ReceiptLabelPO">
+    <id column="receipt_label_id" jdbcType="BIGINT" property="receiptLabelId" />
+    <result column="print_label_id" jdbcType="BIGINT" property="printLabelId" />
+    <result column="receipt_body_id" jdbcType="BIGINT" property="receiptBodyId" />
+    <result column="storage_id" jdbcType="BIGINT" property="storageId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    receipt_label_id, print_label_id, receipt_body_id, storage_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sm_receipt_label
+    where receipt_label_id = #{receiptLabelId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sm_receipt_label
+    where receipt_label_id = #{receiptLabelId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.ReceiptLabelPO">
+    insert into sm_receipt_label (receipt_label_id, print_label_id, receipt_body_id, 
+      storage_id)
+    values (#{receiptLabelId,jdbcType=BIGINT}, #{printLabelId,jdbcType=BIGINT}, #{receiptBodyId,jdbcType=BIGINT}, 
+      #{storageId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.sm.ReceiptLabelPO">
+    insert into sm_receipt_label
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="receiptLabelId != null">
+        receipt_label_id,
+      </if>
+      <if test="printLabelId != null">
+        print_label_id,
+      </if>
+      <if test="receiptBodyId != null">
+        receipt_body_id,
+      </if>
+      <if test="storageId != null">
+        storage_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="receiptLabelId != null">
+        #{receiptLabelId,jdbcType=BIGINT},
+      </if>
+      <if test="printLabelId != null">
+        #{printLabelId,jdbcType=BIGINT},
+      </if>
+      <if test="receiptBodyId != null">
+        #{receiptBodyId,jdbcType=BIGINT},
+      </if>
+      <if test="storageId != null">
+        #{storageId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.sm.ReceiptLabelPO">
+    update sm_receipt_label
+    <set>
+      <if test="printLabelId != null">
+        print_label_id = #{printLabelId,jdbcType=BIGINT},
+      </if>
+      <if test="receiptBodyId != null">
+        receipt_body_id = #{receiptBodyId,jdbcType=BIGINT},
+      </if>
+      <if test="storageId != null">
+        storage_id = #{storageId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where receipt_label_id = #{receiptLabelId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.sm.ReceiptLabelPO">
+    update sm_receipt_label
+    set print_label_id = #{printLabelId,jdbcType=BIGINT},
+      receipt_body_id = #{receiptBodyId,jdbcType=BIGINT},
+      storage_id = #{storageId,jdbcType=BIGINT}
+    where receipt_label_id = #{receiptLabelId,jdbcType=BIGINT}
+  </update>
+</mapper>

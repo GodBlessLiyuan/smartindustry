@@ -14,9 +14,10 @@ public class QeConfirmPO implements Serializable {
     private String remark;
 
     /**
-     * 1：不良，待确认
-2：特采
-3：退供应商
+     * 1：允许
+3：不良，待确认
+4：特采
+5：退供应商
      */
     private Byte status;
 

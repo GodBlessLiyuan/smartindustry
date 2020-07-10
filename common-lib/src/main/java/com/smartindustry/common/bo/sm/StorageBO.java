@@ -1,6 +1,6 @@
 package com.smartindustry.common.bo.sm;
 
-import com.smartindustry.common.pojo.sm.MaterialStoragePO;
+import com.smartindustry.common.pojo.sm.StoragePO;
 import lombok.Data;
 
 /**
@@ -10,7 +10,7 @@ import lombok.Data;
  * @version: 1.0
  */
 @Data
-public class MaterialStorageBO extends MaterialStoragePO {
+public class StorageBO extends StoragePO {
 
     /**
      * 收料单号

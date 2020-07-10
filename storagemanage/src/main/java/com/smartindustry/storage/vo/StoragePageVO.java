@@ -1,6 +1,6 @@
 package com.smartindustry.storage.vo;
 
-import com.smartindustry.common.bo.sm.MaterialStorageBO;
+import com.smartindustry.common.bo.sm.StorageBO;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -77,9 +77,9 @@ public class StoragePageVO implements Serializable {
      * @param bos
      * @return
      */
-    public static List<StoragePageVO> convert(List<MaterialStorageBO> bos) {
+    public static List<StoragePageVO> convert(List<StorageBO> bos) {
         List<StoragePageVO> vos = new ArrayList<>(bos.size());
-        for (MaterialStorageBO bo : bos) {
+        for (StorageBO bo : bos) {
             vos.add(convert(bo));
         }
         return vos;
@@ -91,7 +91,7 @@ public class StoragePageVO implements Serializable {
      * @param bo
      * @return
      */
-    public static StoragePageVO convert(MaterialStorageBO bo) {
+    public static StoragePageVO convert(StorageBO bo) {
         StoragePageVO vo = new StoragePageVO();
         vo.setSid(bo.getStorageId());
         vo.setRbid(bo.getReceiptBodyId());
