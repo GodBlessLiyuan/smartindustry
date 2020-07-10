@@ -71,6 +71,18 @@ public class ReceiptConstant {
      */
     public static final Byte MATERIAL_TYPE_GOOD = 1;
     public static final Byte MATERIAL_TYPE_BAD = 2;
+    /**
+     * 原材料
+     */
+    public static final Byte MATERIAL_TYPE_RAW = 1;
+    /**
+     * 半成品
+     */
+    public static final Byte MATERIAL_TYPE_SEMI = 2;
+    /**
+     * 成品
+     */
+    public static final Byte MATERIAL_TYPE_FINISH = 3;
 
     /**
      * 操作记录

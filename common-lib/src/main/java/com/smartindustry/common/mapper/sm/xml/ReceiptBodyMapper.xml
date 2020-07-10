@@ -318,7 +318,7 @@
         select
         <include refid="ReceiptBodyBO_Column_List"/>
         from sm_receipt_body rb
-        left join sm_material m on rb.material_no = m.material_no
+        left join si_material m on rb.material_no = m.material_no
         where rb.receipt_body_id = #{rbId,jdbcType=BIGINT} and rb.dr = 1
     </select>
 </mapper>

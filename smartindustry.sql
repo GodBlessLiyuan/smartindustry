@@ -318,7 +318,7 @@ CREATE TABLE sm_receipt_label
     receipt_label_id bigint unsigned NOT NULL AUTO_INCREMENT,
     print_label_id bigint unsigned NOT NULL,
     receipt_body_id bigint unsigned NOT NULL,
-    storage_id bigint unsigned NOT NULL,
+    storage_id bigint unsigned,
     PRIMARY KEY (receipt_label_id),
     UNIQUE (receipt_label_id)
 );

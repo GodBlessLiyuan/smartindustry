@@ -57,7 +57,6 @@ public class PrintLabelDTO implements Serializable {
      */
     public static PrintLabelPO createPO(PrintLabelDTO dto, int num, Byte origin) {
         PrintLabelPO po = new PrintLabelPO();
-//        po.setReceiptBodyId(dto.getRbid());
         po.setPackageId(ReceiptNoUtil.genLabelNo(null, new Date(), num));
         po.setProduceDate(dto.getPdate());
         po.setProduceBatch(dto.getPbatch());

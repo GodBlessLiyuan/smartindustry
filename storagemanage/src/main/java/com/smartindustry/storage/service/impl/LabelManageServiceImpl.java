@@ -34,6 +34,8 @@ public class LabelManageServiceImpl implements ILabelManageService {
     @Autowired
     private PrintLabelMapper printLabelMapper;
     @Autowired
+    private ReceiptLabelMapper receiptLabelMapper;
+    @Autowired
     private ReceiptBodyMapper receiptBodyMapper;
     @Autowired
     private IqcDetectMapper iqcDetectMapper;
@@ -83,16 +85,27 @@ public class LabelManageServiceImpl implements ILabelManageService {
         return ResultVO.ok();
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO insert(PrintLabelDTO dto) {
         if (StringUtils.isEmpty(dto.getScode())) {
             // 手动录入
-            List<PrintLabelPO> pos = new ArrayList<>(dto.getPnum());
+            List<PrintLabelPO> plPOs = new ArrayList<>(dto.getPnum());
             int num = ReceiptNoUtil.getLabelNum(printLabelMapper, null, new Date());
             for (int i = 0; i < dto.getPnum(); i++) {
-                pos.add(PrintLabelDTO.createPO(dto, ++num, ReceiptConstant.LABEL_ORIGIN_ENTRY));
+                plPOs.add(PrintLabelDTO.createPO(dto, ++num, ReceiptConstant.LABEL_ORIGIN_ENTRY));
             }
-            printLabelMapper.batchInsert(pos);
+            printLabelMapper.batchInsert(plPOs);
+
+            // 收料标签
+            List<ReceiptLabelPO> rlPOs = new ArrayList<>(plPOs.size());
+            for (PrintLabelPO plPO : plPOs) {
+                ReceiptLabelPO rlPO = new ReceiptLabelPO();
+                rlPO.setPrintLabelId(plPO.getPrintLabelId());
+                rlPO.setReceiptBodyId(dto.getRbid());
+                rlPOs.add(rlPO);
+            }
+            receiptLabelMapper.batchInsert(rlPOs);
 
             return ResultVO.ok();
         }
@@ -127,36 +140,41 @@ public class LabelManageServiceImpl implements ILabelManageService {
             return new ResultVO(2000);
         }
 
+        // 打印标签总数
         List<PrintLabelPO> labelPOs = printLabelMapper.queryByReceiptBodyId(rbId);
         int labelNum = 0;
         for (PrintLabelPO labelPO : labelPOs) {
             labelNum += labelPO.getNum();
         }
-        if (labelNum >= bodyPO.getAcceptNum()) {
-            if (bodyPO.getMaterialType() == 1) {
-                // 原材料
-                IqcDetectPO iqcPO = new IqcDetectPO();
-                iqcPO.setReceiptBodyId(rbId);
-                iqcPO.setStatus(ReceiptConstant.IQC_WAIT);
-                iqcDetectMapper.insert(iqcPO);
-
-                bodyPO.setStatus(ReceiptConstant.RECEIPT_IQC_DETECT);
-            } else {
-                // 半成品/成品
-                QeDetectPO qePO = new QeDetectPO();
-                qePO.setReceiptBodyId(rbId);
-                qePO.setStatus(ReceiptConstant.QE_WAIT);
-                qeDetectMapper.insert(qePO);
-
-                bodyPO.setStatus(ReceiptConstant.RECEIPT_QE_DETECT);
-            }
-
-            receiptBodyMapper.updateByPrimaryKey(bodyPO);
-
-            Byte status = bodyPO.getMaterialType() == 1 ? ReceiptConstant.RECEIPT_IQC_DETECT : ReceiptConstant.RECEIPT_QE_DETECT;
-            recordMapper.insert(new RecordPO(rbId, 1L, "夏慧", ReceiptConstant.RECORD_TYPE_ADD, status));
+        if (labelNum < bodyPO.getAcceptNum()) {
+            return new ResultVO(2000);
         }
 
+        Byte status;    // 操作记录类型
+        if (ReceiptConstant.MATERIAL_TYPE_RAW.equals(bodyPO.getMaterialType())) {
+            // 原材料
+            IqcDetectPO iqcPO = new IqcDetectPO();
+            iqcPO.setReceiptBodyId(rbId);
+            iqcPO.setStatus(ReceiptConstant.IQC_WAIT);
+            iqcDetectMapper.insert(iqcPO);
+
+            status = ReceiptConstant.RECEIPT_IQC_DETECT;
+            bodyPO.setStatus(ReceiptConstant.RECEIPT_IQC_DETECT);
+        } else {
+            // 半成品/成品
+            QeDetectPO qePO = new QeDetectPO();
+            qePO.setReceiptBodyId(rbId);
+            qePO.setStatus(ReceiptConstant.QE_WAIT);
+            qeDetectMapper.insert(qePO);
+
+            status = ReceiptConstant.RECEIPT_QE_DETECT;
+            bodyPO.setStatus(ReceiptConstant.RECEIPT_QE_DETECT);
+        }
+
+        // 更新收料单状态
+        receiptBodyMapper.updateByPrimaryKey(bodyPO);
+
+        recordMapper.insert(new RecordPO(rbId, 1L, "夏慧", ReceiptConstant.RECORD_TYPE_ADD, status));
         recordMapper.insert(new RecordPO(rbId, 1L, "夏慧", ReceiptConstant.RECORD_TYPE_FINISH, ReceiptConstant.RECEIPT_ENTRY_LABEL));
 
         return ResultVO.ok();
