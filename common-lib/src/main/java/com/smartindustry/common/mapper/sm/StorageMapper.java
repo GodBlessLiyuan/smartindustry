@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * MaterialStorageMapper继承基类
+ * StorageMapper继承基类
  */
 @Mapper
 public interface StorageMapper extends BaseMapper<StoragePO, Long> {

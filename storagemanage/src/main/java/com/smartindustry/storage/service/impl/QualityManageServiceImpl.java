@@ -236,7 +236,6 @@ public class QualityManageServiceImpl implements IQualityManageService {
     @Override
     public ResultVO storage(Long rbId) {
         Byte status;    // 操作记录状态
-
         IqcDetectPO iqcDetectPO = iqcDetectMapper.selectByPrimaryKey(rbId);
         if (null != iqcDetectPO) {
             // IQC检验
@@ -250,7 +249,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
             // QE确认
             QeConfirmPO qeConfirmPO = qeConfirmMapper.selectByPrimaryKey(rbId);
             if (null != qeConfirmPO) {
-                if (!ReceiptConstant.QE_FRANCHISE.equals(qeConfirmPO.getStatus())) {
+                if (!ReceiptConstant.QE_FRANCHISE.equals(qeConfirmPO.getStatus()) && !ReceiptConstant.QE_RETURN.equals(qeConfirmPO.getStatus())) {
                     return new ResultVO(2000);
                 }
                 qeConfirmMapper.deleteByPrimaryKey(rbId);
@@ -262,7 +261,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
                 if (null == qeDetectPO) {
                     return new ResultVO(2000);
                 }
-                if (ReceiptConstant.QE_ALLOW.equals(qeDetectPO.getStatus())) {
+                if (!ReceiptConstant.QE_FRANCHISE.equals(qeDetectPO.getStatus()) && !ReceiptConstant.QE_RETURN.equals(qeDetectPO.getStatus())) {
                     return new ResultVO(2000);
                 }
                 qeDetectMapper.deleteByPrimaryKey(rbId);

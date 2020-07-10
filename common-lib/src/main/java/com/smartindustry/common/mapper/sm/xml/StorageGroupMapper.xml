@@ -20,7 +20,8 @@
         from sm_storage_group
         where storage_group_id = #{storageGroupId,jdbcType=BIGINT}
     </delete>
-    <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.StorageGroupPO">
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.StorageGroupPO" useGeneratedKeys="true"
+            keyProperty="storageGroupId">
         insert into sm_storage_group (storage_group_id, storage_id, location_no)
         values (#{storageGroupId,jdbcType=BIGINT}, #{storageId,jdbcType=BIGINT}, #{locationNo,jdbcType=CHAR})
     </insert>
@@ -69,7 +70,8 @@
     </update>
 
     <resultMap id="GroupBOResultMap" type="com.smartindustry.common.bo.sm.StorageGroupBO" extends="BaseResultMap">
-        <collection property="detail" column="storage_detail_id" ofType="com.smartindustry.common.bo.sm.StorageDetailBO">
+        <collection property="detail" column="storage_detail_id"
+                    ofType="com.smartindustry.common.bo.sm.StorageDetailBO">
             <id column="storage_detail_id" jdbcType="BIGINT" property="storageDetailId"/>
             <result column="print_label_id" jdbcType="BIGINT" property="printLabelId"/>
             <result column="package_id" jdbcType="BIGINT" property="packageId"/>
@@ -89,8 +91,8 @@
                m.material_desc
         from sm_storage_group sg
                  left join sm_storage_detail sd on sg.storage_group_id = sd.storage_group_id
-                 left join sm_print_label pl on sd.print_label_id = pl.print_label_id
-                 left join sm_material m on pl.material_no = m.material_no
+                 left join si_print_label pl on sd.print_label_id = pl.print_label_id
+                 left join si_material m on pl.material_no = m.material_no
         where sg.storage_id = #{storageId,jdbcType=BIGINT}
     </select>
 </mapper>

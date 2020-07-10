@@ -96,4 +96,12 @@
         from sm_receipt_label
         where print_label_id = #{printLabelId,jdbcType=BIGINT}
     </select>
+    <update id="updateSidByPlids">
+        update sm_receipt_label
+        set storage_id = #{sid,jdbcType=BIGINT}
+        where print_label_id in
+        <foreach collection="plIds" item="plid" open="(" separator="," close=")">
+            #{plid,jdbcType=BIGINT}
+        </foreach>
+    </update>
 </mapper>

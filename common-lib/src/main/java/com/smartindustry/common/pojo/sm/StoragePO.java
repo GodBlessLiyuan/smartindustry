@@ -6,7 +6,7 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * sm_material_storage
+ * sm_storage
  *
  * @author
  */
@@ -26,6 +26,7 @@ public class StoragePO implements Serializable {
 
     /**
      * 1：已入库
+     * 2：入库中
      * 3：待入库
      */
     private Byte status;
@@ -37,6 +38,12 @@ public class StoragePO implements Serializable {
     private Byte type;
 
     private Date createTime;
+
+    /**
+     * 1：未删除
+     * 2：已删除
+     */
+    private Byte dr;
 
     private static final long serialVersionUID = 1L;
 }

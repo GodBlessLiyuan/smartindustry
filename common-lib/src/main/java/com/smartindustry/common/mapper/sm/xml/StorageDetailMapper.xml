@@ -78,7 +78,7 @@
         select
         <include refid="Bo_Column_List"/>
         from sm_storage_detail sd
-        left join sm_print_label pl on sd.print_label_id = pl.print_label_id
+        left join si_print_label pl on sd.print_label_id = pl.print_label_id
         where storage_group_id = #{storageGroupId,jdbcType=BIGINT}
     </select>
 </mapper>

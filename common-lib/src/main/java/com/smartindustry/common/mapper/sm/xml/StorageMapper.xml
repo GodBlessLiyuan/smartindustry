@@ -11,33 +11,36 @@
         <result column="status" jdbcType="TINYINT" property="status"/>
         <result column="type" jdbcType="TINYINT" property="type"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="dr" jdbcType="TINYINT" property="dr"/>
     </resultMap>
     <sql id="Base_Column_List">
         storage_id, receipt_body_id, storage_no, pending_num, stored_num, storage_time, `status`,
-    `type`, create_time
+    `type`, create_time, dr
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from sm_material_storage
+        from sm_storage
         where storage_id = #{storageId,jdbcType=BIGINT}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete
-        from sm_material_storage
+        from sm_storage
         where storage_id = #{storageId,jdbcType=BIGINT}
     </delete>
     <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.StoragePO" useGeneratedKeys="true"
             keyProperty="storageId">
-        insert into sm_material_storage (storage_id, receipt_body_id, storage_no,
-                                         pending_num, stored_num, storage_time,
-                                         `status`, `type`, create_time)
+        insert into sm_storage (storage_id, receipt_body_id, storage_no,
+                                pending_num, stored_num, storage_time,
+                                `status`, `type`, create_time,
+                                dr)
         values (#{storageId,jdbcType=BIGINT}, #{receiptBodyId,jdbcType=BIGINT}, #{storageNo,jdbcType=CHAR},
                 #{pendingNum,jdbcType=INTEGER}, #{storedNum,jdbcType=INTEGER}, #{storageTime,jdbcType=TIMESTAMP},
-                #{status,jdbcType=TINYINT}, #{type,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP})
+                #{status,jdbcType=TINYINT}, #{type,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP},
+                #{dr,jdbcType=TINYINT})
     </insert>
     <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.sm.StoragePO">
-        insert into sm_material_storage
+        insert into sm_storage
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="storageId != null">
                 storage_id,
@@ -65,6 +68,9 @@
             </if>
             <if test="createTime != null">
                 create_time,
+            </if>
+            <if test="dr != null">
+                dr,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -95,10 +101,13 @@
             <if test="createTime != null">
                 #{createTime,jdbcType=TIMESTAMP},
             </if>
+            <if test="dr != null">
+                #{dr,jdbcType=TINYINT},
+            </if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.sm.StoragePO">
-        update sm_material_storage
+        update sm_storage
         <set>
             <if test="receiptBodyId != null">
                 receipt_body_id = #{receiptBodyId,jdbcType=BIGINT},
@@ -124,11 +133,14 @@
             <if test="createTime != null">
                 create_time = #{createTime,jdbcType=TIMESTAMP},
             </if>
+            <if test="dr != null">
+                dr = #{dr,jdbcType=TINYINT},
+            </if>
         </set>
         where storage_id = #{storageId,jdbcType=BIGINT}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.sm.StoragePO">
-        update sm_material_storage
+        update sm_storage
         set receipt_body_id = #{receiptBodyId,jdbcType=BIGINT},
             storage_no      = #{storageNo,jdbcType=CHAR},
             pending_num     = #{pendingNum,jdbcType=INTEGER},
@@ -136,13 +148,14 @@
             storage_time    = #{storageTime,jdbcType=TIMESTAMP},
             `status`        = #{status,jdbcType=TINYINT},
             `type`          = #{type,jdbcType=TINYINT},
-            create_time     = #{createTime,jdbcType=TIMESTAMP}
+            create_time     = #{createTime,jdbcType=TIMESTAMP},
+            dr              = #{dr,jdbcType=TINYINT}
         where storage_id = #{storageId,jdbcType=BIGINT}
     </update>
 
     <sql id="StorageBO_Column_List">
-        storage_id, ms.receipt_body_id, storage_no, pending_num, stored_num, storage_time, ms.`status`,
-    ms.`type`, ms.create_time, receipt_no, rb.order_type, m.material_no, material_type, material_desc
+        storage_id, s.receipt_body_id, storage_no, pending_num, stored_num, storage_time, s.`status`,
+    s.`type`, s.create_time, receipt_no, rb.order_type, m.material_no, material_type, material_desc
     </sql>
     <resultMap id="StorageBOResultMap" type="com.smartindustry.common.bo.sm.StorageBO" extends="BaseResultMap">
         <result column="receipt_no" jdbcType="CHAR" property="receiptNo"/>
@@ -154,21 +167,21 @@
     <select id="pageQuery" resultMap="StorageBOResultMap">
         select
         <include refid="StorageBO_Column_List"/>
-        from sm_material_storage ms
-        left join sm_receipt_body rb on ms.receipt_body_id = rb.receipt_body_id
-        left join sm_material m on rb.material_no = m.material_no
+        from sm_storage s
+        left join sm_receipt_body rb on s.receipt_body_id = rb.receipt_body_id
+        left join si_material m on rb.material_no = m.material_no
         <where>
             <if test="rno != null and rno != ''">and rb.receipt_no like '%' #{rno,jdbcType=CHAR} '%'</if>
             <if test="rtype != null and rtype != 0">and rb.order_type = #{rtype,jdbcType=TINYINT}</if>
             <if test="mtype != null and mtype != 0">and m.material_type = #{mtype,jdbcType=TINYINT}</if>
-            <if test="status != null and status != 0">and ms.`status` = #{status,jdbcType=TINYINT}</if>
-            <if test="type != null and type != 0">and ms.`type` = #{type,jdbcType=TINYINT}</if>
+            <if test="status != null and status != 0">and s.`status` = #{status,jdbcType=TINYINT}</if>
+            <if test="type != null and type != 0">and s.`type` = #{type,jdbcType=TINYINT}</if>
         </where>
     </select>
     <select id="queryNo" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from sm_material_storage
+        from sm_storage s
         where storage_no like #{no,jdbcType=CHAR} '%'
         order by storage_id desc limit 1
     </select>
