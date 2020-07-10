@@ -24,14 +24,15 @@
         select
         <include refid="Base_Column_List"/>
         from si_print_label
-        where print_label_id = #{printLabelId,jdbcType=BIGINT}
+        where print_label_id = #{printLabelId,jdbcType=BIGINT} and dr = 1
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete
         from si_print_label
         where print_label_id = #{printLabelId,jdbcType=BIGINT}
     </delete>
-    <insert id="insert" parameterType="com.smartindustry.common.pojo.si.PrintLabelPO">
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.si.PrintLabelPO" useGeneratedKeys="true"
+            keyProperty="printLabelId">
         insert into si_print_label (print_label_id, package_id, produce_date,
                                     produce_batch, num, `type`,
                                     origin, material_no, location_no,
@@ -230,15 +231,19 @@
     <select id="queryByRbidAndPid" resultType="com.smartindustry.common.bo.si.PrintLabelBO">
         select pl.print_label_id as printLabelId,
                pl.package_id     as packageId,
+               pl.produce_batch  as produceBatch,
+               pl.produce_date   as produceDate,
+               pl.num,
+               pl.create_time    as createTime,
                m.material_no     as materialNo,
-               m.material_desc   as materialDesc,
-               pl.num
-        from sm_print_label pl
-                 left join sm_material m on pl.material_no = m.material_no
-        where pl.receipt_body_id = #{rbid,jdbcType=BIGINT}
+               m.material_desc   as materialDesc
+        from si_print_label pl
+                 left join sm_receipt_label rl on pl.print_label_id = rl.print_label_id
+                 left join si_material m on pl.material_no = m.material_no
+        where rl.receipt_body_id = #{rbid,jdbcType=BIGINT}
           and pl.package_id = #{pid,jdbcType=CHAR}
           and pl.dr = 1
-          and pl.storage_id is null
+          and rl.storage_id is null
     </select>
     <select id="queryByIds" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select

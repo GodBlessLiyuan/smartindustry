@@ -90,4 +90,10 @@
             #{po.storageId,jdbcType=BIGINT})
         </foreach>
     </insert>
+    <select id="queryByPrintLabelId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sm_receipt_label
+        where print_label_id = #{printLabelId,jdbcType=BIGINT}
+    </select>
 </mapper>

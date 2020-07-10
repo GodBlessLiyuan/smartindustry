@@ -78,8 +78,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
         }
 
         String type = ReceiptConstant.IQC_REJECT.equals(iqcDetectPO.getStatus()) ? ReceiptConstant.RECORD_TYPE_IQC_RECHECK : ReceiptConstant.RECORD_TYPE_IQC_DETECT;
-
-        if (dto.getStatus() == 1) {
+        if (ReceiptConstant.IQC_ALLOW.equals(dto.getStatus())) {
             // 允许
             iqcDetectPO.setStatus(ReceiptConstant.IQC_ALLOW);
             iqcDetectMapper.updateByPrimaryKey(iqcDetectPO);
@@ -151,7 +150,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
         } else {
             return new ResultVO(2000);
         }
-        
+
         // 更新QE检测
         qeDetectPO.setRemark(dto.getRemark());
         qeDetectMapper.updateByPrimaryKey(qeDetectPO);
@@ -183,7 +182,6 @@ public class QualityManageServiceImpl implements IQualityManageService {
         }
 
         String type;    // 操作记录类型
-
         if (ReceiptConstant.QE_FRANCHISE.equals(dto.getStatus())) {
             // 特采
             type = ReceiptConstant.RECORD_TYPE_QE_FRANCHISE;
@@ -194,7 +192,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
 
             receiptBodyPO.setGoodNum(dto.getNum());
             receiptBodyPO.setBadNum(receiptBodyPO.getAcceptNum() - dto.getNum());
-        } else if (ReceiptConstant.IQC_REJECT.equals(dto.getStatus())) {
+        } else if (ReceiptConstant.QE_REJECT.equals(dto.getStatus())) {
             // 驳回
             type = ReceiptConstant.RECORD_TYPE_QE_REJECT;
 
@@ -207,8 +205,10 @@ public class QualityManageServiceImpl implements IQualityManageService {
             iqcDetectPO.setRemark(dto.getRemark());
             iqcDetectMapper.insert(iqcDetectPO);
 
+            // 收料单驳回到IQC
             receiptBodyPO.setStatus(ReceiptConstant.RECEIPT_IQC_DETECT);
 
+            // IQC 操作记录
             recordMapper.insert(new RecordPO(dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_QE_REJECT, ReceiptConstant.RECEIPT_IQC_DETECT));
         } else if (ReceiptConstant.QE_RETURN.equals(dto.getStatus())) {
             // 退供应商
@@ -226,7 +226,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
 
         // 更新收料单
         receiptBodyMapper.updateByPrimaryKey(receiptBodyPO);
-        // 操作记录
+        // QE 操作记录
         recordMapper.insert(new RecordPO(dto.getRbid(), 1L, "夏慧", type, ReceiptConstant.RECEIPT_QE_CONFIRM));
 
         return ResultVO.ok();

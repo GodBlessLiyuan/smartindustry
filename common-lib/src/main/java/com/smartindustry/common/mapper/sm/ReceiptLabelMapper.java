@@ -17,4 +17,12 @@ public interface ReceiptLabelMapper extends BaseMapper<ReceiptLabelPO, Long> {
      * @param rlPOs
      */
     void batchInsert(List<ReceiptLabelPO> rlPOs);
+
+    /**
+     * 根据 printLabelId 查询
+     *
+     * @param printLabelId
+     * @return
+     */
+    ReceiptLabelPO queryByPrintLabelId(Long printLabelId);
 }

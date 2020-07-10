@@ -63,10 +63,11 @@ public class LabelManageServiceImpl implements ILabelManageService {
     @Override
     public ResultVO reprint(Long plId, Integer num) {
         PrintLabelPO labelPO = printLabelMapper.selectByPrimaryKey(plId);
-        if (null == labelPO || labelPO.getDr() != 1) {
+        if (null == labelPO) {
             return new ResultVO(2000);
         }
 
+        // 废弃原有标签
         labelPO.setDr((byte) 2);
         printLabelMapper.updateByPrimaryKey(labelPO);
 
@@ -184,14 +185,19 @@ public class LabelManageServiceImpl implements ILabelManageService {
     @Override
     public ResultVO split(LabelSplitDTO dto) {
         PrintLabelPO labelPO = printLabelMapper.selectByPrimaryKey(dto.getPlid());
-        if (null == labelPO || labelPO.getDr() != 1) {
+        if (null == labelPO) {
             return new ResultVO(2000);
         }
-        if (dto.getBnum() + dto.getGnum() != labelPO.getNum()) {
+        if (dto.getGnum() + dto.getBnum() != labelPO.getNum()) {
             return new ResultVO(2000);
         }
 
-        // 废弃已有的打印标签
+        ReceiptLabelPO rlPO = receiptLabelMapper.queryByPrintLabelId(labelPO.getPrintLabelId());
+        if (null == rlPO) {
+            return new ResultVO(2000);
+        }
+
+        // 废弃原有标签
         labelPO.setDr((byte) 2);
         printLabelMapper.updateByPrimaryKey(labelPO);
 
@@ -208,6 +214,10 @@ public class LabelManageServiceImpl implements ILabelManageService {
             labelPO.setDr((byte) 1);
             labelPO.setCreateTime(new Date());
             printLabelMapper.insert(labelPO);
+
+            rlPO.setReceiptLabelId(null);
+            rlPO.setPrintLabelId(labelPO.getPrintLabelId());
+            receiptLabelMapper.insert(rlPO);
         }
         if (dto.getBnum() > 0) {
             labelPO.setPrintLabelId(null);
@@ -215,6 +225,10 @@ public class LabelManageServiceImpl implements ILabelManageService {
             labelPO.setNum(dto.getBnum());
             labelPO.setType(ReceiptConstant.LABEL_TYPE_BAD);
             printLabelMapper.insert(labelPO);
+
+            rlPO.setReceiptLabelId(null);
+            rlPO.setPrintLabelId(labelPO.getPrintLabelId());
+            receiptLabelMapper.insert(rlPO);
         }
 
         return ResultVO.ok();
