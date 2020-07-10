@@ -6,7 +6,6 @@ import com.smartindustry.common.bo.sm.LabelRecordBO;
 import com.smartindustry.common.bo.sm.ReceiptBO;
 import com.smartindustry.common.bo.sm.ReceiptBodyBO;
 import com.smartindustry.common.mapper.sm.*;
-import com.smartindustry.common.pojo.sm.EntryLabelPO;
 import com.smartindustry.common.pojo.sm.ReceiptBodyPO;
 import com.smartindustry.common.pojo.sm.ReceiptHeadPO;
 import com.smartindustry.common.pojo.sm.RecordPO;
@@ -40,8 +39,6 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
     @Autowired
     private ReceiptBodyMapper receiptBodyMapper;
     @Autowired
-    private EntryLabelMapper entryLabelMapper;
-    @Autowired
     private RecordMapper recordMapper;
     @Autowired
     private LabelRecordMapper labelRecordMapper;
@@ -62,14 +59,6 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
 
         List<ReceiptBodyBO> bodyBOs = ReceiptBodyDTO.createPOs(headPO, dto.getBody(), receiptBodyMapper);
         receiptBodyMapper.batchInsert(bodyBOs);
-
-        List<EntryLabelPO> labelPOs = new ArrayList<>(bodyBOs.size());
-        for (ReceiptBodyBO bodyBO : bodyBOs) {
-            EntryLabelPO labelPO = new EntryLabelPO();
-            labelPO.setReceiptBodyId(bodyBO.getReceiptBodyId());
-            labelPOs.add(labelPO);
-        }
-        entryLabelMapper.batchInsert(labelPOs);
 
         // 操作记录
         List<RecordPO> recordPOs = new ArrayList<>(bodyBOs.size());

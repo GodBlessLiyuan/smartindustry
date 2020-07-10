@@ -34,8 +34,6 @@ public class LabelManageServiceImpl implements ILabelManageService {
     @Autowired
     private ReceiptBodyMapper receiptBodyMapper;
     @Autowired
-    private EntryLabelMapper entryLabelMapper;
-    @Autowired
     private IqcDetectMapper iqcDetectMapper;
     @Autowired
     private QeDetectMapper qeDetectMapper;
@@ -133,7 +131,6 @@ public class LabelManageServiceImpl implements ILabelManageService {
             labelNum += labelPO.getNum();
         }
         if (labelNum >= bodyPO.getAcceptNum()) {
-            entryLabelMapper.deleteByPrimaryKey(rbId);
             if (bodyPO.getMaterialType() == 1) {
                 // 原材料
                 IqcDetectPO iqcPO = new IqcDetectPO();
