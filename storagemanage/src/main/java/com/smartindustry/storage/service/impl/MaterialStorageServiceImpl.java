@@ -2,6 +2,7 @@ package com.smartindustry.storage.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.bo.sm.*;
 import com.smartindustry.common.mapper.si.PrintLabelMapper;
 import com.smartindustry.common.mapper.si.LocationMapper;
@@ -102,7 +103,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
             // 打印标签
             PrintLabelPO printLabelPO = printLabelMapper.selectByPrimaryKey(bo.getPrintLabelId());
             printLabelPO.setLocationNo(materialStoragePO.getStorageNo());
-            printLabelPO.setStorageId(dto.getSid());
+//            printLabelPO.setStorageId(dto.getSid());
             printLabelMapper.updateByPrimaryKey(printLabelPO);
             // 入库单
             materialStoragePO.setStoredNum(materialStoragePO.getStoredNum() + printLabelPO.getNum());
@@ -154,13 +155,13 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
             receiptBodyMapper.updateByPrimaryKey(receiptBodyPO);
 
             // 新打印标签
-            newLabelPO.setStorageId(dto.getSid());
+//            newLabelPO.setStorageId(dto.getSid());
             newLabelPO.setLocationNo(storageGroupPO.getLocationNo());
             printLabelMapper.updateByPrimaryKey(newLabelPO);
 
             // 旧打印标签
             oldLabelPO.setLocationNo(null);
-            oldLabelPO.setStorageId(null);
+//            oldLabelPO.setStorageId(null);
             printLabelMapper.updateByPrimaryKey(oldLabelPO);
         }
 
@@ -212,7 +213,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
 
             // 旧打印标签
             oldLabelPO.setLocationNo(null);
-            oldLabelPO.setStorageId(null);
+//            oldLabelPO.setStorageId(null);
             printLabelMapper.updateByPrimaryKey(oldLabelPO);
         }
 

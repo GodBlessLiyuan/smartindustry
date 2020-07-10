@@ -1,111 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.smartindustry.common.mapper.si.LabelRecordMapper">
-    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.LabelRecordPO">
-        <id column="label_record_id" jdbcType="BIGINT" property="labelRecordId"/>
-        <result column="print_label_id" jdbcType="BIGINT" property="printLabelId"/>
-        <result column="user_id" jdbcType="BIGINT" property="userId"/>
-        <result column="name" jdbcType="CHAR" property="name"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-        label_record_id, print_label_id, user_id, `name`, create_time
-    </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from sm_label_record
-        where label_record_id = #{labelRecordId,jdbcType=BIGINT}
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-        delete
-        from sm_label_record
-        where label_record_id = #{labelRecordId,jdbcType=BIGINT}
-    </delete>
-    <insert id="insert" parameterType="com.smartindustry.common.pojo.si.LabelRecordPO">
-        insert into sm_label_record (label_record_id, print_label_id, user_id,
-                                     `name`, create_time)
-        values (#{labelRecordId,jdbcType=BIGINT}, #{printLabelId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},
-                #{name,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP})
-    </insert>
-    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.LabelRecordPO">
-        insert into sm_label_record
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="labelRecordId != null">
-                label_record_id,
-            </if>
-            <if test="printLabelId != null">
-                print_label_id,
-            </if>
-            <if test="userId != null">
-                user_id,
-            </if>
-            <if test="name != null">
-                `name`,
-            </if>
-            <if test="createTime != null">
-                create_time,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="labelRecordId != null">
-                #{labelRecordId,jdbcType=BIGINT},
-            </if>
-            <if test="printLabelId != null">
-                #{printLabelId,jdbcType=BIGINT},
-            </if>
-            <if test="userId != null">
-                #{userId,jdbcType=BIGINT},
-            </if>
-            <if test="name != null">
-                #{name,jdbcType=CHAR},
-            </if>
-            <if test="createTime != null">
-                #{createTime,jdbcType=TIMESTAMP},
-            </if>
-        </trim>
-    </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.si.LabelRecordPO">
-        update sm_label_record
-        <set>
-            <if test="printLabelId != null">
-                print_label_id = #{printLabelId,jdbcType=BIGINT},
-            </if>
-            <if test="userId != null">
-                user_id = #{userId,jdbcType=BIGINT},
-            </if>
-            <if test="name != null">
-                `name` = #{name,jdbcType=CHAR},
-            </if>
-            <if test="createTime != null">
-                create_time = #{createTime,jdbcType=TIMESTAMP},
-            </if>
-        </set>
-        where label_record_id = #{labelRecordId,jdbcType=BIGINT}
-    </update>
-    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.LabelRecordPO">
-        update sm_label_record
-        set print_label_id = #{printLabelId,jdbcType=BIGINT},
-            user_id        = #{userId,jdbcType=BIGINT},
-            `name`         = #{name,jdbcType=CHAR},
-            create_time    = #{createTime,jdbcType=TIMESTAMP}
-        where label_record_id = #{labelRecordId,jdbcType=BIGINT}
-    </update>
-
-    <sql id="RecordBO_Column_List">
-        label_record_id, lr.print_label_id, user_id, `name`, lr.create_time
-    </sql>
-    <resultMap id="RecordBOResultMap" type="com.smartindustry.common.bo.sm.LabelRecordBO" extends="BaseResultMap">
-        <result column="package_id" jdbcType="CHAR" property="packageId"/>
-        <result column="num" jdbcType="INTEGER" property="num"/>
-        <result column="relate_package_id" jdbcType="CHAR" property="relatePackageId"/>
-    </resultMap>
-    <select id="queryByReceiptBodyId" resultMap="RecordBOResultMap">
-        select
-        <include refid="RecordBO_Column_List"/>
-        from sm_label_record lr
-        left join sm_print_label pl on lr.print_label_id = pl.print_label_id
-        where pl.receipt_body_id = #{receiptBodyId,jdbcType=BIGINT}
-        order by lr.create_time desc
-    </select>
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.LabelRecordPO">
+    <id column="label_record_id" jdbcType="BIGINT" property="labelRecordId" />
+    <result column="print_label_id" jdbcType="BIGINT" property="printLabelId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="name" jdbcType="CHAR" property="name" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    label_record_id, print_label_id, user_id, `name`, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from si_label_record
+    where label_record_id = #{labelRecordId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from si_label_record
+    where label_record_id = #{labelRecordId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.si.LabelRecordPO">
+    insert into si_label_record (label_record_id, print_label_id, user_id, 
+      `name`, create_time)
+    values (#{labelRecordId,jdbcType=BIGINT}, #{printLabelId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
+      #{name,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.LabelRecordPO">
+    insert into si_label_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="labelRecordId != null">
+        label_record_id,
+      </if>
+      <if test="printLabelId != null">
+        print_label_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="labelRecordId != null">
+        #{labelRecordId,jdbcType=BIGINT},
+      </if>
+      <if test="printLabelId != null">
+        #{printLabelId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.si.LabelRecordPO">
+    update si_label_record
+    <set>
+      <if test="printLabelId != null">
+        print_label_id = #{printLabelId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        `name` = #{name,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where label_record_id = #{labelRecordId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.LabelRecordPO">
+    update si_label_record
+    set print_label_id = #{printLabelId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      `name` = #{name,jdbcType=CHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where label_record_id = #{labelRecordId,jdbcType=BIGINT}
+  </update>
 </mapper>

@@ -1,4 +1,4 @@
-package com.smartindustry.common.bo.sm;
+package com.smartindustry.common.bo.si;
 
 import com.smartindustry.common.pojo.si.PrintLabelPO;
 import lombok.Data;

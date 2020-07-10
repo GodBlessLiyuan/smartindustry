@@ -1,6 +1,6 @@
 package com.smartindustry.common.mapper.si;
 
-import com.smartindustry.common.bo.sm.PrintLabelBO;
+import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.si.PrintLabelPO;
 import org.apache.ibatis.annotations.Mapper;

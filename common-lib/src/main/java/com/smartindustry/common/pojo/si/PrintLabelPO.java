@@ -6,15 +6,13 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * sm_print_label
+ * si_print_label
  *
  * @author
  */
 @Data
 public class PrintLabelPO implements Serializable {
     private Long printLabelId;
-
-    private Long receiptBodyId;
 
     private String packageId;
 
@@ -39,8 +37,6 @@ public class PrintLabelPO implements Serializable {
     private String materialNo;
 
     private String locationNo;
-
-    private Long storageId;
 
     private Long relateLabelId;
 

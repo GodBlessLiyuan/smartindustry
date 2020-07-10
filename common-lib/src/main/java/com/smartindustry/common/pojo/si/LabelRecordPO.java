@@ -5,7 +5,7 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * sm_label_record
+ * si_label_record
  * @author 
  */
 @Data
