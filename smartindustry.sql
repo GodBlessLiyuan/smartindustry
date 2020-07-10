@@ -7,20 +7,20 @@ DROP TABLE IF EXISTS ba_role_authority;
 DROP TABLE IF EXISTS ba_authority;
 DROP TABLE IF EXISTS ba_user_role;
 DROP TABLE IF EXISTS ba_role;
-DROP TABLE IF EXISTS sm_label_record;
-DROP TABLE IF EXISTS sm_record;
+DROP TABLE IF EXISTS si_label_record;
+DROP TABLE IF EXISTS sm_receipt_label;
 DROP TABLE IF EXISTS sm_storage_detail;
-DROP TABLE IF EXISTS sm_print_label;
+DROP TABLE IF EXISTS si_print_label;
 DROP TABLE IF EXISTS sm_storage_group;
-DROP TABLE IF EXISTS sm_storage_location;
+DROP TABLE IF EXISTS si_storage_location;
+DROP TABLE IF EXISTS sm_record;
 DROP TABLE IF EXISTS ba_user;
-DROP TABLE IF EXISTS sm_entry_label;
 DROP TABLE IF EXISTS sm_iqc_detect;
-DROP TABLE IF EXISTS sm_material_storage;
 DROP TABLE IF EXISTS sm_qe_confirm;
 DROP TABLE IF EXISTS sm_qe_detect;
+DROP TABLE IF EXISTS sm_storage;
 DROP TABLE IF EXISTS sm_receipt_body;
-DROP TABLE IF EXISTS sm_material;
+DROP TABLE IF EXISTS si_material;
 DROP TABLE IF EXISTS sm_receipt_head;
 
 
@@ -110,11 +110,83 @@ CREATE TABLE ba_user_role
 );
 
 
-CREATE TABLE sm_entry_label
+CREATE TABLE si_label_record
 (
-    receipt_body_id bigint unsigned NOT NULL,
-    PRIMARY KEY (receipt_body_id),
-    UNIQUE (receipt_body_id)
+    label_record_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    print_label_id bigint unsigned NOT NULL,
+    user_id bigint unsigned NOT NULL,
+    name char(255),
+    create_time datetime,
+    PRIMARY KEY (label_record_id),
+    UNIQUE (label_record_id)
+);
+
+
+CREATE TABLE si_material
+(
+    material_no char(32) NOT NULL,
+    material_name char(255) NOT NULL,
+    -- 1：原料；2：半成品；3：成品
+    material_type tinyint NOT NULL COMMENT '1：原料；2：半成品；3：成品',
+    material_model char(255),
+    material_desc char(255),
+    test_type tinyint,
+    create_time datetime,
+    update_time datetime,
+    -- 1：未删除
+    -- 2：已删除
+    dr tinyint COMMENT '1：未删除
+2：已删除',
+    PRIMARY KEY (material_no),
+    UNIQUE (material_no)
+);
+
+
+CREATE TABLE si_print_label
+(
+    print_label_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    package_id char(32) NOT NULL,
+    produce_date char(32),
+    produce_batch char(32),
+    num int,
+    -- 1：良品
+    -- 2：非良品
+    type tinyint COMMENT '1：良品
+2：非良品',
+    -- 1：扫描
+    -- 2：打印
+    origin tinyint NOT NULL COMMENT '1：扫描
+2：打印',
+    material_no char(32) NOT NULL,
+    location_no char(32),
+    relate_label_id bigint unsigned,
+    relate_package_id char(32),
+    create_time datetime,
+    -- 1：未废弃
+    -- 2：已废弃
+    dr tinyint COMMENT '1：未废弃
+2：已废弃',
+    PRIMARY KEY (print_label_id),
+    UNIQUE (print_label_id),
+    UNIQUE (package_id)
+);
+
+
+CREATE TABLE si_storage_location
+(
+    location_no char(32) NOT NULL,
+    location_code char(32),
+    location_name char(255),
+    location_type tinyint,
+    user_id bigint unsigned NOT NULL,
+    create_time datetime,
+    update_time datetime,
+    -- 1：未删除
+    -- 2：已删除
+    dr tinyint COMMENT '1：未删除
+2：已删除',
+    PRIMARY KEY (location_no),
+    UNIQUE (location_no)
 );
 
 
@@ -130,98 +202,6 @@ CREATE TABLE sm_iqc_detect
 3：未检验',
     PRIMARY KEY (receipt_body_id),
     UNIQUE (receipt_body_id)
-);
-
-
-CREATE TABLE sm_label_record
-(
-    label_record_id bigint unsigned NOT NULL AUTO_INCREMENT,
-    print_label_id bigint unsigned NOT NULL,
-    user_id bigint unsigned NOT NULL,
-    name char(255),
-    create_time datetime,
-    PRIMARY KEY (label_record_id),
-    UNIQUE (label_record_id)
-);
-
-
-CREATE TABLE sm_material
-(
-    material_no char(32) NOT NULL,
-    material_name char(255) NOT NULL,
-    material_type tinyint NOT NULL,
-    material_model char(255),
-    material_desc char(255),
-    test_type tinyint,
-    create_time datetime,
-    update_time datetime,
-    -- 1：未删除
-    -- 2：已删除
-    dr tinyint COMMENT '1：未删除
-2：已删除',
-    PRIMARY KEY (material_no),
-    UNIQUE (material_no)
-);
-
-
-CREATE TABLE sm_material_storage
-(
-    storage_id bigint unsigned NOT NULL AUTO_INCREMENT,
-    receipt_body_id bigint unsigned NOT NULL,
-    storage_no char(32) NOT NULL,
-    pending_num int,
-    stored_num int,
-    storage_time datetime,
-    -- 1：已入库
-    -- 2：入库中
-    -- 3：待入库
-    --
-    --
-    status tinyint COMMENT '1：已入库
-2：入库中
-3：待入库
-
-',
-    -- 1：良品
-    -- 2：非良品
-    type tinyint COMMENT '1：良品
-2：非良品',
-    create_time datetime,
-    PRIMARY KEY (storage_id),
-    UNIQUE (storage_id),
-    UNIQUE (storage_no)
-);
-
-
-CREATE TABLE sm_print_label
-(
-    print_label_id bigint unsigned NOT NULL AUTO_INCREMENT,
-    receipt_body_id bigint unsigned NOT NULL,
-    package_id char(32) NOT NULL,
-    produce_date char(32),
-    produce_batch char(32),
-    num int,
-    -- 1：良品
-    -- 2：非良品
-    type tinyint COMMENT '1：良品
-2：非良品',
-    -- 1：扫描
-    -- 2：打印
-    origin tinyint NOT NULL COMMENT '1：扫描
-2：打印',
-    material_no char(32) NOT NULL,
-    location_no char(32),
-    storage_id bigint unsigned,
-    relate_label_id bigint unsigned,
-    relate_package_id char(32),
-    create_time datetime,
-    -- 1：未废弃
-    -- 2：已废弃
-    dr tinyint COMMENT '1：未废弃
-2：已废弃',
-    PRIMARY KEY (print_label_id),
-    UNIQUE (print_label_id),
-    UNIQUE (package_id)
 );
 
 
@@ -333,6 +313,17 @@ CREATE TABLE sm_receipt_head
 );
 
 
+CREATE TABLE sm_receipt_label
+(
+    receipt_label_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    print_label_id bigint unsigned NOT NULL,
+    receipt_body_id bigint unsigned NOT NULL,
+    storage_id bigint unsigned NOT NULL,
+    PRIMARY KEY (receipt_label_id),
+    UNIQUE (receipt_label_id)
+);
+
+
 CREATE TABLE sm_record
 (
     record_id bigint unsigned NOT NULL AUTO_INCREMENT,
@@ -359,6 +350,39 @@ CREATE TABLE sm_record
 );
 
 
+CREATE TABLE sm_storage
+(
+    storage_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    receipt_body_id bigint unsigned NOT NULL,
+    storage_no char(32) NOT NULL,
+    pending_num int,
+    stored_num int,
+    storage_time datetime,
+    -- 1：已入库
+    -- 2：入库中
+    -- 3：待入库
+    --
+    --
+    status tinyint COMMENT '1：已入库
+2：入库中
+3：待入库
+
+',
+    -- 1：良品
+    -- 2：非良品
+    type tinyint COMMENT '1：良品
+2：非良品',
+    create_time datetime,
+    -- 1：未删除
+    -- 2：已删除
+    dr tinyint COMMENT '1：未删除
+2：已删除',
+    PRIMARY KEY (storage_id),
+    UNIQUE (storage_id),
+    UNIQUE (storage_no)
+);
+
+
 CREATE TABLE sm_storage_detail
 (
     storage_detail_id bigint unsigned NOT NULL AUTO_INCREMENT,
@@ -377,24 +401,6 @@ CREATE TABLE sm_storage_group
     location_no char(32),
     PRIMARY KEY (storage_group_id),
     UNIQUE (storage_group_id)
-);
-
-
-CREATE TABLE sm_storage_location
-(
-    location_no char(32) NOT NULL,
-    location_code char(32),
-    location_name char(255),
-    location_type tinyint,
-    user_id bigint unsigned NOT NULL,
-    create_time datetime,
-    update_time datetime,
-    -- 1：未删除
-    -- 2：已删除
-    dr tinyint COMMENT '1：未删除
-2：已删除',
-    PRIMARY KEY (location_no),
-    UNIQUE (location_no)
 );
 
 
@@ -449,7 +455,15 @@ ALTER TABLE ba_user_role
 ;
 
 
-ALTER TABLE sm_label_record
+ALTER TABLE si_label_record
+    ADD FOREIGN KEY (user_id)
+        REFERENCES ba_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_storage_location
     ADD FOREIGN KEY (user_id)
         REFERENCES ba_user (user_id)
         ON UPDATE RESTRICT
@@ -465,17 +479,9 @@ ALTER TABLE sm_record
 ;
 
 
-ALTER TABLE sm_storage_location
-    ADD FOREIGN KEY (user_id)
-        REFERENCES ba_user (user_id)
-        ON UPDATE RESTRICT
-        ON DELETE RESTRICT
-;
-
-
-ALTER TABLE sm_print_label
+ALTER TABLE si_print_label
     ADD FOREIGN KEY (material_no)
-        REFERENCES sm_material (material_no)
+        REFERENCES si_material (material_no)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -483,47 +489,31 @@ ALTER TABLE sm_print_label
 
 ALTER TABLE sm_receipt_body
     ADD FOREIGN KEY (material_no)
-        REFERENCES sm_material (material_no)
+        REFERENCES si_material (material_no)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
 
 
-ALTER TABLE sm_print_label
-    ADD FOREIGN KEY (storage_id)
-        REFERENCES sm_material_storage (storage_id)
-        ON UPDATE RESTRICT
-        ON DELETE RESTRICT
-;
-
-
-ALTER TABLE sm_record
-    ADD FOREIGN KEY (storage_id)
-        REFERENCES sm_material_storage (storage_id)
-        ON UPDATE RESTRICT
-        ON DELETE RESTRICT
-;
-
-
-ALTER TABLE sm_storage_group
-    ADD FOREIGN KEY (storage_id)
-        REFERENCES sm_material_storage (storage_id)
-        ON UPDATE RESTRICT
-        ON DELETE RESTRICT
-;
-
-
-ALTER TABLE sm_label_record
+ALTER TABLE si_label_record
     ADD FOREIGN KEY (print_label_id)
-        REFERENCES sm_print_label (print_label_id)
+        REFERENCES si_print_label (print_label_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
 
 
-ALTER TABLE sm_print_label
+ALTER TABLE si_print_label
     ADD FOREIGN KEY (relate_label_id)
-        REFERENCES sm_print_label (print_label_id)
+        REFERENCES si_print_label (print_label_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE sm_receipt_label
+    ADD FOREIGN KEY (print_label_id)
+        REFERENCES si_print_label (print_label_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -531,37 +521,29 @@ ALTER TABLE sm_print_label
 
 ALTER TABLE sm_storage_detail
     ADD FOREIGN KEY (print_label_id)
-        REFERENCES sm_print_label (print_label_id)
+        REFERENCES si_print_label (print_label_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
 
 
-ALTER TABLE sm_entry_label
-    ADD FOREIGN KEY (receipt_body_id)
-        REFERENCES sm_receipt_body (receipt_body_id)
+ALTER TABLE si_print_label
+    ADD FOREIGN KEY (location_no)
+        REFERENCES si_storage_location (location_no)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE sm_storage_group
+    ADD FOREIGN KEY (location_no)
+        REFERENCES si_storage_location (location_no)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
 
 
 ALTER TABLE sm_iqc_detect
-    ADD FOREIGN KEY (receipt_body_id)
-        REFERENCES sm_receipt_body (receipt_body_id)
-        ON UPDATE RESTRICT
-        ON DELETE RESTRICT
-;
-
-
-ALTER TABLE sm_material_storage
-    ADD FOREIGN KEY (receipt_body_id)
-        REFERENCES sm_receipt_body (receipt_body_id)
-        ON UPDATE RESTRICT
-        ON DELETE RESTRICT
-;
-
-
-ALTER TABLE sm_print_label
     ADD FOREIGN KEY (receipt_body_id)
         REFERENCES sm_receipt_body (receipt_body_id)
         ON UPDATE RESTRICT
@@ -585,7 +567,23 @@ ALTER TABLE sm_qe_detect
 ;
 
 
+ALTER TABLE sm_receipt_label
+    ADD FOREIGN KEY (receipt_body_id)
+        REFERENCES sm_receipt_body (receipt_body_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
 ALTER TABLE sm_record
+    ADD FOREIGN KEY (receipt_body_id)
+        REFERENCES sm_receipt_body (receipt_body_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE sm_storage
     ADD FOREIGN KEY (receipt_body_id)
         REFERENCES sm_receipt_body (receipt_body_id)
         ON UPDATE RESTRICT
@@ -601,25 +599,33 @@ ALTER TABLE sm_receipt_body
 ;
 
 
-ALTER TABLE sm_storage_detail
-    ADD FOREIGN KEY (storage_group_id)
-        REFERENCES sm_storage_group (storage_group_id)
+ALTER TABLE sm_receipt_label
+    ADD FOREIGN KEY (storage_id)
+        REFERENCES sm_storage (storage_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
 
 
-ALTER TABLE sm_print_label
-    ADD FOREIGN KEY (location_no)
-        REFERENCES sm_storage_location (location_no)
+ALTER TABLE sm_record
+    ADD FOREIGN KEY (storage_id)
+        REFERENCES sm_storage (storage_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
 
 
 ALTER TABLE sm_storage_group
-    ADD FOREIGN KEY (location_no)
-        REFERENCES sm_storage_location (location_no)
+    ADD FOREIGN KEY (storage_id)
+        REFERENCES sm_storage (storage_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE sm_storage_detail
+    ADD FOREIGN KEY (storage_group_id)
+        REFERENCES sm_storage_group (storage_group_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
