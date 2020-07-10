@@ -92,7 +92,7 @@ public class ReceiptManageControllerTest extends BaseTest {
                 .content(reqData)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
         ResultVO<ReceiptVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
-        assertEquals(java.util.Optional.of(1000), resultVO.getStatus());
+        assertEquals(Integer.valueOf(1000), resultVO.getStatus());
     }
 
     @Test
