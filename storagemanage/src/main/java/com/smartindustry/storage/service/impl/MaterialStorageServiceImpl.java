@@ -3,7 +3,11 @@ package com.smartindustry.storage.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.smartindustry.common.bo.sm.*;
+import com.smartindustry.common.mapper.si.PrintLabelMapper;
+import com.smartindustry.common.mapper.si.LocationMapper;
 import com.smartindustry.common.mapper.sm.*;
+import com.smartindustry.common.pojo.si.LocationPO;
+import com.smartindustry.common.pojo.si.PrintLabelPO;
 import com.smartindustry.common.pojo.sm.*;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
@@ -36,7 +40,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
     @Autowired
     private MaterialStorageMapper materialStorageMapper;
     @Autowired
-    private StorageLocationMapper storageLocationMapper;
+    private LocationMapper storageLocationMapper;
     @Autowired
     private PrintLabelMapper printLabelMapper;
     @Autowired
@@ -58,7 +62,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
 
     @Override
     public ResultVO location(String lno) {
-        StorageLocationPO locationPO = storageLocationMapper.selectByPrimaryKey(lno);
+        LocationPO locationPO = storageLocationMapper.selectByPrimaryKey(lno);
         if (null == locationPO) {
             return new ResultVO(2000);
         }

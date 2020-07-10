@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.smartindustry.common.bo.sm.LabelRecordBO;
 import com.smartindustry.common.bo.sm.ReceiptBO;
+import com.smartindustry.common.mapper.si.LabelRecordMapper;
 import com.smartindustry.common.mapper.sm.*;
 import com.smartindustry.common.pojo.sm.*;
 import com.smartindustry.common.vo.PageInfoVO;

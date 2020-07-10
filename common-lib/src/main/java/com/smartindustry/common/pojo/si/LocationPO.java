@@ -1,15 +1,15 @@
-package com.smartindustry.common.pojo.sm;
+package com.smartindustry.common.pojo.si;
 
 import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
 
 /**
- * sm_storage_location
+ * si_location
  * @author 
  */
 @Data
-public class StorageLocationPO implements Serializable {
+public class LocationPO implements Serializable {
     private String locationNo;
 
     private String locationCode;

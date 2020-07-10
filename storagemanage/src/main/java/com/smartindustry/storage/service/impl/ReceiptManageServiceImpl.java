@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.smartindustry.common.bo.sm.LabelRecordBO;
 import com.smartindustry.common.bo.sm.ReceiptBO;
 import com.smartindustry.common.bo.sm.ReceiptBodyBO;
+import com.smartindustry.common.mapper.si.LabelRecordMapper;
 import com.smartindustry.common.mapper.sm.*;
 import com.smartindustry.common.pojo.sm.ReceiptBodyPO;
 import com.smartindustry.common.pojo.sm.ReceiptHeadPO;

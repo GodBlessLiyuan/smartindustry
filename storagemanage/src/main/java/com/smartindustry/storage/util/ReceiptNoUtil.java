@@ -1,11 +1,11 @@
 package com.smartindustry.storage.util;
 
 import com.smartindustry.common.mapper.sm.MaterialStorageMapper;
-import com.smartindustry.common.mapper.sm.PrintLabelMapper;
+import com.smartindustry.common.mapper.si.PrintLabelMapper;
 import com.smartindustry.common.mapper.sm.ReceiptBodyMapper;
 import com.smartindustry.common.mapper.sm.ReceiptHeadMapper;
 import com.smartindustry.common.pojo.sm.MaterialStoragePO;
-import com.smartindustry.common.pojo.sm.PrintLabelPO;
+import com.smartindustry.common.pojo.si.PrintLabelPO;
 import com.smartindustry.common.pojo.sm.ReceiptBodyPO;
 import com.smartindustry.common.pojo.sm.ReceiptHeadPO;
 import com.smartindustry.common.util.NoUtil;

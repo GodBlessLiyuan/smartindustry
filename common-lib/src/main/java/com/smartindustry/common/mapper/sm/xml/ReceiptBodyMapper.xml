@@ -244,7 +244,7 @@
             , q.status as qaStatus
         </if>
         from sm_receipt_body rb
-        left join sm_material m on rb.material_no = m.material_no
+        left join si_material m on rb.material_no = m.material_no
         left join sm_receipt_head rh on rb.receipt_head_id = rh.receipt_head_id
         <if test="qa">
             <choose>

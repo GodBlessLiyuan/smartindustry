@@ -12,7 +12,7 @@ DROP TABLE IF EXISTS sm_receipt_label;
 DROP TABLE IF EXISTS sm_storage_detail;
 DROP TABLE IF EXISTS si_print_label;
 DROP TABLE IF EXISTS sm_storage_group;
-DROP TABLE IF EXISTS si_storage_location;
+DROP TABLE IF EXISTS si_location;
 DROP TABLE IF EXISTS sm_record;
 DROP TABLE IF EXISTS ba_user;
 DROP TABLE IF EXISTS sm_iqc_detect;
@@ -122,6 +122,24 @@ CREATE TABLE si_label_record
 );
 
 
+CREATE TABLE si_location
+(
+    location_no char(32) NOT NULL,
+    location_code char(32),
+    location_name char(255),
+    location_type tinyint,
+    user_id bigint unsigned NOT NULL,
+    create_time datetime,
+    update_time datetime,
+    -- 1£ºÎ´É¾³ý
+    -- 2£ºÒÑÉ¾³ý
+    dr tinyint COMMENT '1£ºÎ´É¾³ý
+2£ºÒÑÉ¾³ý',
+    PRIMARY KEY (location_no),
+    UNIQUE (location_no)
+);
+
+
 CREATE TABLE si_material
 (
     material_no char(32) NOT NULL,
@@ -169,24 +187,6 @@ CREATE TABLE si_print_label
     PRIMARY KEY (print_label_id),
     UNIQUE (print_label_id),
     UNIQUE (package_id)
-);
-
-
-CREATE TABLE si_storage_location
-(
-    location_no char(32) NOT NULL,
-    location_code char(32),
-    location_name char(255),
-    location_type tinyint,
-    user_id bigint unsigned NOT NULL,
-    create_time datetime,
-    update_time datetime,
-    -- 1£ºÎ´É¾³ý
-    -- 2£ºÒÑÉ¾³ý
-    dr tinyint COMMENT '1£ºÎ´É¾³ý
-2£ºÒÑÉ¾³ý',
-    PRIMARY KEY (location_no),
-    UNIQUE (location_no)
 );
 
 
@@ -463,7 +463,7 @@ ALTER TABLE si_label_record
 ;
 
 
-ALTER TABLE si_storage_location
+ALTER TABLE si_location
     ADD FOREIGN KEY (user_id)
         REFERENCES ba_user (user_id)
         ON UPDATE RESTRICT
@@ -474,6 +474,22 @@ ALTER TABLE si_storage_location
 ALTER TABLE sm_record
     ADD FOREIGN KEY (user_id)
         REFERENCES ba_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_print_label
+    ADD FOREIGN KEY (location_no)
+        REFERENCES si_location (location_no)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE sm_storage_group
+    ADD FOREIGN KEY (location_no)
+        REFERENCES si_location (location_no)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -522,22 +538,6 @@ ALTER TABLE sm_receipt_label
 ALTER TABLE sm_storage_detail
     ADD FOREIGN KEY (print_label_id)
         REFERENCES si_print_label (print_label_id)
-        ON UPDATE RESTRICT
-        ON DELETE RESTRICT
-;
-
-
-ALTER TABLE si_print_label
-    ADD FOREIGN KEY (location_no)
-        REFERENCES si_storage_location (location_no)
-        ON UPDATE RESTRICT
-        ON DELETE RESTRICT
-;
-
-
-ALTER TABLE sm_storage_group
-    ADD FOREIGN KEY (location_no)
-        REFERENCES si_storage_location (location_no)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;

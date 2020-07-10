@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.smartindustry.common.mapper.sm.LabelRecordMapper">
-    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.sm.LabelRecordPO">
+<mapper namespace="com.smartindustry.common.mapper.si.LabelRecordMapper">
+    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.LabelRecordPO">
         <id column="label_record_id" jdbcType="BIGINT" property="labelRecordId"/>
         <result column="print_label_id" jdbcType="BIGINT" property="printLabelId"/>
         <result column="user_id" jdbcType="BIGINT" property="userId"/>
@@ -22,13 +22,13 @@
         from sm_label_record
         where label_record_id = #{labelRecordId,jdbcType=BIGINT}
     </delete>
-    <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.LabelRecordPO">
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.si.LabelRecordPO">
         insert into sm_label_record (label_record_id, print_label_id, user_id,
                                      `name`, create_time)
         values (#{labelRecordId,jdbcType=BIGINT}, #{printLabelId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},
                 #{name,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP})
     </insert>
-    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.sm.LabelRecordPO">
+    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.LabelRecordPO">
         insert into sm_label_record
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="labelRecordId != null">
@@ -65,7 +65,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.sm.LabelRecordPO">
+    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.si.LabelRecordPO">
         update sm_label_record
         <set>
             <if test="printLabelId != null">
@@ -83,7 +83,7 @@
         </set>
         where label_record_id = #{labelRecordId,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.sm.LabelRecordPO">
+    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.LabelRecordPO">
         update sm_label_record
         set print_label_id = #{printLabelId,jdbcType=BIGINT},
             user_id        = #{userId,jdbcType=BIGINT},

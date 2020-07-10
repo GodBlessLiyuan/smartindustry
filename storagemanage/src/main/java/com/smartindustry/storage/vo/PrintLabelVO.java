@@ -1,6 +1,6 @@
 package com.smartindustry.storage.vo;
 
-import com.smartindustry.common.pojo.sm.PrintLabelPO;
+import com.smartindustry.common.pojo.si.PrintLabelPO;
 import lombok.Data;
 
 import java.io.Serializable;

@@ -1,7 +1,9 @@
 package com.smartindustry.storage.service.impl;
 
 import com.smartindustry.common.bo.sm.ReceiptBodyBO;
+import com.smartindustry.common.mapper.si.PrintLabelMapper;
 import com.smartindustry.common.mapper.sm.*;
+import com.smartindustry.common.pojo.si.PrintLabelPO;
 import com.smartindustry.common.pojo.sm.*;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.ReceiptConstant;

@@ -1,6 +1,6 @@
 package com.smartindustry.storage.service.impl;
 
-import com.smartindustry.common.mapper.sm.MaterialMapper;
+import com.smartindustry.common.mapper.si.MaterialMapper;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.service.IErpExternalService;
 import com.smartindustry.storage.vo.ErpOrderVO;

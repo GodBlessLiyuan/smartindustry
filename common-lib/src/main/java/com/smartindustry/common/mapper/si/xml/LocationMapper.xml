@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.smartindustry.common.mapper.sm.StorageLocationMapper">
-  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.sm.StorageLocationPO">
+<mapper namespace="com.smartindustry.common.mapper.si.LocationMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.LocationPO">
     <id column="location_no" jdbcType="CHAR" property="locationNo" />
     <result column="location_code" jdbcType="CHAR" property="locationCode" />
     <result column="location_name" jdbcType="CHAR" property="locationName" />
@@ -18,23 +18,23 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from sm_storage_location
+    from si_location
     where location_no = #{locationNo,jdbcType=CHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from sm_storage_location
+    delete from si_location
     where location_no = #{locationNo,jdbcType=CHAR}
   </delete>
-  <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.StorageLocationPO">
-    insert into sm_storage_location (location_no, location_code, location_name, 
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.si.LocationPO">
+    insert into si_location (location_no, location_code, location_name, 
       location_type, user_id, create_time, 
       update_time, dr)
     values (#{locationNo,jdbcType=CHAR}, #{locationCode,jdbcType=CHAR}, #{locationName,jdbcType=CHAR}, 
       #{locationType,jdbcType=TINYINT}, #{userId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
   </insert>
-  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.sm.StorageLocationPO">
-    insert into sm_storage_location
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.LocationPO">
+    insert into si_location
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="locationNo != null">
         location_no,
@@ -88,8 +88,8 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.sm.StorageLocationPO">
-    update sm_storage_location
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.si.LocationPO">
+    update si_location
     <set>
       <if test="locationCode != null">
         location_code = #{locationCode,jdbcType=CHAR},
@@ -115,8 +115,8 @@
     </set>
     where location_no = #{locationNo,jdbcType=CHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.sm.StorageLocationPO">
-    update sm_storage_location
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.LocationPO">
+    update si_location
     set location_code = #{locationCode,jdbcType=CHAR},
       location_name = #{locationName,jdbcType=CHAR},
       location_type = #{locationType,jdbcType=TINYINT},

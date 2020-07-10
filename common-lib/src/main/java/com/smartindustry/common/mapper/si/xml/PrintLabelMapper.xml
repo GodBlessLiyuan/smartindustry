@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.smartindustry.common.mapper.sm.PrintLabelMapper">
-    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.sm.PrintLabelPO">
+<mapper namespace="com.smartindustry.common.mapper.si.PrintLabelMapper">
+    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.PrintLabelPO">
         <id column="print_label_id" jdbcType="BIGINT" property="printLabelId"/>
         <result column="receipt_body_id" jdbcType="BIGINT" property="receiptBodyId"/>
         <result column="package_id" jdbcType="CHAR" property="packageId"/>
@@ -34,7 +34,7 @@
         from sm_print_label
         where print_label_id = #{printLabelId,jdbcType=BIGINT}
     </delete>
-    <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.PrintLabelPO">
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.si.PrintLabelPO">
         insert into sm_print_label (print_label_id, receipt_body_id, package_id,
                                     produce_date, produce_batch, num,
                                     `type`, origin, material_no,
@@ -46,7 +46,7 @@
                 #{locationNo,jdbcType=CHAR}, #{storageId,jdbcType=BIGINT}, #{relateLabelId,jdbcType=BIGINT},
                 #{relatePackageId,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
     </insert>
-    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.sm.PrintLabelPO">
+    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.PrintLabelPO">
         insert into sm_print_label
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="printLabelId != null">
@@ -143,7 +143,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.sm.PrintLabelPO">
+    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.si.PrintLabelPO">
         update sm_print_label
         <set>
             <if test="receiptBodyId != null">
@@ -191,7 +191,7 @@
         </set>
         where print_label_id = #{printLabelId,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.sm.PrintLabelPO">
+    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.PrintLabelPO">
         update sm_print_label
         set receipt_body_id   = #{receiptBodyId,jdbcType=BIGINT},
             package_id        = #{packageId,jdbcType=CHAR},

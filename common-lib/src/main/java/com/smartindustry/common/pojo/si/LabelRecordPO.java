@@ -1,4 +1,4 @@
-package com.smartindustry.common.pojo.sm;
+package com.smartindustry.common.pojo.si;
 
 import java.io.Serializable;
 import java.util.Date;
