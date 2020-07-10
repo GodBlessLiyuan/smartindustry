@@ -2,35 +2,19 @@ package com.smartindustry.storage.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.smartindustry.common.bo.sm.ReceiptBO;
-import com.smartindustry.common.mapper.sm.ReceiptBodyMapper;
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.storage.dto.ReceiptDTO;
-import com.smartindustry.storage.service.IReceiptManageService;
 import com.smartindustry.storage.vo.ReceiptVO;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.reactivestreams.Publisher;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.junit.Assert.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static reactor.core.publisher.Mono.when;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author: velve
