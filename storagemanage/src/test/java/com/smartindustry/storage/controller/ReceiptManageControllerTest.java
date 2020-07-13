@@ -14,6 +14,8 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -33,42 +35,41 @@ public class ReceiptManageControllerTest extends BaseTest {
 
     @Test
     public void insert() throws Exception {
-        String reqData = "{\n" +
-                "\t\"head\": {\n" +
-                "\t\t\"ono\": \"PO2020020220200202\",\n" +
-                "\t\t\"otype\": 1,\n" +
-                "\t\t\"odate\": \"2020-07-01 00:00:00\",\n" +
-                "\t\t\"supplier\": \"PO收单-东南院供应商\",\n" +
-                "\t\t\"buyer\": \"轩辕先生\",\n" +
-                "\t\t\"pdate\": \"2020-07-05 00:00:00\",\n" +
-                "\t\t\"loco\": \"京东快递\",\n" +
-                "\t\t\"lono\": \"JD00000000001\",\n" +
-                "\t\t\"way\": 1,\n" +
-                "\t\t\"remark\": \"这是一条测试数据，请不要操作此条数据.\"\n" +
-                "\t},\n" +
-                "\t\"body\":[{\n" +
-                "\t\t\"mno\": \"5101000496\",\n" +
-                "\t\t\"mname\": \"原料物料001\",\n" +
-                "\t\t\"mtype\": 1,\n" +
-                "\t\t\"mmodel\": \"SH0001\",\n" +
-                "\t\t\"mdesc\": \"测试物料，原料类型.\",\n" +
-                "\t\t\"ototal\": 1000,\n" +
-                "\t\t\"anum\": 1000,\n" +
-                "\t\t\"adate\": null\n" +
-                "\t},\n" +
-                "\t{\n" +
-                "\t\t\"mno\": \"5101000497\",\n" +
-                "\t\t\"mname\": \"半成品物料002\",\n" +
-                "\t\t\"mtype\": 2,\n" +
-                "\t\t\"mmodel\": \"SH0002\",\n" +
-                "\t\t\"mdesc\": \"测试物料2，半成品类型.\",\n" +
-                "\t\t\"ototal\": 2000,\n" +
-                "\t\t\"anum\": 2000,\n" +
-                "\t\t\"adate\": null\n" +
-                "\t}]\n" +
-                "}";
 
-        reqData = reqData.replaceAll("\t|\n", "");
+        String reqData = "{" +
+                "\"head\": {" +
+                "\"ono\": \"PO2020020220200202\",\n" +
+                "\"otype\": 1,\n" +
+                "\"odate\": \"2020-07-01 00:00:00\"," +
+                "\"supplier\": \"PO收单-东南院供应商\"," +
+                "\"buyer\": \"轩辕先生\"," +
+                "\"pdate\": \"2020-07-05 00:00:00\"," +
+                "\"loco\": \"京东快递\"," +
+                "\"lono\": \"JD00000000001\"," +
+                "\"way\": 1," +
+                "\"remark\": \"这是一条测试数据，请不要操作此条数据.\"" +
+                "}," +
+                "\"body\":[{\n" +
+                "\"mno\": \"5101000496\"," +
+                "\"mname\": \"原料物料001\"," +
+                "\"mtype\": 1," +
+                "\"mmodel\": \"SH0001\"," +
+                "\"mdesc\": \"测试物料，原料类型.\"," +
+                "\"ototal\": 1000," +
+                "\"anum\": 1000," +
+                "\"adate\": null" +
+                "}," +
+                "{" +
+                "\"mno\": \"5101000497\",\n" +
+                "\"mname\": \"半成品物料002\",\n" +
+                "\"mtype\": 2," +
+                "\"mmodel\": \"SH0002\"," +
+                "\"mdesc\": \"测试物料2，半成品类型.\"," +
+                "\"ototal\": 2000," +
+                "\"anum\": 2000," +
+                "\"adate\": null" +
+                "}]" +
+                "}";
 
 
         MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/receipt/insert")
@@ -80,14 +81,31 @@ public class ReceiptManageControllerTest extends BaseTest {
     }
 
     @Test
-    public void delete() {
+    public void delete()  {
+
+
     }
 
     @Test
-    public void editLog() {
+    public void editLog() throws Exception {
+        String reqData = "{" +
+                "\"rbid\": 1," +
+                "\"company\": \"顺丰快递\"," +
+                "\"no\": \"SF0000000001\"," +
+                "\"way\": 2," +
+                "\"remark\": \"由东京快递改为顺丰快递\"" +
+                "}";
+
+        MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/receipt/editLog")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(reqData)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+        ResultVO<ReceiptVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+        assertEquals(Integer.valueOf(1000),resultVO.getStatus());
     }
 
     @Test
     public void record() {
     }
+
 }
