@@ -19,4 +19,12 @@ public interface StorageDetailMapper extends BaseMapper<StorageDetailPO, Long> {
      * @return
      */
     List<StorageDetailBO> queryByGroupId(Long storageGroupId);
+
+    /**
+     * 根据 plid 查询
+     *
+     * @param printLabelId
+     * @return
+     */
+    StorageDetailPO queryByPlId(Long printLabelId);
 }

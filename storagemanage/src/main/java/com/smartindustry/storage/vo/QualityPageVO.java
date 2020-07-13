@@ -38,7 +38,7 @@ public class QualityPageVO implements Serializable {
     /**
      * 检验类型
      */
-    private Byte tType;
+    private Byte ttype;
     /**
      * 收料类型
      * 1：PO单收料
@@ -94,7 +94,7 @@ public class QualityPageVO implements Serializable {
         vo.setRno(bo.getReceiptNo());
         vo.setMno(bo.getMaterialNo());
         vo.setMdesc(bo.getMaterialDesc());
-        vo.setTType(bo.getTestType());
+        vo.setTtype(bo.getTestType());
         vo.setOtype(bo.getOrderType());
         vo.setAnum(bo.getAcceptNum());
         vo.setGnum(bo.getGoodNum());

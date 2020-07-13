@@ -81,4 +81,10 @@
         left join si_print_label pl on sd.print_label_id = pl.print_label_id
         where storage_group_id = #{storageGroupId,jdbcType=BIGINT}
     </select>
+    <select id="queryByPlId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sm_storage_detail
+        where print_label_id = #{printLabelId,jdbcType=BIGINT}
+    </select>
 </mapper>

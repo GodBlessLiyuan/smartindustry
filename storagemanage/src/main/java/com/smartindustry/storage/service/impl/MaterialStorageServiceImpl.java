@@ -88,6 +88,12 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
             return new ResultVO(2000);
         }
 
+        StorageDetailPO storageDetailPO = storageDetailMapper.queryByPlId(bo.getPrintLabelId());
+        if (null != storageDetailPO) {
+            // 标签已使用
+            return new ResultVO(2000);
+        }
+
         if (null == dto.getSgid()) {
             // 新增物料入库组
             StorageGroupPO groupPO = new StorageGroupPO();
