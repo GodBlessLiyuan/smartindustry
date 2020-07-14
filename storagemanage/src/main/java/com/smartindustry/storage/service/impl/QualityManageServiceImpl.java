@@ -261,9 +261,6 @@ public class QualityManageServiceImpl implements IQualityManageService {
                 if (null == qeDetectPO) {
                     return new ResultVO(1002);
                 }
-                if (!ReceiptConstant.QE_FRANCHISE.equals(qeDetectPO.getStatus()) && !ReceiptConstant.QE_RETURN.equals(qeDetectPO.getStatus())) {
-                    return new ResultVO(1003);
-                }
                 qeDetectMapper.deleteByPrimaryKey(rbId);
 
                 status = ReceiptConstant.RECEIPT_QE_DETECT;
