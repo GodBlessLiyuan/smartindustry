@@ -305,10 +305,19 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         if (!storagePO.getPendingNum().equals(storagePO.getStoredNum())) {
             return new ResultVO(2000);
         }
+        ReceiptBodyPO receiptBodyPO = receiptBodyMapper.queryByBodyId(storagePO.getStorageId());
+        if (null == receiptBodyPO) {
+            return new ResultVO(2000);
+        }
 
+        // 入库单
         storagePO.setStorageTime(new Date());
         storagePO.setStatus(ReceiptConstant.MATERIAL_STORAGE_FINISH);
         storageMapper.updateByPrimaryKey(storagePO);
+
+        // 收料单
+        receiptBodyPO.setStatus(ReceiptConstant.RECEIPT_STORAGE_FINISH);
+        receiptBodyMapper.updateByPrimaryKey(receiptBodyPO);
 
         // 操作记录
         recordMapper.insert(new RecordPO(sid, storagePO.getStorageId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_CONFIRM, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
