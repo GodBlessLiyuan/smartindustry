@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.junit.Assert.*;
@@ -31,18 +32,35 @@ import static org.junit.Assert.*;
 public class MaterialStorageControllerTest extends BaseTest {
 
     @Test
-    public void pageQuery() {
-//        String reqDate = ;
-//
-//        MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/storage/pageQuery")
-//                .contentType(MediaType.APPLICATION_JSON).content(reqDate))
-//                .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andReturn();
-//        ResultVO<ReceiptVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
-   }
+    public void pageQuery() throws Exception {
+        {
+            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.get("/storage/pageQuery")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .param("pageNum", String.valueOf(1))
+                    .param("pageSize", String.valueOf(10))
+                    .param("type", "1")
+            ).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+            ResultVO<ReceiptVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+            assertNotNull(resultVO.getStatus());
+            assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+
+        }
+    }
 
     @Test
-    public void location() {
+    public void location() throws Exception {
+        {
+            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.get("/storage/location")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .param("lno", "8-10"))
+                    .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+            ResultVO<ReceiptVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+            assertNotNull(resultVO.getStatus());
+            assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+
+        }
     }
 
     @Test
@@ -62,10 +80,32 @@ public class MaterialStorageControllerTest extends BaseTest {
     }
 
     @Test
-    public void storage() {
+    public void storage() throws Exception {
+        {
+            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.get("/storage/storage")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .param("sid", String.valueOf(3)))
+                    .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+            ResultVO<ReceiptVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+            assertNotNull(resultVO.getStatus());
+            assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+
+        }
     }
 
     @Test
-    public void detail() {
+    public void detail() throws Exception {
+        {
+            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.get("/storage/detail")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .param("sid", String.valueOf(3)))
+                    .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+            ResultVO<ReceiptVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+            assertNotNull(resultVO.getStatus());
+            assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+
+        }
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.junit.Assert.assertEquals;
@@ -29,7 +30,31 @@ import static org.junit.Assert.assertNotNull;
 public class ReceiptManageControllerTest extends BaseTest {
 
     @Test
-    public void pageQuery() {
+    public void pageQuery() throws Exception {
+        {
+            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/receipt/pageQuery")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .param("pageNum", String.valueOf(1))
+                    .param("pageSize", String.valueOf(2))
+                    .param("keyword", "")
+                    .param("supplier", "")
+                    .param("ono", "")
+                    .param("status", "")
+                    .param("type", "")
+            ).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+            ResultVO<ReceiptVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+            assertNotNull(resultVO.getStatus());
+            assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+
+            //
+
+            //
+
+            //
+
+        }
+
     }
 
     @Test
@@ -95,19 +120,36 @@ public class ReceiptManageControllerTest extends BaseTest {
     }
 
     @Test
-    public void delete() {
+    public void delete() throws Exception {
+        {
+            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/receipt/delete")
+                    .contentType(MediaType.APPLICATION_JSON).param("rbids[]", String.valueOf(2)))
+                    .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+            ResultVO<ReceiptVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+            assertNotNull(resultVO.getStatus());
+            assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+        }
     }
+
 
     @Test
     public void editLog() throws Exception {
         {
             //editLog -编辑物流信息 l
+//            String reqData = "{" +
+//                    "\"rbid\": 1," +
+//                    "\"company\": \"顺丰快递\"," +
+//                    "\"no\": \"SF0000000001\"," +
+//                    "\"way\": 2," +
+//                    "\"remark\": \"由东京快递改为顺丰快递\"" +
+//                    "}";
             String reqData = "{" +
-                    "\"rbid\": 1," +
-                    "\"company\": \"顺丰快递\"," +
-                    "\"no\": \"SF0000000001\"," +
-                    "\"way\": 2," +
-                    "\"remark\": \"由东京快递改为顺丰快递\"" +
+                    "\"rbid\": 9," +
+                    "\"company\": \"京东快递\"," +
+                    "\"no\": \"JD00000000001\"," +
+                    "\"way\": 1," +
+                    "\"remark\": \"这是一条测试数据，请不要操作此条数据.\"" +
                     "}";
 
             MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/receipt/editLog")
@@ -121,7 +163,24 @@ public class ReceiptManageControllerTest extends BaseTest {
     }
 
     @Test
-    public void record() {
+    public void record() throws Exception {
+
+        {
+            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/receipt/record")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .param("rbid", String.valueOf(6)).param("status", String.valueOf(1))).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+            ResultVO<ReceiptVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+            assertNotNull(resultVO.getStatus());
+            assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+            assertNotNull(resultVO.getData());
+
+//
+//
+//            RecordVO recordVO = JSONObject.toJavaObject(JSON.parseObject(String.valueOf(resultVO.getData())), RecordVO.class);
+//            //rbId
+//            assertEquals(Integer.valueOf(6),resultVO.getData());
+//            //status
+        }
     }
 
 }
