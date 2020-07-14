@@ -62,19 +62,19 @@ public class QualityManageServiceImpl implements IQualityManageService {
     public ResultVO iqcTest(IqcTestDTO dto) {
         ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(dto.getRbid());
         if (null == receiptBodyPO) {
-            return new ResultVO(2000);
+            return new ResultVO(1002);
         }
         if (!ReceiptConstant.RECEIPT_IQC_DETECT.equals(receiptBodyPO.getStatus())) {
-            return new ResultVO(2000);
+            return new ResultVO(1003);
         }
 
         // IQC检验
         IqcDetectPO iqcDetectPO = iqcDetectMapper.selectByPrimaryKey(dto.getRbid());
         if (null == iqcDetectPO) {
-            return new ResultVO(2000);
+            return new ResultVO(1002);
         }
         if (ReceiptConstant.IQC_ALLOW.equals(iqcDetectPO.getStatus())) {
-            return new ResultVO(2000);
+            return new ResultVO(1003);
         }
 
         String type = ReceiptConstant.IQC_REJECT.equals(iqcDetectPO.getStatus()) ? ReceiptConstant.RECORD_TYPE_IQC_RECHECK : ReceiptConstant.RECORD_TYPE_IQC_DETECT;
@@ -114,19 +114,19 @@ public class QualityManageServiceImpl implements IQualityManageService {
     public ResultVO qeTest(QeTestDTO dto) {
         ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(dto.getRbid());
         if (null == receiptBodyPO) {
-            return new ResultVO(2000);
+            return new ResultVO(1002);
         }
         if (!ReceiptConstant.RECEIPT_QE_DETECT.equals(receiptBodyPO.getStatus())) {
-            return new ResultVO(2000);
+            return new ResultVO(1003);
         }
 
         // QE 检测
         QeDetectPO qeDetectPO = qeDetectMapper.selectByPrimaryKey(dto.getRbid());
         if (null == qeDetectPO) {
-            return new ResultVO(2000);
+            return new ResultVO(1002);
         }
         if (!ReceiptConstant.QE_WAIT.equals(qeDetectPO.getStatus())) {
-            return new ResultVO(2000);
+            return new ResultVO(1003);
         }
 
         if (ReceiptConstant.QE_ALLOW.equals(dto.getStatus())) {
@@ -148,7 +148,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
             receiptBodyPO.setGoodNum(0);
             receiptBodyPO.setBadNum(receiptBodyPO.getAcceptNum());
         } else {
-            return new ResultVO(2000);
+            return new ResultVO(1001);
         }
 
         // 更新QE检测
@@ -167,18 +167,18 @@ public class QualityManageServiceImpl implements IQualityManageService {
     public ResultVO qeConfirm(QeConfirmDTO dto) {
         ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(dto.getRbid());
         if (null == receiptBodyPO) {
-            return new ResultVO(2000);
+            return new ResultVO(1002);
         }
         if (!ReceiptConstant.RECEIPT_QE_CONFIRM.equals(receiptBodyPO.getStatus())) {
-            return new ResultVO(2000);
+            return new ResultVO(1003);
         }
 
         QeConfirmPO qeConfirmPO = qeConfirmMapper.selectByPrimaryKey(dto.getRbid());
         if (null == qeConfirmPO) {
-            return new ResultVO(2000);
+            return new ResultVO(1002);
         }
         if (!ReceiptConstant.QE_WAIT.equals(qeConfirmPO.getStatus())) {
-            return new ResultVO(2000);
+            return new ResultVO(1003);
         }
 
         String type;    // 操作记录类型
@@ -221,7 +221,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
             receiptBodyPO.setGoodNum(0);
             receiptBodyPO.setBadNum(receiptBodyPO.getAcceptNum());
         } else {
-            return new ResultVO(2000);
+            return new ResultVO(1001);
         }
 
         // 更新收料单
@@ -240,7 +240,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
         if (null != iqcDetectPO) {
             // IQC检验
             if (!ReceiptConstant.IQC_ALLOW.equals(iqcDetectPO.getStatus())) {
-                return new ResultVO(2000);
+                return new ResultVO(1003);
             }
             iqcDetectMapper.deleteByPrimaryKey(rbId);
 
@@ -250,7 +250,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
             QeConfirmPO qeConfirmPO = qeConfirmMapper.selectByPrimaryKey(rbId);
             if (null != qeConfirmPO) {
                 if (!ReceiptConstant.QE_FRANCHISE.equals(qeConfirmPO.getStatus()) && !ReceiptConstant.QE_RETURN.equals(qeConfirmPO.getStatus())) {
-                    return new ResultVO(2000);
+                    return new ResultVO(1003);
                 }
                 qeConfirmMapper.deleteByPrimaryKey(rbId);
 
@@ -259,10 +259,10 @@ public class QualityManageServiceImpl implements IQualityManageService {
                 // QE检验
                 QeDetectPO qeDetectPO = qeDetectMapper.selectByPrimaryKey(rbId);
                 if (null == qeDetectPO) {
-                    return new ResultVO(2000);
+                    return new ResultVO(1002);
                 }
                 if (!ReceiptConstant.QE_FRANCHISE.equals(qeDetectPO.getStatus()) && !ReceiptConstant.QE_RETURN.equals(qeDetectPO.getStatus())) {
-                    return new ResultVO(2000);
+                    return new ResultVO(1003);
                 }
                 qeDetectMapper.deleteByPrimaryKey(rbId);
 

@@ -54,7 +54,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
     public ResultVO queryPid(Long rbId, String pid) {
         PrintLabelPO po = printLabelMapper.queryByRbidAndPid(rbId, pid);
         if (null == po) {
-            return new ResultVO(2000);
+            return new ResultVO(1002);
         }
         return ResultVO.ok().setData(PrintLabelVO.convert(po));
     }
@@ -64,7 +64,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
     public ResultVO reprint(Long plId, Integer num) {
         PrintLabelPO labelPO = printLabelMapper.selectByPrimaryKey(plId);
         if (null == labelPO) {
-            return new ResultVO(2000);
+            return new ResultVO(1002);
         }
 
         // 废弃原有标签
@@ -119,10 +119,10 @@ public class LabelManageServiceImpl implements ILabelManageService {
     public ResultVO delete(Long rbId, Long plId) {
         ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(rbId);
         if (null == receiptBodyPO) {
-            return new ResultVO(2000);
+            return new ResultVO(1002);
         }
         if (!ReceiptConstant.RECEIPT_ENTRY_LABEL.equals(receiptBodyPO.getStatus())) {
-            return new ResultVO(2000);
+            return new ResultVO(1003);
         }
 
         printLabelMapper.deleteByPrimaryKey(plId);
@@ -135,10 +135,10 @@ public class LabelManageServiceImpl implements ILabelManageService {
     public ResultVO finish(Long rbId) {
         ReceiptBodyBO bodyPO = receiptBodyMapper.queryByBodyId(rbId);
         if (null == bodyPO) {
-            return new ResultVO(2000);
+            return new ResultVO(1002);
         }
         if (!ReceiptConstant.RECEIPT_ENTRY_LABEL.equals(bodyPO.getStatus())) {
-            return new ResultVO(2000);
+            return new ResultVO(1003);
         }
 
         // 打印标签总数
@@ -148,7 +148,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
             labelNum += labelPO.getNum();
         }
         if (labelNum < bodyPO.getAcceptNum()) {
-            return new ResultVO(2000);
+            return new ResultVO(1005);
         }
 
         Byte status;    // 操作记录类型
@@ -186,15 +186,15 @@ public class LabelManageServiceImpl implements ILabelManageService {
     public ResultVO split(LabelSplitDTO dto) {
         PrintLabelPO labelPO = printLabelMapper.selectByPrimaryKey(dto.getPlid());
         if (null == labelPO) {
-            return new ResultVO(2000);
+            return new ResultVO(1002);
         }
         if (dto.getGnum() + dto.getBnum() != labelPO.getNum()) {
-            return new ResultVO(2000);
+            return new ResultVO(1001);
         }
 
         ReceiptLabelPO rlPO = receiptLabelMapper.queryByPrintLabelId(labelPO.getPrintLabelId());
         if (null == rlPO) {
-            return new ResultVO(2000);
+            return new ResultVO(1002);
         }
 
         // 废弃原有标签
