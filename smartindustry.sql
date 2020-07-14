@@ -7,7 +7,11 @@ DROP TABLE IF EXISTS ba_role_authority;
 DROP TABLE IF EXISTS ba_authority;
 DROP TABLE IF EXISTS ba_user_role;
 DROP TABLE IF EXISTS ba_role;
+DROP TABLE IF EXISTS om_record;
 DROP TABLE IF EXISTS si_label_record;
+DROP TABLE IF EXISTS om_pick_label;
+DROP TABLE IF EXISTS om_label_recommend;
+DROP TABLE IF EXISTS si_storage_label;
 DROP TABLE IF EXISTS sm_receipt_label;
 DROP TABLE IF EXISTS sm_storage_detail;
 DROP TABLE IF EXISTS si_print_label;
@@ -15,6 +19,11 @@ DROP TABLE IF EXISTS sm_storage_group;
 DROP TABLE IF EXISTS si_location;
 DROP TABLE IF EXISTS sm_record;
 DROP TABLE IF EXISTS ba_user;
+DROP TABLE IF EXISTS om_logistics_picture;
+DROP TABLE IF EXISTS om_logistics_record;
+DROP TABLE IF EXISTS om_pick_body;
+DROP TABLE IF EXISTS om_pick_check;
+DROP TABLE IF EXISTS om_pick_head;
 DROP TABLE IF EXISTS sm_iqc_detect;
 DROP TABLE IF EXISTS sm_qe_confirm;
 DROP TABLE IF EXISTS sm_qe_detect;
@@ -110,12 +119,177 @@ CREATE TABLE ba_user_role
 );
 
 
+CREATE TABLE om_label_recommend
+(
+    label_recommend_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    pick_body_id bigint unsigned NOT NULL,
+    storage_material_id bigint unsigned NOT NULL,
+    PRIMARY KEY (label_recommend_id),
+    UNIQUE (label_recommend_id)
+);
+
+
+CREATE TABLE om_logistics_picture
+(
+    logistics_picture_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    logistics_record_id bigint unsigned NOT NULL,
+    picture char(255) NOT NULL,
+    PRIMARY KEY (logistics_picture_id),
+    UNIQUE (logistics_picture_id)
+);
+
+
+CREATE TABLE om_logistics_record
+(
+    logistics_record_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    pick_head_id bigint unsigned NOT NULL,
+    ship_date date,
+    logistics_no char(64),
+    -- 1：到付
+    -- 2：寄付
+    ship_way tinyint COMMENT '1：到付
+2：寄付',
+    remark char(255),
+    create_time datetime,
+    PRIMARY KEY (logistics_record_id),
+    UNIQUE (logistics_record_id),
+    UNIQUE (pick_head_id)
+);
+
+
+CREATE TABLE om_pick_body
+(
+    pick_body_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    pick_head_id bigint unsigned NOT NULL,
+    material_no char(32) NOT NULL,
+    demand_num int,
+    pick_num int,
+    create_time datetime,
+    -- 1：未删除
+    -- 2：已删除
+    dr tinyint COMMENT '1：未删除
+2：已删除',
+    PRIMARY KEY (pick_body_id),
+    UNIQUE (pick_body_id)
+);
+
+
+CREATE TABLE om_pick_check
+(
+    pick_head_id bigint unsigned NOT NULL,
+    remark char(255),
+    -- 1：同意
+    -- 2：驳回-取消发货，退回仓库
+    -- 3：待审核
+    -- 4：驳回-等齐套发货
+    status tinyint COMMENT '1：同意
+2：驳回-取消发货，退回仓库
+3：待审核
+4：驳回-等齐套发货',
+    PRIMARY KEY (pick_head_id),
+    UNIQUE (pick_head_id)
+);
+
+
+CREATE TABLE om_pick_head
+(
+    pick_head_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    pick_no char(64) NOT NULL,
+    -- 1：未处理
+    -- 5：物料拣货
+    -- 10：工单审核|OQC检验
+    -- 15：等齐套发货
+    -- 20：取消发货，退货仓库
+    -- 25：物料出库
+    -- 30：完成出库
+    -- 35：确认出库
+    material_status tinyint COMMENT '1：未处理
+5：物料拣货
+10：工单审核|OQC检验
+15：等齐套发货
+20：取消发货，退货仓库
+25：物料出库
+30：完成出库
+35：确认出库',
+    -- 1：工单拣货单
+    -- 2：成品拣货单
+    pick_type tinyint NOT NULL COMMENT '1：工单拣货单
+2：成品拣货单',
+    work_no char(64),
+    correspond_project char(255),
+    sale_no char(64),
+    plan_time datetime,
+    outbound_time datetime,
+    -- 1：全部出库
+    -- 2：欠料出库
+    -- 3：未出库
+    outbound_status tinyint COMMENT '1：全部出库
+2：欠料出库
+3：未出库',
+    create_time datetime,
+    -- 1：未删除
+    -- 2：已删除
+    dr tinyint COMMENT '1：未删除
+2：已删除',
+    PRIMARY KEY (pick_head_id),
+    UNIQUE (pick_head_id),
+    UNIQUE (pick_no)
+);
+
+
+CREATE TABLE om_pick_label
+(
+    pick_label_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    pick_head_id bigint unsigned NOT NULL,
+    print_label_id bigint unsigned NOT NULL,
+    -- 1：是
+    -- 2：否
+    recommend tinyint COMMENT '1：是
+2：否',
+    PRIMARY KEY (pick_label_id),
+    UNIQUE (pick_label_id)
+);
+
+
+CREATE TABLE om_record
+(
+    label_record_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    pick_head_id bigint unsigned NOT NULL,
+    user_id bigint unsigned NOT NULL,
+    name char(255),
+    type char(255),
+    create_time datetime,
+    -- 1：未处理
+    -- 5：物料拣货
+    -- 10：工单审核|OQC检验
+    -- 15：等齐套发货
+    -- 20：取消发货，退货仓库
+    -- 25：物料出库
+    -- 30：完成出库
+    -- 35：确认出库
+    status tinyint COMMENT '1：未处理
+5：物料拣货
+10：工单审核|OQC检验
+15：等齐套发货
+20：取消发货，退货仓库
+25：物料出库
+30：完成出库
+35：确认出库',
+    PRIMARY KEY (label_record_id),
+    UNIQUE (label_record_id)
+);
+
+
 CREATE TABLE si_label_record
 (
     label_record_id bigint unsigned NOT NULL AUTO_INCREMENT,
     print_label_id bigint unsigned NOT NULL,
     user_id bigint unsigned NOT NULL,
     name char(255),
+    -- 1：入库管理
+    -- 2：出库管理
+    module tinyint COMMENT '1：入库管理
+2：出库管理',
     create_time datetime,
     PRIMARY KEY (label_record_id),
     UNIQUE (label_record_id)
@@ -187,6 +361,21 @@ CREATE TABLE si_print_label
     PRIMARY KEY (print_label_id),
     UNIQUE (print_label_id),
     UNIQUE (package_id)
+);
+
+
+CREATE TABLE si_storage_label
+(
+    storage_material_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    location_no char(32) NOT NULL,
+    print_label_id bigint unsigned NOT NULL,
+    material_no char(32) NOT NULL,
+    package_id char(32),
+    storage_num int,
+    storage_time datetime,
+    PRIMARY KEY (storage_material_id),
+    UNIQUE (storage_material_id),
+    UNIQUE (print_label_id)
 );
 
 
@@ -320,7 +509,8 @@ CREATE TABLE sm_receipt_label
     receipt_body_id bigint unsigned NOT NULL,
     storage_id bigint unsigned,
     PRIMARY KEY (receipt_label_id),
-    UNIQUE (receipt_label_id)
+    UNIQUE (receipt_label_id),
+    UNIQUE (print_label_id)
 );
 
 
@@ -455,6 +645,14 @@ ALTER TABLE ba_user_role
 ;
 
 
+ALTER TABLE om_record
+    ADD FOREIGN KEY (user_id)
+        REFERENCES ba_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
 ALTER TABLE si_label_record
     ADD FOREIGN KEY (user_id)
         REFERENCES ba_user (user_id)
@@ -479,7 +677,71 @@ ALTER TABLE sm_record
 ;
 
 
+ALTER TABLE om_logistics_picture
+    ADD FOREIGN KEY (logistics_record_id)
+        REFERENCES om_logistics_record (logistics_record_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE om_label_recommend
+    ADD FOREIGN KEY (pick_body_id)
+        REFERENCES om_pick_body (pick_body_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE om_logistics_record
+    ADD FOREIGN KEY (pick_head_id)
+        REFERENCES om_pick_head (pick_head_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE om_pick_body
+    ADD FOREIGN KEY (pick_head_id)
+        REFERENCES om_pick_head (pick_head_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE om_pick_check
+    ADD FOREIGN KEY (pick_head_id)
+        REFERENCES om_pick_head (pick_head_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE om_pick_label
+    ADD FOREIGN KEY (pick_head_id)
+        REFERENCES om_pick_head (pick_head_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE om_record
+    ADD FOREIGN KEY (pick_head_id)
+        REFERENCES om_pick_head (pick_head_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
 ALTER TABLE si_print_label
+    ADD FOREIGN KEY (location_no)
+        REFERENCES si_location (location_no)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_storage_label
     ADD FOREIGN KEY (location_no)
         REFERENCES si_location (location_no)
         ON UPDATE RESTRICT
@@ -495,7 +757,23 @@ ALTER TABLE sm_storage_group
 ;
 
 
+ALTER TABLE om_pick_body
+    ADD FOREIGN KEY (material_no)
+        REFERENCES si_material (material_no)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
 ALTER TABLE si_print_label
+    ADD FOREIGN KEY (material_no)
+        REFERENCES si_material (material_no)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_storage_label
     ADD FOREIGN KEY (material_no)
         REFERENCES si_material (material_no)
         ON UPDATE RESTRICT
@@ -506,6 +784,14 @@ ALTER TABLE si_print_label
 ALTER TABLE sm_receipt_body
     ADD FOREIGN KEY (material_no)
         REFERENCES si_material (material_no)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE om_pick_label
+    ADD FOREIGN KEY (print_label_id)
+        REFERENCES si_print_label (print_label_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -527,6 +813,14 @@ ALTER TABLE si_print_label
 ;
 
 
+ALTER TABLE si_storage_label
+    ADD FOREIGN KEY (print_label_id)
+        REFERENCES si_print_label (print_label_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
 ALTER TABLE sm_receipt_label
     ADD FOREIGN KEY (print_label_id)
         REFERENCES si_print_label (print_label_id)
@@ -538,6 +832,14 @@ ALTER TABLE sm_receipt_label
 ALTER TABLE sm_storage_detail
     ADD FOREIGN KEY (print_label_id)
         REFERENCES si_print_label (print_label_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE om_label_recommend
+    ADD FOREIGN KEY (storage_material_id)
+        REFERENCES si_storage_label (storage_material_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
