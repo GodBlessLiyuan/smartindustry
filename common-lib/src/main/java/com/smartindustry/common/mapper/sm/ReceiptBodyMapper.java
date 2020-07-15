@@ -27,7 +27,7 @@ public interface ReceiptBodyMapper extends BaseMapper<ReceiptBodyPO, Long> {
      *
      * @param bodyBOs
      */
-    void batchInsert(List<ReceiptBodyBO> bodyBOs);
+    void batchInsertBO(List<ReceiptBodyBO> bodyBOs);
 
     /**
      * 批量删除

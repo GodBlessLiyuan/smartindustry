@@ -12,12 +12,6 @@ import java.util.List;
  */
 @Mapper
 public interface StorageRecordMapper extends BaseMapper<StorageRecordPO, Long> {
-    /**
-     * 批量插入
-     *
-     * @param recordPOs
-     */
-    void batchInsert(List<StorageRecordPO> recordPOs);
 
     /**
      * 根据 receipt body id 查询

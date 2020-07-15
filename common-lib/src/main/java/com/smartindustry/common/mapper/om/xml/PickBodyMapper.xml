@@ -114,4 +114,8 @@
       dr = #{dr,jdbcType=TINYINT}
     where pick_body_id = #{pickBodyId,jdbcType=BIGINT}
   </update>
+
+  <insert id="batchInsert">
+
+  </insert>
 </mapper>

@@ -4,6 +4,8 @@ import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.om.PickBodyPO;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * PickBodyMapper继承基类
  */

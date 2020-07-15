@@ -6,7 +6,6 @@ import com.smartindustry.common.mapper.om.PickHeadMapper;
 import com.smartindustry.common.mapper.si.StorageLabelMapper;
 import com.smartindustry.common.pojo.om.PickBodyPO;
 import com.smartindustry.common.pojo.om.PickHeadPO;
-import com.smartindustry.common.pojo.si.StorageLabelPO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.dto.PickDTO;
 import com.smartindustry.outbound.service.IErpExternalService;
@@ -42,7 +41,7 @@ public class ErpExternalServiceImpl implements IErpExternalService {
         pickHeadMapper.insert(headPO);
 
         List<PickBodyPO> bodyPOs = PickDTO.convert(headPO, dto.getBody());
-//        pickBodyMapper.batchInsert(bodyPOs);
+        pickBodyMapper.batchInsert(bodyPOs);
 
         return ResultVO.ok();
     }

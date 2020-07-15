@@ -70,6 +70,12 @@ public class PickDTO implements Serializable {
      */
     public static PickBodyPO convert(PickHeadPO headPO, PickBodyDTO dto) {
         PickBodyPO po = new PickBodyPO();
+        po.setPickHeadId(headPO.getPickHeadId());
+        po.setMaterialNo(dto.getMno());
+        po.setDemandNum(dto.getDnum());
+        po.setPickNum(0);
+        po.setCreateTime(new Date());
+        po.setDr((byte) 1);
         return po;
     }
 

@@ -13,13 +13,6 @@ import java.util.List;
 @Mapper
 public interface ReceiptLabelMapper extends BaseMapper<ReceiptLabelPO, Long> {
     /**
-     * 批量插入
-     *
-     * @param rlPOs
-     */
-    void batchInsert(List<ReceiptLabelPO> rlPOs);
-
-    /**
      * 根据 printLabelId 查询
      *
      * @param printLabelId

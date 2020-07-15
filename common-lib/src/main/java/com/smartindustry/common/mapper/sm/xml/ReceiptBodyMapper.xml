@@ -270,7 +270,7 @@
         <if test="rno != null and rno != ''">and rb.receipt_no like '%' #{rno,jdbcType=CHAR} '%'</if>
         <if test="qa and qaStatus != null and qaStatus != 0">and q.status = #{qaStatus,jdbcType=TINYINT}</if>
     </select>
-    <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="receiptBodyId">
+    <insert id="batchInsertBO" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="receiptBodyId">
         insert into sm_receipt_body (receipt_body_id, receipt_head_id, order_no,
         order_type, receipt_no, material_no,
         order_total, accept_num, accept_date,

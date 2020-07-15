@@ -59,7 +59,7 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         receiptHeadMapper.insert(headPO);
 
         List<ReceiptBodyBO> bodyBOs = ReceiptBodyDTO.createPOs(headPO, dto.getBody(), receiptBodyMapper);
-        receiptBodyMapper.batchInsert(bodyBOs);
+        receiptBodyMapper.batchInsertBO(bodyBOs);
 
         // 操作记录
         List<StorageRecordPO> recordPOs = new ArrayList<>(bodyBOs.size());

@@ -11,10 +11,4 @@ import java.util.List;
  */
 @Mapper
 public interface StorageLabelMapper extends BaseMapper<StorageLabelPO, Long> {
-    /**
-     * 批量插入
-     *
-     * @param storageLabelPOs
-     */
-    void batchInsert(List<StorageLabelPO> storageLabelPOs);
 }
