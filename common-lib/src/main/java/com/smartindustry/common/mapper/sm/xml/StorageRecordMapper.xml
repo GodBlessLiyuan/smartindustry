@@ -129,7 +129,7 @@
     </update>
 
     <insert id="batchInsert" parameterType="java.util.List">
-        insert into sm_record (record_id, receipt_body_id, user_id,
+        insert into sm_storage_record (record_id, receipt_body_id, user_id,
         `name`, `type`, create_time, `status`)
         values
         <foreach collection="list" item="po" separator=",">
@@ -141,13 +141,13 @@
     <select id="queryByReceiptBodyId" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from sm_record
+        from sm_storage_record
         where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT} and `status` = #{status,jdbcType=TINYINT}
     </select>
     <select id="queryBySid" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from sm_record
+        from sm_storage_record
         where storage_id = #{sid,jdbcType=BIGINT}
         order by create_time desc
     </select>
