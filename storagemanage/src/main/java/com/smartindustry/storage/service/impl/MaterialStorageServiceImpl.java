@@ -312,7 +312,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         if (!ReceiptConstant.MATERIAL_STORAGE_BEING.equals(storagePO.getStatus())) {
             return new ResultVO(1003);
         }
-        ReceiptBodyPO receiptBodyPO = receiptBodyMapper.queryByBodyId(storagePO.getStorageId());
+        ReceiptBodyPO receiptBodyPO = receiptBodyMapper.queryByBodyId(storagePO.getReceiptBodyId());
         if (null == receiptBodyPO) {
             return new ResultVO(1002);
         }
