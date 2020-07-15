@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.si.StorageLabelMapper">
+    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.StorageLabelPO">
+        <id column="storage_material_id" jdbcType="BIGINT" property="storageMaterialId"/>
+        <result column="location_no" jdbcType="CHAR" property="locationNo"/>
+        <result column="print_label_id" jdbcType="BIGINT" property="printLabelId"/>
+        <result column="material_no" jdbcType="CHAR" property="materialNo"/>
+        <result column="package_id" jdbcType="CHAR" property="packageId"/>
+        <result column="storage_num" jdbcType="INTEGER" property="storageNum"/>
+        <result column="storage_time" jdbcType="TIMESTAMP" property="storageTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        storage_material_id, location_no, print_label_id, material_no, package_id, storage_num,
+    storage_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_storage_label
+        where storage_material_id = #{storageMaterialId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from si_storage_label
+        where storage_material_id = #{storageMaterialId,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.si.StorageLabelPO">
+        insert into si_storage_label (storage_material_id, location_no, print_label_id,
+                                      material_no, package_id, storage_num,
+                                      storage_time)
+        values (#{storageMaterialId,jdbcType=BIGINT}, #{locationNo,jdbcType=CHAR}, #{printLabelId,jdbcType=BIGINT},
+                #{materialNo,jdbcType=CHAR}, #{packageId,jdbcType=CHAR}, #{storageNum,jdbcType=INTEGER},
+                #{storageTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.StorageLabelPO">
+        insert into si_storage_label
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="storageMaterialId != null">
+                storage_material_id,
+            </if>
+            <if test="locationNo != null">
+                location_no,
+            </if>
+            <if test="printLabelId != null">
+                print_label_id,
+            </if>
+            <if test="materialNo != null">
+                material_no,
+            </if>
+            <if test="packageId != null">
+                package_id,
+            </if>
+            <if test="storageNum != null">
+                storage_num,
+            </if>
+            <if test="storageTime != null">
+                storage_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="storageMaterialId != null">
+                #{storageMaterialId,jdbcType=BIGINT},
+            </if>
+            <if test="locationNo != null">
+                #{locationNo,jdbcType=CHAR},
+            </if>
+            <if test="printLabelId != null">
+                #{printLabelId,jdbcType=BIGINT},
+            </if>
+            <if test="materialNo != null">
+                #{materialNo,jdbcType=CHAR},
+            </if>
+            <if test="packageId != null">
+                #{packageId,jdbcType=CHAR},
+            </if>
+            <if test="storageNum != null">
+                #{storageNum,jdbcType=INTEGER},
+            </if>
+            <if test="storageTime != null">
+                #{storageTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.si.StorageLabelPO">
+        update si_storage_label
+        <set>
+            <if test="locationNo != null">
+                location_no = #{locationNo,jdbcType=CHAR},
+            </if>
+            <if test="printLabelId != null">
+                print_label_id = #{printLabelId,jdbcType=BIGINT},
+            </if>
+            <if test="materialNo != null">
+                material_no = #{materialNo,jdbcType=CHAR},
+            </if>
+            <if test="packageId != null">
+                package_id = #{packageId,jdbcType=CHAR},
+            </if>
+            <if test="storageNum != null">
+                storage_num = #{storageNum,jdbcType=INTEGER},
+            </if>
+            <if test="storageTime != null">
+                storage_time = #{storageTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where storage_material_id = #{storageMaterialId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.StorageLabelPO">
+        update si_storage_label
+        set location_no    = #{locationNo,jdbcType=CHAR},
+            print_label_id = #{printLabelId,jdbcType=BIGINT},
+            material_no    = #{materialNo,jdbcType=CHAR},
+            package_id     = #{packageId,jdbcType=CHAR},
+            storage_num    = #{storageNum,jdbcType=INTEGER},
+            storage_time   = #{storageTime,jdbcType=TIMESTAMP}
+        where storage_material_id = #{storageMaterialId,jdbcType=BIGINT}
+    </update>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        insert into si_storage_label (storage_material_id, location_no, print_label_id,
+        material_no, package_id, storage_num,
+        storage_time)
+        values
+        <foreach collection="list" separator="," item="po">
+            (#{po.storageMaterialId,jdbcType=BIGINT}, #{po.locationNo,jdbcType=CHAR},
+            #{po.printLabelId,jdbcType=BIGINT},
+            #{po.materialNo,jdbcType=CHAR}, #{po.packageId,jdbcType=CHAR}, #{po.storageNum,jdbcType=INTEGER},
+            #{po.storageTime,jdbcType=TIMESTAMP})
+        </foreach>
+    </insert>
+</mapper>

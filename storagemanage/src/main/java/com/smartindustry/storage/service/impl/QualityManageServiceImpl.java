@@ -283,6 +283,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
             storagePO.setStatus(ReceiptConstant.MATERIAL_STORAGE_PENDING);
             storagePO.setType(ReceiptConstant.MATERIAL_TYPE_GOOD);
             storagePO.setCreateTime(new Date());
+            storagePO.setDr((byte) 1);
             storageMapper.insert(storagePO);
 
             recordMapper.insert(new RecordPO(rbId, storagePO.getStorageId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
@@ -297,6 +298,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
             storagePO.setStatus(ReceiptConstant.MATERIAL_STORAGE_PENDING);
             storagePO.setType(ReceiptConstant.MATERIAL_TYPE_BAD);
             storagePO.setCreateTime(new Date());
+            storagePO.setDr((byte) 1);
             storageMapper.insert(storagePO);
 
             recordMapper.insert(new RecordPO(rbId, storagePO.getStorageId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));

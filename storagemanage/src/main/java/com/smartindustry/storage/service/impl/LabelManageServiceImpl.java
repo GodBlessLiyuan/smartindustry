@@ -161,7 +161,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
 
             status = ReceiptConstant.RECEIPT_IQC_DETECT;
             bodyPO.setStatus(ReceiptConstant.RECEIPT_IQC_DETECT);
-        } else {
+        } else if (ReceiptConstant.MATERIAL_TYPE_SEMI.equals(bodyPO.getMaterialType())) {
             // 半成品/成品
             QeDetectPO qePO = new QeDetectPO();
             qePO.setReceiptBodyId(rbId);
@@ -170,6 +170,8 @@ public class LabelManageServiceImpl implements ILabelManageService {
 
             status = ReceiptConstant.RECEIPT_QE_DETECT;
             bodyPO.setStatus(ReceiptConstant.RECEIPT_QE_DETECT);
+        } else {
+            return new ResultVO(1002);
         }
 
         // 更新收料单状态

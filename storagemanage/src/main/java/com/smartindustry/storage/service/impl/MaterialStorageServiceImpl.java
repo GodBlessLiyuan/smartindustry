@@ -6,9 +6,11 @@ import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.bo.sm.*;
 import com.smartindustry.common.mapper.si.PrintLabelMapper;
 import com.smartindustry.common.mapper.si.LocationMapper;
+import com.smartindustry.common.mapper.si.StorageLabelMapper;
 import com.smartindustry.common.mapper.sm.*;
 import com.smartindustry.common.pojo.si.LocationPO;
 import com.smartindustry.common.pojo.si.PrintLabelPO;
+import com.smartindustry.common.pojo.si.StorageLabelPO;
 import com.smartindustry.common.pojo.sm.*;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
@@ -56,6 +58,8 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
     private StorageGroupMapper storageGroupMapper;
     @Autowired
     private StorageDetailMapper storageDetailMapper;
+    @Autowired
+    private StorageLabelMapper storageLabelMapper;
 
     @Override
     public ResultVO pageQuery(int pageNum, int pageSize, Map<String, Object> reqData) {
@@ -305,6 +309,9 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         if (!storagePO.getPendingNum().equals(storagePO.getStoredNum())) {
             return new ResultVO(1005);
         }
+        if (!ReceiptConstant.MATERIAL_STORAGE_BEING.equals(storagePO.getStatus())) {
+            return new ResultVO(1003);
+        }
         ReceiptBodyPO receiptBodyPO = receiptBodyMapper.queryByBodyId(storagePO.getStorageId());
         if (null == receiptBodyPO) {
             return new ResultVO(1002);
@@ -318,6 +325,23 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         // 收料单
         receiptBodyPO.setStatus(ReceiptConstant.RECEIPT_STORAGE_FINISH);
         receiptBodyMapper.updateByPrimaryKey(receiptBodyPO);
+
+        // 库位标签，出库管理使用
+        List<StorageGroupBO> storageGroupBOs = storageGroupMapper.queryBySid(storagePO.getStorageId());
+        List<StorageLabelPO> storageLabelPOs = new ArrayList<>();
+        for (StorageGroupBO groupBO : storageGroupBOs) {
+            for (StorageDetailBO detailBO : groupBO.getDetail()) {
+                StorageLabelPO po = new StorageLabelPO();
+                po.setLocationNo(groupBO.getLocationNo());
+                po.setPrintLabelId(detailBO.getPrintLabelId());
+                po.setMaterialNo(detailBO.getMaterialNo());
+                po.setPackageId(detailBO.getPackageId());
+                po.setStorageNum(detailBO.getNum());
+                po.setStorageTime(storagePO.getStorageTime());
+                storageLabelPOs.add(po);
+            }
+        }
+        storageLabelMapper.batchInsert(storageLabelPOs);
 
         // 操作记录
         recordMapper.insert(new RecordPO(sid, storagePO.getStorageId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_CONFIRM, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
