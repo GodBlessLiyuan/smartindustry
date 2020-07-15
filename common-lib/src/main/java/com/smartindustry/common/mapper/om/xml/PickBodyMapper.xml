@@ -1,121 +1,130 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.smartindustry.common.mapper.om.PickBodyMapper">
-  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.om.PickBodyPO">
-    <id column="pick_body_id" jdbcType="BIGINT" property="pickBodyId" />
-    <result column="pick_head_id" jdbcType="BIGINT" property="pickHeadId" />
-    <result column="material_no" jdbcType="CHAR" property="materialNo" />
-    <result column="demand_num" jdbcType="INTEGER" property="demandNum" />
-    <result column="pick_num" jdbcType="INTEGER" property="pickNum" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="dr" jdbcType="TINYINT" property="dr" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    pick_body_id, pick_head_id, material_no, demand_num, pick_num, create_time, dr
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from om_pick_body
-    where pick_body_id = #{pickBodyId,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from om_pick_body
-    where pick_body_id = #{pickBodyId,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.smartindustry.common.pojo.om.PickBodyPO">
-    insert into om_pick_body (pick_body_id, pick_head_id, material_no, 
-      demand_num, pick_num, create_time, 
-      dr)
-    values (#{pickBodyId,jdbcType=BIGINT}, #{pickHeadId,jdbcType=BIGINT}, #{materialNo,jdbcType=CHAR}, 
-      #{demandNum,jdbcType=INTEGER}, #{pickNum,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{dr,jdbcType=TINYINT})
-  </insert>
-  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.om.PickBodyPO">
-    insert into om_pick_body
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="pickBodyId != null">
-        pick_body_id,
-      </if>
-      <if test="pickHeadId != null">
-        pick_head_id,
-      </if>
-      <if test="materialNo != null">
-        material_no,
-      </if>
-      <if test="demandNum != null">
-        demand_num,
-      </if>
-      <if test="pickNum != null">
-        pick_num,
-      </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
-      <if test="dr != null">
-        dr,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="pickBodyId != null">
-        #{pickBodyId,jdbcType=BIGINT},
-      </if>
-      <if test="pickHeadId != null">
-        #{pickHeadId,jdbcType=BIGINT},
-      </if>
-      <if test="materialNo != null">
-        #{materialNo,jdbcType=CHAR},
-      </if>
-      <if test="demandNum != null">
-        #{demandNum,jdbcType=INTEGER},
-      </if>
-      <if test="pickNum != null">
-        #{pickNum,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="dr != null">
-        #{dr,jdbcType=TINYINT},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.om.PickBodyPO">
-    update om_pick_body
-    <set>
-      <if test="pickHeadId != null">
-        pick_head_id = #{pickHeadId,jdbcType=BIGINT},
-      </if>
-      <if test="materialNo != null">
-        material_no = #{materialNo,jdbcType=CHAR},
-      </if>
-      <if test="demandNum != null">
-        demand_num = #{demandNum,jdbcType=INTEGER},
-      </if>
-      <if test="pickNum != null">
-        pick_num = #{pickNum,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="dr != null">
-        dr = #{dr,jdbcType=TINYINT},
-      </if>
-    </set>
-    where pick_body_id = #{pickBodyId,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.om.PickBodyPO">
-    update om_pick_body
-    set pick_head_id = #{pickHeadId,jdbcType=BIGINT},
-      material_no = #{materialNo,jdbcType=CHAR},
-      demand_num = #{demandNum,jdbcType=INTEGER},
-      pick_num = #{pickNum,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      dr = #{dr,jdbcType=TINYINT}
-    where pick_body_id = #{pickBodyId,jdbcType=BIGINT}
-  </update>
+    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.om.PickBodyPO">
+        <id column="pick_body_id" jdbcType="BIGINT" property="pickBodyId"/>
+        <result column="pick_head_id" jdbcType="BIGINT" property="pickHeadId"/>
+        <result column="material_no" jdbcType="CHAR" property="materialNo"/>
+        <result column="demand_num" jdbcType="INTEGER" property="demandNum"/>
+        <result column="pick_num" jdbcType="INTEGER" property="pickNum"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="dr" jdbcType="TINYINT" property="dr"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        pick_body_id, pick_head_id, material_no, demand_num, pick_num, create_time, dr
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from om_pick_body
+        where pick_body_id = #{pickBodyId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from om_pick_body
+        where pick_body_id = #{pickBodyId,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.om.PickBodyPO">
+        insert into om_pick_body (pick_body_id, pick_head_id, material_no,
+                                  demand_num, pick_num, create_time,
+                                  dr)
+        values (#{pickBodyId,jdbcType=BIGINT}, #{pickHeadId,jdbcType=BIGINT}, #{materialNo,jdbcType=CHAR},
+                #{demandNum,jdbcType=INTEGER}, #{pickNum,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
+                #{dr,jdbcType=TINYINT})
+    </insert>
+    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.om.PickBodyPO">
+        insert into om_pick_body
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pickBodyId != null">
+                pick_body_id,
+            </if>
+            <if test="pickHeadId != null">
+                pick_head_id,
+            </if>
+            <if test="materialNo != null">
+                material_no,
+            </if>
+            <if test="demandNum != null">
+                demand_num,
+            </if>
+            <if test="pickNum != null">
+                pick_num,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="dr != null">
+                dr,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="pickBodyId != null">
+                #{pickBodyId,jdbcType=BIGINT},
+            </if>
+            <if test="pickHeadId != null">
+                #{pickHeadId,jdbcType=BIGINT},
+            </if>
+            <if test="materialNo != null">
+                #{materialNo,jdbcType=CHAR},
+            </if>
+            <if test="demandNum != null">
+                #{demandNum,jdbcType=INTEGER},
+            </if>
+            <if test="pickNum != null">
+                #{pickNum,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dr != null">
+                #{dr,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.om.PickBodyPO">
+        update om_pick_body
+        <set>
+            <if test="pickHeadId != null">
+                pick_head_id = #{pickHeadId,jdbcType=BIGINT},
+            </if>
+            <if test="materialNo != null">
+                material_no = #{materialNo,jdbcType=CHAR},
+            </if>
+            <if test="demandNum != null">
+                demand_num = #{demandNum,jdbcType=INTEGER},
+            </if>
+            <if test="pickNum != null">
+                pick_num = #{pickNum,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dr != null">
+                dr = #{dr,jdbcType=TINYINT},
+            </if>
+        </set>
+        where pick_body_id = #{pickBodyId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.om.PickBodyPO">
+        update om_pick_body
+        set pick_head_id = #{pickHeadId,jdbcType=BIGINT},
+            material_no  = #{materialNo,jdbcType=CHAR},
+            demand_num   = #{demandNum,jdbcType=INTEGER},
+            pick_num     = #{pickNum,jdbcType=INTEGER},
+            create_time  = #{createTime,jdbcType=TIMESTAMP},
+            dr           = #{dr,jdbcType=TINYINT}
+        where pick_body_id = #{pickBodyId,jdbcType=BIGINT}
+    </update>
 
-  <insert id="batchInsert">
-
-  </insert>
+    <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="pickBodyId">
+        insert into om_pick_body (pick_body_id, pick_head_id, material_no,
+        demand_num, pick_num, create_time,
+        dr)
+        values
+        <foreach collection="list" separator="," item="po">
+            (#{po.pickBodyId,jdbcType=BIGINT}, #{po.pickHeadId,jdbcType=BIGINT}, #{po.materialNo,jdbcType=CHAR},
+            #{po.demandNum,jdbcType=INTEGER}, #{po.pickNum,jdbcType=INTEGER}, #{po.createTime,jdbcType=TIMESTAMP},
+            #{po.dr,jdbcType=TINYINT})
+        </foreach>
+    </insert>
 </mapper>

@@ -123,7 +123,7 @@ CREATE TABLE om_label_recommend
 (
     label_recommend_id bigint unsigned NOT NULL AUTO_INCREMENT,
     pick_body_id bigint unsigned NOT NULL,
-    storage_material_id bigint unsigned NOT NULL,
+    storage_label_id bigint unsigned NOT NULL,
     PRIMARY KEY (label_recommend_id),
     UNIQUE (label_recommend_id)
 );
@@ -367,7 +367,7 @@ CREATE TABLE si_print_label
 
 CREATE TABLE si_storage_label
 (
-    storage_material_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    storage_label_id bigint unsigned NOT NULL AUTO_INCREMENT,
     location_no char(32) NOT NULL,
     material_no char(32) NOT NULL,
     print_label_id bigint unsigned NOT NULL,
@@ -385,8 +385,8 @@ CREATE TABLE si_storage_label
 2£º·ÇÁ¼Æ·',
     storage_num int,
     storage_time datetime,
-    PRIMARY KEY (storage_material_id),
-    UNIQUE (storage_material_id),
+    PRIMARY KEY (storage_label_id),
+    UNIQUE (storage_label_id),
     UNIQUE (print_label_id)
 );
 
@@ -850,8 +850,8 @@ ALTER TABLE sm_storage_detail
 
 
 ALTER TABLE om_label_recommend
-    ADD FOREIGN KEY (storage_material_id)
-        REFERENCES si_storage_label (storage_material_id)
+    ADD FOREIGN KEY (storage_label_id)
+        REFERENCES si_storage_label (storage_label_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;

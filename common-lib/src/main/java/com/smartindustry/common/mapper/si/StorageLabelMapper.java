@@ -11,4 +11,12 @@ import java.util.List;
  */
 @Mapper
 public interface StorageLabelMapper extends BaseMapper<StorageLabelPO, Long> {
+    /**
+     * 查询尚未推荐的入库标签
+     *
+     * @param orderNo
+     * @param materialNo
+     * @return
+     */
+    List<StorageLabelPO> queryNotRecommend(String orderNo, String materialNo);
 }

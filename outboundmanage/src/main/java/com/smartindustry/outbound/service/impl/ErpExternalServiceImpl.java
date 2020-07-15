@@ -4,8 +4,11 @@ import com.smartindustry.common.mapper.om.LabelRecommendMapper;
 import com.smartindustry.common.mapper.om.PickBodyMapper;
 import com.smartindustry.common.mapper.om.PickHeadMapper;
 import com.smartindustry.common.mapper.si.StorageLabelMapper;
+import com.smartindustry.common.pojo.om.LabelRecommendPO;
 import com.smartindustry.common.pojo.om.PickBodyPO;
 import com.smartindustry.common.pojo.om.PickHeadPO;
+import com.smartindustry.common.pojo.si.LabelRecordPO;
+import com.smartindustry.common.pojo.si.StorageLabelPO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.dto.PickDTO;
 import com.smartindustry.outbound.service.IErpExternalService;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,6 +46,20 @@ public class ErpExternalServiceImpl implements IErpExternalService {
 
         List<PickBodyPO> bodyPOs = PickDTO.convert(headPO, dto.getBody());
         pickBodyMapper.batchInsert(bodyPOs);
+
+        // 推荐货位
+        new Thread(() -> {
+            List<LabelRecommendPO> recommendPOs = new ArrayList<>();
+            for (PickBodyPO bodyPO : bodyPOs) {
+                List<StorageLabelPO> storageLabelPOs = storageLabelMapper.queryNotRecommend(headPO.getOrderNo(), bodyPO.getMaterialNo());
+                int num = 0;
+                for (StorageLabelPO storageLabelPO : storageLabelPOs) {
+                    LabelRecommendPO labelRecommendPO = new LabelRecommendPO();
+                    labelRecommendPO.setPickBodyId(bodyPO.getPickBodyId());
+//                    labelRecommendPO.
+                }
+            }
+        }).start();
 
         return ResultVO.ok();
     }
