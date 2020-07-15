@@ -379,6 +379,10 @@ CREATE TABLE si_storage_label
     order_type tinyint COMMENT '1：PO单收料
 2：样品采购
 3：生产退料',
+    -- 1：良品
+    -- 2：非良品
+    type tinyint COMMENT '1：良品
+2：非良品',
     storage_num int,
     storage_time datetime,
     PRIMARY KEY (storage_material_id),

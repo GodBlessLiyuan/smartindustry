@@ -338,6 +338,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
                 po.setPackageId(detailBO.getPackageId());
                 po.setOrderNo(receiptBodyPO.getOrderNo());
                 po.setOrderType(receiptBodyPO.getOrderType());
+                po.setType(storagePO.getType());
                 po.setStorageNum(detailBO.getNum());
                 po.setStorageTime(storagePO.getStorageTime());
                 storageLabelPOs.add(po);

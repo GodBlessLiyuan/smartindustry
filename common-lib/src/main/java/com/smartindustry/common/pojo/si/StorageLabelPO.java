@@ -29,6 +29,12 @@ public class StorageLabelPO implements Serializable {
      */
     private Byte orderType;
 
+    /**
+     * 1：良品
+2：非良品
+     */
+    private Byte type;
+
     private Integer storageNum;
 
     private Date storageTime;
