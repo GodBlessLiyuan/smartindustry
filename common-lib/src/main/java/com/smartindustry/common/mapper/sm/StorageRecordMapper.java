@@ -1,7 +1,6 @@
 package com.smartindustry.common.mapper.sm;
 
 import com.smartindustry.common.mapper.BaseMapper;
-import com.smartindustry.common.pojo.sm.RecordPO;
 import com.smartindustry.common.pojo.sm.StorageRecordPO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -18,7 +17,7 @@ public interface StorageRecordMapper extends BaseMapper<StorageRecordPO, Long> {
      *
      * @param recordPOs
      */
-    void batchInsert(List<RecordPO> recordPOs);
+    void batchInsert(List<StorageRecordPO> recordPOs);
 
     /**
      * 根据 receipt body id 查询
@@ -26,7 +25,7 @@ public interface StorageRecordMapper extends BaseMapper<StorageRecordPO, Long> {
      * @param receiptBodyId
      * @return
      */
-    List<RecordPO> queryByReceiptBodyId(@Param("receiptBodyId") Long receiptBodyId, @Param("status") Byte status);
+    List<StorageRecordPO> queryByReceiptBodyId(@Param("receiptBodyId") Long receiptBodyId, @Param("status") Byte status);
 
     /**
      * 根据 storageId 查询
@@ -34,5 +33,5 @@ public interface StorageRecordMapper extends BaseMapper<StorageRecordPO, Long> {
      * @param sid
      * @return
      */
-    List<RecordPO> queryBySid(Byte sid);
+    List<StorageRecordPO> queryBySid(Byte sid);
 }

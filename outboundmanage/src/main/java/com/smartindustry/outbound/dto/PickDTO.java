@@ -54,10 +54,10 @@ public class PickDTO implements Serializable {
      * @param dtos
      * @return
      */
-    public static List<PickBodyPO> convert(List<PickBodyDTO> dtos) {
+    public static List<PickBodyPO> convert(PickHeadPO headPO, List<PickBodyDTO> dtos) {
         List<PickBodyPO> bodyPOs = new ArrayList<>();
         for (PickBodyDTO dto : dtos) {
-            bodyPOs.add(convert(dto));
+            bodyPOs.add(convert(headPO, dto));
         }
         return bodyPOs;
     }
@@ -68,7 +68,7 @@ public class PickDTO implements Serializable {
      * @param dto
      * @return
      */
-    public static PickBodyPO convert(PickBodyDTO dto) {
+    public static PickBodyPO convert(PickHeadPO headPO, PickBodyDTO dto) {
         PickBodyPO po = new PickBodyPO();
         return po;
     }

@@ -29,7 +29,8 @@
         from om_pick_head
         where pick_head_id = #{pickHeadId,jdbcType=BIGINT}
     </delete>
-    <insert id="insert" parameterType="com.smartindustry.common.pojo.om.PickHeadPO">
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.om.PickHeadPO" useGeneratedKeys="true"
+            keyProperty="pickHeadId">
         insert into om_pick_head (pick_head_id, pick_no, order_no,
                                   order_type, material_status, correspond_project,
                                   plan_time, outbound_time, outbound_status,

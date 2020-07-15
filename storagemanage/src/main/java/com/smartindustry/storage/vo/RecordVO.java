@@ -1,6 +1,6 @@
 package com.smartindustry.storage.vo;
 
-import com.smartindustry.common.pojo.sm.RecordPO;
+import com.smartindustry.common.pojo.sm.StorageRecordPO;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -37,9 +37,9 @@ public class RecordVO implements Serializable {
      * @param pos
      * @return
      */
-    public static List<RecordVO> convert(List<RecordPO> pos) {
+    public static List<RecordVO> convert(List<StorageRecordPO> pos) {
         List<RecordVO> vos = new ArrayList<>(pos.size());
-        for (RecordPO po : pos) {
+        for (StorageRecordPO po : pos) {
             vos.add(convert(po));
         }
         return vos;
@@ -51,7 +51,7 @@ public class RecordVO implements Serializable {
      * @param po
      * @return
      */
-    public static RecordVO convert(RecordPO po) {
+    public static RecordVO convert(StorageRecordPO po) {
         RecordVO vo = new RecordVO();
         vo.setName(po.getName());
         vo.setType(po.getType());

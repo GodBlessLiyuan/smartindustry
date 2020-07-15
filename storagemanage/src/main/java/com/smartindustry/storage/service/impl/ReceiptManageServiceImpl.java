@@ -9,7 +9,7 @@ import com.smartindustry.common.mapper.si.LabelRecordMapper;
 import com.smartindustry.common.mapper.sm.*;
 import com.smartindustry.common.pojo.sm.ReceiptBodyPO;
 import com.smartindustry.common.pojo.sm.ReceiptHeadPO;
-import com.smartindustry.common.pojo.sm.RecordPO;
+import com.smartindustry.common.pojo.sm.StorageRecordPO;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.ReceiptConstant;
@@ -62,9 +62,9 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         receiptBodyMapper.batchInsert(bodyBOs);
 
         // 操作记录
-        List<RecordPO> recordPOs = new ArrayList<>(bodyBOs.size());
+        List<StorageRecordPO> recordPOs = new ArrayList<>(bodyBOs.size());
         for (ReceiptBodyBO bodyBO : bodyBOs) {
-            recordPOs.add(new RecordPO(bodyBO.getReceiptBodyId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_ADD, ReceiptConstant.RECEIPT_ENTRY_LABEL));
+            recordPOs.add(new StorageRecordPO(bodyBO.getReceiptBodyId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_ADD, ReceiptConstant.RECEIPT_ENTRY_LABEL));
         }
         recordMapper.batchInsert(recordPOs);
 
@@ -93,7 +93,7 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
     public ResultVO record(Long rbId, Byte status) {
         Map<String, Object> res = new HashMap<>();
         // 操作记录
-        List<RecordPO> recordPOs = recordMapper.queryByReceiptBodyId(rbId, status);
+        List<StorageRecordPO> recordPOs = recordMapper.queryByReceiptBodyId(rbId, status);
         res.put("record", RecordVO.convert(recordPOs));
 
         // 物流信息
