@@ -14,6 +14,14 @@ public class PickHeadPO implements Serializable {
 
     private String pickNo;
 
+    private String orderNo;
+
+    /**
+     * 1：工单
+2：销售订单
+     */
+    private Byte orderType;
+
     /**
      * 1：未处理
 5：物料拣货
@@ -26,17 +34,7 @@ public class PickHeadPO implements Serializable {
      */
     private Byte materialStatus;
 
-    /**
-     * 1：工单拣货单
-2：成品拣货单
-     */
-    private Byte pickType;
-
-    private String workNo;
-
     private String correspondProject;
-
-    private String saleNo;
 
     private Date planTime;
 
