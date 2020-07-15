@@ -3,12 +3,9 @@ package com.smartindustry.storage.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.storage.StorageApplication;
 import com.smartindustry.storage.vo.ReceiptVO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -18,7 +15,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * @author: velve
@@ -64,19 +62,96 @@ public class MaterialStorageControllerTest extends BaseTest {
     }
 
     @Test
-    public void label() {
+    public void label() throws Exception {
+        {
+            //StorageGroupDTO
+            String reqData = "{" +
+                    "\"sid\": 1," +
+                    "\"rbid\": 1," +
+                    "\"sgid\": 1," +
+                    "\"lno\": \"8-12\"," +
+                    "\"pid\": \"2020071500002\"" +
+                    "}";
+
+            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/storage/label")
+                    .contentType(MediaType.APPLICATION_JSON).content(reqData))
+                    .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+            ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+            assertNotNull(resultVO.getStatus());
+
+            /**
+             异常情况1：printLabelId 不为null 返回status：2000
+             */
+            assertEquals(Integer.valueOf(2000), resultVO.getStatus());
+
+        }
     }
 
     @Test
-    public void edit() {
+    public void edit() throws Exception {
+        {
+            //StorageDetailDTO
+            String reqData = "{" +
+                    "\"sid\": 1," +
+                    "\"sgid\": 1," +
+                    "\"sdid\": 1," +
+                    "\"plid\": 2" +
+                    "}";
+
+            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/storage/edit")
+                    .contentType(MediaType.APPLICATION_JSON).content(reqData))
+                    .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+            ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+            assertNotNull(resultVO.getStatus());
+            assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+        }
+    }
+
+
+    @Test
+    public void delete() throws Exception {
+        {
+            //StorageDetailDTO
+            String reqData = "{" +
+                    "\"sid\": 1," +
+                    "\"sgid\": 1," +
+                    "\"sdid\": 1," +
+                    "\"plid\": 2" +
+                    "}";
+
+            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/storage/delete")
+                    .contentType(MediaType.APPLICATION_JSON).content(reqData))
+                    .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+            ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+            assertNotNull(resultVO.getStatus());
+            assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+        }
     }
 
     @Test
-    public void delete() {
-    }
+    public void save() throws Exception {
+        {
+            //StorageGroupDTO
+            String reqData = "{" +
+                    "\"sid\": 1," +
+                    "\"rbid\": 1," +
+                    "\"sgid\": 1," +
+                    "\"lno\": \"8-12\"," +
+                    "\"pid\": \"2020071500002\"" +
+                    "}";
 
-    @Test
-    public void save() {
+            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/storage/save")
+                    .contentType(MediaType.APPLICATION_JSON).content(reqData))
+                    .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+            ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+            assertNotNull(resultVO.getStatus());
+            assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+
+        }
     }
 
     @Test

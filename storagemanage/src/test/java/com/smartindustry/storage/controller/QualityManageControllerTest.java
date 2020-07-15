@@ -30,6 +30,7 @@ import static org.junit.Assert.assertNotNull;
 public class QualityManageControllerTest extends BaseTest {
 
     @Test
+
     public void pageQuery() throws Exception {
         {
             MvcResult res = mockMvc.perform(MockMvcRequestBuilders.get("/quality/pageQuery")
@@ -48,27 +49,25 @@ public class QualityManageControllerTest extends BaseTest {
 
     @Test
     public void iqcTest() throws Exception {
-//        {
-//            //IqcTestDTO
-//            String reqData = "{" +
-//                    "\"rbid\": 103," +
-//                    "\"status\": 3,"+
-//                    "\"gnum\": 300," +
-//                    "\"bnum\": 700"+
-//                    "}";
-//
-//            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/quality/iqcTest")
-//                    .contentType(MediaType.APPLICATION_JSON)
-//                    .content(reqData))
-//                    .andDo(MockMvcResultHandlers.print())
-//                    .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
-//
-//            ResultVO<ReceiptVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
-//            assertNotNull(resultVO.getStatus());
-//            assertEquals(Integer.valueOf(1000), resultVO.getStatus());
-//            //
-//
-//        }
+        {
+            //IqcTestDTO
+            String reqData = "{" +
+                    "\"rbid\": 11," +
+                    "\"status\": 3" +
+                    "}";
+
+            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/quality/iqcTest")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(reqData))
+                    .andDo(MockMvcResultHandlers.print())
+                    .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+            ResultVO<ReceiptVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+            assertNotNull(resultVO.getStatus());
+            assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+            //
+
+        }
     }
 
     @Test
@@ -76,10 +75,8 @@ public class QualityManageControllerTest extends BaseTest {
 //        {
 //            //QeConfirmDTO
 //            String reqData = "{" +
-//                    "\"rbid\": 204," +
-//                    "\"status\": 3," +
-//                    "\"num\": ," +
-//                    "\"remark\": \"\"" +
+//                    "\"rbid\": 13," +
+//                    "\"status\": 3" +
 //                    "}";
 //
 //            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/quality/qeConfirm")
@@ -98,11 +95,9 @@ public class QualityManageControllerTest extends BaseTest {
 //        {
 //            //QeTestDTO
 //            String reqData = "{" +
-//                    "\"rbid\": 223," +
-//                    "\"status\": 1," +
-//                    "\"gnum\": 320," +
-//                    "\"bnum\": 160," +
-//                    "\"remark\": \"测试修改后的允许操作\"" +
+//                    "\"rbid\": 12," +
+//                    "\"status\": 3," +
+//                    "\"remark\": \"\"" +
 //                    "}";
 //
 //            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/quality/qeTest")
@@ -118,16 +113,16 @@ public class QualityManageControllerTest extends BaseTest {
 
     @Test
     public void storage() throws Exception {
-        {
-            //传入数据 Long rbid
-            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.get("/quality/storage")
-                    .contentType(MediaType.APPLICATION_JSON).content(String.valueOf(134L)))
-                    .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
-
-            ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
-            assertNotNull(resultVO.getStatus());
-            assertEquals(Integer.valueOf(1000), resultVO.getStatus());
-        }
+//        {
+//            //传入数据 Long rbid
+//            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.get("/quality/storage")
+//                    .contentType(MediaType.APPLICATION_JSON).param("rbid",String.valueOf(4)))
+//                    .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+//
+//            ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+//            assertNotNull(resultVO.getStatus());
+//            assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+//        }
     }
 
     @Test
