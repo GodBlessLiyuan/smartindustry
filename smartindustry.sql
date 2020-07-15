@@ -229,22 +229,24 @@ CREATE TABLE om_pick_head
     -- 2：销售订单
     order_type tinyint NOT NULL COMMENT '1：工单
 2：销售订单',
-    -- 1：未处理
-    -- 5：物料拣货
-    -- 10：工单审核|OQC检验
-    -- 15：等齐套发货
-    -- 20：取消发货，退货仓库
-    -- 25：物料出库
-    -- 30：完成出库
-    -- 35：确认出库
-    material_status tinyint COMMENT '1：未处理
-5：物料拣货
-10：工单审核|OQC检验
-15：等齐套发货
-20：取消发货，退货仓库
-25：物料出库
-30：完成出库
-35：确认出库',
+    -- 1：待推荐
+    -- 5：未处理
+    -- 10：物料拣货
+    -- 15：工单审核|OQC检验
+    -- 20：等齐套发货
+    -- 25：取消发货，退货仓库
+    -- 30：物料出库
+    -- 35：完成出库
+    -- 40：确认出库
+    material_status tinyint COMMENT '1：待推荐
+5：未处理
+10：物料拣货
+15：工单审核|OQC检验
+20：等齐套发货
+25：取消发货，退货仓库
+30：物料出库
+35：完成出库
+40：确认出库',
     correspond_project char(255),
     plan_time datetime,
     outbound_time datetime,
