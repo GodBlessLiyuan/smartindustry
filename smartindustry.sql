@@ -159,7 +159,7 @@ CREATE TABLE om_logistics_record
 
 CREATE TABLE om_outbound_record
 (
-    label_record_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    record_id bigint unsigned NOT NULL AUTO_INCREMENT,
     pick_head_id bigint unsigned NOT NULL,
     user_id bigint unsigned NOT NULL,
     name char(255),
@@ -181,8 +181,8 @@ CREATE TABLE om_outbound_record
 25：物料出库
 30：完成出库
 35：确认出库',
-    PRIMARY KEY (label_record_id),
-    UNIQUE (label_record_id)
+    PRIMARY KEY (record_id),
+    UNIQUE (record_id)
 );
 
 

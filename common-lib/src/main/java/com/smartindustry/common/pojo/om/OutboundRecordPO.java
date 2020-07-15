@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @Data
 public class OutboundRecordPO implements Serializable {
-    private Long labelRecordId;
+    private Long recordId;
 
     private Long pickHeadId;
 

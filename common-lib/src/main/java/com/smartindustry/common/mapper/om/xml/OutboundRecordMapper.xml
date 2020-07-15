@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.smartindustry.common.mapper.om.OutboundRecordMapper">
   <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.om.OutboundRecordPO">
-    <id column="label_record_id" jdbcType="BIGINT" property="labelRecordId" />
+    <id column="record_id" jdbcType="BIGINT" property="recordId" />
     <result column="pick_head_id" jdbcType="BIGINT" property="pickHeadId" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
     <result column="name" jdbcType="CHAR" property="name" />
@@ -11,31 +11,31 @@
     <result column="status" jdbcType="TINYINT" property="status" />
   </resultMap>
   <sql id="Base_Column_List">
-    label_record_id, pick_head_id, user_id, `name`, `type`, create_time, `status`
+    record_id, pick_head_id, user_id, `name`, `type`, create_time, `status`
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from om_outbound_record
-    where label_record_id = #{labelRecordId,jdbcType=BIGINT}
+    where record_id = #{recordId,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from om_outbound_record
-    where label_record_id = #{labelRecordId,jdbcType=BIGINT}
+    where record_id = #{recordId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.smartindustry.common.pojo.om.OutboundRecordPO">
-    insert into om_outbound_record (label_record_id, pick_head_id, user_id, 
+    insert into om_outbound_record (record_id, pick_head_id, user_id, 
       `name`, `type`, create_time, 
       `status`)
-    values (#{labelRecordId,jdbcType=BIGINT}, #{pickHeadId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
+    values (#{recordId,jdbcType=BIGINT}, #{pickHeadId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
       #{name,jdbcType=CHAR}, #{type,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{status,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.om.OutboundRecordPO">
     insert into om_outbound_record
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="labelRecordId != null">
-        label_record_id,
+      <if test="recordId != null">
+        record_id,
       </if>
       <if test="pickHeadId != null">
         pick_head_id,
@@ -57,8 +57,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="labelRecordId != null">
-        #{labelRecordId,jdbcType=BIGINT},
+      <if test="recordId != null">
+        #{recordId,jdbcType=BIGINT},
       </if>
       <if test="pickHeadId != null">
         #{pickHeadId,jdbcType=BIGINT},
@@ -102,7 +102,7 @@
         `status` = #{status,jdbcType=TINYINT},
       </if>
     </set>
-    where label_record_id = #{labelRecordId,jdbcType=BIGINT}
+    where record_id = #{recordId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.om.OutboundRecordPO">
     update om_outbound_record
@@ -112,6 +112,6 @@
       `type` = #{type,jdbcType=CHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       `status` = #{status,jdbcType=TINYINT}
-    where label_record_id = #{labelRecordId,jdbcType=BIGINT}
+    where record_id = #{recordId,jdbcType=BIGINT}
   </update>
 </mapper>
