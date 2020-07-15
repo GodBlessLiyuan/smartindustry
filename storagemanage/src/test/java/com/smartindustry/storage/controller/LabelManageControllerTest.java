@@ -78,26 +78,47 @@ public class LabelManageControllerTest extends BaseTest {
 
     @Test
     public void insert() throws Exception {
-//        {
-//            //PrintLabelDto
-//            String reqData = "{" +
-//                    "\"rbid\": 5," +
-//                    "\"mno\": \"2020071000003\"," +
-//                    "\"scode\": \"20200708\"," +
-//                    "\"pdate\": \"202007085\"," +
-//                    "\"pbatch\": 300," +
-//                    "\"mnum\": \"2020071000001\"," +
-//                    "\"pnum\": \"2020-07-10 11:24:21\"" +
-//                    "}";
-//            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/label/insert")
-//                    .contentType(MediaType.APPLICATION_JSON)
-//                    .content(reqData))
-//                    .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
-//
-//            ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
-//            assertNotNull(resultVO.getStatus());
-//            assertEquals(Integer.valueOf(1000),resultVO.getStatus());
-//        }
+        {
+            //PrintLabelDto
+            /**
+             手动录入
+             */
+            String reqData = "{" +
+                    "\"rbid\": 1," +
+                    "\"mno\": \"5101000496\"," +
+                    "\"scode\": \"\"," +
+                    "\"pdate\": \"20200708\"," +
+                    "\"pbatch\": \"20200708\"," +
+                    "\"mnum\": 500," +
+                    "\"pnum\": 2" +
+                    "}";
+            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/label/insert")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(reqData))
+                    .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+            ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+            assertNotNull(resultVO.getStatus());
+            assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+
+        }
+        {
+            //PrintLabelDto
+            /**
+             扫描录入
+             */
+            String reqData1 = "{" +
+                    "\"scode\": \"123131231\"" +
+                    "}";
+            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/label/insert")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(reqData1))
+                    .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+            ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+            assertNotNull(resultVO.getStatus());
+            assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+        }
     }
 
     @Test
@@ -116,36 +137,34 @@ public class LabelManageControllerTest extends BaseTest {
 
     @Test
     public void finish() throws Exception {
-//        {
-//            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.get("/label/finish")
-//                    .contentType(MediaType.APPLICATION_JSON).param("rbid", String.valueOf(17)))
-//                    .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
-//
-//            ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
-//            assertNotNull(resultVO.getStatus());
-//            assertEquals(Integer.valueOf(1000),resultVO.getStatus());
-//        }
+        {
+            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.get("/label/finish")
+                    .contentType(MediaType.APPLICATION_JSON).param("rbid", String.valueOf(204)))
+                    .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+            ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+            assertNotNull(resultVO.getStatus());
+            assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+        }
     }
 
     @Test
     public void split() throws Exception {
-//        {
-//            //LabelSplitDTO
-//            String reqData = "{" +
-//                    "\"plid\": 9," +
-//                    "\"gnum\": 500," +
-//                    "\"bnum\": 500" +
-//                    "}";
-//            System.out.println(reqData);
-//            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/label/split")
-//                    .contentType(MediaType.APPLICATION_JSON).content(reqData))
-//                    .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
-//            System.out.println(res);
-//            ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
-//            assertNotNull(resultVO.getStatus());
-//            assertEquals(Integer.valueOf(1000), resultVO.getStatus());
-//
-//
-//        }
+        {
+            //LabelSplitDTO
+            String reqData = "{" +
+                    "\"plid\": 44," +
+                    "\"gnum\": 800," +
+                    "\"bnum\": 200" +
+                    "}";
+            System.out.println(reqData);
+            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/label/split")
+                    .contentType(MediaType.APPLICATION_JSON).content(reqData))
+                    .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+            System.out.println(res);
+            ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+            assertNotNull(resultVO.getStatus());
+            assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+        }
     }
 }
