@@ -4,15 +4,17 @@
     <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.StorageLabelPO">
         <id column="storage_material_id" jdbcType="BIGINT" property="storageMaterialId"/>
         <result column="location_no" jdbcType="CHAR" property="locationNo"/>
-        <result column="print_label_id" jdbcType="BIGINT" property="printLabelId"/>
         <result column="material_no" jdbcType="CHAR" property="materialNo"/>
+        <result column="print_label_id" jdbcType="BIGINT" property="printLabelId"/>
         <result column="package_id" jdbcType="CHAR" property="packageId"/>
+        <result column="order_no" jdbcType="CHAR" property="orderNo"/>
+        <result column="order_type" jdbcType="TINYINT" property="orderType"/>
         <result column="storage_num" jdbcType="INTEGER" property="storageNum"/>
         <result column="storage_time" jdbcType="TIMESTAMP" property="storageTime"/>
     </resultMap>
     <sql id="Base_Column_List">
-        storage_material_id, location_no, print_label_id, material_no, package_id, storage_num,
-    storage_time
+        storage_material_id, location_no, material_no, print_label_id, package_id, order_no,
+    order_type, storage_num, storage_time
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
@@ -26,12 +28,12 @@
         where storage_material_id = #{storageMaterialId,jdbcType=BIGINT}
     </delete>
     <insert id="insert" parameterType="com.smartindustry.common.pojo.si.StorageLabelPO">
-        insert into si_storage_label (storage_material_id, location_no, print_label_id,
-                                      material_no, package_id, storage_num,
-                                      storage_time)
-        values (#{storageMaterialId,jdbcType=BIGINT}, #{locationNo,jdbcType=CHAR}, #{printLabelId,jdbcType=BIGINT},
-                #{materialNo,jdbcType=CHAR}, #{packageId,jdbcType=CHAR}, #{storageNum,jdbcType=INTEGER},
-                #{storageTime,jdbcType=TIMESTAMP})
+        insert into si_storage_label (storage_material_id, location_no, material_no,
+                                      print_label_id, package_id, order_no,
+                                      order_type, storage_num, storage_time)
+        values (#{storageMaterialId,jdbcType=BIGINT}, #{locationNo,jdbcType=CHAR}, #{materialNo,jdbcType=CHAR},
+                #{printLabelId,jdbcType=BIGINT}, #{packageId,jdbcType=CHAR}, #{orderNo,jdbcType=CHAR},
+                #{orderType,jdbcType=TINYINT}, #{storageNum,jdbcType=INTEGER}, #{storageTime,jdbcType=TIMESTAMP})
     </insert>
     <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.StorageLabelPO">
         insert into si_storage_label
@@ -42,14 +44,20 @@
             <if test="locationNo != null">
                 location_no,
             </if>
-            <if test="printLabelId != null">
-                print_label_id,
-            </if>
             <if test="materialNo != null">
                 material_no,
             </if>
+            <if test="printLabelId != null">
+                print_label_id,
+            </if>
             <if test="packageId != null">
                 package_id,
+            </if>
+            <if test="orderNo != null">
+                order_no,
+            </if>
+            <if test="orderType != null">
+                order_type,
             </if>
             <if test="storageNum != null">
                 storage_num,
@@ -65,14 +73,20 @@
             <if test="locationNo != null">
                 #{locationNo,jdbcType=CHAR},
             </if>
-            <if test="printLabelId != null">
-                #{printLabelId,jdbcType=BIGINT},
-            </if>
             <if test="materialNo != null">
                 #{materialNo,jdbcType=CHAR},
             </if>
+            <if test="printLabelId != null">
+                #{printLabelId,jdbcType=BIGINT},
+            </if>
             <if test="packageId != null">
                 #{packageId,jdbcType=CHAR},
+            </if>
+            <if test="orderNo != null">
+                #{orderNo,jdbcType=CHAR},
+            </if>
+            <if test="orderType != null">
+                #{orderType,jdbcType=TINYINT},
             </if>
             <if test="storageNum != null">
                 #{storageNum,jdbcType=INTEGER},
@@ -88,14 +102,20 @@
             <if test="locationNo != null">
                 location_no = #{locationNo,jdbcType=CHAR},
             </if>
-            <if test="printLabelId != null">
-                print_label_id = #{printLabelId,jdbcType=BIGINT},
-            </if>
             <if test="materialNo != null">
                 material_no = #{materialNo,jdbcType=CHAR},
             </if>
+            <if test="printLabelId != null">
+                print_label_id = #{printLabelId,jdbcType=BIGINT},
+            </if>
             <if test="packageId != null">
                 package_id = #{packageId,jdbcType=CHAR},
+            </if>
+            <if test="orderNo != null">
+                order_no = #{orderNo,jdbcType=CHAR},
+            </if>
+            <if test="orderType != null">
+                order_type = #{orderType,jdbcType=TINYINT},
             </if>
             <if test="storageNum != null">
                 storage_num = #{storageNum,jdbcType=INTEGER},
@@ -109,24 +129,25 @@
     <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.StorageLabelPO">
         update si_storage_label
         set location_no    = #{locationNo,jdbcType=CHAR},
-            print_label_id = #{printLabelId,jdbcType=BIGINT},
             material_no    = #{materialNo,jdbcType=CHAR},
+            print_label_id = #{printLabelId,jdbcType=BIGINT},
             package_id     = #{packageId,jdbcType=CHAR},
+            order_no       = #{orderNo,jdbcType=CHAR},
+            order_type     = #{orderType,jdbcType=TINYINT},
             storage_num    = #{storageNum,jdbcType=INTEGER},
             storage_time   = #{storageTime,jdbcType=TIMESTAMP}
         where storage_material_id = #{storageMaterialId,jdbcType=BIGINT}
     </update>
 
     <insert id="batchInsert" parameterType="java.util.List">
-        insert into si_storage_label (storage_material_id, location_no, print_label_id,
-        material_no, package_id, storage_num,
-        storage_time)
+      insert into si_storage_label (storage_material_id, location_no, material_no,
+      print_label_id, package_id, order_no,
+      order_type, storage_num, storage_time)
         values
         <foreach collection="list" separator="," item="po">
-            (#{po.storageMaterialId,jdbcType=BIGINT}, #{po.locationNo,jdbcType=CHAR},
-            #{po.printLabelId,jdbcType=BIGINT},
-            #{po.materialNo,jdbcType=CHAR}, #{po.packageId,jdbcType=CHAR}, #{po.storageNum,jdbcType=INTEGER},
-            #{po.storageTime,jdbcType=TIMESTAMP})
+          (#{po.storageMaterialId,jdbcType=BIGINT}, #{po.locationNo,jdbcType=CHAR}, #{po.materialNo,jdbcType=CHAR},
+          #{po.printLabelId,jdbcType=BIGINT}, #{po.packageId,jdbcType=CHAR}, #{po.orderNo,jdbcType=CHAR},
+          #{po.orderType,jdbcType=TINYINT}, #{po.storageNum,jdbcType=INTEGER}, #{po.storageTime,jdbcType=TIMESTAMP})
         </foreach>
     </insert>
 </mapper>

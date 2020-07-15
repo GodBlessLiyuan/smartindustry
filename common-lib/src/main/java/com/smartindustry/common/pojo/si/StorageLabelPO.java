@@ -14,11 +14,20 @@ public class StorageLabelPO implements Serializable {
 
     private String locationNo;
 
-    private Long printLabelId;
-
     private String materialNo;
 
+    private Long printLabelId;
+
     private String packageId;
+
+    private String orderNo;
+
+    /**
+     * 1：PO单收料
+2：样品采购
+3：生产退料
+     */
+    private Byte orderType;
 
     private Integer storageNum;
 
