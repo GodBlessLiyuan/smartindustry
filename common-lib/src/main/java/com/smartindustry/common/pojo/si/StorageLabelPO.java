@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @Data
 public class StorageLabelPO implements Serializable {
-    private Long storageMaterialId;
+    private Long storageLabelId;
 
     private String locationNo;
 

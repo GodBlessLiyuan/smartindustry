@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.smartindustry.common.mapper.si.StorageLabelMapper">
     <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.StorageLabelPO">
-        <id column="storage_material_id" jdbcType="BIGINT" property="storageMaterialId"/>
+        <id column="storage_label_id" jdbcType="BIGINT" property="storageLabelId"/>
         <result column="location_no" jdbcType="CHAR" property="locationNo"/>
         <result column="material_no" jdbcType="CHAR" property="materialNo"/>
         <result column="print_label_id" jdbcType="BIGINT" property="printLabelId"/>
@@ -14,26 +14,26 @@
         <result column="storage_time" jdbcType="TIMESTAMP" property="storageTime"/>
     </resultMap>
     <sql id="Base_Column_List">
-        storage_material_id, location_no, material_no, print_label_id, package_id, order_no,
+        storage_label_id, location_no, material_no, print_label_id, package_id, order_no,
     order_type, `type`, storage_num, storage_time
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from si_storage_label
-        where storage_material_id = #{storageMaterialId,jdbcType=BIGINT}
+        where storage_label_id = #{storageLabelId,jdbcType=BIGINT}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete
         from si_storage_label
-        where storage_material_id = #{storageMaterialId,jdbcType=BIGINT}
+        where storage_label_id = #{storageLabelId,jdbcType=BIGINT}
     </delete>
     <insert id="insert" parameterType="com.smartindustry.common.pojo.si.StorageLabelPO">
-        insert into si_storage_label (storage_material_id, location_no, material_no,
+        insert into si_storage_label (storage_label_id, location_no, material_no,
                                       print_label_id, package_id, order_no,
                                       order_type, `type`, storage_num,
                                       storage_time)
-        values (#{storageMaterialId,jdbcType=BIGINT}, #{locationNo,jdbcType=CHAR}, #{materialNo,jdbcType=CHAR},
+        values (#{storageLabelId,jdbcType=BIGINT}, #{locationNo,jdbcType=CHAR}, #{materialNo,jdbcType=CHAR},
                 #{printLabelId,jdbcType=BIGINT}, #{packageId,jdbcType=CHAR}, #{orderNo,jdbcType=CHAR},
                 #{orderType,jdbcType=TINYINT}, #{type,jdbcType=TINYINT}, #{storageNum,jdbcType=INTEGER},
                 #{storageTime,jdbcType=TIMESTAMP})
@@ -41,8 +41,8 @@
     <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.StorageLabelPO">
         insert into si_storage_label
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="storageMaterialId != null">
-                storage_material_id,
+            <if test="storageLabelId != null">
+                storage_label_id,
             </if>
             <if test="locationNo != null">
                 location_no,
@@ -73,8 +73,8 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="storageMaterialId != null">
-                #{storageMaterialId,jdbcType=BIGINT},
+            <if test="storageLabelId != null">
+                #{storageLabelId,jdbcType=BIGINT},
             </if>
             <if test="locationNo != null">
                 #{locationNo,jdbcType=CHAR},
@@ -136,7 +136,7 @@
                 storage_time = #{storageTime,jdbcType=TIMESTAMP},
             </if>
         </set>
-        where storage_material_id = #{storageMaterialId,jdbcType=BIGINT}
+        where storage_label_id = #{storageLabelId,jdbcType=BIGINT}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.StorageLabelPO">
         update si_storage_label
@@ -149,20 +149,30 @@
             `type`         = #{type,jdbcType=TINYINT},
             storage_num    = #{storageNum,jdbcType=INTEGER},
             storage_time   = #{storageTime,jdbcType=TIMESTAMP}
-        where storage_material_id = #{storageMaterialId,jdbcType=BIGINT}
+        where storage_label_id = #{storageLabelId,jdbcType=BIGINT}
     </update>
 
     <insert id="batchInsert" parameterType="java.util.List">
-      insert into si_storage_label (storage_material_id, location_no, material_no,
-      print_label_id, package_id, order_no,
-      order_type, `type`, storage_num,
-      storage_time)
+        insert into si_storage_label (storage_label_id, location_no, material_no,
+        print_label_id, package_id, order_no,
+        order_type, `type`, storage_num,
+        storage_time)
         values
         <foreach collection="list" separator="," item="po">
-          (#{po.storageMaterialId,jdbcType=BIGINT}, #{po.locationNo,jdbcType=CHAR}, #{po.materialNo,jdbcType=CHAR},
-          #{po.printLabelId,jdbcType=BIGINT}, #{po.packageId,jdbcType=CHAR}, #{po.orderNo,jdbcType=CHAR},
-          #{po.orderType,jdbcType=TINYINT}, #{po.type,jdbcType=TINYINT}, #{po.storageNum,jdbcType=INTEGER},
-          #{po.storageTime,jdbcType=TIMESTAMP})
+            (#{po.storageLabelId,jdbcType=BIGINT}, #{po.locationNo,jdbcType=CHAR}, #{po.materialNo,jdbcType=CHAR},
+            #{po.printLabelId,jdbcType=BIGINT}, #{po.packageId,jdbcType=CHAR}, #{po.orderNo,jdbcType=CHAR},
+            #{po.orderType,jdbcType=TINYINT}, #{po.type,jdbcType=TINYINT}, #{po.storageNum,jdbcType=INTEGER},
+            #{po.storageTime,jdbcType=TIMESTAMP})
         </foreach>
     </insert>
+    <select id="queryNotRecommend" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_storage_label
+        where order_no = #{orderNo,jdbcType=CHAR} and material_no = #{materialNo,jdbcType=CHAR} and type = 1 and
+        storage_label_id not
+        in (
+        select storage_label_id from om_label_recommend
+        )
+    </select>
 </mapper>

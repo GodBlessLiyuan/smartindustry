@@ -3,6 +3,7 @@ package com.smartindustry.common.mapper.si;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.si.StorageLabelPO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,5 +19,5 @@ public interface StorageLabelMapper extends BaseMapper<StorageLabelPO, Long> {
      * @param materialNo
      * @return
      */
-    List<StorageLabelPO> queryNotRecommend(String orderNo, String materialNo);
+    List<StorageLabelPO> queryNotRecommend(@Param("orderNo") String orderNo, @Param("materialNo") String materialNo);
 }

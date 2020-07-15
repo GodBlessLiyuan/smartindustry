@@ -13,7 +13,7 @@ public class LabelRecommendPO implements Serializable {
 
     private Long pickBodyId;
 
-    private Long storageMaterialId;
+    private Long storageLabelId;
 
     private static final long serialVersionUID = 1L;
 }
