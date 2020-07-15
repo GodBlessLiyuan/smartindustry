@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.smartindustry.common.mapper.sm.RecordMapper">
-    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.sm.RecordPO">
+<mapper namespace="com.smartindustry.common.mapper.sm.StorageRecordMapper">
+    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.sm.StorageRecordPO">
         <id column="record_id" jdbcType="BIGINT" property="recordId"/>
         <result column="receipt_body_id" jdbcType="BIGINT" property="receiptBodyId"/>
         <result column="storage_id" jdbcType="BIGINT" property="storageId"/>
@@ -17,25 +17,25 @@
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from sm_record
+        from sm_storage_record
         where record_id = #{recordId,jdbcType=BIGINT}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete
-        from sm_record
+        from sm_storage_record
         where record_id = #{recordId,jdbcType=BIGINT}
     </delete>
-    <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.RecordPO">
-        insert into sm_record (record_id, receipt_body_id, storage_id,
-                               user_id, `name`, `type`, create_time,
-                               `status`)
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.StorageRecordPO">
+        insert into sm_storage_record (record_id, receipt_body_id, storage_id,
+                                       user_id, `name`, `type`, create_time,
+                                       `status`)
         values (#{recordId,jdbcType=BIGINT}, #{receiptBodyId,jdbcType=BIGINT}, #{storageId,jdbcType=BIGINT},
                 #{userId,jdbcType=BIGINT}, #{name,jdbcType=CHAR}, #{type,jdbcType=CHAR},
                 #{createTime,jdbcType=TIMESTAMP},
                 #{status,jdbcType=TINYINT})
     </insert>
-    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.sm.RecordPO">
-        insert into sm_record
+    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.sm.StorageRecordPO">
+        insert into sm_storage_record
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="recordId != null">
                 record_id,
@@ -89,8 +89,8 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.sm.RecordPO">
-        update sm_record
+    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.sm.StorageRecordPO">
+        update sm_storage_record
         <set>
             <if test="receiptBodyId != null">
                 receipt_body_id = #{receiptBodyId,jdbcType=BIGINT},
@@ -116,8 +116,8 @@
         </set>
         where record_id = #{recordId,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.sm.RecordPO">
-        update sm_record
+    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.sm.StorageRecordPO">
+        update sm_storage_record
         set receipt_body_id = #{receiptBodyId,jdbcType=BIGINT},
             storage_id      = #{storageId,jdbcType=BIGINT},
             user_id         = #{userId,jdbcType=BIGINT},

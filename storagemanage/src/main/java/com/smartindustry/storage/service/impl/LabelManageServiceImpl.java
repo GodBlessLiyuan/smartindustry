@@ -42,7 +42,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
     @Autowired
     private QeDetectMapper qeDetectMapper;
     @Autowired
-    private RecordMapper recordMapper;
+    private StorageRecordMapper recordMapper;
 
     @Override
     public ResultVO query(Long rbId) {
@@ -177,8 +177,8 @@ public class LabelManageServiceImpl implements ILabelManageService {
         // 更新收料单状态
         receiptBodyMapper.updateByPrimaryKey(bodyPO);
 
-        recordMapper.insert(new RecordPO(rbId, 1L, "夏慧", ReceiptConstant.RECORD_TYPE_ADD, status));
-        recordMapper.insert(new RecordPO(rbId, 1L, "夏慧", ReceiptConstant.RECORD_TYPE_FINISH, ReceiptConstant.RECEIPT_ENTRY_LABEL));
+        recordMapper.insert(new StorageRecordPO(rbId, 1L, "夏慧", ReceiptConstant.RECORD_TYPE_ADD, status));
+        recordMapper.insert(new StorageRecordPO(rbId, 1L, "夏慧", ReceiptConstant.RECORD_TYPE_FINISH, ReceiptConstant.RECEIPT_ENTRY_LABEL));
 
         return ResultVO.ok();
     }

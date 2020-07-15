@@ -2,16 +2,17 @@ package com.smartindustry.common.mapper.sm;
 
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.sm.RecordPO;
+import com.smartindustry.common.pojo.sm.StorageRecordPO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 /**
- * RecordMapper继承基类
+ * StorageRecordMapper继承基类
  */
 @Mapper
-public interface RecordMapper extends BaseMapper<RecordPO, Long> {
+public interface StorageRecordMapper extends BaseMapper<StorageRecordPO, Long> {
     /**
      * 批量插入
      *

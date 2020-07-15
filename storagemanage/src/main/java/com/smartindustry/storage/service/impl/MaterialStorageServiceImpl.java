@@ -53,7 +53,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
     @Autowired
     private ReceiptBodyMapper receiptBodyMapper;
     @Autowired
-    private RecordMapper recordMapper;
+    private StorageRecordMapper recordMapper;
     @Autowired
     private StorageGroupMapper storageGroupMapper;
     @Autowired
@@ -346,7 +346,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         storageLabelMapper.batchInsert(storageLabelPOs);
 
         // 操作记录
-        recordMapper.insert(new RecordPO(sid, storagePO.getStorageId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_CONFIRM, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
+        recordMapper.insert(new StorageRecordPO(sid, storagePO.getStorageId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_CONFIRM, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
 
         return ResultVO.ok();
     }

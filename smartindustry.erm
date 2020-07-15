@@ -11,8 +11,8 @@
 	</page_setting>
 	<category_index>0</category_index>
 	<zoom>1.0</zoom>
-	<x>550</x>
-	<y>266</y>
+	<x>735</x>
+	<y>-304</y>
 	<default_color>
 		<r>128</r>
 		<g>128</g>
@@ -135,7 +135,7 @@
 			</connections>
 			<display>false</display>
 			<creation_date>2020-06-22 08:51:45</creation_date>
-			<updated_date>2020-07-15 11:37:17</updated_date>
+			<updated_date>2020-07-15 14:34:56</updated_date>
 			<model_property>
 				<name>Project Name</name>
 				<value></value>
@@ -4165,8 +4165,8 @@
 					<referenced_complex_unique_key>null</referenced_complex_unique_key>
 				</relation>
 			</connections>
-			<physical_name>sm_record</physical_name>
-			<logical_name>收料操作记录表</logical_name>
+			<physical_name>sm_storage_record</physical_name>
+			<logical_name>入库操作记录表</logical_name>
 			<description></description>
 			<constraint></constraint>
 			<primary_key_name></primary_key_name>
@@ -8124,8 +8124,8 @@
 					<referenced_complex_unique_key>null</referenced_complex_unique_key>
 				</relation>
 			</connections>
-			<physical_name>om_record</physical_name>
-			<logical_name>操作记录</logical_name>
+			<physical_name>om_outbound_record</physical_name>
+			<logical_name>出库操作记录</logical_name>
 			<description></description>
 			<constraint></constraint>
 			<primary_key_name></primary_key_name>

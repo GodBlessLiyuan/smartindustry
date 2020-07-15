@@ -40,7 +40,7 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
     @Autowired
     private ReceiptBodyMapper receiptBodyMapper;
     @Autowired
-    private RecordMapper recordMapper;
+    private StorageRecordMapper recordMapper;
     @Autowired
     private LabelRecordMapper labelRecordMapper;
 

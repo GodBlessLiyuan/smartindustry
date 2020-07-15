@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.om.LogisticsPictureMapper">
+    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.om.LogisticsPicturePO">
+        <id column="logistics_picture_id" jdbcType="BIGINT" property="logisticsPictureId"/>
+        <result column="logistics_record_id" jdbcType="BIGINT" property="logisticsRecordId"/>
+        <result column="picture" jdbcType="CHAR" property="picture"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        logistics_picture_id, logistics_record_id, picture
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from om_logistics_picture
+        where logistics_picture_id = #{logisticsPictureId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from om_logistics_picture
+        where logistics_picture_id = #{logisticsPictureId,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.om.LogisticsPicturePO">
+        insert into om_logistics_picture (logistics_picture_id, logistics_record_id,
+                                          picture)
+        values (#{logisticsPictureId,jdbcType=BIGINT}, #{logisticsRecordId,jdbcType=BIGINT},
+                #{picture,jdbcType=CHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.om.LogisticsPicturePO">
+        insert into om_logistics_picture
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="logisticsPictureId != null">
+                logistics_picture_id,
+            </if>
+            <if test="logisticsRecordId != null">
+                logistics_record_id,
+            </if>
+            <if test="picture != null">
+                picture,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="logisticsPictureId != null">
+                #{logisticsPictureId,jdbcType=BIGINT},
+            </if>
+            <if test="logisticsRecordId != null">
+                #{logisticsRecordId,jdbcType=BIGINT},
+            </if>
+            <if test="picture != null">
+                #{picture,jdbcType=CHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.om.LogisticsPicturePO">
+        update om_logistics_picture
+        <set>
+            <if test="logisticsRecordId != null">
+                logistics_record_id = #{logisticsRecordId,jdbcType=BIGINT},
+            </if>
+            <if test="picture != null">
+                picture = #{picture,jdbcType=CHAR},
+            </if>
+        </set>
+        where logistics_picture_id = #{logisticsPictureId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.om.LogisticsPicturePO">
+        update om_logistics_picture
+        set logistics_record_id = #{logisticsRecordId,jdbcType=BIGINT},
+            picture             = #{picture,jdbcType=CHAR}
+        where logistics_picture_id = #{logisticsPictureId,jdbcType=BIGINT}
+    </update>
+</mapper>

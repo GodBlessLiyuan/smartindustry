@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.om.PickHeadMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.om.PickHeadPO">
+    <id column="pick_head_id" jdbcType="BIGINT" property="pickHeadId" />
+    <result column="pick_no" jdbcType="CHAR" property="pickNo" />
+    <result column="material_status" jdbcType="TINYINT" property="materialStatus" />
+    <result column="pick_type" jdbcType="TINYINT" property="pickType" />
+    <result column="work_no" jdbcType="CHAR" property="workNo" />
+    <result column="correspond_project" jdbcType="CHAR" property="correspondProject" />
+    <result column="sale_no" jdbcType="CHAR" property="saleNo" />
+    <result column="plan_time" jdbcType="TIMESTAMP" property="planTime" />
+    <result column="outbound_time" jdbcType="TIMESTAMP" property="outboundTime" />
+    <result column="outbound_status" jdbcType="TINYINT" property="outboundStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="dr" jdbcType="TINYINT" property="dr" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    pick_head_id, pick_no, material_status, pick_type, work_no, correspond_project, sale_no, 
+    plan_time, outbound_time, outbound_status, create_time, dr
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from om_pick_head
+    where pick_head_id = #{pickHeadId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from om_pick_head
+    where pick_head_id = #{pickHeadId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.om.PickHeadPO">
+    insert into om_pick_head (pick_head_id, pick_no, material_status, 
+      pick_type, work_no, correspond_project, 
+      sale_no, plan_time, outbound_time, 
+      outbound_status, create_time, dr
+      )
+    values (#{pickHeadId,jdbcType=BIGINT}, #{pickNo,jdbcType=CHAR}, #{materialStatus,jdbcType=TINYINT}, 
+      #{pickType,jdbcType=TINYINT}, #{workNo,jdbcType=CHAR}, #{correspondProject,jdbcType=CHAR}, 
+      #{saleNo,jdbcType=CHAR}, #{planTime,jdbcType=TIMESTAMP}, #{outboundTime,jdbcType=TIMESTAMP}, 
+      #{outboundStatus,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.om.PickHeadPO">
+    insert into om_pick_head
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pickHeadId != null">
+        pick_head_id,
+      </if>
+      <if test="pickNo != null">
+        pick_no,
+      </if>
+      <if test="materialStatus != null">
+        material_status,
+      </if>
+      <if test="pickType != null">
+        pick_type,
+      </if>
+      <if test="workNo != null">
+        work_no,
+      </if>
+      <if test="correspondProject != null">
+        correspond_project,
+      </if>
+      <if test="saleNo != null">
+        sale_no,
+      </if>
+      <if test="planTime != null">
+        plan_time,
+      </if>
+      <if test="outboundTime != null">
+        outbound_time,
+      </if>
+      <if test="outboundStatus != null">
+        outbound_status,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="dr != null">
+        dr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pickHeadId != null">
+        #{pickHeadId,jdbcType=BIGINT},
+      </if>
+      <if test="pickNo != null">
+        #{pickNo,jdbcType=CHAR},
+      </if>
+      <if test="materialStatus != null">
+        #{materialStatus,jdbcType=TINYINT},
+      </if>
+      <if test="pickType != null">
+        #{pickType,jdbcType=TINYINT},
+      </if>
+      <if test="workNo != null">
+        #{workNo,jdbcType=CHAR},
+      </if>
+      <if test="correspondProject != null">
+        #{correspondProject,jdbcType=CHAR},
+      </if>
+      <if test="saleNo != null">
+        #{saleNo,jdbcType=CHAR},
+      </if>
+      <if test="planTime != null">
+        #{planTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="outboundTime != null">
+        #{outboundTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="outboundStatus != null">
+        #{outboundStatus,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dr != null">
+        #{dr,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.om.PickHeadPO">
+    update om_pick_head
+    <set>
+      <if test="pickNo != null">
+        pick_no = #{pickNo,jdbcType=CHAR},
+      </if>
+      <if test="materialStatus != null">
+        material_status = #{materialStatus,jdbcType=TINYINT},
+      </if>
+      <if test="pickType != null">
+        pick_type = #{pickType,jdbcType=TINYINT},
+      </if>
+      <if test="workNo != null">
+        work_no = #{workNo,jdbcType=CHAR},
+      </if>
+      <if test="correspondProject != null">
+        correspond_project = #{correspondProject,jdbcType=CHAR},
+      </if>
+      <if test="saleNo != null">
+        sale_no = #{saleNo,jdbcType=CHAR},
+      </if>
+      <if test="planTime != null">
+        plan_time = #{planTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="outboundTime != null">
+        outbound_time = #{outboundTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="outboundStatus != null">
+        outbound_status = #{outboundStatus,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dr != null">
+        dr = #{dr,jdbcType=TINYINT},
+      </if>
+    </set>
+    where pick_head_id = #{pickHeadId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.om.PickHeadPO">
+    update om_pick_head
+    set pick_no = #{pickNo,jdbcType=CHAR},
+      material_status = #{materialStatus,jdbcType=TINYINT},
+      pick_type = #{pickType,jdbcType=TINYINT},
+      work_no = #{workNo,jdbcType=CHAR},
+      correspond_project = #{correspondProject,jdbcType=CHAR},
+      sale_no = #{saleNo,jdbcType=CHAR},
+      plan_time = #{planTime,jdbcType=TIMESTAMP},
+      outbound_time = #{outboundTime,jdbcType=TIMESTAMP},
+      outbound_status = #{outboundStatus,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      dr = #{dr,jdbcType=TINYINT}
+    where pick_head_id = #{pickHeadId,jdbcType=BIGINT}
+  </update>
+</mapper>

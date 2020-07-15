@@ -35,7 +35,7 @@ import java.util.*;
 @Service
 public class QualityManageServiceImpl implements IQualityManageService {
     @Autowired
-    private RecordMapper recordMapper;
+    private StorageRecordMapper recordMapper;
     @Autowired
     private IqcDetectMapper iqcDetectMapper;
     @Autowired
@@ -96,7 +96,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
             receiptBodyPO.setStatus(ReceiptConstant.RECEIPT_QE_CONFIRM);
 
             // QE确认新增操作记录
-            recordMapper.insert(new RecordPO(dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_ADD, ReceiptConstant.RECEIPT_QE_CONFIRM));
+            recordMapper.insert(new StorageRecordPO(dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_ADD, ReceiptConstant.RECEIPT_QE_CONFIRM));
         }
 
         // 更新收料单
@@ -105,7 +105,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
         receiptBodyMapper.updateByPrimaryKey(receiptBodyPO);
 
         // 操作记录
-        recordMapper.insert(new RecordPO(dto.getRbid(), 1L, "夏慧", type, ReceiptConstant.RECEIPT_IQC_DETECT));
+        recordMapper.insert(new StorageRecordPO(dto.getRbid(), 1L, "夏慧", type, ReceiptConstant.RECEIPT_IQC_DETECT));
 
         return ResultVO.ok();
     }
@@ -157,7 +157,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
         // 更新收料单
         receiptBodyMapper.updateByPrimaryKey(receiptBodyPO);
         // 操作记录
-        recordMapper.insert(new RecordPO(dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_QE_DETECT, ReceiptConstant.RECEIPT_QE_DETECT));
+        recordMapper.insert(new StorageRecordPO(dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_QE_DETECT, ReceiptConstant.RECEIPT_QE_DETECT));
 
         return ResultVO.ok();
     }
@@ -209,7 +209,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
             receiptBodyPO.setStatus(ReceiptConstant.RECEIPT_IQC_DETECT);
 
             // IQC 操作记录
-            recordMapper.insert(new RecordPO(dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_QE_REJECT, ReceiptConstant.RECEIPT_IQC_DETECT));
+            recordMapper.insert(new StorageRecordPO(dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_QE_REJECT, ReceiptConstant.RECEIPT_IQC_DETECT));
         } else if (ReceiptConstant.QE_RETURN.equals(dto.getStatus())) {
             // 退供应商
             type = ReceiptConstant.RECORD_TYPE_QE_RETURN;
@@ -227,7 +227,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
         // 更新收料单
         receiptBodyMapper.updateByPrimaryKey(receiptBodyPO);
         // QE 操作记录
-        recordMapper.insert(new RecordPO(dto.getRbid(), 1L, "夏慧", type, ReceiptConstant.RECEIPT_QE_CONFIRM));
+        recordMapper.insert(new StorageRecordPO(dto.getRbid(), 1L, "夏慧", type, ReceiptConstant.RECEIPT_QE_CONFIRM));
 
         return ResultVO.ok();
     }
@@ -286,7 +286,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
             storagePO.setDr((byte) 1);
             storageMapper.insert(storagePO);
 
-            recordMapper.insert(new RecordPO(rbId, storagePO.getStorageId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
+            recordMapper.insert(new StorageRecordPO(rbId, storagePO.getStorageId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
         }
         if (receiptBodyPO.getBadNum() > 0) {
             // 非良品入库单
@@ -301,11 +301,11 @@ public class QualityManageServiceImpl implements IQualityManageService {
             storagePO.setDr((byte) 1);
             storageMapper.insert(storagePO);
 
-            recordMapper.insert(new RecordPO(rbId, storagePO.getStorageId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
+            recordMapper.insert(new StorageRecordPO(rbId, storagePO.getStorageId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
         }
 
         // 操作记录
-        recordMapper.insert(new RecordPO(rbId, 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, status));
+        recordMapper.insert(new StorageRecordPO(rbId, 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, status));
 
         return ResultVO.ok();
     }
