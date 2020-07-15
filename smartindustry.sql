@@ -224,6 +224,11 @@ CREATE TABLE om_pick_head
 (
     pick_head_id bigint unsigned NOT NULL AUTO_INCREMENT,
     pick_no char(64) NOT NULL,
+    order_no char(32) NOT NULL,
+    -- 1：工单
+    -- 2：销售订单
+    order_type tinyint NOT NULL COMMENT '1：工单
+2：销售订单',
     -- 1：未处理
     -- 5：物料拣货
     -- 10：工单审核|OQC检验
@@ -240,13 +245,7 @@ CREATE TABLE om_pick_head
 25：物料出库
 30：完成出库
 35：确认出库',
-    -- 1：工单拣货单
-    -- 2：成品拣货单
-    pick_type tinyint NOT NULL COMMENT '1：工单拣货单
-2：成品拣货单',
-    work_no char(64),
     correspond_project char(255),
-    sale_no char(64),
     plan_time datetime,
     outbound_time datetime,
     -- 1：全部出库
