@@ -94,5 +94,6 @@
                  left join si_print_label pl on sd.print_label_id = pl.print_label_id
                  left join si_material m on pl.material_no = m.material_no
         where sg.storage_id = #{storageId,jdbcType=BIGINT}
+        order by sg.storage_group_id desc, sd.storage_detail_id desc
     </select>
 </mapper>
