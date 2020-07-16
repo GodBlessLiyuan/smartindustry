@@ -46,13 +46,6 @@ public class ReceiptManageControllerTest extends BaseTest {
             ResultVO<ReceiptVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
             assertNotNull(resultVO.getStatus());
             assertEquals(Integer.valueOf(1000), resultVO.getStatus());
-
-            //
-
-            //
-
-            //
-
         }
 
     }
