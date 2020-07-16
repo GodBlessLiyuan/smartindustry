@@ -43,7 +43,7 @@ public class OutboundVO implements Serializable {
      */
     private Date otime;
     /**
-     * 出货状态（1：已出库；2：未出库）
+     * 出货状态（1：已出库；3：未出库）
      */
     private Byte status;
 

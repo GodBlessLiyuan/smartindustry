@@ -18,9 +18,11 @@ public class OutboundPO implements Serializable {
 
     private Date outboundTime;
 
+    private Date shipTime;
+
     /**
      * 1：已出库
-3：待出库
+2：待出库
      */
     private Byte status;
 

@@ -6,12 +6,14 @@
         <result column="pick_head_id" jdbcType="BIGINT" property="pickHeadId"/>
         <result column="outbound_no" jdbcType="CHAR" property="outboundNo"/>
         <result column="outbound_time" jdbcType="TIMESTAMP" property="outboundTime"/>
+        <result column="ship_time" jdbcType="TIMESTAMP" property="shipTime"/>
         <result column="status" jdbcType="TINYINT" property="status"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="dr" jdbcType="TINYINT" property="dr"/>
     </resultMap>
     <sql id="Base_Column_List">
-        outbound_id, pick_head_id, outbound_no, outbound_time, `status`, create_time, dr
+        outbound_id, pick_head_id, outbound_no, outbound_time, ship_time, `status`, create_time,
+    dr
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
@@ -26,11 +28,11 @@
     </delete>
     <insert id="insert" parameterType="com.smartindustry.common.pojo.om.OutboundPO">
         insert into om_outbound (outbound_id, pick_head_id, outbound_no,
-                                 outbound_time, `status`, create_time,
-                                 dr)
+                                 outbound_time, ship_time, `status`,
+                                 create_time, dr)
         values (#{outboundId,jdbcType=BIGINT}, #{pickHeadId,jdbcType=BIGINT}, #{outboundNo,jdbcType=CHAR},
-                #{outboundTime,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP},
-                #{dr,jdbcType=TINYINT})
+                #{outboundTime,jdbcType=TIMESTAMP}, #{shipTime,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT},
+                #{createTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
     </insert>
     <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.om.OutboundPO">
         insert into om_outbound
@@ -46,6 +48,9 @@
             </if>
             <if test="outboundTime != null">
                 outbound_time,
+            </if>
+            <if test="shipTime != null">
+                ship_time,
             </if>
             <if test="status != null">
                 `status`,
@@ -70,6 +75,9 @@
             <if test="outboundTime != null">
                 #{outboundTime,jdbcType=TIMESTAMP},
             </if>
+            <if test="shipTime != null">
+                #{shipTime,jdbcType=TIMESTAMP},
+            </if>
             <if test="status != null">
                 #{status,jdbcType=TINYINT},
             </if>
@@ -93,6 +101,9 @@
             <if test="outboundTime != null">
                 outbound_time = #{outboundTime,jdbcType=TIMESTAMP},
             </if>
+            <if test="shipTime != null">
+                ship_time = #{shipTime,jdbcType=TIMESTAMP},
+            </if>
             <if test="status != null">
                 `status` = #{status,jdbcType=TINYINT},
             </if>
@@ -110,6 +121,7 @@
         set pick_head_id  = #{pickHeadId,jdbcType=BIGINT},
             outbound_no   = #{outboundNo,jdbcType=CHAR},
             outbound_time = #{outboundTime,jdbcType=TIMESTAMP},
+            ship_time     = #{shipTime,jdbcType=TIMESTAMP},
             `status`      = #{status,jdbcType=TINYINT},
             create_time   = #{createTime,jdbcType=TIMESTAMP},
             dr            = #{dr,jdbcType=TINYINT}
@@ -124,7 +136,7 @@
         <result column="plan_time" jdbcType="TIMESTAMP" property="planTime"/>
     </resultMap>
     <sql id="BO_Column_List">
-        o.outbound_id, o.pick_head_id, o.outbound_no, o.outbound_time, o.`status`, o.create_time, o.dr,
+        o.outbound_id, o.pick_head_id, o.outbound_no, o.outbound_time, o.ship_time, o.`status`, o.create_time, o.dr,
         ph.pick_no, ph.order_no, ph.order_type, ph.correspond_project, ph.plan_time
     </sql>
     <select id="pageQuery" parameterType="java.util.Map" resultMap="BOResultMap">
