@@ -189,8 +189,7 @@
         where ph.pick_no = #{pickNo} and ph.dr=1 and pl.dr=1
     </select>
     <select id="materialLoss" resultType="com.smartindustry.common.bo.om.MaterialBO">
-        select ma.material_no as materialNo,ma.material_name as materialName,ma.material_desc as materialDesc,pb.demand_num as demandNum,pb.pick_num as pickNum, (pb.demand_num-pb.pick_num) as LackNum
-        as material_loss_num
+        select ma.material_no as materialNo,ma.material_name as materialName,ma.material_desc as materialDesc,pb.demand_num as demandNum,pb.pick_num as pickNum, (pb.demand_num-pb.pick_num) as lackNum
         from om_pick_head ph
         left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
         left join si_material ma on pb.material_no = ma.material_no
