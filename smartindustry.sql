@@ -164,10 +164,11 @@ CREATE TABLE om_outbound
     pick_head_id bigint unsigned NOT NULL,
     outbound_no char(64) NOT NULL,
     outbound_time datetime,
+    ship_time datetime,
     -- 1£ºÒÑ³ö¿â
-    -- 3£º´ý³ö¿â
+    -- 2£º´ý³ö¿â
     status tinyint COMMENT '1£ºÒÑ³ö¿â
-3£º´ý³ö¿â',
+2£º´ý³ö¿â',
     create_time datetime,
     -- 1£ºÎ´É¾³ý
     -- 2£ºÒÑÉ¾³ý
