@@ -24,7 +24,8 @@
         from om_logistics_record
         where logistics_record_id = #{logisticsRecordId,jdbcType=BIGINT}
     </delete>
-    <insert id="insert" parameterType="com.smartindustry.common.pojo.om.LogisticsRecordPO">
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.om.LogisticsRecordPO" useGeneratedKeys="true"
+            keyProperty="logisticsRecordId">
         insert into om_logistics_record (logistics_record_id, outbound_id, ship_date,
                                          logistics_no, ship_way, remark,
                                          create_time)

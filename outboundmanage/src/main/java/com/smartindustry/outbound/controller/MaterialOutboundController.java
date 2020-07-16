@@ -1,9 +1,11 @@
 package com.smartindustry.outbound.controller;
 
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.outbound.dto.LogisticsDTO;
 import com.smartindustry.outbound.service.IMaterialOutboundService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -63,5 +65,16 @@ public class MaterialOutboundController {
     @RequestMapping("upload")
     public ResultVO upload(@Param("file") MultipartFile file) {
         return materialOutboundService.upload(file);
+    }
+
+    /**
+     * 物流信息-新增
+     *
+     * @param dto
+     * @return
+     */
+    @RequestMapping("logInsert")
+    public ResultVO logInsert(@RequestBody LogisticsDTO dto) {
+        return materialOutboundService.logInsert(dto);
     }
 }
