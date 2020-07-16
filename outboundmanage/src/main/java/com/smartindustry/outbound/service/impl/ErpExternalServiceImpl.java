@@ -7,7 +7,6 @@ import com.smartindustry.common.mapper.si.StorageLabelMapper;
 import com.smartindustry.common.pojo.om.LabelRecommendPO;
 import com.smartindustry.common.pojo.om.PickBodyPO;
 import com.smartindustry.common.pojo.om.PickHeadPO;
-import com.smartindustry.common.pojo.si.LabelRecordPO;
 import com.smartindustry.common.pojo.si.StorageLabelPO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.constant.OutboundConstant;

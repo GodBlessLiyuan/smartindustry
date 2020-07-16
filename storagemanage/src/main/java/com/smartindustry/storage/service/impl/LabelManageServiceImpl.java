@@ -66,6 +66,10 @@ public class LabelManageServiceImpl implements ILabelManageService {
         if (null == labelPO) {
             return new ResultVO(1002);
         }
+        ReceiptLabelPO rlPO = receiptLabelMapper.queryByPrintLabelId(labelPO.getPrintLabelId());
+        if (null == rlPO) {
+            return new ResultVO(1002);
+        }
 
         // 废弃原有标签
         labelPO.setDr((byte) 2);
@@ -82,6 +86,10 @@ public class LabelManageServiceImpl implements ILabelManageService {
         labelPO.setDr((byte) 1);
         labelPO.setCreateTime(new Date());
         printLabelMapper.insert(labelPO);
+
+        rlPO.setReceiptLabelId(null);
+        rlPO.setPrintLabelId(labelPO.getPrintLabelId());
+        receiptLabelMapper.insert(rlPO);
 
         return ResultVO.ok();
     }
