@@ -2,14 +2,16 @@ package com.smartindustry.outbound.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.smartindustry.common.bo.om.MaterialBO;
 import com.smartindustry.common.bo.om.PrintLabelBO;
 import com.smartindustry.common.mapper.om.LabelRecommendMapper;
 import com.smartindustry.common.mapper.om.PickHeadMapper;
 import com.smartindustry.common.pojo.om.PickHeadPO;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.common.vo.om.PickHeadVO;
-import com.smartindustry.common.vo.om.ScanPickVO;
+import com.smartindustry.outbound.vo.LackMaterialVO;
+import com.smartindustry.outbound.vo.PickHeadVO;
+import com.smartindustry.outbound.vo.ScanPickVO;
 import com.smartindustry.outbound.service.IPickManageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,24 +34,23 @@ public class PickManageServiceImpl implements IPickManageService {
     private LabelRecommendMapper labelRecommendMapper;
 
     @Override
-    public ResultVO pageQueryPickHead(int pageNum, int pageSize, Map<String, Object> reqMap){
+    public ResultVO pageQueryPickHead(int pageNum, int pageSize, Map<String, Object> reqMap) {
         Page<PickHeadPO> page = PageHelper.startPage(pageNum, pageSize);
-
-        List<PickHeadPO> vos =  pickHeadMapper.pageQueryPickHeadMsg(reqMap);
-        return new ResultVO(1000,new PageInfoVO<>(page.getTotal(), PickHeadVO.convert(vos)));
+        List<PickHeadPO> vos = pickHeadMapper.pageQueryPickHeadMsg(reqMap);
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), PickHeadVO.convert(vos)));
     }
 
     @Override
-    public ResultVO scanPick(int pageNum,int pageSize,String pickNo){
+    public ResultVO scanPick(int pageNum, int pageSize, String pickNo) {
         Page<PrintLabelBO> page = PageHelper.startPage(pageNum, pageSize);
-        List<PrintLabelBO> bos =  pickHeadMapper.scanLabelByPickNo(pickNo);
-        return new ResultVO(1000,new PageInfoVO<>(page.getTotal(), ScanPickVO.convert(bos)));
+        List<PrintLabelBO> bos = pickHeadMapper.scanLabelByPickNo(pickNo);
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), ScanPickVO.convert(bos)));
     }
 
     @Override
-    public ResultVO materialLoss(int pageNum,int pageSize,String pickNo){
-//        Page<MaterialLossBO> page = PageHelper.startPage(pageNum, pageSize);
-//        List<MaterialLossBO> bos =  pickHeadMapper.materialLoss(pickNo);
-        return new ResultVO(1000);
+    public ResultVO materialLoss(int pageNum, int pageSize, Map<String, Object> reqMap) {
+        Page<MaterialBO> page = PageHelper.startPage(pageNum, pageSize);
+        List<MaterialBO> bos = pickHeadMapper.materialLoss(reqMap);
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), LackMaterialVO.convert(bos)));
     }
 }

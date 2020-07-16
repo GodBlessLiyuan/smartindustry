@@ -1,8 +1,7 @@
-package com.smartindustry.common.vo.om;
+package com.smartindustry.outbound.vo;
 
 import com.smartindustry.common.bo.om.PrintLabelBO;
 import lombok.Data;
-import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -41,7 +40,7 @@ public class ScanPickVO implements Serializable {
     private Integer num;
 
     public static List<ScanPickVO> convert(List<PrintLabelBO> bos) {
-        List<ScanPickVO> vos = new ArrayList<>();
+        List<ScanPickVO> vos = new ArrayList<>(bos.size());
         for (PrintLabelBO bo : bos) {
             vos.add(convert(bo));
         }

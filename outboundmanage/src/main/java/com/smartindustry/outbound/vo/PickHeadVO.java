@@ -1,8 +1,7 @@
-package com.smartindustry.common.vo.om;
+package com.smartindustry.outbound.vo;
 
 import com.smartindustry.common.pojo.om.PickHeadPO;
 import lombok.Data;
-import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -48,7 +47,7 @@ public class PickHeadVO implements Serializable {
     private Byte ostatus;
 
     public static List<PickHeadVO> convert(List<PickHeadPO> pos) {
-        List<PickHeadVO> vos = new ArrayList<>();
+        List<PickHeadVO> vos = new ArrayList<>(pos.size());
         for (PickHeadPO po : pos) {
             vos.add(convert(po));
         }
