@@ -3,6 +3,7 @@ package com.smartindustry.storage.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.storage.vo.PrintLabelVO;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,6 +15,8 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -37,13 +40,25 @@ public class LabelManageControllerTest extends BaseTest {
     public void query() throws Exception {
         {
             MvcResult res = mockMvc.perform(MockMvcRequestBuilders.get("/label/query")
-                    .contentType(MediaType.APPLICATION_JSON).param("rbid", String.valueOf(2L)))
+                    .contentType(MediaType.APPLICATION_JSON).param("rbid", String.valueOf(1L)))
                     .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
             ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
             assertNotNull(resultVO.getStatus());
             assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+            assertNotNull(resultVO.getData());
+            List<PrintLabelVO> list = JSONObject.parseArray(JSON.toJSONString(resultVO.getData()), PrintLabelVO.class);
+            //rbid = 1，有6条记录
+            //plid
+            assertEquals(Long.valueOf(1), list.get(0).getPlid());
+            assertEquals(Long.valueOf(2), list.get(1).getPlid());
+            assertEquals(Long.valueOf(3), list.get(2).getPlid());
+            assertEquals(Long.valueOf(4), list.get(3).getPlid());
+            assertEquals(Long.valueOf(5), list.get(4).getPlid());
+            //num
+            assertEquals(Integer.valueOf(200), list.get(3).getNum());
         }
+
     }
 
     @Test
@@ -51,13 +66,36 @@ public class LabelManageControllerTest extends BaseTest {
         {
             MvcResult res = mockMvc.perform(MockMvcRequestBuilders.get("/label/queryPid")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .param("rbid", String.valueOf(7L)).param("pid", "2020071300003"))
+                    .param("rbid", String.valueOf(1L)).param("pid", "2020071500006"))
                     .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
             ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
             assertNotNull(resultVO.getStatus());
             assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+            assertNotNull(resultVO.getData());
+            PrintLabelVO printLabelVO = JSONObject.toJavaObject(JSON.parseObject(String.valueOf(resultVO.getData())), PrintLabelVO.class);
+            //plid
+            assertEquals(Long.valueOf(6), printLabelVO.getPlid());
+            //num
+            assertEquals(Integer.valueOf(500), printLabelVO.getNum());
         }
+
+        {
+            /**
+             * 异常情况1：数据缺失，返回status：1002
+             */
+            {
+                MvcResult res = mockMvc.perform(MockMvcRequestBuilders.get("/label/queryPid")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("rbid", "").param("pid", "2020071500006"))
+                        .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+                ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+                assertNotNull(resultVO.getStatus());
+                assertEquals(Integer.valueOf(1002), resultVO.getStatus());
+            }
+        }
+
     }
 
     @Test
@@ -66,7 +104,7 @@ public class LabelManageControllerTest extends BaseTest {
 
             MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/label/reprint")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .param("plid", String.valueOf(9L)).param("num", "500"))
+                    .param("plid", String.valueOf(2L)).param("num", "500"))
                     .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
             ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
@@ -74,6 +112,37 @@ public class LabelManageControllerTest extends BaseTest {
             assertEquals(Integer.valueOf(1000), resultVO.getStatus());
         }
 
+        {
+            /**
+             * 异常情况：
+             * 异常情况1：dr=2；返回status：1002
+             */
+            {
+                MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/label/reprint")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("plid", String.valueOf(9L)).param("num", "500"))
+                        .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+                ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+                assertNotNull(resultVO.getStatus());
+                assertEquals(Integer.valueOf(1002), resultVO.getStatus());
+            }
+
+            /**
+             * 异常情况：
+             * 异常情况2：未传数据plid；返回status：1002
+             */
+            {
+                MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/label/reprint")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("plid", "").param("num", "500"))
+                        .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+                ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+                assertNotNull(resultVO.getStatus());
+                assertEquals(Integer.valueOf(1002), resultVO.getStatus());
+            }
+        }
     }
 
     @Test
@@ -123,15 +192,32 @@ public class LabelManageControllerTest extends BaseTest {
 
     @Test
     public void delete() throws Exception {
-        {
-            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/label/delete")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .param("rbid", String.valueOf(10L)).param("plid", String.valueOf(161L)))
-                    .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+//        {
+//            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/label/delete")
+//                    .contentType(MediaType.APPLICATION_JSON)
+//                    .param("rbid", String.valueOf(13L)).param("plid", String.valueOf(11L)))
+//                    .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+//
+//            ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+//            assertNotNull(resultVO.getStatus());
+//            assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+//        }
 
-            ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
-            assertNotNull(resultVO.getStatus());
-            assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+        {
+            /**
+             * 异常情况：
+             * 异常情况1：未输入rbId，返回status：1002
+             */
+            {
+                MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/label/delete")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("rbid", "").param("plid", String.valueOf(161L)))
+                        .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+                ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+                assertNotNull(resultVO.getStatus());
+                assertEquals(Integer.valueOf(1002), resultVO.getStatus());
+            }
         }
     }
 
@@ -139,12 +225,55 @@ public class LabelManageControllerTest extends BaseTest {
     public void finish() throws Exception {
         {
             MvcResult res = mockMvc.perform(MockMvcRequestBuilders.get("/label/finish")
-                    .contentType(MediaType.APPLICATION_JSON).param("rbid", String.valueOf(204)))
+                    .contentType(MediaType.APPLICATION_JSON).param("rbid", String.valueOf(5)))
                     .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
             ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
             assertNotNull(resultVO.getStatus());
             assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+        }
+
+        {
+            /**
+             * 异常情况：
+             * 异常情况1：未传入rbid，返回status：1002
+             */
+            {
+                MvcResult res = mockMvc.perform(MockMvcRequestBuilders.get("/label/finish")
+                        .contentType(MediaType.APPLICATION_JSON).param("rbid", ""))
+                        .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+                ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+                assertNotNull(resultVO.getStatus());
+                assertEquals(Integer.valueOf(1002), resultVO.getStatus());
+            }
+
+            /**
+             * 异常情况2：rbid:1,bodyPO.getStatus() != 1，返回status：1003
+             */
+            {
+                MvcResult res = mockMvc.perform(MockMvcRequestBuilders.get("/label/finish")
+                        .contentType(MediaType.APPLICATION_JSON).param("rbid", "1"))
+                        .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+                ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+                assertNotNull(resultVO.getStatus());
+                assertEquals(Integer.valueOf(1003), resultVO.getStatus());
+            }
+
+            /**
+             * 异常情况3：rbid:2, labelNum < bodyPO.getAcceptNum()，返回status：1005
+             */
+            {
+                MvcResult res = mockMvc.perform(MockMvcRequestBuilders.get("/label/finish")
+                        .contentType(MediaType.APPLICATION_JSON).param("rbid", "3"))
+                        .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+                ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+                assertNotNull(resultVO.getStatus());
+                assertEquals(Integer.valueOf(1005), resultVO.getStatus());
+            }
+
         }
     }
 
@@ -153,7 +282,7 @@ public class LabelManageControllerTest extends BaseTest {
         {
             //LabelSplitDTO
             String reqData = "{" +
-                    "\"plid\": 44," +
+                    "\"plid\": 4," +
                     "\"gnum\": 800," +
                     "\"bnum\": 200" +
                     "}";
@@ -165,6 +294,49 @@ public class LabelManageControllerTest extends BaseTest {
             ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
             assertNotNull(resultVO.getStatus());
             assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+        }
+
+        {
+            /**
+             * 异常情况：
+             * 异常情况1：dto.getGnum() + dto.getBnum() != labelPO.getNum()，返回 status：1001；
+             */
+            {
+                //LabelSplitDTO
+                String reqData = "{" +
+                        "\"plid\": 13," +
+                        "\"gnum\": 1000," +
+                        "\"bnum\": 0" +
+                        "}";
+                System.out.println(reqData);
+                MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/label/split")
+                        .contentType(MediaType.APPLICATION_JSON).content(reqData))
+                        .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+                System.out.println(res);
+                ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+                assertNotNull(resultVO.getStatus());
+                assertEquals(Integer.valueOf(1001), resultVO.getStatus());
+            }
+
+            /**
+             * 异常情况2：未传入plid，返回 status：1002；
+             */
+            {
+                //LabelSplitDTO
+                String reqData = "{" +
+                        "\"plid\": \"\"," +
+                        "\"gnum\": 0," +
+                        "\"bnum\": 0" +
+                        "}";
+                System.out.println(reqData);
+                MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/label/split")
+                        .contentType(MediaType.APPLICATION_JSON).content(reqData))
+                        .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+                System.out.println(res);
+                ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+                assertNotNull(resultVO.getStatus());
+                assertEquals(Integer.valueOf(1002), resultVO.getStatus());
+            }
         }
     }
 }
