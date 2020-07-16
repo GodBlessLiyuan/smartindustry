@@ -7,6 +7,8 @@ package com.smartindustry.outbound.constant;
  * @version: 1.0
  */
 public class OutboundConstant {
+    public static final String FILE_LOGISTICS = "logistics";
+
     /**
      * 待推荐
      */

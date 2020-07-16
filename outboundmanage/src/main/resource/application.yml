@@ -36,3 +36,9 @@ logging:
         common:
           mapper: debug
   config: classpath:logback-spring-test.xml
+
+config:
+  file:
+    localPath: D:\\testFile
+    publicPath: http://dev.smartindustry.vbooster.cn
+

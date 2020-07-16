@@ -1,6 +1,7 @@
 package com.smartindustry.outbound.service;
 
 import com.smartindustry.common.vo.ResultVO;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
@@ -20,4 +21,12 @@ public interface IMaterialOutboundService {
      * @return
      */
     ResultVO pageQuery(int pageNum, int pageSize, Map<String, Object> reqData);
+
+    /**
+     * 文件上传
+     *
+     * @param file
+     * @return
+     */
+    ResultVO upload(MultipartFile file);
 }
