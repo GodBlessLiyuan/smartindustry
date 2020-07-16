@@ -3,7 +3,7 @@
 <mapper namespace="com.smartindustry.common.mapper.om.LogisticsRecordMapper">
     <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.om.LogisticsRecordPO">
         <id column="logistics_record_id" jdbcType="BIGINT" property="logisticsRecordId"/>
-        <result column="pick_head_id" jdbcType="BIGINT" property="pickHeadId"/>
+        <result column="outbound_id" jdbcType="BIGINT" property="outboundId"/>
         <result column="ship_date" jdbcType="DATE" property="shipDate"/>
         <result column="logistics_no" jdbcType="CHAR" property="logisticsNo"/>
         <result column="ship_way" jdbcType="TINYINT" property="shipWay"/>
@@ -11,7 +11,7 @@
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
     </resultMap>
     <sql id="Base_Column_List">
-        logistics_record_id, pick_head_id, ship_date, logistics_no, ship_way, remark, create_time
+        logistics_record_id, outbound_id, ship_date, logistics_no, ship_way, remark, create_time
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
@@ -25,10 +25,10 @@
         where logistics_record_id = #{logisticsRecordId,jdbcType=BIGINT}
     </delete>
     <insert id="insert" parameterType="com.smartindustry.common.pojo.om.LogisticsRecordPO">
-        insert into om_logistics_record (logistics_record_id, pick_head_id, ship_date,
+        insert into om_logistics_record (logistics_record_id, outbound_id, ship_date,
                                          logistics_no, ship_way, remark,
                                          create_time)
-        values (#{logisticsRecordId,jdbcType=BIGINT}, #{pickHeadId,jdbcType=BIGINT}, #{shipDate,jdbcType=DATE},
+        values (#{logisticsRecordId,jdbcType=BIGINT}, #{outboundId,jdbcType=BIGINT}, #{shipDate,jdbcType=DATE},
                 #{logisticsNo,jdbcType=CHAR}, #{shipWay,jdbcType=TINYINT}, #{remark,jdbcType=CHAR},
                 #{createTime,jdbcType=TIMESTAMP})
     </insert>
@@ -38,8 +38,8 @@
             <if test="logisticsRecordId != null">
                 logistics_record_id,
             </if>
-            <if test="pickHeadId != null">
-                pick_head_id,
+            <if test="outboundId != null">
+                outbound_id,
             </if>
             <if test="shipDate != null">
                 ship_date,
@@ -61,8 +61,8 @@
             <if test="logisticsRecordId != null">
                 #{logisticsRecordId,jdbcType=BIGINT},
             </if>
-            <if test="pickHeadId != null">
-                #{pickHeadId,jdbcType=BIGINT},
+            <if test="outboundId != null">
+                #{outboundId,jdbcType=BIGINT},
             </if>
             <if test="shipDate != null">
                 #{shipDate,jdbcType=DATE},
@@ -84,8 +84,8 @@
     <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.om.LogisticsRecordPO">
         update om_logistics_record
         <set>
-            <if test="pickHeadId != null">
-                pick_head_id = #{pickHeadId,jdbcType=BIGINT},
+            <if test="outboundId != null">
+                outbound_id = #{outboundId,jdbcType=BIGINT},
             </if>
             <if test="shipDate != null">
                 ship_date = #{shipDate,jdbcType=DATE},
@@ -107,7 +107,7 @@
     </update>
     <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.om.LogisticsRecordPO">
         update om_logistics_record
-        set pick_head_id = #{pickHeadId,jdbcType=BIGINT},
+        set outbound_id  = #{outboundId,jdbcType=BIGINT},
             ship_date    = #{shipDate,jdbcType=DATE},
             logistics_no = #{logisticsNo,jdbcType=CHAR},
             ship_way     = #{shipWay,jdbcType=TINYINT},

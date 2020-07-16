@@ -12,7 +12,7 @@ import lombok.Data;
 public class LogisticsRecordPO implements Serializable {
     private Long logisticsRecordId;
 
-    private Long pickHeadId;
+    private Long outboundId;
 
     private Date shipDate;
 

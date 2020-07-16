@@ -21,6 +21,7 @@ DROP TABLE IF EXISTS sm_storage_record;
 DROP TABLE IF EXISTS ba_user;
 DROP TABLE IF EXISTS om_logistics_picture;
 DROP TABLE IF EXISTS om_logistics_record;
+DROP TABLE IF EXISTS om_outbound;
 DROP TABLE IF EXISTS om_pick_body;
 DROP TABLE IF EXISTS om_pick_check;
 DROP TABLE IF EXISTS om_pick_head;
@@ -142,7 +143,7 @@ CREATE TABLE om_logistics_picture
 CREATE TABLE om_logistics_record
 (
     logistics_record_id bigint unsigned NOT NULL AUTO_INCREMENT,
-    pick_head_id bigint unsigned NOT NULL,
+    outbound_id bigint unsigned NOT NULL,
     ship_date date,
     logistics_no char(64),
     -- 1£ºµ½¸¶
@@ -153,7 +154,29 @@ CREATE TABLE om_logistics_record
     create_time datetime,
     PRIMARY KEY (logistics_record_id),
     UNIQUE (logistics_record_id),
-    UNIQUE (pick_head_id)
+    UNIQUE (outbound_id)
+);
+
+
+CREATE TABLE om_outbound
+(
+    outbound_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    pick_head_id bigint unsigned NOT NULL,
+    outbound_no char(64) NOT NULL,
+    outbound_time datetime,
+    -- 1£ºÒÑ³ö¿â
+    -- 3£º´ý³ö¿â
+    status tinyint COMMENT '1£ºÒÑ³ö¿â
+3£º´ý³ö¿â',
+    create_time datetime,
+    -- 1£ºÎ´É¾³ý
+    -- 2£ºÒÑÉ¾³ý
+    dr tinyint COMMENT '1£ºÎ´É¾³ý
+2£ºÒÑÉ¾³ý',
+    PRIMARY KEY (outbound_id),
+    UNIQUE (outbound_id),
+    UNIQUE (pick_head_id),
+    UNIQUE (outbound_no)
 );
 
 
@@ -697,6 +720,14 @@ ALTER TABLE om_logistics_picture
 ;
 
 
+ALTER TABLE om_logistics_record
+    ADD FOREIGN KEY (outbound_id)
+        REFERENCES om_outbound (outbound_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
 ALTER TABLE om_label_recommend
     ADD FOREIGN KEY (pick_body_id)
         REFERENCES om_pick_body (pick_body_id)
@@ -705,7 +736,7 @@ ALTER TABLE om_label_recommend
 ;
 
 
-ALTER TABLE om_logistics_record
+ALTER TABLE om_outbound
     ADD FOREIGN KEY (pick_head_id)
         REFERENCES om_pick_head (pick_head_id)
         ON UPDATE RESTRICT
