@@ -41,7 +41,7 @@ public class PickDTO implements Serializable {
         if (!StringUtils.isEmpty(dto.getPtime())) {
             headPO.setPlanTime(DateUtil.str2Date(dto.getPtime(), DateUtil.Y_M_D));
         }
-        headPO.setOutboundStatus(OutboundConstant.OUTBOUND_STATUS_WAIT);
+        headPO.setOutboundStatus(OutboundConstant.PICK_OUTBOUND_WAIT);
         headPO.setCreateTime(new Date());
         headPO.setDr((byte) 1);
 

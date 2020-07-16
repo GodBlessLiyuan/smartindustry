@@ -38,4 +38,12 @@ public interface IMaterialOutboundService {
      * @return
      */
     ResultVO logInsert(LogisticsDTO dto);
+
+    /**
+     * 记录信息
+     *
+     * @param oId
+     * @return
+     */
+    ResultVO record(Byte oId);
 }

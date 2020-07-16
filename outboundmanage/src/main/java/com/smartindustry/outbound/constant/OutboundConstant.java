@@ -49,13 +49,23 @@ public class OutboundConstant {
     /**
      * 全部出库
      */
-    public static final Byte OUTBOUND_STATUS_ALL = 1;
+    public static final Byte PICK_OUTBOUND_ALL = 1;
     /**
      * 欠料出库
      */
-    public static final Byte OUTBOUND_STATUS_LACK = 2;
+    public static final Byte PICK_OUTBOUND_LACK = 2;
+    /**
+     * 未出库
+     */
+    public static final Byte PICK_OUTBOUND_WAIT = 3;
+
+    /**
+     * 已出库
+     */
+    public static final Byte OUTBOUND_STATUS_FINISH = 1;
     /**
      * 未出库
      */
     public static final Byte OUTBOUND_STATUS_WAIT = 3;
+
 }

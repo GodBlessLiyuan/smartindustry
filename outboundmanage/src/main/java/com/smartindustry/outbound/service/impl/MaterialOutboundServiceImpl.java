@@ -9,8 +9,11 @@ import com.smartindustry.common.constant.ModuleConstant;
 import com.smartindustry.common.mapper.om.LogisticsPictureMapper;
 import com.smartindustry.common.mapper.om.LogisticsRecordMapper;
 import com.smartindustry.common.mapper.om.OutboundMapper;
+import com.smartindustry.common.mapper.om.PickHeadMapper;
 import com.smartindustry.common.pojo.om.LogisticsPicturePO;
 import com.smartindustry.common.pojo.om.LogisticsRecordPO;
+import com.smartindustry.common.pojo.om.OutboundPO;
+import com.smartindustry.common.pojo.om.PickHeadPO;
 import com.smartindustry.common.util.FileUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
@@ -40,6 +43,8 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
     @Autowired
     private OutboundMapper outboundMapper;
     @Autowired
+    private PickHeadMapper pickHeadMapper;
+    @Autowired
     private LogisticsRecordMapper logisticsRecordMapper;
     @Autowired
     private LogisticsPictureMapper logisticsPictureMapper;
@@ -57,12 +62,21 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
     @Override
     public ResultVO upload(MultipartFile file) {
         String picture = FileUtil.uploadFile(file, filePathConfig.getLocalPath(), filePathConfig.getProjectDir() + filePathConfig.getOutboundDir() + filePathConfig.getLogisticsDir(), OutboundConstant.FILE_LOGISTICS);
-        return new ResultVO<>(1000, filePathConfig.getPublicPath() + picture);
+        return ResultVO.ok().setData(filePathConfig.getPublicPath() + picture);
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO logInsert(LogisticsDTO dto) {
+        OutboundPO outboundPO = outboundMapper.selectByPrimaryKey(dto.getOid());
+        if (null == outboundPO) {
+            return new ResultVO(1002);
+        }
+        PickHeadPO pickHeadPO = pickHeadMapper.selectByPrimaryKey(outboundPO.getPickHeadId());
+        if (null == pickHeadPO) {
+            return new ResultVO(1002);
+        }
+
         LogisticsRecordPO recordPO = LogisticsDTO.createPO(dto);
         logisticsRecordMapper.insert(recordPO);
 
@@ -75,6 +89,17 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
         }
         logisticsPictureMapper.batchInsert(picturePOs);
 
+        if (OutboundConstant.OUTBOUND_STATUS_WAIT.equals(outboundPO.getStatus())) {
+            // 确认出货
+            pickHeadPO.setMaterialStatus(OutboundConstant.MATERIAL_STATUS_CONFIRM);
+            pickHeadMapper.updateByPrimaryKey(pickHeadPO);
+        }
+
         return ResultVO.ok();
+    }
+
+    @Override
+    public ResultVO record(Byte oId) {
+        return null;
     }
 }

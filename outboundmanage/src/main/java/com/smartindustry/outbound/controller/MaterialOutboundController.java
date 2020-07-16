@@ -57,14 +57,14 @@ public class MaterialOutboundController {
     }
 
     /**
-     * 上传
+     * 记录信息
      *
-     * @param file
+     * @param oId
      * @return
      */
-    @RequestMapping("upload")
-    public ResultVO upload(@Param("file") MultipartFile file) {
-        return materialOutboundService.upload(file);
+    @RequestMapping("record")
+    public ResultVO record(@RequestParam(value = "oid") Byte oId) {
+        return materialOutboundService.record(oId);
     }
 
     /**
@@ -76,5 +76,16 @@ public class MaterialOutboundController {
     @RequestMapping("logInsert")
     public ResultVO logInsert(@RequestBody LogisticsDTO dto) {
         return materialOutboundService.logInsert(dto);
+    }
+
+    /**
+     * 上传
+     *
+     * @param file
+     * @return
+     */
+    @RequestMapping("upload")
+    public ResultVO upload(@Param("file") MultipartFile file) {
+        return materialOutboundService.upload(file);
     }
 }
