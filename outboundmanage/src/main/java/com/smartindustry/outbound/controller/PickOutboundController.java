@@ -1,6 +1,6 @@
 package com.smartindustry.outbound.controller;
 
-import com.smartindustry.outbound.service.IMaterialOutboundService;
+import com.smartindustry.outbound.service.IPickOutboundService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RequestMapping("outbound")
 @RestController
-public class MaterialOutboundController {
+public class PickOutboundController {
     @Autowired
-    private IMaterialOutboundService materialOutboundService;
+    private IPickOutboundService materialOutboundService;
 }

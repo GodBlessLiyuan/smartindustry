@@ -1,6 +1,6 @@
 package com.smartindustry.outbound.service.impl;
 
-import com.smartindustry.outbound.service.IMaterialOutboundService;
+import com.smartindustry.outbound.service.IPickOutboundService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -10,5 +10,5 @@ import org.springframework.stereotype.Service;
  * @version: 1.0
  */
 @Service
-public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
+public class PickOutboundServiceImpl implements IPickOutboundService {
 }

@@ -6,5 +6,5 @@ package com.smartindustry.outbound.service;
  * @description: 物料出库
  * @version: 1.0
  */
-public interface IMaterialOutboundService {
+public interface IPickOutboundService {
 }
