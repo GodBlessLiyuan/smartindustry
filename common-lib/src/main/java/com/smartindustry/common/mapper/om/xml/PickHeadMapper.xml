@@ -163,4 +163,46 @@
             dr                 = #{dr,jdbcType=TINYINT}
         where pick_head_id = #{pickHeadId,jdbcType=BIGINT}
     </update>
+    <select id="pageQueryPickHeadMsg" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from om_pick_head ph
+        where material_status = #{materialStatus}
+        <if test="pickNo != null and pickNo != ''">
+            and ph.pick_no like '%' #{pickNo} '%'
+        </if>
+        <if test="orderNo != null and orderNo != ''">
+            and ph.order_no like '%' #{orderNo} '%'
+        </if>
+        <if test="correspondProject != null and correspondProject != ''">
+            and ph.correspondProject like '%' #{correspondProject} '%'
+        </if>
+        order by ph.create_time desc
+    </select>
+    <select id="scanLabelByPickNo" parameterType="java.lang.String"
+            resultType="com.smartindustry.common.bo.om.ScanPickBO">
+        select pl.package_id,pl.material_no,ma.material_name,ma.material_desc,pl.num
+        from om_pick_head ph
+        left join om_pick_label pil on ph.pick_head_id = pil.pick_head_id
+        left join si_print_label pl on pil.print_label_id = pl.print_label_id
+        left join si_material ma on pl.material_no = ma.material_no
+        where ph.pick_no = #{pickNo} and ph.dr=1 and pl.dr=1
+    </select>
+    <select id="materialLoss" resultType="com.smartindustry.common.bo.om.MaterialLossBO">
+        select ma.material_no,ma.material_name,ma.material_desc,pb.demand_num,pb.pick_num, (pb.demand_num-pb.pick_num)
+        as material_loss_num
+        from om_pick_head ph
+        left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
+        left join si_material ma on pb.material_no = ma.material_no
+        where ph.dr =1 and ph.pick_no
+        <if test="materialNo != null and materialNo != ''">
+            and ma.material_no like '%' #{materialNo} '%'
+        </if>
+        <if test="materialName != null and materialName != ''">
+            and ma.materialName like '%' #{materialName} '%'
+        </if>
+        <if test="flag != null and flag != ''">
+            and material_loss_num &lt;=0
+        </if>
+    </select>
 </mapper>
