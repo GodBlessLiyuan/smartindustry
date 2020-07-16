@@ -1,6 +1,6 @@
 package com.smartindustry.common.vo.om;
 
-import com.smartindustry.common.bo.om.ScanPickBO;
+import com.smartindustry.common.bo.om.PrintLabelBO;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
@@ -21,28 +21,40 @@ public class ScanPickVO implements Serializable {
     /**
      * 打印标签的PID
      */
-    private String packageId;
+    private String pid;
+    /**
+     * 物料编码
+     */
+    private String mno;
 
     /**
      * 物料名称
      */
-    private String materialName;
+    private String mname;
     /**
      * 物料描述
      */
-    private String materialDesc;
+    private String mdesc;
     /**
      * 数量
      */
     private Integer num;
 
-    public static List<ScanPickVO> convert(List<ScanPickBO> bos) {
+    public static List<ScanPickVO> convert(List<PrintLabelBO> bos) {
         List<ScanPickVO> vos = new ArrayList<>();
-        for (ScanPickBO bo : bos) {
-            ScanPickVO vo = new ScanPickVO();
-            BeanUtils.copyProperties(bo, vo);
-            vos.add(vo);
+        for (PrintLabelBO bo : bos) {
+            vos.add(convert(bo));
         }
         return vos;
+    }
+
+    public static ScanPickVO convert(PrintLabelBO bo) {
+        ScanPickVO vo = new ScanPickVO();
+        vo.setMdesc(bo.getMaterialDesc());
+        vo.setMname(bo.getMaterialName());
+        vo.setNum(bo.getNum());
+        vo.setPid(bo.getPackageId());
+        vo.setMno(bo.getMaterialNo());
+        return vo;
     }
 }

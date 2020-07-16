@@ -1,5 +1,6 @@
 package com.smartindustry.common.bo.om;
 
+import com.smartindustry.common.pojo.si.MaterialPO;
 import lombok.Data;
 
 /**
@@ -9,20 +10,12 @@ import lombok.Data;
  * @description: 欠料列表实体类
  */
 @Data
-public class MaterialLossBO {
+public class MaterialBO extends MaterialPO {
     private static final long SerialVersionUID = 1L;
     /**
      * 物料编号
      */
-    private String materialNo;
-    /**
-     * 物料名称
-     */
-    private String materialName;
-    /**
-     * 物料描述
-     */
-    private String materialDesc;
+    private String pickNo;
     /**
      * 需求数量
      */

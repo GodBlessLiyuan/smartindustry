@@ -1,7 +1,7 @@
 package com.smartindustry.common.mapper.om;
 
-import com.smartindustry.common.bo.om.MaterialLossBO;
-import com.smartindustry.common.bo.om.ScanPickBO;
+import com.smartindustry.common.bo.om.MaterialBO;
+import com.smartindustry.common.bo.om.PrintLabelBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.om.PickHeadPO;
 import org.apache.ibatis.annotations.Mapper;
@@ -29,7 +29,7 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
      * @param pickNo
      * @return
      */
-    List<ScanPickBO> scanLabelByPickNo(@Param("pickNo") String pickNo);
+    List<PrintLabelBO> scanLabelByPickNo(@Param("pickNo") String pickNo);
 
     /**
      * 扫码拣货的欠料的列表
@@ -39,5 +39,5 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
      * @param flag         用来标识是否点击了只看欠料按钮
      * @return
      */
-    List<MaterialLossBO> materialLoss(@Param("pickNo") String pickNo, @Param("materialNo") String materialNo, @Param("materialName") String materialName, @Param("flag") Byte flag);
+    List<MaterialBO> materialLoss(@Param("pickNo") String pickNo, @Param("materialNo") String materialNo, @Param("materialName") String materialName, @Param("flag") Byte flag);
 }

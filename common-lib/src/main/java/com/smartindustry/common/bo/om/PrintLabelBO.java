@@ -10,7 +10,7 @@ import lombok.Data;
  * @description: 扫码拣货检索列表
  */
 @Data
-public class ScanPickBO extends PrintLabelPO {
+public class PrintLabelBO extends PrintLabelPO {
     private static final long SerialVersionUID = 1L;
     /**
      * 物料名称

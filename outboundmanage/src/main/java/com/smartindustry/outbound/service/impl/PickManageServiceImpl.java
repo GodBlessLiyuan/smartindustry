@@ -2,8 +2,7 @@ package com.smartindustry.outbound.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.smartindustry.common.bo.om.MaterialLossBO;
-import com.smartindustry.common.bo.om.ScanPickBO;
+import com.smartindustry.common.bo.om.PrintLabelBO;
 import com.smartindustry.common.mapper.om.LabelRecommendMapper;
 import com.smartindustry.common.mapper.om.PickHeadMapper;
 import com.smartindustry.common.pojo.om.PickHeadPO;
@@ -42,8 +41,8 @@ public class PickManageServiceImpl implements IPickManageService {
 
     @Override
     public ResultVO scanPick(int pageNum,int pageSize,String pickNo){
-        Page<ScanPickBO> page = PageHelper.startPage(pageNum, pageSize);
-        List<ScanPickBO> bos =  pickHeadMapper.scanLabelByPickNo(pickNo);
+        Page<PrintLabelBO> page = PageHelper.startPage(pageNum, pageSize);
+        List<PrintLabelBO> bos =  pickHeadMapper.scanLabelByPickNo(pickNo);
         return new ResultVO(1000,new PageInfoVO<>(page.getTotal(), ScanPickVO.convert(bos)));
     }
 
