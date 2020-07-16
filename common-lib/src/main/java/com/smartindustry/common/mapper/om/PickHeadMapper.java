@@ -33,11 +33,8 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
 
     /**
      * 扫码拣货的欠料的列表
-     *
-     * @param materialNo   物料编码
-     * @param materialName 物料名称
-     * @param flag         用来标识是否点击了只看欠料按钮
+     * @param reqMap
      * @return
      */
-    List<MaterialBO> materialLoss(@Param("pickNo") String pickNo, @Param("materialNo") String materialNo, @Param("materialName") String materialName, @Param("flag") Byte flag);
+    List<MaterialBO> materialLoss(Map<String, Object> reqMap);
 }

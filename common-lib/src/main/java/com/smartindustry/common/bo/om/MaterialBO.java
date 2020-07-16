@@ -13,7 +13,7 @@ import lombok.Data;
 public class MaterialBO extends MaterialPO {
     private static final long SerialVersionUID = 1L;
     /**
-     * 物料编号
+     * 工单拣货单编号
      */
     private String pickNo;
     /**
@@ -24,4 +24,8 @@ public class MaterialBO extends MaterialPO {
      * 已扫描数量
      */
     private Integer pickNum;
+    /**
+     * 欠料的数量
+     */
+    private Integer LackNum;
 }

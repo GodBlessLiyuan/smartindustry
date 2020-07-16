@@ -33,8 +33,8 @@ public interface IPickManageService {
      * 根据工单拣货通知单的编号查询所有的物料现状(需求数，已扫描数，欠料数)
      * @param pageNum
      * @param pageSize
-     * @param pickNo
+     * @param reqMap
      * @return
      */
-    ResultVO materialLoss(int pageNum,int pageSize,String pickNo);
+    ResultVO materialLoss(int pageNum, int pageSize, Map<String, Object> reqMap);
 }

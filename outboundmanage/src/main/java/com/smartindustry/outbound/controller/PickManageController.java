@@ -22,7 +22,19 @@ public class PickManageController {
     @Autowired
     private IPickManageService pickManageService;
 
-    @RequestMapping("queryPickHeadMsg")
+    /**
+     * 工单拣货单状态查询
+     *
+     * @param pageNum
+     * @param pageSize
+     * @param pickNo
+     * @param orderNo
+     * @param correspondProject
+     * @param materialStatus
+     * @return
+     * @author jiangzhaojie
+     */
+    @RequestMapping("queryPick")
     public ResultVO queryPickHeadMsg(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                      @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
                                      @RequestParam(value = "pickNo", required = false) String pickNo,
@@ -44,6 +56,7 @@ public class PickManageController {
      * @param pageSize
      * @param pickNo
      * @return
+     * @author jiangzhaojie
      */
     @RequestMapping("scanPick")
     public ResultVO scanPick(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
@@ -52,13 +65,30 @@ public class PickManageController {
         return pickManageService.scanPick(pageNum, pageSize, pickNo);
     }
 
-//    @RequestMapping("materialLoss")
-//    public ResultVO materialLoss(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-//                                 @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-//                                 @RequestParam(value = "pickNo", required = false) String pickNo,
-//                                 @RequestParam(value = "pickNo", required = false) String pickNo,
-//                                 @RequestParam(value = "pickNo", required = false) String pickNo,
-//                                 @RequestParam(value = "pickNo", required = false) String pickNo){
-//        return pickManageService.materialLoss(pageNum,pageSize,pickNo);
-//    }
+    /**
+     * 扫描拣货的欠料列表
+     *
+     * @param pageNum
+     * @param pageSize
+     * @param pickNo
+     * @param materialNo
+     * @param materialName
+     * @param flag
+     * @return
+     * @author jiangzhaojie
+     */
+    @RequestMapping("materialLoss")
+    public ResultVO materialLoss(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                                 @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                                 @RequestParam(value = "pickNo", required = false) String pickNo,
+                                 @RequestParam(value = "materialNo", required = false) String materialNo,
+                                 @RequestParam(value = "materialName", required = false) String materialName,
+                                 @RequestParam(value = "flag", required = false) Byte flag) {
+        Map<String, Object> reqData = new HashMap<>(4);
+        reqData.put("pickNo", pickNo);
+        reqData.put("orderNo", materialNo);
+        reqData.put("correspondProject", materialName);
+        reqData.put("materialStatus", flag);
+        return pickManageService.materialLoss(pageNum, pageSize, reqData);
+    }
 }
