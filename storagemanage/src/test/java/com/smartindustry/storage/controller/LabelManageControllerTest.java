@@ -95,13 +95,11 @@ public class LabelManageControllerTest extends BaseTest {
                 assertEquals(Integer.valueOf(1002), resultVO.getStatus());
             }
         }
-
     }
 
     @Test
     public void reprint() throws Exception {
         {
-
             MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/label/reprint")
                     .contentType(MediaType.APPLICATION_JSON)
                     .param("plid", String.valueOf(2L)).param("num", "500"))
@@ -192,16 +190,16 @@ public class LabelManageControllerTest extends BaseTest {
 
     @Test
     public void delete() throws Exception {
-//        {
-//            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/label/delete")
-//                    .contentType(MediaType.APPLICATION_JSON)
-//                    .param("rbid", String.valueOf(13L)).param("plid", String.valueOf(11L)))
-//                    .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
-//
-//            ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
-//            assertNotNull(resultVO.getStatus());
-//            assertEquals(Integer.valueOf(1000), resultVO.getStatus());
-//        }
+        {
+            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.get("/label/delete")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .param("rbid", String.valueOf(4)).param("plid", String.valueOf(11L)))
+                    .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+            ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+            assertNotNull(resultVO.getStatus());
+            assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+        }
 
         {
             /**
@@ -209,7 +207,7 @@ public class LabelManageControllerTest extends BaseTest {
              * 异常情况1：未输入rbId，返回status：1002
              */
             {
-                MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/label/delete")
+                MvcResult res = mockMvc.perform(MockMvcRequestBuilders.get("/label/delete")
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("rbid", "").param("plid", String.valueOf(161L)))
                         .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
@@ -217,6 +215,20 @@ public class LabelManageControllerTest extends BaseTest {
                 ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
                 assertNotNull(resultVO.getStatus());
                 assertEquals(Integer.valueOf(1002), resultVO.getStatus());
+            }
+
+            /**
+             * 异常情况2：receiptBodyPO.getStatus() != RECEIPT_ENTRY_LABEL
+             */
+            {
+                MvcResult res = mockMvc.perform(MockMvcRequestBuilders.get("/label/delete")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("rbid", String.valueOf(11)).param("plid", ""))
+                        .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+                ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+                assertNotNull(resultVO.getStatus());
+                assertEquals(Integer.valueOf(1003), resultVO.getStatus());
             }
         }
     }
