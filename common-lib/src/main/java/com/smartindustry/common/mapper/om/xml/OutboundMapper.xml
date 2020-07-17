@@ -19,7 +19,7 @@
         select
         <include refid="Base_Column_List"/>
         from om_outbound
-        where outbound_id = #{outboundId,jdbcType=BIGINT}
+        where outbound_id = #{outboundId,jdbcType=BIGINT} and dr = 1
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete

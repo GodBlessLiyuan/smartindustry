@@ -32,6 +32,14 @@ public interface IMaterialOutboundService {
     ResultVO detail(Long oId);
 
     /**
+     * 出库
+     *
+     * @param oId
+     * @return
+     */
+    ResultVO outbound(Long oId);
+
+    /**
      * 文件上传
      *
      * @param file

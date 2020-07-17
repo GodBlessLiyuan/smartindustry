@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,6 +74,34 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
         List<PrintLabelBO> labelBOs = pickLabelMapper.queryByPhid(outboundBO.getPickHeadId());
 
         return ResultVO.ok().setData(OutboundDetailVO.convert(outboundBO, labelBOs));
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public ResultVO outbound(Long oId) {
+        OutboundPO outboundPO = outboundMapper.selectByPrimaryKey(oId);
+        if (null == outboundPO) {
+            return new ResultVO(1002);
+        }
+        PickHeadPO headPO = pickHeadMapper.selectByPrimaryKey(outboundPO.getPickHeadId());
+        if (null == headPO) {
+            return new ResultVO(1002);
+        }
+
+        outboundPO.setOutboundTime(new Date());
+        outboundPO.setStatus(OutboundConstant.OUTBOUND_STATUS_FINISH);
+        headPO.setMaterialStatus(OutboundConstant.MATERIAL_STATUS_FINISH);
+
+        LogisticsRecordPO logisticsRecordPO = logisticsRecordMapper.queryByOid(oId);
+        if (null != logisticsRecordPO) {
+            outboundPO.setShipTime(new Date());
+            headPO.setMaterialStatus(OutboundConstant.MATERIAL_STATUS_CONFIRM);
+        }
+
+        pickHeadMapper.updateByPrimaryKey(headPO);
+        outboundMapper.updateByPrimaryKey(outboundPO);
+
+        return ResultVO.ok();
     }
 
     @Override

@@ -61,6 +61,11 @@ public class MaterialOutboundController {
         return materialOutboundService.detail(oId);
     }
 
+    @RequestMapping("outbound")
+    public ResultVO outbound(@RequestParam(value = "oid") Long oId) {
+        return materialOutboundService.outbound(oId);
+    }
+
     /**
      * 记录信息
      *
