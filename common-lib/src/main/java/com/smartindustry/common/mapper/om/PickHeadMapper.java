@@ -1,7 +1,8 @@
 package com.smartindustry.common.mapper.om;
 
 import com.smartindustry.common.bo.om.MaterialBO;
-import com.smartindustry.common.bo.om.PrintLabelBO;
+import com.smartindustry.common.bo.om.PickHeadBO;
+import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.om.PickHeadPO;
 import org.apache.ibatis.annotations.Mapper;
@@ -24,12 +25,12 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
     List<PickHeadPO> pageQueryPickHeadMsg(Map<String, Object> reqMap);
 
     /**
-     * 根据工单拣货单查询所有的打印标签信息
-     *
+     * 根据工单拣货单号和PID扫码出库
      * @param pickNo
+     * @param packageId
      * @return
      */
-    List<PrintLabelBO> scanLabelByPickNo(@Param("pickNo") String pickNo);
+    PrintLabelBO pickPid(@Param("pickNo") String pickNo, @Param("packageId") String packageId);
 
     /**
      * 扫码拣货的欠料的列表
@@ -37,4 +38,27 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
      * @return
      */
     List<MaterialBO> materialLoss(Map<String, Object> reqMap);
+
+    /**
+     * 查看当前工单拣货单的推荐pid格式为  pickNo,maNo,(pid1,pid2,pid3)
+     * @param pickNo
+     * @return
+     */
+    List<PickHeadBO> queryRecommend(@Param("pickNo") String pickNo);
+
+
+    /**
+     * 根据工单拣货单查看目前每个物料已采用的pid
+     * @param pickNo
+     * @return
+     */
+    List<PickHeadBO> queryRealPid(@Param("pickNo") String pickNo);
+
+    /**
+     * 查看当前物料并不属于该工单
+     * @param pickNo
+     * @param pid
+     * @return
+     */
+    List<PickHeadPO> judgeMaterial(@Param("pickNo") String pickNo,@Param("pid") String pid);
 }

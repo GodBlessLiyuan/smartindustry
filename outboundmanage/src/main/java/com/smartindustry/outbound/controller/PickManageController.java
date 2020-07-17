@@ -49,21 +49,21 @@ public class PickManageController {
         return pickManageService.pageQueryPickHead(pageNum, pageSize, reqData);
     }
 
-    /**
-     * 根据工单拣货通知单扫描拣货页面清单
-     *
-     * @param pageNum
-     * @param pageSize
-     * @param pickNo
-     * @return
-     * @author jiangzhaojie
-     */
-    @RequestMapping("scanPick")
-    public ResultVO scanPick(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                             @RequestParam(value = "pickNo", required = false) String pickNo) {
-        return pickManageService.scanPick(pageNum, pageSize, pickNo);
-    }
+//    /**
+//     * 根据工单拣货通知单扫描拣货页面清单
+//     *
+//     * @param pageNum
+//     * @param pageSize
+//     * @param pickNo
+//     * @return
+//     * @author jiangzhaojie
+//     */
+//    @RequestMapping("scanPick")
+//    public ResultVO scanPick(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+//                             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+//                             @RequestParam(value = "pickNo", required = false) String pickNo) {
+//        return pickManageService.scanPick(pageNum, pageSize, pickNo);
+//    }
 
     /**
      * 扫描拣货的欠料列表
@@ -91,4 +91,19 @@ public class PickManageController {
         reqData.put("materialStatus", flag);
         return pickManageService.materialLoss(pageNum, pageSize, reqData);
     }
+
+    /**
+     * 查看当前拣货工单号的异常数据（未扫描优先推荐的pid）
+     * @param pageNum
+     * @param pageSize
+     * @param pickNo
+     * @return
+     */
+    @RequestMapping("queryExItems")
+    public ResultVO queryExItems(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                                 @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                                 @RequestParam(value = "pickNo", required = false) String pickNo){
+        return pickManageService.queryExItems(pageNum, pageSize, pickNo);
+    }
+
 }
