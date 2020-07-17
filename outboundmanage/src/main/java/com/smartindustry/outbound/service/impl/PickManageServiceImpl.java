@@ -15,6 +15,8 @@ import com.smartindustry.outbound.vo.PickHeadVO;
 import com.smartindustry.outbound.service.IPickManageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -25,6 +27,7 @@ import java.util.Map;
  * @description: 拣货单管理
  * @version: 1.0
  */
+@EnableTransactionManagement
 @Service
 public class PickManageServiceImpl implements IPickManageService {
     @Autowired
@@ -51,10 +54,31 @@ public class PickManageServiceImpl implements IPickManageService {
     @Override
     public ResultVO queryExItems(int pageNum,int pageSize,String pickNo){
 
-        List<PickHeadBO> recommedItems = pickHeadMapper.queryRecommend(pickNo);
-        List<PickHeadBO> realItems = pickHeadMapper.queryRealPid(pickNo);
+//        List<PickHeadBO> recommedItems = pickHeadMapper.queryRecommend(pickNo);
+//        List<PickHeadBO> realItems = pickHeadMapper.queryRealPid(pickNo);
         return new ResultVO(1000);
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public ResultVO pickPidOut(String pickNo,String packageId){
+        //1.首先根据输入的PID,得到相应PID的信息，进行展示
+        PrintLabelBO bo = pickHeadMapper.pickPid(packageId);
+        PickHeadPO po = pickHeadMapper.queryByPickNo(pickNo);
+        // 如果该物料的PID不在该工单对应采购单的物料范围内，则提示 该物料并不属于该工单
+//        List<String> pidList = pickHeadMapper.judgePidHave(pickNo);
 
+        // 判断当前物料不在拣货清单中，则提示 该物料并不在出库清单中
+        List<String> maList = pickHeadMapper.judgeMaterial(pickNo);
+        boolean flag = maList.contains(bo.getMaterialNo());
+        //2.将拣货单表体表中的已拣量作加操作
+        int addResult = pickHeadMapper.addPickNum(bo.getMaterialNo(),bo.getNum());
+        //3.查看扫码的PID是否在推荐的库位标签表中是否存在推荐的PID,存在则更新拣货标签表中的是否推荐标志位
+        List<String> reList = pickHeadMapper.queryRecommend(pickNo);
+        boolean flagOne = reList.contains(packageId);
+        int recommend = flagOne?1:0;
+        int insertResult = pickHeadMapper.insertPickLabel(po.getPickHeadId(),bo.getPrintLabelId(),recommend);
+
+        return ResultVO.ok().setData(bo);
+    }
 }

@@ -49,22 +49,6 @@ public class PickManageController {
         return pickManageService.pageQueryPickHead(pageNum, pageSize, reqData);
     }
 
-//    /**
-//     * 根据工单拣货通知单扫描拣货页面清单
-//     *
-//     * @param pageNum
-//     * @param pageSize
-//     * @param pickNo
-//     * @return
-//     * @author jiangzhaojie
-//     */
-//    @RequestMapping("scanPick")
-//    public ResultVO scanPick(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-//                             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-//                             @RequestParam(value = "pickNo", required = false) String pickNo) {
-//        return pickManageService.scanPick(pageNum, pageSize, pickNo);
-//    }
-
     /**
      * 扫描拣货的欠料列表
      *
@@ -106,4 +90,15 @@ public class PickManageController {
         return pickManageService.queryExItems(pageNum, pageSize, pickNo);
     }
 
+    /**
+     * 根据当前选中的工单拣货单和扫码入库的PID进行物料入库
+     * @param pickNo
+     * @param packageId
+     * @return
+     */
+    @RequestMapping("pickPidOut")
+    public ResultVO pickPidOut(@RequestParam(value = "pickNo", required = false) String pickNo,
+                               @RequestParam(value = "packageId", required = false) String packageId){
+        return pickManageService.pickPidOut(pickNo,packageId);
+    }
 }
