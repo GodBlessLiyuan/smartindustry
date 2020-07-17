@@ -191,7 +191,7 @@
 
     <!--    查看当前工单拣货单的所有欠料列表-->
     <select id="materialLoss" resultType="com.smartindustry.common.bo.om.MaterialBO">
-        select ma.material_no as materialNo,ma.material_name as materialName,ma.material_desc as
+        select pb.material_no as materialNo,ma.material_name as materialName,ma.material_desc as
         materialDesc,pb.demand_num as demandNum,pb.pick_num as pickNum, (pb.demand_num-pb.pick_num) as lackNum
         from om_pick_head ph
         left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
@@ -253,5 +253,23 @@
         from om_pick_head
         where pick_no = #{pickNo}
     </select>
+    
+<!--    当物料的已拣货量未满需求量，查找出其他推荐的pid-->
+<!--    <select id="queryAbnormal" parameterType="java.lang.String">-->
+<!--        select spl.material_no as materialNo,ma.material_name as materialName,ma.material_desc as materialDesc,GROUP_CONCAT(spl.package_id) as noRecommend-->
+<!--        from om_pick_head ph-->
+<!--        left join om_pick_label opl on ph.pick_head_id = opl.pick_head_id-->
+<!--        left join si_print_label spl on opl.print_label_id = spl.print_label_id-->
+<!--        left join si_material ma on spl.material_no = ma.material_no-->
+<!--        where opl.recommend = 2 and ph.pick_no = #{pickNo}-->
+<!--        group by ph.pick_no,spl.material_no-->
+<!--    </select>-->
 
+<!--    当物料的已拣货量已满足需求量，查找出未扫描优先推荐的pid-->
+<!--    <select id="queryLack" parameterType="java.lang.String">-->
+<!--        select-->
+<!--        from om_pick_body pb-->
+<!--        left join om_pick_head ph on pb.pick_head_id = ph.pick_head_id-->
+<!--        inner join om_pick_label opl on ph.pick_head_id = opl.pick_head_id-->
+<!--    </select>-->
 </mapper>

@@ -53,9 +53,13 @@ public class PickManageServiceImpl implements IPickManageService {
 
     @Override
     public ResultVO queryExItems(int pageNum,int pageSize,String pickNo){
+        // 先查询出当前工单号下 物料编码
 
-//        List<PickHeadBO> recommedItems = pickHeadMapper.queryRecommend(pickNo);
-//        List<PickHeadBO> realItems = pickHeadMapper.queryRealPid(pickNo);
+        // 当前物料的需求数未满时，若扫描了未推荐的PID,则异常列表只显示，扫描了其他推荐的PID
+
+        // 若已拣货量大于需求量时，将未扫描优先推荐的pid以及扫描了其他推荐的pid
+
+
         return new ResultVO(1000);
     }
 
@@ -74,11 +78,13 @@ public class PickManageServiceImpl implements IPickManageService {
         //2.将拣货单表体表中的已拣量作加操作
         int addResult = pickHeadMapper.addPickNum(bo.getMaterialNo(),bo.getNum());
         //3.查看扫码的PID是否在推荐的库位标签表中是否存在推荐的PID,存在则更新拣货标签表中的是否推荐标志位
-        List<String> reList = pickHeadMapper.queryRecommend(pickNo);
-        boolean flagOne = reList.contains(packageId);
+        List<String> ReList = pickHeadMapper.queryRecommend(pickNo);
+        boolean flagOne = ReList.contains(packageId);
         int recommend = flagOne?1:0;
         int insertResult = pickHeadMapper.insertPickLabel(po.getPickHeadId(),bo.getPrintLabelId(),recommend);
 
         return ResultVO.ok().setData(bo);
     }
+
+
 }
