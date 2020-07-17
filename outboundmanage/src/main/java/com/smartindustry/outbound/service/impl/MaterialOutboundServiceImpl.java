@@ -5,14 +5,8 @@ import com.github.pagehelper.PageHelper;
 import com.smartindustry.common.bo.om.LogisticsRecordBO;
 import com.smartindustry.common.bo.om.OutboundBO;
 import com.smartindustry.common.config.FilePathConfig;
-import com.smartindustry.common.mapper.om.LogisticsPictureMapper;
-import com.smartindustry.common.mapper.om.LogisticsRecordMapper;
-import com.smartindustry.common.mapper.om.OutboundMapper;
-import com.smartindustry.common.mapper.om.PickHeadMapper;
-import com.smartindustry.common.pojo.om.LogisticsPicturePO;
-import com.smartindustry.common.pojo.om.LogisticsRecordPO;
-import com.smartindustry.common.pojo.om.OutboundPO;
-import com.smartindustry.common.pojo.om.PickHeadPO;
+import com.smartindustry.common.mapper.om.*;
+import com.smartindustry.common.pojo.om.*;
 import com.smartindustry.common.util.FileUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
@@ -20,6 +14,7 @@ import com.smartindustry.outbound.constant.OutboundConstant;
 import com.smartindustry.outbound.dto.LogisticsRecordDTO;
 import com.smartindustry.outbound.service.IMaterialOutboundService;
 import com.smartindustry.outbound.vo.LogisticsRecordVO;
+import com.smartindustry.outbound.vo.OutboundRecordVO;
 import com.smartindustry.outbound.vo.OutboundVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,6 +44,8 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
     private LogisticsRecordMapper logisticsRecordMapper;
     @Autowired
     private LogisticsPictureMapper logisticsPictureMapper;
+    @Autowired
+    private OutboundRecordMapper outboundRecordMapper;
     @Autowired
     private FilePathConfig filePathConfig;
 
@@ -104,6 +101,8 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
         Map<String, Object> res = new HashMap<>();
         LogisticsRecordBO logisticsRecordBO = logisticsRecordMapper.queryByOid(oId);
         res.put("logistics", LogisticsRecordVO.convert(logisticsRecordBO, filePathConfig));
+        List<OutboundRecordPO> outboundRecordPOs = outboundRecordMapper.queryByOid(oId);
+        res.put("operate", OutboundRecordVO.convert(outboundRecordPOs));
         return ResultVO.ok().setData(res);
     }
 }

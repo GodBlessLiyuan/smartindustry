@@ -59,7 +59,7 @@ public class LogisticsRecordVO implements Serializable {
         vo.setSdate(bo.getShipDate());
         vo.setSway(bo.getShipWay());
         vo.setRemark(bo.getRemark());
-        List<String> picture = new ArrayList<>();
+        List<String> picture = new ArrayList<>(bo.getPicturePOs().size());
         for (LogisticsPicturePO po : bo.getPicturePOs()) {
             picture.add(config.getPublicPath() + po.getPicture());
         }

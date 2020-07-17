@@ -14,6 +14,8 @@ public class OutboundRecordPO implements Serializable {
 
     private Long pickHeadId;
 
+    private Long outboundId;
+
     private Long userId;
 
     private String name;

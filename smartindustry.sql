@@ -166,9 +166,9 @@ CREATE TABLE om_outbound
     outbound_time datetime,
     ship_time datetime,
     -- 1£ºÒÑ³ö¿â
-    -- 2£º´ý³ö¿â
+    -- 3£º´ý³ö¿â
     status tinyint COMMENT '1£ºÒÑ³ö¿â
-2£º´ý³ö¿â',
+3£º´ý³ö¿â',
     create_time datetime,
     -- 1£ºÎ´É¾³ý
     -- 2£ºÒÑÉ¾³ý
@@ -185,7 +185,8 @@ CREATE TABLE om_outbound_record
 (
     record_id bigint unsigned NOT NULL AUTO_INCREMENT,
     pick_head_id bigint unsigned NOT NULL,
-    user_id bigint unsigned NOT NULL,
+    outbound_id bigint unsigned,
+    user_id bigint unsigned,
     name char(255),
     type char(255),
     create_time datetime,
@@ -722,6 +723,14 @@ ALTER TABLE om_logistics_picture
 
 
 ALTER TABLE om_logistics_record
+    ADD FOREIGN KEY (outbound_id)
+        REFERENCES om_outbound (outbound_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE om_outbound_record
     ADD FOREIGN KEY (outbound_id)
         REFERENCES om_outbound (outbound_id)
         ON UPDATE RESTRICT
