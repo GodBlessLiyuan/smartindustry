@@ -4,9 +4,13 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.smartindustry.common.bo.om.LogisticsRecordBO;
 import com.smartindustry.common.bo.om.OutboundBO;
+import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.config.FilePathConfig;
 import com.smartindustry.common.mapper.om.*;
-import com.smartindustry.common.pojo.om.*;
+import com.smartindustry.common.pojo.om.LogisticsRecordPO;
+import com.smartindustry.common.pojo.om.OutboundPO;
+import com.smartindustry.common.pojo.om.OutboundRecordPO;
+import com.smartindustry.common.pojo.om.PickHeadPO;
 import com.smartindustry.common.util.FileUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
@@ -14,6 +18,7 @@ import com.smartindustry.outbound.constant.OutboundConstant;
 import com.smartindustry.outbound.dto.LogisticsRecordDTO;
 import com.smartindustry.outbound.service.IMaterialOutboundService;
 import com.smartindustry.outbound.vo.LogisticsRecordVO;
+import com.smartindustry.outbound.vo.OutboundDetailVO;
 import com.smartindustry.outbound.vo.OutboundRecordVO;
 import com.smartindustry.outbound.vo.OutboundVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +27,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +51,8 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
     @Autowired
     private OutboundRecordMapper outboundRecordMapper;
     @Autowired
+    private PickLabelMapper pickLabelMapper;
+    @Autowired
     private FilePathConfig filePathConfig;
 
     @Override
@@ -55,6 +61,18 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
         List<OutboundBO> bos = outboundMapper.pageQuery(reqData);
 
         return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), OutboundVO.convert(bos)));
+    }
+
+    @Override
+    public ResultVO detail(Long oId) {
+        OutboundBO outboundBO = outboundMapper.queryByOid(oId);
+        if (null == outboundBO) {
+            return new ResultVO(1002);
+        }
+
+        List<PrintLabelBO> labelBOs = pickLabelMapper.queryByPhid(outboundBO.getPickHeadId());
+
+        return ResultVO.ok().setData(OutboundDetailVO.convert(outboundBO, labelBOs));
     }
 
     @Override

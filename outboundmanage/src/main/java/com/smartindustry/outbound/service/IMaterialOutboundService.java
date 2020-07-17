@@ -24,6 +24,14 @@ public interface IMaterialOutboundService {
     ResultVO pageQuery(int pageNum, int pageSize, Map<String, Object> reqData);
 
     /**
+     * 详情
+     *
+     * @param oId
+     * @return
+     */
+    ResultVO detail(Long oId);
+
+    /**
      * 文件上传
      *
      * @param file

@@ -20,4 +20,12 @@ public interface OutboundMapper extends BaseMapper<OutboundPO, Long> {
      * @return
      */
     List<OutboundBO> pageQuery(Map<String, Object> reqData);
+
+    /**
+     * 根据oid查询
+     *
+     * @param oId
+     * @return
+     */
+    OutboundBO queryByOid(Long oId);
 }

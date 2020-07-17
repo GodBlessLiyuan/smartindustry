@@ -11,6 +11,16 @@ import lombok.Data;
  */
 @Data
 public class PrintLabelBO extends PrintLabelPO {
+    /**
+     * 物流编码
+     */
     private String materialNo;
+    /**
+     * 物料名称
+     */
+    private String materialName;
+    /**
+     * 物料描述
+     */
     private String materialDesc;
 }

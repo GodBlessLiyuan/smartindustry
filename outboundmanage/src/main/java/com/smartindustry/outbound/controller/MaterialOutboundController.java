@@ -56,6 +56,11 @@ public class MaterialOutboundController {
         return materialOutboundService.pageQuery(pageNum, pageSize, reqData);
     }
 
+    @RequestMapping("detail")
+    public ResultVO detail(@RequestParam(value = "oid") Long oId) {
+        return materialOutboundService.detail(oId);
+    }
+
     /**
      * 记录信息
      *
