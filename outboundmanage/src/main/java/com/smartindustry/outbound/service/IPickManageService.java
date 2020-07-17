@@ -41,7 +41,6 @@ public interface IPickManageService {
      */
     ResultVO queryExItems(int pageNum, int pageSize, String pickNo);
 
-
     /**
      * 拣货单打印-详情
      *
@@ -49,4 +48,12 @@ public interface IPickManageService {
      * @return
      */
     ResultVO detail(Long phId);
+
+    /**
+     * 根据当前选中的工单拣货单和扫码入库的PID进行物料入库
+     * @param pickNo
+     * @param packageId
+     * @return
+     */
+    ResultVO pickPidOut(String pickNo,String packageId);
 }

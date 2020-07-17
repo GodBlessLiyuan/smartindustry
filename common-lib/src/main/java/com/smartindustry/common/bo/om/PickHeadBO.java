@@ -24,8 +24,8 @@ public class PickHeadBO extends PickHeadPO {
      * 物料描述
      */
     private String materialDesc;
-    /**
-     * 以逗号为间隔隔开的PID列表
-     */
-    private String packageItems;
+//    /**
+//     * 以逗号为间隔隔开的PID列表
+//     */
+//    private String packageItems;
 }
