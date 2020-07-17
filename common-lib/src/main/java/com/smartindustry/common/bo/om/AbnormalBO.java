@@ -37,7 +37,6 @@ public class AbnormalBO implements Serializable {
         materialItems.setMaterialDesc(bo.getMaterialDesc());
         materialItems.setMaterialName(bo.getMaterialName());
         materialItems.setMaterialNo(bo.getMaterialNo());
-        materialItems.setPackageId(Arrays.asList(bo.getPackageItems().split(",")));
         abnormalBO.setPickNo(bo.getPickNo());
         return abnormalBO;
     }

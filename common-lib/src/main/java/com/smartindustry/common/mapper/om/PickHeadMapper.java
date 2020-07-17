@@ -26,11 +26,10 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
 
     /**
      * 根据工单拣货单号和PID扫码出库
-     * @param pickNo
      * @param packageId
      * @return
      */
-    PrintLabelBO pickPid(@Param("pickNo") String pickNo, @Param("packageId") String packageId);
+    PrintLabelBO pickPid(@Param("packageId") String packageId);
 
     /**
      * 扫码拣货的欠料的列表
@@ -44,7 +43,7 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
      * @param pickNo
      * @return
      */
-    List<PickHeadBO> queryRecommend(@Param("pickNo") String pickNo);
+    List<String> queryRecommend(@Param("pickNo") String pickNo);
 
 
     /**
@@ -57,8 +56,34 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
     /**
      * 查看当前物料并不属于该工单
      * @param pickNo
-     * @param pid
      * @return
      */
-    List<PickHeadPO> judgeMaterial(@Param("pickNo") String pickNo,@Param("pid") String pid);
+    List<String> judgeMaterial(@Param("pickNo") String pickNo);
+
+    /**
+     * 当扫码出库的时候更新当前物料的已拣货量
+     * @param materialNo
+     * @param pickNum
+     * @return
+     */
+    int addPickNum(@Param("materialNo") String materialNo,@Param("pickNum") Integer pickNum);
+
+    /**
+     * 更新拣货标签表中的所有信息
+     * @param pickHeadId
+     * @param printLabelId
+     * @param recommend
+     * @return
+     */
+    int insertPickLabel(@Param("pickHeadId") Long pickHeadId,
+                        @Param("printLabelId") Long printLabelId,
+                        @Param("recommend") int recommend);
+
+    /**
+     * 根据当前的工单拣货单
+     * @param pickNo
+     * @return
+     */
+    PickHeadPO queryByPickNo(@Param("pickNo") String pickNo);
+
 }
