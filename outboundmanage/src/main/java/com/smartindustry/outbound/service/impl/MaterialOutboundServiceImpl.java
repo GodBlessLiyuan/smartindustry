@@ -65,7 +65,7 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public ResultVO logInsert(LogisticsRecordDTO dto) {
+    public ResultVO logEdit(LogisticsRecordDTO dto) {
         OutboundPO outboundPO = outboundMapper.selectByPrimaryKey(dto.getOid());
         if (null == outboundPO) {
             return new ResultVO(1002);
@@ -75,23 +75,33 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
             return new ResultVO(1002);
         }
 
-        LogisticsRecordPO recordPO = LogisticsRecordDTO.createPO(dto);
-        logisticsRecordMapper.insert(recordPO);
+        if (null == dto.getLid()) {
+            // 新增
+            LogisticsRecordPO recordPO = LogisticsRecordDTO.createPO(dto);
+            logisticsRecordMapper.insert(recordPO);
 
-        List<LogisticsPicturePO> picturePOs = new ArrayList<>();
-        for (String pic : dto.getPicture()) {
-            LogisticsPicturePO po = new LogisticsPicturePO();
-            po.setLogisticsRecordId(recordPO.getLogisticsRecordId());
-            po.setPicture(pic.split(filePathConfig.getPublicPath())[1]);
-            picturePOs.add(po);
-        }
-        logisticsPictureMapper.batchInsert(picturePOs);
+            dto.setLid(recordPO.getLogisticsRecordId());
+            logisticsPictureMapper.batchInsert(LogisticsRecordDTO.createPicPO(dto, filePathConfig));
 
-        if (OutboundConstant.OUTBOUND_STATUS_WAIT.equals(outboundPO.getStatus())) {
-            // 确认出货
-            pickHeadPO.setMaterialStatus(OutboundConstant.MATERIAL_STATUS_CONFIRM);
-            pickHeadMapper.updateByPrimaryKey(pickHeadPO);
+            if (OutboundConstant.OUTBOUND_STATUS_WAIT.equals(outboundPO.getStatus())) {
+                // 确认出货
+                pickHeadPO.setMaterialStatus(OutboundConstant.MATERIAL_STATUS_CONFIRM);
+                pickHeadMapper.updateByPrimaryKey(pickHeadPO);
+            }
+
+            return ResultVO.ok();
         }
+
+        // 编辑保存
+        LogisticsRecordPO recordPO = logisticsRecordMapper.selectByPrimaryKey(dto.getLid());
+        if (null == recordPO) {
+            return new ResultVO(1002);
+        }
+
+        logisticsRecordMapper.updateByPrimaryKey(LogisticsRecordDTO.updatePO(recordPO, dto));
+
+        logisticsPictureMapper.deleteBylid(dto.getLid());
+        logisticsPictureMapper.batchInsert(LogisticsRecordDTO.createPicPO(dto, filePathConfig));
 
         return ResultVO.ok();
     }
@@ -100,7 +110,9 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
     public ResultVO record(Long oId) {
         Map<String, Object> res = new HashMap<>();
         LogisticsRecordBO logisticsRecordBO = logisticsRecordMapper.queryByOid(oId);
-        res.put("logistics", LogisticsRecordVO.convert(logisticsRecordBO, filePathConfig));
+        if (null != logisticsRecordBO) {
+            res.put("logistics", LogisticsRecordVO.convert(logisticsRecordBO, filePathConfig));
+        }
         List<OutboundRecordPO> outboundRecordPOs = outboundRecordMapper.queryByOid(oId);
         res.put("operate", OutboundRecordVO.convert(outboundRecordPOs));
         return ResultVO.ok().setData(res);

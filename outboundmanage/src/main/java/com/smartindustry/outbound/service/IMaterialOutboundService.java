@@ -37,7 +37,7 @@ public interface IMaterialOutboundService {
      * @param dto
      * @return
      */
-    ResultVO logInsert(LogisticsRecordDTO dto);
+    ResultVO logEdit(LogisticsRecordDTO dto);
 
     /**
      * 记录信息

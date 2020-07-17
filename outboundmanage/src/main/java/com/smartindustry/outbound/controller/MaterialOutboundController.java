@@ -73,9 +73,9 @@ public class MaterialOutboundController {
      * @param dto
      * @return
      */
-    @RequestMapping("logInsert")
-    public ResultVO logInsert(@RequestBody LogisticsRecordDTO dto) {
-        return materialOutboundService.logInsert(dto);
+    @RequestMapping("logEdit")
+    public ResultVO logEdit(@RequestBody LogisticsRecordDTO dto) {
+        return materialOutboundService.logEdit(dto);
     }
 
     /**

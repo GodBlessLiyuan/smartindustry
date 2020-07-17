@@ -79,4 +79,9 @@
             #{po.picture,jdbcType=CHAR})
         </foreach>
     </insert>
+    <delete id="deleteBylid" parameterType="java.lang.Long">
+        delete
+        from om_logistics_picture
+        where logistics_record_id = #{logisticsRecordId,jdbcType=BIGINT}
+    </delete>
 </mapper>

@@ -9,4 +9,10 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface LogisticsPictureMapper extends BaseMapper<LogisticsPicturePO, Long> {
+    /**
+     * 根据物流记录ID删除
+     *
+     * @param lid
+     */
+    void deleteBylid(Long lid);
 }

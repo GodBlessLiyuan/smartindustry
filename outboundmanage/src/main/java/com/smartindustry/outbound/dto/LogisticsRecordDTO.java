@@ -1,9 +1,12 @@
 package com.smartindustry.outbound.dto;
 
+import com.smartindustry.common.config.FilePathConfig;
+import com.smartindustry.common.pojo.om.LogisticsPicturePO;
 import com.smartindustry.common.pojo.om.LogisticsRecordPO;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,6 +24,10 @@ public class LogisticsRecordDTO implements Serializable {
      * 出库单ID
      */
     private Long oid;
+    /**
+     * 物流ID
+     */
+    private Long lid;
     /**
      * 物流单号
      */
@@ -43,19 +50,42 @@ public class LogisticsRecordDTO implements Serializable {
     private List<String> picture;
 
     /**
-     * dto 转 po
+     * 创建 po
      *
      * @param dto
      * @return
      */
     public static LogisticsRecordPO createPO(LogisticsRecordDTO dto) {
-        LogisticsRecordPO po = new LogisticsRecordPO();
+        LogisticsRecordPO po = updatePO(new LogisticsRecordPO(), dto);
+        po.setCreateTime(new Date());
+        return po;
+    }
+
+    /**
+     * 更新 po
+     *
+     * @param po
+     * @param dto
+     * @return
+     */
+    public static LogisticsRecordPO updatePO(LogisticsRecordPO po, LogisticsRecordDTO dto) {
         po.setOutboundId(dto.getOid());
         po.setShipDate(dto.getSdate());
         po.setLogisticsNo(dto.getLno());
         po.setShipWay(dto.getSway());
         po.setRemark(dto.getRemark());
-        po.setCreateTime(new Date());
         return po;
+    }
+
+    public static List<LogisticsPicturePO> createPicPO(LogisticsRecordDTO dto, FilePathConfig config) {
+        List<LogisticsPicturePO> pos = new ArrayList<>();
+        for (String pic : dto.getPicture()) {
+            LogisticsPicturePO po = new LogisticsPicturePO();
+            po.setLogisticsRecordId(dto.getLid());
+            po.setPicture(pic.split(config.getPublicPath())[1]);
+            pos.add(po);
+        }
+
+        return pos;
     }
 }
