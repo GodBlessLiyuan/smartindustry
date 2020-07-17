@@ -88,7 +88,6 @@ public class ReceiptManageControllerTest extends BaseTest {
                     "}]" +
                     "}";
 
-
             MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/receipt/insert")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(reqData)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
@@ -129,14 +128,6 @@ public class ReceiptManageControllerTest extends BaseTest {
     @Test
     public void editLog() throws Exception {
         {
-            //editLog -编辑物流信息 l
-//            String reqData = "{" +
-//                    "\"rbid\": 1," +
-//                    "\"company\": \"顺丰快递\"," +
-//                    "\"no\": \"SF0000000001\"," +
-//                    "\"way\": 2," +
-//                    "\"remark\": \"由东京快递改为顺丰快递\"" +
-//                    "}";
             String reqData = "{" +
                     "\"rbid\": 9," +
                     "\"company\": \"京东快递\"," +
@@ -157,7 +148,6 @@ public class ReceiptManageControllerTest extends BaseTest {
 
     @Test
     public void record() throws Exception {
-
         {
             MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/receipt/record")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -166,13 +156,6 @@ public class ReceiptManageControllerTest extends BaseTest {
             assertNotNull(resultVO.getStatus());
             assertEquals(Integer.valueOf(1000), resultVO.getStatus());
             assertNotNull(resultVO.getData());
-
-//
-//
-//            RecordVO recordVO = JSONObject.toJavaObject(JSON.parseObject(String.valueOf(resultVO.getData())), RecordVO.class);
-//            //rbId
-//            assertEquals(Integer.valueOf(6),resultVO.getData());
-//            //status
         }
     }
 

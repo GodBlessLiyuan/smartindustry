@@ -44,7 +44,6 @@ public class MaterialStorageControllerTest extends BaseTest {
             assertNotNull(resultVO.getStatus());
             assertEquals(Integer.valueOf(1000), resultVO.getStatus());
             assertNotNull(resultVO.getData());
-
         }
     }
 
@@ -59,54 +58,95 @@ public class MaterialStorageControllerTest extends BaseTest {
             ResultVO<ReceiptVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
             assertNotNull(resultVO.getStatus());
             assertEquals(Integer.valueOf(1000), resultVO.getStatus());
-
         }
     }
 
     @Test
     public void label() throws Exception {
-//        {
-//            /**
-//             异常情况1：rbid = 1, dr = 2, 数据被删除，找不到PrintLabelBO；返回status：1002
-//             */
-//            //StorageGroupDTO
-//            String reqData1 = "{" +
-//                    "\"sid\": 1," +
-//                    "\"rbid\": 1," +
-//                    "\"sgid\": 1," +
-//                    "\"lno\": \"8-12\"," +
-//                    "\"pid\": \"2020071500002\"" +
-//                    "}";
-//            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/storage/label")
-//                    .contentType(MediaType.APPLICATION_JSON).content(reqData1))
-//                    .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
-//
-//            ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
-//            assertNotNull(resultVO.getStatus());
-//            assertEquals(Integer.valueOf(1002), resultVO.getStatus());
-//        }
-
         {
-            /**
-             *
-             */
             //StorageGroupDTO
-            String reqData2 = "{" +
-                    "\"sgid\": 3," +
-                    "\"sid\": 4" +
-                    "\"lno\": \"8-11\"," +
-                    "\"rbid\": 15," +
-                    "\"pid\": \"2020071500019\"" +
+            String reqData = "{" +
+                    "\"sid\": 1," +
+                    "\"sgid\": 1," +
+                    "\"rbid\": 1," +
+                    "\"lno\": \"8-12\"," +
+                    "\"pid\": \"2020071500004\"" +
                     "}";
 
             MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/storage/label")
-                    .contentType(MediaType.APPLICATION_JSON).content(reqData2))
+                    .contentType(MediaType.APPLICATION_JSON).content(reqData))
                     .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
             ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
             assertNotNull(resultVO.getStatus());
-            assertEquals(Integer.valueOf(2000), resultVO.getStatus());
+            assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+        }
 
+        {
+            /**
+             * 异常情况：
+             * 异常情况1："rbid = 1, dr = 2", 数据被删除，找不到PrintLabelBO；返回status：1002 --> reqData1
+             * 异常情况2：未传入sid，返回status：1002 --> reqData2
+             * 异常情况3：未传入pid，返回status：1002 --> reqData3
+             */
+            {
+                //StorageGroupDTO
+                String reqData1 = "{" +
+                        "\"sid\": 1," +
+                        "\"rbid\": 1," +
+                        "\"sgid\": 1," +
+                        "\"lno\": \"8-12\"," +
+                        "\"pid\": \"2020071500001\"" +
+                        "}";
+
+                //StorageGroupDTO
+                String reqData2 = "{" +
+                        "\"sid\": \"\"," +
+                        "\"rbid\": 1," +
+                        "\"sgid\": 1," +
+                        "\"lno\": \"8-12\"," +
+                        "\"pid\": \"2020071500001\"" +
+                        "}";
+
+                //StorageGroupDTO
+                String reqData3 = "{" +
+                        "\"sid\": 1," +
+                        "\"rbid\": 1," +
+                        "\"sgid\": 1," +
+                        "\"lno\": \"8-12\"," +
+                        "\"pid\": \"\"" +
+                        "}";
+
+                MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/storage/label")
+                        .contentType(MediaType.APPLICATION_JSON).content(reqData3))
+                        .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+                ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+                assertNotNull(resultVO.getStatus());
+                assertEquals(Integer.valueOf(1002), resultVO.getStatus());
+            }
+
+            /**
+             * 异常情况4：StorageDetailPO != null, 标签已使用 返回status：1004
+             */
+            {
+                //StorageGroupDTO
+                String reqData4 = "{" +
+                        "\"sid\": 2," +
+                        "\"sgid\": \"\"," +
+                        "\"lno\": \"\"," +
+                        "\"rbid\": \"1\"," +
+                        "\"pid\": \"2020071500003\"" +
+                        "}";
+
+                MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/storage/label")
+                        .contentType(MediaType.APPLICATION_JSON).content(reqData4))
+                        .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+                ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+                assertNotNull(resultVO.getStatus());
+                assertEquals(Integer.valueOf(1004), resultVO.getStatus());
+            }
         }
     }
 
@@ -239,8 +279,8 @@ public class MaterialStorageControllerTest extends BaseTest {
             ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
             assertNotNull(resultVO.getStatus());
             assertEquals(Integer.valueOf(1000), resultVO.getStatus());
-
         }
+
         {
             /**
              * 异常情况：
@@ -294,7 +334,7 @@ public class MaterialStorageControllerTest extends BaseTest {
                         "\"sid\": 1," +
                         "\"rbid\": 1," +
                         "\"sgid\": 1," +
-                        "\"lno\": \"\"," +
+                        "\"lno\": \"8-12\"," +
                         "\"pid\": \"2020071500002\"" +
                         "}";
 
@@ -387,7 +427,6 @@ public class MaterialStorageControllerTest extends BaseTest {
             assertEquals(Integer.valueOf(1000), storageDetailVO.getPnum());
             //已入库数
             assertEquals(Integer.valueOf(200), storageDetailVO.getSnum());
-
         }
 
         {

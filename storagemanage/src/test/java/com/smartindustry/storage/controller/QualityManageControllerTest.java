@@ -64,8 +64,6 @@ public class QualityManageControllerTest extends BaseTest {
             ResultVO<ReceiptVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
             assertNotNull(resultVO.getStatus());
             assertEquals(Integer.valueOf(1000), resultVO.getStatus());
-            //
-
         }
 
         {
@@ -114,22 +112,22 @@ public class QualityManageControllerTest extends BaseTest {
 
     @Test
     public void qeConfirm() throws Exception {
-//        {
-//            //QeConfirmDTO
-//            String reqData = "{" +
-//                    "\"rbid\": 13," +
-//                    "\"status\": 3" +
-//                    "}";
-//
-//            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/quality/qeConfirm")
-//                    .contentType(MediaType.APPLICATION_JSON).content(reqData))
-//                    .andDo(MockMvcResultHandlers.print())
-//                    .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
-//
-//            ResultVO<ReceiptVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
-//            assertNotNull(resultVO.getStatus());
-//            assertEquals(Integer.valueOf(1000), resultVO.getStatus());
-//        }
+        {
+            //QeConfirmDTO
+            String reqData = "{" +
+                    "\"rbid\": 13," +
+                    "\"status\": 3" +
+                    "}";
+
+            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/quality/qeConfirm")
+                    .contentType(MediaType.APPLICATION_JSON).content(reqData))
+                    .andDo(MockMvcResultHandlers.print())
+                    .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+            ResultVO<ReceiptVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+            assertNotNull(resultVO.getStatus());
+            assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+        }
 
         {
             /**
@@ -157,7 +155,7 @@ public class QualityManageControllerTest extends BaseTest {
              * 异常情况2：receiptBodyPO.getStatus() != RECEIPT_QE_DETECT || qeDetectPO.getStatus() == RECEIPT_QE_DETECT ;返回 status ： 1003
              */
             {
-                //QeConfirmDTO    //rbid = 8, 12
+                //QeConfirmDTO
                 String reqData2 = "{" +
                         "\"rbid\": 8," +
                         "\"status\": 3" +
@@ -174,47 +172,46 @@ public class QualityManageControllerTest extends BaseTest {
             }
 
             /**
-             * 异常情况3：
+             * 异常情况3：输入参数有误，返回status：1001
              */
-//            {
-//                //QeConfirmDTO
-//                String reqData3 = "{" +
-//                        "\"rbid\": 13," +
-//                        "\"status\": 3" +
-//                        "}";
-//
-//                MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/quality/qeConfirm")
-//                        .contentType(MediaType.APPLICATION_JSON).content(reqData3))
-//                        .andDo(MockMvcResultHandlers.print())
-//                        .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
-//
-//                ResultVO<ReceiptVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
-//                assertNotNull(resultVO.getStatus());
-//                assertEquals(Integer.valueOf(1001), resultVO.getStatus());
-//            }
+            {
+                //QeConfirmDTO
+                String reqData3 = "{" +
+                        "\"rbid\": 13," +
+                        "\"status\": 1" +
+                        "}";
+
+                MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/quality/qeConfirm")
+                        .contentType(MediaType.APPLICATION_JSON).content(reqData3))
+                        .andDo(MockMvcResultHandlers.print())
+                        .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+                ResultVO<ReceiptVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+                assertNotNull(resultVO.getStatus());
+                assertEquals(Integer.valueOf(1001), resultVO.getStatus());
+            }
 
         }
     }
 
     @Test
     public void qeTest() throws Exception {
-//        {
-//            //QeTestDTO
-//            String reqData = "{" +
-//                    "\"rbid\": 12," +
-//                    "\"status\": 3," +
-//                    "\"remark\": \"\"" +
-//                    "}";
-//
-//            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/quality/qeTest")
-//                    .contentType(MediaType.APPLICATION_JSON).content(reqData))
-//                    .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
-//
-//            ResultVO<ReceiptVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
-//            assertNotNull(resultVO.getStatus());
-//            assertEquals(Integer.valueOf(1000), resultVO.getStatus());
-//
-//        }
+        {
+            //QeTestDTO
+            String reqData = "{" +
+                    "\"rbid\": 12," +
+                    "\"status\": 3," +
+                    "\"remark\": \"\"" +
+                    "}";
+
+            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/quality/qeTest")
+                    .contentType(MediaType.APPLICATION_JSON).content(reqData))
+                    .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+            ResultVO<ReceiptVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+            assertNotNull(resultVO.getStatus());
+            assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+        }
 
         {
             /**
@@ -259,39 +256,39 @@ public class QualityManageControllerTest extends BaseTest {
             }
 
             /**
-             * 异常情况3：返回status：1001 /////////
+             * 异常情况3：输入参数有误，返回status：1001
              */
-//            {
-//                //QeTestDTO
-//                String reqData3 = "{" +
-//                        "\"rbid\": ?," +
-//                        "\"status\": 3," +
-//                        "\"remark\": \"\"" +
-//                        "}";
-//
-//                MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/quality/qeTest")
-//                        .contentType(MediaType.APPLICATION_JSON).content(reqData3))
-//                        .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
-//
-//                ResultVO<ReceiptVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
-//                assertNotNull(resultVO.getStatus());
-//                assertEquals(Integer.valueOf(1003), resultVO.getStatus());
-//            }
+            {
+                //QeTestDTO
+                String reqData3 = "{" +
+                        "\"rbid\": 12," +
+                        "\"status\": 1," +
+                        "\"remark\": \"\"" +
+                        "}";
+
+                MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/quality/qeTest")
+                        .contentType(MediaType.APPLICATION_JSON).content(reqData3))
+                        .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+                ResultVO<ReceiptVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+                assertNotNull(resultVO.getStatus());
+                assertEquals(Integer.valueOf(1001), resultVO.getStatus());
+            }
         }
     }
 
     @Test
     public void storage() throws Exception {
-//        {
-//            //传入数据 Long rbid
-//            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.get("/quality/storage")
-//                    .contentType(MediaType.APPLICATION_JSON).param("rbid", String.valueOf(11)))
-//                    .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
-//
-//            ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
-//            assertNotNull(resultVO.getStatus());
-//            assertEquals(Integer.valueOf(1000), resultVO.getStatus());
-//        }
+        {
+            //传入数据 Long rbid
+            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.get("/quality/storage")
+                    .contentType(MediaType.APPLICATION_JSON).param("rbid", String.valueOf(3)))
+                    .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+            ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+            assertNotNull(resultVO.getStatus());
+            assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+        }
 
         /**
          * 异常情况：
@@ -305,10 +302,21 @@ public class QualityManageControllerTest extends BaseTest {
 
             ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
             assertNotNull(resultVO.getStatus());
+            assertEquals(Integer.valueOf(1003), resultVO.getStatus());
+        }
+        /**
+         * 异常情况2：未输入rbid， 返回status：1002
+         */
+        {
+            //传入数据 Long rbid
+            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.get("/quality/storage")
+                    .contentType(MediaType.APPLICATION_JSON).param("rbid", ""))
+                    .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+            ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+            assertNotNull(resultVO.getStatus());
             assertEquals(Integer.valueOf(1000), resultVO.getStatus());
         }
-
-
     }
 
     @Test
