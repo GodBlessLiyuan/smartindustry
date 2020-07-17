@@ -74,8 +74,8 @@ public class PickManageServiceImpl implements IPickManageService {
         //2.将拣货单表体表中的已拣量作加操作
         int addResult = pickHeadMapper.addPickNum(bo.getMaterialNo(),bo.getNum());
         //3.查看扫码的PID是否在推荐的库位标签表中是否存在推荐的PID,存在则更新拣货标签表中的是否推荐标志位
-        List<String> ReList = pickHeadMapper.queryRecommend(pickNo);
-        boolean flagOne = ReList.contains(packageId);
+        List<String> reList = pickHeadMapper.queryRecommend(pickNo);
+        boolean flagOne = reList.contains(packageId);
         int recommend = flagOne?1:0;
         int insertResult = pickHeadMapper.insertPickLabel(po.getPickHeadId(),bo.getPrintLabelId(),recommend);
 
