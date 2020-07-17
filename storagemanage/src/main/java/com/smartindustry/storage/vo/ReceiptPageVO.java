@@ -1,7 +1,9 @@
 package com.smartindustry.storage.vo;
 
 import com.smartindustry.common.bo.sm.ReceiptBO;
+import com.smartindustry.common.util.DateUtil;
 import lombok.Data;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -57,7 +59,7 @@ public class ReceiptPageVO implements Serializable {
     /**
      * 采购日期
      */
-    private Date odate;
+    private String odate;
     /**
      * 供应商名称
      */
@@ -69,7 +71,7 @@ public class ReceiptPageVO implements Serializable {
     /**
      * 计划到货时间
      */
-    private Date pdate;
+    private String pdate;
     /**
      * 接受数量
      */
@@ -115,10 +117,14 @@ public class ReceiptPageVO implements Serializable {
         vo.setMtype(bo.getMaterialType());
         vo.setMdesc(bo.getMaterialDesc());
         vo.setOtotal(bo.getOrderTotal());
-        vo.setOdate(bo.getOrderDate());
+        if(!StringUtils.isEmpty(bo.getOrderDate())) {
+            vo.setOdate(DateUtil.date2Str(bo.getOrderDate(), DateUtil.Y_M_D));
+        }
         vo.setSupplier(bo.getSupplier());
         vo.setBuyer(bo.getBuyer());
-        vo.setPdate(bo.getPlanDate());
+        if(!StringUtils.isEmpty(bo.getPlanDate())) {
+            vo.setPdate(DateUtil.date2Str(bo.getPlanDate(), DateUtil.Y_M_D));
+        }
         vo.setAnum(bo.getAcceptNum());
         vo.setAdate(bo.getAcceptDate());
         vo.setSnum(bo.getStockNum());
