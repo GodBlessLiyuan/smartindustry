@@ -94,6 +94,7 @@ public class PickManageController {
 
     /**
      * 查看当前拣货工单号的异常数据（未扫描优先推荐的pid）
+     *
      * @param pageNum
      * @param pageSize
      * @param pickNo
@@ -102,8 +103,19 @@ public class PickManageController {
     @RequestMapping("queryExItems")
     public ResultVO queryExItems(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                  @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                 @RequestParam(value = "pickNo", required = false) String pickNo){
+                                 @RequestParam(value = "pickNo", required = false) String pickNo) {
         return pickManageService.queryExItems(pageNum, pageSize, pickNo);
+    }
+
+    /**
+     * 拣货单打印-详情
+     *
+     * @param phId
+     * @return
+     */
+    @RequestMapping("detail")
+    public ResultVO detail(@RequestParam("phid") Long phId) {
+        return pickManageService.detail(phId);
     }
 
 }

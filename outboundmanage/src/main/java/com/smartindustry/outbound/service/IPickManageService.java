@@ -13,15 +13,17 @@ import java.util.Map;
 public interface IPickManageService {
     /**
      * 根据拣货单号，工单号，对应项目，物料状态检索部分拣货单表头信息
+     *
      * @param pageNum
      * @param pageSize
-     * @param reqMap 检索条件
+     * @param reqMap   检索条件
      * @return
      */
     ResultVO pageQueryPickHead(int pageNum, int pageSize, Map<String, Object> reqMap);
 
     /**
      * 根据工单拣货通知单的编号查询所有的物料现状(需求数，已扫描数，欠料数)
+     *
      * @param pageNum
      * @param pageSize
      * @param reqMap
@@ -31,12 +33,20 @@ public interface IPickManageService {
 
     /**
      * 查询当前工单拣货单的异常数据清单
+     *
      * @param pageNum
      * @param pageSize
      * @param pickNo
      * @return
      */
-    ResultVO queryExItems(int pageNum,int pageSize,String pickNo);
+    ResultVO queryExItems(int pageNum, int pageSize, String pickNo);
 
 
+    /**
+     * 拣货单打印-详情
+     *
+     * @param phId
+     * @return
+     */
+    ResultVO detail(Long phId);
 }

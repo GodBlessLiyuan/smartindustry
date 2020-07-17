@@ -1,5 +1,6 @@
 package com.smartindustry.outbound.vo;
 
+import com.smartindustry.common.bo.om.PickBodyBO;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -38,4 +39,19 @@ public class PickBodyVO implements Serializable {
      * 数量
      */
     private Integer num;
+
+    /**
+     * bo 转 vo
+     *
+     * @param bo
+     * @return
+     */
+    public static PickBodyVO convert(PickBodyBO bo) {
+        PickBodyVO vo = new PickBodyVO();
+        vo.setPbid(bo.getPickBodyId());
+        vo.setMno(bo.getMaterialNo());
+        vo.setMdesc(bo.getMaterialDesc());
+        vo.setNum(bo.getDemandNum());
+        return vo;
+    }
 }
