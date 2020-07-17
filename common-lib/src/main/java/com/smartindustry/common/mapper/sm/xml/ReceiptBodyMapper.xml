@@ -10,7 +10,7 @@
         <result column="material_no" jdbcType="CHAR" property="materialNo"/>
         <result column="order_total" jdbcType="INTEGER" property="orderTotal"/>
         <result column="accept_num" jdbcType="INTEGER" property="acceptNum"/>
-        <result column="accept_date" jdbcType="DATE" property="acceptDate"/>
+        <result column="accept_date" jdbcType="TIMESTAMP" property="acceptDate"/>
         <result column="good_num" jdbcType="INTEGER" property="goodNum"/>
         <result column="bad_num" jdbcType="INTEGER" property="badNum"/>
         <result column="stock_num" jdbcType="INTEGER" property="stockNum"/>
@@ -42,7 +42,7 @@
                                      `status`, create_time, dr)
         values (#{receiptBodyId,jdbcType=BIGINT}, #{receiptHeadId,jdbcType=BIGINT}, #{orderNo,jdbcType=CHAR},
                 #{orderType,jdbcType=TINYINT}, #{receiptNo,jdbcType=CHAR}, #{materialNo,jdbcType=CHAR},
-                #{orderTotal,jdbcType=INTEGER}, #{acceptNum,jdbcType=INTEGER}, #{acceptDate,jdbcType=DATE},
+                #{orderTotal,jdbcType=INTEGER}, #{acceptNum,jdbcType=INTEGER}, #{acceptDate,jdbcType=TIMESTAMP},
                 #{goodNum,jdbcType=INTEGER}, #{badNum,jdbcType=INTEGER}, #{stockNum,jdbcType=INTEGER},
                 #{status,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
     </insert>
@@ -121,7 +121,7 @@
                 #{acceptNum,jdbcType=INTEGER},
             </if>
             <if test="acceptDate != null">
-                #{acceptDate,jdbcType=DATE},
+                #{acceptDate,jdbcType=TIMESTAMP},
             </if>
             <if test="goodNum != null">
                 #{goodNum,jdbcType=INTEGER},
@@ -168,7 +168,7 @@
                 accept_num = #{acceptNum,jdbcType=INTEGER},
             </if>
             <if test="acceptDate != null">
-                accept_date = #{acceptDate,jdbcType=DATE},
+                accept_date = #{acceptDate,jdbcType=TIMESTAMP},
             </if>
             <if test="goodNum != null">
                 good_num = #{goodNum,jdbcType=INTEGER},
@@ -200,7 +200,7 @@
             material_no     = #{materialNo,jdbcType=CHAR},
             order_total     = #{orderTotal,jdbcType=INTEGER},
             accept_num      = #{acceptNum,jdbcType=INTEGER},
-            accept_date     = #{acceptDate,jdbcType=DATE},
+            accept_date     = #{acceptDate,jdbcType=TIMESTAMP},
             good_num        = #{goodNum,jdbcType=INTEGER},
             bad_num         = #{badNum,jdbcType=INTEGER},
             stock_num       = #{stockNum,jdbcType=INTEGER},
@@ -280,7 +280,7 @@
         <foreach collection="list" item="bo" separator=",">
             (#{bo.receiptBodyId,jdbcType=BIGINT}, #{bo.receiptHeadId,jdbcType=BIGINT}, #{bo.orderNo,jdbcType=CHAR},
             #{bo.orderType,jdbcType=TINYINT}, #{bo.receiptNo,jdbcType=CHAR}, #{bo.materialNo,jdbcType=CHAR},
-            #{bo.orderTotal,jdbcType=INTEGER}, #{bo.acceptNum,jdbcType=INTEGER}, #{bo.acceptDate,jdbcType=DATE},
+            #{bo.orderTotal,jdbcType=INTEGER}, #{bo.acceptNum,jdbcType=INTEGER}, #{bo.acceptDate,jdbcType=TIMESTAMP},
             #{bo.goodNum,jdbcType=INTEGER}, #{bo.badNum,jdbcType=INTEGER}, #{bo.stockNum,jdbcType=INTEGER},
             #{bo.status,jdbcType=TINYINT}, #{bo.createTime,jdbcType=TIMESTAMP}, #{bo.dr,jdbcType=TINYINT})
         </foreach>

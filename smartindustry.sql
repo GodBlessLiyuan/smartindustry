@@ -480,7 +480,7 @@ CREATE TABLE sm_receipt_body
     material_no char(32) NOT NULL,
     order_total int,
     accept_num int,
-    accept_date date,
+    accept_date datetime,
     good_num int,
     bad_num int,
     stock_num int,
