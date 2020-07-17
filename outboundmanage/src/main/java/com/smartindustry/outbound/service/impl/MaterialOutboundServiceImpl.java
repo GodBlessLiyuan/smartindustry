@@ -2,10 +2,9 @@ package com.smartindustry.outbound.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.smartindustry.common.bo.om.LogisticsRecordBO;
 import com.smartindustry.common.bo.om.OutboundBO;
-import com.smartindustry.common.bo.sm.StorageBO;
 import com.smartindustry.common.config.FilePathConfig;
-import com.smartindustry.common.constant.ModuleConstant;
 import com.smartindustry.common.mapper.om.LogisticsPictureMapper;
 import com.smartindustry.common.mapper.om.LogisticsRecordMapper;
 import com.smartindustry.common.mapper.om.OutboundMapper;
@@ -18,8 +17,9 @@ import com.smartindustry.common.util.FileUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.constant.OutboundConstant;
-import com.smartindustry.outbound.dto.LogisticsDTO;
+import com.smartindustry.outbound.dto.LogisticsRecordDTO;
 import com.smartindustry.outbound.service.IMaterialOutboundService;
+import com.smartindustry.outbound.vo.LogisticsRecordVO;
 import com.smartindustry.outbound.vo.OutboundVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -67,7 +68,7 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public ResultVO logInsert(LogisticsDTO dto) {
+    public ResultVO logInsert(LogisticsRecordDTO dto) {
         OutboundPO outboundPO = outboundMapper.selectByPrimaryKey(dto.getOid());
         if (null == outboundPO) {
             return new ResultVO(1002);
@@ -77,7 +78,7 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
             return new ResultVO(1002);
         }
 
-        LogisticsRecordPO recordPO = LogisticsDTO.createPO(dto);
+        LogisticsRecordPO recordPO = LogisticsRecordDTO.createPO(dto);
         logisticsRecordMapper.insert(recordPO);
 
         List<LogisticsPicturePO> picturePOs = new ArrayList<>();
@@ -99,7 +100,10 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
     }
 
     @Override
-    public ResultVO record(Byte oId) {
-        return null;
+    public ResultVO record(Long oId) {
+        Map<String, Object> res = new HashMap<>();
+        LogisticsRecordBO logisticsRecordBO = logisticsRecordMapper.queryByOid(oId);
+        res.put("logistics", LogisticsRecordVO.convert(logisticsRecordBO, filePathConfig));
+        return ResultVO.ok().setData(res);
     }
 }

@@ -1,6 +1,5 @@
 package com.smartindustry.outbound.dto;
 
-import com.smartindustry.common.config.FilePathConfig;
 import com.smartindustry.common.pojo.om.LogisticsRecordPO;
 import lombok.Data;
 
@@ -15,7 +14,7 @@ import java.util.List;
  * @version: 1.0
  */
 @Data
-public class LogisticsDTO implements Serializable {
+public class LogisticsRecordDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -49,7 +48,7 @@ public class LogisticsDTO implements Serializable {
      * @param dto
      * @return
      */
-    public static LogisticsRecordPO createPO(LogisticsDTO dto) {
+    public static LogisticsRecordPO createPO(LogisticsRecordDTO dto) {
         LogisticsRecordPO po = new LogisticsRecordPO();
         po.setOutboundId(dto.getOid());
         po.setShipDate(dto.getSdate());

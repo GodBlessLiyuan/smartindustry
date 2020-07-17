@@ -116,4 +116,23 @@
             create_time  = #{createTime,jdbcType=TIMESTAMP}
         where logistics_record_id = #{logisticsRecordId,jdbcType=BIGINT}
     </update>
+
+    <resultMap id="BO_ResultMap" extends="BaseResultMap" type="com.smartindustry.common.bo.om.LogisticsRecordBO">
+        <collection property="picturePOs" ofType="com.smartindustry.common.pojo.om.LogisticsPicturePO">
+            <id column="logistics_picture_id" jdbcType="BIGINT" property="logisticsPictureId"/>
+            <result column="logistics_record_id" jdbcType="BIGINT" property="logisticsRecordId"/>
+            <result column="picture" jdbcType="CHAR" property="picture"/>
+        </collection>
+    </resultMap>
+    <sql id="BO_Column_List">
+        lr.logistics_record_id, lr.outbound_id, lr.ship_date, lr.logistics_no, lr.ship_way, lr.remark, lr.create_time,
+        lp.logistics_picture_id, lp.logistics_record_id, lp.picture
+    </sql>
+    <select id="queryByOid" parameterType="java.lang.Long" resultMap="BO_ResultMap">
+        select
+        <include refid="BO_Column_List"/>
+        from om_logistics_record lr
+        left join om_logistics_picture lp on lr.logistics_record_id = lp.logistics_record_id
+        where lr.outbound_id = #{oId,jdbcType=BIGINT}
+    </select>
 </mapper>

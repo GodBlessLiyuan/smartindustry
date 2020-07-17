@@ -1,7 +1,7 @@
 package com.smartindustry.outbound.controller;
 
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.outbound.dto.LogisticsDTO;
+import com.smartindustry.outbound.dto.LogisticsRecordDTO;
 import com.smartindustry.outbound.service.IMaterialOutboundService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +63,7 @@ public class MaterialOutboundController {
      * @return
      */
     @RequestMapping("record")
-    public ResultVO record(@RequestParam(value = "oid") Byte oId) {
+    public ResultVO record(@RequestParam(value = "oid") Long oId) {
         return materialOutboundService.record(oId);
     }
 
@@ -74,7 +74,7 @@ public class MaterialOutboundController {
      * @return
      */
     @RequestMapping("logInsert")
-    public ResultVO logInsert(@RequestBody LogisticsDTO dto) {
+    public ResultVO logInsert(@RequestBody LogisticsRecordDTO dto) {
         return materialOutboundService.logInsert(dto);
     }
 
