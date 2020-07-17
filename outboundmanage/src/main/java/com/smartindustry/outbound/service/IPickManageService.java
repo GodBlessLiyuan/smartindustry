@@ -21,15 +21,6 @@ public interface IPickManageService {
     ResultVO pageQueryPickHead(int pageNum, int pageSize, Map<String, Object> reqMap);
 
     /**
-     * 根据工单拣货通知单的编号查询所有的打印标签信息
-     * @param pageNum
-     * @param pageSize
-     * @param pickNo
-     * @return
-     */
-    ResultVO scanPick(int pageNum,int pageSize,String pickNo);
-
-    /**
      * 根据工单拣货通知单的编号查询所有的物料现状(需求数，已扫描数，欠料数)
      * @param pageNum
      * @param pageSize
@@ -37,4 +28,15 @@ public interface IPickManageService {
      * @return
      */
     ResultVO materialLoss(int pageNum, int pageSize, Map<String, Object> reqMap);
+
+    /**
+     * 查询当前工单拣货单的异常数据清单
+     * @param pageNum
+     * @param pageSize
+     * @param pickNo
+     * @return
+     */
+    ResultVO queryExItems(int pageNum,int pageSize,String pickNo);
+
+
 }

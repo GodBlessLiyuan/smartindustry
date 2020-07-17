@@ -1,6 +1,6 @@
 package com.smartindustry.outbound.vo;
 
-import com.smartindustry.common.bo.om.PrintLabelBO;
+import com.smartindustry.common.bo.si.PrintLabelBO;
 import lombok.Data;
 
 import java.io.Serializable;
