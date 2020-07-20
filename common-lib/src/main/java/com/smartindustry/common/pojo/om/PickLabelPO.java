@@ -1,6 +1,7 @@
 package com.smartindustry.common.pojo.om;
 
 import java.io.Serializable;
+import java.util.Date;
 import lombok.Data;
 
 /**
@@ -20,6 +21,10 @@ public class PickLabelPO implements Serializable {
 2：否
      */
     private Byte recommend;
+
+    private String exception;
+
+    private Date createTime;
 
     private static final long serialVersionUID = 1L;
 }

@@ -6,9 +6,11 @@
         <result column="pick_head_id" jdbcType="BIGINT" property="pickHeadId"/>
         <result column="print_label_id" jdbcType="BIGINT" property="printLabelId"/>
         <result column="recommend" jdbcType="TINYINT" property="recommend"/>
+        <result column="exception" jdbcType="CHAR" property="exception"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
     </resultMap>
     <sql id="Base_Column_List">
-        pick_label_id, pick_head_id, print_label_id, recommend
+        pick_label_id, pick_head_id, print_label_id, recommend, `exception`, create_time
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
@@ -23,9 +25,9 @@
     </delete>
     <insert id="insert" parameterType="com.smartindustry.common.pojo.om.PickLabelPO">
         insert into om_pick_label (pick_label_id, pick_head_id, print_label_id,
-                                   recommend)
+                                   recommend, `exception`, create_time)
         values (#{pickLabelId,jdbcType=BIGINT}, #{pickHeadId,jdbcType=BIGINT}, #{printLabelId,jdbcType=BIGINT},
-                #{recommend,jdbcType=TINYINT})
+                #{recommend,jdbcType=TINYINT}, #{exception,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP})
     </insert>
     <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.om.PickLabelPO">
         insert into om_pick_label
@@ -42,6 +44,12 @@
             <if test="recommend != null">
                 recommend,
             </if>
+            <if test="exception != null">
+                `exception`,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="pickLabelId != null">
@@ -55,6 +63,12 @@
             </if>
             <if test="recommend != null">
                 #{recommend,jdbcType=TINYINT},
+            </if>
+            <if test="exception != null">
+                #{exception,jdbcType=CHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
             </if>
         </trim>
     </insert>
@@ -70,6 +84,12 @@
             <if test="recommend != null">
                 recommend = #{recommend,jdbcType=TINYINT},
             </if>
+            <if test="exception != null">
+                `exception` = #{exception,jdbcType=CHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
         </set>
         where pick_label_id = #{pickLabelId,jdbcType=BIGINT}
     </update>
@@ -77,7 +97,9 @@
         update om_pick_label
         set pick_head_id   = #{pickHeadId,jdbcType=BIGINT},
             print_label_id = #{printLabelId,jdbcType=BIGINT},
-            recommend      = #{recommend,jdbcType=TINYINT}
+            recommend      = #{recommend,jdbcType=TINYINT},
+            `exception`    = #{exception,jdbcType=CHAR},
+            create_time    = #{createTime,jdbcType=TIMESTAMP}
         where pick_label_id = #{pickLabelId,jdbcType=BIGINT}
     </update>
 
