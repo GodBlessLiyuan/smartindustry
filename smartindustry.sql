@@ -301,6 +301,7 @@ CREATE TABLE om_pick_label
     -- 2£º·ñ
     recommend tinyint COMMENT '1£ºÊÇ
 2£º·ñ',
+    create_time datetime,
     PRIMARY KEY (pick_label_id),
     UNIQUE (pick_label_id)
 );
