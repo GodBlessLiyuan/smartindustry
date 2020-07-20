@@ -24,8 +24,12 @@ public class PickHeadBO extends PickHeadPO {
      * 物料描述
      */
     private String materialDesc;
-//    /**
-//     * 以逗号为间隔隔开的PID列表
-//     */
-//    private String packageItems;
+    /**
+     * 当前物料使用了推荐的pid,以逗号隔开
+     */
+    private String recommendPid;
+    /**
+     * 当前物料使用了未推荐的pid,以逗号隔开
+     */
+    private String noRecommendPid;
 }

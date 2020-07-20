@@ -546,8 +546,7 @@ CREATE TABLE sm_receipt_label
     receipt_body_id bigint unsigned NOT NULL,
     storage_id bigint unsigned,
     PRIMARY KEY (receipt_label_id),
-    UNIQUE (receipt_label_id),
-    UNIQUE (print_label_id)
+    UNIQUE (receipt_label_id)
 );
 
 

@@ -68,6 +68,21 @@
         where label_recommend_id = #{labelRecommendId,jdbcType=BIGINT}
     </update>
 
+    <resultMap id="BOResultMap" type="com.smartindustry.common.bo.om.LabelRecommendBO">
+        <result column="location_no" jdbcType="CHAR" property="locationNo"/>
+        <result column="package_id" jdbcType="CHAR" property="packageId"/>
+    </resultMap>
+    <sql id="BO_Column_List">
+        lr.label_recommend_id, lr.pick_body_id, lr.storage_label_id,
+        sl.location_no, sl.package_id
+    </sql>
+    <select id="queryByPbid" parameterType="java.lang.Long" resultMap="BOResultMap">
+        select
+        <include refid="BO_Column_List"/>
+        from om_label_recommend lr
+        left join si_storage_label sl on lr.storage_label_id = sl.storage_label_id
+        where lr.pick_body_id = #{pickBodyId,jdbcType=BIGINT}
+    </select>
     <insert id="batchInsert" parameterType="java.util.List">
         insert into om_label_recommend (label_recommend_id, pick_body_id, storage_label_id)
         values
