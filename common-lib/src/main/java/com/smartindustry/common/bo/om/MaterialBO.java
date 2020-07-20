@@ -28,4 +28,5 @@ public class MaterialBO extends MaterialPO {
      * 欠料的数量
      */
     private Integer lackNum;
+
 }

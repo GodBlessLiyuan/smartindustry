@@ -43,9 +43,14 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
      * @param pickNo
      * @return
      */
-    List<String> queryRecommend(@Param("pickNo") String pickNo);
+    List<PickHeadBO> queryRecommend(@Param("pickNo") String pickNo);
 
-
+    /**
+     * 查看当前工单号的pid,仅仅只有pid
+     * @param pickNo
+     * @return
+     */
+    List<String> queryReOnlyPid(@Param("pickNo") String pickNo);
     /**
      * 根据工单拣货单查看目前每个物料已采用的pid
      * @param pickNo
@@ -86,4 +91,17 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
      */
     PickHeadPO queryByPickNo(@Param("pickNo") String pickNo);
 
+    /**
+     * 查询当前工单号所有已经推荐的pid,需要在 （拣货量 > 需求量）
+     * @param pickNo
+     * @return
+     */
+    List<PickHeadBO> queryAllRePid(@Param("pickNo") String pickNo);
+
+    /**
+     * 根据当前工单号查询出所有使用未推荐的pid
+     * @param pickNo
+     * @return
+     */
+    List<PickHeadBO> queryNoRecommend(@Param("pickNo") String pickNo);
 }
