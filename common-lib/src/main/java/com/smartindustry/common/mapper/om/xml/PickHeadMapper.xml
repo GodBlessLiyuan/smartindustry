@@ -208,13 +208,34 @@
         </if>
     </select>
     <!--    查看当前工单拣货单的推荐pid-->
-    <select id="queryRecommend" parameterType="java.lang.String" resultType="java.lang.String">
+    <select id="queryRecommend" parameterType="java.lang.String" resultType="com.smartindustry.common.bo.om.PickHeadBO">
+        select sl.material_no as materialNo,GROUP_CONCAT(sl.package_id) as recommendPid
+        from om_pick_head ph
+        left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
+        left join om_label_recommend lr on pb.pick_body_id = lr.pick_body_id
+        left join si_storage_label sl on lr.storage_label_id = sl.storage_label_id
+        where ph.pick_no=#{pickNo}
+    </select>
+
+    <!--    查看当前工单拣货单的推荐,不和物料编号对应的-->
+    <select id="queryReOnlyPid" parameterType="java.lang.String" resultType="java.lang.String">
         select sl.package_id
         from om_pick_head ph
         left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
         left join om_label_recommend lr on pb.pick_body_id = lr.pick_body_id
         left join si_storage_label sl on lr.storage_label_id = sl.storage_label_id
         where ph.pick_no=#{pickNo}
+    </select>
+
+    <!--  当拣货量大于需求量才查询 查询所有当前工单号推荐的pid-->
+    <select id="queryAllRePid" parameterType="java.lang.String" resultType="com.smartindustry.common.bo.om.PickHeadBO">
+        select spl.material_no as materialNo,GROUP_CONCAT(spl.package_id) as recommendPid
+        from om_pick_head ph
+        left join om_pick_label opl on ph.pick_head_id = opl.pick_head_id
+        left join si_print_label spl on opl.print_label_id = spl.print_label_id
+        left join si_material ma on spl.material_no = ma.material_no
+        left join om_pick_body pb on ma.material_no = pb.material_no
+        where opl.recommend = 1 and ph.pick_no = #{pickNo} and (pb.pick_num - pb.demand_num >= 0)
     </select>
 
     <!--    查看当前工单拣货单的各个物料的真实打印pid-->
@@ -271,7 +292,7 @@
 <!--    未扫描优先推荐的pid,扫描了其他推荐的pid-->
     <!--    当物料的已拣货量未满需求量，查找出其他推荐的pid-->
     <select id="queryNoRecommend" parameterType="java.lang.String" resultType="com.smartindustry.common.bo.om.PickHeadBO">
-        select spl.material_no as materialNo,ma.material_name as materialName,ma.material_desc as materialDesc,GROUP_CONCAT(spl.package_id) as noRecommend,
+        select spl.material_no as materialNo,ma.material_name as materialName,ma.material_desc as materialDesc,GROUP_CONCAT(spl.package_id) as noRecommendPid,
         from om_pick_head ph
         left join om_pick_label opl on ph.pick_head_id = opl.pick_head_id
         left join si_print_label spl on opl.print_label_id = spl.print_label_id
@@ -283,13 +304,5 @@
 <!--    当物料的已拣货量已满足需求量，查找出未扫描优先推荐的pid-->
 
 
-<!--    查询当前工单号推荐的pid-->
-    <select id="queryAllRePid" parameterType="java.lang.String" resultType="java.lang.String">
-        select spl.package_id
-        from om_pick_head ph
-        left join om_pick_label opl on ph.pick_head_id = opl.pick_head_id
-        left join si_print_label spl on opl.print_label_id = spl.print_label_id
-        left join si_material ma on spl.material_no = ma.material_no
-        where opl.recommend = 1 and ph.pick_no = #{pickNo}
-    </select>
+
 </mapper>

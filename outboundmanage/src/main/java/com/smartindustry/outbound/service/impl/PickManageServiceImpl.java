@@ -27,7 +27,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Array;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author: xiahui
@@ -66,14 +68,27 @@ public class PickManageServiceImpl implements IPickManageService {
     public ResultVO queryExItems(int pageNum,int pageSize,String pickNo){
         // 先查询出当前工单号下 物料编码
 
-        // 当前物料的需求数未满时，若扫描了未推荐的PID,则异常列表只显示，扫描了其他推荐的PID
-
+        // 若扫描了未推荐的PID,则异常列表只显示，扫描了其他推荐的PID
+        List<PickHeadBO> noRecommend = pickHeadMapper.queryNoRecommend(pickNo);
         // 若已拣货量大于需求量时，将未扫描优先推荐的pid以及扫描了其他推荐的pid
         //(1) 先查询出所有的推荐的pid
-        List<String> reList = pickHeadMapper.queryRecommend(pickNo);
-        //(2) 再查询出目前工单已经使用的推荐pid
-
+        List<PickHeadBO> reList = pickHeadMapper.queryRecommend(pickNo);
+        Map<String, String> map = reList.stream().collect(Collectors.toMap(PickHeadBO::getMaterialNo,PickHeadBO::getRecommendPid));
+        //(2) 再查询出目前工单已经使用的推荐pid,这里必须是  拣货量大于 需求量才查询
+        List<PickHeadBO> useList = pickHeadMapper.queryAllRePid(pickNo);
         //(3) 推荐未使用的进行相减，以及拼接其他未推荐的pid
+        for (PickHeadBO bo:useList) {
+            String materialNo = bo.getMaterialNo();
+            boolean containsKey = map.containsKey(materialNo);
+            if (containsKey){
+                List<String> allPidList = Arrays.asList(map.get(materialNo).split(","));
+                List<String> rePidList = Arrays.asList(bo.getRecommendPid().split(","));
+//                bo.setRecommendPid(allPidList.stream()
+//                        .filter(s -> !rePidList.contains(s))
+//                        .collect (Collectors.toList()));
+            }
+        }
+
 
         return new ResultVO(1000);
     }
@@ -138,7 +153,7 @@ public class PickManageServiceImpl implements IPickManageService {
         //2.将拣货单表体表中的已拣量作加操作
         int addResult = pickHeadMapper.addPickNum(bo.getMaterialNo(), bo.getNum());
         //3.查看扫码的PID是否在推荐的库位标签表中是否存在推荐的PID,存在则更新拣货标签表中的是否推荐标志位
-        List<String> reList = pickHeadMapper.queryRecommend(pickNo);
+        List<String> reList = pickHeadMapper.queryReOnlyPid(pickNo);
         boolean flagOne = reList.contains(packageId);
         int recommend = flagOne ? 1 : 0;
         int insertResult = pickHeadMapper.insertPickLabel(po.getPickHeadId(), bo.getPrintLabelId(), recommend);
