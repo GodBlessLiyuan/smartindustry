@@ -71,7 +71,7 @@ public class QualityManageController {
     }
 
     @RequestMapping("record")
-    public ResultVO record(@RequestParam(value = "rbid") Long rbid, @RequestParam(value = "status", required = false, defaultValue = "1") Byte status) {
+    public ResultVO record(@RequestParam(value = "rbid") Long rbid, @RequestParam(value = "status") Byte status) {
         return qualityManageService.record(rbid, status);
     }
 }

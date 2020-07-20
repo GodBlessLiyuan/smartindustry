@@ -369,7 +369,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
     }
 
     @Override
-    public ResultVO record(Byte sid) {
+    public ResultVO record(Long sid) {
         List<StorageRecordPO> recordPOs = recordMapper.queryBySid(sid);
         return ResultVO.ok().setData(RecordVO.convert(recordPOs));
     }

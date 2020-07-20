@@ -84,5 +84,5 @@ public interface IMaterialStorageService {
      * @param sid
      * @return
      */
-    ResultVO record(Byte sid);
+    ResultVO record(Long sid);
 }

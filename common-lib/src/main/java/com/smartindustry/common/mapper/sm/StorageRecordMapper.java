@@ -27,5 +27,5 @@ public interface StorageRecordMapper extends BaseMapper<StorageRecordPO, Long> {
      * @param sid
      * @return
      */
-    List<StorageRecordPO> queryBySid(Byte sid);
+    List<StorageRecordPO> queryBySid(Long sid);
 }

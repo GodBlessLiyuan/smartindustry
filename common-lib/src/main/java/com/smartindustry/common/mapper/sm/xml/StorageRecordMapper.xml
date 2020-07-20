@@ -145,7 +145,7 @@
         where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT} and `status` = #{status,jdbcType=TINYINT}
         order by create_time desc
     </select>
-    <select id="queryBySid" resultMap="BaseResultMap">
+    <select id="queryBySid" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from sm_storage_record
