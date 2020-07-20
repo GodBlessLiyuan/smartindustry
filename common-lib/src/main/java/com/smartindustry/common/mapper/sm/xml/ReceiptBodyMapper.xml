@@ -269,6 +269,7 @@
         <if test="type != null and type != 0">and rh.order_type = #{type,jdbcType=TINYINT}</if>
         <if test="rno != null and rno != ''">and rb.receipt_no like '%' #{rno,jdbcType=CHAR} '%'</if>
         <if test="qa and qaStatus != null and qaStatus != 0">and q.status = #{qaStatus,jdbcType=TINYINT}</if>
+        order by rb.create_time desc
     </select>
     <insert id="batchInsertBO" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="receiptBodyId">
         insert into sm_receipt_body (receipt_body_id, receipt_head_id, order_no,
