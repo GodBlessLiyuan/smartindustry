@@ -5,10 +5,7 @@ import com.smartindustry.outbound.dto.LogisticsRecordDTO;
 import com.smartindustry.outbound.service.IMaterialOutboundService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
@@ -78,12 +75,12 @@ public class MaterialOutboundController {
     }
 
     /**
-     * 物流信息-新增
+     * 物流信息-新增/编辑
      *
      * @param dto
      * @return
      */
-    @RequestMapping("logEdit")
+    @PostMapping("logEdit")
     public ResultVO logEdit(@RequestBody LogisticsRecordDTO dto) {
         return materialOutboundService.logEdit(dto);
     }
