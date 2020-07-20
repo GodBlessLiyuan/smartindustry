@@ -2,8 +2,6 @@ server:
   port: 8032
   tomcat:
     uri-encoding: UTF-8
-  servlet:
-    context-path: /om
 spring:
   application:
     name: outboundmanage

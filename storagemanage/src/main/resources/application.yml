@@ -2,8 +2,6 @@ server:
   port: 8031
   tomcat:
     uri-encoding: UTF-8
-  servlet:
-    context-path: /sm
 spring:
   application:
     name: storagemanage

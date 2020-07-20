@@ -1,0 +1,19 @@
+server:
+  port: 8050
+spring:
+  application:
+    name: industryzuul
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8030/eureka/
+zuul:
+  sensitive-headers: '*'
+  routes:
+    storagemanage: /sm/**
+    outboundmanage: /om/**
+  host:
+    connect-timeout-millis: 15000
+    socket-timeout-millis: 60000
+logging:
+  config: classpath:logback-spring-test.xml
