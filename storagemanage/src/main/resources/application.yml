@@ -28,6 +28,10 @@ spring:
       max-file-size: 100MB #设置单个文件最大长度
 mybatis:
   mapper-locations: com/smartindustry/common/mapper/**/*.xml
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8030/eureka/
 
 logging:
   level:

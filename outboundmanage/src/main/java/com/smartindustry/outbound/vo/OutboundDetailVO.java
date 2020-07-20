@@ -23,7 +23,7 @@ public class OutboundDetailVO implements Serializable {
     private String ono;
     private String pno;
     private String cproject;
-    private Date pdate;
+    private Date ptime;
     private List<PickBodyVO> body;
 
     /**
@@ -39,7 +39,7 @@ public class OutboundDetailVO implements Serializable {
         detailVO.setOno(outboundBO.getOrderNo());
         detailVO.setPno(outboundBO.getPickNo());
         detailVO.setCproject(outboundBO.getCorrespondProject());
-        detailVO.setPdate(outboundBO.getPlanTime());
+        detailVO.setPtime(outboundBO.getPlanTime());
         List<PickBodyVO> body = new ArrayList<>(labelBOs.size());
         for (PrintLabelBO bo : labelBOs) {
             PickBodyVO vo = new PickBodyVO();
