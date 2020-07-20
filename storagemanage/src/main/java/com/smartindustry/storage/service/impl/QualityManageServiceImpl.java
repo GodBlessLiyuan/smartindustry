@@ -77,13 +77,17 @@ public class QualityManageServiceImpl implements IQualityManageService {
             return new ResultVO(1003);
         }
 
-        String type = ReceiptConstant.IQC_REJECT.equals(iqcDetectPO.getStatus()) ? ReceiptConstant.RECORD_TYPE_IQC_RECHECK : ReceiptConstant.RECORD_TYPE_IQC_DETECT;
+        String type;
         if (ReceiptConstant.IQC_ALLOW.equals(dto.getStatus())) {
             // 允许
+            type = ReceiptConstant.IQC_REJECT.equals(iqcDetectPO.getStatus()) ? ReceiptConstant.RECORD_TYPE_IQC_RECHECK_ALLOW : ReceiptConstant.RECORD_TYPE_IQC_DETECT_ALLOW;
+
             iqcDetectPO.setStatus(ReceiptConstant.IQC_ALLOW);
             iqcDetectMapper.updateByPrimaryKey(iqcDetectPO);
         } else if (dto.getStatus() == 2) {
             // 不良
+            type = ReceiptConstant.IQC_REJECT.equals(iqcDetectPO.getStatus()) ? ReceiptConstant.RECORD_TYPE_IQC_RECHECK_BAD : ReceiptConstant.RECORD_TYPE_IQC_DETECT_BAD;
+
             iqcDetectMapper.deleteByPrimaryKey(dto.getRbid());
 
             // QE确认
@@ -95,8 +99,12 @@ public class QualityManageServiceImpl implements IQualityManageService {
             // 收料单状态设为QE确认
             receiptBodyPO.setStatus(ReceiptConstant.RECEIPT_QE_CONFIRM);
 
-            // QE确认新增操作记录
-            recordMapper.insert(new StorageRecordPO(dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_ADD, ReceiptConstant.RECEIPT_QE_CONFIRM));
+            if (!ReceiptConstant.IQC_REJECT.equals(iqcDetectPO.getStatus())) {
+                // QE确认新增操作记录
+                recordMapper.insert(new StorageRecordPO(dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_QE_CONFIRM_ADD, ReceiptConstant.RECEIPT_QE_CONFIRM));
+            }
+        } else {
+            return new ResultVO(1001);
         }
 
         // 更新收料单
@@ -129,20 +137,24 @@ public class QualityManageServiceImpl implements IQualityManageService {
             return new ResultVO(1003);
         }
 
+        String type;
         if (ReceiptConstant.QE_ALLOW.equals(dto.getStatus())) {
             // 允许
+            type = ReceiptConstant.RECORD_TYPE_QE_DETECT_ALLOW;
             qeDetectPO.setStatus(ReceiptConstant.QE_ALLOW);
 
             receiptBodyPO.setGoodNum(dto.getGnum());
             receiptBodyPO.setBadNum(dto.getBnum());
         } else if (ReceiptConstant.QE_FRANCHISE.equals(dto.getStatus())) {
             // 特采
+            type = ReceiptConstant.RECORD_TYPE_QE_DETECT_FRANCHISE;
             qeDetectPO.setStatus(ReceiptConstant.QE_FRANCHISE);
 
             receiptBodyPO.setGoodNum(dto.getGnum());
             receiptBodyPO.setBadNum(receiptBodyPO.getAcceptNum() - dto.getGnum());
         } else if (ReceiptConstant.QE_RETURN.equals(dto.getStatus())) {
             // 退供应商
+            type = ReceiptConstant.RECORD_TYPE_QE_DETECT_RETURN;
             qeDetectPO.setStatus(ReceiptConstant.QE_RETURN);
 
             receiptBodyPO.setGoodNum(0);
@@ -157,7 +169,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
         // 更新收料单
         receiptBodyMapper.updateByPrimaryKey(receiptBodyPO);
         // 操作记录
-        recordMapper.insert(new StorageRecordPO(dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_QE_DETECT, ReceiptConstant.RECEIPT_QE_DETECT));
+        recordMapper.insert(new StorageRecordPO(dto.getRbid(), 1L, "夏慧", type, ReceiptConstant.RECEIPT_QE_DETECT));
 
         return ResultVO.ok();
     }
@@ -184,7 +196,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
         String type;    // 操作记录类型
         if (ReceiptConstant.QE_FRANCHISE.equals(dto.getStatus())) {
             // 特采
-            type = ReceiptConstant.RECORD_TYPE_QE_FRANCHISE;
+            type = ReceiptConstant.RECORD_TYPE_QE_CONFIRM_FRANCHISE;
 
             qeConfirmPO.setStatus(ReceiptConstant.QE_FRANCHISE);
             qeConfirmPO.setRemark(dto.getRemark());
@@ -194,7 +206,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
             receiptBodyPO.setBadNum(receiptBodyPO.getAcceptNum() - dto.getNum());
         } else if (ReceiptConstant.QE_REJECT.equals(dto.getStatus())) {
             // 驳回
-            type = ReceiptConstant.RECORD_TYPE_QE_REJECT;
+            type = ReceiptConstant.RECORD_TYPE_QE_CONFIRM_REJECT;
 
             qeConfirmMapper.deleteByPrimaryKey(dto.getRbid());
 
@@ -209,10 +221,10 @@ public class QualityManageServiceImpl implements IQualityManageService {
             receiptBodyPO.setStatus(ReceiptConstant.RECEIPT_IQC_DETECT);
 
             // IQC 操作记录
-            recordMapper.insert(new StorageRecordPO(dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_QE_REJECT, ReceiptConstant.RECEIPT_IQC_DETECT));
+            recordMapper.insert(new StorageRecordPO(dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_IQC_QE_REJECT, ReceiptConstant.RECEIPT_IQC_DETECT));
         } else if (ReceiptConstant.QE_RETURN.equals(dto.getStatus())) {
             // 退供应商
-            type = ReceiptConstant.RECORD_TYPE_QE_RETURN;
+            type = ReceiptConstant.RECORD_TYPE_QE_CONFIRM_RETURN;
 
             qeConfirmPO.setRemark(dto.getRemark());
             qeConfirmPO.setStatus(ReceiptConstant.QE_RETURN);

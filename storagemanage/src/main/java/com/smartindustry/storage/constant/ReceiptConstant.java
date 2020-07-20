@@ -92,12 +92,18 @@ public class ReceiptConstant {
      */
     public static final String RECORD_TYPE_ADD = "新增";
     public static final String RECORD_TYPE_FINISH = "完成录入";
-    public static final String RECORD_TYPE_IQC_DETECT = "IQC检验";
-    public static final String RECORD_TYPE_QE_REJECT = "QE驳回";
-    public static final String RECORD_TYPE_IQC_RECHECK = "IQC重检";
-    public static final String RECORD_TYPE_QE_DETECT = "QE检验";
-    public static final String RECORD_TYPE_QE_FRANCHISE = "QE特采";
-    public static final String RECORD_TYPE_QE_RETURN = "QE退供应商";
+    public static final String RECORD_TYPE_IQC_DETECT_ALLOW = "IQC检验-允许";
+    public static final String RECORD_TYPE_IQC_DETECT_BAD = "IQC检验-不良";
+    public static final String RECORD_TYPE_IQC_QE_REJECT = "QE驳回";
+    public static final String RECORD_TYPE_IQC_RECHECK_ALLOW = "IQC重检-允许";
+    public static final String RECORD_TYPE_IQC_RECHECK_BAD = "IQC重检-不良";
+    public static final String RECORD_TYPE_QE_DETECT_ALLOW = "QE检验-允许";
+    public static final String RECORD_TYPE_QE_DETECT_FRANCHISE = "QE检验-特采";
+    public static final String RECORD_TYPE_QE_DETECT_RETURN = "QE检验-退供应商";
+    public static final String RECORD_TYPE_QE_CONFIRM_ADD = "形成QE确认单";
+    public static final String RECORD_TYPE_QE_CONFIRM_FRANCHISE = "QE确认-特采";
+    public static final String RECORD_TYPE_QE_CONFIRM_REJECT = "QE确认-驳回";
+    public static final String RECORD_TYPE_QE_CONFIRM_RETURN = "QE确认-退供应商";
     public static final String RECORD_TYPE_STORAGE_INVOICE = "生成入库单";
     public static final String RECORD_TYPE_STORAGE_CONFIRM = "确认入库";
 }
