@@ -28,10 +28,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author: xiahui
@@ -370,7 +367,9 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
 
     @Override
     public ResultVO record(Long sid) {
+        Map<String, Object> res = new HashMap<>();
         List<StorageRecordPO> recordPOs = recordMapper.queryBySid(sid);
-        return ResultVO.ok().setData(RecordVO.convert(recordPOs));
+        res.put("record", RecordVO.convert(recordPOs));
+        return ResultVO.ok().setData(res);
     }
 }
