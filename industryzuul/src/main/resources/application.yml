@@ -3,10 +3,14 @@ server:
 spring:
   application:
     name: industryzuul
+  security:
+    user:
+      name: vbooster
+      password: 123456a
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8030/eureka/
+      defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@localhost:8030/eureka/
 zuul:
   sensitive-headers: '*'
   routes:

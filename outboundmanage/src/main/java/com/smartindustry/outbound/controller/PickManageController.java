@@ -122,7 +122,8 @@ public class PickManageController {
 
     @RequestMapping("showMsgByPid")
     public ResultVO showMsgByPid(@RequestParam(value = "packageId", required = false) String packageId){
-        return pickManageService.showMsgByPid(packageId);
+//        return pickManageService.showMsgByPid(packageId);
+        return null;
     }
 
 

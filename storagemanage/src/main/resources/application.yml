@@ -24,12 +24,16 @@ spring:
       enabled: true #是否启用http上传处理
       max-request-size: 100MB #最大请求文件的大小
       max-file-size: 100MB #设置单个文件最大长度
+  security:
+    user:
+      name: vbooster
+      password: 123456a
 mybatis:
   mapper-locations: com/smartindustry/common/mapper/**/*.xml
 eureka:
   client:
     service-url:
-      defaultZone: http://vbooster:123456a@localhost:8030/eureka/
+      defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@localhost:8030/eureka/
 
 logging:
   level:
