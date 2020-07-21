@@ -51,9 +51,30 @@ public interface IPickManageService {
 
     /**
      * 根据当前选中的工单拣货单和扫码入库的PID进行物料入库
-     * @param pickNo
+     * @param pickHeadId
      * @param packageId
      * @return
      */
-    ResultVO pickPidOut(String pickNo,String packageId);
+    ResultVO pickPidOut(Long pickHeadId,String packageId);
+
+    /**
+     * 根据工单拣货单id查询
+     * @param pickHeadId
+     * @return
+     */
+    ResultVO queryByPhId(Long pickHeadId);
+
+    /**
+     * 根据PID进行分料
+     * @param packageId
+     * @return
+     */
+    ResultVO packageIdDiv(String packageId,Integer num);
+
+//    /**
+//     * 根据已有的PID进行对应的物料信息基本查询
+//     * @param packageId
+//     * @return
+//     */
+//    ResultVO showMsgByPid(String packageId);
 }

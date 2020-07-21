@@ -10,7 +10,7 @@ import com.smartindustry.storage.constant.ReceiptConstant;
 import com.smartindustry.storage.dto.LabelSplitDTO;
 import com.smartindustry.storage.dto.PrintLabelDTO;
 import com.smartindustry.storage.service.ILabelManageService;
-import com.smartindustry.storage.util.ReceiptNoUtil;
+import com.smartindustry.common.util.ReceiptNoUtil;
 import com.smartindustry.storage.vo.PrintLabelVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,7 +66,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
         if (null == labelPO) {
             return new ResultVO(1002);
         }
-        ReceiptLabelPO rlPO = receiptLabelMapper.queryByPrintLabelId(labelPO.getPrintLabelId());
+        ReceiptLabelPO rlPO = receiptLabelMapper.queryByPrintLabelId(labelPO.getRelateLabelId());
         if (null == rlPO) {
             return new ResultVO(1002);
         }
