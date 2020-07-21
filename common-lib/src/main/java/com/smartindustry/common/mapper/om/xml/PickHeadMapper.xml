@@ -168,22 +168,23 @@
         select
         <include refid="Base_Column_List"/>
         from om_pick_head ph
-        where material_status = #{materialStatus}
+        where ph.dr = 1 and ph.material_status = #{materialStatus}
         <if test="pickNo != null and pickNo != ''">
-            and ph.pick_no like '%' #{pickNo} '%'
+            and ph.pick_no like concat('%',#{pickNo,jdbcType=VARCHAR},'%')
         </if>
         <if test="orderNo != null and orderNo != ''">
-            and ph.order_no like '%' #{orderNo} '%'
+            and ph.order_no like concat('%',#{orderNo,jdbcType=VARCHAR},'%')
         </if>
         <if test="correspondProject != null and correspondProject != ''">
-            and ph.correspondProject like '%' #{correspondProject} '%'
+            and ph.correspond_project like concat('%',#{correspondProject,jdbcType=VARCHAR},'%')
         </if>
         order by ph.create_time desc
     </select>
+
     <!--    扫码拣货-->
     <select id="pickPid" parameterType="java.lang.String"
             resultType="com.smartindustry.common.bo.si.PrintLabelBO">
-        select pl.package_id as packageId,pl.material_no as materialNo,ma.material_name as materialName,ma.material_desc as materialDesc,pl.num as num
+        select pl.print_label_id as printLableId,pl.package_id as packageId,pl.material_no as materialNo,ma.material_name as materialName,ma.material_desc as materialDesc,pl.num as num
         from si_print_label pl
         left join si_material ma on pl.material_no = ma.material_no
         where pl.package_id=#{packageId}
@@ -218,13 +219,13 @@
     </select>
 
     <!--    查看当前工单拣货单的推荐,不和物料编号对应的-->
-    <select id="queryReOnlyPid" parameterType="java.lang.String" resultType="java.lang.String">
+    <select id="queryReOnlyPid" parameterType="java.lang.Long" resultType="java.lang.String">
         select sl.package_id
         from om_pick_head ph
         left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
         left join om_label_recommend lr on pb.pick_body_id = lr.pick_body_id
         left join si_storage_label sl on lr.storage_label_id = sl.storage_label_id
-        where ph.pick_no=#{pickNo}
+        where ph.pick_head_id=#{pickHeadId}
     </select>
 
     <!--  当拣货量大于需求量才查询 查询所有当前工单号推荐的pid-->
@@ -250,11 +251,11 @@
     </select>
 
     <!--    判断某个物料是否在该工单下-->
-    <select id="judgeMaterial" parameterType="java.lang.String" resultType="java.lang.String">
+    <select id="judgeMaterial" parameterType="java.lang.Long" resultType="java.lang.String">
         select pb.material_no as materialNo
         from om_pick_head ph
         left join om_pick_body pb on pb.pick_head_id = ph.pick_head_id
-        where ph.pick_no = #{pickNo}
+        where ph.pick_head_id = #{pickHeadId}
     </select>
     
     <update id="addPickNum">
@@ -264,30 +265,17 @@
     </update>
 
     <insert id="insertPickLabel" parameterType="com.smartindustry.common.pojo.om.PickLabelPO">
-        insert into om_pick_label (pick_head_id,print_label_id,recommend)
-        values (#{pickHeadId,jdbcType=BIGINT},#{printLabelId,jdbcType=BIGINT},#{recommend,jdbcType=TINYINT})
+        insert into om_pick_label (pick_head_id,print_label_id,recommend,create_time)
+        values (#{pickHeadId,jdbcType=BIGINT},#{printLabelId,jdbcType=BIGINT},#{recommend,jdbcType=TINYINT},#{createTime,jdbcType=TIMESTAMP})
     </insert>
 
-    <select id="queryByPickNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <select id="queryByPickNo" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from om_pick_head
-        where pick_no = #{pickNo}
+        where pick_head_id = #{pickHeadId}
     </select>
-    
 
-<!--    <select id="queryAbnormal" parameterType="java.lang.String">-->
-<!--        select spl.material_no as materialNo,ma.material_name as materialName,ma.material_desc as materialDesc,GROUP_CONCAT(spl.package_id) as noRecommend-->
-<!--        from om_pick_head ph-->
-<!--        left join om_pick_label opl on ph.pick_head_id = opl.pick_head_id-->
-<!--        left join si_print_label spl on opl.print_label_id = spl.print_label_id-->
-<!--        left join si_material ma on spl.material_no = ma.material_no-->
-<!--        where opl.recommend = 2 and ph.pick_no = #{pickNo}-->
-<!--        group by ph.pick_no,spl.material_no-->
-<!--    </select>-->
-
-    
-    
 <!--    异常列表提醒：(1)当拣货量未满需求量时，异常提示扫描了其他推荐的pid;(2)当拣货量超过需求量时，提示-->
 <!--    未扫描优先推荐的pid,扫描了其他推荐的pid-->
     <!--    当物料的已拣货量未满需求量，查找出其他推荐的pid-->
@@ -301,7 +289,7 @@
         group by ph.pick_no,spl.material_no
     </select>
 
-<!--    当物料的已拣货量已满足需求量，查找出未扫描优先推荐的pid-->
+<!--    将si_print_label中的选中pid dr状态置为2-->
 
 
 

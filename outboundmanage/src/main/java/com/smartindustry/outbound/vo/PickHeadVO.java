@@ -17,6 +17,7 @@ import java.util.List;
 @Data
 public class PickHeadVO implements Serializable {
     private static final long SerialVersionUID = 1L;
+    private Long phid;
     /**
      * 拣货单号
      */
@@ -56,6 +57,7 @@ public class PickHeadVO implements Serializable {
 
     public static PickHeadVO convert(PickHeadPO po) {
         PickHeadVO vo = new PickHeadVO();
+        vo.setPhid(po.getPickHeadId());
         vo.setCoproject(po.getCorrespondProject());
         vo.setMstatus(po.getMaterialStatus());
         vo.setOno(po.getOrderNo());
