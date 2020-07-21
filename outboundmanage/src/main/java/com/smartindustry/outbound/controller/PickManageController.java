@@ -124,6 +124,4 @@ public class PickManageController {
     public ResultVO showMsgByPid(@RequestParam(value = "pid", required = false) String packageId){
         return pickManageService.showMsgByPid(packageId);
     }
-
-
 }
