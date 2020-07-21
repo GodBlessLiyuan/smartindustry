@@ -66,15 +66,16 @@ public interface IPickManageService {
 
     /**
      * 根据PID进行分料
+     * @param printLabelId
+     * @param num
+     * @return
+     */
+    ResultVO packageIdDiv(Long printLabelId,Integer num);
+
+    /**
+     * 根据已有的PID进行对应的物料信息基本查询
      * @param packageId
      * @return
      */
-    ResultVO packageIdDiv(String packageId,Integer num);
-
-//    /**
-//     * 根据已有的PID进行对应的物料信息基本查询
-//     * @param packageId
-//     * @return
-//     */
-//    ResultVO showMsgByPid(String packageId);
+    ResultVO showMsgByPid(String packageId);
 }

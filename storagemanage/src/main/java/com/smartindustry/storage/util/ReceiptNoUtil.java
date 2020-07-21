@@ -1,4 +1,4 @@
-package com.smartindustry.common.util;
+package com.smartindustry.storage.util;
 
 import com.smartindustry.common.mapper.sm.StorageMapper;
 import com.smartindustry.common.mapper.si.PrintLabelMapper;

@@ -37,10 +37,10 @@ public class PickManageController {
     @RequestMapping("queryPick")
     public ResultVO queryPickHeadMsg(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                      @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                     @RequestParam(value = "pickNo", required = false) String pickNo,
-                                     @RequestParam(value = "orderNo", required = false) String orderNo,
-                                     @RequestParam(value = "correspondProject", required = false) String correspondProject,
-                                     @RequestParam(value = "materialStatus", defaultValue = "") Byte materialStatus) {
+                                     @RequestParam(value = "pno", required = false) String pickNo,
+                                     @RequestParam(value = "ono", required = false) String orderNo,
+                                     @RequestParam(value = "coproject", required = false) String correspondProject,
+                                     @RequestParam(value = "mstatus", defaultValue = "") Byte materialStatus) {
         Map<String, Object> reqData = new HashMap<>(4);
         reqData.put("pickNo", pickNo);
         reqData.put("orderNo", orderNo);
@@ -64,9 +64,9 @@ public class PickManageController {
     @RequestMapping("materialLoss")
     public ResultVO materialLoss(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                  @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                 @RequestParam(value = "pickNo", required = false) String pickNo,
-                                 @RequestParam(value = "materialNo", required = false) String materialNo,
-                                 @RequestParam(value = "materialName", required = false) String materialName,
+                                 @RequestParam(value = "pno", required = false) String pickNo,
+                                 @RequestParam(value = "mno", required = false) String materialNo,
+                                 @RequestParam(value = "mname", required = false) String materialName,
                                  @RequestParam(value = "flag", required = false) Byte flag) {
         Map<String, Object> reqData = new HashMap<>(4);
         reqData.put("pickNo", pickNo);
@@ -87,7 +87,7 @@ public class PickManageController {
     @RequestMapping("queryExItems")
     public ResultVO queryExItems(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                  @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                 @RequestParam(value = "pickNo", required = false) String pickNo) {
+                                 @RequestParam(value = "pno", required = false) String pickNo) {
         return pickManageService.queryExItems(pageNum, pageSize, pickNo);
     }
 
@@ -104,27 +104,24 @@ public class PickManageController {
 
 
     @RequestMapping("pickPidOut")
-    public ResultVO pickPidOut(@RequestParam(value = "pickHeadId", required = false) Long pickHeadId,
-                               @RequestParam(value = "packageId", required = false) String packageId){
+    public ResultVO pickPidOut(@RequestParam(value = "phid", required = false) Long pickHeadId,
+                               @RequestParam(value = "pid", required = false) String packageId){
         return pickManageService.pickPidOut(pickHeadId,packageId);
     }
 
     @RequestMapping("queryByPhId")
-    public ResultVO queryByPhId(@RequestParam(value = "pickHeadId", required = false) Long pickHeadId){
+    public ResultVO queryByPhId(@RequestParam(value = "phid", required = false) Long pickHeadId){
         return pickManageService.queryByPhId(pickHeadId);
     }
 
     @RequestMapping("packageIdDiv")
-    public ResultVO packageIdDiv(@RequestParam(value = "packageId", required = false) String packageId,
+    public ResultVO packageIdDiv(@RequestParam(value = "plid", required = false) Long printLabelId,
                                  @RequestParam(value = "num", required = false) Integer num){
-        return pickManageService.packageIdDiv(packageId,num);
+        return pickManageService.packageIdDiv(printLabelId,num);
     }
 
     @RequestMapping("showMsgByPid")
-    public ResultVO showMsgByPid(@RequestParam(value = "packageId", required = false) String packageId){
-//        return pickManageService.showMsgByPid(packageId);
-        return null;
+    public ResultVO showMsgByPid(@RequestParam(value = "pid", required = false) String packageId){
+        return pickManageService.showMsgByPid(packageId);
     }
-
-
 }
