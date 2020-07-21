@@ -5,6 +5,7 @@ import com.smartindustry.common.bo.om.PickHeadBO;
 import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.om.PickHeadPO;
+import com.smartindustry.common.pojo.om.PickLabelPO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -47,10 +48,10 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
 
     /**
      * 查看当前工单号的pid,仅仅只有pid
-     * @param pickNo
+     * @param pickHeadId
      * @return
      */
-    List<String> queryReOnlyPid(@Param("pickNo") String pickNo);
+    List<String> queryReOnlyPid(@Param("pickHeadId") Long pickHeadId);
     /**
      * 根据工单拣货单查看目前每个物料已采用的pid
      * @param pickNo
@@ -60,10 +61,10 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
 
     /**
      * 查看当前物料并不属于该工单
-     * @param pickNo
+     * @param pickHeadId
      * @return
      */
-    List<String> judgeMaterial(@Param("pickNo") String pickNo);
+    List<String> judgeMaterial(@Param("pickHeadId") Long pickHeadId);
 
     /**
      * 当扫码出库的时候更新当前物料的已拣货量
@@ -75,21 +76,17 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
 
     /**
      * 更新拣货标签表中的所有信息
-     * @param pickHeadId
-     * @param printLabelId
-     * @param recommend
+     * @param pickLabelPo
      * @return
      */
-    int insertPickLabel(@Param("pickHeadId") Long pickHeadId,
-                        @Param("printLabelId") Long printLabelId,
-                        @Param("recommend") int recommend);
+    int insertPickLabel(PickLabelPO pickLabelPo);
 
     /**
      * 根据当前的工单拣货单
      * @param pickNo
      * @return
      */
-    PickHeadPO queryByPickNo(@Param("pickNo") String pickNo);
+    PickHeadPO queryByPickNo(@Param("pickNo") Long pickNo);
 
     /**
      * 查询当前工单号所有已经推荐的pid,需要在 （拣货量 > 需求量）

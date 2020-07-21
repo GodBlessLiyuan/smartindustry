@@ -10,11 +10,15 @@ import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.mapper.om.LabelRecommendMapper;
 import com.smartindustry.common.mapper.om.PickBodyMapper;
 import com.smartindustry.common.mapper.om.PickHeadMapper;
+import com.smartindustry.common.mapper.si.PrintLabelMapper;
 import com.smartindustry.common.mapper.si.StorageLabelMapper;
 import com.smartindustry.common.pojo.om.LabelRecommendPO;
 import com.smartindustry.common.pojo.om.PickBodyPO;
 import com.smartindustry.common.pojo.om.PickHeadPO;
+import com.smartindustry.common.pojo.om.PickLabelPO;
+import com.smartindustry.common.pojo.si.PrintLabelPO;
 import com.smartindustry.common.pojo.si.StorageLabelPO;
+import com.smartindustry.common.util.ReceiptNoUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.vo.LackMaterialVO;
@@ -22,11 +26,14 @@ import com.smartindustry.outbound.vo.PickBodyVO;
 import com.smartindustry.outbound.vo.PickDetailVO;
 import com.smartindustry.outbound.vo.PickHeadVO;
 import com.smartindustry.outbound.service.IPickManageService;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.xml.crypto.Data;
 import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -48,6 +55,8 @@ public class PickManageServiceImpl implements IPickManageService {
     private LabelRecommendMapper labelRecommendMapper;
     @Autowired
     private StorageLabelMapper storageLabelMapper;
+    @Autowired
+    private PrintLabelMapper printLabelMapper;
 
     @Override
     public ResultVO pageQueryPickHead(int pageNum, int pageSize, Map<String, Object> reqMap) {
@@ -56,6 +65,11 @@ public class PickManageServiceImpl implements IPickManageService {
         return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), PickHeadVO.convert(vos)));
     }
 
+    @Override
+    public ResultVO queryByPhId(Long pickHeadId) {
+        PickHeadPO po = pickHeadMapper.selectByPrimaryKey(pickHeadId);
+        return ResultVO.ok().setData(PickHeadVO.convert(po));
+    }
 
     @Override
     public ResultVO materialLoss(int pageNum, int pageSize, Map<String, Object> reqMap) {
@@ -66,8 +80,6 @@ public class PickManageServiceImpl implements IPickManageService {
 
     @Override
     public ResultVO queryExItems(int pageNum,int pageSize,String pickNo){
-        // 先查询出当前工单号下 物料编码
-
         // 若扫描了未推荐的PID,则异常列表只显示，扫描了其他推荐的PID
         List<PickHeadBO> noRecommend = pickHeadMapper.queryNoRecommend(pickNo);
         // 若已拣货量大于需求量时，将未扫描优先推荐的pid以及扫描了其他推荐的pid
@@ -83,14 +95,21 @@ public class PickManageServiceImpl implements IPickManageService {
             if (containsKey){
                 List<String> allPidList = Arrays.asList(map.get(materialNo).split(","));
                 List<String> rePidList = Arrays.asList(bo.getRecommendPid().split(","));
-//                bo.setRecommendPid(allPidList.stream()
-//                        .filter(s -> !rePidList.contains(s))
-//                        .collect (Collectors.toList()));
+                bo.setRecommendPid(StringUtils.join(allPidList.stream()
+                        .filter(s -> !rePidList.contains(s))
+                        .collect(Collectors.toList()), ","));
             }
         }
-
-
-        return new ResultVO(1000);
+        Map<String, String> useMap = useList.stream().collect(Collectors.toMap(PickHeadBO::getMaterialNo,PickHeadBO::getRecommendPid));
+        // 将未使用推荐和已使用未推荐进行组合
+        for (PickHeadBO bo:noRecommend) {
+            String materialNo = bo.getMaterialNo();
+            boolean useKey = useMap.containsKey(materialNo);
+            if (useKey){
+                bo.setRecommendPid(useMap.get(materialNo));
+            }
+        }
+        return ResultVO.ok().setData(noRecommend);
     }
 
     @Override
@@ -140,26 +159,76 @@ public class PickManageServiceImpl implements IPickManageService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ResultVO pickPidOut(String pickNo, String packageId) {
+    public ResultVO pickPidOut(Long pickHeadId, String packageId) {
         //1.首先根据输入的PID,得到相应PID的信息，进行展示
         PrintLabelBO bo = pickHeadMapper.pickPid(packageId);
-        PickHeadPO po = pickHeadMapper.queryByPickNo(pickNo);
+//        PickHeadPO po = pickHeadMapper.queryByPickNo(pickHeadId);
         // 如果该物料的PID不在该工单对应采购单的物料范围内，则提示 该物料并不属于该工单
-//        List<String> pidList = pickHeadMapper.judgePidHave(pickNo);
+//        List<String> pidList = pickHeadMapper.judgePidHave(packageId);
 
         // 判断当前物料不在拣货清单中，则提示 该物料并不在出库清单中
-        List<String> maList = pickHeadMapper.judgeMaterial(pickNo);
+        List<String> maList = pickHeadMapper.judgeMaterial(pickHeadId);
         boolean flag = maList.contains(bo.getMaterialNo());
+        if (!flag) {
+            return new ResultVO(2000);
+        }
         //2.将拣货单表体表中的已拣量作加操作
         int addResult = pickHeadMapper.addPickNum(bo.getMaterialNo(), bo.getNum());
         //3.查看扫码的PID是否在推荐的库位标签表中是否存在推荐的PID,存在则更新拣货标签表中的是否推荐标志位
-        List<String> reList = pickHeadMapper.queryReOnlyPid(pickNo);
+        List<String> reList = pickHeadMapper.queryReOnlyPid(pickHeadId);
         boolean flagOne = reList.contains(packageId);
-        int recommend = flagOne ? 1 : 0;
-        int insertResult = pickHeadMapper.insertPickLabel(po.getPickHeadId(), bo.getPrintLabelId(), recommend);
+        Byte recommend = flagOne ? (byte)1 : (byte)2;
+
+        PickLabelPO pickLabelPo = new PickLabelPO();
+        pickLabelPo.setPickHeadId(pickHeadId);
+        pickLabelPo.setPrintLabelId(bo.getPrintLabelId());
+        pickLabelPo.setRecommend(recommend);
+        pickLabelPo.setCreateTime(new Date());
+        int insertResult = pickHeadMapper.insertPickLabel(pickLabelPo);
 
         return ResultVO.ok().setData(bo);
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public ResultVO packageIdDiv(String packageId,Integer num){
+        //(1) 根据扫描pid获取物料信息
+        PrintLabelBO bo = pickHeadMapper.pickPid(packageId);
+        //(2) 将扫描的pid的dr值设为2，并且按照分料数量分成两个pid
+        PrintLabelPO po = new PrintLabelPO();
+        po = printLabelMapper.queryNo(bo.getPackageId());
+
+        PrintLabelPO poDivOne = new PrintLabelPO();
+        PrintLabelPO poDivTwo = new PrintLabelPO();
+        BeanUtils.copyProperties(po,poDivOne,new String[]{"printLabelId","dr"});
+        BeanUtils.copyProperties(po,poDivTwo,new String[]{"printLabelId","dr"});
+        // 生成分料pid1
+        Date divOneTime = new Date();
+        poDivOne.setCreateTime(divOneTime);
+        int curNumOne = ReceiptNoUtil.getLabelNum(printLabelMapper, null, divOneTime);
+        poDivOne.setPackageId(ReceiptNoUtil.genLabelNo(null, divOneTime, ++curNumOne));
+        poDivOne.setRelatePackageId(bo.getPackageId());
+        poDivOne.setNum(num);
+        poDivOne.setDr((byte)1);
+        int resultDivOne = printLabelMapper.insert(poDivOne);
+
+        // 生成分料pid2
+        Date divTwoTime = new Date();
+        poDivOne.setCreateTime(divTwoTime);
+        int curNumTwo = ReceiptNoUtil.getLabelNum(printLabelMapper, null, divTwoTime);
+        poDivTwo.setPackageId(ReceiptNoUtil.genLabelNo(null, divTwoTime, ++curNumTwo));
+        poDivTwo.setRelatePackageId(bo.getPackageId());
+        poDivTwo.setNum(po.getNum()-num);
+        poDivTwo.setDr((byte)1);
+        int resultDivTwo = printLabelMapper.insert(poDivTwo);
+
+        po.setDr((byte)2);
+        int result = printLabelMapper.updateByPrimaryKey(po);
+
+        return ResultVO.ok().setData(bo);
+    }
+
+
 
 
 }

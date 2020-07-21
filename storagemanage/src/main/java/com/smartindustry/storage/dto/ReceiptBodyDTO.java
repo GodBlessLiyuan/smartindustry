@@ -4,7 +4,7 @@ import com.smartindustry.common.bo.sm.ReceiptBodyBO;
 import com.smartindustry.common.mapper.sm.ReceiptBodyMapper;
 import com.smartindustry.common.pojo.sm.ReceiptHeadPO;
 import com.smartindustry.storage.constant.ReceiptConstant;
-import com.smartindustry.storage.util.ReceiptNoUtil;
+import com.smartindustry.common.util.ReceiptNoUtil;
 import lombok.Data;
 
 import java.io.Serializable;
