@@ -8,3 +8,9 @@ eureka:
       defaultZone: http://localhost:8030/eureka/
 logging:
   config: classpath:logback-spring-test.xml
+
+spring:
+  security:
+    user:
+      name: vbooster
+      password: vbooster@123
