@@ -3,14 +3,16 @@ server:
 eureka:
   client:
     register-with-eureka: false
-    fetch-registry: false
+    fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8030/eureka/
+      defaultZone: http://vbooster:123456a@localhost:8030/eureka/
 logging:
   config: classpath:logback-spring-test.xml
 
 spring:
+  application:
+    name: industryeureka
   security:
     user:
       name: vbooster
-      password: vbooster@123
+      password: 123456a

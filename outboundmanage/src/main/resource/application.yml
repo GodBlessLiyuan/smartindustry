@@ -29,7 +29,7 @@ mybatis:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8030/eureka/
+      defaultZone: http://vbooster:123456a@localhost:8030/eureka/
 
 logging:
   level:
