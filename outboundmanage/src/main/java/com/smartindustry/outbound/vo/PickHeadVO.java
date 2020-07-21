@@ -33,11 +33,11 @@ public class PickHeadVO implements Serializable {
     /**
      * 对应项目
      */
-    private String coproject;
+    private String cproject;
     /**
      * 计算发货时间
      */
-    private Date planTime;
+    private Date ptime;
     /**
      * 出库时间
      */
@@ -58,11 +58,11 @@ public class PickHeadVO implements Serializable {
     public static PickHeadVO convert(PickHeadPO po) {
         PickHeadVO vo = new PickHeadVO();
         vo.setPhid(po.getPickHeadId());
-        vo.setCoproject(po.getCorrespondProject());
+        vo.setCproject(po.getCorrespondProject());
         vo.setMstatus(po.getMaterialStatus());
         vo.setOno(po.getOrderNo());
         vo.setOstatus(po.getOutboundStatus());
-        vo.setPlanTime(po.getPlanTime());
+        vo.setPtime(po.getPlanTime());
         vo.setPno(po.getPickNo());
         vo.setOtime(po.getOutboundTime());
         return vo;

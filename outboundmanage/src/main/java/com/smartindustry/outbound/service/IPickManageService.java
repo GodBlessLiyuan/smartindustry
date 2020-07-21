@@ -2,6 +2,7 @@ package com.smartindustry.outbound.service;
 
 import com.smartindustry.common.vo.ResultVO;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,10 +37,10 @@ public interface IPickManageService {
      *
      * @param pageNum
      * @param pageSize
-     * @param pickNo
+     * @param pickHeadId
      * @return
      */
-    ResultVO queryExItems(int pageNum, int pageSize, String pickNo);
+    ResultVO queryExItems(int pageNum, int pageSize, Long pickHeadId);
 
     /**
      * 拣货单打印-详情
@@ -78,4 +79,21 @@ public interface IPickManageService {
      * @return
      */
     ResultVO showMsgByPid(String packageId);
+
+    /**
+     * 在扫码拣货下的列表展示
+     * @param pageNum
+     * @param pageSize
+     * @param pickHeadId
+     * @return
+     */
+    ResultVO showScanItems(int pageNum, int pageSize,Long pickHeadId);
+
+    /**
+     * 扫码拣货列表的删除
+     * @param pickHeadId
+     * @param printLabelId
+     * @return
+     */
+    ResultVO deleteScanPid(Long pickHeadId, Long printLabelId);
 }

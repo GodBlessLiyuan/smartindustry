@@ -3,11 +3,10 @@ package com.smartindustry.outbound.controller;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.service.IPickManageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -39,7 +38,7 @@ public class PickManageController {
                                      @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
                                      @RequestParam(value = "pno", required = false) String pickNo,
                                      @RequestParam(value = "ono", required = false) String orderNo,
-                                     @RequestParam(value = "coproject", required = false) String correspondProject,
+                                     @RequestParam(value = "cproject", required = false) String correspondProject,
                                      @RequestParam(value = "mstatus", defaultValue = "") Byte materialStatus) {
         Map<String, Object> reqData = new HashMap<>(4);
         reqData.put("pickNo", pickNo);
@@ -54,25 +53,22 @@ public class PickManageController {
      *
      * @param pageNum
      * @param pageSize
-     * @param pickNo
+     * @param pickHeadId
      * @param materialNo
      * @param materialName
-     * @param flag
      * @return
      * @author jiangzhaojie
      */
     @RequestMapping("materialLoss")
     public ResultVO materialLoss(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                  @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                 @RequestParam(value = "pno", required = false) String pickNo,
+                                 @RequestParam(value = "phid", required = false) Long pickHeadId,
                                  @RequestParam(value = "mno", required = false) String materialNo,
-                                 @RequestParam(value = "mname", required = false) String materialName,
-                                 @RequestParam(value = "flag", required = false) Byte flag) {
-        Map<String, Object> reqData = new HashMap<>(4);
-        reqData.put("pickNo", pickNo);
-        reqData.put("orderNo", materialNo);
-        reqData.put("correspondProject", materialName);
-        reqData.put("materialStatus", flag);
+                                 @RequestParam(value = "mname", required = false) String materialName) {
+        Map<String, Object> reqData = new HashMap<>(3);
+        reqData.put("pickHeadId", pickHeadId);
+        reqData.put("materialNo", materialNo);
+        reqData.put("materialName", materialName);
         return pickManageService.materialLoss(pageNum, pageSize, reqData);
     }
 
@@ -81,14 +77,14 @@ public class PickManageController {
      *
      * @param pageNum
      * @param pageSize
-     * @param pickNo
+     * @param pickHeadId
      * @return
      */
     @RequestMapping("queryExItems")
     public ResultVO queryExItems(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                  @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                 @RequestParam(value = "pno", required = false) String pickNo) {
-        return pickManageService.queryExItems(pageNum, pageSize, pickNo);
+                                 @RequestParam(value = "phid", required = false) Long pickHeadId) {
+        return pickManageService.queryExItems(pageNum, pageSize, pickHeadId);
     }
 
     /**
@@ -123,5 +119,18 @@ public class PickManageController {
     @RequestMapping("showMsgByPid")
     public ResultVO showMsgByPid(@RequestParam(value = "pid", required = false) String packageId){
         return pickManageService.showMsgByPid(packageId);
+    }
+
+    @RequestMapping("showScanItems")
+    public ResultVO showScanItems(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                                  @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                                  @RequestParam(value = "phid", required = false) Long pickHeadId){
+        return pickManageService.showScanItems(pageNum,pageSize,pickHeadId);
+    }
+
+    @RequestMapping("deleteScanPid")
+    public ResultVO deleteScanPid(@RequestParam(value = "phid", required = false) Long pickHeadId,
+                                  @RequestParam(value = "plid", required = false) Long printLabelId){
+        return pickManageService.deleteScanPid(pickHeadId,printLabelId);
     }
 }
