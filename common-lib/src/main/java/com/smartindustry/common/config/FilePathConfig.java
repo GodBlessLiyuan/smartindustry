@@ -24,7 +24,7 @@ public class FilePathConfig {
     /**
      * 项目目录
      */
-    private String projectDir = "/smartindustry";
+    private String projectDir = "/industryfile";
     /**
      * 模块目录
      */
