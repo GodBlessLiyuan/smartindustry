@@ -14,7 +14,7 @@ import com.smartindustry.storage.dto.IqcTestDTO;
 import com.smartindustry.storage.dto.QeConfirmDTO;
 import com.smartindustry.storage.dto.QeTestDTO;
 import com.smartindustry.storage.service.IQualityManageService;
-import com.smartindustry.common.util.ReceiptNoUtil;
+import com.smartindustry.storage.util.ReceiptNoUtil;
 import com.smartindustry.storage.vo.LabelRecordVO;
 import com.smartindustry.storage.vo.QualityPageVO;
 import com.smartindustry.storage.vo.RecordVO;

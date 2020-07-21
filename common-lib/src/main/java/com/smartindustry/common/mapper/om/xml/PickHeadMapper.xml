@@ -168,7 +168,10 @@
         select
         <include refid="Base_Column_List"/>
         from om_pick_head ph
-        where ph.dr = 1 and ph.material_status = #{materialStatus}
+        where ph.dr = 1
+        <if test="materialStatus != null and materialStatus != 0">
+            and ph.material_status = #{materialStatus}
+        </if>
         <if test="pickNo != null and pickNo != ''">
             and ph.pick_no like concat('%',#{pickNo,jdbcType=VARCHAR},'%')
         </if>
@@ -184,7 +187,7 @@
     <!--    扫码拣货-->
     <select id="pickPid" parameterType="java.lang.String"
             resultType="com.smartindustry.common.bo.si.PrintLabelBO">
-        select pl.print_label_id as printLableId,pl.package_id as packageId,pl.material_no as materialNo,ma.material_name as materialName,ma.material_desc as materialDesc,pl.num as num
+        select pl.print_label_id as printLabelId,pl.package_id as packageId,pl.material_no as materialNo,ma.material_name as materialName,ma.material_desc as materialDesc,pl.num as num
         from si_print_label pl
         left join si_material ma on pl.material_no = ma.material_no
         where pl.package_id=#{packageId}

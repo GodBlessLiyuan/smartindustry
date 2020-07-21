@@ -12,8 +12,6 @@ import com.smartindustry.common.mapper.om.PickBodyMapper;
 import com.smartindustry.common.mapper.om.PickHeadMapper;
 import com.smartindustry.common.mapper.si.PrintLabelMapper;
 import com.smartindustry.common.mapper.si.StorageLabelMapper;
-import com.smartindustry.common.pojo.om.LabelRecommendPO;
-import com.smartindustry.common.pojo.om.PickBodyPO;
 import com.smartindustry.common.pojo.om.PickHeadPO;
 import com.smartindustry.common.pojo.om.PickLabelPO;
 import com.smartindustry.common.pojo.si.PrintLabelPO;
@@ -33,8 +31,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.xml.crypto.Data;
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -191,12 +187,9 @@ public class PickManageServiceImpl implements IPickManageService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ResultVO packageIdDiv(String packageId,Integer num){
-        //(1) 根据扫描pid获取物料信息
-        PrintLabelBO bo = pickHeadMapper.pickPid(packageId);
+    public ResultVO packageIdDiv(Long printLabelId,Integer num){
         //(2) 将扫描的pid的dr值设为2，并且按照分料数量分成两个pid
-        PrintLabelPO po = new PrintLabelPO();
-        po = printLabelMapper.queryNo(bo.getPackageId());
+        PrintLabelPO po = printLabelMapper.selectByPrimaryKey(printLabelId);
 
         PrintLabelPO poDivOne = new PrintLabelPO();
         PrintLabelPO poDivTwo = new PrintLabelPO();
@@ -207,7 +200,7 @@ public class PickManageServiceImpl implements IPickManageService {
         poDivOne.setCreateTime(divOneTime);
         int curNumOne = ReceiptNoUtil.getLabelNum(printLabelMapper, null, divOneTime);
         poDivOne.setPackageId(ReceiptNoUtil.genLabelNo(null, divOneTime, ++curNumOne));
-        poDivOne.setRelatePackageId(bo.getPackageId());
+        poDivOne.setRelatePackageId(po.getPackageId());
         poDivOne.setNum(num);
         poDivOne.setDr((byte)1);
         int resultDivOne = printLabelMapper.insert(poDivOne);
@@ -217,18 +210,20 @@ public class PickManageServiceImpl implements IPickManageService {
         poDivOne.setCreateTime(divTwoTime);
         int curNumTwo = ReceiptNoUtil.getLabelNum(printLabelMapper, null, divTwoTime);
         poDivTwo.setPackageId(ReceiptNoUtil.genLabelNo(null, divTwoTime, ++curNumTwo));
-        poDivTwo.setRelatePackageId(bo.getPackageId());
+        poDivTwo.setRelatePackageId(po.getPackageId());
         poDivTwo.setNum(po.getNum()-num);
         poDivTwo.setDr((byte)1);
         int resultDivTwo = printLabelMapper.insert(poDivTwo);
-
         po.setDr((byte)2);
         int result = printLabelMapper.updateByPrimaryKey(po);
-
-        return ResultVO.ok().setData(bo);
+        return ResultVO.ok();
     }
 
-
+    @Override
+    public ResultVO showMsgByPid(String packageId){
+        PrintLabelBO bo = pickHeadMapper.pickPid(packageId);
+        return ResultVO.ok().setData(bo);
+    }
 
 
 }

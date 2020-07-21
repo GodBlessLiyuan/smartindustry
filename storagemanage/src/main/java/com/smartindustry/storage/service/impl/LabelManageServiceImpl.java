@@ -10,7 +10,7 @@ import com.smartindustry.storage.constant.ReceiptConstant;
 import com.smartindustry.storage.dto.LabelSplitDTO;
 import com.smartindustry.storage.dto.PrintLabelDTO;
 import com.smartindustry.storage.service.ILabelManageService;
-import com.smartindustry.common.util.ReceiptNoUtil;
+import com.smartindustry.storage.util.ReceiptNoUtil;
 import com.smartindustry.storage.vo.PrintLabelVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
