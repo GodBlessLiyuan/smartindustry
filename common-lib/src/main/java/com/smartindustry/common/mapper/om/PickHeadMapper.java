@@ -41,10 +41,10 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
 
     /**
      * 查看当前工单拣货单的推荐pid格式为  pickNo,maNo,(pid1,pid2,pid3)
-     * @param pickNo
+     * @param pickHeadId
      * @return
      */
-    List<PickHeadBO> queryRecommend(@Param("pickNo") String pickNo);
+    List<PickHeadBO> queryRecommend(@Param("pickHeadId") Long pickHeadId);
 
     /**
      * 查看当前工单号的pid,仅仅只有pid
@@ -90,15 +90,30 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
 
     /**
      * 查询当前工单号所有已经推荐的pid,需要在 （拣货量 > 需求量）
-     * @param pickNo
+     * @param pickHeadId
      * @return
      */
-    List<PickHeadBO> queryAllRePid(@Param("pickNo") String pickNo);
+    List<PickHeadBO> queryAllRePid(@Param("pickHeadId") Long pickHeadId);
 
     /**
      * 根据当前工单号查询出所有使用未推荐的pid
-     * @param pickNo
+     * @param pickHeadId
      * @return
      */
-    List<PickHeadBO> queryNoRecommend(@Param("pickNo") String pickNo);
+    List<PickHeadBO> queryNoRecommend(@Param("pickHeadId") Long pickHeadId);
+
+    /**
+     * 展示扫码拣货下面的已扫码列表
+     * @param pickHeadId
+     * @return
+     */
+    List<PrintLabelBO> showScanItems(@Param("pickHeadId") Long pickHeadId);
+
+    /**
+     * 扫码拣货列表选中的批量删除
+     * @param pickHeadId
+     * @param printLabelId
+     * @return
+     */
+    int deleteScanPid(@Param("pickHeadId") Long pickHeadId,@Param("printLabelId") Long printLabelId);
 }

@@ -19,10 +19,7 @@ import com.smartindustry.common.pojo.si.StorageLabelPO;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.util.OmNoUtil;
-import com.smartindustry.outbound.vo.LackMaterialVO;
-import com.smartindustry.outbound.vo.PickBodyVO;
-import com.smartindustry.outbound.vo.PickDetailVO;
-import com.smartindustry.outbound.vo.PickHeadVO;
+import com.smartindustry.outbound.vo.*;
 import com.smartindustry.outbound.service.IPickManageService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -75,15 +72,15 @@ public class PickManageServiceImpl implements IPickManageService {
     }
 
     @Override
-    public ResultVO queryExItems(int pageNum,int pageSize,String pickNo){
+    public ResultVO queryExItems(int pageNum,int pageSize,Long pickHeadId){
         // 若扫描了未推荐的PID,则异常列表只显示，扫描了其他推荐的PID
-        List<PickHeadBO> noRecommend = pickHeadMapper.queryNoRecommend(pickNo);
+        List<PickHeadBO> noRecommend = pickHeadMapper.queryNoRecommend(pickHeadId);
         // 若已拣货量大于需求量时，将未扫描优先推荐的pid以及扫描了其他推荐的pid
         //(1) 先查询出所有的推荐的pid
-        List<PickHeadBO> reList = pickHeadMapper.queryRecommend(pickNo);
+        List<PickHeadBO> reList = pickHeadMapper.queryRecommend(pickHeadId);
         Map<String, String> map = reList.stream().collect(Collectors.toMap(PickHeadBO::getMaterialNo,PickHeadBO::getRecommendPid));
         //(2) 再查询出目前工单已经使用的推荐pid,这里必须是  拣货量大于 需求量才查询
-        List<PickHeadBO> useList = pickHeadMapper.queryAllRePid(pickNo);
+        List<PickHeadBO> useList = pickHeadMapper.queryAllRePid(pickHeadId);
         //(3) 推荐未使用的进行相减，以及拼接其他未推荐的pid
         for (PickHeadBO bo:useList) {
             String materialNo = bo.getMaterialNo();
@@ -182,7 +179,7 @@ public class PickManageServiceImpl implements IPickManageService {
         pickLabelPo.setCreateTime(new Date());
         int insertResult = pickHeadMapper.insertPickLabel(pickLabelPo);
 
-        return ResultVO.ok().setData(bo);
+        return ResultVO.ok().setData(ScanOutVO.convert(bo));
     }
 
     @Override
@@ -190,7 +187,6 @@ public class PickManageServiceImpl implements IPickManageService {
     public ResultVO packageIdDiv(Long printLabelId,Integer num){
         //(2) 将扫描的pid的dr值设为2，并且按照分料数量分成两个pid
         PrintLabelPO po = printLabelMapper.selectByPrimaryKey(printLabelId);
-
         PrintLabelPO poDivOne = new PrintLabelPO();
         PrintLabelPO poDivTwo = new PrintLabelPO();
         BeanUtils.copyProperties(po,poDivOne,new String[]{"printLabelId","dr"});
@@ -222,8 +218,19 @@ public class PickManageServiceImpl implements IPickManageService {
     @Override
     public ResultVO showMsgByPid(String packageId){
         PrintLabelBO bo = pickHeadMapper.pickPid(packageId);
-        return ResultVO.ok().setData(bo);
+        return ResultVO.ok().setData(ScanOutVO.convert(bo));
     }
 
+    @Override
+    public ResultVO showScanItems(int pageNum, int pageSize,Long pickHeadId){
+        Page<PrintLabelBO> page = PageHelper.startPage(pageNum, pageSize);
+        List<PrintLabelBO> bos = pickHeadMapper.showScanItems(pickHeadId);
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), ScanOutVO.convert(bos)));
+    }
 
+    @Override
+    public ResultVO deleteScanPid(Long pickHeadId, Long printLabelId){
+        int result = pickHeadMapper.deleteScanPid(pickHeadId,printLabelId);
+        return ResultVO.ok();
+    }
 }

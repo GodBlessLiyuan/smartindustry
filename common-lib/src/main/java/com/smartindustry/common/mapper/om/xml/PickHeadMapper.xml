@@ -163,6 +163,7 @@
             dr                 = #{dr,jdbcType=TINYINT}
         where pick_head_id = #{pickHeadId,jdbcType=BIGINT}
     </update>
+
     <!--    查看所有工单拣货单的情况-->
     <select id="pageQueryPickHeadMsg" parameterType="java.util.Map" resultMap="BaseResultMap">
         select
@@ -200,25 +201,22 @@
         from om_pick_head ph
         left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
         left join si_material ma on pb.material_no = ma.material_no
-        where ph.dr =1 and ph.pick_no = #{pickNo}
+        where ph.dr =1 and ph.pick_head_id = #{pickHeadId}
         <if test="materialNo != null and materialNo != ''">
             and ma.material_no like '%' #{materialNo} '%'
         </if>
         <if test="materialName != null and materialName != ''">
-            and ma.materialName like '%' #{materialName} '%'
-        </if>
-        <if test="flag != null and flag != ''">
-            and material_loss_num &lt;=0
+            and ma.material_name like '%' #{materialName} '%'
         </if>
     </select>
     <!--    查看当前工单拣货单的推荐pid-->
-    <select id="queryRecommend" parameterType="java.lang.String" resultType="com.smartindustry.common.bo.om.PickHeadBO">
+    <select id="queryRecommend" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.om.PickHeadBO">
         select sl.material_no as materialNo,GROUP_CONCAT(sl.package_id) as recommendPid
         from om_pick_head ph
         left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
         left join om_label_recommend lr on pb.pick_body_id = lr.pick_body_id
         left join si_storage_label sl on lr.storage_label_id = sl.storage_label_id
-        where ph.pick_no=#{pickNo}
+        where ph.pick_head_id=#{pickHeadId}
     </select>
 
     <!--    查看当前工单拣货单的推荐,不和物料编号对应的-->
@@ -239,7 +237,7 @@
         left join si_print_label spl on opl.print_label_id = spl.print_label_id
         left join si_material ma on spl.material_no = ma.material_no
         left join om_pick_body pb on ma.material_no = pb.material_no
-        where opl.recommend = 1 and ph.pick_no = #{pickNo} and (pb.pick_num - pb.demand_num >= 0)
+        where opl.recommend = 1 and ph.pick_head_id = #{pickHeadId} and (pb.pick_num - pb.demand_num >= 0)
     </select>
 
     <!--    查看当前工单拣货单的各个物料的真实打印pid-->
@@ -282,18 +280,32 @@
 <!--    异常列表提醒：(1)当拣货量未满需求量时，异常提示扫描了其他推荐的pid;(2)当拣货量超过需求量时，提示-->
 <!--    未扫描优先推荐的pid,扫描了其他推荐的pid-->
     <!--    当物料的已拣货量未满需求量，查找出其他推荐的pid-->
-    <select id="queryNoRecommend" parameterType="java.lang.String" resultType="com.smartindustry.common.bo.om.PickHeadBO">
+    <select id="queryNoRecommend" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.om.PickHeadBO">
         select spl.material_no as materialNo,ma.material_name as materialName,ma.material_desc as materialDesc,GROUP_CONCAT(spl.package_id) as noRecommendPid,
         from om_pick_head ph
         left join om_pick_label opl on ph.pick_head_id = opl.pick_head_id
         left join si_print_label spl on opl.print_label_id = spl.print_label_id
         left join si_material ma on spl.material_no = ma.material_no
-        where opl.recommend = 2 and ph.pick_no = #{pickNo}
+        where opl.recommend = 2 and ph.pick_head_id = #{pickHeadId}
         group by ph.pick_no,spl.material_no
     </select>
 
-<!--    将si_print_label中的选中pid dr状态置为2-->
+<!--    按照创建时间顺序进行当前拣货单号的所有已扫码入库的信息查询-->
+    <select id="showScanItems" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.si.PrintLabelBO">
+        select spl.print_label_id as printLabelId,spl.package_id as packageId,spl.material_no as materialNo,ma.material_name as materialName,ma.material_desc as materialDesc,spl.num as num
+        from om_pick_head ph
+        left join om_pick_label pl on ph.pick_head_id = pl.pick_head_id
+        left join si_print_label spl on pl.print_label_id = spl.print_label_id
+        left join si_material ma on spl.material_no = ma.material_no
+        where ph.pick_head_id = #{pickHeadId}
+        order by pl.create_time desc
+    </select>
 
+<!--    扫码拣货列表选中删除-->
+    <delete id="deleteScanPid">
+        delete from om_pick_label
+        where print_label_id = #{printLabelId} and pick_head_id = #{pickHeadId}
+    </delete>
 
 
 </mapper>
