@@ -96,6 +96,7 @@ public class PickManageController {
      *
      * @param phId
      * @return
+     * @author xiahui
      */
     @RequestMapping("detail")
     public ResultVO detail(@RequestParam("phid") Long phId) {
