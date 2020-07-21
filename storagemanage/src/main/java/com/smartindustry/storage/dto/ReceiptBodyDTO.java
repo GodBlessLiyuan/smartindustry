@@ -80,6 +80,11 @@ public class ReceiptBodyDTO implements Serializable {
         String head = headPO.getOrderType() == 1 ? ReceiptNoUtil.RECEIPT_BODY_PO : headPO.getOrderType() == 2 ? ReceiptNoUtil.RECEIPT_BODY_YP : ReceiptNoUtil.RECEIPT_BODY_RP;
         int curNum = ReceiptNoUtil.getReceiptBodyNum(mapper, head, new Date());
         for (ReceiptBodyDTO dto : dtos) {
+            // 过滤接受数量为空的数据
+            if (null == dto.getAnum() || dto.getAnum() <= 0) {
+                continue;
+            }
+
             bos.add(ReceiptBodyDTO.createPO(headPO, dto, ReceiptNoUtil.genReceiptBodyNo(head, new Date(), ++curNum)));
         }
         return bos;

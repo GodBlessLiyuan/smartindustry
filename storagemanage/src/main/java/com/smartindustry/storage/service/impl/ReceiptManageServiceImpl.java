@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.*;
 
@@ -59,6 +60,11 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         receiptHeadMapper.insert(headPO);
 
         List<ReceiptBodyBO> bodyBOs = ReceiptBodyDTO.createPOs(headPO, dto.getBody(), receiptBodyMapper);
+        if (bodyBOs.size() == 0) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return new ResultVO(1001);
+        }
+
         receiptBodyMapper.batchInsertBO(bodyBOs);
 
         // 操作记录
