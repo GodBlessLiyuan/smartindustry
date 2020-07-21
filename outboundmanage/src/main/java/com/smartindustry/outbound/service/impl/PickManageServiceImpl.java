@@ -16,9 +16,9 @@ import com.smartindustry.common.pojo.om.PickHeadPO;
 import com.smartindustry.common.pojo.om.PickLabelPO;
 import com.smartindustry.common.pojo.si.PrintLabelPO;
 import com.smartindustry.common.pojo.si.StorageLabelPO;
-import com.smartindustry.common.util.ReceiptNoUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.outbound.util.OmNoUtil;
 import com.smartindustry.outbound.vo.LackMaterialVO;
 import com.smartindustry.outbound.vo.PickBodyVO;
 import com.smartindustry.outbound.vo.PickDetailVO;
@@ -198,8 +198,8 @@ public class PickManageServiceImpl implements IPickManageService {
         // 生成分料pid1
         Date divOneTime = new Date();
         poDivOne.setCreateTime(divOneTime);
-        int curNumOne = ReceiptNoUtil.getLabelNum(printLabelMapper, null, divOneTime);
-        poDivOne.setPackageId(ReceiptNoUtil.genLabelNo(null, divOneTime, ++curNumOne));
+        int curNumOne = OmNoUtil.getLabelNum(printLabelMapper, null, divOneTime);
+        poDivOne.setPackageId(OmNoUtil.genLabelNo(null, divOneTime, ++curNumOne));
         poDivOne.setRelatePackageId(po.getPackageId());
         poDivOne.setNum(num);
         poDivOne.setDr((byte)1);
@@ -208,8 +208,8 @@ public class PickManageServiceImpl implements IPickManageService {
         // 生成分料pid2
         Date divTwoTime = new Date();
         poDivOne.setCreateTime(divTwoTime);
-        int curNumTwo = ReceiptNoUtil.getLabelNum(printLabelMapper, null, divTwoTime);
-        poDivTwo.setPackageId(ReceiptNoUtil.genLabelNo(null, divTwoTime, ++curNumTwo));
+        int curNumTwo = OmNoUtil.getLabelNum(printLabelMapper, null, divTwoTime);
+        poDivTwo.setPackageId(OmNoUtil.genLabelNo(null, divTwoTime, ++curNumTwo));
         poDivTwo.setRelatePackageId(po.getPackageId());
         poDivTwo.setNum(po.getNum()-num);
         poDivTwo.setDr((byte)1);
