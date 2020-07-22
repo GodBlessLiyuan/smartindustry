@@ -180,9 +180,6 @@
         from om_outbound ob
         left join om_pick_head ph on ob.pick_head_id = ph.pick_head_id
         where ob.dr = 1
-        <if test="outBoundNo != null and outBoundNo != ''">
-            and ob.outbound_no like concat('%',#{outBoundNo,jdbcType=VARCHAR},'%')
-        </if>
         <if test="pickNo != null and pickNo != ''">
             and ph.pick_no like concat('%',#{pickNo,jdbcType=VARCHAR},'%')
         </if>
