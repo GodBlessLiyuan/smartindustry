@@ -1,0 +1,1 @@
+INSERT INTO `ba_role` (`role_id`, `code`, `name`, `create_time`, `dr`) VALUES ('1', '11', '111', '2020-07-09 12:49:34', '1');

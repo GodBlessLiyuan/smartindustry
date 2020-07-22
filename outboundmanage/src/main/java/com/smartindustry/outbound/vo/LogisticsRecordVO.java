@@ -4,7 +4,6 @@ import com.smartindustry.common.bo.om.LogisticsRecordBO;
 import com.smartindustry.common.config.FilePathConfig;
 import com.smartindustry.common.pojo.om.LogisticsPicturePO;
 import lombok.Data;
-import sun.rmi.runtime.Log;
 
 import java.io.Serializable;
 import java.util.ArrayList;
