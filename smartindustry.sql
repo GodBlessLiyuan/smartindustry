@@ -219,6 +219,7 @@ CREATE TABLE om_pick_body
     demand_num int,
     pick_num int,
     create_time datetime,
+    exception char(255),
     -- 1£ºÎ´É¾³ý
     -- 2£ºÒÑÉ¾³ý
     dr tinyint COMMENT '1£ºÎ´É¾³ý
@@ -301,7 +302,6 @@ CREATE TABLE om_pick_label
     -- 2£º·ñ
     recommend tinyint COMMENT '1£ºÊÇ
 2£º·ñ',
-    exception char(255),
     create_time datetime,
     PRIMARY KEY (pick_label_id),
     UNIQUE (pick_label_id)
