@@ -1,10 +1,14 @@
 package com.smartindustry.storage.service.impl;
 
 import com.smartindustry.common.bo.sm.ReceiptBodyBO;
+import com.smartindustry.common.constant.ModuleConstant;
+import com.smartindustry.common.mapper.si.LabelRecordMapper;
 import com.smartindustry.common.mapper.si.PrintLabelMapper;
 import com.smartindustry.common.mapper.sm.*;
+import com.smartindustry.common.pojo.si.LabelRecordPO;
 import com.smartindustry.common.pojo.si.PrintLabelPO;
 import com.smartindustry.common.pojo.sm.*;
+import com.smartindustry.common.util.PrintUtil;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.ReceiptConstant;
 import com.smartindustry.storage.dto.LabelSplitDTO;
@@ -43,6 +47,8 @@ public class LabelManageServiceImpl implements ILabelManageService {
     private QeDetectMapper qeDetectMapper;
     @Autowired
     private StorageRecordMapper recordMapper;
+    @Autowired
+    private LabelRecordMapper labelRecordMapper;
 
     @Override
     public ResultVO query(Long rbId) {
@@ -60,8 +66,17 @@ public class LabelManageServiceImpl implements ILabelManageService {
     }
 
     @Override
-    public ResultVO print(String pid) {
-        return null;
+    public ResultVO print(String pid, Byte status) {
+        PrintLabelPO labelPO = printLabelMapper.queryByPidAndDr(pid, (byte) 1);
+        if (null == labelPO) {
+            return new ResultVO(1002);
+        }
+
+        // 打印记录
+        labelRecordMapper.insert(new LabelRecordPO(labelPO.getPrintLabelId(), 1L, "夏慧", ModuleConstant.STORAGE_MANAGE, status));
+        // TODO: 打印操作
+
+        return ResultVO.ok();
     }
 
     @Transactional(rollbackFor = Exception.class)

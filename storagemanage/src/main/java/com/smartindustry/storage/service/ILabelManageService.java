@@ -34,7 +34,7 @@ public interface ILabelManageService {
      * @param pid
      * @return
      */
-    ResultVO print(String pid);
+    ResultVO print(String pid, Byte status);
 
     /**
      * 重新打印

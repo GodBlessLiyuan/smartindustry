@@ -33,8 +33,8 @@ public class LabelManageController {
     }
 
     @RequestMapping("print")
-    public ResultVO print(@RequestParam(value = "pid") String pid) {
-        return labelManageService.print(pid);
+    public ResultVO print(@RequestParam(value = "pid") String pid, @RequestParam("status") Byte status) {
+        return labelManageService.print(pid, status);
     }
 
     @RequestMapping("reprint")

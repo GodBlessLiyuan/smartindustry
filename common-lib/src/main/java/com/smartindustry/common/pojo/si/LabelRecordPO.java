@@ -39,4 +39,13 @@ public class LabelRecordPO implements Serializable {
     private Byte status;
 
     private static final long serialVersionUID = 1L;
+
+    public LabelRecordPO(Long printLabelId, Long userId, String name, Byte module, Byte status) {
+        this.printLabelId = printLabelId;
+        this.userId = userId;
+        this.name = name;
+        this.module = module;
+        this.status = status;
+        this.createTime = new Date();
+    }
 }

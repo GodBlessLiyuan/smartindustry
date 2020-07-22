@@ -11,9 +11,9 @@ public class ModuleConstant {
     /**
      * 入库管理
      */
-    public static final String MODULE_STORAGE = "storage";
+    public static final Byte STORAGE_MANAGE = 1;
     /**
      * 出库管理
      */
-    public static final String MODULE_OUTBOUND = "outbound";
+    public static final Byte OUTBOUND_MANAGE = 2;
 }
