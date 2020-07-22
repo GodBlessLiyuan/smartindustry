@@ -22,7 +22,7 @@ public class PickLabelPO implements Serializable {
      */
     private Byte recommend;
 
-    private String exception;
+
 
     private Date createTime;
 
