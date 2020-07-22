@@ -20,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationAdapter;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -81,41 +83,6 @@ public class LabelManageServiceImpl implements ILabelManageService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public ResultVO reprint(Long plId, Integer num) {
-        PrintLabelPO labelPO = printLabelMapper.selectByPrimaryKey(plId);
-        if (null == labelPO) {
-            return new ResultVO(1002);
-        }
-        ReceiptLabelPO rlPO = receiptLabelMapper.queryByPrintLabelId(labelPO.getRelateLabelId());
-        if (null == rlPO) {
-            return new ResultVO(1002);
-        }
-
-        // 废弃原有标签
-        labelPO.setDr((byte) 2);
-        printLabelMapper.updateByPrimaryKey(labelPO);
-
-        String existPid = labelPO.getPackageId();
-
-        int curNum = ReceiptNoUtil.getLabelNum(printLabelMapper, null, new Date());
-        labelPO.setPrintLabelId(null);
-        labelPO.setPackageId(ReceiptNoUtil.genLabelNo(null, new Date(), ++curNum));
-        labelPO.setNum(num);
-        labelPO.setRelateLabelId(plId);
-        labelPO.setRelatePackageId(existPid);
-        labelPO.setDr((byte) 1);
-        labelPO.setCreateTime(new Date());
-        printLabelMapper.insert(labelPO);
-
-        rlPO.setReceiptLabelId(null);
-        rlPO.setPrintLabelId(labelPO.getPrintLabelId());
-        receiptLabelMapper.insert(rlPO);
-
-        return ResultVO.ok();
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    @Override
     public ResultVO insert(PrintLabelDTO dto) {
         if (StringUtils.isEmpty(dto.getScode())) {
             // 手动录入
@@ -136,12 +103,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
             }
             receiptLabelMapper.batchInsert(rlPOs);
 
-            
-            new Thread(() -> {
-                for (PrintLabelPO plPO : plPOs) {
-                    print(plPO.getPackageId(), ReceiptConstant.RECEIPT_ENTRY_LABEL);
-                }
-            }).start();
+            print(plPOs, ReceiptConstant.RECEIPT_ENTRY_LABEL);
 
             return ResultVO.ok();
         }
@@ -220,6 +182,46 @@ public class LabelManageServiceImpl implements ILabelManageService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
+    public ResultVO reprint(Long plId, Integer num) {
+        PrintLabelPO labelPO = printLabelMapper.selectByPrimaryKey(plId);
+        if (null == labelPO) {
+            return new ResultVO(1002);
+        }
+        ReceiptLabelPO rlPO = receiptLabelMapper.queryByPrintLabelId(labelPO.getPrintLabelId());
+        if (null == rlPO) {
+            return new ResultVO(1002);
+        }
+        ReceiptBodyPO rbPO = receiptBodyMapper.selectByPrimaryKey(rlPO.getReceiptBodyId());
+        if (null == rbPO) {
+            return new ResultVO(1002);
+        }
+
+        // 废弃原有标签
+        labelPO.setDr((byte) 2);
+        printLabelMapper.updateByPrimaryKey(labelPO);
+
+        // 新的标签
+        List<PrintLabelPO> newPlPOs = new ArrayList<>();
+
+        int curNum = ReceiptNoUtil.getLabelNum(printLabelMapper, null, new Date());
+        if (num > 0) {
+            PrintLabelPO newPlPO = PrintLabelPO.buildPO(labelPO, ReceiptNoUtil.genLabelNo(null, new Date(), ++curNum), num, null);
+            printLabelMapper.insert(newPlPO);
+
+            rlPO.setReceiptLabelId(null);
+            rlPO.setPrintLabelId(newPlPO.getPrintLabelId());
+            receiptLabelMapper.insert(rlPO);
+
+            newPlPOs.add(newPlPO);
+        }
+
+        print(newPlPOs, rbPO.getStatus());
+
+        return ResultVO.ok();
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
     public ResultVO split(LabelSplitDTO dto) {
         PrintLabelPO labelPO = printLabelMapper.selectByPrimaryKey(dto.getPlid());
         if (null == labelPO) {
@@ -233,41 +235,62 @@ public class LabelManageServiceImpl implements ILabelManageService {
         if (null == rlPO) {
             return new ResultVO(1002);
         }
+        ReceiptBodyPO rbPO = receiptBodyMapper.selectByPrimaryKey(rlPO.getReceiptBodyId());
+        if (null == rbPO) {
+            return new ResultVO(1002);
+        }
 
         // 废弃原有标签
         labelPO.setDr((byte) 2);
         printLabelMapper.updateByPrimaryKey(labelPO);
 
+        // 新的标签
+        List<PrintLabelPO> newPlPOs = new ArrayList<>();
+
         // 生产新的打印标签
-        String existPid = labelPO.getPackageId();
         int num = ReceiptNoUtil.getLabelNum(printLabelMapper, null, new Date());
         if (dto.getGnum() > 0) {
-            labelPO.setPrintLabelId(null);
-            labelPO.setPackageId(ReceiptNoUtil.genLabelNo(null, new Date(), ++num));
-            labelPO.setNum(dto.getGnum());
-            labelPO.setType(ReceiptConstant.LABEL_TYPE_GOOD);
-            labelPO.setRelateLabelId(dto.getPlid());
-            labelPO.setRelatePackageId(existPid);
-            labelPO.setDr((byte) 1);
-            labelPO.setCreateTime(new Date());
-            printLabelMapper.insert(labelPO);
+            PrintLabelPO newPlPO = PrintLabelPO.buildPO(labelPO, ReceiptNoUtil.genLabelNo(null, new Date(), ++num), dto.getGnum(), ReceiptConstant.LABEL_TYPE_GOOD);
+            printLabelMapper.insert(newPlPO);
 
             rlPO.setReceiptLabelId(null);
-            rlPO.setPrintLabelId(labelPO.getPrintLabelId());
+            rlPO.setPrintLabelId(newPlPO.getPrintLabelId());
             receiptLabelMapper.insert(rlPO);
+
+            newPlPOs.add(newPlPO);
         }
         if (dto.getBnum() > 0) {
-            labelPO.setPrintLabelId(null);
-            labelPO.setPackageId(ReceiptNoUtil.genLabelNo(null, new Date(), ++num));
-            labelPO.setNum(dto.getBnum());
-            labelPO.setType(ReceiptConstant.LABEL_TYPE_BAD);
-            printLabelMapper.insert(labelPO);
+            PrintLabelPO newPlPO = PrintLabelPO.buildPO(labelPO, ReceiptNoUtil.genLabelNo(null, new Date(), ++num), dto.getBnum(), ReceiptConstant.LABEL_TYPE_BAD);
+            printLabelMapper.insert(newPlPO);
 
             rlPO.setReceiptLabelId(null);
-            rlPO.setPrintLabelId(labelPO.getPrintLabelId());
+            rlPO.setPrintLabelId(newPlPO.getPrintLabelId());
             receiptLabelMapper.insert(rlPO);
+
+            newPlPOs.add(newPlPO);
         }
 
+        print(newPlPOs, rbPO.getStatus());
+
         return ResultVO.ok();
+    }
+
+    /**
+     * 打印操作
+     *
+     * @param plPOs
+     * @param status
+     */
+    public void print(List<PrintLabelPO> plPOs, Byte status) {
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
+            @Override
+            public void afterCommit() {
+                new Thread(() -> {
+                    for (PrintLabelPO plPO : plPOs) {
+                        print(plPO.getPackageId(), status);
+                    }
+                }).start();
+            }
+        });
     }
 }

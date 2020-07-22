@@ -108,7 +108,7 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         res.put("logistics", LogisticsVO.convert(headPO));
 
         // 打印标签
-        List<LabelRecordBO> labelRecordBOs = labelRecordMapper.queryByReceiptBodyId(rbId);
+        List<LabelRecordBO> labelRecordBOs = labelRecordMapper.queryByReceiptBodyId(rbId, status);
         res.put("print", LabelRecordVO.convert(labelRecordBOs));
 
         return ResultVO.ok().setData(res);

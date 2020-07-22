@@ -51,4 +51,27 @@ public class PrintLabelPO implements Serializable {
     private Byte dr;
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 构建新的打印标签
+     *
+     * @param po
+     * @return
+     */
+    public static PrintLabelPO buildPO(PrintLabelPO po, String pid, Integer num, Byte type) {
+        PrintLabelPO newPlPO = new PrintLabelPO();
+        newPlPO.setPackageId(pid);
+        newPlPO.setProduceDate(po.getProduceDate());
+        newPlPO.setProduceBatch(po.getProduceBatch());
+        newPlPO.setNum(num);
+        newPlPO.setType(type);
+        newPlPO.setOrigin(po.getOrigin());
+        newPlPO.setLocationNo(po.getLocationNo());
+        newPlPO.setMaterialNo(po.getMaterialNo());
+        newPlPO.setRelatePackageId(po.getPackageId());
+        newPlPO.setRelateLabelId(po.getPrintLabelId());
+        newPlPO.setCreateTime(new Date());
+        newPlPO.setDr((byte) 1);
+        return newPlPO;
+    }
 }

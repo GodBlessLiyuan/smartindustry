@@ -326,7 +326,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
     public ResultVO record(Long rbId, Byte status) {
         Map<String, Object> res = new HashMap<>();
         // 打印标签
-        List<LabelRecordBO> labelRecordBOs = labelRecordMapper.queryByReceiptBodyId(rbId);
+        List<LabelRecordBO> labelRecordBOs = labelRecordMapper.queryByReceiptBodyId(rbId, status);
         res.put("print", LabelRecordVO.convert(labelRecordBOs));
         // 操作记录
         List<StorageRecordPO> recordPOs = recordMapper.queryByReceiptBodyId(rbId, status);

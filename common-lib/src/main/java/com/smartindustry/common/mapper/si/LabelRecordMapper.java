@@ -4,6 +4,7 @@ import com.smartindustry.common.bo.si.LabelRecordBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.si.LabelRecordPO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -17,5 +18,5 @@ public interface LabelRecordMapper extends BaseMapper<LabelRecordPO, Long> {
      * @param rbId
      * @return
      */
-    List<LabelRecordBO> queryByReceiptBodyId(Long rbId);
+    List<LabelRecordBO> queryByReceiptBodyId(@Param("rbId") Long rbId,@Param("status") Byte status);
 }
