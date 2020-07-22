@@ -3,6 +3,7 @@ package com.smartindustry.common.pojo.si;
 import java.io.Serializable;
 import java.util.Date;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -10,6 +11,7 @@ import lombok.Data;
  *
  * @author
  */
+@AllArgsConstructor
 @Data
 public class LabelRecordPO implements Serializable {
     private Long labelRecordId;
@@ -39,6 +41,10 @@ public class LabelRecordPO implements Serializable {
     private Byte status;
 
     private static final long serialVersionUID = 1L;
+
+    public LabelRecordPO() {
+
+    }
 
     public LabelRecordPO(Long printLabelId, Long userId, String name, Byte module, Byte status) {
         this.printLabelId = printLabelId;

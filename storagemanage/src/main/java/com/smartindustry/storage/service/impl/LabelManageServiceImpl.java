@@ -136,6 +136,13 @@ public class LabelManageServiceImpl implements ILabelManageService {
             }
             receiptLabelMapper.batchInsert(rlPOs);
 
+            
+            new Thread(() -> {
+                for (PrintLabelPO plPO : plPOs) {
+                    print(plPO.getPackageId(), ReceiptConstant.RECEIPT_ENTRY_LABEL);
+                }
+            }).start();
+
             return ResultVO.ok();
         }
 
