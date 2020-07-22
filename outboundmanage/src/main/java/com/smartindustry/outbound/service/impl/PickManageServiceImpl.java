@@ -18,6 +18,7 @@ import com.smartindustry.common.pojo.si.PrintLabelPO;
 import com.smartindustry.common.pojo.si.StorageLabelPO;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.outbound.constant.OutboundConstant;
 import com.smartindustry.outbound.util.OmNoUtil;
 import com.smartindustry.outbound.vo.*;
 import com.smartindustry.outbound.service.IPickManageService;
@@ -239,5 +240,13 @@ public class PickManageServiceImpl implements IPickManageService {
     public ResultVO printLabelSplit(String packageId){
         List<PrintLabelBO> bos = pickHeadMapper.printLabelSplit(packageId);
         return ResultVO.ok().setData(PrintSplitVO.convert(bos));
+    }
+
+    @Override
+    public ResultVO judgeStatus(Long pickHeadId){
+        //1. 当前工单拣货单id所关联的拣货标签表拥有数据,那么正处于物料拣货状态
+        int flag = pickHeadMapper.judgeIsPick(pickHeadId);
+        int result = (flag==1) ? pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_PICK) : 0;
+        return ResultVO.ok();
     }
 }

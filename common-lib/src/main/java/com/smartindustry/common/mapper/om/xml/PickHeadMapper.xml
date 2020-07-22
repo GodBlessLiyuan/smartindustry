@@ -206,10 +206,10 @@
         left join si_material ma on pb.material_no = ma.material_no
         where ph.dr =1 and ph.pick_head_id = #{pickHeadId}
         <if test="materialNo != null and materialNo != ''">
-            and ma.material_no like '%' #{materialNo} '%'
+            and ma.material_no like concat('%',#{materialNo,jdbcType=VARCHAR},'%')
         </if>
         <if test="materialName != null and materialName != ''">
-            and ma.material_name like '%' #{materialName} '%'
+            and ma.material_name like concat('%',#{materialName,jdbcType=VARCHAR},'%')
         </if>
         ORDER BY flag desc
     </select>
@@ -307,6 +307,16 @@
         order by pl.create_time desc
     </select>
 
+    <select id="judgeIsPick" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        select 1
+        from om_pick_head ph
+        left join om_pick_label pl on ph.pick_head_id = pl.pick_head_id
+        left join si_print_label spl on pl.print_label_id = spl.print_label_id
+        left join si_material ma on spl.material_no = ma.material_no
+        where ph.pick_head_id = #{pickHeadId}
+        limit 1
+    </select>
+
 <!--    扫码拣货列表选中删除-->
     <delete id="deleteScanPid">
         delete from om_pick_label
@@ -322,4 +332,11 @@
          where pl.relate_package_id = #{packageId}
          limit 2
     </select>
+
+<!--    更新当前pickHeadId 的物料状态, 从未处理到物料拣货/从物料拣货到未处理-->
+    <update id="updateStatus">
+        update om_pick_head ph
+        set ph.material_status = #{materialStatus}
+        where ph.pick_head_id = #{pickHeadId}
+    </update>
 </mapper>

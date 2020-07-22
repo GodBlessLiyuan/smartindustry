@@ -1,6 +1,7 @@
 package com.smartindustry.outbound.service;
 
 import com.smartindustry.common.vo.ResultVO;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Map;
@@ -103,4 +104,11 @@ public interface IPickManageService {
      * @return
      */
     ResultVO printLabelSplit(String packageId);
+
+    /**
+     * 判断当前的物料状态
+     * @param pickHeadId
+     * @return
+     */
+    ResultVO judgeStatus(Long pickHeadId);
 }

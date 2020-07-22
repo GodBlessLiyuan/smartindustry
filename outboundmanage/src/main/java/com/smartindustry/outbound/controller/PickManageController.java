@@ -140,5 +140,12 @@ public class PickManageController {
         return pickManageService.printLabelSplit(packageId);
     }
 
+    @RequestMapping("judgeStatus")
+    public ResultVO judgeStatus(@RequestParam(value = "phid", required = false) Long pickHeadId){
+        return pickManageService.judgeStatus(pickHeadId);
+    }
+
+
+
 
 }

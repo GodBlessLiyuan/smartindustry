@@ -123,4 +123,19 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
      * @return
      */
     List<PrintLabelBO> printLabelSplit(@Param("packageId") String packageId);
+
+    /**
+     * 更新物料状态
+     * @param pickHeadId
+     * @param materialStatus
+     * @return
+     */
+    int updateStatus(@Param("pickHeadId") Long pickHeadId,@Param("materialStatus") Byte materialStatus);
+
+    /**
+     * 判断当前的工单物料状态是不是物料拣货状态
+     * @param pickHeadId
+     * @return
+     */
+    int judgeIsPick(@Param("pickHeadId") Long pickHeadId);
 }
