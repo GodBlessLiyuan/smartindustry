@@ -29,4 +29,9 @@ public class MaterialBO extends MaterialPO {
      */
     private Integer lackNum;
 
+    /**
+     * 物料状态, 1 标识欠料 2 标识不欠料
+     */
+    private Byte flag;
+
 }

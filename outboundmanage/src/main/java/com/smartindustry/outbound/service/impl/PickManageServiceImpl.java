@@ -93,6 +93,7 @@ public class PickManageServiceImpl implements IPickManageService {
                         .collect(Collectors.toList()), ","));
             }
         }
+
         Map<String, String> useMap = useList.stream().collect(Collectors.toMap(PickHeadBO::getMaterialNo,PickHeadBO::getRecommendPid));
         // 将未使用推荐和已使用未推荐进行组合
         for (PickHeadBO bo:noRecommend) {
@@ -232,5 +233,11 @@ public class PickManageServiceImpl implements IPickManageService {
     public ResultVO deleteScanPid(Long pickHeadId, Long printLabelId){
         int result = pickHeadMapper.deleteScanPid(pickHeadId,printLabelId);
         return ResultVO.ok();
+    }
+
+    @Override
+    public ResultVO printLabelSplit(String packageId){
+        List<PrintLabelBO> bos = pickHeadMapper.printLabelSplit(packageId);
+        return ResultVO.ok().setData(PrintSplitVO.convert(bos));
     }
 }
