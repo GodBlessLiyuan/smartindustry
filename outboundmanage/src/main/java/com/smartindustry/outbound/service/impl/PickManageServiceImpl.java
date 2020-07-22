@@ -8,10 +8,12 @@ import com.smartindustry.common.bo.om.PickBodyBO;
 import com.smartindustry.common.bo.om.PickHeadBO;
 import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.mapper.om.LabelRecommendMapper;
+import com.smartindustry.common.mapper.om.OutboundMapper;
 import com.smartindustry.common.mapper.om.PickBodyMapper;
 import com.smartindustry.common.mapper.om.PickHeadMapper;
 import com.smartindustry.common.mapper.si.PrintLabelMapper;
 import com.smartindustry.common.mapper.si.StorageLabelMapper;
+import com.smartindustry.common.pojo.om.OutboundPO;
 import com.smartindustry.common.pojo.om.PickBodyPO;
 import com.smartindustry.common.pojo.om.PickHeadPO;
 import com.smartindustry.common.pojo.om.PickLabelPO;
@@ -52,7 +54,8 @@ public class PickManageServiceImpl implements IPickManageService {
     private StorageLabelMapper storageLabelMapper;
     @Autowired
     private PrintLabelMapper printLabelMapper;
-
+    @Autowired
+    private OutboundMapper outboundMapper;
     @Override
     public ResultVO pageQueryPickHead(int pageNum, int pageSize, Map<String, Object> reqMap) {
         Page<PickHeadPO> page = PageHelper.startPage(pageNum, pageSize);
@@ -67,14 +70,13 @@ public class PickManageServiceImpl implements IPickManageService {
     }
 
     @Override
-    public ResultVO materialLoss(int pageNum, int pageSize, Map<String, Object> reqMap) {
-        Page<MaterialBO> page = PageHelper.startPage(pageNum, pageSize);
+    public ResultVO materialLoss(Map<String, Object> reqMap) {
         List<MaterialBO> bos = pickHeadMapper.materialLoss(reqMap);
-        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), LackMaterialVO.convert(bos)));
+        return ResultVO.ok().setData(LackMaterialVO.convert(bos));
     }
 
     @Override
-    public ResultVO queryExItems(int pageNum,int pageSize,Long pickHeadId){
+    public ResultVO queryExItems(Long pickHeadId){
         // 若扫描了未推荐的PID,则异常列表只显示，扫描了其他推荐的PID
         List<PickHeadBO> noRecommend = pickHeadMapper.queryNoRecommend(pickHeadId);
         // 若已拣货量大于需求量时，将未扫描优先推荐的pid以及扫描了其他推荐的pid
@@ -247,7 +249,7 @@ public class PickManageServiceImpl implements IPickManageService {
 
     @Override
     public ResultVO judgeStatus(Long pickHeadId){
-        //1. 当前工单拣货单id所关联的拣货标签表拥有数据,那么正处于物料拣货状态
+        // 当前工单拣货单id所关联的拣货标签表拥有数据,那么正处于物料拣货状态
         int flag = pickHeadMapper.judgeIsPick(pickHeadId);
         int result = (flag==1) ? pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_PICK) : 0;
         return ResultVO.ok();
@@ -257,6 +259,20 @@ public class PickManageServiceImpl implements IPickManageService {
     @Override
     public ResultVO updateException(Long pickHeadId,String materialNo,String exception){
         int result = pickBodyMapper.updateException(pickHeadId,materialNo,exception);
+        return ResultVO.ok();
+    }
+
+
+    @Override
+    public ResultVO outBoundItems(Long pickHeadId){
+        OutboundPO po = new OutboundPO();
+        po.setPickHeadId(pickHeadId);
+        Date date = new Date();
+        po.setOutboundNo(OmNoUtil.getOutboundNo(outboundMapper, OmNoUtil.OUTBOUND, date));
+        po.setStatus((byte)3);
+        po.setCreateTime(date);
+        po.setDr((byte)1);
+        int result = outboundMapper.insert(po);
         return ResultVO.ok();
     }
 }

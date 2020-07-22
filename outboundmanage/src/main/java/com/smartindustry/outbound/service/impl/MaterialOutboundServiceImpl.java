@@ -3,6 +3,7 @@ package com.smartindustry.outbound.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.smartindustry.common.bo.om.LogisticsRecordBO;
+import com.smartindustry.common.bo.om.MaterialBO;
 import com.smartindustry.common.bo.om.OutboundBO;
 import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.config.FilePathConfig;
@@ -17,10 +18,7 @@ import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.constant.OutboundConstant;
 import com.smartindustry.outbound.dto.LogisticsRecordDTO;
 import com.smartindustry.outbound.service.IMaterialOutboundService;
-import com.smartindustry.outbound.vo.LogisticsRecordVO;
-import com.smartindustry.outbound.vo.OutboundDetailVO;
-import com.smartindustry.outbound.vo.OutboundRecordVO;
-import com.smartindustry.outbound.vo.OutboundVO;
+import com.smartindustry.outbound.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -163,5 +161,12 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
         List<OutboundRecordPO> outboundRecordPOs = outboundRecordMapper.queryByOid(oId);
         res.put("operate", OutboundRecordVO.convert(outboundRecordPOs));
         return ResultVO.ok().setData(res);
+    }
+
+    @Override
+    public ResultVO outOrderCheck(int pageNum, int pageSize, Map<String, Object> reqMap){
+        Page<OutboundBO> page = PageHelper.startPage(pageNum, pageSize);
+        List<OutboundBO> bos = outboundMapper.outOrderCheck(reqMap);
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), OutboundVO.convert(bos)));
     }
 }
