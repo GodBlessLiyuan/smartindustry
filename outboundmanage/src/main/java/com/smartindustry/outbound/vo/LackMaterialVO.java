@@ -42,6 +42,8 @@ public class LackMaterialVO implements Serializable {
      */
     private Integer lnum;
 
+    private Byte flag;
+
     public static List<LackMaterialVO> convert(List<MaterialBO> bos) {
         List<LackMaterialVO> vos = new ArrayList<>(bos.size());
         for (MaterialBO bo : bos) {
@@ -58,6 +60,7 @@ public class LackMaterialVO implements Serializable {
         vo.setMname(bo.getMaterialName());
         vo.setMno(bo.getMaterialNo());
         vo.setPnum(bo.getPickNum());
+        vo.setFlag(bo.getFlag());
         return vo;
     }
 }

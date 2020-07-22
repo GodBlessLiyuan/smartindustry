@@ -113,7 +113,7 @@ public class PickManageController {
 
     @RequestMapping("packageIdDiv")
     public ResultVO packageIdDiv(@RequestParam(value = "plid", required = false) Long printLabelId,
-                                 @RequestParam(value = "num", required = false) Integer num){
+                                 @RequestParam(value = "snum", required = false) Integer num){
         return pickManageService.packageIdDiv(printLabelId,num);
     }
 
@@ -134,4 +134,11 @@ public class PickManageController {
                                   @RequestParam(value = "plid", required = false) Long printLabelId){
         return pickManageService.deleteScanPid(pickHeadId,printLabelId);
     }
+
+    @RequestMapping("printLabelSplit")
+    public ResultVO printLabelSplit(@RequestParam(value = "pid", required = false) String packageId){
+        return pickManageService.printLabelSplit(packageId);
+    }
+
+
 }
