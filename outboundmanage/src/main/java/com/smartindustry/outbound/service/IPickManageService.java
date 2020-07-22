@@ -96,4 +96,11 @@ public interface IPickManageService {
      * @return
      */
     ResultVO deleteScanPid(Long pickHeadId, Long printLabelId);
+
+    /**
+     * 拆分之后的标签打印
+     * @param packageId
+     * @return
+     */
+    ResultVO printLabelSplit(String packageId);
 }

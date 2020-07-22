@@ -116,4 +116,11 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
      * @return
      */
     int deleteScanPid(@Param("pickHeadId") Long pickHeadId,@Param("printLabelId") Long printLabelId);
+
+    /**
+     * 分料后的关联pid查询
+     * @param packageId
+     * @return
+     */
+    List<PrintLabelBO> printLabelSplit(@Param("packageId") String packageId);
 }
