@@ -319,6 +319,18 @@ CREATE TABLE si_label_record
     module tinyint COMMENT '1：入库管理
 2：出库管理',
     create_time datetime,
+    -- 1：录入标签
+    -- 5：IQC检测
+    -- 10：QE检测
+    -- 15：QE确认
+    -- 20：物料入库
+    -- 25：入库完成
+    status tinyint COMMENT '1：录入标签
+5：IQC检测
+10：QE检测
+15：QE确认
+20：物料入库
+25：入库完成',
     PRIMARY KEY (label_record_id),
     UNIQUE (label_record_id)
 );

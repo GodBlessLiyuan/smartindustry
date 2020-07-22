@@ -59,6 +59,11 @@ public class LabelManageServiceImpl implements ILabelManageService {
         return ResultVO.ok().setData(PrintLabelVO.convert(po));
     }
 
+    @Override
+    public ResultVO print(String pid) {
+        return null;
+    }
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO reprint(Long plId, Integer num) {

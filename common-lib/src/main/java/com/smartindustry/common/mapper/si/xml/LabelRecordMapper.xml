@@ -6,10 +6,12 @@
         <result column="print_label_id" jdbcType="BIGINT" property="printLabelId"/>
         <result column="user_id" jdbcType="BIGINT" property="userId"/>
         <result column="name" jdbcType="CHAR" property="name"/>
+        <result column="module" jdbcType="TINYINT" property="module"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
     </resultMap>
     <sql id="Base_Column_List">
-        label_record_id, print_label_id, user_id, `name`, create_time
+        label_record_id, print_label_id, user_id, `name`, `module`, create_time, `status`
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
@@ -24,9 +26,11 @@
     </delete>
     <insert id="insert" parameterType="com.smartindustry.common.pojo.si.LabelRecordPO">
         insert into si_label_record (label_record_id, print_label_id, user_id,
-                                     `name`, create_time)
+                                     `name`, `module`, create_time,
+                                     `status`)
         values (#{labelRecordId,jdbcType=BIGINT}, #{printLabelId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},
-                #{name,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP})
+                #{name,jdbcType=CHAR}, #{module,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP},
+                #{status,jdbcType=TINYINT})
     </insert>
     <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.LabelRecordPO">
         insert into si_label_record
@@ -43,8 +47,14 @@
             <if test="name != null">
                 `name`,
             </if>
+            <if test="module != null">
+                `module`,
+            </if>
             <if test="createTime != null">
                 create_time,
+            </if>
+            <if test="status != null">
+                `status`,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -60,8 +70,14 @@
             <if test="name != null">
                 #{name,jdbcType=CHAR},
             </if>
+            <if test="module != null">
+                #{module,jdbcType=TINYINT},
+            </if>
             <if test="createTime != null">
                 #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
             </if>
         </trim>
     </insert>
@@ -77,8 +93,14 @@
             <if test="name != null">
                 `name` = #{name,jdbcType=CHAR},
             </if>
+            <if test="module != null">
+                `module` = #{module,jdbcType=TINYINT},
+            </if>
             <if test="createTime != null">
                 create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                `status` = #{status,jdbcType=TINYINT},
             </if>
         </set>
         where label_record_id = #{labelRecordId,jdbcType=BIGINT}
@@ -88,7 +110,9 @@
         set print_label_id = #{printLabelId,jdbcType=BIGINT},
             user_id        = #{userId,jdbcType=BIGINT},
             `name`         = #{name,jdbcType=CHAR},
-            create_time    = #{createTime,jdbcType=TIMESTAMP}
+            `module`       = #{module,jdbcType=TINYINT},
+            create_time    = #{createTime,jdbcType=TIMESTAMP},
+            `status`       = #{status,jdbcType=TINYINT}
         where label_record_id = #{labelRecordId,jdbcType=BIGINT}
     </update>
 

@@ -32,6 +32,11 @@ public class LabelManageController {
         return labelManageService.queryPid(rbId, pid);
     }
 
+    @RequestMapping("print")
+    public ResultVO print(@RequestParam(value = "pid") String pid) {
+        return labelManageService.print(pid);
+    }
+
     @RequestMapping("reprint")
     public ResultVO reprint(@RequestParam(value = "plid") Long plId, @RequestParam(value = "num") Integer num) {
         return labelManageService.reprint(plId, num);
