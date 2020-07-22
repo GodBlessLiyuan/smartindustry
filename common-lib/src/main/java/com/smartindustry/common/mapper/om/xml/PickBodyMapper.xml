@@ -8,11 +8,12 @@
         <result column="demand_num" jdbcType="INTEGER" property="demandNum"/>
         <result column="pick_num" jdbcType="INTEGER" property="pickNum"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="exception" jdbcType="CHAR" property="exception"/>
         <result column="dr" jdbcType="TINYINT" property="dr"/>
     </resultMap>
     <sql id="Base_Column_List">
-        pick_body_id, pick_head_id, material_no, demand_num, pick_num, create_time, dr
-    </sql>
+    pick_body_id, pick_head_id, material_no, demand_num, pick_num, create_time, dr, `exception`
+  </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -20,18 +21,17 @@
         where pick_body_id = #{pickBodyId,jdbcType=BIGINT}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-        delete
-        from om_pick_body
-        where pick_body_id = #{pickBodyId,jdbcType=BIGINT}
-    </delete>
+    delete from om_pick_body
+    where pick_body_id = #{pickBodyId,jdbcType=BIGINT}
+  </delete>
     <insert id="insert" parameterType="com.smartindustry.common.pojo.om.PickBodyPO">
-        insert into om_pick_body (pick_body_id, pick_head_id, material_no,
-                                  demand_num, pick_num, create_time,
-                                  dr)
-        values (#{pickBodyId,jdbcType=BIGINT}, #{pickHeadId,jdbcType=BIGINT}, #{materialNo,jdbcType=CHAR},
-                #{demandNum,jdbcType=INTEGER}, #{pickNum,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
-                #{dr,jdbcType=TINYINT})
-    </insert>
+    insert into om_pick_body (pick_body_id, pick_head_id, material_no,
+      demand_num, pick_num, create_time,
+      dr, `exception`)
+    values (#{pickBodyId,jdbcType=BIGINT}, #{pickHeadId,jdbcType=BIGINT}, #{materialNo,jdbcType=CHAR},
+      #{demandNum,jdbcType=INTEGER}, #{pickNum,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
+      #{dr,jdbcType=TINYINT}, #{exception,jdbcType=CHAR})
+  </insert>
     <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.om.PickBodyPO">
         insert into om_pick_body
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -56,6 +56,9 @@
             <if test="dr != null">
                 dr,
             </if>
+            <if test="exception != null">
+                `exception`,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="pickBodyId != null">
@@ -78,6 +81,9 @@
             </if>
             <if test="dr != null">
                 #{dr,jdbcType=TINYINT},
+            </if>
+            <if test="exception != null">
+                #{exception,jdbcType=CHAR},
             </if>
         </trim>
     </insert>
@@ -102,19 +108,23 @@
             <if test="dr != null">
                 dr = #{dr,jdbcType=TINYINT},
             </if>
+            <if test="exception != null">
+                `exception` = #{exception,jdbcType=CHAR},
+            </if>
         </set>
         where pick_body_id = #{pickBodyId,jdbcType=BIGINT}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.om.PickBodyPO">
-        update om_pick_body
-        set pick_head_id = #{pickHeadId,jdbcType=BIGINT},
-            material_no  = #{materialNo,jdbcType=CHAR},
-            demand_num   = #{demandNum,jdbcType=INTEGER},
-            pick_num     = #{pickNum,jdbcType=INTEGER},
-            create_time  = #{createTime,jdbcType=TIMESTAMP},
-            dr           = #{dr,jdbcType=TINYINT}
-        where pick_body_id = #{pickBodyId,jdbcType=BIGINT}
-    </update>
+    update om_pick_body
+    set pick_head_id = #{pickHeadId,jdbcType=BIGINT},
+      material_no = #{materialNo,jdbcType=CHAR},
+      demand_num = #{demandNum,jdbcType=INTEGER},
+      pick_num = #{pickNum,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      dr = #{dr,jdbcType=TINYINT},
+      `exception` = #{exception,jdbcType=CHAR}
+    where pick_body_id = #{pickBodyId,jdbcType=BIGINT}
+  </update>
 
     <resultMap id="BOResultMap" type="com.smartindustry.common.bo.om.PickBodyBO" extends="BaseResultMap">
         <result column="material_desc" jdbcType="CHAR" property="materialDesc"/>
@@ -141,4 +151,17 @@
             #{po.dr,jdbcType=TINYINT})
         </foreach>
     </insert>
+
+    <!--    根据拣货单id 和 物料编号查询异常情况-->
+    <select id="queryException"  resultType="java.lang.String">
+        select `exception`
+        from om_pick_body
+        where pick_head_id = #{pickHeadId} and material_no = #{materialNo}
+    </select>
+
+    <update id="updateException">
+        update om_pick_body
+        set  `exception` = #{exception,jdbcType=CHAR}
+        where pick_head_id = #{pickHeadId} and material_no = #{materialNo}
+    </update>
 </mapper>

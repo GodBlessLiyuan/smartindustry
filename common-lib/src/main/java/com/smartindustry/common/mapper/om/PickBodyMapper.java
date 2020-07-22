@@ -4,6 +4,7 @@ import com.smartindustry.common.bo.om.PickBodyBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.om.PickBodyPO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -19,4 +20,23 @@ public interface PickBodyMapper extends BaseMapper<PickBodyPO, Long> {
      * @return
      */
     List<PickBodyBO> queryByHeadId(Long phId);
+
+    /**
+     * 根据工单拣货单id和物料编号查询异常说明
+     * @param pickHeadId
+     * @param materialNo
+     * @return
+     */
+    String queryException(@Param("pickHeadId") Long pickHeadId,@Param("materialNo") String materialNo);
+
+    /**
+     * 更新异常信息
+     * @param pickHeadId
+     * @param materialNo
+     * @param exception
+     * @return
+     */
+    int updateException(@Param("pickHeadId") Long pickHeadId,
+                        @Param("materialNo") String materialNo,
+                        @Param("exception") String exception);
 }

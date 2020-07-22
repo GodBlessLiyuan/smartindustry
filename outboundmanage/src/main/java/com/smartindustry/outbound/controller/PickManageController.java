@@ -145,6 +145,13 @@ public class PickManageController {
         return pickManageService.judgeStatus(pickHeadId);
     }
 
+    @RequestMapping("updateException")
+    public ResultVO updateException(@RequestParam(value = "phid", required = false) Long pickHeadId,
+                                    @RequestParam(value = "mno", required = false) String materialNo,
+                                    @RequestParam(value = "exce", required = false) String exception){
+        return pickManageService.updateException(pickHeadId,materialNo,exception);
+    }
+
 
 
 

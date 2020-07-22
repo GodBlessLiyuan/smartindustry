@@ -22,6 +22,8 @@ public class PickBodyPO implements Serializable {
 
     private Date createTime;
 
+    private String exception;
+
     /**
      * 1：未删除
 2：已删除

@@ -32,4 +32,9 @@ public class PickHeadBO extends PickHeadPO {
      * 当前物料使用了未推荐的pid,以逗号隔开
      */
     private String noRecommendPid;
+
+    /**
+     * 异常说明情况
+     */
+    private String aberrantDesc;
 }
