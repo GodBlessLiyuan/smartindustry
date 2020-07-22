@@ -166,4 +166,30 @@
         left join om_pick_head ph on o.pick_head_id = ph.pick_head_id
         where o.dr = 1 and ph.dr = 1 and o.outbound_id = #{oId,jdbcType=BIGINT}
     </select>
+
+    <select id="queryNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from om_outbound
+        where outbound_no like #{no,jdbcType=CHAR} '%'
+        order by outbound_id desc limit 1
+    </select>
+
+    <select id="outOrderCheck" parameterType="java.util.Map" resultType="com.smartindustry.common.bo.om.OutboundBO">
+        select ob.outbound_id as outboundId,ob.pick_head_id as pickHeadId,ob.outbound_no as outboundNo,ph.plan_time as planTime,ph.correspond_project as correspondProject,ph.pick_no as pickNo
+        from om_outbound ob
+        left join om_pick_head ph on ob.pick_head_id = ph.pick_head_id
+        where ob.dr = 1
+        <if test="outBoundNo != null and outBoundNo != ''">
+            and ob.outbound_no like concat('%',#{outBoundNo,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="pickNo != null and pickNo != ''">
+            and ph.pick_no like concat('%',#{pickNo,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="correspondProject != null and correspondProject != ''">
+            and ph.correspond_project like concat('%',#{correspondProject,jdbcType=VARCHAR},'%')
+        </if>
+        and ph.material_status = 15
+        order by ph.create_time desc
+    </select>
 </mapper>

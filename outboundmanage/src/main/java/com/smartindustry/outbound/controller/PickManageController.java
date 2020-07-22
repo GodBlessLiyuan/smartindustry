@@ -60,31 +60,24 @@ public class PickManageController {
      * @author jiangzhaojie
      */
     @RequestMapping("materialLoss")
-    public ResultVO materialLoss(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                                 @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                 @RequestParam(value = "phid", required = false) Long pickHeadId,
+    public ResultVO materialLoss(@RequestParam(value = "phid", required = false) Long pickHeadId,
                                  @RequestParam(value = "mno", required = false) String materialNo,
                                  @RequestParam(value = "mname", required = false) String materialName) {
         Map<String, Object> reqData = new HashMap<>(3);
         reqData.put("pickHeadId", pickHeadId);
         reqData.put("materialNo", materialNo);
         reqData.put("materialName", materialName);
-        return pickManageService.materialLoss(pageNum, pageSize, reqData);
+        return pickManageService.materialLoss(reqData);
     }
 
     /**
      * 查看当前拣货工单号的异常数据（未扫描优先推荐的pid）
-     *
-     * @param pageNum
-     * @param pageSize
      * @param pickHeadId
      * @return
      */
     @RequestMapping("queryExItems")
-    public ResultVO queryExItems(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                                 @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                 @RequestParam(value = "phid", required = false) Long pickHeadId) {
-        return pickManageService.queryExItems(pageNum, pageSize, pickHeadId);
+    public ResultVO queryExItems(@RequestParam(value = "phid", required = false) Long pickHeadId) {
+        return pickManageService.queryExItems(pickHeadId);
     }
 
     /**
@@ -152,7 +145,9 @@ public class PickManageController {
         return pickManageService.updateException(pickHeadId,materialNo,exception);
     }
 
-
-
+    @RequestMapping("outBoundItems")
+    public ResultVO outBoundItems(@RequestParam(value = "phid", required = false) Long pickHeadId){
+        return pickManageService.outBoundItems(pickHeadId);
+    }
 
 }
