@@ -117,7 +117,8 @@
     </update>
 
     <sql id="RecordBO_Column_List">
-        label_record_id, lr.print_label_id, user_id, `name`, lr.create_time
+        lr.label_record_id, lr.print_label_id, lr.user_id, lr.`name`, lr.`module`, lr.create_time, lr.`status`,
+        pl.package_id, pl.num, pl.relate_package_id
     </sql>
     <resultMap id="RecordBOResultMap" type="com.smartindustry.common.bo.si.LabelRecordBO" extends="BaseResultMap">
         <result column="package_id" jdbcType="CHAR" property="packageId"/>
@@ -130,7 +131,8 @@
         from si_label_record lr
         left join si_print_label pl on lr.print_label_id = pl.print_label_id
         left join sm_receipt_label rl on pl.print_label_id = rl.print_label_id
-        where rl.receipt_body_id = #{rbId,jdbcType=BIGINT} and lr.status = #{status,jdbcType=TINYINT}
+        where rl.receipt_body_id = #{rbId,jdbcType=BIGINT} and lr.status = #{status,jdbcType=TINYINT} and lr.module =
+        #{module,jdbcType=TINYINT}
         order by lr.create_time desc
     </select>
 </mapper>

@@ -15,8 +15,9 @@ import java.util.List;
 public interface LabelRecordMapper extends BaseMapper<LabelRecordPO, Long> {
     /**
      * 根据
+     *
      * @param rbId
      * @return
      */
-    List<LabelRecordBO> queryByReceiptBodyId(@Param("rbId") Long rbId,@Param("status") Byte status);
+    List<LabelRecordBO> queryByReceiptBodyId(@Param("rbId") Long rbId, @Param("status") Byte status, @Param("module") Byte module);
 }

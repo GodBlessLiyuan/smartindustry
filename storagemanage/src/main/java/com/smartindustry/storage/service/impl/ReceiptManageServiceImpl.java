@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.smartindustry.common.bo.si.LabelRecordBO;
 import com.smartindustry.common.bo.sm.ReceiptBO;
 import com.smartindustry.common.bo.sm.ReceiptBodyBO;
+import com.smartindustry.common.constant.ModuleConstant;
 import com.smartindustry.common.mapper.si.LabelRecordMapper;
 import com.smartindustry.common.mapper.sm.*;
 import com.smartindustry.common.pojo.sm.ReceiptBodyPO;
@@ -108,7 +109,7 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         res.put("logistics", LogisticsVO.convert(headPO));
 
         // 打印标签
-        List<LabelRecordBO> labelRecordBOs = labelRecordMapper.queryByReceiptBodyId(rbId, status);
+        List<LabelRecordBO> labelRecordBOs = labelRecordMapper.queryByReceiptBodyId(rbId, status, ModuleConstant.STORAGE_MANAGE);
         res.put("print", LabelRecordVO.convert(labelRecordBOs));
 
         return ResultVO.ok().setData(res);

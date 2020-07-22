@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.smartindustry.common.bo.si.LabelRecordBO;
 import com.smartindustry.common.bo.sm.ReceiptBO;
+import com.smartindustry.common.constant.ModuleConstant;
 import com.smartindustry.common.mapper.si.LabelRecordMapper;
 import com.smartindustry.common.mapper.sm.*;
 import com.smartindustry.common.pojo.sm.*;
@@ -326,7 +327,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
     public ResultVO record(Long rbId, Byte status) {
         Map<String, Object> res = new HashMap<>();
         // 打印标签
-        List<LabelRecordBO> labelRecordBOs = labelRecordMapper.queryByReceiptBodyId(rbId, status);
+        List<LabelRecordBO> labelRecordBOs = labelRecordMapper.queryByReceiptBodyId(rbId, status, ModuleConstant.STORAGE_MANAGE);
         res.put("print", LabelRecordVO.convert(labelRecordBOs));
         // 操作记录
         List<StorageRecordPO> recordPOs = recordMapper.queryByReceiptBodyId(rbId, status);
