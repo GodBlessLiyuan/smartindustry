@@ -111,4 +111,13 @@ public interface IPickManageService {
      * @return
      */
     ResultVO judgeStatus(Long pickHeadId);
+
+    /**
+     * 插入工单物料的异常情况
+     * @param pickHeadId
+     * @param materialNo
+     * @param exception
+     * @return
+     */
+    ResultVO updateException(Long pickHeadId,String materialNo,String exception);
 }

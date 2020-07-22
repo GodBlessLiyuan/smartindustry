@@ -12,6 +12,7 @@ import com.smartindustry.common.mapper.om.PickBodyMapper;
 import com.smartindustry.common.mapper.om.PickHeadMapper;
 import com.smartindustry.common.mapper.si.PrintLabelMapper;
 import com.smartindustry.common.mapper.si.StorageLabelMapper;
+import com.smartindustry.common.pojo.om.PickBodyPO;
 import com.smartindustry.common.pojo.om.PickHeadPO;
 import com.smartindustry.common.pojo.om.PickLabelPO;
 import com.smartindustry.common.pojo.si.PrintLabelPO;
@@ -103,8 +104,10 @@ public class PickManageServiceImpl implements IPickManageService {
             if (useKey){
                 bo.setRecommendPid(useMap.get(materialNo));
             }
+            String exception = pickBodyMapper.queryException(pickHeadId,materialNo);
+            bo.setAberrantDesc(exception);
         }
-        return ResultVO.ok().setData(noRecommend);
+        return ResultVO.ok().setData(AberrantItemsVO.convert(noRecommend));
     }
 
     @Override
@@ -247,6 +250,13 @@ public class PickManageServiceImpl implements IPickManageService {
         //1. 当前工单拣货单id所关联的拣货标签表拥有数据,那么正处于物料拣货状态
         int flag = pickHeadMapper.judgeIsPick(pickHeadId);
         int result = (flag==1) ? pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_PICK) : 0;
+        return ResultVO.ok();
+    }
+
+
+    @Override
+    public ResultVO updateException(Long pickHeadId,String materialNo,String exception){
+        int result = pickBodyMapper.updateException(pickHeadId,materialNo,exception);
         return ResultVO.ok();
     }
 }
