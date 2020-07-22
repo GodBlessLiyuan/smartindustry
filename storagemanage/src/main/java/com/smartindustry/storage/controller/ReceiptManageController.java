@@ -60,4 +60,18 @@ public class ReceiptManageController {
     public ResultVO record(@RequestParam(value = "rbid") Long rbId, @RequestParam(value = "status", required = false, defaultValue = "1") Byte status) {
         return receiptManageService.record(rbId, status);
     }
+
+    @RequestMapping("materialQuery")
+    public ResultVO materialQuery(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                                  @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                                  @RequestParam(value = "mno", required = false, defaultValue = "") String mno,
+                                  @RequestParam(value = "mname", required = false, defaultValue = "") String mname,
+                                  @RequestParam(value = "mmodel", required = false, defaultValue = "") String mmodel) {
+        Map<String, Object> reqData = new HashMap<>(4);
+        reqData.put("mno", mno);
+        reqData.put("mname", mname);
+        reqData.put("mmodel", mmodel);
+
+        return receiptManageService.materialQuery(pageNum, pageSize, reqData);
+    }
 }

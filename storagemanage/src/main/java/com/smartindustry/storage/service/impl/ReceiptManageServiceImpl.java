@@ -7,7 +7,9 @@ import com.smartindustry.common.bo.sm.ReceiptBO;
 import com.smartindustry.common.bo.sm.ReceiptBodyBO;
 import com.smartindustry.common.constant.ModuleConstant;
 import com.smartindustry.common.mapper.si.LabelRecordMapper;
+import com.smartindustry.common.mapper.si.MaterialMapper;
 import com.smartindustry.common.mapper.sm.*;
+import com.smartindustry.common.pojo.si.MaterialPO;
 import com.smartindustry.common.pojo.sm.ReceiptBodyPO;
 import com.smartindustry.common.pojo.sm.ReceiptHeadPO;
 import com.smartindustry.common.pojo.sm.StorageRecordPO;
@@ -45,6 +47,8 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
     private StorageRecordMapper recordMapper;
     @Autowired
     private LabelRecordMapper labelRecordMapper;
+    @Autowired
+    private MaterialMapper materialMapper;
 
     @Override
     public ResultVO pageQuery(int pageNum, int pageSize, Map<String, Object> reqData) {
@@ -113,6 +117,14 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         res.put("print", LabelRecordVO.convert(labelRecordBOs));
 
         return ResultVO.ok().setData(res);
+    }
+
+    @Override
+    public ResultVO materialQuery(int pageNum, int pageSize, Map<String, Object> reqData) {
+        Page<MaterialPO> page = PageHelper.startPage(pageNum, pageSize);
+        List<MaterialPO> pos = materialMapper.pageQuery(reqData);
+
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), MaterialPageVO.convert(pos)));
     }
 
     @Transactional(rollbackFor = Exception.class)

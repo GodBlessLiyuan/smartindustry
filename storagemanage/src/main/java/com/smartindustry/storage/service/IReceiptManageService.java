@@ -55,4 +55,14 @@ public interface IReceiptManageService {
      * @return
      */
     ResultVO record(Long rbId, Byte status);
+
+    /**
+     * 物料查询
+     *
+     * @param pageNum
+     * @param pageSize
+     * @param reqData
+     * @return
+     */
+    ResultVO materialQuery(int pageNum, int pageSize, Map<String, Object> reqData);
 }
