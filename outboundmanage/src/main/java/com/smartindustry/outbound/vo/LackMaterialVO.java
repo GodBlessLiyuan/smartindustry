@@ -17,6 +17,7 @@ import java.util.List;
 @Data
 public class LackMaterialVO implements Serializable {
     private static final long SerialVersionUID = 1L;
+    private Long pbid;
     /**
      * 物料编号
      */
@@ -54,6 +55,7 @@ public class LackMaterialVO implements Serializable {
 
     public static LackMaterialVO convert(MaterialBO bo) {
         LackMaterialVO vo = new LackMaterialVO();
+        vo.setPbid(bo.getPickBodyId());
         vo.setDnum(bo.getDemandNum());
         vo.setLnum(bo.getLackNum());
         vo.setMdesc(bo.getMaterialDesc());

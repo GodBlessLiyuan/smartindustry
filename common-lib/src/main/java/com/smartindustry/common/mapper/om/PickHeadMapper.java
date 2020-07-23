@@ -138,4 +138,18 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
      * @return
      */
     int judgeIsPick(@Param("pickHeadId") Long pickHeadId);
+
+    /**
+     * 判断当前的工单拣货单是否是异常
+     * @param pickHeadId
+     * @return
+     */
+    Integer judgeIsEx(@Param("pickHeadId") Long pickHeadId);
+
+    /**
+     * 判断当前工单是否存在物料欠料
+     * @param pickHeadId
+     * @return
+     */
+    Integer judgeIsLack(@Param("pickHeadId") Long pickHeadId);
 }

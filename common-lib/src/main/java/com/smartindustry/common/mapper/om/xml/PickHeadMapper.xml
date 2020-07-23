@@ -196,7 +196,7 @@
 
     <!--    查看当前工单拣货单的所有欠料列表-->
     <select id="materialLoss" resultType="com.smartindustry.common.bo.om.MaterialBO">
-        select pb.material_no as materialNo,ma.material_name as materialName,ma.material_desc as
+        select pb.pick_body_id as pickBodyId,pb.material_no as materialNo,ma.material_name as materialName,ma.material_desc as
         materialDesc,pb.demand_num as demandNum,pb.pick_num as pickNum, (pb.demand_num-pb.pick_num) as lackNum ,
         (case
             when pb.demand_num-pb.pick_num > 0 then 0 else 1
@@ -339,4 +339,22 @@
         set ph.material_status = #{materialStatus}
         where ph.pick_head_id = #{pickHeadId}
     </update>
+
+<!--    查询当前工单号是否是异常列表，欠料情况，不欠料出库-->
+    <select id="judgeIsEx" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        select 1
+        from om_pick_head ph
+        left join om_pick_label pl on ph.pick_head_id = pl.pick_head_id
+        where ph.pick_head_id = #{pickHeadId} and pl.recommend = 2
+        where ph.pick_head_id = #{pickHeadId} and pl.recommend = 2
+        limit 1
+    </select>
+    <select id="judgeIsLack" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        select 1
+        from om_pick_head ph
+        left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
+        where ph.pick_head_id = #{pickHeadId} and (pb.pick_num-pb.demand_num &lt; 0)
+        limit 1
+    </select>
+
 </mapper>
