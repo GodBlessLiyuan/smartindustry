@@ -197,7 +197,10 @@
     <!--    查看当前工单拣货单的所有欠料列表-->
     <select id="materialLoss" resultType="com.smartindustry.common.bo.om.MaterialBO">
         select pb.pick_body_id as pickBodyId,pb.material_no as materialNo,ma.material_name as materialName,ma.material_desc as
-        materialDesc,pb.demand_num as demandNum,pb.pick_num as pickNum, (pb.demand_num-pb.pick_num) as lackNum ,
+        materialDesc,pb.demand_num as demandNum,pb.pick_num as pickNum,
+        (case
+        when pb.demand_num-pb.pick_num > 0 then (pb.demand_num-pb.pick_num) else 0
+        end) as lackNum,
         (case
             when pb.demand_num-pb.pick_num > 0 then 0 else 1
         end) as flag
@@ -298,12 +301,11 @@
 
 <!--    按照创建时间顺序进行当前拣货单号的所有已扫码入库的信息查询-->
     <select id="showScanItems" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.si.PrintLabelBO">
-        select spl.print_label_id as printLabelId,spl.package_id as packageId,spl.material_no as materialNo,ma.material_name as materialName,ma.material_desc as materialDesc,spl.num as num
-        from om_pick_head ph
-        left join om_pick_label pl on ph.pick_head_id = pl.pick_head_id
+        select pl.print_label_id as printLabelId,spl.package_id as packageId,spl.material_no as materialNo,ma.material_name as materialName,ma.material_desc as materialDesc,spl.num as num
+        from om_pick_label pl
         left join si_print_label spl on pl.print_label_id = spl.print_label_id
         left join si_material ma on spl.material_no = ma.material_no
-        where ph.pick_head_id = #{pickHeadId}
+        where pl.pick_head_id = #{pickHeadId}
         order by pl.create_time desc
     </select>
 
@@ -388,4 +390,14 @@
         set pl.dr = 2
         where pl.relate_package_id = #{packageId}
     </update>
+
+<!--    判断当前PID的是否已在某工单拣货单扫码列表中-->
+    <select id="judgePidInPhid" resultType="java.lang.Integer">
+        select 1
+        from om_pick_head ph
+        left join om_pick_label pl on ph.pick_head_id = pl.pick_head_id
+        left join si_print_label spl on pl.print_label_id = spl.print_label_id
+        where spl.print_label_id = #{printLabelId}
+        limit 1
+    </select>
 </mapper>

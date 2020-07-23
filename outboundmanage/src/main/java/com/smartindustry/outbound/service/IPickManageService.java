@@ -131,4 +131,12 @@ public interface IPickManageService {
      */
     ResultVO deleteSplit(String packageId);
 
+    /**
+     * 驳回
+     * @param pickHeadId
+     * @param message
+     * @return
+     */
+    ResultVO disAgree(Long pickHeadId,Byte status,String message);
+
 }

@@ -182,4 +182,12 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
      * @return
      */
     int deletePid(@Param("packageId") String packageId);
+
+
+    /**
+     * 判断某个PID是否已经在某个工单的扫码列表下
+     * @param printLabelId
+     * @return
+     */
+    Integer judgePidInPhid(@Param("printLabelId") Long printLabelId);
 }
