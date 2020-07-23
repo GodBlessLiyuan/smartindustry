@@ -188,24 +188,27 @@
         where print_label_id = #{printLabelId,jdbcType=BIGINT}
     </update>
 
-    <select id="queryByReceiptBodyId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <select id="queryByReceiptBodyId" resultMap="BaseResultMap">
         select pl.print_label_id,
-               pl.package_id,
-               pl.produce_date,
-               pl.produce_batch,
-               pl.num,
-               pl.`type`,
-               pl.origin,
-               pl.material_no,
-               pl.location_no,
-               pl.relate_label_id,
-               pl.relate_package_id,
-               pl.create_time,
-               pl.dr
+        pl.package_id,
+        pl.produce_date,
+        pl.produce_batch,
+        pl.num,
+        pl.`type`,
+        pl.origin,
+        pl.material_no,
+        pl.location_no,
+        pl.relate_label_id,
+        pl.relate_package_id,
+        pl.create_time,
+        pl.dr
         from si_print_label pl
-                 left join sm_receipt_label rl on pl.print_label_id = rl.print_label_id
-        where rl.receipt_body_id = #{receiptBodyId,jdbcType=BIGINT}
-          and pl.dr = 1
+        left join sm_receipt_label rl on pl.print_label_id = rl.print_label_id
+        where rl.receipt_body_id = #{rbid,jdbcType=BIGINT}
+        and pl.dr = 1
+        <if test="status">
+            and pl.relate_label_id is not null
+        </if>
         order by pl.create_time desc, pl.print_label_id desc
     </select>
     <select id="queryNo" parameterType="java.lang.String" resultMap="BaseResultMap">

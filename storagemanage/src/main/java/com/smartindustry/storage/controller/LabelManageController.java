@@ -23,8 +23,8 @@ public class LabelManageController {
     private ILabelManageService labelManageService;
 
     @RequestMapping("query")
-    public ResultVO query(@RequestParam(value = "rbid") Long rbId) {
-        return labelManageService.query(rbId);
+    public ResultVO query(@RequestParam(value = "rbid") Long rbId, @RequestParam(value = "status", defaultValue = "false") Boolean status) {
+        return labelManageService.query(rbId, status);
     }
 
     @RequestMapping("queryPid")

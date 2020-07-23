@@ -52,8 +52,8 @@ public class LabelManageServiceImpl implements ILabelManageService {
     private LabelRecordMapper labelRecordMapper;
 
     @Override
-    public ResultVO query(Long rbId) {
-        List<PrintLabelPO> pos = printLabelMapper.queryByReceiptBodyId(rbId);
+    public ResultVO query(Long rbId, Boolean status) {
+        List<PrintLabelPO> pos = printLabelMapper.queryByReceiptBodyId(rbId, status);
         return ResultVO.ok().setData(PrintLabelVO.convert(pos));
     }
 
@@ -155,7 +155,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
         }
 
         // 打印标签总数
-        List<PrintLabelPO> labelPOs = printLabelMapper.queryByReceiptBodyId(rbId);
+        List<PrintLabelPO> labelPOs = printLabelMapper.queryByReceiptBodyId(rbId, false);
         int labelNum = 0;
         for (PrintLabelPO labelPO : labelPOs) {
             labelNum += labelPO.getNum();

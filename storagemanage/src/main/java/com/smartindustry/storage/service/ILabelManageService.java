@@ -17,7 +17,7 @@ public interface ILabelManageService {
      * @param rbId
      * @return
      */
-    ResultVO query(Long rbId);
+    ResultVO query(Long rbId, Boolean status);
 
     /**
      * 根据 PID 查询
