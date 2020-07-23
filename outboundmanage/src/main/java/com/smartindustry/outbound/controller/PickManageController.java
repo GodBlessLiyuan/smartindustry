@@ -152,4 +152,12 @@ public class PickManageController {
     public ResultVO deleteSplit(@RequestParam(value = "pid", required = false) String packageId){
         return pickManageService.deleteSplit(packageId);
     }
+
+    @RequestMapping("disAgree")
+    public ResultVO disAgree(@RequestParam(value = "phid", required = false) Long pickHeadId,
+                             @RequestParam(value = "status", required = false) Byte status,
+                             @RequestParam(value = "msg", required = false) String message){
+        return pickManageService.disAgree(pickHeadId,status,message);
+    }
+
 }

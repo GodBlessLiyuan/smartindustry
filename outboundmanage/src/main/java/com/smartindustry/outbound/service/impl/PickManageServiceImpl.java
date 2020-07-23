@@ -7,16 +7,10 @@ import com.smartindustry.common.bo.om.MaterialBO;
 import com.smartindustry.common.bo.om.PickBodyBO;
 import com.smartindustry.common.bo.om.PickHeadBO;
 import com.smartindustry.common.bo.si.PrintLabelBO;
-import com.smartindustry.common.mapper.om.LabelRecommendMapper;
-import com.smartindustry.common.mapper.om.OutboundMapper;
-import com.smartindustry.common.mapper.om.PickBodyMapper;
-import com.smartindustry.common.mapper.om.PickHeadMapper;
+import com.smartindustry.common.mapper.om.*;
 import com.smartindustry.common.mapper.si.PrintLabelMapper;
 import com.smartindustry.common.mapper.si.StorageLabelMapper;
-import com.smartindustry.common.pojo.om.OutboundPO;
-import com.smartindustry.common.pojo.om.PickBodyPO;
-import com.smartindustry.common.pojo.om.PickHeadPO;
-import com.smartindustry.common.pojo.om.PickLabelPO;
+import com.smartindustry.common.pojo.om.*;
 import com.smartindustry.common.pojo.si.PrintLabelPO;
 import com.smartindustry.common.pojo.si.StorageLabelPO;
 import com.smartindustry.common.vo.PageInfoVO;
@@ -56,6 +50,8 @@ public class PickManageServiceImpl implements IPickManageService {
     private PrintLabelMapper printLabelMapper;
     @Autowired
     private OutboundMapper outboundMapper;
+    @Autowired
+    private PickCheckMapper pickCheckMapper;
     @Override
     public ResultVO pageQueryPickHead(int pageNum, int pageSize, Map<String, Object> reqMap) {
         Page<PickHeadPO> page = PageHelper.startPage(pageNum, pageSize);
@@ -218,6 +214,12 @@ public class PickManageServiceImpl implements IPickManageService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO packageIdDiv(Long printLabelId,Integer num){
+
+        //判断当前PID的是否已在某工单拣货单扫码列表中
+        Integer resultIn = pickHeadMapper.judgePidInPhid(printLabelId);
+        if (resultIn != null){
+            return new ResultVO(2024);
+        }
         //(2) 将扫描的pid的dr值设为2，并且按照分料数量分成两个pid
         PrintLabelPO po = printLabelMapper.selectByPrimaryKey(printLabelId);
         PrintLabelPO poDivOne = new PrintLabelPO();
@@ -305,6 +307,10 @@ public class PickManageServiceImpl implements IPickManageService {
         Integer resultLack = pickHeadMapper.judgeIsLack(pickHeadId);
         if (resultEx==1 || resultLack==1){
             int resultUp = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_CHECK);
+            PickCheckPO po = new PickCheckPO();
+            po.setPickHeadId(pickHeadId);
+            po.setStatus((byte)3);
+            int resultIn = pickCheckMapper.insert(po);
             statusCode = 1;
         }else {
             int resultUp = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_STORAGE);
@@ -326,6 +332,30 @@ public class PickManageServiceImpl implements IPickManageService {
     public ResultVO deleteSplit(String packageId){
         int resultDe = pickHeadMapper.deletePid(packageId);
         int resultRe = pickHeadMapper.resumePid(packageId);
+        return ResultVO.ok();
+    }
+
+    @Override
+    public  ResultVO disAgree(Long pickHeadId,Byte status,String message){
+        PickCheckPO po = new PickCheckPO();
+        po.setPickHeadId(pickHeadId);
+        po.setRemark(message);
+        if (status == null){
+            //OQC检测时的驳回
+            int result = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_RETURN);
+            po.setStatus((byte)2);
+            int resultUp = pickCheckMapper.updateByPrimaryKey(po);
+        }else if (status.equals(OutboundConstant.MATERIAL_STATUS_WAIT)){
+            //等齐套发货
+            int result = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_WAIT);
+            po.setStatus((byte)4);
+            int resultUp = pickCheckMapper.updateByPrimaryKey(po);
+        }else if(status.equals(OutboundConstant.MATERIAL_STATUS_RETURN)){
+            //取消发货，退货仓库
+            int result = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_RETURN);
+            po.setStatus((byte)2);
+            int resultUp = pickCheckMapper.updateByPrimaryKey(po);
+        }
         return ResultVO.ok();
     }
 }
