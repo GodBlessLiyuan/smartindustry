@@ -285,4 +285,9 @@
             #{plid,jdbcType=BIGINT}
         </foreach>
     </update>
+    <delete id="deleteByRelateId" parameterType="java.lang.Long">
+        delete
+        from si_print_label
+        where relate_label_id = #{relateLabelId,jdbcType=BIGINT}
+    </delete>
 </mapper>

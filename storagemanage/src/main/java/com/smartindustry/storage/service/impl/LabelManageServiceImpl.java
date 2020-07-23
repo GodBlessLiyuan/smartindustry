@@ -63,7 +63,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
         if (null == po) {
             return new ResultVO(1002);
         }
-        if(po.getDr() == 2) {
+        if (po.getDr() == 2) {
             return new ResultVO(1006);
         }
         return ResultVO.ok().setData(PrintLabelVO.convert(po));
@@ -114,12 +114,26 @@ public class LabelManageServiceImpl implements ILabelManageService {
         return ResultVO.ok();
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO delete(Long rbId, Long plId) {
         ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(rbId);
         if (null == receiptBodyPO) {
             return new ResultVO(1002);
         }
+        PrintLabelPO printLabelPO = printLabelMapper.selectByPrimaryKey(plId);
+        if (null == printLabelPO) {
+            return new ResultVO(1002);
+        }
+
+        if (null != printLabelPO.getRelateLabelId()) {
+            printLabelMapper.deleteByRelateId(printLabelPO.getRelateLabelId());
+            PrintLabelPO relateLabelPO = printLabelMapper.queryByRbidAndPid(rbId, printLabelPO.getRelatePackageId());
+            relateLabelPO.setDr((byte) 1);
+            printLabelMapper.updateByPrimaryKey(relateLabelPO);
+            return ResultVO.ok();
+        }
+
         if (!ReceiptConstant.RECEIPT_ENTRY_LABEL.equals(receiptBodyPO.getStatus())) {
             return new ResultVO(1003);
         }
