@@ -77,7 +77,7 @@ public class PickManageServiceImpl implements IPickManageService {
         List<PickHeadBO> noRecommend = pickHeadMapper.queryNoRecommend(pickHeadId);
         if(null == noRecommend || noRecommend.size() ==0 ){
             // 目前未有异常信息
-            return new ResultVO(2030);
+            return ResultVO.ok().setData(noRecommend);
         }
         // 若已拣货量大于需求量时，将未扫描优先推荐的pid以及扫描了其他推荐的pid
         //(1) 先查询出所有的推荐的pid
