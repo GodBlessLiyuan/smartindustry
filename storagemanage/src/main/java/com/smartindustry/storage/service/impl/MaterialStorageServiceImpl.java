@@ -88,6 +88,9 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         if (null == bo) {
             return new ResultVO(1002);
         }
+        if (bo.getDr() == 2) {
+            return new ResultVO(1006);
+        }
 
         StorageDetailPO storageDetailPO = storageDetailMapper.queryByPlId(bo.getPrintLabelId());
         if (null != storageDetailPO) {

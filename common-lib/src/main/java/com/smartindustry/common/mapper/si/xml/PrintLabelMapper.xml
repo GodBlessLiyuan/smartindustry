@@ -243,7 +243,6 @@
                  left join si_material m on pl.material_no = m.material_no
         where rl.receipt_body_id = #{rbid,jdbcType=BIGINT}
           and pl.package_id = #{pid,jdbcType=CHAR}
-          and pl.dr = 1
           and rl.storage_id is null
     </select>
     <select id="queryByIds" parameterType="java.lang.Long" resultMap="BaseResultMap">

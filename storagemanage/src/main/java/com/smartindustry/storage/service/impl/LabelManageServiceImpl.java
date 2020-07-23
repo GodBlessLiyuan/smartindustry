@@ -8,7 +8,6 @@ import com.smartindustry.common.mapper.sm.*;
 import com.smartindustry.common.pojo.si.LabelRecordPO;
 import com.smartindustry.common.pojo.si.PrintLabelPO;
 import com.smartindustry.common.pojo.sm.*;
-import com.smartindustry.common.util.PrintUtil;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.ReceiptConstant;
 import com.smartindustry.storage.dto.LabelSplitDTO;
@@ -63,6 +62,9 @@ public class LabelManageServiceImpl implements ILabelManageService {
         PrintLabelPO po = printLabelMapper.queryByRbidAndPid(rbId, pid);
         if (null == po) {
             return new ResultVO(1002);
+        }
+        if(po.getDr() == 2) {
+            return new ResultVO(1006);
         }
         return ResultVO.ok().setData(PrintLabelVO.convert(po));
     }
