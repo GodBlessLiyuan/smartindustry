@@ -95,4 +95,16 @@ public class MaterialOutboundController {
     public ResultVO upload(@Param("file") MultipartFile file) {
         return materialOutboundService.upload(file);
     }
+
+
+    @RequestMapping("outOrderCheck")
+    public ResultVO outOrderCheck(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                                  @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                                  @RequestParam(value = "pno",required = false) String pickNo,
+                                  @RequestParam(value = "cproject",required = false) String correspondProject){
+        Map<String, Object> reqData = new HashMap<>(2);
+        reqData.put("pickNo", pickNo);
+        reqData.put("correspondProject", correspondProject);
+        return materialOutboundService.outOrderCheck(pageNum, pageSize,reqData);
+    }
 }

@@ -26,6 +26,8 @@ public class OutboundVO implements Serializable {
      * 出货单号
      */
     private String ono;
+
+    private Long phid;
     /**
      * 拣货单号
      */
@@ -72,6 +74,7 @@ public class OutboundVO implements Serializable {
         vo.setOid(bo.getOutboundId());
         vo.setOno(bo.getOutboundNo());
         vo.setPno(bo.getPickNo());
+        vo.setPhid(bo.getPickHeadId());
         vo.setCproject(bo.getCorrespondProject());
         vo.setPtime(bo.getPlanTime());
         vo.setOtime(bo.getOutboundTime());
