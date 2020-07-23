@@ -148,4 +148,8 @@ public class PickManageController {
         return pickManageService.outBoundItems(pickHeadId);
     }
 
+    @RequestMapping("deleteSplit")
+    public ResultVO deleteSplit(@RequestParam(value = "pid", required = false) String packageId){
+        return pickManageService.deleteSplit(packageId);
+    }
 }

@@ -375,4 +375,17 @@
         where ph.pick_head_id = #{pickHeadId} and spl.package_id = #{packageId}
         limit 1
     </select>
+
+<!--    恢复当前PID的标签打印单-->
+    <update id="resumePid">
+        update si_print_label pl
+        set pl.dr = 1
+        where pl.package_id = #{packageId}
+    </update>
+<!--    将分料后的PID设置为废弃-->
+    <update id="deletePid">
+        update si_print_label pl
+        set pl.dr = 2
+        where pl.relate_package_id = #{packageId}
+    </update>
 </mapper>

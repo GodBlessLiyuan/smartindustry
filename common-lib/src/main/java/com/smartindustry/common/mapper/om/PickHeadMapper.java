@@ -168,4 +168,18 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
      * @return
      */
     Integer judgeIsPidHave(@Param("pickHeadId") Long pickHeadId,@Param("packageId") String packageId);
+
+    /**
+     * 恢复原先的pid
+     * @param packageId
+     * @return
+     */
+    int resumePid(@Param("packageId") String packageId);
+
+    /**
+     * 删除分料
+     * @param packageId
+     * @return
+     */
+    int deletePid(@Param("packageId") String packageId);
 }
