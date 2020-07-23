@@ -79,35 +79,46 @@ public class PickManageServiceImpl implements IPickManageService {
     public ResultVO queryExItems(Long pickHeadId){
         // 若扫描了未推荐的PID,则异常列表只显示，扫描了其他推荐的PID
         List<PickHeadBO> noRecommend = pickHeadMapper.queryNoRecommend(pickHeadId);
+        if(null == noRecommend || noRecommend.size() ==0 ){
+            // 目前未有异常信息
+            return new ResultVO(2030);
+        }
         // 若已拣货量大于需求量时，将未扫描优先推荐的pid以及扫描了其他推荐的pid
         //(1) 先查询出所有的推荐的pid
         List<PickHeadBO> reList = pickHeadMapper.queryRecommend(pickHeadId);
-        Map<String, String> map = reList.stream().collect(Collectors.toMap(PickHeadBO::getMaterialNo,PickHeadBO::getRecommendPid));
+        if(null == reList || reList.size() ==0 ){
+            // 当前工单拣货单没有推荐的pid
+            return new ResultVO(2031);
+        }
+        Map<String, String> map = reList.stream()
+                .collect(HashMap::new, (m,v)->m.put(v.getMaterialNo(), v.getRecommendPid()), HashMap::putAll);
         //(2) 再查询出目前工单已经使用的推荐pid,这里必须是  拣货量大于 需求量才查询
         List<PickHeadBO> useList = pickHeadMapper.queryAllRePid(pickHeadId);
-        //(3) 推荐未使用的进行相减，以及拼接其他未推荐的pid
-        for (PickHeadBO bo:useList) {
-            String materialNo = bo.getMaterialNo();
-            boolean containsKey = map.containsKey(materialNo);
-            if (containsKey){
-                List<String> allPidList = Arrays.asList(map.get(materialNo).split(","));
-                List<String> rePidList = Arrays.asList(bo.getRecommendPid().split(","));
-                bo.setRecommendPid(StringUtils.join(allPidList.stream()
-                        .filter(s -> !rePidList.contains(s))
-                        .collect(Collectors.toList()), ","));
+        if(null != useList || useList.size() !=0 ){
+            // 当需求量满足时，没有使用任何推荐pid
+            for (PickHeadBO bo:useList) {
+                String materialNo = bo.getMaterialNo();
+                boolean containsKey = map.containsKey(materialNo);
+                if (containsKey){
+                    List<String> allPidList = Arrays.asList(map.get(materialNo).split(","));
+                    List<String> rePidList = Arrays.asList(bo.getRecommendPid().split(","));
+                    bo.setRecommendPid(StringUtils.join(allPidList.stream()
+                            .filter(s -> !rePidList.contains(s))
+                            .collect(Collectors.toList()), ","));
+                }
             }
-        }
-
-        Map<String, String> useMap = useList.stream().collect(Collectors.toMap(PickHeadBO::getMaterialNo,PickHeadBO::getRecommendPid));
-        // 将未使用推荐和已使用未推荐进行组合
-        for (PickHeadBO bo:noRecommend) {
-            String materialNo = bo.getMaterialNo();
-            boolean useKey = useMap.containsKey(materialNo);
-            if (useKey){
-                bo.setRecommendPid(useMap.get(materialNo));
+            //(3) 推荐未使用的进行相减，以及拼接其他未推荐的pid
+            Map<String, String> useMap = useList.stream().collect(Collectors.toMap(PickHeadBO::getMaterialNo,PickHeadBO::getRecommendPid));
+            // 将未使用推荐和已使用未推荐进行组合
+            for (PickHeadBO bo:noRecommend) {
+                String materialNo = bo.getMaterialNo();
+                boolean useKey = useMap.containsKey(materialNo);
+                if (useKey){
+                    bo.setRecommendPid(useMap.get(materialNo));
+                }
+                String exception = pickBodyMapper.queryException(pickHeadId,materialNo);
+                bo.setAberrantDesc(exception);
             }
-            String exception = pickBodyMapper.queryException(pickHeadId,materialNo);
-            bo.setAberrantDesc(exception);
         }
         return ResultVO.ok().setData(AberrantItemsVO.convert(noRecommend));
     }
@@ -168,7 +179,7 @@ public class PickManageServiceImpl implements IPickManageService {
         }
         //2 若当前输入的PID已经扫码入库，则提示不需要重复扫码
         Integer resultPid = pickHeadMapper.judgeIsPidHave(pickHeadId,packageId);
-        if (resultPid == null) {
+        if (resultPid != null) {
             return new ResultVO(2010);
         }
         //若输入的PID并不属于该工单对应采购单的物料范围，则提示该物料并不属于该工单
@@ -308,5 +319,13 @@ public class PickManageServiceImpl implements IPickManageService {
         }
         //2 当形成出库单，在不欠料的情况下，则由物料拣货10变成物料出库30
         return ResultVO.ok().setData(statusCode);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public ResultVO deleteSplit(String packageId){
+        int resultDe = pickHeadMapper.deletePid(packageId);
+        int resultRe = pickHeadMapper.resumePid(packageId);
+        return ResultVO.ok();
     }
 }
