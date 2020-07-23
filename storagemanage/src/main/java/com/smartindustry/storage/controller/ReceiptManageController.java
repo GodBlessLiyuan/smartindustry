@@ -25,7 +25,7 @@ public class ReceiptManageController {
 
     @RequestMapping("pageQuery")
     public ResultVO pageQuery(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                              @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                              @RequestParam(value = "pageSize", defaultValue = "100000000") int pageSize,
                               @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
                               @RequestParam(value = "supplier", required = false, defaultValue = "") String supplier,
                               @RequestParam(value = "ono", required = false, defaultValue = "") String ono,
@@ -63,7 +63,7 @@ public class ReceiptManageController {
 
     @RequestMapping("materialQuery")
     public ResultVO materialQuery(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                                  @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                                  @RequestParam(value = "pageSize", defaultValue = "100000000") int pageSize,
                                   @RequestParam(value = "mno", required = false, defaultValue = "") String mno,
                                   @RequestParam(value = "mname", required = false, defaultValue = "") String mname,
                                   @RequestParam(value = "mmodel", required = false, defaultValue = "") String mmodel) {

@@ -29,7 +29,7 @@ public class QualityManageController {
 
     @RequestMapping("pageQuery")
     public ResultVO pageQuery(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                              @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                              @RequestParam(value = "pageSize", defaultValue = "100000000") int pageSize,
                               @RequestParam(value = "rno", required = false, defaultValue = "") String rno,
                               @RequestParam(value = "type", required = false, defaultValue = "0") Byte type,
                               @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,

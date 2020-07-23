@@ -37,7 +37,7 @@ public class MaterialOutboundController {
      */
     @RequestMapping("pageQuery")
     public ResultVO pageQuery(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                              @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                              @RequestParam(value = "pageSize", defaultValue = "100000000") int pageSize,
                               @RequestParam(value = "ono", required = false, defaultValue = "") String ono,
                               @RequestParam(value = "pno", required = false, defaultValue = "") String pno,
                               @RequestParam(value = "cproject", required = false, defaultValue = "") String cproject,
@@ -99,7 +99,7 @@ public class MaterialOutboundController {
 
     @RequestMapping("outOrderCheck")
     public ResultVO outOrderCheck(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                                  @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                                  @RequestParam(value = "pageSize", defaultValue = "100000000") int pageSize,
                                   @RequestParam(value = "pno",required = false) String pickNo,
                                   @RequestParam(value = "cproject",required = false) String correspondProject){
         Map<String, Object> reqData = new HashMap<>(2);

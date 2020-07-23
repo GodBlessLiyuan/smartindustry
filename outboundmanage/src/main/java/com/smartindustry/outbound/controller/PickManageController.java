@@ -35,7 +35,7 @@ public class PickManageController {
      */
     @RequestMapping("queryPick")
     public ResultVO queryPickHeadMsg(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                                     @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                                     @RequestParam(value = "pageSize", defaultValue = "100000000") int pageSize,
                                      @RequestParam(value = "pno", required = false) String pickNo,
                                      @RequestParam(value = "ono", required = false) String orderNo,
                                      @RequestParam(value = "cproject", required = false) String correspondProject,
@@ -115,7 +115,7 @@ public class PickManageController {
 
     @RequestMapping("showScanItems")
     public ResultVO showScanItems(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                                  @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                                  @RequestParam(value = "pageSize", defaultValue = "100000000") int pageSize,
                                   @RequestParam(value = "phid", required = false) Long pickHeadId){
         return pickManageService.showScanItems(pageNum,pageSize,pickHeadId);
     }
