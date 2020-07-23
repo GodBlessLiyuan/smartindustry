@@ -162,13 +162,26 @@ public class PickManageServiceImpl implements IPickManageService {
     public ResultVO pickPidOut(Long pickHeadId, String packageId) {
         //1.首先根据输入的PID,得到相应PID的信息，进行展示
         PrintLabelBO bo = pickHeadMapper.pickPid(packageId);
-        //
-
+        if (bo == null){
+            // 提示没有这个PID号
+            return new ResultVO(2040);
+        }
+        //2 若当前输入的PID已经扫码入库，则提示不需要重复扫码
+        Integer resultPid = pickHeadMapper.judgeIsPidHave(pickHeadId,packageId);
+        if (resultPid == null) {
+            return new ResultVO(2010);
+        }
+        //若输入的PID并不属于该工单对应采购单的物料范围，则提示该物料并不属于该工单
+        String materialNo = bo.getMaterialNo();
+        Integer resultMa = pickHeadMapper.judgeIsMaHave(pickHeadId,materialNo);
+        if (resultMa == null) {
+            return new ResultVO(2011);
+        }
         // 判断当前物料不在拣货清单中，则提示 该物料并不在出库清单中
         List<String> maList = pickHeadMapper.judgeMaterial(pickHeadId);
         boolean flag = maList.contains(bo.getMaterialNo());
         if (!flag) {
-            return new ResultVO(2000);
+            return new ResultVO(2012);
         }
         //2.将拣货单表体表中的已拣量作加操作
         int addResult = pickHeadMapper.addPickNum(bo.getMaterialNo(), bo.getNum());
@@ -227,6 +240,10 @@ public class PickManageServiceImpl implements IPickManageService {
     @Override
     public ResultVO showMsgByPid(String packageId){
         PrintLabelBO bo = pickHeadMapper.pickPid(packageId);
+        if (bo == null){
+            // PID不存在
+            return new ResultVO(2040);
+        }
         return ResultVO.ok().setData(ScanOutVO.convert(bo));
     }
 
