@@ -162,9 +162,7 @@ public class PickManageServiceImpl implements IPickManageService {
     public ResultVO pickPidOut(Long pickHeadId, String packageId) {
         //1.首先根据输入的PID,得到相应PID的信息，进行展示
         PrintLabelBO bo = pickHeadMapper.pickPid(packageId);
-//        PickHeadPO po = pickHeadMapper.queryByPickNo(pickHeadId);
-        // 如果该物料的PID不在该工单对应采购单的物料范围内，则提示 该物料并不属于该工单
-//        List<String> pidList = pickHeadMapper.judgePidHave(packageId);
+        //
 
         // 判断当前物料不在拣货清单中，则提示 该物料并不在出库清单中
         List<String> maList = pickHeadMapper.judgeMaterial(pickHeadId);
@@ -185,6 +183,10 @@ public class PickManageServiceImpl implements IPickManageService {
         pickLabelPo.setRecommend(recommend);
         pickLabelPo.setCreateTime(new Date());
         int insertResult = pickHeadMapper.insertPickLabel(pickLabelPo);
+
+
+        int flagTwo = pickHeadMapper.judgeIsPick(pickHeadId);
+        int result = (flagTwo==1) ? pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_PICK) : 0;
 
         return ResultVO.ok().setData(ScanOutVO.convert(bo));
     }
@@ -236,8 +238,11 @@ public class PickManageServiceImpl implements IPickManageService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ResultVO deleteScanPid(Long pickHeadId, Long printLabelId){
         int result = pickHeadMapper.deleteScanPid(pickHeadId,printLabelId);
+        int flag = pickHeadMapper.judgeIsPick(pickHeadId);
+        int resultStatus = (flag==1) ? pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_PICK) : 0;
         return ResultVO.ok();
     }
 
@@ -264,15 +269,27 @@ public class PickManageServiceImpl implements IPickManageService {
 
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ResultVO outBoundItems(Long pickHeadId){
-        OutboundPO po = new OutboundPO();
-        po.setPickHeadId(pickHeadId);
-        Date date = new Date();
-        po.setOutboundNo(OmNoUtil.getOutboundNo(outboundMapper, OmNoUtil.OUTBOUND, date));
-        po.setStatus((byte)3);
-        po.setCreateTime(date);
-        po.setDr((byte)1);
-        int result = outboundMapper.insert(po);
-        return ResultVO.ok();
+        //1 当形成出库单，由于物料欠缺，异常数据，则由物料拣货10变成工单审核15
+        int statusCode = 0;
+        Integer resultEx = pickHeadMapper.judgeIsEx(pickHeadId);
+        Integer resultLack = pickHeadMapper.judgeIsLack(pickHeadId);
+        if (resultEx==1 || resultLack==1){
+            int resultUp = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_CHECK);
+            statusCode = 1;
+        }else {
+            int resultUp = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_STORAGE);
+            OutboundPO po = new OutboundPO();
+            po.setPickHeadId(pickHeadId);
+            Date date = new Date();
+            po.setOutboundNo(OmNoUtil.getOutboundNo(outboundMapper, OmNoUtil.OUTBOUND, date));
+            po.setStatus((byte)3);
+            po.setCreateTime(date);
+            po.setDr((byte)1);
+            int result = outboundMapper.insert(po);
+        }
+        //2 当形成出库单，在不欠料的情况下，则由物料拣货10变成物料出库30
+        return ResultVO.ok().setData(statusCode);
     }
 }

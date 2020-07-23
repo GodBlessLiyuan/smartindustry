@@ -51,8 +51,6 @@ public class PickManageController {
     /**
      * 扫描拣货的欠料列表
      *
-     * @param pageNum
-     * @param pageSize
      * @param pickHeadId
      * @param materialNo
      * @param materialName
