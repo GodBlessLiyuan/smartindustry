@@ -90,7 +90,8 @@ public class PickManageServiceImpl implements IPickManageService {
             // 当前工单拣货单没有推荐的pid
             return new ResultVO(2031);
         }
-        Map<String, String> map = reList.stream().collect(Collectors.toMap(PickHeadBO::getMaterialNo,PickHeadBO::getRecommendPid));
+        Map<String, String> map = reList.stream()
+                .collect(HashMap::new, (m,v)->m.put(v.getMaterialNo(), v.getRecommendPid()), HashMap::putAll);
         //(2) 再查询出目前工单已经使用的推荐pid,这里必须是  拣货量大于 需求量才查询
         List<PickHeadBO> useList = pickHeadMapper.queryAllRePid(pickHeadId);
         if(null != useList || useList.size() !=0 ){
