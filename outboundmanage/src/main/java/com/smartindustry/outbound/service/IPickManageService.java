@@ -124,4 +124,11 @@ public interface IPickManageService {
      */
     ResultVO outBoundItems(Long pickHeadId);
 
+    /**
+     * 删除分料后的PID单，恢复原来的标签打印单
+     * @param packageId
+     * @return
+     */
+    ResultVO deleteSplit(String packageId);
+
 }
