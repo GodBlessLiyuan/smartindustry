@@ -12,6 +12,8 @@ import lombok.Data;
 @Data
 public class MaterialBO extends MaterialPO {
     private static final long SerialVersionUID = 1L;
+
+    private Long pickBodyId;
     /**
      * 工单拣货单编号
      */
