@@ -133,6 +133,6 @@
         left join sm_receipt_label rl on pl.print_label_id = rl.print_label_id
         where rl.receipt_body_id = #{rbId,jdbcType=BIGINT} and lr.status = #{status,jdbcType=TINYINT} and lr.module =
         #{module,jdbcType=TINYINT}
-        order by lr.create_time desc
+        order by lr.create_time desc, lr.print_label_id desc
     </select>
 </mapper>
