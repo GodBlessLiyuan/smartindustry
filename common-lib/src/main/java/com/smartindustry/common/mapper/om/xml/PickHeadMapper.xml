@@ -426,5 +426,19 @@
         limit 1
     </select>
 
+<!--    查看OQC检测的分页查询-->
+    <select id="queryOqc"  resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from om_pick_head ph
+        where ph.dr = 1 and ph.order_type = 2 and ph.material_status = 15
+        <if test="pickNo != null and pickNo != ''">
+            and ph.pick_no like concat('%',#{pickNo,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="orderNo != null and orderNo != ''">
+            and ph.order_no like concat('%',#{orderNo,jdbcType=VARCHAR},'%')
+        </if>
+        order by ph.create_time desc
+    </select>
 </mapper>
 

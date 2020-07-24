@@ -33,6 +33,14 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
     List<PickHeadPO> queryPickGoods(Map<String, Object> reqMap);
 
     /**
+     * OQC检测查询
+     * @param pickNo
+     * @param orderNo
+     * @return
+     */
+    List<PickHeadPO> queryOqc(@Param("pickNo") String pickNo,@Param("orderNo") String orderNo);
+
+    /**
      * 根据工单拣货单号和PID扫码出库
      * @param packageId
      * @return
