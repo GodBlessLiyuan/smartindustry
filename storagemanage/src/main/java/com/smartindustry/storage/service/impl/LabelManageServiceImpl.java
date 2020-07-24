@@ -127,8 +127,11 @@ public class LabelManageServiceImpl implements ILabelManageService {
         }
 
         if (null != printLabelPO.getRelateLabelId()) {
-            printLabelMapper.deleteByRelateId(printLabelPO.getRelateLabelId());
             PrintLabelPO relateLabelPO = printLabelMapper.queryByRbidAndPid(rbId, printLabelPO.getRelatePackageId());
+            if (null == relateLabelPO) {
+                return new ResultVO(1002);
+            }
+            printLabelMapper.deleteByRelateId(printLabelPO.getRelateLabelId());
             relateLabelPO.setDr((byte) 1);
             printLabelMapper.updateByPrimaryKey(relateLabelPO);
             return ResultVO.ok();

@@ -188,6 +188,16 @@
         where print_label_id = #{printLabelId,jdbcType=BIGINT}
     </update>
 
+    <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.PrintLabelBO" extends="BaseResultMap">
+        <result column="material_no" jdbcType="CHAR" property="materialNo"/>
+        <result column="material_name" jdbcType="CHAR" property="materialName"/>
+        <result column="material_desc" jdbcType="CHAR" property="materialDesc"/>
+    </resultMap>
+    <sql id="BO_Column_List">
+        pl.print_label_id, pl.package_id, pl.produce_date, pl.produce_batch, pl.num, pl.`type`, pl.origin, pl.material_no,
+    pl.location_no, pl.relate_label_id, pl.relate_package_id, pl.create_time, pl.dr,
+    m.material_no, m.material_desc
+    </sql>
     <select id="queryByReceiptBodyId" resultMap="BaseResultMap">
         select pl.print_label_id,
         pl.package_id,
@@ -232,22 +242,15 @@
             #{po.dr,jdbcType=TINYINT})
         </foreach>
     </insert>
-    <select id="queryByRbidAndPid" resultType="com.smartindustry.common.bo.si.PrintLabelBO">
-        select pl.print_label_id as printLabelId,
-               pl.package_id     as packageId,
-               pl.produce_batch  as produceBatch,
-               pl.produce_date   as produceDate,
-               pl.num,
-               pl.create_time    as createTime,
-               m.material_no     as materialNo,
-               m.material_desc   as materialDesc,
-               pl.dr
+    <select id="queryByRbidAndPid" resultMap="BOResultMap">
+        select
+        <include refid="BO_Column_List"/>
         from si_print_label pl
-                 left join sm_receipt_label rl on pl.print_label_id = rl.print_label_id
-                 left join si_material m on pl.material_no = m.material_no
+        left join sm_receipt_label rl on pl.print_label_id = rl.print_label_id
+        left join si_material m on pl.material_no = m.material_no
         where rl.receipt_body_id = #{rbid,jdbcType=BIGINT}
-          and pl.package_id = #{pid,jdbcType=CHAR}
-          and rl.storage_id is null
+        and pl.package_id = #{pid,jdbcType=CHAR}
+        and rl.storage_id is null
     </select>
     <select id="queryByIds" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
