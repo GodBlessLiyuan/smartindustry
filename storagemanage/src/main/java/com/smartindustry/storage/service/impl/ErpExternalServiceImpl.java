@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: xiahui
@@ -22,13 +23,14 @@ public class ErpExternalServiceImpl implements IErpExternalService {
     private MaterialMapper materialMapper;
 
     @Override
-    public ResultVO order(String ono, Byte otype) {
-        if (otype == 1) {
-            // po 收料单
-
-        } else if (otype == 3) {
-            // 生产退料
-        }
+    public ResultVO order(Map<String, Object> reqData) {
+        
+//        if (otype == 1) {
+//            // po 收料单
+//
+//        } else if (otype == 3) {
+//            // 生产退料
+//        }
 
         // 测试数据
         ErpOrderVO vo = new ErpOrderVO();

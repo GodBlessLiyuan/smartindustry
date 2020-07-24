@@ -3,9 +3,9 @@ package com.smartindustry.storage.controller;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.service.IErpExternalService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * @author: xiahui
@@ -19,8 +19,8 @@ public class ErpExternalController {
     @Autowired
     private IErpExternalService erpExternalService;
 
-    @RequestMapping("order")
-    public ResultVO order(@RequestParam(value = "ono") String ono, @RequestParam(value = "otype") Byte otype) {
-        return erpExternalService.order(ono, otype);
+    @PostMapping("order")
+    public ResultVO order(@RequestBody Map<String, Object> reqData) {
+        return erpExternalService.order(reqData);
     }
 }
