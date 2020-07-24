@@ -155,4 +155,13 @@ public interface IPickManageService {
      */
     ResultVO agreeOutBound(Long pickHeadId);
 
+    /**
+     * 欠料出库单审核
+     * @param pageNum
+     * @param pageSize
+     * @param reqMap
+     * @return
+     */
+    ResultVO outOrderCheck(int pageNum, int pageSize, Map<String, Object> reqMap);
+
 }

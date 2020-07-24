@@ -205,6 +205,22 @@
         </if>
         order by ph.create_time desc
     </select>
+
+<!--    工单拣货单审核查询-->
+    <select id="outOrderCheck" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from om_pick_head ph
+        where ph.dr = 1 and ph.order_type = 1 and ph.material_status = 15
+        <if test="pickNo != null and pickNo != ''">
+            and ph.pick_no like concat('%',#{pickNo,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="correspondProject != null and correspondProject != ''">
+            and ph.correspond_project like concat('%',#{correspondProject,jdbcType=VARCHAR},'%')
+        </if>
+        order by ph.create_time desc
+    </select>
+
     <!--    扫码拣货-->
     <select id="pickPid" parameterType="java.lang.String"
             resultType="com.smartindustry.common.bo.si.PrintLabelBO">
@@ -291,7 +307,7 @@
     <update id="addPickNum">
         update om_pick_body pb
         set pb.pick_num = pb.pick_num + #{pickNum}
-        where pb.material_no = #{materialNo}
+        where pb.pick_head_id = #{pickHeadId} and pb.material_no = #{materialNo}
     </update>
 
     <insert id="insertPickLabel" parameterType="com.smartindustry.common.pojo.om.PickLabelPO">
@@ -351,7 +367,7 @@
          select pl.print_label_id as printLabelId,pl.package_id as packageId,pl.material_no as materialNo,ma.material_name as materialName,ma.material_desc as materialDesc,pl.num as num,pl.create_time as createTime,pl.produce_date as produceDate
          from si_print_label pl
          left join si_material ma on pl.material_no = ma.material_no
-         where pl.relate_package_id = #{packageId}
+         where pl.relate_package_id = #{packageId} and pl.dr = 1
          limit 2
     </select>
 
@@ -440,5 +456,12 @@
         </if>
         order by ph.create_time desc
     </select>
+
+<!--    若在扫码时删除已扫码的PID,那么已拣货量要相应的减去-->
+    <update id="updatePickNum">
+        update om_pick_body pb
+        set pb.pick_num = pb.pick_num - #{num}
+        where pb.pick_head_id = #{pickHeadId} and pb.material_no = #{materialNo}
+    </update>
 </mapper>
 

@@ -163,10 +163,5 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
         return ResultVO.ok().setData(res);
     }
 
-    @Override
-    public ResultVO outOrderCheck(int pageNum, int pageSize, Map<String, Object> reqMap){
-        Page<OutboundBO> page = PageHelper.startPage(pageNum, pageSize);
-        List<OutboundBO> bos = outboundMapper.outOrderCheck(reqMap);
-        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), OutboundVO.convert(bos)));
-    }
+
 }
