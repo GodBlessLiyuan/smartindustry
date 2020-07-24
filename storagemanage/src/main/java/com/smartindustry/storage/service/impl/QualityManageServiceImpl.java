@@ -55,10 +55,14 @@ public class QualityManageServiceImpl implements IQualityManageService {
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData) {
-        Object status = reqData.get("status");
-        if (null == status || !ReceiptConstant.RECEIPT_IQC_DETECT.equals(status) && !ReceiptConstant.RECEIPT_QE_DETECT.equals(status) && !ReceiptConstant.RECEIPT_QE_CONFIRM.equals(status)) {
+        if (null == reqData.get("status")) {
             return new ResultVO(1001);
         }
+        Byte status = Byte.valueOf(reqData.get("status").toString());
+        if (!ReceiptConstant.RECEIPT_IQC_DETECT.equals(status) && !ReceiptConstant.RECEIPT_QE_DETECT.equals(status) && !ReceiptConstant.RECEIPT_QE_CONFIRM.equals(status)) {
+            return new ResultVO(1001);
+        }
+        
         // 质量管理 分页查询查询
         reqData.put("qa", true);
         Page<ReceiptBO> page = PageQueryUtil.startPage(reqData);

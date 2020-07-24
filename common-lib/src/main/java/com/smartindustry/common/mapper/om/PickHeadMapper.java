@@ -229,7 +229,7 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
      * @param materialNo
      * @return
      */
-    int updatePickNum(@Param("printLabelId") Long printLabelId,
+    int updatePickNum(@Param("pickHeadId") Long pickHeadId,
                       @Param("num") Integer num,
                       @Param("materialNo") String materialNo);
 }
