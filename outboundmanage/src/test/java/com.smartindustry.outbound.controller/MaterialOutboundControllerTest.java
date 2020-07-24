@@ -2,7 +2,6 @@ package com.smartindustry.outbound.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.smartindustry.common.bo.om.OutboundBO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.vo.OutboundDetailVO;
 import org.junit.Test;
@@ -24,8 +23,18 @@ import static org.junit.Assert.assertNotNull;
 @WebAppConfiguration
 public class MaterialOutboundControllerTest extends BaseTest {
     @Test
-    public void pageQuery() {
+    public void pageQuery() throws Exception {
+        MvcResult res = mockMvc.perform(MockMvcRequestBuilders.get("/outbound/pageQuery")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("pageNum", String.valueOf(1))
+                .param("pageSize", String.valueOf(1))
+                .param("otype", String.valueOf(1)))
+                .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
+        ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+        assertNotNull(resultVO.getStatus());
+        assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+        assertNotNull(resultVO.getData());
     }
 
     @Test
@@ -39,7 +48,7 @@ public class MaterialOutboundControllerTest extends BaseTest {
         assertEquals(Integer.valueOf(1000), resultVO.getStatus());
         assertNotNull(resultVO.getData());
         OutboundDetailVO outboundDetailVO = JSONObject.toJavaObject(JSON.parseObject(String.valueOf(resultVO.getData())), OutboundDetailVO.class);
-        assertEquals("PO2020071200001",outboundDetailVO.getOno());
+        assertEquals("PO2020071200001", outboundDetailVO.getOno());
 
     }
 
@@ -49,8 +58,15 @@ public class MaterialOutboundControllerTest extends BaseTest {
     }
 
     @Test
-    public void record() {
+    public void record() throws Exception {
+        MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/outbound/detail")
+                .contentType(MediaType.APPLICATION_JSON).param("oid", String.valueOf(2)))
+                .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
+        ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+        assertNotNull(resultVO.getStatus());
+        assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+        assertNotNull(resultVO.getData());
     }
 
     @Test
