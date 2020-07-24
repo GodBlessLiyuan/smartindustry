@@ -210,10 +210,10 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
 
     /**
      * 判断某个PID是否已经在某个工单的扫码列表下
-     * @param printLabelId
+     * @param packageId
      * @return
      */
-    Integer judgePidInPhid(@Param("printLabelId") Long printLabelId);
+    Integer judgePidInPhid(@Param("packageId") String packageId);
 
     /**
      * 欠料出库单审核的查询
