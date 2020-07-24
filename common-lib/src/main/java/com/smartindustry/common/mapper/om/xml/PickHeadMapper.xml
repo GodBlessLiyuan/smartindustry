@@ -341,7 +341,7 @@
         from om_pick_label pl
         left join si_print_label spl on pl.print_label_id = spl.print_label_id
         left join si_material ma on spl.material_no = ma.material_no
-        where pl.pick_head_id = #{pickHeadId}
+        where pl.pick_head_id = #{pickHeadId} and spl.dr = 1
         order by pl.create_time desc
     </select>
 

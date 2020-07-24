@@ -228,6 +228,9 @@ public class PickManageServiceImpl implements IPickManageService {
 
         //(2) 将扫描的pid的dr值设为2，并且按照分料数量分成两个pid
         PrintLabelPO po = printLabelMapper.selectByPrimaryKey(printLabelId);
+        if (num >= po.getNum()){
+            return new ResultVO(2056);
+        }
         PrintLabelPO poDivOne = new PrintLabelPO();
         PrintLabelPO poDivTwo = new PrintLabelPO();
         BeanUtils.copyProperties(po,poDivOne,new String[]{"printLabelId","dr"});
