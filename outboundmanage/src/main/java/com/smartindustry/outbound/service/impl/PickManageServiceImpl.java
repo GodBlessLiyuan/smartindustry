@@ -67,6 +67,13 @@ public class PickManageServiceImpl implements IPickManageService {
     }
 
     @Override
+    public ResultVO outOrderCheck(int pageNum, int pageSize, Map<String, Object> reqMap){
+        Page<PickHeadPO> page = PageHelper.startPage(pageNum, pageSize);
+        List<PickHeadPO> pos = pickHeadMapper.outOrderCheck(reqMap);
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), PickHeadVO.convert(pos)));
+    }
+
+    @Override
     public ResultVO queryByPhId(Long pickHeadId) {
         PickHeadPO po = pickHeadMapper.selectByPrimaryKey(pickHeadId);
         return ResultVO.ok().setData(PickHeadVO.convert(po));
@@ -198,7 +205,7 @@ public class PickManageServiceImpl implements IPickManageService {
             return new ResultVO(2012);
         }
         //2.将拣货单表体表中的已拣量作加操作
-        int addResult = pickHeadMapper.addPickNum(bo.getMaterialNo(), bo.getNum());
+        int addResult = pickHeadMapper.addPickNum(pickHeadId,bo.getMaterialNo(), bo.getNum());
         //3.查看扫码的PID是否在推荐的库位标签表中是否存在推荐的PID,存在则更新拣货标签表中的是否推荐标志位
         List<String> reList = pickHeadMapper.queryReOnlyPid(pickHeadId);
         boolean flagOne = reList.contains(packageId);
@@ -210,11 +217,8 @@ public class PickManageServiceImpl implements IPickManageService {
         pickLabelPo.setRecommend(recommend);
         pickLabelPo.setCreateTime(new Date());
         int insertResult = pickHeadMapper.insertPickLabel(pickLabelPo);
-
-
         int flagTwo = pickHeadMapper.judgeIsPick(pickHeadId);
         int result = (flagTwo==1) ? pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_PICK) : 0;
-
         return ResultVO.ok().setData(ScanOutVO.convert(bo));
     }
 
@@ -278,6 +282,11 @@ public class PickManageServiceImpl implements IPickManageService {
     @Transactional(rollbackFor = Exception.class)
     public ResultVO deleteScanPid(Long pickHeadId, Long printLabelId){
         int result = pickHeadMapper.deleteScanPid(pickHeadId,printLabelId);
+        // 删除的时候需要将已拣货量相应的减去
+        PrintLabelPO po = printLabelMapper.selectByPrimaryKey(printLabelId);
+        String materialNo = po.getMaterialNo();
+        Integer num = po.getNum();
+        int resultDe = pickHeadMapper.updatePickNum(pickHeadId,num,materialNo);
         int flag = pickHeadMapper.judgeIsPick(pickHeadId);
         int resultStatus = (flag==1) ? pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_PICK) : 0;
         return ResultVO.ok();
@@ -375,4 +384,6 @@ public class PickManageServiceImpl implements IPickManageService {
         int result = pickHeadMapper.updateStatus(pickHeadId,OutboundConstant.MATERIAL_STATUS_STORAGE);
         return ResultVO.ok();
     }
+
+
 }

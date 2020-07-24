@@ -97,14 +97,5 @@ public class MaterialOutboundController {
     }
 
 
-    @RequestMapping("outOrderCheck")
-    public ResultVO outOrderCheck(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                                  @RequestParam(value = "pageSize", defaultValue = "100000000") int pageSize,
-                                  @RequestParam(value = "pno",required = false) String pickNo,
-                                  @RequestParam(value = "cproject",required = false) String correspondProject){
-        Map<String, Object> reqData = new HashMap<>(2);
-        reqData.put("pickNo", pickNo);
-        reqData.put("correspondProject", correspondProject);
-        return materialOutboundService.outOrderCheck(pageNum, pageSize,reqData);
-    }
+
 }

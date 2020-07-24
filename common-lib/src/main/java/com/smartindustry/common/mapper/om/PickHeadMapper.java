@@ -1,6 +1,7 @@
 package com.smartindustry.common.mapper.om;
 
 import com.smartindustry.common.bo.om.MaterialBO;
+import com.smartindustry.common.bo.om.OutboundBO;
 import com.smartindustry.common.bo.om.PickHeadBO;
 import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.mapper.BaseMapper;
@@ -87,7 +88,7 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
      * @param pickNum
      * @return
      */
-    int addPickNum(@Param("materialNo") String materialNo,@Param("pickNum") Integer pickNum);
+    int addPickNum(@Param("pickHeadId") Long pickHeadId,@Param("materialNo") String materialNo,@Param("pickNum") Integer pickNum);
 
     /**
      * 更新拣货标签表中的所有信息
@@ -213,4 +214,22 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
      * @return
      */
     Integer judgePidInPhid(@Param("printLabelId") Long printLabelId);
+
+    /**
+     * 欠料出库单审核的查询
+     * @param reqData
+     * @return
+     */
+    List<PickHeadPO> outOrderCheck(Map<String, Object> reqData);
+
+    /**
+     * 在扫码列表中删除一个pid时，相应的已拣货量需要更新
+     * @param printLabelId
+     * @param num
+     * @param materialNo
+     * @return
+     */
+    int updatePickNum(@Param("printLabelId") Long printLabelId,
+                      @Param("num") Integer num,
+                      @Param("materialNo") String materialNo);
 }

@@ -29,10 +29,5 @@ public interface OutboundMapper extends BaseMapper<OutboundPO, Long> {
      */
     OutboundBO queryByOid(Long oId);
 
-    /**
-     * 欠料出库单审核的查询
-     * @param reqData
-     * @return
-     */
-    List<OutboundBO> outOrderCheck(Map<String, Object> reqData);
+
 }
