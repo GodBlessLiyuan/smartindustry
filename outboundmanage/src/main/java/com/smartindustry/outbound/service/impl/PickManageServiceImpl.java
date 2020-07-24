@@ -226,11 +226,6 @@ public class PickManageServiceImpl implements IPickManageService {
     @Transactional(rollbackFor = Exception.class)
     public ResultVO packageIdDiv(Long printLabelId,Integer num){
 
-        //判断当前PID的是否已在某工单拣货单扫码列表中
-        Integer resultIn = pickHeadMapper.judgePidInPhid(printLabelId);
-        if (resultIn != null){
-            return new ResultVO(2024);
-        }
         //(2) 将扫描的pid的dr值设为2，并且按照分料数量分成两个pid
         PrintLabelPO po = printLabelMapper.selectByPrimaryKey(printLabelId);
         PrintLabelPO poDivOne = new PrintLabelPO();
@@ -267,6 +262,11 @@ public class PickManageServiceImpl implements IPickManageService {
         if (bo == null){
             // PID不存在
             return new ResultVO(2040);
+        }
+        //判断当前PID的是否已在某工单拣货单扫码列表中
+        Integer resultIn = pickHeadMapper.judgePidInPhid(packageId);
+        if (resultIn != null){
+            return new ResultVO(2024);
         }
         return ResultVO.ok().setData(ScanOutVO.convert(bo));
     }

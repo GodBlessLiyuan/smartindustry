@@ -438,7 +438,7 @@
         from om_pick_head ph
         left join om_pick_label pl on ph.pick_head_id = pl.pick_head_id
         left join si_print_label spl on pl.print_label_id = spl.print_label_id
-        where spl.print_label_id = #{printLabelId}
+        where spl.package_id = #{packageId}
         limit 1
     </select>
 
