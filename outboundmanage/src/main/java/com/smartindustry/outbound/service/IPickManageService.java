@@ -24,6 +24,15 @@ public interface IPickManageService {
     ResultVO pageQueryPickHead(int pageNum, int pageSize, Map<String, Object> reqMap);
 
     /**
+     * 查看成品拣货单
+     * @param pageNum
+     * @param pageSize
+     * @param reqMap
+     * @return
+     */
+    ResultVO queryPickGoods(int pageNum, int pageSize, Map<String, Object> reqMap);
+
+    /**
      * 根据工单拣货通知单的编号查询所有的物料现状(需求数，已扫描数，欠料数)
      *
      * @param reqMap
@@ -138,5 +147,12 @@ public interface IPickManageService {
      * @return
      */
     ResultVO disAgree(Long pickHeadId,Byte status,String message);
+
+    /**
+     * 欠料同意出库
+     * @param pickHeadId
+     * @return
+     */
+    ResultVO agreeOutBound(Long pickHeadId);
 
 }

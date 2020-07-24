@@ -169,7 +169,7 @@
         select
         <include refid="Base_Column_List"/>
         from om_pick_head ph
-        where ph.dr = 1
+        where ph.dr = 1 and ph.order_type = 1
         <if test="materialStatus != null and materialStatus != 0">
             and ph.material_status = #{materialStatus}
         </if>
@@ -185,6 +185,26 @@
         order by ph.create_time desc
     </select>
 
+<!--    查看成品拣货单-->
+    <select id="queryPickGoods" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from om_pick_head ph
+        where ph.dr = 1 and ph.order_type = 2
+        <if test="materialStatus != null and materialStatus != 0">
+            and ph.material_status = #{materialStatus}
+        </if>
+        <if test="pickNo != null and pickNo != ''">
+            and ph.pick_no like concat('%',#{pickNo,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="orderNo != null and orderNo != ''">
+            and ph.order_no like concat('%',#{orderNo,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="correspondProject != null and correspondProject != ''">
+            and ph.correspond_project like concat('%',#{correspondProject,jdbcType=VARCHAR},'%')
+        </if>
+        order by ph.create_time desc
+    </select>
     <!--    扫码拣货-->
     <select id="pickPid" parameterType="java.lang.String"
             resultType="com.smartindustry.common.bo.si.PrintLabelBO">
@@ -342,12 +362,17 @@
         where ph.pick_head_id = #{pickHeadId}
     </update>
 
+    <update id="updateOutStatus">
+        update om_pick_head ph
+        set ph.outbound_status = #{outboundStatus}
+        where ph.pick_head_id = #{pickHeadId}
+    </update>
+
 <!--    查询当前工单号是否是异常列表，欠料情况，不欠料出库-->
     <select id="judgeIsEx" parameterType="java.lang.Long" resultType="java.lang.Integer">
         select 1
         from om_pick_head ph
         left join om_pick_label pl on ph.pick_head_id = pl.pick_head_id
-        where ph.pick_head_id = #{pickHeadId} and pl.recommend = 2
         where ph.pick_head_id = #{pickHeadId} and pl.recommend = 2
         limit 1
     </select>
@@ -400,4 +425,6 @@
         where spl.print_label_id = #{printLabelId}
         limit 1
     </select>
+
 </mapper>
+

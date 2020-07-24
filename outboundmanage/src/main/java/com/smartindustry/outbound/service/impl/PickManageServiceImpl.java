@@ -60,6 +60,13 @@ public class PickManageServiceImpl implements IPickManageService {
     }
 
     @Override
+    public ResultVO queryPickGoods(int pageNum, int pageSize, Map<String, Object> reqMap) {
+        Page<PickHeadPO> page = PageHelper.startPage(pageNum, pageSize);
+        List<PickHeadPO> vos = pickHeadMapper.queryPickGoods(reqMap);
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), PickHeadVO.convert(vos)));
+    }
+
+    @Override
     public ResultVO queryByPhId(Long pickHeadId) {
         PickHeadPO po = pickHeadMapper.selectByPrimaryKey(pickHeadId);
         return ResultVO.ok().setData(PickHeadVO.convert(po));
@@ -336,6 +343,7 @@ public class PickManageServiceImpl implements IPickManageService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public  ResultVO disAgree(Long pickHeadId,Byte status,String message){
         PickCheckPO po = new PickCheckPO();
         po.setPickHeadId(pickHeadId);
@@ -356,6 +364,15 @@ public class PickManageServiceImpl implements IPickManageService {
             po.setStatus((byte)2);
             int resultUp = pickCheckMapper.updateByPrimaryKey(po);
         }
+        return ResultVO.ok();
+    }
+
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public ResultVO agreeOutBound(Long pickHeadId){
+        // 欠料出库，将物料状态改成“物料出库”
+        int result = pickHeadMapper.updateStatus(pickHeadId,OutboundConstant.MATERIAL_STATUS_STORAGE);
         return ResultVO.ok();
     }
 }
