@@ -26,31 +26,11 @@ public class MaterialOutboundController {
     /**
      * 分页查询
      *
-     * @param pageNum  页号
-     * @param pageSize 页大小
-     * @param ono      出库单号
-     * @param pno      拣货单号
-     * @param cproject 对应项目
-     * @param status   出库状态
-     * @param otype    出库单类型
      * @return
      */
-    @RequestMapping("pageQuery")
-    public ResultVO pageQuery(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                              @RequestParam(value = "pageSize", defaultValue = "100000000") int pageSize,
-                              @RequestParam(value = "ono", required = false, defaultValue = "") String ono,
-                              @RequestParam(value = "pno", required = false, defaultValue = "") String pno,
-                              @RequestParam(value = "cproject", required = false, defaultValue = "") String cproject,
-                              @RequestParam(value = "status", required = false, defaultValue = "0") Byte status,
-                              @RequestParam(value = "otype") Byte otype) {
-        Map<String, Object> reqData = new HashMap<>(5);
-        reqData.put("ono", ono);
-        reqData.put("pno", pno);
-        reqData.put("cproject", cproject);
-        reqData.put("status", status);
-        reqData.put("otype", otype);
-
-        return materialOutboundService.pageQuery(pageNum, pageSize, reqData);
+    @PostMapping("pageQuery")
+    public ResultVO pageQuery(@RequestBody Map<String, Object> reqData) {
+        return materialOutboundService.pageQuery(reqData);
     }
 
     @RequestMapping("detail")
@@ -95,7 +75,6 @@ public class MaterialOutboundController {
     public ResultVO upload(@Param("file") MultipartFile file) {
         return materialOutboundService.upload(file);
     }
-
 
 
 }

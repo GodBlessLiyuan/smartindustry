@@ -1,9 +1,7 @@
 package com.smartindustry.outbound.service.impl;
 
 import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import com.smartindustry.common.bo.om.LogisticsRecordBO;
-import com.smartindustry.common.bo.om.MaterialBO;
 import com.smartindustry.common.bo.om.OutboundBO;
 import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.config.FilePathConfig;
@@ -13,12 +11,16 @@ import com.smartindustry.common.pojo.om.OutboundPO;
 import com.smartindustry.common.pojo.om.OutboundRecordPO;
 import com.smartindustry.common.pojo.om.PickHeadPO;
 import com.smartindustry.common.util.FileUtil;
+import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.constant.OutboundConstant;
 import com.smartindustry.outbound.dto.LogisticsRecordDTO;
 import com.smartindustry.outbound.service.IMaterialOutboundService;
-import com.smartindustry.outbound.vo.*;
+import com.smartindustry.outbound.vo.LogisticsRecordVO;
+import com.smartindustry.outbound.vo.OutboundDetailVO;
+import com.smartindustry.outbound.vo.OutboundRecordVO;
+import com.smartindustry.outbound.vo.OutboundVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -55,8 +57,8 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
     private FilePathConfig filePathConfig;
 
     @Override
-    public ResultVO pageQuery(int pageNum, int pageSize, Map<String, Object> reqData) {
-        Page<OutboundBO> page = PageHelper.startPage(pageNum, pageSize);
+    public ResultVO pageQuery(Map<String, Object> reqData) {
+        Page<OutboundBO> page = PageQueryUtil.startPage(reqData);
         List<OutboundBO> bos = outboundMapper.pageQuery(reqData);
 
         return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), OutboundVO.convert(bos)));

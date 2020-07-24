@@ -62,7 +62,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
         if (!ReceiptConstant.RECEIPT_IQC_DETECT.equals(status) && !ReceiptConstant.RECEIPT_QE_DETECT.equals(status) && !ReceiptConstant.RECEIPT_QE_CONFIRM.equals(status)) {
             return new ResultVO(1001);
         }
-        
+
         // 质量管理 分页查询查询
         reqData.put("qa", true);
         Page<ReceiptBO> page = PageQueryUtil.startPage(reqData);
