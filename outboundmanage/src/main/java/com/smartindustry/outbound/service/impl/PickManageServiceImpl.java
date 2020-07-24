@@ -385,6 +385,7 @@ public class PickManageServiceImpl implements IPickManageService {
     public ResultVO agreeOutBound(Long pickHeadId){
         // 欠料出库，将物料状态改成“物料出库”
         int result = pickHeadMapper.updateStatus(pickHeadId,OutboundConstant.MATERIAL_STATUS_STORAGE);
+        // 形成出库单
         OutboundPO po = new OutboundPO();
         po.setPickHeadId(pickHeadId);
         Date date = new Date();
@@ -395,6 +396,4 @@ public class PickManageServiceImpl implements IPickManageService {
         int resultIn= outboundMapper.insert(po);
         return ResultVO.ok();
     }
-
-
 }
