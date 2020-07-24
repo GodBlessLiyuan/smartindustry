@@ -328,7 +328,7 @@ public class PickManageServiceImpl implements IPickManageService {
             int resultUp = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_CHECK);
             PickCheckPO po = new PickCheckPO();
             po.setPickHeadId(pickHeadId);
-            po.setStatus((byte)3);
+            po.setStatus(OutboundConstant.OUTBOUND_STATUS_WAIT);
             int resultIn = pickCheckMapper.insert(po);
             statusCode = 1;
         }else {
@@ -337,7 +337,7 @@ public class PickManageServiceImpl implements IPickManageService {
             po.setPickHeadId(pickHeadId);
             Date date = new Date();
             po.setOutboundNo(OmNoUtil.getOutboundNo(outboundMapper, OmNoUtil.OUTBOUND, date));
-            po.setStatus((byte)3);
+            po.setStatus(OutboundConstant.OUTBOUND_STATUS_WAIT);
             po.setCreateTime(date);
             po.setDr((byte)1);
             int result = outboundMapper.insert(po);
@@ -349,6 +349,16 @@ public class PickManageServiceImpl implements IPickManageService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO deleteSplit(String packageId){
+        //如果当前pid的关联子pid已经被使用，那么子pid不能被删除
+        // 查询当前PID的子pid
+        List<String> list = pickHeadMapper.queryChildPid(packageId);
+        //判断当前PID的是否已在某工单拣货单扫码列表中
+        for(String pid:list){
+            Integer resultInOne = pickHeadMapper.judgePidInPhid(pid);
+            if (resultInOne != null){
+                return new ResultVO(2316);
+            }
+        }
         int resultDe = pickHeadMapper.deletePid(packageId);
         int resultRe = pickHeadMapper.resumePid(packageId);
         return ResultVO.ok();
@@ -363,17 +373,17 @@ public class PickManageServiceImpl implements IPickManageService {
         if (status == null){
             //OQC检测时的驳回
             int result = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_RETURN);
-            po.setStatus((byte)2);
+            po.setStatus(OutboundConstant.TURN_DOWN_CANCEL);
             int resultUp = pickCheckMapper.updateByPrimaryKey(po);
         }else if (status.equals(OutboundConstant.MATERIAL_STATUS_WAIT)){
             //等齐套发货
             int result = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_WAIT);
-            po.setStatus((byte)4);
+            po.setStatus(OutboundConstant.PENDING_WAIT);
             int resultUp = pickCheckMapper.updateByPrimaryKey(po);
         }else if(status.equals(OutboundConstant.MATERIAL_STATUS_RETURN)){
             //取消发货，退货仓库
             int result = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_RETURN);
-            po.setStatus((byte)2);
+            po.setStatus(OutboundConstant.TURN_DOWN_CANCEL);
             int resultUp = pickCheckMapper.updateByPrimaryKey(po);
         }
         return ResultVO.ok();
@@ -390,7 +400,7 @@ public class PickManageServiceImpl implements IPickManageService {
         po.setPickHeadId(pickHeadId);
         Date date = new Date();
         po.setOutboundNo(OmNoUtil.getOutboundNo(outboundMapper, OmNoUtil.OUTBOUND, date));
-        po.setStatus((byte)3);
+        po.setStatus(OutboundConstant.OUTBOUND_STATUS_WAIT);
         po.setCreateTime(date);
         po.setDr((byte)1);
         int resultIn= outboundMapper.insert(po);
