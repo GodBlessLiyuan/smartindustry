@@ -26,6 +26,13 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
     List<PickHeadPO> pageQueryPickHeadMsg(Map<String, Object> reqMap);
 
     /**
+     * 成品拣货单查看
+     * @param reqMap
+     * @return
+     */
+    List<PickHeadPO> queryPickGoods(Map<String, Object> reqMap);
+
+    /**
      * 根据工单拣货单号和PID扫码出库
      * @param packageId
      * @return
@@ -131,6 +138,14 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
      * @return
      */
     int updateStatus(@Param("pickHeadId") Long pickHeadId,@Param("materialStatus") Byte materialStatus);
+
+    /**
+     * 更新出库状态
+     * @param pickHeadId
+     * @param outboundStatus
+     * @return
+     */
+    int updateOutStatus(@Param("pickHeadId") Long pickHeadId,@Param("outboundStatus") Byte outboundStatus);
 
     /**
      * 判断当前的工单物料状态是不是物料拣货状态

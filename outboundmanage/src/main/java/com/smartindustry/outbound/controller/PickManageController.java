@@ -48,6 +48,21 @@ public class PickManageController {
         return pickManageService.pageQueryPickHead(pageNum, pageSize, reqData);
     }
 
+    @RequestMapping("queryPickGoods")
+    public ResultVO queryPickGoods(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                                     @RequestParam(value = "pageSize", defaultValue = "100000000") int pageSize,
+                                     @RequestParam(value = "pno", required = false) String pickNo,
+                                     @RequestParam(value = "ono", required = false) String orderNo,
+                                     @RequestParam(value = "cproject", required = false) String correspondProject,
+                                     @RequestParam(value = "mstatus", defaultValue = "") Byte materialStatus) {
+        Map<String, Object> reqData = new HashMap<>(4);
+        reqData.put("pickNo", pickNo);
+        reqData.put("orderNo", orderNo);
+        reqData.put("correspondProject", correspondProject);
+        reqData.put("materialStatus", materialStatus);
+        return pickManageService.queryPickGoods(pageNum, pageSize, reqData);
+    }
+
     /**
      * 扫描拣货的欠料列表
      *
@@ -160,4 +175,8 @@ public class PickManageController {
         return pickManageService.disAgree(pickHeadId,status,message);
     }
 
+    @RequestMapping("agreeOutBound")
+    public ResultVO agreeOutBound(@RequestParam(value = "phid", required = false) Long pickHeadId){
+        return pickManageService.agreeOutBound(pickHeadId);
+    }
 }
