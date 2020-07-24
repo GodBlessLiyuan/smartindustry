@@ -2,6 +2,7 @@ package com.smartindustry.storage.controller;
 
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.dto.LogisticsDTO;
+import com.smartindustry.storage.dto.OperateDTO;
 import com.smartindustry.storage.dto.ReceiptDTO;
 import com.smartindustry.storage.service.IReceiptManageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +34,8 @@ public class ReceiptManageController {
         return receiptManageService.insert(dto);
     }
 
-    @RequestMapping("delete")
-    public ResultVO delete(@RequestParam(value = "rbids[]") List<Long> rbIds) {
+    @PostMapping("delete")
+    public ResultVO delete(@RequestBody List<Long> rbIds) {
         return receiptManageService.delete(rbIds);
     }
 
@@ -43,9 +44,9 @@ public class ReceiptManageController {
         return receiptManageService.editLog(dto);
     }
 
-    @RequestMapping("record")
-    public ResultVO record(@RequestParam(value = "rbid") Long rbId, @RequestParam(value = "status", required = false, defaultValue = "1") Byte status) {
-        return receiptManageService.record(rbId, status);
+    @PostMapping("record")
+    public ResultVO record(@RequestBody OperateDTO dto) {
+        return receiptManageService.record(dto);
     }
 
     @PostMapping("materialQuery")

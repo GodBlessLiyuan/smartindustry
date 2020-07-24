@@ -216,7 +216,7 @@
         left join sm_receipt_label rl on pl.print_label_id = rl.print_label_id
         where rl.receipt_body_id = #{rbid,jdbcType=BIGINT}
         and pl.dr = 1
-        <if test="status">
+        <if test="status != null and status == 2">
             and pl.relate_label_id is not null
         </if>
         order by pl.create_time desc, pl.print_label_id desc

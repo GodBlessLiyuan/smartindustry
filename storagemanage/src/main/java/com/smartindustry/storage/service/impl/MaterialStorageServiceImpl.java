@@ -16,6 +16,7 @@ import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.ReceiptConstant;
+import com.smartindustry.storage.dto.OperateDTO;
 import com.smartindustry.storage.dto.StorageDetailDTO;
 import com.smartindustry.storage.dto.StorageGroupDTO;
 import com.smartindustry.storage.service.IMaterialStorageService;
@@ -28,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.*;
 
@@ -68,8 +70,8 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
     }
 
     @Override
-    public ResultVO location(String lno) {
-        LocationPO locationPO = storageLocationMapper.selectByPrimaryKey(lno);
+    public ResultVO location(@RequestBody OperateDTO dto) {
+        LocationPO locationPO = storageLocationMapper.selectByPrimaryKey(dto.getLno());
         if (null == locationPO) {
             return new ResultVO(1002);
         }
@@ -302,8 +304,8 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public ResultVO storage(Long sid) {
-        StoragePO storagePO = storageMapper.selectByPrimaryKey(sid);
+    public ResultVO storage(@RequestBody OperateDTO dto) {
+        StoragePO storagePO = storageMapper.selectByPrimaryKey(dto.getSid());
         if (null == storagePO) {
             return new ResultVO(1002);
         }
@@ -348,14 +350,14 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         storageLabelMapper.batchInsert(storageLabelPOs);
 
         // 操作记录
-        recordMapper.insert(new StorageRecordPO(sid, storagePO.getStorageId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_CONFIRM, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
+        recordMapper.insert(new StorageRecordPO(dto.getSid(), storagePO.getStorageId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_CONFIRM, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
 
         return ResultVO.ok();
     }
 
     @Override
-    public ResultVO detail(Long sid) {
-        StoragePO storagePO = storageMapper.selectByPrimaryKey(sid);
+    public ResultVO detail(@RequestBody OperateDTO dto) {
+        StoragePO storagePO = storageMapper.selectByPrimaryKey(dto.getSid());
         if (null == storagePO) {
             return new ResultVO(1002);
         }
@@ -370,9 +372,9 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
     }
 
     @Override
-    public ResultVO record(Long sid) {
+    public ResultVO record(@RequestBody OperateDTO dto) {
         Map<String, Object> res = new HashMap<>();
-        List<StorageRecordPO> recordPOs = recordMapper.queryBySid(sid);
+        List<StorageRecordPO> recordPOs = recordMapper.queryBySid(dto.getSid());
         res.put("record", RecordVO.convert(recordPOs));
         return ResultVO.ok().setData(res);
     }

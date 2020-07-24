@@ -3,6 +3,7 @@ package com.smartindustry.storage.controller;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.ReceiptConstant;
 import com.smartindustry.storage.dto.IqcTestDTO;
+import com.smartindustry.storage.dto.OperateDTO;
 import com.smartindustry.storage.dto.QeConfirmDTO;
 import com.smartindustry.storage.dto.QeTestDTO;
 import com.smartindustry.storage.service.IQualityManageService;
@@ -44,13 +45,13 @@ public class QualityManageController {
         return qualityManageService.qeTest(dto);
     }
 
-    @RequestMapping("storage")
-    public ResultVO storage(@RequestParam(value = "rbid") Long rbid) {
-        return qualityManageService.storage(rbid);
+    @PostMapping("storage")
+    public ResultVO storage(@RequestBody OperateDTO dto) {
+        return qualityManageService.storage(dto);
     }
 
-    @RequestMapping("record")
-    public ResultVO record(@RequestParam(value = "rbid") Long rbid, @RequestParam(value = "status") Byte status) {
-        return qualityManageService.record(rbid, status);
+    @PostMapping("record")
+    public ResultVO record(@RequestBody OperateDTO dto) {
+        return qualityManageService.record(dto);
     }
 }

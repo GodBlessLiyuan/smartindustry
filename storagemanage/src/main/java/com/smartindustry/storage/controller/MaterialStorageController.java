@@ -1,6 +1,7 @@
 package com.smartindustry.storage.controller;
 
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.storage.dto.OperateDTO;
 import com.smartindustry.storage.dto.StorageDetailDTO;
 import com.smartindustry.storage.dto.StorageGroupDTO;
 import com.smartindustry.storage.service.IMaterialStorageService;
@@ -32,9 +33,9 @@ public class MaterialStorageController {
         return materialStorageService.pageQuery(reqData);
     }
 
-    @RequestMapping("location")
-    public ResultVO location(@RequestParam(value = "lno") String lno) {
-        return materialStorageService.location(lno);
+    @PostMapping("location")
+    public ResultVO location(@RequestBody OperateDTO dto) {
+        return materialStorageService.location(dto);
     }
 
     @PostMapping("label")
@@ -57,18 +58,18 @@ public class MaterialStorageController {
         return materialStorageService.save(dto);
     }
 
-    @RequestMapping("storage")
-    public ResultVO storage(@RequestParam(value = "sid") Long sid) {
-        return materialStorageService.storage(sid);
+    @PostMapping("storage")
+    public ResultVO storage(@RequestBody OperateDTO dto) {
+        return materialStorageService.storage(dto);
     }
 
-    @RequestMapping("detail")
-    public ResultVO detail(@RequestParam("sid") Long sid) {
-        return materialStorageService.detail(sid);
+    @PostMapping("detail")
+    public ResultVO detail(@RequestBody OperateDTO dto) {
+        return materialStorageService.detail(dto);
     }
 
-    @RequestMapping("record")
-    public ResultVO record(@RequestParam(value = "sid") Long sid) {
-        return materialStorageService.record(sid);
+    @PostMapping("record")
+    public ResultVO record(@RequestBody OperateDTO dto) {
+        return materialStorageService.record(dto);
     }
 }

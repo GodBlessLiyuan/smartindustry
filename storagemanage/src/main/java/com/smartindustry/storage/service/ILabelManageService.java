@@ -2,7 +2,9 @@ package com.smartindustry.storage.service;
 
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.dto.LabelSplitDTO;
+import com.smartindustry.storage.dto.OperateDTO;
 import com.smartindustry.storage.dto.PrintLabelDTO;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * @author: xiahui
@@ -14,36 +16,34 @@ public interface ILabelManageService {
     /**
      * 查询
      *
-     * @param rbId
+     * @param dto
      * @return
      */
-    ResultVO query(Long rbId, Boolean status);
+    ResultVO query(@RequestBody OperateDTO dto);
 
     /**
      * 根据 PID 查询
      *
-     * @param rbId
-     * @param pid
+     * @param dto
      * @return
      */
-    ResultVO queryPid(Long rbId, String pid);
+    ResultVO queryPid(@RequestBody OperateDTO dto);
 
     /**
      * 打印
      *
-     * @param pid
+     * @param dto
      * @return
      */
-    ResultVO print(String pid, Byte status);
+    ResultVO print(@RequestBody OperateDTO dto);
 
     /**
      * 重新打印
      *
-     * @param plId
-     * @param num
+     * @param dto
      * @return
      */
-    ResultVO reprint(Long plId, Integer num);
+    ResultVO reprint(OperateDTO dto);
 
     /**
      * 标签录入
@@ -56,18 +56,18 @@ public interface ILabelManageService {
     /**
      * 删除
      *
-     * @param plId
+     * @param dto
      * @return
      */
-    ResultVO delete(Long rbId, Long plId);
+    ResultVO delete(@RequestBody OperateDTO dto);
 
     /**
      * 录入完成
      *
-     * @param rbId
+     * @param dto
      * @return
      */
-    ResultVO finish(Long rbId);
+    ResultVO finish(@RequestBody OperateDTO dto);
 
     /**
      * 标签拆分

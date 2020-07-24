@@ -1,8 +1,10 @@
 package com.smartindustry.storage.service;
 
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.storage.dto.OperateDTO;
 import com.smartindustry.storage.dto.StorageDetailDTO;
 import com.smartindustry.storage.dto.StorageGroupDTO;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Map;
 
@@ -24,10 +26,10 @@ public interface IMaterialStorageService {
     /**
      * 库位查询
      *
-     * @param lno
+     * @param dto
      * @return
      */
-    ResultVO location(String lno);
+    ResultVO location(@RequestBody OperateDTO dto);
 
     /**
      * 打印标签查询
@@ -66,7 +68,7 @@ public interface IMaterialStorageService {
      * @param sid
      * @return
      */
-    ResultVO storage(Long sid);
+    ResultVO storage(@RequestBody OperateDTO dto);
 
     /**
      * 详情
@@ -74,7 +76,7 @@ public interface IMaterialStorageService {
      * @param sid
      * @return
      */
-    ResultVO detail(Long sid);
+    ResultVO detail(@RequestBody OperateDTO dto);
 
     /**
      * 查询操作记录
@@ -82,5 +84,5 @@ public interface IMaterialStorageService {
      * @param sid
      * @return
      */
-    ResultVO record(Long sid);
+    ResultVO record(@RequestBody OperateDTO dto);
 }

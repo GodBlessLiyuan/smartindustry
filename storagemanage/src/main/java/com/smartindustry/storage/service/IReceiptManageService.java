@@ -2,6 +2,7 @@ package com.smartindustry.storage.service;
 
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.dto.LogisticsDTO;
+import com.smartindustry.storage.dto.OperateDTO;
 import com.smartindustry.storage.dto.ReceiptDTO;
 
 import java.util.List;
@@ -49,10 +50,10 @@ public interface IReceiptManageService {
     /**
      * 查询操作记录
      *
-     * @param rbId
+     * @param dto
      * @return
      */
-    ResultVO record(Long rbId, Byte status);
+    ResultVO record(OperateDTO dto);
 
     /**
      * 物料查询

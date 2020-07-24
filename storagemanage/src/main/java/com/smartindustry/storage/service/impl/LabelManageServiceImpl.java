@@ -11,6 +11,7 @@ import com.smartindustry.common.pojo.sm.*;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.ReceiptConstant;
 import com.smartindustry.storage.dto.LabelSplitDTO;
+import com.smartindustry.storage.dto.OperateDTO;
 import com.smartindustry.storage.dto.PrintLabelDTO;
 import com.smartindustry.storage.service.ILabelManageService;
 import com.smartindustry.storage.util.ReceiptNoUtil;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronizationAdapter;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,14 +54,14 @@ public class LabelManageServiceImpl implements ILabelManageService {
     private LabelRecordMapper labelRecordMapper;
 
     @Override
-    public ResultVO query(Long rbId, Boolean status) {
-        List<PrintLabelPO> pos = printLabelMapper.queryByReceiptBodyId(rbId, status);
+    public ResultVO query(@RequestBody OperateDTO dto) {
+        List<PrintLabelPO> pos = printLabelMapper.queryByReceiptBodyId(dto.getRbid(), dto.getStatus());
         return ResultVO.ok().setData(PrintLabelVO.convert(pos));
     }
 
     @Override
-    public ResultVO queryPid(Long rbId, String pid) {
-        PrintLabelPO po = printLabelMapper.queryByRbidAndPid(rbId, pid);
+    public ResultVO queryPid(@RequestBody OperateDTO dto) {
+        PrintLabelPO po = printLabelMapper.queryByRbidAndPid(dto.getRbid(), dto.getPid());
         if (null == po) {
             return new ResultVO(1002);
         }
@@ -70,14 +72,14 @@ public class LabelManageServiceImpl implements ILabelManageService {
     }
 
     @Override
-    public ResultVO print(String pid, Byte status) {
-        PrintLabelPO labelPO = printLabelMapper.queryByPidAndDr(pid, (byte) 1);
+    public ResultVO print(@RequestBody OperateDTO dto) {
+        PrintLabelPO labelPO = printLabelMapper.queryByPidAndDr(dto.getPid(), (byte) 1);
         if (null == labelPO) {
             return new ResultVO(1002);
         }
 
         // 打印记录
-        labelRecordMapper.insert(new LabelRecordPO(labelPO.getPrintLabelId(), 1L, "夏慧", ModuleConstant.STORAGE_MANAGE, status));
+        labelRecordMapper.insert(new LabelRecordPO(labelPO.getPrintLabelId(), 1L, "夏慧", ModuleConstant.STORAGE_MANAGE, dto.getStatus()));
         // TODO: 打印操作
 
         return ResultVO.ok();
@@ -116,18 +118,18 @@ public class LabelManageServiceImpl implements ILabelManageService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public ResultVO delete(Long rbId, Long plId) {
-        ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(rbId);
+    public ResultVO delete(@RequestBody OperateDTO dto) {
+        ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(dto.getRbid());
         if (null == receiptBodyPO) {
             return new ResultVO(1002);
         }
-        PrintLabelPO printLabelPO = printLabelMapper.selectByPrimaryKey(plId);
+        PrintLabelPO printLabelPO = printLabelMapper.selectByPrimaryKey(dto.getPlid());
         if (null == printLabelPO) {
             return new ResultVO(1002);
         }
 
         if (null != printLabelPO.getRelateLabelId()) {
-            PrintLabelPO relateLabelPO = printLabelMapper.queryByRbidAndPid(rbId, printLabelPO.getRelatePackageId());
+            PrintLabelPO relateLabelPO = printLabelMapper.queryByRbidAndPid(dto.getRbid(), printLabelPO.getRelatePackageId());
             if (null == relateLabelPO) {
                 return new ResultVO(1002);
             }
@@ -141,15 +143,15 @@ public class LabelManageServiceImpl implements ILabelManageService {
             return new ResultVO(1003);
         }
 
-        printLabelMapper.deleteByPrimaryKey(plId);
+        printLabelMapper.deleteByPrimaryKey(dto.getPlid());
 
         return ResultVO.ok();
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public ResultVO finish(Long rbId) {
-        ReceiptBodyBO bodyPO = receiptBodyMapper.queryByBodyId(rbId);
+    public ResultVO finish(@RequestBody OperateDTO dto) {
+        ReceiptBodyBO bodyPO = receiptBodyMapper.queryByBodyId(dto.getRbid());
         if (null == bodyPO) {
             return new ResultVO(1002);
         }
@@ -158,7 +160,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
         }
 
         // 打印标签总数
-        List<PrintLabelPO> labelPOs = printLabelMapper.queryByReceiptBodyId(rbId, false);
+        List<PrintLabelPO> labelPOs = printLabelMapper.queryByReceiptBodyId(dto.getRbid(), (byte) 1);
         int labelNum = 0;
         for (PrintLabelPO labelPO : labelPOs) {
             labelNum += labelPO.getNum();
@@ -171,7 +173,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
         if (ReceiptConstant.MATERIAL_TYPE_RAW.equals(bodyPO.getMaterialType())) {
             // 原材料
             IqcDetectPO iqcPO = new IqcDetectPO();
-            iqcPO.setReceiptBodyId(rbId);
+            iqcPO.setReceiptBodyId(dto.getRbid());
             iqcPO.setStatus(ReceiptConstant.IQC_WAIT);
             iqcDetectMapper.insert(iqcPO);
 
@@ -180,7 +182,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
         } else if (ReceiptConstant.MATERIAL_TYPE_SEMI.equals(bodyPO.getMaterialType())) {
             // 半成品/成品
             QeDetectPO qePO = new QeDetectPO();
-            qePO.setReceiptBodyId(rbId);
+            qePO.setReceiptBodyId(dto.getRbid());
             qePO.setStatus(ReceiptConstant.QE_WAIT);
             qeDetectMapper.insert(qePO);
 
@@ -193,16 +195,16 @@ public class LabelManageServiceImpl implements ILabelManageService {
         // 更新收料单状态
         receiptBodyMapper.updateByPrimaryKey(bodyPO);
 
-        recordMapper.insert(new StorageRecordPO(rbId, 1L, "夏慧", ReceiptConstant.RECORD_TYPE_ADD, status));
-        recordMapper.insert(new StorageRecordPO(rbId, 1L, "夏慧", ReceiptConstant.RECORD_TYPE_FINISH, ReceiptConstant.RECEIPT_ENTRY_LABEL));
+        recordMapper.insert(new StorageRecordPO(dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_ADD, status));
+        recordMapper.insert(new StorageRecordPO(dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_FINISH, ReceiptConstant.RECEIPT_ENTRY_LABEL));
 
         return ResultVO.ok();
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public ResultVO reprint(Long plId, Integer num) {
-        PrintLabelPO labelPO = printLabelMapper.selectByPrimaryKey(plId);
+    public ResultVO reprint(OperateDTO dto) {
+        PrintLabelPO labelPO = printLabelMapper.selectByPrimaryKey(dto.getPlid());
         if (null == labelPO) {
             return new ResultVO(1002);
         }
@@ -223,8 +225,8 @@ public class LabelManageServiceImpl implements ILabelManageService {
         List<PrintLabelPO> newPlPOs = new ArrayList<>();
 
         int curNum = ReceiptNoUtil.getLabelNum(printLabelMapper, null, new Date());
-        if (num > 0) {
-            PrintLabelPO newPlPO = PrintLabelPO.buildPO(labelPO, ReceiptNoUtil.genLabelNo(null, new Date(), ++curNum), num, null);
+        if (dto.getNum() > 0) {
+            PrintLabelPO newPlPO = PrintLabelPO.buildPO(labelPO, ReceiptNoUtil.genLabelNo(null, new Date(), ++curNum), dto.getNum(), null);
             printLabelMapper.insert(newPlPO);
 
             rlPO.setReceiptLabelId(null);
@@ -306,7 +308,10 @@ public class LabelManageServiceImpl implements ILabelManageService {
             public void afterCommit() {
                 new Thread(() -> {
                     for (PrintLabelPO plPO : plPOs) {
-                        print(plPO.getPackageId(), status);
+                        OperateDTO dto = new OperateDTO();
+                        dto.setPid(plPO.getPackageId());
+                        dto.setStatus(status);
+                        print(dto);
                     }
                 }).start();
             }

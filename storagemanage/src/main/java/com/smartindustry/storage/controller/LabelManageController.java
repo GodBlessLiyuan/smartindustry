@@ -2,6 +2,7 @@ package com.smartindustry.storage.controller;
 
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.dto.LabelSplitDTO;
+import com.smartindustry.storage.dto.OperateDTO;
 import com.smartindustry.storage.dto.PrintLabelDTO;
 import com.smartindustry.storage.service.ILabelManageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,23 +21,23 @@ public class LabelManageController {
     private ILabelManageService labelManageService;
 
     @RequestMapping("query")
-    public ResultVO query(@RequestParam(value = "rbid") Long rbId, @RequestParam(value = "status", defaultValue = "false") Boolean status) {
-        return labelManageService.query(rbId, status);
+    public ResultVO query(@RequestBody OperateDTO dto) {
+        return labelManageService.query(dto);
     }
 
-    @RequestMapping("queryPid")
-    public ResultVO queryPid(@RequestParam(value = "rbid") Long rbId, @RequestParam(value = "pid") String pid) {
-        return labelManageService.queryPid(rbId, pid);
+    @PostMapping("queryPid")
+    public ResultVO queryPid(@RequestBody OperateDTO dto) {
+        return labelManageService.queryPid(dto);
     }
 
-    @RequestMapping("print")
-    public ResultVO print(@RequestParam(value = "pid") String pid, @RequestParam("status") Byte status) {
-        return labelManageService.print(pid, status);
+    @PostMapping("print")
+    public ResultVO print(@RequestBody OperateDTO dto) {
+        return labelManageService.print(dto);
     }
 
-    @RequestMapping("reprint")
-    public ResultVO reprint(@RequestParam(value = "plid") Long plId, @RequestParam(value = "num") Integer num) {
-        return labelManageService.reprint(plId, num);
+    @PostMapping("reprint")
+    public ResultVO reprint(@RequestBody OperateDTO dto) {
+        return labelManageService.reprint(dto);
     }
 
     @PostMapping("insert")
@@ -44,14 +45,14 @@ public class LabelManageController {
         return labelManageService.insert(dto);
     }
 
-    @RequestMapping("delete")
-    public ResultVO delete(@RequestParam(value = "rbid") Long rbId, @RequestParam(value = "plid") Long plId) {
-        return labelManageService.delete(rbId, plId);
+    @PostMapping("delete")
+    public ResultVO delete(@RequestBody OperateDTO dto) {
+        return labelManageService.delete(dto);
     }
 
-    @RequestMapping("finish")
-    public ResultVO finish(@RequestParam(value = "rbid") Long rbId) {
-        return labelManageService.finish(rbId);
+    @PostMapping("finish")
+    public ResultVO finish(@RequestBody OperateDTO dto) {
+        return labelManageService.finish(dto);
     }
 
     @PostMapping("split")

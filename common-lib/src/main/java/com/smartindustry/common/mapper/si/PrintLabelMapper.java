@@ -19,7 +19,7 @@ public interface PrintLabelMapper extends BaseMapper<PrintLabelPO, Long> {
      * @param rbId
      * @return
      */
-    List<PrintLabelPO> queryByReceiptBodyId(@Param("rbid") Long rbId, @Param("status") Boolean status);
+    List<PrintLabelPO> queryByReceiptBodyId(@Param("rbid") Long rbId, @Param("status") Byte status);
 
     /**
      * 根据 rbid 和 pid 查询

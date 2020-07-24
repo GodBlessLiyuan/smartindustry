@@ -13,6 +13,7 @@ import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.ReceiptConstant;
 import com.smartindustry.storage.dto.IqcTestDTO;
+import com.smartindustry.storage.dto.OperateDTO;
 import com.smartindustry.storage.dto.QeConfirmDTO;
 import com.smartindustry.storage.dto.QeTestDTO;
 import com.smartindustry.storage.service.IQualityManageService;
@@ -24,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.*;
 
@@ -254,41 +256,41 @@ public class QualityManageServiceImpl implements IQualityManageService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public ResultVO storage(Long rbId) {
+    public ResultVO storage(@RequestBody OperateDTO dto) {
         Byte status;    // 操作记录状态
-        IqcDetectPO iqcDetectPO = iqcDetectMapper.selectByPrimaryKey(rbId);
+        IqcDetectPO iqcDetectPO = iqcDetectMapper.selectByPrimaryKey(dto.getRbid());
         if (null != iqcDetectPO) {
             // IQC检验
             if (!ReceiptConstant.IQC_ALLOW.equals(iqcDetectPO.getStatus())) {
                 return new ResultVO(1003);
             }
-            iqcDetectMapper.deleteByPrimaryKey(rbId);
+            iqcDetectMapper.deleteByPrimaryKey(dto.getRbid());
 
             status = ReceiptConstant.RECEIPT_IQC_DETECT;
         } else {
             // QE确认
-            QeConfirmPO qeConfirmPO = qeConfirmMapper.selectByPrimaryKey(rbId);
+            QeConfirmPO qeConfirmPO = qeConfirmMapper.selectByPrimaryKey(dto.getRbid());
             if (null != qeConfirmPO) {
                 if (!ReceiptConstant.QE_FRANCHISE.equals(qeConfirmPO.getStatus()) && !ReceiptConstant.QE_RETURN.equals(qeConfirmPO.getStatus())) {
                     return new ResultVO(1003);
                 }
-                qeConfirmMapper.deleteByPrimaryKey(rbId);
+                qeConfirmMapper.deleteByPrimaryKey(dto.getRbid());
 
                 status = ReceiptConstant.RECEIPT_QE_CONFIRM;
             } else {
                 // QE检验
-                QeDetectPO qeDetectPO = qeDetectMapper.selectByPrimaryKey(rbId);
+                QeDetectPO qeDetectPO = qeDetectMapper.selectByPrimaryKey(dto.getRbid());
                 if (null == qeDetectPO) {
                     return new ResultVO(1002);
                 }
-                qeDetectMapper.deleteByPrimaryKey(rbId);
+                qeDetectMapper.deleteByPrimaryKey(dto.getRbid());
 
                 status = ReceiptConstant.RECEIPT_QE_DETECT;
             }
         }
 
         // 更新物料单
-        ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(rbId);
+        ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(dto.getRbid());
         receiptBodyPO.setStatus(ReceiptConstant.RECEIPT_MATERIAL_STORAGE);
         receiptBodyPO.setStockNum(0);
         receiptBodyMapper.updateByPrimaryKey(receiptBodyPO);
@@ -296,7 +298,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
         if (receiptBodyPO.getGoodNum() > 0) {
             // 良品入库单
             StoragePO storagePO = new StoragePO();
-            storagePO.setReceiptBodyId(rbId);
+            storagePO.setReceiptBodyId(dto.getRbid());
             storagePO.setStorageNo(ReceiptNoUtil.genStorageNo(storageMapper, ReceiptNoUtil.MATERIAL_STORAGE_LPPK, new Date()));
             storagePO.setPendingNum(receiptBodyPO.getGoodNum());
             storagePO.setStoredNum(0);
@@ -306,12 +308,12 @@ public class QualityManageServiceImpl implements IQualityManageService {
             storagePO.setDr((byte) 1);
             storageMapper.insert(storagePO);
 
-            recordMapper.insert(new StorageRecordPO(rbId, storagePO.getStorageId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
+            recordMapper.insert(new StorageRecordPO(dto.getRbid(), storagePO.getStorageId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
         }
         if (receiptBodyPO.getBadNum() > 0) {
             // 非良品入库单
             StoragePO storagePO = new StoragePO();
-            storagePO.setReceiptBodyId(rbId);
+            storagePO.setReceiptBodyId(dto.getRbid());
             storagePO.setStorageNo(ReceiptNoUtil.genStorageNo(storageMapper, ReceiptNoUtil.MATERIAL_STORAGE_BLPK, new Date()));
             storagePO.setPendingNum(receiptBodyPO.getBadNum());
             storagePO.setStoredNum(0);
@@ -321,23 +323,23 @@ public class QualityManageServiceImpl implements IQualityManageService {
             storagePO.setDr((byte) 1);
             storageMapper.insert(storagePO);
 
-            recordMapper.insert(new StorageRecordPO(rbId, storagePO.getStorageId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
+            recordMapper.insert(new StorageRecordPO(dto.getRbid(), storagePO.getStorageId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
         }
 
         // 操作记录
-        recordMapper.insert(new StorageRecordPO(rbId, 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, status));
+        recordMapper.insert(new StorageRecordPO(dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, status));
 
         return ResultVO.ok();
     }
 
     @Override
-    public ResultVO record(Long rbId, Byte status) {
+    public ResultVO record(@RequestBody OperateDTO dto) {
         Map<String, Object> res = new HashMap<>();
         // 打印标签
-        List<LabelRecordBO> labelRecordBOs = labelRecordMapper.queryByReceiptBodyId(rbId, status, ModuleConstant.STORAGE_MANAGE);
+        List<LabelRecordBO> labelRecordBOs = labelRecordMapper.queryByReceiptBodyId(dto.getRbid(), dto.getStatus(), ModuleConstant.STORAGE_MANAGE);
         res.put("print", LabelRecordVO.convert(labelRecordBOs));
         // 操作记录
-        List<StorageRecordPO> recordPOs = recordMapper.queryByReceiptBodyId(rbId, status);
+        List<StorageRecordPO> recordPOs = recordMapper.queryByReceiptBodyId(dto.getRbid(), dto.getStatus());
         res.put("record", RecordVO.convert(recordPOs));
 
         return ResultVO.ok().setData(res);

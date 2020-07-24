@@ -2,8 +2,10 @@ package com.smartindustry.storage.service;
 
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.dto.IqcTestDTO;
+import com.smartindustry.storage.dto.OperateDTO;
 import com.smartindustry.storage.dto.QeConfirmDTO;
 import com.smartindustry.storage.dto.QeTestDTO;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Map;
 
@@ -50,17 +52,16 @@ public interface IQualityManageService {
     /**
      * 生产入库
      *
-     * @param rbId
+     * @param dto
      * @return
      */
-    ResultVO storage(Long rbId);
+    ResultVO storage(@RequestBody OperateDTO dto);
 
     /**
      * 查询记录
      *
-     * @param rbId
-     * @param status
+     * @param dto
      * @return
      */
-    ResultVO record(Long rbId, Byte status);
+    ResultVO record(@RequestBody OperateDTO dto);
 }

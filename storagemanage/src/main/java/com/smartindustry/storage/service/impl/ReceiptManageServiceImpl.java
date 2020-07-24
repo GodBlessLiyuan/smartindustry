@@ -17,10 +17,7 @@ import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.ReceiptConstant;
-import com.smartindustry.storage.dto.LogisticsDTO;
-import com.smartindustry.storage.dto.ReceiptBodyDTO;
-import com.smartindustry.storage.dto.ReceiptDTO;
-import com.smartindustry.storage.dto.ReceiptHeadDTO;
+import com.smartindustry.storage.dto.*;
 import com.smartindustry.storage.service.IReceiptManageService;
 import com.smartindustry.storage.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,19 +99,23 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
     }
 
     @Override
-    public ResultVO record(Long rbId, Byte status) {
+    public ResultVO record(OperateDTO dto) {
+        ReceiptBodyPO bodyPO = receiptBodyMapper.selectByPrimaryKey(dto.getRbid());
+        if (null == bodyPO) {
+            return new ResultVO(1002);
+        }
+
         Map<String, Object> res = new HashMap<>();
         // 操作记录
-        List<StorageRecordPO> recordPOs = recordMapper.queryByReceiptBodyId(rbId, status);
+        List<StorageRecordPO> recordPOs = recordMapper.queryByReceiptBodyId(dto.getRbid(), dto.getStatus());
         res.put("record", RecordVO.convert(recordPOs));
 
         // 物流信息
-        ReceiptBodyPO bodyPO = receiptBodyMapper.selectByPrimaryKey(rbId);
         ReceiptHeadPO headPO = receiptHeadMapper.selectByPrimaryKey(bodyPO.getReceiptHeadId());
         res.put("logistics", LogisticsVO.convert(headPO));
 
         // 打印标签
-        List<LabelRecordBO> labelRecordBOs = labelRecordMapper.queryByReceiptBodyId(rbId, status, ModuleConstant.STORAGE_MANAGE);
+        List<LabelRecordBO> labelRecordBOs = labelRecordMapper.queryByReceiptBodyId(dto.getRbid(), dto.getStatus(), ModuleConstant.STORAGE_MANAGE);
         res.put("print", LabelRecordVO.convert(labelRecordBOs));
 
         return ResultVO.ok().setData(res);
