@@ -463,5 +463,12 @@
         set pb.pick_num = pb.pick_num - #{num}
         where pb.pick_head_id = #{pickHeadId} and pb.material_no = #{materialNo}
     </update>
+    
+<!--    查询给定分料后的PID的关联子pid-->
+    <select id="queryChildPid" parameterType="java.lang.String" resultType="java.lang.String">
+        select pl.package_id as packageId
+        from si_print_label pl
+        where pl.relate_package_id = #{packageId} and pl.dr = 1
+    </select>
 </mapper>
 

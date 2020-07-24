@@ -68,4 +68,31 @@ public class OutboundConstant {
      */
     public static final Byte OUTBOUND_STATUS_WAIT = 3;
 
+    /**
+     * 操作人的操作文案
+     */
+    public static final String CANCEL_DELIVERY = "取消发货";
+    public static final String WAIT_FOR_SHIPMENT = "等齐料发货";
+    public static final String AGREE_TO_RELEASE = "同意";
+    public static final String NEW_INSERT = "新增";
+
+    /**
+     * OQC审核的同意
+     */
+    public static final Byte AGREE = 1;
+    /**
+     * OQC审核的驳回-取消发货，退回仓库
+     */
+    public static final Byte TURN_DOWN_CANCEL = 2;
+    /**
+     * OQC审核的待审核
+     */
+    public static final Byte PENDING = 3;
+    /**
+     * OQC审核的驳回，等齐套发货
+     */
+    public static final Byte PENDING_WAIT = 4;
+
+
+
 }
