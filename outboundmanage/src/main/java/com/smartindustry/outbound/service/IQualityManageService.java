@@ -16,4 +16,14 @@ public interface IQualityManageService {
      * @return
      */
     ResultVO pickOqcButton(Long pickHeadId);
+
+    /**
+     * OQC检测分页查询
+     * @param pageNum
+     * @param pageSize
+     * @param pickNo
+     * @param orderNo
+     * @return
+     */
+    ResultVO queryOqc(int pageNum, int pageSize, String pickNo, String orderNo);
 }

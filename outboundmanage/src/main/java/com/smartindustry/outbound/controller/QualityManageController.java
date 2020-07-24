@@ -23,4 +23,12 @@ public class QualityManageController {
     public ResultVO pickOqcButton(@RequestParam(value = "phid", required = false) Long pickHeadId){
         return qualityManageService.pickOqcButton(pickHeadId);
     }
+
+    @RequestMapping("queryOqc")
+    public ResultVO queryOqc(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                             @RequestParam(value = "pageSize", defaultValue = "100000000") int pageSize,
+                             @RequestParam(value = "pno", required = false) String pickNo,
+                             @RequestParam(value = "ono", required = false) String orderNo){
+        return qualityManageService.queryOqc(pageNum,pageSize,pickNo,orderNo);
+    }
 }
