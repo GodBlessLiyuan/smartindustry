@@ -240,7 +240,8 @@
                pl.num,
                pl.create_time    as createTime,
                m.material_no     as materialNo,
-               m.material_desc   as materialDesc
+               m.material_desc   as materialDesc,
+               pl.dr
         from si_print_label pl
                  left join sm_receipt_label rl on pl.print_label_id = rl.print_label_id
                  left join si_material m on pl.material_no = m.material_no
