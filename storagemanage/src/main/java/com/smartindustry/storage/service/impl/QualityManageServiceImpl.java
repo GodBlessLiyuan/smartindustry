@@ -8,6 +8,7 @@ import com.smartindustry.common.constant.ModuleConstant;
 import com.smartindustry.common.mapper.si.LabelRecordMapper;
 import com.smartindustry.common.mapper.sm.*;
 import com.smartindustry.common.pojo.sm.*;
+import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.ReceiptConstant;
@@ -51,8 +52,14 @@ public class QualityManageServiceImpl implements IQualityManageService {
     private LabelRecordMapper labelRecordMapper;
 
     @Override
-    public ResultVO pageQuery(int pageNum, int pageSize, Map<String, Object> reqData) {
-        Page<ReceiptBO> page = PageHelper.startPage(pageNum, pageSize);
+    public ResultVO pageQuery(Map<String, Object> reqData) {
+        Object status = reqData.get("status");
+        if (null == status || !ReceiptConstant.RECEIPT_IQC_DETECT.equals(status) && !ReceiptConstant.RECEIPT_QE_DETECT.equals(status) && !ReceiptConstant.RECEIPT_QE_CONFIRM.equals(status)) {
+            return new ResultVO(1001);
+        }
+        // 质量管理 分页查询查询
+        reqData.put("qa", true);
+        Page<ReceiptBO> page = PageQueryUtil.startPage(reqData);
         List<ReceiptBO> bos = receiptBodyMapper.pageQuery(reqData);
 
         return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), QualityPageVO.convert(bos)));

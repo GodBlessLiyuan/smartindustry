@@ -17,12 +17,10 @@ public interface IReceiptManageService {
     /**
      * 分页查询
      *
-     * @param pageNum
-     * @param pageSize
      * @param reqData
      * @return
      */
-    ResultVO pageQuery(int pageNum, int pageSize, Map<String, Object> reqData);
+    ResultVO pageQuery(Map<String, Object> reqData);
 
     /**
      * 新增
@@ -59,10 +57,8 @@ public interface IReceiptManageService {
     /**
      * 物料查询
      *
-     * @param pageNum
-     * @param pageSize
      * @param reqData
      * @return
      */
-    ResultVO materialQuery(int pageNum, int pageSize, Map<String, Object> reqData);
+    ResultVO materialQuery(Map<String, Object> reqData);
 }

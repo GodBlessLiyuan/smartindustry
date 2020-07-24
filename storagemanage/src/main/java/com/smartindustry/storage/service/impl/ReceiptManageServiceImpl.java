@@ -13,6 +13,7 @@ import com.smartindustry.common.pojo.si.MaterialPO;
 import com.smartindustry.common.pojo.sm.ReceiptBodyPO;
 import com.smartindustry.common.pojo.sm.ReceiptHeadPO;
 import com.smartindustry.common.pojo.sm.StorageRecordPO;
+import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.ReceiptConstant;
@@ -51,8 +52,8 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
     private MaterialMapper materialMapper;
 
     @Override
-    public ResultVO pageQuery(int pageNum, int pageSize, Map<String, Object> reqData) {
-        Page<ReceiptBO> page = PageHelper.startPage(pageNum, pageSize);
+    public ResultVO pageQuery(Map<String, Object> reqData) {
+        Page<ReceiptBO> page = PageQueryUtil.startPage(reqData);
         List<ReceiptBO> bos = receiptBodyMapper.pageQuery(reqData);
 
         return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), ReceiptPageVO.convert(bos)));
@@ -120,8 +121,8 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
     }
 
     @Override
-    public ResultVO materialQuery(int pageNum, int pageSize, Map<String, Object> reqData) {
-        Page<MaterialPO> page = PageHelper.startPage(pageNum, pageSize);
+    public ResultVO materialQuery(Map<String, Object> reqData) {
+        Page<MaterialPO> page = PageQueryUtil.startPage(reqData);
         List<MaterialPO> pos = materialMapper.pageQuery(reqData);
 
         return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), MaterialPageVO.convert(pos)));

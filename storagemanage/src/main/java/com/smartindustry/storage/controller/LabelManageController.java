@@ -5,10 +5,7 @@ import com.smartindustry.storage.dto.LabelSplitDTO;
 import com.smartindustry.storage.dto.PrintLabelDTO;
 import com.smartindustry.storage.service.ILabelManageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author: xiahui
@@ -42,7 +39,7 @@ public class LabelManageController {
         return labelManageService.reprint(plId, num);
     }
 
-    @RequestMapping("insert")
+    @PostMapping("insert")
     public ResultVO insert(@RequestBody PrintLabelDTO dto) {
         return labelManageService.insert(dto);
     }
@@ -57,7 +54,7 @@ public class LabelManageController {
         return labelManageService.finish(rbId);
     }
 
-    @RequestMapping("split")
+    @PostMapping("split")
     public ResultVO split(@RequestBody LabelSplitDTO dto) {
         return labelManageService.split(dto);
     }

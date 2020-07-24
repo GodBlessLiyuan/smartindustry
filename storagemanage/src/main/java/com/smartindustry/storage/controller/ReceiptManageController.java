@@ -23,22 +23,9 @@ public class ReceiptManageController {
     @Autowired
     private IReceiptManageService receiptManageService;
 
-    @RequestMapping("pageQuery")
-    public ResultVO pageQuery(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                              @RequestParam(value = "pageSize", defaultValue = "100000000") int pageSize,
-                              @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-                              @RequestParam(value = "supplier", required = false, defaultValue = "") String supplier,
-                              @RequestParam(value = "ono", required = false, defaultValue = "") String ono,
-                              @RequestParam(value = "status", required = false, defaultValue = "0") Byte status,
-                              @RequestParam(value = "type") Byte type) {
-        Map<String, Object> reqData = new HashMap<>(8);
-        reqData.put("keyword", keyword);
-        reqData.put("supplier", supplier);
-        reqData.put("ono", ono);
-        reqData.put("status", status);
-        reqData.put("type", type);
-
-        return receiptManageService.pageQuery(pageNum, pageSize, reqData);
+    @PostMapping("pageQuery")
+    public ResultVO pageQuery(@RequestBody Map<String, Object> reqData) {
+        return receiptManageService.pageQuery(reqData);
     }
 
     @PostMapping("insert")
@@ -61,17 +48,8 @@ public class ReceiptManageController {
         return receiptManageService.record(rbId, status);
     }
 
-    @RequestMapping("materialQuery")
-    public ResultVO materialQuery(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                                  @RequestParam(value = "pageSize", defaultValue = "100000000") int pageSize,
-                                  @RequestParam(value = "mno", required = false, defaultValue = "") String mno,
-                                  @RequestParam(value = "mname", required = false, defaultValue = "") String mname,
-                                  @RequestParam(value = "mmodel", required = false, defaultValue = "") String mmodel) {
-        Map<String, Object> reqData = new HashMap<>(4);
-        reqData.put("mno", mno);
-        reqData.put("mname", mname);
-        reqData.put("mmodel", mmodel);
-
-        return receiptManageService.materialQuery(pageNum, pageSize, reqData);
+    @PostMapping("materialQuery")
+    public ResultVO materialQuery(@RequestBody Map<String, Object> reqData) {
+        return receiptManageService.materialQuery(reqData);
     }
 }

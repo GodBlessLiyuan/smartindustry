@@ -12,6 +12,7 @@ import com.smartindustry.common.pojo.si.LocationPO;
 import com.smartindustry.common.pojo.si.PrintLabelPO;
 import com.smartindustry.common.pojo.si.StorageLabelPO;
 import com.smartindustry.common.pojo.sm.*;
+import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.ReceiptConstant;
@@ -59,8 +60,8 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
     private StorageLabelMapper storageLabelMapper;
 
     @Override
-    public ResultVO pageQuery(int pageNum, int pageSize, Map<String, Object> reqData) {
-        Page<StorageBO> page = PageHelper.startPage(pageNum, pageSize);
+    public ResultVO pageQuery(Map<String, Object> reqData) {
+        Page<StorageBO> page = PageQueryUtil.startPage(reqData);
         List<StorageBO> bos = storageMapper.pageQuery(reqData);
 
         return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), StoragePageVO.convert(bos)));

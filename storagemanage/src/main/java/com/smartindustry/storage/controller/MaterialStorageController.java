@@ -5,10 +5,7 @@ import com.smartindustry.storage.dto.StorageDetailDTO;
 import com.smartindustry.storage.dto.StorageGroupDTO;
 import com.smartindustry.storage.service.IMaterialStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,30 +25,11 @@ public class MaterialStorageController {
     /**
      * 入库单 分页查询
      *
-     * @param pageNum  页号
-     * @param pageSize 页大小
-     * @param rno      收料单号
-     * @param rtype    收料类型 0 全部、1 PO单收料、2 样品采购、3 生产退料
-     * @param mtype    物料类型 0 全部、1 原材料、2 半成品、3 成品
-     * @param status   入库状态 0 全部、1 已入库、2 入库中、3 待入库
-     * @param type     入库类型 1 良品、2 非良品
      * @return
      */
-    @RequestMapping("pageQuery")
-    public ResultVO pageQuery(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                              @RequestParam(value = "pageSize", defaultValue = "100000000") int pageSize,
-                              @RequestParam(value = "rno", required = false, defaultValue = "") String rno,
-                              @RequestParam(value = "rtype", required = false, defaultValue = "0") Byte rtype,
-                              @RequestParam(value = "mtype", required = false, defaultValue = "0") Byte mtype,
-                              @RequestParam(value = "status", required = false, defaultValue = "0") Byte status,
-                              @RequestParam(value = "type") Byte type) {
-        Map<String, Object> reqData = new HashMap<>(8);
-        reqData.put("rno", rno);
-        reqData.put("rtype", rtype);
-        reqData.put("mtype", mtype);
-        reqData.put("status", status);
-        reqData.put("type", type);
-        return materialStorageService.pageQuery(pageNum, pageSize, reqData);
+    @PostMapping("pageQuery")
+    public ResultVO pageQuery(@RequestBody Map<String, Object> reqData) {
+        return materialStorageService.pageQuery(reqData);
     }
 
     @RequestMapping("location")
@@ -59,22 +37,22 @@ public class MaterialStorageController {
         return materialStorageService.location(lno);
     }
 
-    @RequestMapping("label")
+    @PostMapping("label")
     public ResultVO label(@RequestBody StorageGroupDTO dto) {
         return materialStorageService.label(dto);
     }
 
-    @RequestMapping("edit")
+    @PostMapping("edit")
     public ResultVO edit(@RequestBody StorageDetailDTO dto) {
         return materialStorageService.edit(dto);
     }
 
-    @RequestMapping("delete")
+    @PostMapping("delete")
     public ResultVO delete(@RequestBody StorageDetailDTO dto) {
         return materialStorageService.delete(dto);
     }
 
-    @RequestMapping("save")
+    @PostMapping("save")
     public ResultVO save(@RequestBody StorageGroupDTO dto) {
         return materialStorageService.save(dto);
     }

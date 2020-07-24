@@ -7,10 +7,7 @@ import com.smartindustry.storage.dto.QeConfirmDTO;
 import com.smartindustry.storage.dto.QeTestDTO;
 import com.smartindustry.storage.service.IQualityManageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,40 +24,22 @@ public class QualityManageController {
     @Autowired
     private IQualityManageService qualityManageService;
 
-    @RequestMapping("pageQuery")
-    public ResultVO pageQuery(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                              @RequestParam(value = "pageSize", defaultValue = "100000000") int pageSize,
-                              @RequestParam(value = "rno", required = false, defaultValue = "") String rno,
-                              @RequestParam(value = "type", required = false, defaultValue = "0") Byte type,
-                              @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-                              @RequestParam(value = "qaStatus", required = false, defaultValue = "0") Byte qaStatus,
-                              @RequestParam(value = "status") Byte status) {
-        if (!ReceiptConstant.RECEIPT_IQC_DETECT.equals(status) && !ReceiptConstant.RECEIPT_QE_DETECT.equals(status) && !ReceiptConstant.RECEIPT_QE_CONFIRM.equals(status)) {
-            return new ResultVO(2000);
-        }
-
-        Map<String, Object> reqData = new HashMap<>(8);
-        // 质量管理 分页查询查询
-        reqData.put("qa", true);
-        reqData.put("rno", rno);
-        reqData.put("type", type);
-        reqData.put("keyword", keyword);
-        reqData.put("qaStatus", qaStatus);
-        reqData.put("status", status);
-        return qualityManageService.pageQuery(pageNum, pageSize, reqData);
+    @PostMapping("pageQuery")
+    public ResultVO pageQuery(@RequestBody Map<String, Object> reqData) {
+        return qualityManageService.pageQuery(reqData);
     }
 
-    @RequestMapping("iqcTest")
+    @PostMapping("iqcTest")
     public ResultVO iqcTest(@RequestBody IqcTestDTO dto) {
         return qualityManageService.iqcTest(dto);
     }
 
-    @RequestMapping("qeConfirm")
+    @PostMapping("qeConfirm")
     public ResultVO qeConfirm(@RequestBody QeConfirmDTO dto) {
         return qualityManageService.qeConfirm(dto);
     }
 
-    @RequestMapping("qeTest")
+    @PostMapping("qeTest")
     public ResultVO qeTest(@RequestBody QeTestDTO dto) {
         return qualityManageService.qeTest(dto);
     }

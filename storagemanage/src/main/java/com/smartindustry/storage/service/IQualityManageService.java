@@ -21,7 +21,7 @@ public interface IQualityManageService {
      * @param reqData
      * @return
      */
-    ResultVO pageQuery(int pageNum, int pageSize, Map<String, Object> reqData);
+    ResultVO pageQuery(Map<String, Object> reqData);
 
     /**
      * IQC检验
