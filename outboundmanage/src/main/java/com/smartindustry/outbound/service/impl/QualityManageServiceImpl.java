@@ -2,6 +2,7 @@ package com.smartindustry.outbound.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.google.common.collect.ImmutableMap;
 import com.smartindustry.common.mapper.om.OutboundRecordMapper;
 import com.smartindustry.common.mapper.om.PickCheckMapper;
 import com.smartindustry.common.mapper.om.PickHeadMapper;
@@ -70,9 +71,18 @@ public class QualityManageServiceImpl implements IQualityManageService {
     public ResultVO queryRecordMsg(OperateDTO dto){
         List<OutboundRecordPO> outs= outboundRecordMapper.queryByPhid(dto.getPhid(),OutboundConstant.MATERIAL_STATUS_CHECK);
         List<PrintLabelPO> prints = pickHeadMapper.queryByPhidItems(dto.getPhid());
-        Map<String,Object> listMap = new HashMap<>();
-        listMap.put("record",OutboundRecordVO.convert(outs));
-        listMap.put("print",PrintLabelVO.convert(prints));
+        Map<String,Object> listMap = new HashMap<String,Object>(){
+            {
+                put("record",null);
+                put("print",null);
+            }
+        };
+        if(null != outs && outs.size() !=0){
+            listMap.put("record",OutboundRecordVO.convert(outs));
+        }
+        if(null != prints && prints.size() !=0){
+            listMap.put("print",PrintLabelVO.convert(prints));
+        }
         return ResultVO.ok().setData(listMap);
     }
 }
