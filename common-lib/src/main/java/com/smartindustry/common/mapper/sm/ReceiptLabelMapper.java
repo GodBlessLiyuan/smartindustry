@@ -27,4 +27,11 @@ public interface ReceiptLabelMapper extends BaseMapper<ReceiptLabelPO, Long> {
      * @param plIds
      */
     void updateSidByPlids(@Param("sid") Long sid, @Param("plIds") List<Long> plIds);
+
+    /**
+     * 根据 rbids 删除数据
+     *
+     * @param rbIds
+     */
+    void batchDeleteByRbid(List<Long> rbIds);
 }

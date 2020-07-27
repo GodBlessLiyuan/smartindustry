@@ -104,4 +104,12 @@
             #{plid,jdbcType=BIGINT}
         </foreach>
     </update>
+    <delete id="batchDeleteByRbid" parameterType="java.util.List">
+        delete
+        from sm_receipt_label
+        where receipt_body_id in
+        <foreach collection="list" item="rbid" open="(" separator="," close=")">
+            #{rbid,jdbcType=BIGINT}
+        </foreach>
+    </delete>
 </mapper>

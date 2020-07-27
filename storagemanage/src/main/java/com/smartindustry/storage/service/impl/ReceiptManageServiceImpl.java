@@ -42,6 +42,8 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
     @Autowired
     private ReceiptBodyMapper receiptBodyMapper;
     @Autowired
+    private ReceiptLabelMapper receiptLabelMapper;
+    @Autowired
     private StorageRecordMapper recordMapper;
     @Autowired
     private LabelRecordMapper labelRecordMapper;
@@ -80,9 +82,12 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         return ResultVO.ok().setData(ReceiptVO.convert(headPO, bodyBOs));
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO delete(List<Long> rbIds) {
         receiptBodyMapper.batchDelete(rbIds);
+
+        receiptLabelMapper.batchDeleteByRbid(rbIds);
 
         // 删除表头信息
         new Thread(() -> {
