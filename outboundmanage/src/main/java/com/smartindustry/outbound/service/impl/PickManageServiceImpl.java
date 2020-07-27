@@ -347,6 +347,7 @@ public class PickManageServiceImpl implements IPickManageService {
             po.setCreateTime(date);
             po.setDr((byte)1);
             int result = outboundMapper.insert(po);
+            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId,null,1L,"jzj",OutboundConstant.TAKE_OUTBOUND_ORDER,new Date(),OutboundConstant.MATERIAL_STATUS_PICK));
         }
         //2 当形成出库单，在不欠料的情况下，则由物料拣货10变成物料出库30
         return ResultVO.ok().setData(statusCode);
@@ -397,6 +398,7 @@ public class PickManageServiceImpl implements IPickManageService {
         }
         return ResultVO.ok();
     }
+
 
 
     @Override

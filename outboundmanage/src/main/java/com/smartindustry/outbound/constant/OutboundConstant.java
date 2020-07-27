@@ -76,6 +76,8 @@ public class OutboundConstant {
     public static final String AGREE_TO_RELEASE = "同意";
     public static final String NEW_INSERT = "新增";
 
+    public static final String TAKE_OUTBOUND_ORDER = "形成审核单";
+
     /**
      * OQC审核的同意
      */
