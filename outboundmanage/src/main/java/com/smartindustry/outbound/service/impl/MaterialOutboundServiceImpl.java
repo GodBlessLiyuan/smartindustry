@@ -161,9 +161,7 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
             res.put("logistics", LogisticsRecordVO.convert(logisticsRecordBO, filePathConfig));
         }
         List<OutboundRecordPO> outboundRecordPOs = outboundRecordMapper.queryByOid(oId);
-        res.put("operate", OutboundRecordVO.convert(outboundRecordPOs));
+        res.put("record", OutboundRecordVO.convert(outboundRecordPOs));
         return ResultVO.ok().setData(res);
     }
-
-
 }

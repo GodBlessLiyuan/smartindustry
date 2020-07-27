@@ -18,4 +18,12 @@ public interface IErpExternalService {
      * @return
      */
     ResultVO order(Map<String, Object> reqData);
+
+    /**
+     * 查询
+     *
+     * @param reqData
+     * @return
+     */
+    ResultVO pageQuery(Map<String, Object> reqData);
 }

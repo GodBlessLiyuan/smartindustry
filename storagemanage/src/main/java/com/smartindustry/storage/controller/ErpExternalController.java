@@ -19,6 +19,11 @@ public class ErpExternalController {
     @Autowired
     private IErpExternalService erpExternalService;
 
+    @PostMapping("pageQuery")
+    public ResultVO pageQuery(@RequestBody Map<String, Object> reqData) {
+        return erpExternalService.pageQuery(reqData);
+    }
+
     @PostMapping("order")
     public ResultVO order(@RequestBody Map<String, Object> reqData) {
         return erpExternalService.order(reqData);
