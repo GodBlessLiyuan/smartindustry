@@ -2,12 +2,15 @@ package com.smartindustry.common.pojo.om;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
  * om_outbound_record
  * @author 
  */
+@AllArgsConstructor
 @Data
 public class OutboundRecordPO implements Serializable {
     private Long recordId;
@@ -37,4 +40,14 @@ public class OutboundRecordPO implements Serializable {
     private Byte status;
 
     private static final long serialVersionUID = 1L;
+
+    public OutboundRecordPO(Long pickHeadId,Long outboundId,Long userId,String name,String type,Date createTime,Byte status){
+        this.pickHeadId = pickHeadId;
+        this.outboundId = outboundId;
+        this.userId = userId;
+        this.name = name;
+        this.type = type;
+        this.createTime = createTime;
+        this.status = status;
+    }
 }
