@@ -53,8 +53,29 @@ public class MaterialOutboundControllerTest extends BaseTest {
     }
 
     @Test
-    public void outbound() {
+    public void outbound() throws Exception {
+        {
+            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/outbound/outbound")
+                    .contentType(MediaType.APPLICATION_JSON).param("oid", String.valueOf(1)))
+                    .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
+            ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+            assertNotNull(resultVO.getStatus());
+            assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+        }
+
+        {
+            /**
+             * 异常情况1：OutboundPO 为 null 返回status：1002
+             */
+//            MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/outbound/outbound")
+//                    .contentType(MediaType.APPLICATION_JSON).param("oid", String.valueOf(4)))
+//                    .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+//
+//            ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+//            assertNotNull(resultVO.getStatus());
+//            assertEquals(Integer.valueOf(1002), resultVO.getStatus());
+        }
     }
 
     @Test
@@ -70,8 +91,25 @@ public class MaterialOutboundControllerTest extends BaseTest {
     }
 
     @Test
-    public void logEdit() {
+    public void logEdit() throws Exception {
+        String reqData = "{" +
+                "\"oid\": \"\", " +
+                "\"lid\": \"\", " +
+                "\"lno\": \"\", " +
+                "\"sdate\": \"\", " +
+                "\"sway\": \"\", " +
+                "\"remark\": \"\", " +
+                "\"picture\": \"\" " +
+                "}";
 
+        MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/outbound/logEdit")
+                .contentType(MediaType.APPLICATION_JSON).content(reqData))
+                .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+        ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+        assertNotNull(resultVO.getStatus());
+        assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+        assertNotNull(resultVO.getData());
     }
 
     @Test

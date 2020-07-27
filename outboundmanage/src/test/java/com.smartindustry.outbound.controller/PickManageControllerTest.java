@@ -82,7 +82,6 @@ public class PickManageControllerTest extends BaseTest {
         ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
         assertNotNull(resultVO.getStatus());
         assertEquals(Integer.valueOf(1000), resultVO.getStatus());
-        assertNotNull(resultVO.getData());
     }
 
     @Test
@@ -114,10 +113,10 @@ public class PickManageControllerTest extends BaseTest {
         ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
         assertNotNull(resultVO.getStatus());
         assertEquals(Integer.valueOf(1000), resultVO.getStatus());
-//        assertNotNull(resultVO.getData());
-//        ScanOutVO scanOutVO = JSONObject.toJavaObject(JSON.parseObject(String.valueOf(resultVO.getData())), ScanOutVO.class);
-//        //num == 500
-//        assertEquals(Integer.valueOf(500), scanOutVO.getNum());
+        assertNotNull(resultVO.getData());
+        ScanOutVO scanOutVO = JSONObject.toJavaObject(JSON.parseObject(String.valueOf(resultVO.getData())), ScanOutVO.class);
+        //num == 500
+        assertEquals(Integer.valueOf(500), scanOutVO.getNum());
     }
 
     @Test
@@ -130,6 +129,11 @@ public class PickManageControllerTest extends BaseTest {
         assertNotNull(resultVO.getStatus());
         assertEquals(Integer.valueOf(1000), resultVO.getStatus());
         assertNotNull(resultVO.getData());
+        PickHeadVO pickHeadVO = JSONObject.toJavaObject(JSON.parseObject(String.valueOf(resultVO.getData())), PickHeadVO.class);
+        //ostatus == 3
+        assertEquals(Byte.valueOf((byte) 3), pickHeadVO.getOstatus());
+        //mstatus == 20
+        assertEquals(Byte.valueOf((byte) 20), pickHeadVO.getMstatus());
     }
 
     @Test
@@ -211,8 +215,8 @@ public class PickManageControllerTest extends BaseTest {
     public void deleteScanPid() throws Exception {
         MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/pick/deleteScanPid")
                 .contentType(MediaType.APPLICATION_JSON)
-                .param("phid", String.valueOf(2))
-                .param("plid", String.valueOf(12)))
+                .param("phid", String.valueOf(10))
+                .param("plid", String.valueOf(11)))
                 .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
         ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
@@ -223,7 +227,7 @@ public class PickManageControllerTest extends BaseTest {
     @Test
     public void printLabelSplit() throws Exception {
         MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/pick/printLabelSplit")
-                .contentType(MediaType.APPLICATION_JSON).param("pid", "2020072400001"))
+                .contentType(MediaType.APPLICATION_JSON).param("pid", "2020072200007"))
                 .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
         ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
@@ -234,14 +238,12 @@ public class PickManageControllerTest extends BaseTest {
     @Test
     public void judgeStatus() throws Exception {
         MvcResult res = mockMvc.perform(MockMvcRequestBuilders.get("/pick/judgeStatus")
-                .contentType(MediaType.APPLICATION_JSON).param("phid", String.valueOf(1)))
+                .contentType(MediaType.APPLICATION_JSON).param("phid", String.valueOf(9)))
                 .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
         ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
         assertNotNull(resultVO.getStatus());
         assertEquals(Integer.valueOf(1000), resultVO.getStatus());
-        assertNotNull(resultVO.getData());
-
     }
 
     @Test
@@ -256,21 +258,18 @@ public class PickManageControllerTest extends BaseTest {
         ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
         assertNotNull(resultVO.getStatus());
         assertEquals(Integer.valueOf(1000), resultVO.getStatus());
-        assertNotNull(resultVO.getData());
-
     }
 
     @Test
     public void outBoundItems() throws Exception {
-        MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/pick/deleteSplit")
+        MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/pick/outBoundItems")
                 .contentType(MediaType.APPLICATION_JSON)
-                .param("phid", String.valueOf(4)))
+                .param("phid", String.valueOf(9)))
                 .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
         ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
         assertNotNull(resultVO.getStatus());
         assertEquals(Integer.valueOf(1000), resultVO.getStatus());
-
     }
 
     @Test
@@ -292,7 +291,7 @@ public class PickManageControllerTest extends BaseTest {
         MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/pick/disAgree")
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("phid", String.valueOf(1))
-                .param("status", "20")
+                .param("status", "1")
                 .param("msg", "驳回"))
                 .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
@@ -311,5 +310,26 @@ public class PickManageControllerTest extends BaseTest {
         ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
         assertNotNull(resultVO.getStatus());
         assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+    }
+
+    @Test
+    public void outOrderCheck() throws Exception {
+        MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/pick/outOrderCheck")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("pageNum", String.valueOf(1))
+                .param("pageSize", String.valueOf(10000))
+                .param("pno", "")
+                .param("cproject", ""))
+                .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+
+        ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
+        assertNotNull(resultVO.getStatus());
+        assertEquals(Integer.valueOf(1000), resultVO.getStatus());
+        ResultVO<ResultVO> resultVO1 = JSONObject.toJavaObject(JSON.parseObject(String.valueOf(resultVO.getData())), ResultVO.class);
+        List<PickHeadVO> pickHeadVOS = JSONObject.parseArray(JSON.toJSONString(resultVO1.getData()), PickHeadVO.class);
+        //phid == 9
+        assertEquals(Long.valueOf(9), pickHeadVOS.get(0).getPhid());
+        //mstatus == 15
+        assertEquals(Byte.valueOf((byte) 15), pickHeadVOS.get(0).getMstatus());
     }
 }
