@@ -62,9 +62,8 @@ public class QualityManageServiceImpl implements IQualityManageService {
     @Override
     public ResultVO queryRecordMsg(Long pickHeadId){
         List<OutboundRecordPO> pos= outboundRecordMapper.queryByPhid(pickHeadId);
-        List<OutboundRecordVO> vos = OutboundRecordVO.convert(pos);
-        Map<String,List<OutboundRecordVO>> listMap = new HashMap<>(vos.size());
-        listMap.put("record",vos);
+        Map<String,Object> listMap = new HashMap<>(1);
+        listMap.put("record",OutboundRecordVO.convert(pos));
         return ResultVO.ok().setData(listMap);
     }
 
