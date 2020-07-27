@@ -26,10 +26,10 @@ public class ErpExternalControllerTest extends BaseTest {
     public void pick() throws Exception {
         String reqData = "{" +
                 "\"head\": {" +
-                "\"pno\": \"GDJH2020052200004\"," +
+                "\"pno\": \"GDJH2020052200006\"," +
                 "\"ono\": \"PO2020071200002\"," +
                 "" +
-                "\"otype\": 1," +
+                "\"otype\": 2," +
                 "\"cproject\": \"ES7035W\"," +
                 "\"ptime\": \"2019-12-07 00:00:00\"" +
                 "}," +
