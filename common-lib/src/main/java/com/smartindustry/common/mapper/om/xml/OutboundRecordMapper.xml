@@ -135,4 +135,12 @@
         where outbound_id = #{outboundId,jdbcType=BIGINT}
         order by create_time desc
     </select>
+
+    <select id="queryByPhid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from om_outbound_record
+        where pick_head_id = #{pickHeadId,jdbcType=BIGINT} and status = 15
+        order by create_time asc
+    </select>
 </mapper>

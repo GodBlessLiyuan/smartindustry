@@ -63,7 +63,7 @@ public class AberrantItemsVO implements Serializable {
         if (bo.getRecommendPid()==null){
             vo.setAbmsg("扫描了其他推荐的PID:"+bo.getNoRecommendPid());
         }else{
-            vo.setAbmsg("未扫描优先推荐的PID:"+bo.getRecommendPid()+",扫描了其他推荐的PID:"+bo.getNoRecommendPid());
+            vo.setAbmsg("未扫描优先推荐的PID:"+bo.getRecommendPid()+";扫描了其他推荐的PID:"+bo.getNoRecommendPid());
         }
         return vo;
     }

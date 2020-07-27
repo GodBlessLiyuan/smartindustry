@@ -52,6 +52,8 @@ public class PickManageServiceImpl implements IPickManageService {
     private OutboundMapper outboundMapper;
     @Autowired
     private PickCheckMapper pickCheckMapper;
+    @Autowired
+    private OutboundRecordMapper outboundRecordMapper;
     @Override
     public ResultVO pageQueryPickHead(int pageNum, int pageSize, Map<String, Object> reqMap) {
         Page<PickHeadPO> page = PageHelper.startPage(pageNum, pageSize);
@@ -104,7 +106,7 @@ public class PickManageServiceImpl implements IPickManageService {
                 .collect(HashMap::new, (m,v)->m.put(v.getMaterialNo(), v.getRecommendPid()), HashMap::putAll);
         //(2) 再查询出目前工单已经使用的推荐pid,这里必须是  拣货量大于 需求量才查询
         List<PickHeadBO> useList = pickHeadMapper.queryAllRePid(pickHeadId);
-        if(null != useList || useList.size() !=0 ){
+        if(null != useList && useList.size() !=0 ){
             // 当需求量满足时，没有使用任何推荐pid
             for (PickHeadBO bo:useList) {
                 String materialNo = bo.getMaterialNo();
@@ -117,18 +119,20 @@ public class PickManageServiceImpl implements IPickManageService {
                             .collect(Collectors.toList()), ","));
                 }
             }
-            //(3) 推荐未使用的进行相减，以及拼接其他未推荐的pid
-            Map<String, String> useMap = useList.stream().collect(Collectors.toMap(PickHeadBO::getMaterialNo,PickHeadBO::getRecommendPid));
-            // 将未使用推荐和已使用未推荐进行组合
-            for (PickHeadBO bo:noRecommend) {
-                String materialNo = bo.getMaterialNo();
-                boolean useKey = useMap.containsKey(materialNo);
-                if (useKey){
-                    bo.setRecommendPid(useMap.get(materialNo));
-                }
-                String exception = pickBodyMapper.queryException(pickHeadId,materialNo);
-                bo.setAberrantDesc(exception);
+        }else {
+            useList = reList;
+        }
+        //(3) 推荐未使用的进行相减，以及拼接其他未推荐的pid
+        Map<String, String> useMap = useList.stream().collect(Collectors.toMap(PickHeadBO::getMaterialNo,PickHeadBO::getRecommendPid));
+        // 将未使用推荐和已使用未推荐进行组合
+        for (PickHeadBO bo:noRecommend) {
+            String materialNo = bo.getMaterialNo();
+            boolean useKey = useMap.containsKey(materialNo);
+            if (useKey){
+                bo.setRecommendPid(useMap.get(materialNo));
             }
+            String exception = pickBodyMapper.queryException(pickHeadId,materialNo);
+            bo.setAberrantDesc(exception);
         }
         return ResultVO.ok().setData(AberrantItemsVO.convert(noRecommend));
     }
@@ -331,6 +335,8 @@ public class PickManageServiceImpl implements IPickManageService {
             po.setStatus(OutboundConstant.OUTBOUND_STATUS_WAIT);
             int resultIn = pickCheckMapper.insert(po);
             statusCode = 1;
+            // 当欠料异常形成出库单，将新增审核操作记录到操作记录表中
+            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId,null,1L,"jzj",OutboundConstant.NEW_INSERT,new Date(),OutboundConstant.MATERIAL_STATUS_CHECK));
         }else {
             int resultUp = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_STORAGE);
             OutboundPO po = new OutboundPO();
@@ -375,16 +381,19 @@ public class PickManageServiceImpl implements IPickManageService {
             int result = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_RETURN);
             po.setStatus(OutboundConstant.TURN_DOWN_CANCEL);
             int resultUp = pickCheckMapper.updateByPrimaryKey(po);
+            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId,null,1L,"jzj",OutboundConstant.CANCEL_DELIVERY,new Date(),OutboundConstant.MATERIAL_STATUS_CHECK));
         }else if (status.equals(OutboundConstant.MATERIAL_STATUS_WAIT)){
             //等齐套发货
             int result = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_WAIT);
             po.setStatus(OutboundConstant.PENDING_WAIT);
             int resultUp = pickCheckMapper.updateByPrimaryKey(po);
+            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId,null,1L,"jzj",OutboundConstant.WAIT_FOR_SHIPMENT,new Date(),OutboundConstant.MATERIAL_STATUS_CHECK));
         }else if(status.equals(OutboundConstant.MATERIAL_STATUS_RETURN)){
             //取消发货，退货仓库
             int result = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_RETURN);
             po.setStatus(OutboundConstant.TURN_DOWN_CANCEL);
             int resultUp = pickCheckMapper.updateByPrimaryKey(po);
+            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId,null,1L,"jzj",OutboundConstant.CANCEL_DELIVERY,new Date(),OutboundConstant.MATERIAL_STATUS_CHECK));
         }
         return ResultVO.ok();
     }
@@ -404,6 +413,7 @@ public class PickManageServiceImpl implements IPickManageService {
         po.setCreateTime(date);
         po.setDr((byte)1);
         int resultIn= outboundMapper.insert(po);
+        outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId,null,1L,"jzj",OutboundConstant.AGREE_TO_RELEASE,new Date(),OutboundConstant.MATERIAL_STATUS_CHECK));
         return ResultVO.ok();
     }
 }

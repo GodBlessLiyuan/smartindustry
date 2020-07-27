@@ -26,4 +26,11 @@ public interface IQualityManageService {
      * @return
      */
     ResultVO queryOqc(int pageNum, int pageSize, String pickNo, String orderNo);
+
+    /**
+     * 查看当前的工单的操作记录
+     * @param pickHeadId
+     * @return
+     */
+    ResultVO queryRecordMsg(Long pickHeadId);
 }
