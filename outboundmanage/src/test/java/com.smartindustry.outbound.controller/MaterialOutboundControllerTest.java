@@ -92,24 +92,7 @@ public class MaterialOutboundControllerTest extends BaseTest {
 
     @Test
     public void logEdit() throws Exception {
-        String reqData = "{" +
-                "\"oid\": \"\", " +
-                "\"lid\": \"\", " +
-                "\"lno\": \"\", " +
-                "\"sdate\": \"\", " +
-                "\"sway\": \"\", " +
-                "\"remark\": \"\", " +
-                "\"picture\": \"\" " +
-                "}";
 
-        MvcResult res = mockMvc.perform(MockMvcRequestBuilders.post("/outbound/logEdit")
-                .contentType(MediaType.APPLICATION_JSON).content(reqData))
-                .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
-
-        ResultVO<ResultVO> resultVO = JSONObject.toJavaObject(JSON.parseObject(res.getResponse().getContentAsString()), ResultVO.class);
-        assertNotNull(resultVO.getStatus());
-        assertEquals(Integer.valueOf(1000), resultVO.getStatus());
-        assertNotNull(resultVO.getData());
     }
 
     @Test
