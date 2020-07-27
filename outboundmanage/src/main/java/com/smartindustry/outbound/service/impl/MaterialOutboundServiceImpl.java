@@ -127,9 +127,11 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
             LogisticsRecordPO recordPO = LogisticsRecordDTO.createPO(dto);
             logisticsRecordMapper.insert(recordPO);
 
-            dto.setLid(recordPO.getLogisticsRecordId());
-            logisticsPictureMapper.batchInsert(LogisticsRecordDTO.createPicPO(dto, filePathConfig));
-
+            if (null != dto.getPicture() && dto.getPicture().size() > 0) {
+                dto.setLid(recordPO.getLogisticsRecordId());
+                logisticsPictureMapper.batchInsert(LogisticsRecordDTO.createPicPO(dto, filePathConfig));
+            }
+            
             if (OutboundConstant.OUTBOUND_STATUS_WAIT.equals(outboundPO.getStatus())) {
                 // 确认出货
                 pickHeadPO.setMaterialStatus(OutboundConstant.MATERIAL_STATUS_CONFIRM);
@@ -148,8 +150,9 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
         logisticsRecordMapper.updateByPrimaryKey(LogisticsRecordDTO.updatePO(recordPO, dto));
 
         logisticsPictureMapper.deleteBylid(dto.getLid());
-        logisticsPictureMapper.batchInsert(LogisticsRecordDTO.createPicPO(dto, filePathConfig));
-
+        if (null != dto.getPicture() && dto.getPicture().size() > 0) {
+            logisticsPictureMapper.batchInsert(LogisticsRecordDTO.createPicPO(dto, filePathConfig));
+        }
         return ResultVO.ok();
     }
 
