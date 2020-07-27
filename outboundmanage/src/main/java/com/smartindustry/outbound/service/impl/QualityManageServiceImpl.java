@@ -19,7 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: xiahui
@@ -60,7 +62,10 @@ public class QualityManageServiceImpl implements IQualityManageService {
     @Override
     public ResultVO queryRecordMsg(Long pickHeadId){
         List<OutboundRecordPO> pos= outboundRecordMapper.queryByPhid(pickHeadId);
-        return ResultVO.ok().setData(OutboundRecordVO.convert(pos));
+        List<OutboundRecordVO> vos = OutboundRecordVO.convert(pos);
+        Map<String,List<OutboundRecordVO>> listMap = new HashMap<>(vos.size());
+        listMap.put("record",vos);
+        return ResultVO.ok().setData(listMap);
     }
 
 }
