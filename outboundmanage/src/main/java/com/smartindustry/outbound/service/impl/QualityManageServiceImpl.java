@@ -2,7 +2,6 @@ package com.smartindustry.outbound.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.google.common.collect.ImmutableMap;
 import com.smartindustry.common.mapper.om.OutboundRecordMapper;
 import com.smartindustry.common.mapper.om.PickCheckMapper;
 import com.smartindustry.common.mapper.om.PickHeadMapper;
