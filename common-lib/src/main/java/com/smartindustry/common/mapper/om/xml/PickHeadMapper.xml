@@ -470,5 +470,15 @@
         from si_print_label pl
         where pl.relate_package_id = #{packageId} and pl.dr = 1
     </select>
+
+
+    <!--    查找当前工单拣货单得所有PID详情-->
+    <select id="queryByPhidItems" parameterType="java.lang.Long" resultType="com.smartindustry.common.pojo.si.PrintLabelPO">
+        select spl.package_id as packageId,spl.num as num,spl.create_time as createTime,spl.relate_package_id as relatePackageId
+        from om_pick_head ph
+        left join om_pick_label pl on ph.pick_head_id = pl.pick_head_id
+        left join si_print_label spl on pl.print_label_id = spl.print_label_id
+        where ph.pick_head_id = #{pickHeadId} and ph.dr = 1
+    </select>
 </mapper>
 

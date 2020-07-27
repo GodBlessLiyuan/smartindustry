@@ -68,4 +68,6 @@ public interface PrintLabelMapper extends BaseMapper<PrintLabelPO, Long> {
      * @param relateLabelId
      */
     void deleteByRelateId(Long relateLabelId);
+
+
 }

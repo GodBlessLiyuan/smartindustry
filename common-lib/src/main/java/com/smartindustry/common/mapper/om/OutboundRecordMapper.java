@@ -3,6 +3,7 @@ package com.smartindustry.common.mapper.om;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.om.OutboundRecordPO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -22,7 +23,8 @@ public interface OutboundRecordMapper extends BaseMapper<OutboundRecordPO, Long>
     /**
      * 根据工单号id查找
      * @param pickHeadId
+     * @param status
      * @return
      */
-    List<OutboundRecordPO> queryByPhid(Long pickHeadId);
+    List<OutboundRecordPO> queryByPhid(@Param("pickHeadId") Long pickHeadId, @Param("status") Byte status);
 }

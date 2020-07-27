@@ -7,6 +7,7 @@ import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.om.PickHeadPO;
 import com.smartindustry.common.pojo.om.PickLabelPO;
+import com.smartindustry.common.pojo.si.PrintLabelPO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -238,4 +239,12 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
      * @return
      */
     List<String> queryChildPid(@Param("packageId") String packageId);
+
+
+    /**
+     * 查询当前工单拣货单id下得PID列表
+     * @param pickHeadId
+     * @return
+     */
+    List<PrintLabelPO> queryByPhidItems(@Param("pickHeadId") Long pickHeadId);
 }

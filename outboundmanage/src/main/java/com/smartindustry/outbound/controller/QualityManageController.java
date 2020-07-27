@@ -1,11 +1,10 @@
 package com.smartindustry.outbound.controller;
 
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.outbound.dto.OperateDTO;
 import com.smartindustry.outbound.service.IQualityManageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author: xiahui
@@ -32,8 +31,8 @@ public class QualityManageController {
         return qualityManageService.queryOqc(pageNum,pageSize,pickNo,orderNo);
     }
 
-    @RequestMapping("recordMsgByPhid")
-    public ResultVO queryRecordMsg(@RequestParam(value = "phid", required = false) Long pickHeadId){
-        return qualityManageService.queryRecordMsg(pickHeadId);
+    @PostMapping("recordMsgByPhid")
+    public ResultVO queryRecordMsg(@RequestBody OperateDTO dto){
+        return qualityManageService.queryRecordMsg(dto);
     }
 }

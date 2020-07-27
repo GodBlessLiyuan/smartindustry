@@ -136,11 +136,11 @@
         order by create_time desc
     </select>
 
-    <select id="queryByPhid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <select id="queryByPhid" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from om_outbound_record
-        where pick_head_id = #{pickHeadId} and status = 15
+        where pick_head_id = #{pickHeadId} and `status` = #{status}
         order by create_time asc
     </select>
 </mapper>

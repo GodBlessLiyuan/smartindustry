@@ -1,6 +1,7 @@
 package com.smartindustry.outbound.service;
 
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.outbound.dto.OperateDTO;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -29,8 +30,9 @@ public interface IQualityManageService {
 
     /**
      * 查看当前的工单的操作记录
-     * @param pickHeadId
+     * @param dto
      * @return
      */
-    ResultVO queryRecordMsg(Long pickHeadId);
+    ResultVO queryRecordMsg(OperateDTO dto);
+
 }
