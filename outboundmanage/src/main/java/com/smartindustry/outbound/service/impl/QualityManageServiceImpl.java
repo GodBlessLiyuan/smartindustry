@@ -5,15 +5,19 @@ import com.github.pagehelper.PageHelper;
 import com.smartindustry.common.mapper.om.OutboundRecordMapper;
 import com.smartindustry.common.mapper.om.PickCheckMapper;
 import com.smartindustry.common.mapper.om.PickHeadMapper;
+import com.smartindustry.common.mapper.si.PrintLabelMapper;
 import com.smartindustry.common.pojo.om.OutboundRecordPO;
 import com.smartindustry.common.pojo.om.PickCheckPO;
 import com.smartindustry.common.pojo.om.PickHeadPO;
+import com.smartindustry.common.pojo.si.PrintLabelPO;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.constant.OutboundConstant;
+import com.smartindustry.outbound.dto.OperateDTO;
 import com.smartindustry.outbound.service.IQualityManageService;
 import com.smartindustry.outbound.vo.OutboundRecordVO;
 import com.smartindustry.outbound.vo.PickHeadVO;
+import com.smartindustry.outbound.vo.PrintLabelVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +41,8 @@ public class QualityManageServiceImpl implements IQualityManageService {
     private PickCheckMapper pickCheckMapper;
     @Autowired
     private OutboundRecordMapper outboundRecordMapper;
+    @Autowired
+    private PrintLabelMapper printLabelMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -59,12 +65,14 @@ public class QualityManageServiceImpl implements IQualityManageService {
         List<PickHeadPO> pos = pickHeadMapper.queryOqc(pickNo,orderNo);
         return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), PickHeadVO.convert(pos)));
     }
+
     @Override
-    public ResultVO queryRecordMsg(Long pickHeadId){
-        List<OutboundRecordPO> pos= outboundRecordMapper.queryByPhid(pickHeadId);
-        Map<String,Object> listMap = new HashMap<>(1);
-        listMap.put("record",OutboundRecordVO.convert(pos));
+    public ResultVO queryRecordMsg(OperateDTO dto){
+        List<OutboundRecordPO> outs= outboundRecordMapper.queryByPhid(dto.getPhid(),OutboundConstant.MATERIAL_STATUS_CHECK);
+        List<PrintLabelPO> prints = pickHeadMapper.queryByPhidItems(dto.getPhid());
+        Map<String,Object> listMap = new HashMap<>();
+        listMap.put("record",OutboundRecordVO.convert(outs));
+        listMap.put("print",PrintLabelVO.convert(prints));
         return ResultVO.ok().setData(listMap);
     }
-
 }
