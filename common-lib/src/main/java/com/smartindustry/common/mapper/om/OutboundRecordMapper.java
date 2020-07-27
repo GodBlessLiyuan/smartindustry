@@ -18,4 +18,11 @@ public interface OutboundRecordMapper extends BaseMapper<OutboundRecordPO, Long>
      * @return
      */
     List<OutboundRecordPO> queryByOid(Long oId);
+
+    /**
+     * 根据工单号id查找
+     * @param pickHeadId
+     * @return
+     */
+    List<OutboundRecordPO> queryByPhid(Long pickHeadId);
 }

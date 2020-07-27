@@ -31,4 +31,9 @@ public class QualityManageController {
                              @RequestParam(value = "ono", required = false) String orderNo){
         return qualityManageService.queryOqc(pageNum,pageSize,pickNo,orderNo);
     }
+
+    @RequestMapping("recordMsgByPhid")
+    public ResultVO queryRecordMsg(@RequestParam(value = "phid", required = false) Long pickHeadId){
+        return qualityManageService.queryRecordMsg(pickHeadId);
+    }
 }
