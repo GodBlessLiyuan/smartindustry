@@ -157,9 +157,7 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
     public ResultVO record(Long oId) {
         Map<String, Object> res = new HashMap<>();
         LogisticsRecordBO logisticsRecordBO = logisticsRecordMapper.queryByOid(oId);
-        if (null != logisticsRecordBO) {
-            res.put("logistics", LogisticsRecordVO.convert(logisticsRecordBO, filePathConfig));
-        }
+        res.put("logistics", LogisticsRecordVO.convert(null == logisticsRecordBO ? new LogisticsRecordBO() : logisticsRecordBO, filePathConfig));
         List<OutboundRecordPO> outboundRecordPOs = outboundRecordMapper.queryByOid(oId);
         res.put("record", OutboundRecordVO.convert(outboundRecordPOs));
         return ResultVO.ok().setData(res);
