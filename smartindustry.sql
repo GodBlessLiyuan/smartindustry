@@ -7,30 +7,46 @@ DROP TABLE IF EXISTS ba_role_authority;
 DROP TABLE IF EXISTS ba_authority;
 DROP TABLE IF EXISTS ba_user_role;
 DROP TABLE IF EXISTS ba_role;
-DROP TABLE IF EXISTS om_outbound_record;
-DROP TABLE IF EXISTS si_label_record;
-DROP TABLE IF EXISTS om_pick_label;
 DROP TABLE IF EXISTS om_label_recommend;
+DROP TABLE IF EXISTS om_pick_body;
+DROP TABLE IF EXISTS si_material_specification;
+DROP TABLE IF EXISTS om_pick_label;
+DROP TABLE IF EXISTS si_label_record;
 DROP TABLE IF EXISTS si_storage_label;
 DROP TABLE IF EXISTS sm_receipt_label;
 DROP TABLE IF EXISTS sm_storage_detail;
 DROP TABLE IF EXISTS si_print_label;
+DROP TABLE IF EXISTS sm_iqc_detect;
+DROP TABLE IF EXISTS sm_qe_confirm;
+DROP TABLE IF EXISTS sm_qe_detect;
 DROP TABLE IF EXISTS sm_storage_group;
-DROP TABLE IF EXISTS si_location;
 DROP TABLE IF EXISTS sm_storage_record;
+DROP TABLE IF EXISTS sm_storage;
+DROP TABLE IF EXISTS sm_receipt_body;
+DROP TABLE IF EXISTS si_material;
+DROP TABLE IF EXISTS si_supplier;
+DROP TABLE IF EXISTS dd_cert_status;
+DROP TABLE IF EXISTS dd_currency;
+DROP TABLE IF EXISTS dd_humidity_level;
+DROP TABLE IF EXISTS dd_lift_cycle_state;
+DROP TABLE IF EXISTS dd_material_level;
+DROP TABLE IF EXISTS dd_material_type;
+DROP TABLE IF EXISTS dd_material_version;
+DROP TABLE IF EXISTS dd_measure_unit;
+DROP TABLE IF EXISTS dd_produce_loss_level;
+DROP TABLE IF EXISTS dd_settle_period;
+DROP TABLE IF EXISTS dd_supplier_group;
+DROP TABLE IF EXISTS dd_supplier_type;
+DROP TABLE IF EXISTS si_location;
+DROP TABLE IF EXISTS si_warehouse;
+DROP TABLE IF EXISTS dd_warehouse_type;
+DROP TABLE IF EXISTS om_outbound_record;
 DROP TABLE IF EXISTS ba_user;
 DROP TABLE IF EXISTS om_logistics_picture;
 DROP TABLE IF EXISTS om_logistics_record;
 DROP TABLE IF EXISTS om_outbound;
-DROP TABLE IF EXISTS om_pick_body;
 DROP TABLE IF EXISTS om_pick_check;
 DROP TABLE IF EXISTS om_pick_head;
-DROP TABLE IF EXISTS sm_iqc_detect;
-DROP TABLE IF EXISTS sm_qe_confirm;
-DROP TABLE IF EXISTS sm_qe_detect;
-DROP TABLE IF EXISTS sm_storage;
-DROP TABLE IF EXISTS sm_receipt_body;
-DROP TABLE IF EXISTS si_material;
 DROP TABLE IF EXISTS sm_receipt_head;
 
 
@@ -117,6 +133,148 @@ CREATE TABLE ba_user_role
     role_id bigint unsigned NOT NULL,
     PRIMARY KEY (user_role_id),
     UNIQUE (user_role_id)
+);
+
+
+CREATE TABLE dd_cert_status
+(
+    cert_status_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    cert_status_name char(255) NOT NULL,
+    user_id bigint unsigned,
+    create_time datetime,
+    PRIMARY KEY (cert_status_id),
+    UNIQUE (cert_status_id)
+);
+
+
+CREATE TABLE dd_currency
+(
+    currency_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    currency_name char(255) NOT NULL,
+    user_id bigint unsigned,
+    create_time datetime,
+    PRIMARY KEY (currency_id),
+    UNIQUE (currency_id)
+);
+
+
+CREATE TABLE dd_humidity_level
+(
+    humidity_level_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    humidity_level_name char(255) NOT NULL,
+    user_id bigint unsigned,
+    create_time datetime,
+    PRIMARY KEY (humidity_level_id),
+    UNIQUE (humidity_level_id)
+);
+
+
+CREATE TABLE dd_lift_cycle_state
+(
+    lift_cycle_state_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    lift_cycle_state_name char(255) NOT NULL,
+    user_id bigint unsigned,
+    create_time datetime,
+    PRIMARY KEY (lift_cycle_state_id),
+    UNIQUE (lift_cycle_state_id)
+);
+
+
+CREATE TABLE dd_material_level
+(
+    material_level_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    material_level_name char(255) NOT NULL,
+    user_id bigint unsigned,
+    create_time datetime,
+    PRIMARY KEY (material_level_id),
+    UNIQUE (material_level_id)
+);
+
+
+CREATE TABLE dd_material_type
+(
+    material_type_id bigint NOT NULL AUTO_INCREMENT,
+    material_type_name char(255) NOT NULL,
+    user_id bigint unsigned,
+    create_time datetime,
+    PRIMARY KEY (material_type_id)
+);
+
+
+CREATE TABLE dd_material_version
+(
+    material_version_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    material_version_name char(255) NOT NULL,
+    user_id bigint unsigned,
+    create_time datetime,
+    PRIMARY KEY (material_version_id),
+    UNIQUE (material_version_id)
+);
+
+
+CREATE TABLE dd_measure_unit
+(
+    measure_unit_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    measure_unit_name char(255) NOT NULL,
+    user_id bigint unsigned,
+    create_time datetime,
+    PRIMARY KEY (measure_unit_id),
+    UNIQUE (measure_unit_id)
+);
+
+
+CREATE TABLE dd_produce_loss_level
+(
+    produce_loss_level_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    produce_loss_level_name char(255) NOT NULL,
+    user_id bigint unsigned,
+    create_time datetime,
+    PRIMARY KEY (produce_loss_level_id),
+    UNIQUE (produce_loss_level_id)
+);
+
+
+CREATE TABLE dd_settle_period
+(
+    settle_period_id bigint NOT NULL AUTO_INCREMENT,
+    settle_period_name char(255) NOT NULL,
+    user_id bigint unsigned,
+    create_time datetime,
+    PRIMARY KEY (settle_period_id),
+    UNIQUE (settle_period_id)
+);
+
+
+CREATE TABLE dd_supplier_group
+(
+    supplier_group_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    supplier_group_name char(255) NOT NULL,
+    user_id bigint unsigned,
+    create_time datetime,
+    PRIMARY KEY (supplier_group_id),
+    UNIQUE (supplier_group_id)
+);
+
+
+CREATE TABLE dd_supplier_type
+(
+    supplier_type_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    supplier_type_name char(255) NOT NULL,
+    user_id bigint unsigned,
+    create_time datetime,
+    PRIMARY KEY (supplier_type_id),
+    UNIQUE (supplier_type_id)
+);
+
+
+CREATE TABLE dd_warehouse_type
+(
+    warehouse_type_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    warehouse_type_name char(64) NOT NULL,
+    user_id bigint unsigned,
+    create_time datetime,
+    PRIMARY KEY (warehouse_type_id),
+    UNIQUE (warehouse_type_id)
 );
 
 
@@ -215,7 +373,7 @@ CREATE TABLE om_pick_body
 (
     pick_body_id bigint unsigned NOT NULL AUTO_INCREMENT,
     pick_head_id bigint unsigned NOT NULL,
-    material_no char(32) NOT NULL,
+    material_id bigint unsigned NOT NULL,
     demand_num int,
     pick_num int,
     create_time datetime,
@@ -225,7 +383,8 @@ CREATE TABLE om_pick_body
     dr tinyint COMMENT '1£ºÎ´É¾³ý
 2£ºÒÑÉ¾³ý',
     PRIMARY KEY (pick_body_id),
-    UNIQUE (pick_body_id)
+    UNIQUE (pick_body_id),
+    UNIQUE (material_id)
 );
 
 
@@ -338,39 +497,65 @@ CREATE TABLE si_label_record
 
 CREATE TABLE si_location
 (
-    location_no char(32) NOT NULL,
-    location_code char(32),
-    location_name char(255),
-    location_type tinyint,
-    user_id bigint unsigned NOT NULL,
+    location_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    location_no char(64) NOT NULL,
+    location_name char(255) NOT NULL,
+    warehouse_id bigint unsigned NOT NULL,
+    remark char(255),
+    user_id bigint unsigned,
     create_time datetime,
     update_time datetime,
     -- 1£ºÎ´É¾³ý
     -- 2£ºÒÑÉ¾³ý
     dr tinyint COMMENT '1£ºÎ´É¾³ý
 2£ºÒÑÉ¾³ý',
-    PRIMARY KEY (location_no),
+    PRIMARY KEY (location_id),
+    UNIQUE (location_id),
     UNIQUE (location_no)
 );
 
 
 CREATE TABLE si_material
 (
-    material_no char(32) NOT NULL,
-    material_name char(255) NOT NULL,
-    -- 1£ºÔ­ÁÏ£»2£º°ë³ÉÆ·£»3£º³ÉÆ·
-    material_type tinyint NOT NULL COMMENT '1£ºÔ­ÁÏ£»2£º°ë³ÉÆ·£»3£º³ÉÆ·',
-    material_model char(255),
+    material_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    material_no char(64) NOT NULL,
+    material_type_id bigint NOT NULL,
+    humidity_level_id bigint unsigned,
+    material_level_id bigint unsigned,
+    measure_unit_id bigint unsigned,
+    material_version_id bigint unsigned,
+    produce_loss_level_id bigint unsigned,
+    lift_cycle_state_id bigint unsigned,
+    material_name char(64) NOT NULL,
+    delivery_days int NOT NULL,
+    moq char(32) NOT NULL,
+    material_model char(64),
+    material_draw char(64),
+    supplier_id bigint unsigned NOT NULL,
     material_desc char(255),
     test_type tinyint,
+    user_id bigint unsigned,
     create_time datetime,
     update_time datetime,
     -- 1£ºÎ´É¾³ý
     -- 2£ºÒÑÉ¾³ý
     dr tinyint COMMENT '1£ºÎ´É¾³ý
 2£ºÒÑÉ¾³ý',
-    PRIMARY KEY (material_no),
-    UNIQUE (material_no)
+    PRIMARY KEY (material_id),
+    UNIQUE (material_id),
+    UNIQUE (material_no),
+    UNIQUE (supplier_id)
+);
+
+
+CREATE TABLE si_material_specification
+(
+    material_specification_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    material_id bigint unsigned NOT NULL,
+    file_path char(255) NOT NULL,
+    create_time datetime,
+    PRIMARY KEY (material_specification_id),
+    UNIQUE (material_specification_id)
 );
 
 
@@ -389,8 +574,7 @@ CREATE TABLE si_print_label
     -- 2£º´òÓ¡
     origin tinyint NOT NULL COMMENT '1£ºÉ¨Ãè
 2£º´òÓ¡',
-    material_no char(32) NOT NULL,
-    location_no char(32),
+    location_id bigint unsigned NOT NULL,
     relate_label_id bigint unsigned,
     relate_package_id char(32),
     create_time datetime,
@@ -398,17 +582,18 @@ CREATE TABLE si_print_label
     -- 2£ºÒÑ·ÏÆú
     dr tinyint COMMENT '1£ºÎ´·ÏÆú
 2£ºÒÑ·ÏÆú',
+    material_id bigint unsigned NOT NULL,
     PRIMARY KEY (print_label_id),
     UNIQUE (print_label_id),
-    UNIQUE (package_id)
+    UNIQUE (package_id),
+    UNIQUE (location_id),
+    UNIQUE (material_id)
 );
 
 
 CREATE TABLE si_storage_label
 (
     storage_label_id bigint unsigned NOT NULL AUTO_INCREMENT,
-    location_no char(32) NOT NULL,
-    material_no char(32) NOT NULL,
     print_label_id bigint unsigned NOT NULL,
     package_id char(32),
     order_no char(32),
@@ -424,9 +609,67 @@ CREATE TABLE si_storage_label
 2£º·ÇÁ¼Æ·',
     storage_num int,
     storage_time datetime,
+    location_id bigint unsigned NOT NULL,
+    material_id bigint unsigned NOT NULL,
     PRIMARY KEY (storage_label_id),
     UNIQUE (storage_label_id),
-    UNIQUE (print_label_id)
+    UNIQUE (print_label_id),
+    UNIQUE (location_id),
+    UNIQUE (material_id)
+);
+
+
+CREATE TABLE si_supplier
+(
+    supplier_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    supplier_no char(64) NOT NULL,
+    supplier_group_id bigint unsigned,
+    cert_status_id bigint unsigned,
+    supplier_type_id bigint unsigned,
+    settle_period_id bigint,
+    currency_id bigint unsigned,
+    supplier_name char(64) NOT NULL,
+    contact_name char(64),
+    phone char(16),
+    fax char(16),
+    site char(64),
+    mail char(64),
+    address char(128),
+    remark char(255),
+    user_id bigint unsigned,
+    create_time datetime,
+    update_time datetime,
+    -- 1£ºÎ´É¾³ý
+    -- 2£ºÒÑÉ¾³ý
+    dr tinyint COMMENT '1£ºÎ´É¾³ý
+2£ºÒÑÉ¾³ý',
+    PRIMARY KEY (supplier_id),
+    UNIQUE (supplier_id),
+    UNIQUE (supplier_no)
+);
+
+
+CREATE TABLE si_warehouse
+(
+    warehouse_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    warehouse_no char(64) NOT NULL,
+    warehouse_name char(64) NOT NULL,
+    warehouse_type_id bigint unsigned NOT NULL,
+    principal char(32),
+    phone char(16),
+    area char(64),
+    address char(128),
+    remark char(255),
+    user_id bigint unsigned,
+    create_time datetime,
+    update_time datetime,
+    -- 1£ºÎ´É¾³ý
+    -- 2£ºÒÑÉ¾³ý
+    dr tinyint COMMENT '1£ºÎ´É¾³ý
+2£ºÒÑÉ¾³ý',
+    PRIMARY KEY (warehouse_id),
+    UNIQUE (warehouse_id),
+    UNIQUE (warehouse_no)
 );
 
 
@@ -483,6 +726,7 @@ CREATE TABLE sm_receipt_body
 (
     receipt_body_id bigint unsigned NOT NULL AUTO_INCREMENT,
     receipt_head_id bigint unsigned NOT NULL,
+    material_id bigint unsigned NOT NULL,
     order_no char(32),
     -- 1£ºPOµ¥ÊÕÁÏ
     -- 2£ºÑùÆ·²É¹º
@@ -491,7 +735,6 @@ CREATE TABLE sm_receipt_body
 2£ºÑùÆ·²É¹º
 3£ºÉú²úÍËÁÏ',
     receipt_no char(32) NOT NULL,
-    material_no char(32) NOT NULL,
     order_total int,
     accept_num int,
     accept_date datetime,
@@ -612,9 +855,10 @@ CREATE TABLE sm_storage_group
 (
     storage_group_id bigint unsigned NOT NULL AUTO_INCREMENT,
     storage_id bigint unsigned NOT NULL,
-    location_no char(32),
+    location_id bigint unsigned NOT NULL,
     PRIMARY KEY (storage_group_id),
-    UNIQUE (storage_group_id)
+    UNIQUE (storage_group_id),
+    UNIQUE (location_id)
 );
 
 
@@ -695,6 +939,110 @@ ALTER TABLE ba_user_role
 ;
 
 
+ALTER TABLE dd_cert_status
+    ADD FOREIGN KEY (user_id)
+        REFERENCES ba_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE dd_currency
+    ADD FOREIGN KEY (user_id)
+        REFERENCES ba_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE dd_humidity_level
+    ADD FOREIGN KEY (user_id)
+        REFERENCES ba_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE dd_lift_cycle_state
+    ADD FOREIGN KEY (user_id)
+        REFERENCES ba_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE dd_material_level
+    ADD FOREIGN KEY (user_id)
+        REFERENCES ba_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE dd_material_type
+    ADD FOREIGN KEY (user_id)
+        REFERENCES ba_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE dd_material_version
+    ADD FOREIGN KEY (user_id)
+        REFERENCES ba_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE dd_measure_unit
+    ADD FOREIGN KEY (user_id)
+        REFERENCES ba_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE dd_produce_loss_level
+    ADD FOREIGN KEY (user_id)
+        REFERENCES ba_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE dd_settle_period
+    ADD FOREIGN KEY (user_id)
+        REFERENCES ba_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE dd_supplier_group
+    ADD FOREIGN KEY (user_id)
+        REFERENCES ba_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE dd_supplier_type
+    ADD FOREIGN KEY (user_id)
+        REFERENCES ba_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE dd_warehouse_type
+    ADD FOREIGN KEY (user_id)
+        REFERENCES ba_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
 ALTER TABLE om_outbound_record
     ADD FOREIGN KEY (user_id)
         REFERENCES ba_user (user_id)
@@ -719,9 +1067,137 @@ ALTER TABLE si_location
 ;
 
 
+ALTER TABLE si_material
+    ADD FOREIGN KEY (user_id)
+        REFERENCES ba_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_supplier
+    ADD FOREIGN KEY (user_id)
+        REFERENCES ba_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_warehouse
+    ADD FOREIGN KEY (user_id)
+        REFERENCES ba_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
 ALTER TABLE sm_storage_record
     ADD FOREIGN KEY (user_id)
         REFERENCES ba_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_supplier
+    ADD FOREIGN KEY (cert_status_id)
+        REFERENCES dd_cert_status (cert_status_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_supplier
+    ADD FOREIGN KEY (currency_id)
+        REFERENCES dd_currency (currency_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_material
+    ADD FOREIGN KEY (humidity_level_id)
+        REFERENCES dd_humidity_level (humidity_level_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_material
+    ADD FOREIGN KEY (lift_cycle_state_id)
+        REFERENCES dd_lift_cycle_state (lift_cycle_state_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_material
+    ADD FOREIGN KEY (material_level_id)
+        REFERENCES dd_material_level (material_level_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_material
+    ADD FOREIGN KEY (material_type_id)
+        REFERENCES dd_material_type (material_type_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_material
+    ADD FOREIGN KEY (material_version_id)
+        REFERENCES dd_material_version (material_version_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_material
+    ADD FOREIGN KEY (measure_unit_id)
+        REFERENCES dd_measure_unit (measure_unit_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_material
+    ADD FOREIGN KEY (produce_loss_level_id)
+        REFERENCES dd_produce_loss_level (produce_loss_level_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_supplier
+    ADD FOREIGN KEY (settle_period_id)
+        REFERENCES dd_settle_period (settle_period_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_supplier
+    ADD FOREIGN KEY (supplier_group_id)
+        REFERENCES dd_supplier_group (supplier_group_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_supplier
+    ADD FOREIGN KEY (supplier_type_id)
+        REFERENCES dd_supplier_type (supplier_type_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_warehouse
+    ADD FOREIGN KEY (warehouse_type_id)
+        REFERENCES dd_warehouse_type (warehouse_type_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -800,56 +1276,64 @@ ALTER TABLE om_pick_label
 
 
 ALTER TABLE si_print_label
-    ADD FOREIGN KEY (location_no)
-        REFERENCES si_location (location_no)
+    ADD FOREIGN KEY (location_id)
+        REFERENCES si_location (location_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
 
 
 ALTER TABLE si_storage_label
-    ADD FOREIGN KEY (location_no)
-        REFERENCES si_location (location_no)
+    ADD FOREIGN KEY (location_id)
+        REFERENCES si_location (location_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
 
 
 ALTER TABLE sm_storage_group
-    ADD FOREIGN KEY (location_no)
-        REFERENCES si_location (location_no)
+    ADD FOREIGN KEY (location_id)
+        REFERENCES si_location (location_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
 
 
 ALTER TABLE om_pick_body
-    ADD FOREIGN KEY (material_no)
-        REFERENCES si_material (material_no)
+    ADD FOREIGN KEY (material_id)
+        REFERENCES si_material (material_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_material_specification
+    ADD FOREIGN KEY (material_id)
+        REFERENCES si_material (material_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
 
 
 ALTER TABLE si_print_label
-    ADD FOREIGN KEY (material_no)
-        REFERENCES si_material (material_no)
+    ADD FOREIGN KEY (material_id)
+        REFERENCES si_material (material_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
 
 
 ALTER TABLE si_storage_label
-    ADD FOREIGN KEY (material_no)
-        REFERENCES si_material (material_no)
+    ADD FOREIGN KEY (material_id)
+        REFERENCES si_material (material_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
 
 
 ALTER TABLE sm_receipt_body
-    ADD FOREIGN KEY (material_no)
-        REFERENCES si_material (material_no)
+    ADD FOREIGN KEY (material_id)
+        REFERENCES si_material (material_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -906,6 +1390,22 @@ ALTER TABLE sm_storage_detail
 ALTER TABLE om_label_recommend
     ADD FOREIGN KEY (storage_label_id)
         REFERENCES si_storage_label (storage_label_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_material
+    ADD FOREIGN KEY (supplier_id)
+        REFERENCES si_supplier (supplier_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_location
+    ADD FOREIGN KEY (warehouse_id)
+        REFERENCES si_warehouse (warehouse_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
