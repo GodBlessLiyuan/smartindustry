@@ -383,8 +383,7 @@ CREATE TABLE om_pick_body
     dr tinyint COMMENT '1：未删除
 2：已删除',
     PRIMARY KEY (pick_body_id),
-    UNIQUE (pick_body_id),
-    UNIQUE (material_id)
+    UNIQUE (pick_body_id)
 );
 
 
@@ -565,6 +564,7 @@ CREATE TABLE si_print_label
     package_id char(32) NOT NULL,
     produce_date char(32),
     produce_batch char(32),
+    material_id bigint unsigned NOT NULL,
     num int,
     -- 1：良品
     -- 2：非良品
@@ -582,12 +582,9 @@ CREATE TABLE si_print_label
     -- 2：已废弃
     dr tinyint COMMENT '1：未废弃
 2：已废弃',
-    material_id bigint unsigned NOT NULL,
     PRIMARY KEY (print_label_id),
     UNIQUE (print_label_id),
-    UNIQUE (package_id),
-    UNIQUE (location_id),
-    UNIQUE (material_id)
+    UNIQUE (package_id)
 );
 
 
@@ -595,6 +592,8 @@ CREATE TABLE si_storage_label
 (
     storage_label_id bigint unsigned NOT NULL AUTO_INCREMENT,
     print_label_id bigint unsigned NOT NULL,
+    material_id bigint unsigned NOT NULL,
+    location_id bigint unsigned NOT NULL,
     package_id char(32),
     order_no char(32),
     -- 1：PO单收料
@@ -609,13 +608,9 @@ CREATE TABLE si_storage_label
 2：非良品',
     storage_num int,
     storage_time datetime,
-    location_id bigint unsigned NOT NULL,
-    material_id bigint unsigned NOT NULL,
     PRIMARY KEY (storage_label_id),
     UNIQUE (storage_label_id),
-    UNIQUE (print_label_id),
-    UNIQUE (location_id),
-    UNIQUE (material_id)
+    UNIQUE (print_label_id)
 );
 
 
