@@ -123,7 +123,8 @@ public class PickManageServiceImpl implements IPickManageService {
             useList = reList;
         }
         //(3) 推荐未使用的进行相减，以及拼接其他未推荐的pid
-        Map<String, String> useMap = useList.stream().collect(Collectors.toMap(PickHeadBO::getMaterialNo,PickHeadBO::getRecommendPid));
+        Map<String, String> useMap = useList.stream()
+                .collect(HashMap::new, (m,v)->m.put(v.getMaterialNo(), v.getRecommendPid()), HashMap::putAll);
         // 将未使用推荐和已使用未推荐进行组合
         for (PickHeadBO bo:noRecommend) {
             String materialNo = bo.getMaterialNo();
