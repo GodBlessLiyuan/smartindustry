@@ -15,6 +15,7 @@
         <module>industryeureka</module>
         <module>industryzuul</module>
         <module>authoritymanage</module>
+        <module>basicmanage</module>
     </modules>
 
     <name>smartindustry</name>

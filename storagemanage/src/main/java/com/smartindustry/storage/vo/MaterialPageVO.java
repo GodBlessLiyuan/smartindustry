@@ -17,7 +17,10 @@ import java.util.List;
 public class MaterialPageVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
+
+    private Long mid;
     private String mno;
+    private Long mtid;
     private String mname;
     private String mmodel;
     private String mdesc;
@@ -47,7 +50,9 @@ public class MaterialPageVO implements Serializable {
      */
     public static MaterialPageVO convert(MaterialPO po) {
         MaterialPageVO vo = new MaterialPageVO();
+        vo.setMid(po.getMaterialId());
         vo.setMno(po.getMaterialNo());
+        vo.setMtid(po.getMaterialTypeId());
         vo.setMname(po.getMaterialName());
         vo.setMmodel(po.getMaterialModel());
         vo.setMdesc(po.getMaterialDesc());
