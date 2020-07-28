@@ -57,10 +57,10 @@ public interface PrintLabelMapper extends BaseMapper<PrintLabelPO, Long> {
     /**
      * 更新打印标签
      *
-     * @param lno
+     * @param lid
      * @param plIds
      */
-    void updateLnoByIds(@Param("lno") String lno, @Param("plIds") List<Long> plIds);
+    void updateLidByIds(@Param("lid") Long lid, @Param("plIds") List<Long> plIds);
 
     /**
      * 根据关联ID删除数据

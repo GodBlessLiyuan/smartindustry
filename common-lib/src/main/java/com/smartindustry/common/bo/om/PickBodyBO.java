@@ -12,6 +12,10 @@ import lombok.Data;
 @Data
 public class PickBodyBO extends PickBodyPO {
     /**
+     * 物料编号
+     */
+    private String materialNo;
+    /**
      * 物料描述
      */
     private String materialDesc;

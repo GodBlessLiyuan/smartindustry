@@ -13,7 +13,7 @@ public class StorageGroupPO implements Serializable {
 
     private Long storageId;
 
-    private String locationNo;
+    private Long locationId;
 
     private static final long serialVersionUID = 1L;
 }

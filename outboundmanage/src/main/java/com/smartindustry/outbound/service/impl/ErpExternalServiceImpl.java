@@ -1,5 +1,6 @@
 package com.smartindustry.outbound.service.impl;
 
+import com.smartindustry.common.bo.si.StorageLabelBO;
 import com.smartindustry.common.mapper.om.LabelRecommendMapper;
 import com.smartindustry.common.mapper.om.PickBodyMapper;
 import com.smartindustry.common.mapper.om.PickHeadMapper;
@@ -53,19 +54,19 @@ public class ErpExternalServiceImpl implements IErpExternalService {
         new Thread(() -> {
             Map<Long, LabelRecommendPO> labelRecommendPOs = new HashMap<>();
             for (PickBodyPO bodyPO : bodyPOs) {
-                List<StorageLabelPO> storageLabelPOs = storageLabelMapper.queryNotRecommend(headPO.getOrderNo(), bodyPO.getMaterialNo());
+                List<StorageLabelBO> storageLabelBOS = storageLabelMapper.queryNotRecommend(headPO.getOrderNo(), bodyPO.getMaterialId());
                 int num = 0;
-                for (StorageLabelPO storageLabelPO : storageLabelPOs) {
-                    if (labelRecommendPOs.containsKey(storageLabelPO.getStorageLabelId())) {
+                for (StorageLabelBO storageLabelBO : storageLabelBOS) {
+                    if (labelRecommendPOs.containsKey(storageLabelBO.getStorageLabelId())) {
                         continue;
                     }
 
                     LabelRecommendPO labelRecommendPO = new LabelRecommendPO();
                     labelRecommendPO.setPickBodyId(bodyPO.getPickBodyId());
-                    labelRecommendPO.setStorageLabelId(storageLabelPO.getStorageLabelId());
-                    labelRecommendPOs.put(storageLabelPO.getStorageLabelId(), labelRecommendPO);
+                    labelRecommendPO.setStorageLabelId(storageLabelBO.getStorageLabelId());
+                    labelRecommendPOs.put(storageLabelBO.getStorageLabelId(), labelRecommendPO);
 
-                    num += storageLabelPO.getStorageNum();
+                    num += storageLabelBO.getStorageNum();
                     if (num >= bodyPO.getDemandNum()) {
                         break;
                     }

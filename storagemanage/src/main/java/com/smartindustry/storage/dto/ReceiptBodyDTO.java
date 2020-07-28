@@ -23,6 +23,10 @@ public class ReceiptBodyDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 物料ID
+     */
+    private Long mid;
+    /**
      * 物料编码
      */
     private String mno;
@@ -103,9 +107,9 @@ public class ReceiptBodyDTO implements Serializable {
         bo.setOrderNo(headPO.getOrderNo());
         bo.setOrderType(headPO.getOrderType());
         bo.setReceiptNo(no);
+        bo.setMaterialId(dto.getMid());
         bo.setMaterialNo(dto.getMno());
         bo.setMaterialName(dto.getMname());
-        bo.setMaterialType(dto.getMtype());
         bo.setMaterialModel(dto.getMmodel());
         bo.setMaterialDesc(dto.getMdesc());
         bo.setOrderTotal(dto.getOtotal());

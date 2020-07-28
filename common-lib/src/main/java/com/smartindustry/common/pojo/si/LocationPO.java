@@ -10,13 +10,15 @@ import lombok.Data;
  */
 @Data
 public class LocationPO implements Serializable {
-    private String locationNo;
+    private Long locationId;
 
-    private String locationCode;
+    private String locationNo;
 
     private String locationName;
 
-    private Byte locationType;
+    private Long warehouseId;
+
+    private String remark;
 
     private Long userId;
 

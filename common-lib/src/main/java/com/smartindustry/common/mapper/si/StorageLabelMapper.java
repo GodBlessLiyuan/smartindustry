@@ -1,5 +1,6 @@
 package com.smartindustry.common.mapper.si;
 
+import com.smartindustry.common.bo.si.StorageLabelBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.si.StorageLabelPO;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,8 +17,8 @@ public interface StorageLabelMapper extends BaseMapper<StorageLabelPO, Long> {
      * 查询尚未推荐的入库标签
      *
      * @param orderNo
-     * @param materialNo
+     * @param materialId
      * @return
      */
-    List<StorageLabelPO> queryNotRecommend(@Param("orderNo") String orderNo, @Param("materialNo") String materialNo);
+    List<StorageLabelBO> queryNotRecommend(@Param("orderNo") String orderNo, @Param("materialId") Long materialId);
 }

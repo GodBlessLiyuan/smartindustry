@@ -1,14 +1,16 @@
 package com.smartindustry.storage.service.impl;
 
 import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import com.smartindustry.common.bo.si.LabelRecordBO;
 import com.smartindustry.common.bo.sm.ReceiptBO;
 import com.smartindustry.common.bo.sm.ReceiptBodyBO;
 import com.smartindustry.common.constant.ModuleConstant;
 import com.smartindustry.common.mapper.si.LabelRecordMapper;
 import com.smartindustry.common.mapper.si.MaterialMapper;
-import com.smartindustry.common.mapper.sm.*;
+import com.smartindustry.common.mapper.sm.ReceiptBodyMapper;
+import com.smartindustry.common.mapper.sm.ReceiptHeadMapper;
+import com.smartindustry.common.mapper.sm.ReceiptLabelMapper;
+import com.smartindustry.common.mapper.sm.StorageRecordMapper;
 import com.smartindustry.common.pojo.si.MaterialPO;
 import com.smartindustry.common.pojo.sm.ReceiptBodyPO;
 import com.smartindustry.common.pojo.sm.ReceiptHeadPO;
@@ -26,7 +28,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author: xiahui
@@ -54,7 +59,6 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
     public ResultVO pageQuery(Map<String, Object> reqData) {
         Page<ReceiptBO> page = PageQueryUtil.startPage(reqData);
         List<ReceiptBO> bos = receiptBodyMapper.pageQuery(reqData);
-
         return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), ReceiptPageVO.convert(bos)));
     }
 

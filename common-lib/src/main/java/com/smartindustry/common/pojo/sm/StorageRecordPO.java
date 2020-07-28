@@ -8,8 +8,7 @@ import lombok.Data;
 
 /**
  * sm_storage_record
- *
- * @author
+ * @author 
  */
 @AllArgsConstructor
 @Data
@@ -30,11 +29,11 @@ public class StorageRecordPO implements Serializable {
 
     /**
      * 1：录入标签
-     * 5：IQC检测
-     * 10：QE检测
-     * 15：QE确认
-     * 20：物料入库
-     * 25：入库完成
+5：IQC检测
+10：QE检测
+15：QE确认
+20：物料入库
+25：入库完成
      */
     private Byte status;
 

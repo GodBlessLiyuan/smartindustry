@@ -3,9 +3,9 @@
 <mapper namespace="com.smartindustry.common.mapper.si.StorageLabelMapper">
     <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.StorageLabelPO">
         <id column="storage_label_id" jdbcType="BIGINT" property="storageLabelId"/>
-        <result column="location_no" jdbcType="CHAR" property="locationNo"/>
-        <result column="material_no" jdbcType="CHAR" property="materialNo"/>
         <result column="print_label_id" jdbcType="BIGINT" property="printLabelId"/>
+        <result column="material_id" jdbcType="BIGINT" property="materialId"/>
+        <result column="location_id" jdbcType="BIGINT" property="locationId"/>
         <result column="package_id" jdbcType="CHAR" property="packageId"/>
         <result column="order_no" jdbcType="CHAR" property="orderNo"/>
         <result column="order_type" jdbcType="TINYINT" property="orderType"/>
@@ -14,7 +14,7 @@
         <result column="storage_time" jdbcType="TIMESTAMP" property="storageTime"/>
     </resultMap>
     <sql id="Base_Column_List">
-        storage_label_id, location_no, material_no, print_label_id, package_id, order_no,
+        storage_label_id, print_label_id, material_id, location_id, package_id, order_no,
     order_type, `type`, storage_num, storage_time
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -29,12 +29,12 @@
         where storage_label_id = #{storageLabelId,jdbcType=BIGINT}
     </delete>
     <insert id="insert" parameterType="com.smartindustry.common.pojo.si.StorageLabelPO">
-        insert into si_storage_label (storage_label_id, location_no, material_no,
-                                      print_label_id, package_id, order_no,
+        insert into si_storage_label (storage_label_id, print_label_id, material_id,
+                                      location_id, package_id, order_no,
                                       order_type, `type`, storage_num,
                                       storage_time)
-        values (#{storageLabelId,jdbcType=BIGINT}, #{locationNo,jdbcType=CHAR}, #{materialNo,jdbcType=CHAR},
-                #{printLabelId,jdbcType=BIGINT}, #{packageId,jdbcType=CHAR}, #{orderNo,jdbcType=CHAR},
+        values (#{storageLabelId,jdbcType=BIGINT}, #{printLabelId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT},
+                #{locationId,jdbcType=BIGINT}, #{packageId,jdbcType=CHAR}, #{orderNo,jdbcType=CHAR},
                 #{orderType,jdbcType=TINYINT}, #{type,jdbcType=TINYINT}, #{storageNum,jdbcType=INTEGER},
                 #{storageTime,jdbcType=TIMESTAMP})
     </insert>
@@ -44,14 +44,14 @@
             <if test="storageLabelId != null">
                 storage_label_id,
             </if>
-            <if test="locationNo != null">
-                location_no,
-            </if>
-            <if test="materialNo != null">
-                material_no,
-            </if>
             <if test="printLabelId != null">
                 print_label_id,
+            </if>
+            <if test="materialId != null">
+                material_id,
+            </if>
+            <if test="locationId != null">
+                location_id,
             </if>
             <if test="packageId != null">
                 package_id,
@@ -76,14 +76,14 @@
             <if test="storageLabelId != null">
                 #{storageLabelId,jdbcType=BIGINT},
             </if>
-            <if test="locationNo != null">
-                #{locationNo,jdbcType=CHAR},
-            </if>
-            <if test="materialNo != null">
-                #{materialNo,jdbcType=CHAR},
-            </if>
             <if test="printLabelId != null">
                 #{printLabelId,jdbcType=BIGINT},
+            </if>
+            <if test="materialId != null">
+                #{materialId,jdbcType=BIGINT},
+            </if>
+            <if test="locationId != null">
+                #{locationId,jdbcType=BIGINT},
             </if>
             <if test="packageId != null">
                 #{packageId,jdbcType=CHAR},
@@ -108,14 +108,14 @@
     <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.si.StorageLabelPO">
         update si_storage_label
         <set>
-            <if test="locationNo != null">
-                location_no = #{locationNo,jdbcType=CHAR},
-            </if>
-            <if test="materialNo != null">
-                material_no = #{materialNo,jdbcType=CHAR},
-            </if>
             <if test="printLabelId != null">
                 print_label_id = #{printLabelId,jdbcType=BIGINT},
+            </if>
+            <if test="materialId != null">
+                material_id = #{materialId,jdbcType=BIGINT},
+            </if>
+            <if test="locationId != null">
+                location_id = #{locationId,jdbcType=BIGINT},
             </if>
             <if test="packageId != null">
                 package_id = #{packageId,jdbcType=CHAR},
@@ -140,9 +140,9 @@
     </update>
     <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.StorageLabelPO">
         update si_storage_label
-        set location_no    = #{locationNo,jdbcType=CHAR},
-            material_no    = #{materialNo,jdbcType=CHAR},
-            print_label_id = #{printLabelId,jdbcType=BIGINT},
+        set print_label_id = #{printLabelId,jdbcType=BIGINT},
+            material_id    = #{materialId,jdbcType=BIGINT},
+            location_id    = #{locationId,jdbcType=BIGINT},
             package_id     = #{packageId,jdbcType=CHAR},
             order_no       = #{orderNo,jdbcType=CHAR},
             order_type     = #{orderType,jdbcType=TINYINT},
@@ -152,27 +152,36 @@
         where storage_label_id = #{storageLabelId,jdbcType=BIGINT}
     </update>
 
-    <insert id="batchInsert" parameterType="java.util.List">
-        insert into si_storage_label (storage_label_id, location_no, material_no,
-        print_label_id, package_id, order_no,
-        order_type, `type`, storage_num,
-        storage_time)
-        values
-        <foreach collection="list" separator="," item="po">
-            (#{po.storageLabelId,jdbcType=BIGINT}, #{po.locationNo,jdbcType=CHAR}, #{po.materialNo,jdbcType=CHAR},
-            #{po.printLabelId,jdbcType=BIGINT}, #{po.packageId,jdbcType=CHAR}, #{po.orderNo,jdbcType=CHAR},
-            #{po.orderType,jdbcType=TINYINT}, #{po.type,jdbcType=TINYINT}, #{po.storageNum,jdbcType=INTEGER},
-            #{po.storageTime,jdbcType=TIMESTAMP})
-        </foreach>
-    </insert>
-    <select id="queryNotRecommend" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.StorageLabelBO" extends="BaseResultMap">
+        <result column="location_no" jdbcType="CHAR" property="locationNo"/>
+    </resultMap>
+    <sql id="BO_Column_List">
+        sl.storage_label_id, sl.print_label_id, sl.material_id, sl.location_id, sl.package_id, sl.order_no,
+    sl.order_type, sl.`type`, sl.storage_num, sl.storage_time,
+    l.location_no
+    </sql>
+    <select id="queryNotRecommend" resultMap="BOResultMap">
         select
-        <include refid="Base_Column_List"/>
-        from si_storage_label
-        where order_no = #{orderNo,jdbcType=CHAR} and material_no = #{materialNo,jdbcType=CHAR} and type = 1 and
+        <include refid="BO_Column_List"/>, l.location_no as locationNo
+        from si_storage_label sl
+        left join si_location l on sl.location_id = l.location_id
+        where sl.order_no = #{orderNo,jdbcType=CHAR} and sl.material_id = #{materialId,jdbcType=BIGINT} and type = 1 and
         storage_label_id not
         in (
         select storage_label_id from om_label_recommend
         )
     </select>
+    <insert id="batchInsert" parameterType="java.util.List">
+        insert into si_storage_label (storage_label_id, print_label_id, material_id,
+        location_id, package_id, order_no,
+        order_type, `type`, storage_num,
+        storage_time)
+        values
+        <foreach collection="list" separator="," item="po">
+            (#{po.storageLabelId,jdbcType=BIGINT}, #{po.printLabelId,jdbcType=BIGINT}, #{po.materialId,jdbcType=BIGINT},
+            #{po.locationId,jdbcType=BIGINT}, #{po.packageId,jdbcType=CHAR}, #{po.orderNo,jdbcType=CHAR},
+            #{po.orderType,jdbcType=TINYINT}, #{po.type,jdbcType=TINYINT}, #{po.storageNum,jdbcType=INTEGER},
+            #{po.storageTime,jdbcType=TIMESTAMP})
+        </foreach>
+    </insert>
 </mapper>

@@ -81,9 +81,10 @@ public class ReceiptVO implements Serializable {
         ReceiptBodyVO vo = new ReceiptBodyVO();
         vo.setRbid(bo.getReceiptBodyId());
         vo.setRno(bo.getReceiptNo());
+        vo.setMid(bo.getMaterialId());
         vo.setMno(bo.getMaterialNo());
         vo.setMname(bo.getMaterialName());
-        vo.setMtype(bo.getMaterialType());
+        vo.setMtype(bo.getMaterialTypeName());
         vo.setMmodel(bo.getMaterialModel());
         vo.setMdesc(bo.getMaterialDesc());
         vo.setOtotal(bo.getOrderTotal());
@@ -147,6 +148,10 @@ public class ReceiptVO implements Serializable {
          */
         private String rno;
         /**
+         * 物料ID
+         */
+        private Long mid;
+        /**
          * 物料编码
          */
         private String mno;
@@ -157,7 +162,7 @@ public class ReceiptVO implements Serializable {
         /**
          * 物料类型
          */
-        private Byte mtype;
+        private String mtype;
         /**
          * 物料型号
          */

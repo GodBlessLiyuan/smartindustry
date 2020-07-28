@@ -36,13 +36,13 @@ public class PrintUtil {
             while ((str = reader.readLine()) != null) {
                 Matcher mFd = PATTERN_FD.matcher(str);
                 while (mFd.find()) {
-                    str = "^FD>;" + (fdNum == 0 ? po.getMaterialNo() : po.getNum()) + "^FS";
+//                    str = "^FD>;" + (fdNum == 0 ? po.getMaterialNo() : po.getNum()) + "^FS";
                     fdNum++;
                 }
 
                 Matcher mFdma = PATTERN_FDMA.matcher(str);
                 while (mFdma.find()) {
-                    str = "^FDMA," + po.getPackageId() + "," + po.getMaterialNo() + "," + po.getNum() + "," + po.getProduceBatch() + "," + po.getProduceDate() + "^FS";
+//                    str = "^FDMA," + po.getPackageId() + "," + po.getMaterialNo() + "," + po.getNum() + "," + po.getProduceBatch() + "," + po.getProduceDate() + "^FS";
                 }
 
                 System.out.println(str);

@@ -14,7 +14,7 @@ public class PickBodyPO implements Serializable {
 
     private Long pickHeadId;
 
-    private String materialNo;
+    private Long materialId;
 
     private Integer demandNum;
 

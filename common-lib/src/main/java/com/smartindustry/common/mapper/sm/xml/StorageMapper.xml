@@ -154,14 +154,17 @@
     </update>
 
     <sql id="StorageBO_Column_List">
-        storage_id, s.receipt_body_id, storage_no, pending_num, stored_num, storage_time, s.`status`,
-    s.`type`, s.create_time, receipt_no, rb.order_type, m.material_no, material_type, material_desc
+        s.storage_id, s.receipt_body_id, s.storage_no, s.pending_num, s.stored_num, s.storage_time, s.`status`,
+    s.`type`, s.create_time, s.dr,
+    rb.receipt_no, rb.order_type,
+    m.material_no, m.material_desc,
+    mt.material_type_name
     </sql>
     <resultMap id="StorageBOResultMap" type="com.smartindustry.common.bo.sm.StorageBO" extends="BaseResultMap">
         <result column="receipt_no" jdbcType="CHAR" property="receiptNo"/>
         <result column="order_type" jdbcType="TINYINT" property="orderType"/>
         <result column="material_no" jdbcType="CHAR" property="materialNo"/>
-        <result column="material_type" jdbcType="TINYINT" property="materialType"/>
+        <result column="material_type_name" jdbcType="CHAR" property="materialTypeName"/>
         <result column="material_desc" jdbcType="CHAR" property="materialDesc"/>
     </resultMap>
     <select id="pageQuery" resultMap="StorageBOResultMap">
@@ -169,11 +172,12 @@
         <include refid="StorageBO_Column_List"/>
         from sm_storage s
         left join sm_receipt_body rb on s.receipt_body_id = rb.receipt_body_id
-        left join si_material m on rb.material_no = m.material_no
+        left join si_material m on rb.material_id = m.material_id
+        left join dd_material_type mt on m.material_type_id = mt.material_type_id
         <where>
             <if test="rno != null and rno != ''">and rb.receipt_no like '%' #{rno,jdbcType=CHAR} '%'</if>
             <if test="rtype != null and rtype != 0">and rb.order_type = #{rtype,jdbcType=TINYINT}</if>
-            <if test="mtype != null and mtype != 0">and m.material_type = #{mtype,jdbcType=TINYINT}</if>
+            <if test="mtype != null and mtype != 0">and m.material_type_id = #{mtype,jdbcType=BIGINT}</if>
             <if test="status != null and status != 0">and s.`status` = #{status,jdbcType=TINYINT}</if>
             <if test="type != null and type != 0">and s.`type` = #{type,jdbcType=TINYINT}</if>
         </where>

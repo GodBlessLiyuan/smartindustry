@@ -530,7 +530,7 @@ CREATE TABLE si_material
     moq char(32) NOT NULL,
     material_model char(64),
     material_draw char(64),
-    supplier_id bigint unsigned NOT NULL,
+    supplier_id bigint unsigned,
     material_desc char(255),
     test_type tinyint,
     user_id bigint unsigned,
@@ -542,8 +542,7 @@ CREATE TABLE si_material
 2£∫“—…æ≥˝',
     PRIMARY KEY (material_id),
     UNIQUE (material_id),
-    UNIQUE (material_no),
-    UNIQUE (supplier_id)
+    UNIQUE (material_no)
 );
 
 
@@ -574,7 +573,7 @@ CREATE TABLE si_print_label
     -- 2£∫¥Ú”°
     origin tinyint NOT NULL COMMENT '1£∫…®√Ë
 2£∫¥Ú”°',
-    location_id bigint unsigned NOT NULL,
+    location_id bigint unsigned,
     relate_label_id bigint unsigned,
     relate_package_id char(32),
     create_time datetime,
@@ -850,10 +849,9 @@ CREATE TABLE sm_storage_group
 (
     storage_group_id bigint unsigned NOT NULL AUTO_INCREMENT,
     storage_id bigint unsigned NOT NULL,
-    location_id bigint unsigned NOT NULL,
+    location_id bigint unsigned,
     PRIMARY KEY (storage_group_id),
-    UNIQUE (storage_group_id),
-    UNIQUE (location_id)
+    UNIQUE (storage_group_id)
 );
 
 

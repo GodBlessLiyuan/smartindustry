@@ -461,7 +461,7 @@
     <update id="updatePickNum">
         update om_pick_body pb
         set pb.pick_num = pb.pick_num - #{num}
-        where pb.pick_head_id = #{pickHeadId} and pb.material_no = #{materialNo}
+        where pb.pick_head_id = #{pickHeadId} and pb.material_id = #{materialId}
     </update>
     
 <!--    查询给定分料后的PID的关联子pid-->

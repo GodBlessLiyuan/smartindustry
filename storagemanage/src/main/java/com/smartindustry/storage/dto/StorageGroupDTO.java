@@ -27,7 +27,7 @@ public class StorageGroupDTO implements Serializable {
      */
     private Long sgid;
     /**
-     * 库位编号
+     * 库位ID
      */
     private String lno;
     /**

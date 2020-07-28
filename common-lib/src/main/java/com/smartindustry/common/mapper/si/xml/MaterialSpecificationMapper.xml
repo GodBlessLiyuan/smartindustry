@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.si.MaterialSpecificationMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.MaterialSpecificationPO">
+    <id column="material_specification_id" jdbcType="BIGINT" property="materialSpecificationId" />
+    <result column="material_id" jdbcType="BIGINT" property="materialId" />
+    <result column="file_path" jdbcType="CHAR" property="filePath" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    material_specification_id, material_id, file_path, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from si_material_specification
+    where material_specification_id = #{materialSpecificationId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from si_material_specification
+    where material_specification_id = #{materialSpecificationId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.si.MaterialSpecificationPO">
+    insert into si_material_specification (material_specification_id, material_id, 
+      file_path, create_time)
+    values (#{materialSpecificationId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT}, 
+      #{filePath,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.MaterialSpecificationPO">
+    insert into si_material_specification
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="materialSpecificationId != null">
+        material_specification_id,
+      </if>
+      <if test="materialId != null">
+        material_id,
+      </if>
+      <if test="filePath != null">
+        file_path,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="materialSpecificationId != null">
+        #{materialSpecificationId,jdbcType=BIGINT},
+      </if>
+      <if test="materialId != null">
+        #{materialId,jdbcType=BIGINT},
+      </if>
+      <if test="filePath != null">
+        #{filePath,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.si.MaterialSpecificationPO">
+    update si_material_specification
+    <set>
+      <if test="materialId != null">
+        material_id = #{materialId,jdbcType=BIGINT},
+      </if>
+      <if test="filePath != null">
+        file_path = #{filePath,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where material_specification_id = #{materialSpecificationId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.MaterialSpecificationPO">
+    update si_material_specification
+    set material_id = #{materialId,jdbcType=BIGINT},
+      file_path = #{filePath,jdbcType=CHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where material_specification_id = #{materialSpecificationId,jdbcType=BIGINT}
+  </update>
+</mapper>

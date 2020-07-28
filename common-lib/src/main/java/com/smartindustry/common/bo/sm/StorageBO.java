@@ -27,7 +27,7 @@ public class StorageBO extends StoragePO {
     /**
      * 物料类型
      */
-    private Byte materialType;
+    private String materialTypeName;
     /**
      * 物料描述
      */

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.dd.MaterialTypeMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.dd.MaterialTypePO">
+    <id column="material_type_id" jdbcType="BIGINT" property="materialTypeId" />
+    <result column="material_type_name" jdbcType="CHAR" property="materialTypeName" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    material_type_id, material_type_name, user_id, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from dd_material_type
+    where material_type_id = #{materialTypeId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from dd_material_type
+    where material_type_id = #{materialTypeId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.dd.MaterialTypePO">
+    insert into dd_material_type (material_type_id, material_type_name, user_id, 
+      create_time)
+    values (#{materialTypeId,jdbcType=BIGINT}, #{materialTypeName,jdbcType=CHAR}, #{userId,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.dd.MaterialTypePO">
+    insert into dd_material_type
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="materialTypeId != null">
+        material_type_id,
+      </if>
+      <if test="materialTypeName != null">
+        material_type_name,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="materialTypeId != null">
+        #{materialTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="materialTypeName != null">
+        #{materialTypeName,jdbcType=CHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.dd.MaterialTypePO">
+    update dd_material_type
+    <set>
+      <if test="materialTypeName != null">
+        material_type_name = #{materialTypeName,jdbcType=CHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where material_type_id = #{materialTypeId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.dd.MaterialTypePO">
+    update dd_material_type
+    set material_type_name = #{materialTypeName,jdbcType=CHAR},
+      user_id = #{userId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where material_type_id = #{materialTypeId,jdbcType=BIGINT}
+  </update>
+</mapper>

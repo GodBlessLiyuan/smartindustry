@@ -20,6 +20,8 @@ public class PrintLabelPO implements Serializable {
 
     private String produceBatch;
 
+    private Long materialId;
+
     private Integer num;
 
     /**
@@ -34,9 +36,7 @@ public class PrintLabelPO implements Serializable {
      */
     private Byte origin;
 
-    private String materialNo;
-
-    private String locationNo;
+    private Long locationId;
 
     private Long relateLabelId;
 
@@ -66,8 +66,8 @@ public class PrintLabelPO implements Serializable {
         newPlPO.setNum(num);
         newPlPO.setType(type);
         newPlPO.setOrigin(po.getOrigin());
-        newPlPO.setLocationNo(po.getLocationNo());
-        newPlPO.setMaterialNo(po.getMaterialNo());
+        newPlPO.setLocationId(po.getLocationId());
+        newPlPO.setMaterialId(po.getMaterialId());
         newPlPO.setRelatePackageId(po.getPackageId());
         newPlPO.setRelateLabelId(po.getPrintLabelId());
         newPlPO.setCreateTime(new Date());

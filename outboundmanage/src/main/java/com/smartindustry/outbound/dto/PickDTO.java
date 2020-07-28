@@ -71,7 +71,7 @@ public class PickDTO implements Serializable {
     public static PickBodyPO convert(PickHeadPO headPO, PickBodyDTO dto) {
         PickBodyPO po = new PickBodyPO();
         po.setPickHeadId(headPO.getPickHeadId());
-        po.setMaterialNo(dto.getMno());
+        po.setMaterialId(dto.getMid());
         po.setDemandNum(dto.getDnum());
         po.setPickNum(0);
         po.setCreateTime(new Date());
@@ -106,9 +106,9 @@ public class PickDTO implements Serializable {
     @Data
     public static class PickBodyDTO {
         /**
-         * 物料编号
+         * 物料ID
          */
-        private String mno;
+        private Long mid;
         /**
          * 需求数量
          */

@@ -12,8 +12,10 @@ import lombok.Data;
 @Data
 public class ReceiptBodyBO extends ReceiptBodyPO {
 
+    private String materialNo;
+    private Long materialTypeId;
+    private String materialTypeName;
     private String materialName;
-    private Byte materialType;
     private String materialModel;
     private String materialDesc;
     private Byte testType;

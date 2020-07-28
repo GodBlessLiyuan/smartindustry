@@ -226,12 +226,12 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
     /**
      * 在扫码列表中删除一个pid时，相应的已拣货量需要更新
      * @param num
-     * @param materialNo
+     * @param materialId
      * @return
      */
     int updatePickNum(@Param("pickHeadId") Long pickHeadId,
                       @Param("num") Integer num,
-                      @Param("materialNo") String materialNo);
+                      @Param("materialId") Long materialId);
 
     /**
      * 查询父pid的两个子节点

@@ -11,7 +11,7 @@ import java.util.Map;
  * MaterialMapper继承基类
  */
 @Mapper
-public interface MaterialMapper extends BaseMapper<MaterialPO, String> {
+public interface MaterialMapper extends BaseMapper<MaterialPO, Long> {
     /**
      * 分页查询
      *

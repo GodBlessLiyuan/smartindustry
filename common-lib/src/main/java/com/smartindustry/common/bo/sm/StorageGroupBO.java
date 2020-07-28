@@ -13,6 +13,6 @@ import java.util.List;
  */
 @Data
 public class StorageGroupBO extends StorageGroupPO {
-
+    private String locationNo;
     List<StorageDetailBO> detail;
 }

@@ -45,7 +45,7 @@ public class StoragePageVO implements Serializable {
     /**
      * 物料类型
      */
-    private Byte mtype;
+    private String mtype;
     /**
      * 物料描述
      */
@@ -99,7 +99,7 @@ public class StoragePageVO implements Serializable {
         vo.setRno(bo.getReceiptNo());
         vo.setRtype(bo.getOrderType());
         vo.setMno(bo.getMaterialNo());
-        vo.setMtype(bo.getMaterialType());
+        vo.setMtype(bo.getMaterialTypeName());
         vo.setMdesc(bo.getMaterialDesc());
         vo.setCtime(bo.getCreateTime());
         vo.setStatus(bo.getStatus());
