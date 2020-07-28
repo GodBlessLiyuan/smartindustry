@@ -45,6 +45,7 @@ public class ErpExternalServiceImpl implements IErpExternalService {
         head.setPdate(new Date());
         List<ErpOrderVO.ErpOrderBodyVO> body = vo.getBody();
         ErpOrderVO.ErpOrderBodyVO bodyVO = new ErpOrderVO.ErpOrderBodyVO();
+        bodyVO.setMid(1L);
         bodyVO.setMno("5101000496");
         bodyVO.setMtype((byte) 1);
         bodyVO.setMname("原料物料001");
@@ -53,6 +54,7 @@ public class ErpExternalServiceImpl implements IErpExternalService {
         bodyVO.setOtotal(1000);
         body.add(bodyVO);
         ErpOrderVO.ErpOrderBodyVO bodyVO2 = new ErpOrderVO.ErpOrderBodyVO();
+        bodyVO2.setMid(2L);
         bodyVO2.setMno("5101000497");
         bodyVO2.setMtype((byte) 2);
         bodyVO2.setMname("半成品物料002");
