@@ -28,4 +28,19 @@ public interface WarehouseMapper extends BaseMapper<WarehousePO, Long> {
      * @return
      */
     WarehouseBO queryById(Long wid);
+
+    /**
+     * 根据编号查询
+     *
+     * @param wno
+     * @return
+     */
+    WarehousePO queryByNo(String wno);
+
+    /**
+     * 批量删除
+     *
+     * @param wids
+     */
+    void batchDelete(List<Long> wids);
 }

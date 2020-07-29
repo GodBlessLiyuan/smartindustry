@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS ba_user_role;
 DROP TABLE IF EXISTS ba_role;
 DROP TABLE IF EXISTS om_label_recommend;
 DROP TABLE IF EXISTS om_pick_body;
+DROP TABLE IF EXISTS si_material_record;
 DROP TABLE IF EXISTS si_material_specification;
 DROP TABLE IF EXISTS om_pick_label;
 DROP TABLE IF EXISTS si_label_record;
@@ -24,6 +25,7 @@ DROP TABLE IF EXISTS sm_storage_record;
 DROP TABLE IF EXISTS sm_storage;
 DROP TABLE IF EXISTS sm_receipt_body;
 DROP TABLE IF EXISTS si_material;
+DROP TABLE IF EXISTS si_supplier_record;
 DROP TABLE IF EXISTS si_supplier;
 DROP TABLE IF EXISTS dd_cert_status;
 DROP TABLE IF EXISTS dd_currency;
@@ -37,7 +39,9 @@ DROP TABLE IF EXISTS dd_produce_loss_level;
 DROP TABLE IF EXISTS dd_settle_period;
 DROP TABLE IF EXISTS dd_supplier_group;
 DROP TABLE IF EXISTS dd_supplier_type;
+DROP TABLE IF EXISTS si_location_record;
 DROP TABLE IF EXISTS si_location;
+DROP TABLE IF EXISTS si_warehouse_record;
 DROP TABLE IF EXISTS si_warehouse;
 DROP TABLE IF EXISTS dd_warehouse_type;
 DROP TABLE IF EXISTS om_outbound_record;
@@ -514,6 +518,18 @@ CREATE TABLE si_location
 );
 
 
+CREATE TABLE si_location_record
+(
+    location_record_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    location_id bigint unsigned NOT NULL,
+    user_id bigint unsigned NOT NULL,
+    create_time datetime,
+    type char(255),
+    PRIMARY KEY (location_record_id),
+    UNIQUE (location_record_id)
+);
+
+
 CREATE TABLE si_material
 (
     material_id bigint unsigned NOT NULL AUTO_INCREMENT,
@@ -543,6 +559,18 @@ CREATE TABLE si_material
     PRIMARY KEY (material_id),
     UNIQUE (material_id),
     UNIQUE (material_no)
+);
+
+
+CREATE TABLE si_material_record
+(
+    material_record_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    material_id bigint unsigned NOT NULL,
+    user_id bigint unsigned NOT NULL,
+    create_time datetime,
+    type char(255),
+    PRIMARY KEY (material_record_id),
+    UNIQUE (material_record_id)
 );
 
 
@@ -643,6 +671,18 @@ CREATE TABLE si_supplier
 );
 
 
+CREATE TABLE si_supplier_record
+(
+    supplier_record_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    supplier_id bigint unsigned NOT NULL,
+    user_id bigint unsigned NOT NULL,
+    create_time datetime,
+    type char(255),
+    PRIMARY KEY (supplier_record_id),
+    UNIQUE (supplier_record_id)
+);
+
+
 CREATE TABLE si_warehouse
 (
     warehouse_id bigint unsigned NOT NULL AUTO_INCREMENT,
@@ -664,6 +704,18 @@ CREATE TABLE si_warehouse
     PRIMARY KEY (warehouse_id),
     UNIQUE (warehouse_id),
     UNIQUE (warehouse_no)
+);
+
+
+CREATE TABLE si_warehouse_record
+(
+    warehouse_record_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    warehouse_id bigint unsigned NOT NULL,
+    user_id bigint unsigned NOT NULL,
+    create_time datetime,
+    type char(255),
+    PRIMARY KEY (warehouse_record_id),
+    UNIQUE (warehouse_record_id)
 );
 
 
@@ -1060,7 +1112,23 @@ ALTER TABLE si_location
 ;
 
 
+ALTER TABLE si_location_record
+    ADD FOREIGN KEY (user_id)
+        REFERENCES ba_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
 ALTER TABLE si_material
+    ADD FOREIGN KEY (user_id)
+        REFERENCES ba_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_material_record
     ADD FOREIGN KEY (user_id)
         REFERENCES ba_user (user_id)
         ON UPDATE RESTRICT
@@ -1076,7 +1144,23 @@ ALTER TABLE si_supplier
 ;
 
 
+ALTER TABLE si_supplier_record
+    ADD FOREIGN KEY (user_id)
+        REFERENCES ba_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
 ALTER TABLE si_warehouse
+    ADD FOREIGN KEY (user_id)
+        REFERENCES ba_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_warehouse_record
     ADD FOREIGN KEY (user_id)
         REFERENCES ba_user (user_id)
         ON UPDATE RESTRICT
@@ -1268,6 +1352,14 @@ ALTER TABLE om_pick_label
 ;
 
 
+ALTER TABLE si_location_record
+    ADD FOREIGN KEY (location_id)
+        REFERENCES si_location (location_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
 ALTER TABLE si_print_label
     ADD FOREIGN KEY (location_id)
         REFERENCES si_location (location_id)
@@ -1293,6 +1385,14 @@ ALTER TABLE sm_storage_group
 
 
 ALTER TABLE om_pick_body
+    ADD FOREIGN KEY (material_id)
+        REFERENCES si_material (material_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_material_record
     ADD FOREIGN KEY (material_id)
         REFERENCES si_material (material_id)
         ON UPDATE RESTRICT
@@ -1396,7 +1496,23 @@ ALTER TABLE si_material
 ;
 
 
+ALTER TABLE si_supplier_record
+    ADD FOREIGN KEY (supplier_id)
+        REFERENCES si_supplier (supplier_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
 ALTER TABLE si_location
+    ADD FOREIGN KEY (warehouse_id)
+        REFERENCES si_warehouse (warehouse_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_warehouse_record
     ADD FOREIGN KEY (warehouse_id)
         REFERENCES si_warehouse (warehouse_id)
         ON UPDATE RESTRICT

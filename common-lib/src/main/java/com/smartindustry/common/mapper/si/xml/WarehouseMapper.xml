@@ -31,7 +31,8 @@
         from si_warehouse
         where warehouse_id = #{warehouseId,jdbcType=BIGINT}
     </delete>
-    <insert id="insert" parameterType="com.smartindustry.common.pojo.si.WarehousePO">
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.si.WarehousePO" useGeneratedKeys="true"
+            keyProperty="warehouseId">
         insert into si_warehouse (warehouse_id, warehouse_no, warehouse_name,
                                   warehouse_type_id, principal, phone,
                                   area, address, remark, user_id,
@@ -208,6 +209,7 @@
         <if test="wtype != null and wtype != 0">
             and w.warehouse_type_id = #{wtype,jdbcType=BIGINT}
         </if>
+        order by w.create_time desc
     </select>
     <select id="queryById" parameterType="java.util.Map" resultMap="BOResultMap">
         select
@@ -216,4 +218,17 @@
         left join dd_warehouse_type wt on w.warehouse_type_id = wt.warehouse_type_id
         where w.dr = 1
     </select>
+    <select id="queryByNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_warehouse w
+        where w.dr = 1 and warehouse_no = #{wno,jdbcType=CHAR} limit 1
+    </select>
+    <update id="batchDelete" parameterType="java.util.List">
+        update si_warehouse
+        set dr = 2 where warehouse_id in
+        <foreach collection="list" item="wid" open="(" separator="," close=")">
+            #{wid,jdbcType=BIGINT}
+        </foreach>
+    </update>
 </mapper>

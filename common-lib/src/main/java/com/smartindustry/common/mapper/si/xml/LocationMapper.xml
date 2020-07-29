@@ -139,10 +139,26 @@
         where location_id = #{locationId,jdbcType=BIGINT}
     </update>
 
+    <resultMap id="BoResultMap" type="com.smartindustry.common.bo.si.LocationBO">
+    </resultMap>
+    <sql id="Bo_Column_List">
+        l.location_id, l.location_no, l.location_name, l.warehouse_id, l.remark, l.user_id, l.create_time,
+    l.update_time, l.dr
+    </sql>
     <select id="queryByLno" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from si_location
         where location_no = #{locationNo,jdbcType=CHAR} and dr = 1
+    </select>
+    <select id="queryByWids" parameterType="java.util.List" resultMap="BoResultMap">
+        select
+        <include refid="Bo_Column_List"/>
+        from si_location l
+        left join si_warehouse w on l.warehouse_id = w.warehouse_id
+        where l.dr = 1 and w.dr = 1 and warehouse_id in
+        <foreach collection="list" item="wid" separator="," open="(" close=")">
+            #{wid,jdbcType=BIGINT}
+        </foreach>
     </select>
 </mapper>

@@ -81,7 +81,7 @@
         where warehouse_type_id = #{warehouseTypeId,jdbcType=BIGINT}
     </update>
 
-    <select id="queryAll" resultType="java.util.List">
+    <select id="queryAll" resultType="java.util.Map">
         select warehouse_type_id as wtid, warehouse_type_name as wtname
         from dd_warehouse_type
     </select>
