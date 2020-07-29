@@ -74,13 +74,14 @@
     </resultMap>
     <sql id="BO_Column_List">
         lr.label_recommend_id, lr.pick_body_id, lr.storage_label_id,
-        sl.location_no, sl.package_id
+        l.location_no, sl.package_id
     </sql>
     <select id="queryByPbid" parameterType="java.lang.Long" resultMap="BOResultMap">
         select
         <include refid="BO_Column_List"/>
         from om_label_recommend lr
         left join si_storage_label sl on lr.storage_label_id = sl.storage_label_id
+        left join si_location l on sl.location_id = l.location_id
         where lr.pick_body_id = #{pickBodyId,jdbcType=BIGINT}
     </select>
     <insert id="batchInsert" parameterType="java.util.List">
