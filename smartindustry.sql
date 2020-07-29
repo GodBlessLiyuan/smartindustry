@@ -2,6 +2,7 @@ SET SESSION FOREIGN_KEY_CHECKS=0;
 
 /* Drop Tables */
 
+DROP TABLE IF EXISTS am_m_user_authority;
 DROP TABLE IF EXISTS ba_role_authority;
 DROP TABLE IF EXISTS am_authority;
 DROP TABLE IF EXISTS am_dept_record;
@@ -103,6 +104,17 @@ CREATE TABLE am_dept_record
     type char(255),
     PRIMARY KEY (dept_record_id),
     UNIQUE (dept_record_id)
+);
+
+
+CREATE TABLE am_m_user_authority
+(
+    user_authority_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    user_id bigint unsigned NOT NULL,
+    authority_id bigint unsigned NOT NULL,
+    authority_name char(255),
+    PRIMARY KEY (user_authority_id),
+    UNIQUE (user_authority_id)
 );
 
 
@@ -995,6 +1007,14 @@ ALTER TABLE am_authority
 ;
 
 
+ALTER TABLE am_m_user_authority
+    ADD FOREIGN KEY (authority_id)
+        REFERENCES am_authority (authority_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
 ALTER TABLE ba_role_authority
     ADD FOREIGN KEY (authority_id)
         REFERENCES am_authority (authority_id)
@@ -1052,6 +1072,14 @@ ALTER TABLE ba_role_authority
 
 
 ALTER TABLE am_dept_record
+    ADD FOREIGN KEY (user_id)
+        REFERENCES am_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE am_m_user_authority
     ADD FOREIGN KEY (user_id)
         REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
