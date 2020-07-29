@@ -1,188 +1,219 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.smartindustry.common.mapper.si.WarehouseMapper">
-  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.WarehousePO">
-    <id column="warehouse_id" jdbcType="BIGINT" property="warehouseId" />
-    <result column="warehouse_no" jdbcType="CHAR" property="warehouseNo" />
-    <result column="warehouse_name" jdbcType="CHAR" property="warehouseName" />
-    <result column="warehouse_type_id" jdbcType="BIGINT" property="warehouseTypeId" />
-    <result column="principal" jdbcType="CHAR" property="principal" />
-    <result column="phone" jdbcType="CHAR" property="phone" />
-    <result column="area" jdbcType="CHAR" property="area" />
-    <result column="address" jdbcType="CHAR" property="address" />
-    <result column="remark" jdbcType="CHAR" property="remark" />
-    <result column="user_id" jdbcType="BIGINT" property="userId" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="dr" jdbcType="TINYINT" property="dr" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    warehouse_id, warehouse_no, warehouse_name, warehouse_type_id, principal, phone, 
+    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.WarehousePO">
+        <id column="warehouse_id" jdbcType="BIGINT" property="warehouseId"/>
+        <result column="warehouse_no" jdbcType="CHAR" property="warehouseNo"/>
+        <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
+        <result column="warehouse_type_id" jdbcType="BIGINT" property="warehouseTypeId"/>
+        <result column="principal" jdbcType="CHAR" property="principal"/>
+        <result column="phone" jdbcType="CHAR" property="phone"/>
+        <result column="area" jdbcType="CHAR" property="area"/>
+        <result column="address" jdbcType="CHAR" property="address"/>
+        <result column="remark" jdbcType="CHAR" property="remark"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="dr" jdbcType="TINYINT" property="dr"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        warehouse_id, warehouse_no, warehouse_name, warehouse_type_id, principal, phone,
     area, address, remark, user_id, create_time, update_time, dr
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from si_warehouse
-    where warehouse_id = #{warehouseId,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from si_warehouse
-    where warehouse_id = #{warehouseId,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.smartindustry.common.pojo.si.WarehousePO">
-    insert into si_warehouse (warehouse_id, warehouse_no, warehouse_name, 
-      warehouse_type_id, principal, phone, 
-      area, address, remark, user_id, 
-      create_time, update_time, dr
-      )
-    values (#{warehouseId,jdbcType=BIGINT}, #{warehouseNo,jdbcType=CHAR}, #{warehouseName,jdbcType=CHAR}, 
-      #{warehouseTypeId,jdbcType=BIGINT}, #{principal,jdbcType=CHAR}, #{phone,jdbcType=CHAR}, 
-      #{area,jdbcType=CHAR}, #{address,jdbcType=CHAR}, #{remark,jdbcType=CHAR}, #{userId,jdbcType=BIGINT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.WarehousePO">
-    insert into si_warehouse
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="warehouseId != null">
-        warehouse_id,
-      </if>
-      <if test="warehouseNo != null">
-        warehouse_no,
-      </if>
-      <if test="warehouseName != null">
-        warehouse_name,
-      </if>
-      <if test="warehouseTypeId != null">
-        warehouse_type_id,
-      </if>
-      <if test="principal != null">
-        principal,
-      </if>
-      <if test="phone != null">
-        phone,
-      </if>
-      <if test="area != null">
-        area,
-      </if>
-      <if test="address != null">
-        address,
-      </if>
-      <if test="remark != null">
-        remark,
-      </if>
-      <if test="userId != null">
-        user_id,
-      </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
-      <if test="updateTime != null">
-        update_time,
-      </if>
-      <if test="dr != null">
-        dr,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="warehouseId != null">
-        #{warehouseId,jdbcType=BIGINT},
-      </if>
-      <if test="warehouseNo != null">
-        #{warehouseNo,jdbcType=CHAR},
-      </if>
-      <if test="warehouseName != null">
-        #{warehouseName,jdbcType=CHAR},
-      </if>
-      <if test="warehouseTypeId != null">
-        #{warehouseTypeId,jdbcType=BIGINT},
-      </if>
-      <if test="principal != null">
-        #{principal,jdbcType=CHAR},
-      </if>
-      <if test="phone != null">
-        #{phone,jdbcType=CHAR},
-      </if>
-      <if test="area != null">
-        #{area,jdbcType=CHAR},
-      </if>
-      <if test="address != null">
-        #{address,jdbcType=CHAR},
-      </if>
-      <if test="remark != null">
-        #{remark,jdbcType=CHAR},
-      </if>
-      <if test="userId != null">
-        #{userId,jdbcType=BIGINT},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="dr != null">
-        #{dr,jdbcType=TINYINT},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.si.WarehousePO">
-    update si_warehouse
-    <set>
-      <if test="warehouseNo != null">
-        warehouse_no = #{warehouseNo,jdbcType=CHAR},
-      </if>
-      <if test="warehouseName != null">
-        warehouse_name = #{warehouseName,jdbcType=CHAR},
-      </if>
-      <if test="warehouseTypeId != null">
-        warehouse_type_id = #{warehouseTypeId,jdbcType=BIGINT},
-      </if>
-      <if test="principal != null">
-        principal = #{principal,jdbcType=CHAR},
-      </if>
-      <if test="phone != null">
-        phone = #{phone,jdbcType=CHAR},
-      </if>
-      <if test="area != null">
-        area = #{area,jdbcType=CHAR},
-      </if>
-      <if test="address != null">
-        address = #{address,jdbcType=CHAR},
-      </if>
-      <if test="remark != null">
-        remark = #{remark,jdbcType=CHAR},
-      </if>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=BIGINT},
-      </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="dr != null">
-        dr = #{dr,jdbcType=TINYINT},
-      </if>
-    </set>
-    where warehouse_id = #{warehouseId,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.WarehousePO">
-    update si_warehouse
-    set warehouse_no = #{warehouseNo,jdbcType=CHAR},
-      warehouse_name = #{warehouseName,jdbcType=CHAR},
-      warehouse_type_id = #{warehouseTypeId,jdbcType=BIGINT},
-      principal = #{principal,jdbcType=CHAR},
-      phone = #{phone,jdbcType=CHAR},
-      area = #{area,jdbcType=CHAR},
-      address = #{address,jdbcType=CHAR},
-      remark = #{remark,jdbcType=CHAR},
-      user_id = #{userId,jdbcType=BIGINT},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
-      dr = #{dr,jdbcType=TINYINT}
-    where warehouse_id = #{warehouseId,jdbcType=BIGINT}
-  </update>
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_warehouse
+        where warehouse_id = #{warehouseId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from si_warehouse
+        where warehouse_id = #{warehouseId,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.si.WarehousePO">
+        insert into si_warehouse (warehouse_id, warehouse_no, warehouse_name,
+                                  warehouse_type_id, principal, phone,
+                                  area, address, remark, user_id,
+                                  create_time, update_time, dr)
+        values (#{warehouseId,jdbcType=BIGINT}, #{warehouseNo,jdbcType=CHAR}, #{warehouseName,jdbcType=CHAR},
+                #{warehouseTypeId,jdbcType=BIGINT}, #{principal,jdbcType=CHAR}, #{phone,jdbcType=CHAR},
+                #{area,jdbcType=CHAR}, #{address,jdbcType=CHAR}, #{remark,jdbcType=CHAR}, #{userId,jdbcType=BIGINT},
+                #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
+    </insert>
+    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.WarehousePO">
+        insert into si_warehouse
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="warehouseId != null">
+                warehouse_id,
+            </if>
+            <if test="warehouseNo != null">
+                warehouse_no,
+            </if>
+            <if test="warehouseName != null">
+                warehouse_name,
+            </if>
+            <if test="warehouseTypeId != null">
+                warehouse_type_id,
+            </if>
+            <if test="principal != null">
+                principal,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="area != null">
+                area,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="dr != null">
+                dr,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="warehouseId != null">
+                #{warehouseId,jdbcType=BIGINT},
+            </if>
+            <if test="warehouseNo != null">
+                #{warehouseNo,jdbcType=CHAR},
+            </if>
+            <if test="warehouseName != null">
+                #{warehouseName,jdbcType=CHAR},
+            </if>
+            <if test="warehouseTypeId != null">
+                #{warehouseTypeId,jdbcType=BIGINT},
+            </if>
+            <if test="principal != null">
+                #{principal,jdbcType=CHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=CHAR},
+            </if>
+            <if test="area != null">
+                #{area,jdbcType=CHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=CHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=CHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dr != null">
+                #{dr,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.si.WarehousePO">
+        update si_warehouse
+        <set>
+            <if test="warehouseNo != null">
+                warehouse_no = #{warehouseNo,jdbcType=CHAR},
+            </if>
+            <if test="warehouseName != null">
+                warehouse_name = #{warehouseName,jdbcType=CHAR},
+            </if>
+            <if test="warehouseTypeId != null">
+                warehouse_type_id = #{warehouseTypeId,jdbcType=BIGINT},
+            </if>
+            <if test="principal != null">
+                principal = #{principal,jdbcType=CHAR},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=CHAR},
+            </if>
+            <if test="area != null">
+                area = #{area,jdbcType=CHAR},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=CHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=CHAR},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dr != null">
+                dr = #{dr,jdbcType=TINYINT},
+            </if>
+        </set>
+        where warehouse_id = #{warehouseId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.WarehousePO">
+        update si_warehouse
+        set warehouse_no      = #{warehouseNo,jdbcType=CHAR},
+            warehouse_name    = #{warehouseName,jdbcType=CHAR},
+            warehouse_type_id = #{warehouseTypeId,jdbcType=BIGINT},
+            principal         = #{principal,jdbcType=CHAR},
+            phone             = #{phone,jdbcType=CHAR},
+            area              = #{area,jdbcType=CHAR},
+            address           = #{address,jdbcType=CHAR},
+            remark            = #{remark,jdbcType=CHAR},
+            user_id           = #{userId,jdbcType=BIGINT},
+            create_time       = #{createTime,jdbcType=TIMESTAMP},
+            update_time       = #{updateTime,jdbcType=TIMESTAMP},
+            dr                = #{dr,jdbcType=TINYINT}
+        where warehouse_id = #{warehouseId,jdbcType=BIGINT}
+    </update>
+
+    <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.WarehouseBO" extends="BaseResultMap">
+        <result column="warehouse_type_name" jdbcType="CHAR" property="warehouseTypeName"/>
+    </resultMap>
+    <sql id="BO_Column_List">
+        w.warehouse_id, w.warehouse_no, w.warehouse_name, w.warehouse_type_id, w.principal, w.phone,
+    w.area, w.address, w.remark, w.user_id, w.create_time, w.update_time, w.dr,
+    wt.warehouse_type_name
+    </sql>
+    <select id="pageQuery" parameterType="java.util.Map" resultMap="BOResultMap">
+        select
+        <include refid="BO_Column_List"/>
+        from si_warehouse w
+        left join dd_warehouse_type wt on w.warehouse_type_id = wt.warehouse_type_id
+        where w.dr = 1
+        <if test="wno != null and wno != ''">
+            and w.warehouse_no like '%' #{wno,jdbcType=CHAR} '%'
+        </if>
+        <if test="wname != null and wname != ''">
+            and w.warehouse_name like '%' #{wname,jdbcType=CHAR} '%'
+        </if>
+        <if test="wtype != null and wtype != 0">
+            and w.warehouse_type_id = #{wtype,jdbcType=BIGINT}
+        </if>
+    </select>
+    <select id="queryById" parameterType="java.util.Map" resultMap="BOResultMap">
+        select
+        <include refid="BO_Column_List"/>
+        from si_warehouse w
+        left join dd_warehouse_type wt on w.warehouse_type_id = wt.warehouse_type_id
+        where w.dr = 1
+    </select>
 </mapper>
