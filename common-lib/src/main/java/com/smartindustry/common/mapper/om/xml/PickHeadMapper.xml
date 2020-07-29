@@ -262,7 +262,7 @@
     </select>
     <!--    查看当前工单拣货单的推荐pid-->
     <select id="queryRecommend" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.om.PickHeadBO">
-        select m.material_no as materialNo, GROUP_CONCAT(sl.package_id) as recommendPid
+        select m.material_no as materialNo,GROUP_CONCAT(sl.package_id) as recommendPid
         from om_pick_head ph
                  left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
                  left join om_label_recommend lr on pb.pick_body_id = lr.pick_body_id
@@ -341,6 +341,7 @@
     <!--    当物料的已拣货量未满需求量，查找出其他推荐的pid-->
     <select id="queryNoRecommend" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.om.PickHeadBO">
         select ph.pick_head_id              as pickHeadId,
+               ma.material_id               as materialId,
                ma.material_no               as materialNo,
                ma.material_name             as materialName,
                ma.material_desc             as materialDesc,
@@ -376,7 +377,7 @@
                  left join om_pick_label pl on ph.pick_head_id = pl.pick_head_id
                  left join si_print_label spl on pl.print_label_id = spl.print_label_id
                  left join si_material ma on spl.material_id = ma.material_id
-        where ph.pick_head_id = #{pickHeadId}
+        where ph.pick_head_id = #{pickHeadId} and spl.package_id is not null
         limit 1
     </select>
 
@@ -528,6 +529,14 @@
         where ph.pick_head_id = #{pickHeadId}
           and ph.dr = 1
           and spl.package_id is not null
+    </select>
+
+    <select id="queryOnoByPid" parameterType="java.lang.Long" resultType="java.lang.String">
+        select distinct rb.order_no
+        from sm_receipt_body rb
+        left join sm_receipt_label rl on rb.receipt_body_id = rl.receipt_body_id
+        left join si_print_label pl on rl.print_label_id = pl.print_label_id
+        where pl.print_label_id = #{printLabelId}
     </select>
 </mapper>
 
