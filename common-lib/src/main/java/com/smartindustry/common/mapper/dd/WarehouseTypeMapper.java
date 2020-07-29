@@ -18,4 +18,12 @@ public interface WarehouseTypeMapper extends BaseMapper<WarehouseTypePO, Long> {
      * @return
      */
     List<Map<String, Object>> queryAll();
+
+    /**
+     * 根据名称查询
+     *
+     * @param wtname
+     * @return
+     */
+    WarehouseTypePO queryByName(String wtname);
 }

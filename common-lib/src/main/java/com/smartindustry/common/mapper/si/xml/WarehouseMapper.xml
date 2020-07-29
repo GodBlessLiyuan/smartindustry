@@ -231,4 +231,10 @@
             #{wid,jdbcType=BIGINT}
         </foreach>
     </update>
+    <select id="queryByWtid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_warehouse
+        where dr = 1 and warehouse_type_id = #{wtid,jdbcType=BIGINT}
+    </select>
 </mapper>

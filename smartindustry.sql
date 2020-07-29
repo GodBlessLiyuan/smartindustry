@@ -2,11 +2,11 @@ SET SESSION FOREIGN_KEY_CHECKS=0;
 
 /* Drop Tables */
 
-DROP TABLE IF EXISTS ba_m_user_authority;
 DROP TABLE IF EXISTS ba_role_authority;
-DROP TABLE IF EXISTS ba_authority;
-DROP TABLE IF EXISTS ba_user_role;
-DROP TABLE IF EXISTS ba_role;
+DROP TABLE IF EXISTS am_authority;
+DROP TABLE IF EXISTS am_dept_record;
+DROP TABLE IF EXISTS am_role_record;
+DROP TABLE IF EXISTS am_user_record;
 DROP TABLE IF EXISTS om_label_recommend;
 DROP TABLE IF EXISTS om_pick_body;
 DROP TABLE IF EXISTS si_material_record;
@@ -45,7 +45,9 @@ DROP TABLE IF EXISTS si_warehouse_record;
 DROP TABLE IF EXISTS si_warehouse;
 DROP TABLE IF EXISTS dd_warehouse_type;
 DROP TABLE IF EXISTS om_outbound_record;
-DROP TABLE IF EXISTS ba_user;
+DROP TABLE IF EXISTS am_user;
+DROP TABLE IF EXISTS am_dept;
+DROP TABLE IF EXISTS am_role;
 DROP TABLE IF EXISTS om_logistics_picture;
 DROP TABLE IF EXISTS om_logistics_record;
 DROP TABLE IF EXISTS om_outbound;
@@ -58,85 +60,134 @@ DROP TABLE IF EXISTS sm_receipt_head;
 
 /* Create Tables */
 
-CREATE TABLE ba_authority
+CREATE TABLE am_authority
 (
     authority_id bigint unsigned NOT NULL AUTO_INCREMENT,
-    code char(255) NOT NULL,
-    name char(255) NOT NULL,
+    authority_name char(255) NOT NULL,
+    -- 1£º²Ëµ¥   2£º°´Å¥
+    type tinyint COMMENT '1£º²Ëµ¥   2£º°´Å¥',
+    parent_id bigint unsigned NOT NULL,
+    PRIMARY KEY (authority_id),
+    UNIQUE (authority_id)
+);
+
+
+CREATE TABLE am_dept
+(
+    dept_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    parent_id bigint unsigned,
+    detp_name char(32) NOT NULL,
+    user_id bigint unsigned,
+    dept_desc char(255),
+    -- 1 Æô¶¯
+    -- 2 ½ûÓÃ
+    status tinyint COMMENT '1 Æô¶¯
+2 ½ûÓÃ',
     create_time datetime,
+    update_time datetime,
     -- 1£ºÎ´É¾³ý
     -- 2£ºÒÑÉ¾³ý
     dr tinyint COMMENT '1£ºÎ´É¾³ý
 2£ºÒÑÉ¾³ý',
-    PRIMARY KEY (authority_id),
-    UNIQUE (authority_id),
-    UNIQUE (code)
+    PRIMARY KEY (dept_id),
+    UNIQUE (dept_id)
 );
 
 
-CREATE TABLE ba_m_user_authority
+CREATE TABLE am_dept_record
 (
-    user_authority_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    dept_record_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    dept_id bigint unsigned NOT NULL,
     user_id bigint unsigned NOT NULL,
-    authority_id bigint unsigned NOT NULL,
-    code char(255),
-    name char(255),
-    PRIMARY KEY (user_authority_id),
-    UNIQUE (user_authority_id)
+    create_time datetime,
+    type char(255),
+    PRIMARY KEY (dept_record_id),
+    UNIQUE (dept_record_id)
 );
 
 
-CREATE TABLE ba_role
+CREATE TABLE am_role
 (
     role_id bigint unsigned NOT NULL AUTO_INCREMENT,
-    code char(255) NOT NULL,
-    name char(255) NOT NULL,
+    role_name char(32) NOT NULL,
+    role_desc char(255),
+    -- 1£ºÆôÓÃ
+    -- 2£º½ûÓÃ
+    status tinyint COMMENT '1£ºÆôÓÃ
+2£º½ûÓÃ',
     create_time datetime,
+    update_time datetime,
     -- 1£ºÎ´É¾³ý
     -- 2£ºÒÑÉ¾³ý
     dr tinyint COMMENT '1£ºÎ´É¾³ý
 2£ºÒÑÉ¾³ý',
     PRIMARY KEY (role_id),
-    UNIQUE (role_id),
-    UNIQUE (code)
+    UNIQUE (role_id)
 );
 
 
-CREATE TABLE ba_role_authority
+CREATE TABLE am_role_record
 (
-    role_authority_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    role_record_id bigint unsigned NOT NULL AUTO_INCREMENT,
     role_id bigint unsigned NOT NULL,
-    authority_id bigint unsigned NOT NULL,
-    PRIMARY KEY (role_authority_id),
-    UNIQUE (role_authority_id),
-    UNIQUE (role_id),
-    UNIQUE (authority_id)
+    user_id bigint unsigned NOT NULL,
+    create_time datetime,
+    type char(255),
+    PRIMARY KEY (role_record_id)
 );
 
 
-CREATE TABLE ba_user
+CREATE TABLE am_user
 (
     user_id bigint unsigned NOT NULL AUTO_INCREMENT,
-    username char(255) NOT NULL,
-    password char(255) NOT NULL,
+    name char(32) NOT NULL,
+    -- 1 ÄÐ
+    -- 2 Å®
+    sex tinyint COMMENT '1 ÄÐ
+2 Å®',
+    dept_id bigint unsigned NOT NULL,
+    username char(32) NOT NULL,
+    password char(32) NOT NULL,
+    role_id bigint unsigned NOT NULL,
+    job char(16),
+    phone char(16),
+    email char(255),
+    -- 1 ÆôÓÃ
+    -- 2 ½ûÓÃ
+    status tinyint COMMENT '1 ÆôÓÃ
+2 ½ûÓÃ',
+    remark char(255),
     create_time datetime,
+    update_time datetime,
     -- 1£ºÎ´É¾³ý
     -- 2£ºÒÑÉ¾³ý
     dr tinyint COMMENT '1£ºÎ´É¾³ý
 2£ºÒÑÉ¾³ý',
     PRIMARY KEY (user_id),
-    UNIQUE (user_id),
-    UNIQUE (username)
+    UNIQUE (user_id)
 );
 
 
-CREATE TABLE ba_user_role
+CREATE TABLE am_user_record
 (
-    user_role_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    user_record_id bigint NOT NULL AUTO_INCREMENT,
     user_id bigint unsigned NOT NULL,
+    operate_id bigint unsigned NOT NULL,
+    create_time datetime,
+    type char(255),
+    PRIMARY KEY (user_record_id),
+    UNIQUE (user_record_id),
+    UNIQUE (operate_id)
+);
+
+
+CREATE TABLE ba_role_authority
+(
+    role_authority_id bigint NOT NULL AUTO_INCREMENT,
     role_id bigint unsigned NOT NULL,
-    PRIMARY KEY (user_role_id),
-    UNIQUE (user_role_id)
+    authority_id bigint unsigned NOT NULL,
+    PRIMARY KEY (role_authority_id),
+    UNIQUE (role_authority_id)
 );
 
 
@@ -936,9 +987,9 @@ CREATE TABLE sm_storage_record
 
 /* Create Foreign Keys */
 
-ALTER TABLE ba_m_user_authority
-    ADD FOREIGN KEY (authority_id)
-        REFERENCES ba_authority (authority_id)
+ALTER TABLE am_authority
+    ADD FOREIGN KEY (parent_id)
+        REFERENCES am_authority (authority_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -946,7 +997,47 @@ ALTER TABLE ba_m_user_authority
 
 ALTER TABLE ba_role_authority
     ADD FOREIGN KEY (authority_id)
-        REFERENCES ba_authority (authority_id)
+        REFERENCES am_authority (authority_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE am_dept
+    ADD FOREIGN KEY (parent_id)
+        REFERENCES am_dept (dept_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE am_dept_record
+    ADD FOREIGN KEY (dept_id)
+        REFERENCES am_dept (dept_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE am_user
+    ADD FOREIGN KEY (dept_id)
+        REFERENCES am_dept (dept_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE am_role_record
+    ADD FOREIGN KEY (role_id)
+        REFERENCES am_role (role_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE am_user
+    ADD FOREIGN KEY (role_id)
+        REFERENCES am_role (role_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -954,31 +1045,39 @@ ALTER TABLE ba_role_authority
 
 ALTER TABLE ba_role_authority
     ADD FOREIGN KEY (role_id)
-        REFERENCES ba_role (role_id)
+        REFERENCES am_role (role_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
 
 
-ALTER TABLE ba_user_role
-    ADD FOREIGN KEY (role_id)
-        REFERENCES ba_role (role_id)
-        ON UPDATE RESTRICT
-        ON DELETE RESTRICT
-;
-
-
-ALTER TABLE ba_m_user_authority
+ALTER TABLE am_dept_record
     ADD FOREIGN KEY (user_id)
-        REFERENCES ba_user (user_id)
+        REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
 
 
-ALTER TABLE ba_user_role
+ALTER TABLE am_role_record
     ADD FOREIGN KEY (user_id)
-        REFERENCES ba_user (user_id)
+        REFERENCES am_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE am_user_record
+    ADD FOREIGN KEY (user_id)
+        REFERENCES am_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE am_user_record
+    ADD FOREIGN KEY (operate_id)
+        REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -986,7 +1085,7 @@ ALTER TABLE ba_user_role
 
 ALTER TABLE dd_cert_status
     ADD FOREIGN KEY (user_id)
-        REFERENCES ba_user (user_id)
+        REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -994,7 +1093,7 @@ ALTER TABLE dd_cert_status
 
 ALTER TABLE dd_currency
     ADD FOREIGN KEY (user_id)
-        REFERENCES ba_user (user_id)
+        REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -1002,7 +1101,7 @@ ALTER TABLE dd_currency
 
 ALTER TABLE dd_humidity_level
     ADD FOREIGN KEY (user_id)
-        REFERENCES ba_user (user_id)
+        REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -1010,7 +1109,7 @@ ALTER TABLE dd_humidity_level
 
 ALTER TABLE dd_lift_cycle_state
     ADD FOREIGN KEY (user_id)
-        REFERENCES ba_user (user_id)
+        REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -1018,7 +1117,7 @@ ALTER TABLE dd_lift_cycle_state
 
 ALTER TABLE dd_material_level
     ADD FOREIGN KEY (user_id)
-        REFERENCES ba_user (user_id)
+        REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -1026,7 +1125,7 @@ ALTER TABLE dd_material_level
 
 ALTER TABLE dd_material_type
     ADD FOREIGN KEY (user_id)
-        REFERENCES ba_user (user_id)
+        REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -1034,7 +1133,7 @@ ALTER TABLE dd_material_type
 
 ALTER TABLE dd_material_version
     ADD FOREIGN KEY (user_id)
-        REFERENCES ba_user (user_id)
+        REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -1042,7 +1141,7 @@ ALTER TABLE dd_material_version
 
 ALTER TABLE dd_measure_unit
     ADD FOREIGN KEY (user_id)
-        REFERENCES ba_user (user_id)
+        REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -1050,7 +1149,7 @@ ALTER TABLE dd_measure_unit
 
 ALTER TABLE dd_produce_loss_level
     ADD FOREIGN KEY (user_id)
-        REFERENCES ba_user (user_id)
+        REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -1058,7 +1157,7 @@ ALTER TABLE dd_produce_loss_level
 
 ALTER TABLE dd_settle_period
     ADD FOREIGN KEY (user_id)
-        REFERENCES ba_user (user_id)
+        REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -1066,7 +1165,7 @@ ALTER TABLE dd_settle_period
 
 ALTER TABLE dd_supplier_group
     ADD FOREIGN KEY (user_id)
-        REFERENCES ba_user (user_id)
+        REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -1074,7 +1173,7 @@ ALTER TABLE dd_supplier_group
 
 ALTER TABLE dd_supplier_type
     ADD FOREIGN KEY (user_id)
-        REFERENCES ba_user (user_id)
+        REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -1082,7 +1181,7 @@ ALTER TABLE dd_supplier_type
 
 ALTER TABLE dd_warehouse_type
     ADD FOREIGN KEY (user_id)
-        REFERENCES ba_user (user_id)
+        REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -1090,7 +1189,7 @@ ALTER TABLE dd_warehouse_type
 
 ALTER TABLE om_outbound_record
     ADD FOREIGN KEY (user_id)
-        REFERENCES ba_user (user_id)
+        REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -1098,7 +1197,7 @@ ALTER TABLE om_outbound_record
 
 ALTER TABLE si_label_record
     ADD FOREIGN KEY (user_id)
-        REFERENCES ba_user (user_id)
+        REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -1106,7 +1205,7 @@ ALTER TABLE si_label_record
 
 ALTER TABLE si_location
     ADD FOREIGN KEY (user_id)
-        REFERENCES ba_user (user_id)
+        REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -1114,7 +1213,7 @@ ALTER TABLE si_location
 
 ALTER TABLE si_location_record
     ADD FOREIGN KEY (user_id)
-        REFERENCES ba_user (user_id)
+        REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -1122,7 +1221,7 @@ ALTER TABLE si_location_record
 
 ALTER TABLE si_material
     ADD FOREIGN KEY (user_id)
-        REFERENCES ba_user (user_id)
+        REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -1130,7 +1229,7 @@ ALTER TABLE si_material
 
 ALTER TABLE si_material_record
     ADD FOREIGN KEY (user_id)
-        REFERENCES ba_user (user_id)
+        REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -1138,7 +1237,7 @@ ALTER TABLE si_material_record
 
 ALTER TABLE si_supplier
     ADD FOREIGN KEY (user_id)
-        REFERENCES ba_user (user_id)
+        REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -1146,7 +1245,7 @@ ALTER TABLE si_supplier
 
 ALTER TABLE si_supplier_record
     ADD FOREIGN KEY (user_id)
-        REFERENCES ba_user (user_id)
+        REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -1154,7 +1253,7 @@ ALTER TABLE si_supplier_record
 
 ALTER TABLE si_warehouse
     ADD FOREIGN KEY (user_id)
-        REFERENCES ba_user (user_id)
+        REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -1162,7 +1261,7 @@ ALTER TABLE si_warehouse
 
 ALTER TABLE si_warehouse_record
     ADD FOREIGN KEY (user_id)
-        REFERENCES ba_user (user_id)
+        REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -1170,7 +1269,7 @@ ALTER TABLE si_warehouse_record
 
 ALTER TABLE sm_storage_record
     ADD FOREIGN KEY (user_id)
-        REFERENCES ba_user (user_id)
+        REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;

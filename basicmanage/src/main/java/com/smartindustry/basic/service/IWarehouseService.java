@@ -2,6 +2,7 @@ package com.smartindustry.basic.service;
 
 import com.smartindustry.basic.dto.OperateDTO;
 import com.smartindustry.basic.dto.WarehouseDTO;
+import com.smartindustry.basic.dto.WarehouseTypeDTO;
 import com.smartindustry.common.vo.ResultVO;
 
 import java.util.List;
@@ -16,8 +17,6 @@ import java.util.Map;
 public interface IWarehouseService {
     ResultVO pageQuery(Map<String, Object> reqData);
 
-    ResultVO typeQuery();
-
     ResultVO edit(WarehouseDTO dto);
 
     ResultVO delete(List<Long> wids);
@@ -25,4 +24,10 @@ public interface IWarehouseService {
     ResultVO detail(OperateDTO dto);
 
     ResultVO record(OperateDTO dto);
+
+    ResultVO typeQuery();
+
+    ResultVO typeEdit(WarehouseTypeDTO dto);
+
+    ResultVO typeDelete(OperateDTO dto);
 }

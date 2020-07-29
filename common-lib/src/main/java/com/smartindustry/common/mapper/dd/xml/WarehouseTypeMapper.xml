@@ -85,4 +85,10 @@
         select warehouse_type_id as wtid, warehouse_type_name as wtname
         from dd_warehouse_type
     </select>
+    <select id="queryByName" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from dd_warehouse_type
+        where warehouse_type_name = #{warehouseTypeName,jdbcType=CHAR}
+    </select>
 </mapper>

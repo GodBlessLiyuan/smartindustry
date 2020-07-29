@@ -15,4 +15,5 @@ public class OperateDTO implements Serializable {
     private static final long SerialVersionUID = 1L;
 
     private Long wid;
+    private Long wtid;
 }

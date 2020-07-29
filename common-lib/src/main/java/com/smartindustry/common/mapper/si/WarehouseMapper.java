@@ -43,4 +43,12 @@ public interface WarehouseMapper extends BaseMapper<WarehousePO, Long> {
      * @param wids
      */
     void batchDelete(List<Long> wids);
+
+    /**
+     * 根据 wtid 查询
+     *
+     * @param wtid
+     * @return
+     */
+    List<WarehousePO> queryByWtid(Long wtid);
 }

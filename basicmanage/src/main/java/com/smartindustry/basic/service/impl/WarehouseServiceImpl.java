@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.smartindustry.basic.constant.BasicConstant;
 import com.smartindustry.basic.dto.OperateDTO;
 import com.smartindustry.basic.dto.WarehouseDTO;
+import com.smartindustry.basic.dto.WarehouseTypeDTO;
 import com.smartindustry.basic.service.IWarehouseService;
 import com.smartindustry.basic.vo.WarehouseRecordVO;
 import com.smartindustry.basic.vo.WarehouseVO;
@@ -13,6 +14,7 @@ import com.smartindustry.common.mapper.dd.WarehouseTypeMapper;
 import com.smartindustry.common.mapper.si.LocationMapper;
 import com.smartindustry.common.mapper.si.WarehouseMapper;
 import com.smartindustry.common.mapper.si.WarehouseRecordMapper;
+import com.smartindustry.common.pojo.dd.WarehouseTypePO;
 import com.smartindustry.common.pojo.si.WarehousePO;
 import com.smartindustry.common.pojo.si.WarehouseRecordPO;
 import com.smartindustry.common.util.PageQueryUtil;
@@ -51,12 +53,6 @@ public class WarehouseServiceImpl implements IWarehouseService {
         List<WarehouseBO> bos = warehouseMapper.pageQuery(reqData);
 
         return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), WarehouseVO.convert(bos)));
-    }
-
-    @Override
-    public ResultVO typeQuery() {
-        List<Map<String, Object>> res = warehouseTypeMapper.queryAll();
-        return ResultVO.ok().setData(res);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -114,5 +110,50 @@ public class WarehouseServiceImpl implements IWarehouseService {
     public ResultVO record(OperateDTO dto) {
         List<WarehouseRecordPO> warehouseRecordPOs = warehouseRecordMapper.queryByWid(dto.getWid());
         return ResultVO.ok().setData(WarehouseRecordVO.convert(warehouseRecordPOs));
+    }
+
+    @Override
+    public ResultVO typeQuery() {
+        List<Map<String, Object>> res = warehouseTypeMapper.queryAll();
+        return ResultVO.ok().setData(res);
+    }
+
+    @Override
+    public ResultVO typeEdit(WarehouseTypeDTO dto) {
+        WarehouseTypePO exitPO = warehouseTypeMapper.queryByName(dto.getWtname());
+        if (null != exitPO && (dto.getWtid() == null || !dto.getWtid().equals(exitPO.getWarehouseTypeId()))) {
+            return new ResultVO(1004);
+        }
+
+        if (null == dto.getWtid()) {
+            // 新增
+            warehouseTypeMapper.insert(WarehouseTypeDTO.createPO(dto, 1L));
+            return ResultVO.ok();
+        }
+        // 修改
+        WarehouseTypePO warehouseTypePO = warehouseTypeMapper.selectByPrimaryKey(dto.getWtid());
+        if (null == warehouseTypePO) {
+            return new ResultVO(1002);
+        }
+
+        warehouseTypeMapper.updateByPrimaryKey(WarehouseTypeDTO.buildPO(warehouseTypePO, dto));
+        return ResultVO.ok();
+    }
+
+    @Override
+    public ResultVO typeDelete(OperateDTO dto) {
+        WarehouseTypePO warehouseTypePO = warehouseTypeMapper.selectByPrimaryKey(dto.getWtid());
+        if (null == warehouseTypePO) {
+            return new ResultVO(1002);
+        }
+
+        List<WarehousePO> warehousePOs = warehouseMapper.queryByWtid(dto.getWtid());
+        if (null != warehousePOs && warehousePOs.size() > 0) {
+            return new ResultVO(1007);
+        }
+
+        warehouseTypeMapper.deleteByPrimaryKey(dto.getWtid());
+
+        return ResultVO.ok();
     }
 }
