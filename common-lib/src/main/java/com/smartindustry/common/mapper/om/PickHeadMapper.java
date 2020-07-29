@@ -162,7 +162,7 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
      * @param pickHeadId
      * @return
      */
-    int judgeIsPick(@Param("pickHeadId") Long pickHeadId);
+    Integer judgeIsPick(@Param("pickHeadId") Long pickHeadId);
 
     /**
      * 判断当前的工单拣货单是否是异常
@@ -247,4 +247,11 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
      * @return
      */
     List<PrintLabelPO> queryByPhidItems(@Param("pickHeadId") Long pickHeadId);
+
+    /**
+     * 根据打印标签pid查询来源订单编号
+     * @param printLabelId
+     * @return
+     */
+    String queryOnoByPid(@Param("printLabelId") Long printLabelId);
 }
