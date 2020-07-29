@@ -190,18 +190,14 @@ public class PickManageServiceImpl implements IPickManageService {
     public ResultVO pickPidOut(Long pickHeadId, String packageId) {
         //1.首先根据输入的PID,得到相应PID的信息，进行展示
         PrintLabelBO bo = pickHeadMapper.pickPid(packageId);
+        PickHeadPO po = pickHeadMapper.selectByPrimaryKey(pickHeadId);
         if (bo == null) {
             // 提示没有这个PID号
             return new ResultVO(2040);
         }
-        //2 若当前输入的PID已经扫码入库，则提示不需要重复扫码
-        Integer resultPid = pickHeadMapper.judgeIsPidHave(pickHeadId, packageId);
-        if (resultPid != null) {
-            return new ResultVO(2010);
-        }
         //若输入的PID并不属于该工单对应采购单的物料范围，则提示该物料并不属于该工单
-        Integer resultMa = pickHeadMapper.judgeIsMaHave(pickHeadId, bo.getMaterialNo());
-        if (resultMa == null) {
+        String ono = pickHeadMapper.queryOnoByPid(bo.getPrintLabelId());
+        if (!ono.equals(po.getOrderNo())) {
             return new ResultVO(2011);
         }
         // 判断当前物料不在拣货清单中，则提示 该物料并不在出库清单中
@@ -209,6 +205,11 @@ public class PickManageServiceImpl implements IPickManageService {
         boolean flag = maList.contains(bo.getMaterialNo());
         if (!flag) {
             return new ResultVO(2012);
+        }
+        //2 若当前输入的PID已经扫码入库，则提示不需要重复扫码
+        Integer resultPid = pickHeadMapper.judgeIsPidHave(pickHeadId, packageId);
+        if (resultPid != null) {
+            return new ResultVO(2010);
         }
         //2.将拣货单表体表中的已拣量作加操作
         pickHeadMapper.addPickNum(pickHeadId, bo.getMaterialId(), bo.getNum());
@@ -223,8 +224,8 @@ public class PickManageServiceImpl implements IPickManageService {
         pickLabelPo.setRecommend(recommend);
         pickLabelPo.setCreateTime(new Date());
         pickHeadMapper.insertPickLabel(pickLabelPo);
-        int flagTwo = pickHeadMapper.judgeIsPick(pickHeadId);
-        int result = (flagTwo == 1) ? pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_PICK) : 0;
+        Integer flagTwo = pickHeadMapper.judgeIsPick(pickHeadId);
+        int result = (flagTwo != null) ? pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_PICK) : 0;
         return ResultVO.ok().setData(ScanOutVO.convert(bo));
     }
 
@@ -294,8 +295,9 @@ public class PickManageServiceImpl implements IPickManageService {
         // 删除的时候需要将已拣货量相应的减去
         PrintLabelPO po = printLabelMapper.selectByPrimaryKey(printLabelId);
         pickHeadMapper.updatePickNum(pickHeadId, po.getNum(), po.getMaterialId());
-        int flag = pickHeadMapper.judgeIsPick(pickHeadId);
-        int resultStatus = (flag == 1) ? pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_PICK) : 0;
+        Integer flag = pickHeadMapper.judgeIsPick(pickHeadId);
+
+        int resultStatus = (flag == null) ? pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_UNPROCESSED) : 0;
         return ResultVO.ok();
     }
 
@@ -308,7 +310,7 @@ public class PickManageServiceImpl implements IPickManageService {
     @Override
     public ResultVO judgeStatus(Long pickHeadId) {
         // 当前工单拣货单id所关联的拣货标签表拥有数据,那么正处于物料拣货状态
-        int flag = pickHeadMapper.judgeIsPick(pickHeadId);
+        Integer flag = pickHeadMapper.judgeIsPick(pickHeadId);
         int result = (flag == 1) ? pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_PICK) : 0;
         return ResultVO.ok();
     }
