@@ -328,7 +328,7 @@ public class PickManageServiceImpl implements IPickManageService {
         int statusCode = 0;
         Integer resultEx = pickHeadMapper.judgeIsEx(pickHeadId);
         Integer resultLack = pickHeadMapper.judgeIsLack(pickHeadId);
-        if (resultEx == 1 || resultLack == 1) {
+        if (resultEx != null  || resultLack != null) {
             int resultUp = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_CHECK);
             PickCheckPO po = new PickCheckPO();
             po.setPickHeadId(pickHeadId);
