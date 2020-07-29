@@ -122,7 +122,11 @@ public class PickManageServiceImpl implements IPickManageService {
                 }
             }
         } else {
-            useList = reList;
+            for (PickHeadBO bo : noRecommend) {
+                String exception = pickBodyMapper.queryException(pickHeadId, bo.getMaterialId());
+                bo.setAberrantDesc(exception);
+            }
+            return ResultVO.ok().setData(AberrantItemsVO.convert(noRecommend));
         }
         //(3) 推荐未使用的进行相减，以及拼接其他未推荐的pid
         Map<String, String> useMap = useList.stream()
