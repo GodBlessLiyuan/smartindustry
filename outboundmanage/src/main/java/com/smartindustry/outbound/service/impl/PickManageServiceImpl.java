@@ -200,8 +200,7 @@ public class PickManageServiceImpl implements IPickManageService {
             return new ResultVO(2010);
         }
         //若输入的PID并不属于该工单对应采购单的物料范围，则提示该物料并不属于该工单
-        String materialNo = bo.getMaterialNo();
-        Integer resultMa = pickHeadMapper.judgeIsMaHave(pickHeadId, materialNo);
+        Integer resultMa = pickHeadMapper.judgeIsMaHave(pickHeadId, bo.getMaterialNo());
         if (resultMa == null) {
             return new ResultVO(2011);
         }
@@ -212,7 +211,7 @@ public class PickManageServiceImpl implements IPickManageService {
             return new ResultVO(2012);
         }
         //2.将拣货单表体表中的已拣量作加操作
-        int addResult = pickHeadMapper.addPickNum(pickHeadId, bo.getMaterialNo(), bo.getNum());
+        pickHeadMapper.addPickNum(pickHeadId, bo.getMaterialId(), bo.getNum());
         //3.查看扫码的PID是否在推荐的库位标签表中是否存在推荐的PID,存在则更新拣货标签表中的是否推荐标志位
         List<String> reList = pickHeadMapper.queryReOnlyPid(pickHeadId);
         boolean flagOne = reList.contains(packageId);
@@ -223,7 +222,7 @@ public class PickManageServiceImpl implements IPickManageService {
         pickLabelPo.setPrintLabelId(bo.getPrintLabelId());
         pickLabelPo.setRecommend(recommend);
         pickLabelPo.setCreateTime(new Date());
-        int insertResult = pickHeadMapper.insertPickLabel(pickLabelPo);
+        pickHeadMapper.insertPickLabel(pickLabelPo);
         int flagTwo = pickHeadMapper.judgeIsPick(pickHeadId);
         int result = (flagTwo == 1) ? pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_PICK) : 0;
         return ResultVO.ok().setData(ScanOutVO.convert(bo));

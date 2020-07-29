@@ -129,17 +129,18 @@
     </update>
 
     <resultMap id="BOResultMap" type="com.smartindustry.common.bo.om.PickBodyBO" extends="BaseResultMap">
+        <result column="material_no" jdbcType="CHAR" property="materialNo"/>
         <result column="material_desc" jdbcType="CHAR" property="materialDesc"/>
     </resultMap>
     <sql id="BO_Column_List">
-        pb.pick_body_id, pb.pick_head_id, pb.material_no, pb.demand_num, pb.pick_num, pb.create_time, pb.dr,
-        m.material_desc
+        pb.pick_body_id, pb.pick_head_id, pb.material_id, pb.demand_num, pb.pick_num, pb.create_time, pb.`exception`, pb.dr,
+        m.material_no, m.material_desc
     </sql>
     <select id="queryByHeadId" parameterType="java.lang.Long" resultMap="BOResultMap">
         select
         <include refid="BO_Column_List"/>
         from om_pick_body pb
-        left join si_material m on pb.material_no = m.material_no
+        left join si_material m on pb.material_id = m.material_id
         where pb.pick_head_id = #{pickHeadId,jdbcType=BIGINT}
     </select>
     <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="pickBodyId">

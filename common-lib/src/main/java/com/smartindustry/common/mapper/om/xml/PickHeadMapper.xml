@@ -185,7 +185,7 @@
         order by ph.create_time desc
     </select>
 
-<!--    查看成品拣货单-->
+    <!--    查看成品拣货单-->
     <select id="queryPickGoods" parameterType="java.util.Map" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -206,7 +206,7 @@
         order by ph.create_time desc
     </select>
 
-<!--    工单拣货单审核查询-->
+    <!--    工单拣货单审核查询-->
     <select id="outOrderCheck" parameterType="java.util.Map" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -224,25 +224,33 @@
     <!--    扫码拣货-->
     <select id="pickPid" parameterType="java.lang.String"
             resultType="com.smartindustry.common.bo.si.PrintLabelBO">
-        select pl.print_label_id as printLabelId,pl.package_id as packageId,pl.material_no as materialNo,ma.material_name as materialName,ma.material_desc as materialDesc,pl.num as num
+        select pl.print_label_id as printLabelId,
+               pl.package_id     as packageId,
+               pl.material_id    as materialId,
+               ma.material_no    as materialNo,
+               ma.material_name  as materialName,
+               ma.material_desc  as materialDesc,
+               pl.num            as num
         from si_print_label pl
-        left join si_material ma on pl.material_no = ma.material_no
-        where pl.package_id=#{packageId} and pl.dr = 1
+                 left join si_material ma on pl.material_id = ma.material_id
+        where pl.package_id = #{packageId}
+          and pl.dr = 1
     </select>
 
     <!--    查看当前工单拣货单的所有欠料列表-->
     <select id="materialLoss" resultType="com.smartindustry.common.bo.om.MaterialBO">
-        select pb.pick_body_id as pickBodyId,pb.material_no as materialNo,ma.material_name as materialName,ma.material_desc as
+        select pb.pick_body_id as pickBodyId,ma.material_no as materialNo,ma.material_name as
+        materialName,ma.material_desc as
         materialDesc,pb.demand_num as demandNum,pb.pick_num as pickNum,
         (case
         when pb.demand_num-pb.pick_num > 0 then (pb.demand_num-pb.pick_num) else 0
         end) as lackNum,
         (case
-            when pb.demand_num-pb.pick_num > 0 then 0 else 1
+        when pb.demand_num-pb.pick_num > 0 then 0 else 1
         end) as flag
         from om_pick_head ph
         left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
-        left join si_material ma on pb.material_no = ma.material_no
+        left join si_material ma on pb.material_id = ma.material_id
         where ph.dr =1 and ph.pick_head_id = #{pickHeadId}
         <if test="materialNo != null and materialNo != ''">
             and ma.material_no like concat('%',#{materialNo,jdbcType=VARCHAR},'%')
@@ -254,65 +262,71 @@
     </select>
     <!--    查看当前工单拣货单的推荐pid-->
     <select id="queryRecommend" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.om.PickHeadBO">
-        select pb.material_no as materialNo,GROUP_CONCAT(sl.package_id) as recommendPid
+        select m.material_no as materialNo, GROUP_CONCAT(sl.package_id) as recommendPid
         from om_pick_head ph
-        left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
-        left join om_label_recommend lr on pb.pick_body_id = lr.pick_body_id
-        left join si_storage_label sl on lr.storage_label_id = sl.storage_label_id
-        where ph.pick_head_id=#{pickHeadId}
-        GROUP BY pb.material_no
+                 left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
+                 left join om_label_recommend lr on pb.pick_body_id = lr.pick_body_id
+                 left join si_storage_label sl on lr.storage_label_id = sl.storage_label_id
+                 left join si_material m on pb.material_id = m.material_id
+        where ph.pick_head_id = #{pickHeadId}
+        GROUP BY pb.material_id
     </select>
 
     <!--    查看当前工单拣货单的推荐,不和物料编号对应的-->
     <select id="queryReOnlyPid" parameterType="java.lang.Long" resultType="java.lang.String">
         select sl.package_id
         from om_pick_head ph
-        left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
-        left join om_label_recommend lr on pb.pick_body_id = lr.pick_body_id
-        left join si_storage_label sl on lr.storage_label_id = sl.storage_label_id
-        where ph.pick_head_id=#{pickHeadId}
+                 left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
+                 left join om_label_recommend lr on pb.pick_body_id = lr.pick_body_id
+                 left join si_storage_label sl on lr.storage_label_id = sl.storage_label_id
+        where ph.pick_head_id = #{pickHeadId}
     </select>
 
     <!--  当拣货量大于需求量才查询 查询所有当前工单号推荐的pid-->
     <select id="queryAllRePid" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.om.PickHeadBO">
-       select pb.material_no as materialNo,GROUP_CONCAT(spl.package_id) as recommendPid
-       from om_pick_body pb
-       left join om_pick_head ph on pb.pick_head_id = ph.pick_head_id
-       left join om_pick_label opl on ph.pick_head_id = opl.pick_head_id
-       left join si_print_label spl on opl.print_label_id = spl.print_label_id
-       left join si_material ma on spl.material_no = ma.material_no
-       where opl.recommend = 1 and ph.pick_head_id = #{pickHeadId} and (pb.pick_num-pb.demand_num>= 0)
-       group by pb.material_no
+        select ma.material_no as materialNo, GROUP_CONCAT(spl.package_id) as recommendPid
+        from om_pick_body pb
+                 left join om_pick_head ph on pb.pick_head_id = ph.pick_head_id
+                 left join om_pick_label opl on ph.pick_head_id = opl.pick_head_id
+                 left join si_print_label spl on opl.print_label_id = spl.print_label_id
+                 left join si_material ma on spl.material_id = ma.material_id
+        where opl.recommend = 1
+          and ph.pick_head_id = #{pickHeadId}
+          and (pb.pick_num - pb.demand_num >= 0)
+        group by pb.material_id
     </select>
 
     <!--    查看当前工单拣货单的各个物料的真实打印pid-->
     <select id="queryRealPid" parameterType="java.lang.String" resultType="com.smartindustry.common.bo.om.PickHeadBO">
-        select ph.pick_no,pb.material_no,GROUP_CONCAT(pl.package_id)
+        select ph.pick_no, ma.material_no, GROUP_CONCAT(pl.package_id)
         from om_pick_head ph
-        left join om_pick_label pil on ph.pick_head_id = pil.pick_head_id
-        left join si_print_label pl on pil.print_label_id = pl.print_label_id
-        left join si_material ma on pl.material_no = ma.material_no
+                 left join om_pick_label pil on ph.pick_head_id = pil.pick_head_id
+                 left join si_print_label pl on pil.print_label_id = pl.print_label_id
+                 left join si_material ma on pl.material_id = ma.material_id
         where ph.pick_no = #{pickNo}
-        group by ph.pick_no,pb.material_no
+        group by ph.pick_no, ma.material_no
     </select>
 
     <!--    判断某个物料是否在该工单下-->
     <select id="judgeMaterial" parameterType="java.lang.Long" resultType="java.lang.String">
-        select pb.material_no as materialNo
+        select m.material_no as materialNo
         from om_pick_head ph
-        left join om_pick_body pb on pb.pick_head_id = ph.pick_head_id
+                 left join om_pick_body pb on pb.pick_head_id = ph.pick_head_id
+                 left join si_material m on pb.material_id = m.material_id
         where ph.pick_head_id = #{pickHeadId}
     </select>
-    
+
     <update id="addPickNum">
         update om_pick_body pb
         set pb.pick_num = pb.pick_num + #{pickNum}
-        where pb.pick_head_id = #{pickHeadId} and pb.material_no = #{materialNo}
+        where pb.pick_head_id = #{pickHeadId}
+          and pb.material_id = #{materialId}
     </update>
 
     <insert id="insertPickLabel" parameterType="com.smartindustry.common.pojo.om.PickLabelPO">
-        insert into om_pick_label (pick_head_id,print_label_id,recommend,create_time)
-        values (#{pickHeadId,jdbcType=BIGINT},#{printLabelId,jdbcType=BIGINT},#{recommend,jdbcType=TINYINT},#{createTime,jdbcType=TIMESTAMP})
+        insert into om_pick_label (pick_head_id, print_label_id, recommend, create_time)
+        values (#{pickHeadId,jdbcType=BIGINT}, #{printLabelId,jdbcType=BIGINT}, #{recommend,jdbcType=TINYINT},
+                #{createTime,jdbcType=TIMESTAMP})
     </insert>
 
     <select id="queryByPickNo" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -322,56 +336,77 @@
         where pick_head_id = #{pickHeadId}
     </select>
 
-<!--    异常列表提醒：(1)当拣货量未满需求量时，异常提示扫描了其他推荐的pid;(2)当拣货量超过需求量时，提示-->
-<!--    未扫描优先推荐的pid,扫描了其他推荐的pid-->
+    <!--    异常列表提醒：(1)当拣货量未满需求量时，异常提示扫描了其他推荐的pid;(2)当拣货量超过需求量时，提示-->
+    <!--    未扫描优先推荐的pid,扫描了其他推荐的pid-->
     <!--    当物料的已拣货量未满需求量，查找出其他推荐的pid-->
     <select id="queryNoRecommend" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.om.PickHeadBO">
-        select ph.pick_head_id as pickHeadId,spl.material_no as materialNo,ma.material_name as materialName,ma.material_desc as materialDesc,GROUP_CONCAT(spl.package_id) as noRecommendPid
+        select ph.pick_head_id              as pickHeadId,
+               ma.material_no               as materialNo,
+               ma.material_name             as materialName,
+               ma.material_desc             as materialDesc,
+               GROUP_CONCAT(spl.package_id) as noRecommendPid
         from om_pick_head ph
-        left join om_pick_label opl on ph.pick_head_id = opl.pick_head_id
-        left join si_print_label spl on opl.print_label_id = spl.print_label_id
-        left join si_material ma on spl.material_no = ma.material_no
-        where opl.recommend = 2 and ph.pick_head_id = #{pickHeadId}
-        group by ph.pick_no,spl.material_no
+                 left join om_pick_label opl on ph.pick_head_id = opl.pick_head_id
+                 left join si_print_label spl on opl.print_label_id = spl.print_label_id
+                 left join si_material ma on spl.material_id = ma.material_id
+        where opl.recommend = 2
+          and ph.pick_head_id = #{pickHeadId}
+        group by ph.pick_no, spl.material_id
     </select>
 
-<!--    按照创建时间顺序进行当前拣货单号的所有已扫码入库的信息查询-->
+    <!--    按照创建时间顺序进行当前拣货单号的所有已扫码入库的信息查询-->
     <select id="showScanItems" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.si.PrintLabelBO">
-        select pl.print_label_id as printLabelId,spl.package_id as packageId,spl.material_no as materialNo,ma.material_name as materialName,ma.material_desc as materialDesc,spl.num as num
+        select pl.print_label_id as printLabelId,
+               spl.package_id    as packageId,
+               ma.material_no    as materialNo,
+               ma.material_name  as materialName,
+               ma.material_desc  as materialDesc,
+               spl.num           as num
         from om_pick_label pl
-        left join si_print_label spl on pl.print_label_id = spl.print_label_id
-        left join si_material ma on spl.material_no = ma.material_no
-        where pl.pick_head_id = #{pickHeadId} and spl.dr = 1
+                 left join si_print_label spl on pl.print_label_id = spl.print_label_id
+                 left join si_material ma on spl.material_id = ma.material_id
+        where pl.pick_head_id = #{pickHeadId}
+          and spl.dr = 1
         order by pl.create_time desc
     </select>
 
     <select id="judgeIsPick" parameterType="java.lang.Long" resultType="java.lang.Integer">
         select 1
         from om_pick_head ph
-        left join om_pick_label pl on ph.pick_head_id = pl.pick_head_id
-        left join si_print_label spl on pl.print_label_id = spl.print_label_id
-        left join si_material ma on spl.material_no = ma.material_no
+                 left join om_pick_label pl on ph.pick_head_id = pl.pick_head_id
+                 left join si_print_label spl on pl.print_label_id = spl.print_label_id
+                 left join si_material ma on spl.material_id = ma.material_id
         where ph.pick_head_id = #{pickHeadId}
         limit 1
     </select>
 
-<!--    扫码拣货列表选中删除-->
+    <!--    扫码拣货列表选中删除-->
     <delete id="deleteScanPid">
-        delete from om_pick_label
-        where print_label_id = #{printLabelId} and pick_head_id = #{pickHeadId}
+        delete
+        from om_pick_label
+        where print_label_id = #{printLabelId}
+          and pick_head_id = #{pickHeadId}
     </delete>
 
-<!--    查询拆分后的pid关联当前pid-->
+    <!--    查询拆分后的pid关联当前pid-->
     <select id="printLabelSplit" parameterType="java.lang.String"
             resultType="com.smartindustry.common.bo.si.PrintLabelBO">
-         select pl.print_label_id as printLabelId,pl.package_id as packageId,pl.material_no as materialNo,ma.material_name as materialName,ma.material_desc as materialDesc,pl.num as num,pl.create_time as createTime,pl.produce_date as produceDate
-         from si_print_label pl
-         left join si_material ma on pl.material_no = ma.material_no
-         where pl.relate_package_id = #{packageId} and pl.dr = 1
-         limit 2
+        select pl.print_label_id as printLabelId,
+               pl.package_id     as packageId,
+               ma.material_no    as materialNo,
+               ma.material_name  as materialName,
+               ma.material_desc  as materialDesc,
+               pl.num            as num,
+               pl.create_time    as createTime,
+               pl.produce_date   as produceDate
+        from si_print_label pl
+                 left join si_material ma on pl.material_id = ma.material_id
+        where pl.relate_package_id = #{packageId}
+          and pl.dr = 1
+        limit 2
     </select>
 
-<!--    更新当前pickHeadId 的物料状态, 从未处理到物料拣货/从物料拣货到未处理-->
+    <!--    更新当前pickHeadId 的物料状态, 从未处理到物料拣货/从物料拣货到未处理-->
     <update id="updateStatus">
         update om_pick_head ph
         set ph.material_status = #{materialStatus}
@@ -384,66 +419,71 @@
         where ph.pick_head_id = #{pickHeadId}
     </update>
 
-<!--    查询当前工单号是否是异常列表，欠料情况，不欠料出库-->
+    <!--    查询当前工单号是否是异常列表，欠料情况，不欠料出库-->
     <select id="judgeIsEx" parameterType="java.lang.Long" resultType="java.lang.Integer">
         select 1
         from om_pick_head ph
-        left join om_pick_label pl on ph.pick_head_id = pl.pick_head_id
-        where ph.pick_head_id = #{pickHeadId} and pl.recommend = 2
+                 left join om_pick_label pl on ph.pick_head_id = pl.pick_head_id
+        where ph.pick_head_id = #{pickHeadId}
+          and pl.recommend = 2
         limit 1
     </select>
     <select id="judgeIsLack" parameterType="java.lang.Long" resultType="java.lang.Integer">
         select 1
         from om_pick_head ph
-        left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
-        where ph.pick_head_id = #{pickHeadId} and (pb.pick_num-pb.demand_num &lt; 0)
+                 left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
+        where ph.pick_head_id = #{pickHeadId}
+          and (pb.pick_num - pb.demand_num &lt; 0)
         limit 1
     </select>
 
-<!--    查看当前物料是否在当前工单物料列表下-->
+    <!--    查看当前物料是否在当前工单物料列表下-->
     <select id="judgeIsMaHave" resultType="java.lang.Integer">
         select 1
         from om_pick_head ph
-        left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
-        where ph.pick_head_id = #{pickHeadId} and pb.material_no = #{materialNo}
+                 left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
+                 left join si_material m on pb.material_id = m.material_id
+        where ph.pick_head_id = #{pickHeadId}
+          and m.material_no = #{materialNo}
         limit 1
     </select>
 
-<!--    查看当前的pid是否已在当前工单拣货下-->
+    <!--    查看当前的pid是否已在当前工单拣货下-->
     <select id="judgeIsPidHave" resultType="java.lang.Integer">
         select 1
         from om_pick_head ph
-        left join om_pick_label pl on ph.pick_head_id = pl.pick_head_id
-        left join si_print_label spl on pl.print_label_id = spl.print_label_id
-        where ph.pick_head_id = #{pickHeadId} and spl.package_id = #{packageId}
+                 left join om_pick_label pl on ph.pick_head_id = pl.pick_head_id
+                 left join si_print_label spl on pl.print_label_id = spl.print_label_id
+        where ph.pick_head_id = #{pickHeadId}
+          and spl.package_id = #{packageId}
         limit 1
     </select>
 
-<!--    恢复当前PID的标签打印单-->
+    <!--    恢复当前PID的标签打印单-->
     <update id="resumePid">
         update si_print_label pl
         set pl.dr = 1
         where pl.package_id = #{packageId}
     </update>
-<!--    将分料后的PID设置为废弃-->
+    <!--    将分料后的PID设置为废弃-->
     <update id="deletePid">
         update si_print_label pl
         set pl.dr = 2
         where pl.relate_package_id = #{packageId}
     </update>
 
-<!--    判断当前PID的是否已在某工单拣货单扫码列表中-->
+    <!--    判断当前PID的是否已在某工单拣货单扫码列表中-->
     <select id="judgePidInPhid" resultType="java.lang.Integer">
         select 1
         from om_pick_head ph
-        left join om_pick_label pl on ph.pick_head_id = pl.pick_head_id
-        left join si_print_label spl on pl.print_label_id = spl.print_label_id
+                 left join om_pick_label pl on ph.pick_head_id = pl.pick_head_id
+                 left join si_print_label spl on pl.print_label_id = spl.print_label_id
         where spl.package_id = #{packageId}
         limit 1
     </select>
 
-<!--    查看OQC检测的分页查询-->
-    <select id="queryOqc"  resultMap="BaseResultMap">
+    <!--    查看OQC检测的分页查询-->
+    <select id="queryOqc" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from om_pick_head ph
@@ -457,28 +497,37 @@
         order by ph.create_time desc
     </select>
 
-<!--    若在扫码时删除已扫码的PID,那么已拣货量要相应的减去-->
+    <!--    若在扫码时删除已扫码的PID,那么已拣货量要相应的减去-->
     <update id="updatePickNum">
         update om_pick_body pb
         set pb.pick_num = pb.pick_num - #{num}
-        where pb.pick_head_id = #{pickHeadId} and pb.material_id = #{materialId}
+        where pb.pick_head_id = #{pickHeadId}
+          and pb.material_id = #{materialId}
     </update>
-    
-<!--    查询给定分料后的PID的关联子pid-->
+
+    <!--    查询给定分料后的PID的关联子pid-->
     <select id="queryChildPid" parameterType="java.lang.String" resultType="java.lang.String">
         select pl.package_id as packageId
         from si_print_label pl
-        where pl.relate_package_id = #{packageId} and pl.dr = 1
+        where pl.relate_package_id = #{packageId}
+          and pl.dr = 1
     </select>
 
 
     <!--    查找当前工单拣货单得所有PID详情-->
-    <select id="queryByPhidItems" parameterType="java.lang.Long" resultType="com.smartindustry.common.pojo.si.PrintLabelPO">
-        select spl.print_label_id as printLabelId,spl.package_id as packageId,spl.num as num,spl.create_time as createTime,spl.relate_package_id as relatePackageId
+    <select id="queryByPhidItems" parameterType="java.lang.Long"
+            resultType="com.smartindustry.common.pojo.si.PrintLabelPO">
+        select spl.print_label_id    as printLabelId,
+               spl.package_id        as packageId,
+               spl.num               as num,
+               spl.create_time       as createTime,
+               spl.relate_package_id as relatePackageId
         from om_pick_head ph
-        left join om_pick_label pl on ph.pick_head_id = pl.pick_head_id
-        left join si_print_label spl on pl.print_label_id = spl.print_label_id
-        where ph.pick_head_id = #{pickHeadId} and ph.dr = 1 and spl.package_id is not null
+                 left join om_pick_label pl on ph.pick_head_id = pl.pick_head_id
+                 left join si_print_label spl on pl.print_label_id = spl.print_label_id
+        where ph.pick_head_id = #{pickHeadId}
+          and ph.dr = 1
+          and spl.package_id is not null
     </select>
 </mapper>
 

@@ -31,6 +31,7 @@ public class ErpOrderVO implements Serializable {
 
     @Data
     public static class ErpOrderBodyVO {
+        private Long mid;
         private String mno;
         private Byte mtype;
         private String mname;
