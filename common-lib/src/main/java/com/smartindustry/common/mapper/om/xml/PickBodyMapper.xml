@@ -160,7 +160,7 @@
         select `exception`
         from om_pick_body
         where pick_head_id = #{pickHeadId}
-          and material_no = #{materialNo}
+          and material_id = #{materialId}
     </select>
 
     <update id="updateException">

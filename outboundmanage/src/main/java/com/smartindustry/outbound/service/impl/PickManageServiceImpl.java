@@ -134,7 +134,7 @@ public class PickManageServiceImpl implements IPickManageService {
             if (useKey) {
                 bo.setRecommendPid(useMap.get(materialNo));
             }
-            String exception = pickBodyMapper.queryException(pickHeadId, materialNo);
+            String exception = pickBodyMapper.queryException(pickHeadId, bo.getMaterialId());
             bo.setAberrantDesc(exception);
         }
         return ResultVO.ok().setData(AberrantItemsVO.convert(noRecommend));
