@@ -12,6 +12,7 @@ import lombok.Data;
  */
 @Data
 public class PickHeadBO extends PickHeadPO {
+    private Long materialId;
     /**
      * 物料编号
      */

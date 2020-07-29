@@ -24,10 +24,10 @@ public interface PickBodyMapper extends BaseMapper<PickBodyPO, Long> {
     /**
      * 根据工单拣货单id和物料编号查询异常说明
      * @param pickHeadId
-     * @param materialNo
+     * @param materialId
      * @return
      */
-    String queryException(@Param("pickHeadId") Long pickHeadId,@Param("materialNo") String materialNo);
+    String queryException(@Param("pickHeadId") Long pickHeadId,@Param("materialId") Long materialId);
 
     /**
      * 更新异常信息

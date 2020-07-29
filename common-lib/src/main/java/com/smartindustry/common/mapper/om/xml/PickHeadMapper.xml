@@ -284,7 +284,7 @@
 
     <!--  当拣货量大于需求量才查询 查询所有当前工单号推荐的pid-->
     <select id="queryAllRePid" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.om.PickHeadBO">
-        select ma.material_no as materialNo, GROUP_CONCAT(spl.package_id) as recommendPid
+        select pb.material_id as materialId, GROUP_CONCAT(spl.package_id) as recommendPid,ma.material_no as materialNo
         from om_pick_body pb
                  left join om_pick_head ph on pb.pick_head_id = ph.pick_head_id
                  left join om_pick_label opl on ph.pick_head_id = opl.pick_head_id
@@ -293,7 +293,7 @@
         where opl.recommend = 1
           and ph.pick_head_id = #{pickHeadId}
           and (pb.pick_num - pb.demand_num >= 0)
-        group by pb.material_id
+        group by pb.material_id,ma.material_no
     </select>
 
     <!--    查看当前工单拣货单的各个物料的真实打印pid-->
