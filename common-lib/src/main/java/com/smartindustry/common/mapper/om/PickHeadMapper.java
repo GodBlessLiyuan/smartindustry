@@ -85,11 +85,11 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
 
     /**
      * 当扫码出库的时候更新当前物料的已拣货量
-     * @param materialNo
+     * @param materialId
      * @param pickNum
      * @return
      */
-    int addPickNum(@Param("pickHeadId") Long pickHeadId,@Param("materialNo") String materialNo,@Param("pickNum") Integer pickNum);
+    int addPickNum(@Param("pickHeadId") Long pickHeadId,@Param("materialId") Long materialId,@Param("pickNum") Integer pickNum);
 
     /**
      * 更新拣货标签表中的所有信息
