@@ -2,10 +2,12 @@ package com.smartindustry.outbound.service.impl;
 
 import com.smartindustry.common.bo.si.StorageLabelBO;
 import com.smartindustry.common.mapper.om.LabelRecommendMapper;
+import com.smartindustry.common.mapper.om.OutboundRecordMapper;
 import com.smartindustry.common.mapper.om.PickBodyMapper;
 import com.smartindustry.common.mapper.om.PickHeadMapper;
 import com.smartindustry.common.mapper.si.StorageLabelMapper;
 import com.smartindustry.common.pojo.om.LabelRecommendPO;
+import com.smartindustry.common.pojo.om.OutboundRecordPO;
 import com.smartindustry.common.pojo.om.PickBodyPO;
 import com.smartindustry.common.pojo.om.PickHeadPO;
 import com.smartindustry.common.pojo.si.StorageLabelPO;
@@ -18,10 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author: xiahui
@@ -40,6 +39,8 @@ public class ErpExternalServiceImpl implements IErpExternalService {
     private StorageLabelMapper storageLabelMapper;
     @Autowired
     private LabelRecommendMapper labelRecommendMapper;
+    @Autowired
+    private OutboundRecordMapper outboundRecordMapper;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -49,6 +50,7 @@ public class ErpExternalServiceImpl implements IErpExternalService {
 
         List<PickBodyPO> bodyPOs = PickDTO.convert(headPO, dto.getBody());
         pickBodyMapper.batchInsert(bodyPOs);
+        outboundRecordMapper.insert(new OutboundRecordPO(headPO.getPickHeadId(), null, 1L, "jzj", OutboundConstant.NEW_INSERT, new Date(), OutboundConstant.MATERIAL_STATUS_PICK));
 
         // 推荐货位
         new Thread(() -> {
