@@ -18,7 +18,7 @@ import java.util.List;
 @Data
 public class AberrantItemsVO implements Serializable {
     private static final long SerialVersionUID = 1L;
-
+    private Long mid;
     private Long phid;
 
     private String pno;
@@ -59,6 +59,7 @@ public class AberrantItemsVO implements Serializable {
         vo.setAbdesc(bo.getAberrantDesc());
         vo.setPno(bo.getPickNo());
         vo.setMname(bo.getMaterialName());
+        vo.setMid(bo.getMaterialId());
         vo.setMdesc(bo.getMaterialDesc());
         if (bo.getRecommendPid()==null){
             vo.setAbmsg("扫描了其他推荐的PID:"+bo.getNoRecommendPid());

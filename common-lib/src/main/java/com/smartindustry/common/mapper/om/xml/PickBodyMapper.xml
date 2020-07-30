@@ -167,6 +167,6 @@
         update om_pick_body
         set `exception` = #{exception,jdbcType=CHAR}
         where pick_head_id = #{pickHeadId}
-          and material_no = #{materialNo}
+          and material_id = #{materialId}
     </update>
 </mapper>
