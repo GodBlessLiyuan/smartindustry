@@ -13,7 +13,6 @@ import com.smartindustry.common.mapper.si.PrintLabelMapper;
 import com.smartindustry.common.mapper.si.StorageLabelMapper;
 import com.smartindustry.common.pojo.om.*;
 import com.smartindustry.common.pojo.si.PrintLabelPO;
-import com.smartindustry.common.pojo.si.StorageLabelPO;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.constant.OutboundConstant;

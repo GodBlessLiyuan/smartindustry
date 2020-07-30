@@ -1,5 +1,6 @@
 package com.smartindustry.basic.dto;
 
+import com.smartindustry.common.pojo.si.MaterialPO;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -13,4 +14,13 @@ import java.io.Serializable;
 @Data
 public class MaterialDTO implements Serializable {
     private static final long SerialVersionUID = 1L;
+
+    private Long mid;
+    private String mno;
+
+    public static MaterialPO createPO(MaterialDTO dto) {
+    }
+
+    public static void buildPO(MaterialPO materialPO, MaterialDTO dto) {
+    }
 }

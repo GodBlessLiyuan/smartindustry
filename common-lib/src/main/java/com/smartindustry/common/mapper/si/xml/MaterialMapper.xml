@@ -283,6 +283,53 @@
         where material_id = #{materialId,jdbcType=BIGINT}
     </update>
 
+    <select id="queryByMno" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_material
+        where dr = 1 and material_no = #{mno,jdbcType=CHAR}
+    </select>
+
+    <resultMap id="BOResultMap" type="com.smartindustry.common.bo.om.MaterialBO">
+        <id column="material_id" jdbcType="BIGINT" property="materialId"/>
+        <result column="material_no" jdbcType="CHAR" property="materialNo"/>
+        <result column="material_type_id" jdbcType="BIGINT" property="materialTypeId"/>
+        <result column="humidity_level_id" jdbcType="BIGINT" property="humidityLevelId"/>
+        <result column="material_level_id" jdbcType="BIGINT" property="materialLevelId"/>
+        <result column="measure_unit_id" jdbcType="BIGINT" property="measureUnitId"/>
+        <result column="material_version_id" jdbcType="BIGINT" property="materialVersionId"/>
+        <result column="produce_loss_level_id" jdbcType="BIGINT" property="produceLossLevelId"/>
+        <result column="lift_cycle_state_id" jdbcType="BIGINT" property="liftCycleStateId"/>
+        <result column="material_name" jdbcType="CHAR" property="materialName"/>
+        <result column="delivery_days" jdbcType="INTEGER" property="deliveryDays"/>
+        <result column="moq" jdbcType="CHAR" property="moq"/>
+        <result column="material_model" jdbcType="CHAR" property="materialModel"/>
+        <result column="material_draw" jdbcType="CHAR" property="materialDraw"/>
+        <result column="supplier_id" jdbcType="BIGINT" property="supplierId"/>
+        <result column="material_desc" jdbcType="CHAR" property="materialDesc"/>
+        <result column="test_type" jdbcType="TINYINT" property="testType"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="dr" jdbcType="TINYINT" property="dr"/>
+    </resultMap>
+    <sql id="BO_Column_List">
+        material_id, material_no, material_type_id, humidity_level_id, material_level_id,
+    measure_unit_id, material_version_id, produce_loss_level_id, lift_cycle_state_id,
+    material_name, delivery_days, moq, material_model, material_draw, supplier_id, material_desc,
+    test_type, user_id, create_time, update_time, dr
+    </sql>
+    <select id="queryByMid" parameterType="java.lang.Long" resultMap="BOResultMap">
+        select
+        <include refid="BO_Column_List"/>
+        from si_supplier s
+        left join dd_supplier_group sg on s.supplier_group_id = sg.supplier_group_id
+        left join dd_cert_status cs on s.cert_status_id = cs.cert_status_id
+        left join dd_supplier_type st on s.supplier_type_id = st.supplier_type_id
+        left join dd_settle_period sp on s.settle_period_id = sp.settle_period_id
+        left join dd_currency c on s.currency_id = c.currency_id
+        where s.dr = 1 and supplier_id = #{sid,jdbcType=BIGINT}
+    </select>
     <select id="pageQuery" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -302,4 +349,11 @@
             #{sid,jdbcType=BIGINT}
         </foreach>
     </select>
+    <update id="batchDelete" parameterType="java.util.List">
+        update si_material
+        set dr = 2 where material_id in
+        <foreach collection="list" item="mid" open="(" separator="," close=")">
+            #{mid,jdbcType=BIGINT}
+        </foreach>
+    </update>
 </mapper>

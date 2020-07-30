@@ -23,4 +23,6 @@ public interface ISupplierService {
     ResultVO detail(OperateDTO dto);
 
     ResultVO record(OperateDTO dto);
+
+    ResultVO queryAll();
 }

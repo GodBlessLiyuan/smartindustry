@@ -2,11 +2,13 @@ package com.smartindustry.common.pojo.si;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import lombok.Data;
 
 /**
  * si_material_record
- * @author 
+ *
+ * @author
  */
 @Data
 public class MaterialRecordPO implements Serializable {
@@ -21,4 +23,11 @@ public class MaterialRecordPO implements Serializable {
     private String type;
 
     private static final long serialVersionUID = 1L;
+
+    public MaterialRecordPO(Long materialId, Long userId, String type) {
+        this.materialId = materialId;
+        this.userId = userId;
+        this.createTime = new Date();
+        this.type = type;
+    }
 }

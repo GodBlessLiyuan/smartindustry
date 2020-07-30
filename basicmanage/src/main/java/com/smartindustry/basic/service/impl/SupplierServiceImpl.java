@@ -102,4 +102,10 @@ public class SupplierServiceImpl implements ISupplierService {
         List<SupplierRecordPO> supplierRecordPOs = supplierRecordMapper.queryBySid(dto.getSid());
         return ResultVO.ok().setData(SupplierRecordVO.convert(supplierRecordPOs));
     }
+
+    @Override
+    public ResultVO queryAll() {
+        List<Map<String, Object>> res = supplierMapper.queryAll();
+        return ResultVO.ok().setData(res);
+    }
 }

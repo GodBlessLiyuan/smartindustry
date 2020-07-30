@@ -1,7 +1,6 @@
 package com.smartindustry.outbound.vo;
 
 import com.smartindustry.common.bo.om.MaterialBO;
-import com.smartindustry.common.pojo.om.PickHeadPO;
 import lombok.Data;
 
 import java.io.Serializable;

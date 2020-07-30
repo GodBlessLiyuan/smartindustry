@@ -83,4 +83,11 @@ public interface SupplierMapper extends BaseMapper<SupplierPO, Long> {
      * @return
      */
     List<SupplierPO> queryByCid(Long cid);
+
+    /**
+     * 查询所有
+     *
+     * @return
+     */
+    List<Map<String, Object>> queryAll();
 }

@@ -77,4 +77,15 @@ public class SupplierController {
     public ResultVO record(@RequestBody OperateDTO dto) {
         return supplierService.record(dto);
     }
+
+    /**
+     * 供应商 查询
+     *
+     * @return
+     */
+    @PostMapping("queryAll")
+    public ResultVO queryAll() {
+        return supplierService.queryAll();
+    }
+
 }

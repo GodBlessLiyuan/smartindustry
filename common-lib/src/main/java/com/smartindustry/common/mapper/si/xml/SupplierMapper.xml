@@ -354,4 +354,9 @@
         from si_supplier
         where dr = 1 and currency_id = #{cid,jdbcType=BIGINT}
     </select>
+    <select id="queryAll" resultType="java.util.Map">
+        select supplier_id as sid, supplier_name as sname
+        from si_supplier
+        where dr = 1
+    </select>
 </mapper>
