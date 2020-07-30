@@ -4,6 +4,7 @@ import com.smartindustry.authority.dto.DeptDTO;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,5 +20,32 @@ public interface IDeptService {
      * @param reqData
      * @return
      */
-    ResultVO deptQuery(Map<String, Object> reqData);
+    ResultVO pageQuery(Map<String, Object> reqData);
+
+    /**
+     * 批量禁用部门
+     * @param dtos
+     * @return
+     */
+    ResultVO updateBatch(List<DeptDTO> dtos);
+
+    /**
+     * 新增部门
+     * @param dto
+     * @return
+     */
+    ResultVO insert(DeptDTO dto);
+
+    /**
+     * 批量删除
+     * @param dtos
+     * @return
+     */
+    ResultVO deleteBatch(List<DeptDTO> dtos);
+
+    /**
+     * 按照树形结构给前端传值部门名字
+     * @return
+     */
+    ResultVO queryDeptName();
 }

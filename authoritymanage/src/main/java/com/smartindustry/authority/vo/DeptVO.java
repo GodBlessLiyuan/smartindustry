@@ -1,5 +1,6 @@
 package com.smartindustry.authority.vo;
 
+import com.smartindustry.common.bo.am.DeptBO;
 import com.smartindustry.common.pojo.am.DeptPO;
 import com.smartindustry.common.pojo.si.PrintLabelPO;
 import lombok.Data;
@@ -22,9 +23,13 @@ public class DeptVO implements Serializable {
 
     private Long pid;
 
+    private String pname;
+
     private String dname;
 
     private Long uid;
+
+    private String uname;
 
     private String ddesc;
 
@@ -37,25 +42,29 @@ public class DeptVO implements Serializable {
     private Date ctime;
 
     private Date utime;
+    /**
+     * 当前部门的子部门列表
+     */
+    private List<DeptVO> children;
 
-    public static List<DeptVO> convert(List<DeptPO> pos) {
-        List<DeptVO> vos = new ArrayList<>(pos.size());
-        for (DeptPO po : pos) {
-            vos.add(convert(po));
+    public static List<DeptVO> convert(List<DeptBO> bos) {
+        List<DeptVO> vos = new ArrayList<>(bos.size());
+        for (DeptBO bo : bos) {
+            vos.add(convert(bo));
         }
         return vos;
     }
 
-    public static DeptVO convert(DeptPO po) {
+    public static DeptVO convert(DeptBO bo) {
         DeptVO vo = new DeptVO();
-        vo.setCtime(po.getCreateTime());
-        vo.setDdesc(po.getDeptDesc());
-        vo.setDid(po.getDeptId());
-        vo.setDname(po.getDeptName());
-        vo.setStatus(po.getStatus());
-        vo.setUid(po.getUserId());
-        vo.setUtime(po.getUpdateTime());
-        vo.setPid(po.getParentId());
+        vo.setDid(bo.getDeptId());
+        vo.setDname(bo.getDeptName());
+        vo.setPname(bo.getParentName());
+        vo.setUname(bo.getUsername());
+        vo.setStatus(bo.getStatus());
+        vo.setDdesc(bo.getDeptDesc());
+        vo.setPid(bo.getParentId());
+        vo.setUid(bo.getUserId());
         return vo;
     }
 }

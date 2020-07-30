@@ -1,5 +1,6 @@
 package com.smartindustry.common.mapper.am;
 
+import com.smartindustry.common.bo.am.DeptBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.am.DeptPO;
 import org.apache.ibatis.annotations.Mapper;
@@ -15,5 +16,39 @@ import java.util.Map;
 @Mapper
 public interface DeptMapper extends BaseMapper<DeptPO, Long> {
 
-    List<DeptPO> deptPageQuery(Map<String, Object> reqData);
+    /**
+     * 部门查询
+     * @param reqData
+     * @return
+     */
+    List<DeptBO> deptPageQuery(Map<String, Object> reqData);
+
+    /**
+     * 批量更新部门状态
+     * @param pos
+     * @return
+     */
+    Integer updateBatch(List<DeptPO> pos);
+
+    /**
+     * 批量删除部门
+     * @param pos
+     * @return
+     */
+    Integer deleteBatch(List<DeptPO> pos);
+
+
+    /**
+     * 判断当前节点是否有父节点，没有那么其本身作为子节点
+     * @param parentId
+     * @return
+     */
+    Integer judgeExist(@Param("parentId") Long parentId);
+
+    /**
+     * 查询当前节点的子节点
+     * @param parentId
+     * @return
+     */
+    List<DeptBO> queryChildren(@Param("parentId") Long parentId);
 }
