@@ -7,7 +7,7 @@ import com.smartindustry.basic.dto.OperateDTO;
 import com.smartindustry.basic.service.IMaterialService;
 import com.smartindustry.basic.vo.MaterialVO;
 import com.smartindustry.basic.vo.SupplierRecordVO;
-import com.smartindustry.common.bo.om.MaterialBO;
+import com.smartindustry.common.bo.si.MaterialBO;
 import com.smartindustry.common.mapper.si.MaterialMapper;
 import com.smartindustry.common.mapper.si.MaterialRecordMapper;
 import com.smartindustry.common.mapper.si.MaterialSpecificationMapper;

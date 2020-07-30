@@ -1,6 +1,6 @@
 package com.smartindustry.basic.vo;
 
-import com.smartindustry.common.bo.om.MaterialBO;
+import com.smartindustry.common.bo.si.MaterialBO;
 import lombok.Data;
 
 import java.io.Serializable;

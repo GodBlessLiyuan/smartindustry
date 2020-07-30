@@ -1,6 +1,7 @@
 package com.smartindustry.outbound.vo;
 
-import com.smartindustry.common.bo.om.MaterialBO;
+import com.smartindustry.common.bo.om.PickBodyBO;
+import com.smartindustry.common.bo.si.MaterialBO;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -44,15 +45,15 @@ public class LackMaterialVO implements Serializable {
 
     private Byte flag;
 
-    public static List<LackMaterialVO> convert(List<MaterialBO> bos) {
+    public static List<LackMaterialVO> convert(List<PickBodyBO> bos) {
         List<LackMaterialVO> vos = new ArrayList<>(bos.size());
-        for (MaterialBO bo : bos) {
+        for (PickBodyBO bo : bos) {
             vos.add(convert(bo));
         }
         return vos;
     }
 
-    public static LackMaterialVO convert(MaterialBO bo) {
+    public static LackMaterialVO convert(PickBodyBO bo) {
         LackMaterialVO vo = new LackMaterialVO();
         vo.setPbid(bo.getPickBodyId());
         vo.setDnum(bo.getDemandNum());

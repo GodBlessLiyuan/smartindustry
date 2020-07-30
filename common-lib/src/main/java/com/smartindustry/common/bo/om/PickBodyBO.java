@@ -15,8 +15,24 @@ public class PickBodyBO extends PickBodyPO {
      * 物料编号
      */
     private String materialNo;
+
+    private String materialName;
     /**
      * 物料描述
      */
     private String materialDesc;
+    /**
+     * 工单拣货单编号
+     */
+    private String pickNo;
+
+    /**
+     * 欠料的数量
+     */
+    private Integer lackNum;
+
+    /**
+     * 物料状态, 1 标识欠料 2 标识不欠料
+     */
+    private Byte flag;
 }

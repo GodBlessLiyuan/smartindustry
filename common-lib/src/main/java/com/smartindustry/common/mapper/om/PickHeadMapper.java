@@ -1,6 +1,7 @@
 package com.smartindustry.common.mapper.om;
 
-import com.smartindustry.common.bo.om.MaterialBO;
+import com.smartindustry.common.bo.om.PickBodyBO;
+import com.smartindustry.common.bo.si.MaterialBO;
 import com.smartindustry.common.bo.om.PickHeadBO;
 import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.mapper.BaseMapper;
@@ -53,7 +54,7 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
      * @param reqMap
      * @return
      */
-    List<MaterialBO> materialLoss(Map<String, Object> reqMap);
+    List<PickBodyBO> materialLoss(Map<String, Object> reqMap);
 
     /**
      * 查看当前工单拣货单的推荐pid格式为  pickNo,maNo,(pid1,pid2,pid3)

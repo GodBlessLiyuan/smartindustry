@@ -3,7 +3,7 @@ package com.smartindustry.outbound.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.smartindustry.common.bo.om.LabelRecommendBO;
-import com.smartindustry.common.bo.om.MaterialBO;
+import com.smartindustry.common.bo.si.MaterialBO;
 import com.smartindustry.common.bo.om.PickBodyBO;
 import com.smartindustry.common.bo.om.PickHeadBO;
 import com.smartindustry.common.bo.si.PrintLabelBO;
@@ -84,7 +84,7 @@ public class PickManageServiceImpl implements IPickManageService {
 
     @Override
     public ResultVO materialLoss(Map<String, Object> reqMap) {
-        List<MaterialBO> bos = pickHeadMapper.materialLoss(reqMap);
+        List<PickBodyBO> bos = pickHeadMapper.materialLoss(reqMap);
         return ResultVO.ok().setData(LackMaterialVO.convert(bos));
     }
 
