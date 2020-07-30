@@ -238,7 +238,7 @@
     </select>
 
     <!--    查看当前工单拣货单的所有欠料列表-->
-    <select id="materialLoss" resultType="com.smartindustry.common.bo.om.MaterialBO">
+    <select id="materialLoss" resultType="com.smartindustry.common.bo.om.PickBodyBO">
         select pb.pick_body_id as pickBodyId,ma.material_no as materialNo,ma.material_name as
         materialName,ma.material_desc as
         materialDesc,pb.demand_num as demandNum,pb.pick_num as pickNum,

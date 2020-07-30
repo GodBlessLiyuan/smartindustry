@@ -290,7 +290,7 @@
         where dr = 1 and material_no = #{mno,jdbcType=CHAR}
     </select>
 
-    <resultMap id="BOResultMap" type="com.smartindustry.common.bo.om.MaterialBO">
+    <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.MaterialBO">
         <id column="material_id" jdbcType="BIGINT" property="materialId"/>
         <result column="material_no" jdbcType="CHAR" property="materialNo"/>
         <result column="material_type_id" jdbcType="BIGINT" property="materialTypeId"/>
