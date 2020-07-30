@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,8 +29,28 @@ public class DeptController {
      * @param reqData
      * @return
      */
-    @PostMapping("deptQuery")
-    public ResultVO deptQuery(@RequestBody Map<String, Object> reqData) {
-        return deptService.deptQuery(reqData);
+    @PostMapping("pageQuery")
+    public ResultVO pageQuery(@RequestBody Map<String, Object> reqData) {
+        return deptService.pageQuery(reqData);
+    }
+
+    @PostMapping("updateBatch")
+    public ResultVO updateBatch(@RequestBody List<DeptDTO> dtos) {
+        return deptService.updateBatch(dtos);
+    }
+
+    @PostMapping("insert")
+    public ResultVO insert(@RequestBody DeptDTO dto) {
+        return deptService.insert(dto);
+    }
+
+    @PostMapping("delete")
+    public ResultVO delete(@RequestBody List<DeptDTO> dtos) {
+        return deptService.deleteBatch(dtos);
+    }
+
+    @PostMapping("queryDeptName")
+    public ResultVO queryDeptName() {
+        return deptService.queryDeptName();
     }
 }

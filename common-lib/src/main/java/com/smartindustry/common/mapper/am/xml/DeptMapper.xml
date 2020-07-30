@@ -140,18 +140,73 @@
     where dept_id = #{deptId,jdbcType=BIGINT}
   </update>
 
-  <select id="deptPageQuery" parameterType="java.util.Map" resultMap="BaseResultMap">
+  <resultMap id="BOResultMap" type="com.smartindustry.common.bo.am.DeptBO" extends="BaseResultMap">
+    <result column="username" jdbcType="CHAR" property="username"/>
+    <result column="parentName" jdbcType="CHAR" property="parentName"/>
+  </resultMap>
+  <sql id="BO_Column_List">
+        d.dept_id, d.parent_id, d.dept_name, d.user_id, d.dept_desc, d.`status`, d.create_time, d.update_time,
+    d.dr,u.name as username,d2.dept_name as parentName
+    </sql>
+
+
+  <select id="deptPageQuery" parameterType="java.util.Map" resultMap="BOResultMap">
     select
-    <include refid="Base_Column_List"/>
-    from am_dept
-    where dr = 1
+    <include refid="BO_Column_List"/>
+    from am_dept d
+    left join am_user u on d.user_id = u.user_id
+    left join am_dept d2 on d.parent_id = d2.dept_id
+    where d.dr = 1
     <if test="deptName != null and deptName != ''">
-      and dept_name like concat('%',#{deptName,jdbcType=CHAR},'%')
+      and d.dept_name like concat('%',#{deptName,jdbcType=CHAR},'%')
     </if>
     <if test="status != null and status != 0">
-      and  `status` = #{status,jdbcType=TINYINT}
+      and d.`status` = #{status,jdbcType=TINYINT}
     </if>
-    order by create_time desc
+    order by d.create_time desc
   </select>
 
+<!--  批量禁用部门-->
+  <update id="updateBatch" parameterType="java.util.List">
+    <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+      update am_dept
+      <set >
+        <if test="item.status != null" >
+          `status` = #{item.status,jdbcType=TINYINT},
+        </if>
+      </set>
+      where dept_id = #{item.deptId,jdbcType=BIGINT}
+    </foreach>
+  </update>
+
+  <update id="deleteBatch" parameterType="java.util.List">
+    <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+      update am_dept
+      <set >
+          dr = 2
+      </set>
+      where dept_id = #{item.deptId,jdbcType=BIGINT}
+    </foreach>
+  </update>
+
+  <select id="queryChildren" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.am.DeptBO">
+    select d.dept_id as deptId,d.parent_id as parentId,d.dept_name as deptName,u.username as username
+    from am_dept d
+    left join am_user u on d.user_id = u.user_id
+    <choose>
+      <when test="parentId != null and parentId !=''">
+        where d.parent_id = #{parentId,jdbcType=BIGINT} and d.status = 1
+      </when>
+      <otherwise>
+        where d.parent_id is null and d.status = 1
+      </otherwise>
+    </choose>
+  </select>
+
+<!--  判断当前部门id不是其他部门的父节点id-->
+  <select id="judgeExist" parameterType="java.lang.Long" resultType="java.lang.Integer">
+     select case when exists(SELECT 1 from am_dept where parent_id = 1 and status = 1 limit 1)
+     then 1
+     else 0 end as result
+  </select>
 </mapper>
