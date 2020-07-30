@@ -1,7 +1,6 @@
 package com.smartindustry.basic.service.impl;
 
 import com.github.pagehelper.Page;
-import com.netflix.discovery.converters.Auto;
 import com.smartindustry.basic.constant.BasicConstant;
 import com.smartindustry.basic.dto.LocationDTO;
 import com.smartindustry.basic.dto.OperateDTO;
@@ -9,7 +8,6 @@ import com.smartindustry.basic.service.ILocationService;
 import com.smartindustry.basic.vo.LocationRecordVO;
 import com.smartindustry.basic.vo.LocationVO;
 import com.smartindustry.common.bo.si.LocationBO;
-import com.smartindustry.common.bo.si.StorageLabelBO;
 import com.smartindustry.common.mapper.si.LocationMapper;
 import com.smartindustry.common.mapper.si.LocationRecordMapper;
 import com.smartindustry.common.mapper.si.StorageLabelMapper;

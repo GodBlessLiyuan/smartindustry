@@ -719,6 +719,7 @@ CREATE TABLE si_supplier
     fax char(16),
     site char(64),
     mail char(64),
+    area char(64),
     address char(128),
     remark char(255),
     user_id bigint unsigned,

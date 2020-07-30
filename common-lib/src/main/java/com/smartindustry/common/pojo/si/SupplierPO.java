@@ -36,6 +36,8 @@ public class SupplierPO implements Serializable {
 
     private String mail;
 
+    private String area;
+
     private String address;
 
     private String remark;

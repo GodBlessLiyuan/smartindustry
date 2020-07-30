@@ -2,11 +2,13 @@ package com.smartindustry.common.pojo.si;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import lombok.Data;
 
 /**
  * si_supplier_record
- * @author 
+ *
+ * @author
  */
 @Data
 public class SupplierRecordPO implements Serializable {
@@ -21,4 +23,11 @@ public class SupplierRecordPO implements Serializable {
     private String type;
 
     private static final long serialVersionUID = 1L;
+
+    public SupplierRecordPO(Long supplierId, Long userId, String type) {
+        this.supplierId = supplierId;
+        this.userId = userId;
+        this.createTime = new Date();
+        this.type = type;
+    }
 }

@@ -91,6 +91,8 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
         outboundPO.setOutboundTime(new Date());
         outboundPO.setStatus(OutboundConstant.OUTBOUND_STATUS_FINISH);
         headPO.setMaterialStatus(OutboundConstant.MATERIAL_STATUS_FINISH);
+        headPO.setOutboundStatus(OutboundConstant.OUTBOUND_STATUS_FINISH);
+        headPO.setOutboundTime(new Date());
 
         LogisticsRecordPO logisticsRecordPO = logisticsRecordMapper.queryByOid(oId);
         if (null != logisticsRecordPO) {
@@ -131,7 +133,7 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
                 dto.setLid(recordPO.getLogisticsRecordId());
                 logisticsPictureMapper.batchInsert(LogisticsRecordDTO.createPicPO(dto, filePathConfig));
             }
-            
+
             if (OutboundConstant.OUTBOUND_STATUS_WAIT.equals(outboundPO.getStatus())) {
                 // 确认出货
                 pickHeadPO.setMaterialStatus(OutboundConstant.MATERIAL_STATUS_CONFIRM);
