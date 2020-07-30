@@ -1,7 +1,6 @@
 package com.smartindustry.outbound.vo;
 
 import com.smartindustry.common.bo.om.PickBodyBO;
-import com.smartindustry.common.bo.si.MaterialBO;
 import lombok.Data;
 
 import java.io.Serializable;

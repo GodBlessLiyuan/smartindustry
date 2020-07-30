@@ -1,7 +1,6 @@
 package com.smartindustry.common.mapper.om;
 
 import com.smartindustry.common.bo.om.PickBodyBO;
-import com.smartindustry.common.bo.si.MaterialBO;
 import com.smartindustry.common.bo.om.PickHeadBO;
 import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.mapper.BaseMapper;

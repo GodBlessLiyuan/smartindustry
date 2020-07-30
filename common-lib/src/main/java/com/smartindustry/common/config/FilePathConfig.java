@@ -25,12 +25,16 @@ public class FilePathConfig {
      * 项目目录
      */
     private String projectDir = "/industryfile";
+
     /**
      * 模块目录
      */
     private String outboundDir = "/outbound";
+    private String basicDir = "/basic";
+
     /**
-     * 物流目录
+     * 文件目录
      */
     private String logisticsDir = "/logistics/";
+    private String materialDir = "/material/";
 }

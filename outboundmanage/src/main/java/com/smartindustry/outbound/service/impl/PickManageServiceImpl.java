@@ -3,7 +3,6 @@ package com.smartindustry.outbound.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.smartindustry.common.bo.om.LabelRecommendBO;
-import com.smartindustry.common.bo.si.MaterialBO;
 import com.smartindustry.common.bo.om.PickBodyBO;
 import com.smartindustry.common.bo.om.PickHeadBO;
 import com.smartindustry.common.bo.si.PrintLabelBO;

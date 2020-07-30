@@ -5,14 +5,14 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * dd_lift_cycle_state
+ * dd_life_cycle_state
  * @author 
  */
 @Data
-public class LiftCycleStatePO implements Serializable {
-    private Long liftCycleStateId;
+public class LifeCycleStatePO implements Serializable {
+    private Long lifeCycleStateId;
 
-    private String liftCycleStateName;
+    private String lifeCycleStateName;
 
     private Long userId;
 

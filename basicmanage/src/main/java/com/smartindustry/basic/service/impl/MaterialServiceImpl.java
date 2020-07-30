@@ -8,12 +8,14 @@ import com.smartindustry.basic.service.IMaterialService;
 import com.smartindustry.basic.vo.MaterialVO;
 import com.smartindustry.basic.vo.SupplierRecordVO;
 import com.smartindustry.common.bo.si.MaterialBO;
+import com.smartindustry.common.config.FilePathConfig;
 import com.smartindustry.common.mapper.si.MaterialMapper;
 import com.smartindustry.common.mapper.si.MaterialRecordMapper;
 import com.smartindustry.common.mapper.si.MaterialSpecificationMapper;
 import com.smartindustry.common.pojo.si.MaterialPO;
 import com.smartindustry.common.pojo.si.MaterialRecordPO;
 import com.smartindustry.common.pojo.si.SupplierRecordPO;
+import com.smartindustry.common.util.FileUtil;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
@@ -39,6 +41,8 @@ public class MaterialServiceImpl implements IMaterialService {
     private MaterialRecordMapper materialRecordMapper;
     @Autowired
     private MaterialSpecificationMapper materialSpecificationMapper;
+    @Autowired
+    private FilePathConfig filePathConfig;
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData) {
@@ -103,6 +107,7 @@ public class MaterialServiceImpl implements IMaterialService {
 
     @Override
     public ResultVO upload(MultipartFile file) {
-        return null;
+        String picture = FileUtil.uploadFile(file, filePathConfig.getLocalPath(), filePathConfig.getProjectDir() + filePathConfig.getBasicDir() + filePathConfig.getMaterialDir(), BasicConstant.FILE_MATERIAL);
+        return ResultVO.ok().setData(filePathConfig.getPublicPath() + picture);
     }
 }

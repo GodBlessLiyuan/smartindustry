@@ -10,7 +10,7 @@
         <result column="measure_unit_id" jdbcType="BIGINT" property="measureUnitId"/>
         <result column="material_version_id" jdbcType="BIGINT" property="materialVersionId"/>
         <result column="produce_loss_level_id" jdbcType="BIGINT" property="produceLossLevelId"/>
-        <result column="lift_cycle_state_id" jdbcType="BIGINT" property="liftCycleStateId"/>
+        <result column="life_cycle_state_id" jdbcType="BIGINT" property="lifeCycleStateId"/>
         <result column="material_name" jdbcType="CHAR" property="materialName"/>
         <result column="delivery_days" jdbcType="INTEGER" property="deliveryDays"/>
         <result column="moq" jdbcType="CHAR" property="moq"/>
@@ -26,7 +26,7 @@
     </resultMap>
     <sql id="Base_Column_List">
         material_id, material_no, material_type_id, humidity_level_id, material_level_id,
-    measure_unit_id, material_version_id, produce_loss_level_id, lift_cycle_state_id, 
+    measure_unit_id, material_version_id, produce_loss_level_id, life_cycle_state_id, 
     material_name, delivery_days, moq, material_model, material_draw, supplier_id, material_desc, 
     test_type, user_id, create_time, update_time, dr
     </sql>
@@ -44,7 +44,7 @@
     <insert id="insert" parameterType="com.smartindustry.common.pojo.si.MaterialPO">
         insert into si_material (material_id, material_no, material_type_id,
                                  humidity_level_id, material_level_id, measure_unit_id,
-                                 material_version_id, produce_loss_level_id, lift_cycle_state_id,
+                                 material_version_id, produce_loss_level_id, life_cycle_state_id,
                                  material_name, delivery_days, moq,
                                  material_model, material_draw, supplier_id,
                                  material_desc, test_type, user_id,
@@ -53,7 +53,7 @@
                 #{humidityLevelId,jdbcType=BIGINT}, #{materialLevelId,jdbcType=BIGINT},
                 #{measureUnitId,jdbcType=BIGINT},
                 #{materialVersionId,jdbcType=BIGINT}, #{produceLossLevelId,jdbcType=BIGINT},
-                #{liftCycleStateId,jdbcType=BIGINT},
+                #{lifeCycleStateId,jdbcType=BIGINT},
                 #{materialName,jdbcType=CHAR}, #{deliveryDays,jdbcType=INTEGER}, #{moq,jdbcType=CHAR},
                 #{materialModel,jdbcType=CHAR}, #{materialDraw,jdbcType=CHAR}, #{supplierId,jdbcType=BIGINT},
                 #{materialDesc,jdbcType=CHAR}, #{testType,jdbcType=TINYINT}, #{userId,jdbcType=BIGINT},
@@ -86,8 +86,8 @@
             <if test="produceLossLevelId != null">
                 produce_loss_level_id,
             </if>
-            <if test="liftCycleStateId != null">
-                lift_cycle_state_id,
+            <if test="lifeCycleStateId != null">
+                life_cycle_state_id,
             </if>
             <if test="materialName != null">
                 material_name,
@@ -151,8 +151,8 @@
             <if test="produceLossLevelId != null">
                 #{produceLossLevelId,jdbcType=BIGINT},
             </if>
-            <if test="liftCycleStateId != null">
-                #{liftCycleStateId,jdbcType=BIGINT},
+            <if test="lifeCycleStateId != null">
+                #{lifeCycleStateId,jdbcType=BIGINT},
             </if>
             <if test="materialName != null">
                 #{materialName,jdbcType=CHAR},
@@ -216,8 +216,8 @@
             <if test="produceLossLevelId != null">
                 produce_loss_level_id = #{produceLossLevelId,jdbcType=BIGINT},
             </if>
-            <if test="liftCycleStateId != null">
-                lift_cycle_state_id = #{liftCycleStateId,jdbcType=BIGINT},
+            <if test="lifeCycleStateId != null">
+                life_cycle_state_id = #{lifeCycleStateId,jdbcType=BIGINT},
             </if>
             <if test="materialName != null">
                 material_name = #{materialName,jdbcType=CHAR},
@@ -267,7 +267,7 @@
             measure_unit_id       = #{measureUnitId,jdbcType=BIGINT},
             material_version_id   = #{materialVersionId,jdbcType=BIGINT},
             produce_loss_level_id = #{produceLossLevelId,jdbcType=BIGINT},
-            lift_cycle_state_id   = #{liftCycleStateId,jdbcType=BIGINT},
+            life_cycle_state_id   = #{lifeCycleStateId,jdbcType=BIGINT},
             material_name         = #{materialName,jdbcType=CHAR},
             delivery_days         = #{deliveryDays,jdbcType=INTEGER},
             moq                   = #{moq,jdbcType=CHAR},
@@ -290,55 +290,55 @@
         where dr = 1 and material_no = #{mno,jdbcType=CHAR}
     </select>
 
-    <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.MaterialBO">
-        <id column="material_id" jdbcType="BIGINT" property="materialId"/>
-        <result column="material_no" jdbcType="CHAR" property="materialNo"/>
-        <result column="material_type_id" jdbcType="BIGINT" property="materialTypeId"/>
-        <result column="humidity_level_id" jdbcType="BIGINT" property="humidityLevelId"/>
-        <result column="material_level_id" jdbcType="BIGINT" property="materialLevelId"/>
-        <result column="measure_unit_id" jdbcType="BIGINT" property="measureUnitId"/>
-        <result column="material_version_id" jdbcType="BIGINT" property="materialVersionId"/>
-        <result column="produce_loss_level_id" jdbcType="BIGINT" property="produceLossLevelId"/>
-        <result column="lift_cycle_state_id" jdbcType="BIGINT" property="liftCycleStateId"/>
-        <result column="material_name" jdbcType="CHAR" property="materialName"/>
-        <result column="delivery_days" jdbcType="INTEGER" property="deliveryDays"/>
-        <result column="moq" jdbcType="CHAR" property="moq"/>
-        <result column="material_model" jdbcType="CHAR" property="materialModel"/>
-        <result column="material_draw" jdbcType="CHAR" property="materialDraw"/>
-        <result column="supplier_id" jdbcType="BIGINT" property="supplierId"/>
-        <result column="material_desc" jdbcType="CHAR" property="materialDesc"/>
-        <result column="test_type" jdbcType="TINYINT" property="testType"/>
-        <result column="user_id" jdbcType="BIGINT" property="userId"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
-        <result column="dr" jdbcType="TINYINT" property="dr"/>
+    <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.MaterialBO" extends="BaseResultMap">
+        <result column="material_type_name" jdbcType="CHAR" property="materialName"/>
+        <result column="humidity_level_name" jdbcType="CHAR" property="humidityLevelName"/>
+        <result column="material_level_name" jdbcType="CHAR" property="materialLevelName"/>
+        <result column="measure_unit_name" jdbcType="CHAR" property="measureUnitName"/>
+        <result column="material_version_name" jdbcType="CHAR" property="materialVersionName"/>
+        <result column="produce_loss_level_name" jdbcType="CHAR" property="produceLossLevelName"/>
+        <result column="life_cycle_state_name" jdbcType="CHAR" property="lifeCycleStateName"/>
+        <result column="supplier_name" jdbcType="CHAR" property="supplierName"/>
     </resultMap>
     <sql id="BO_Column_List">
-        material_id, material_no, material_type_id, humidity_level_id, material_level_id,
-    measure_unit_id, material_version_id, produce_loss_level_id, lift_cycle_state_id,
-    material_name, delivery_days, moq, material_model, material_draw, supplier_id, material_desc,
-    test_type, user_id, create_time, update_time, dr
+        m.material_id, m.material_no, m.material_type_id, m.humidity_level_id, m.material_level_id,
+    m.measure_unit_id, m.material_version_id, m.produce_loss_level_id, m.life_cycle_state_id,
+    m.material_name, m.delivery_days, m.moq, m.material_model, m.material_draw, m.supplier_id, m.material_desc,
+    m.test_type, m.user_id, m.create_time, m.update_time, m.dr,
+    mt.material_type_name, hl.humidity_level_name, ml.material_level_name, mu.measure_unit_name, mv.material_version_name,
+    pll.produce_loss_level_name, lcs.life_cycle_state_name, s.supplier_name
     </sql>
+    <select id="pageQuery" resultMap="BOResultMap">
+        select
+        <include refid="BO_Column_List"/>
+        from si_material m
+        left join dd_material_type mt on m.material_type_id = mt.material_type_id
+        left join dd_humidity_level hl on m.humidity_level_id = hl.humidity_level_id
+        left join dd_material_level ml on m.material_level_id = ml.material_level_id
+        left join dd_measure_unit mu on m.measure_unit_id = mu.measure_unit_id
+        left join dd_material_version mv on m.material_version_id = mv.material_version_id
+        left join dd_produce_loss_level pll on m.produce_loss_level_id = pll.produce_loss_level_id
+        left join dd_life_cycle_state lcs on m.life_cycle_state_id = lcs.life_cycle_state_id
+        left join si_supplier s on m.supplier_id = s.supplier_id
+        where m.dr = 1
+        <if test="mno != null and mno != ''">and m.material_no like '%' #{mno,jdbcType=CHAR} '%'</if>
+        <if test="mname != null and mname != ''">and m.material_name like '%' #{mname,jdbcType=CHAR} '%'</if>
+        <if test="mmodel != null and mmodel != ''">and m.material_model like '%' #{mmodel,jdbcType=CHAR} '%'</if>
+        order by create_time desc
+    </select>
     <select id="queryByMid" parameterType="java.lang.Long" resultMap="BOResultMap">
         select
         <include refid="BO_Column_List"/>
-        from si_supplier s
-        left join dd_supplier_group sg on s.supplier_group_id = sg.supplier_group_id
-        left join dd_cert_status cs on s.cert_status_id = cs.cert_status_id
-        left join dd_supplier_type st on s.supplier_type_id = st.supplier_type_id
-        left join dd_settle_period sp on s.settle_period_id = sp.settle_period_id
-        left join dd_currency c on s.currency_id = c.currency_id
-        where s.dr = 1 and supplier_id = #{sid,jdbcType=BIGINT}
-    </select>
-    <select id="pageQuery" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from si_material
-        where dr = 1
-        <if test="mno != null and mno != ''">and material_no like '%' #{mno,jdbcType=CHAR} '%'</if>
-        <if test="mname != null and mname != ''">and material_name like '%' #{mname,jdbcType=CHAR} '%'</if>
-        <if test="mmodel != null and mmodel != ''">and material_model like '%' #{mmodel,jdbcType=CHAR} '%'</if>
-        order by create_time desc
+        from si_material m
+        left join dd_material_type mt on m.material_type_id = mt.material_type_id
+        left join dd_humidity_level hl on m.humidity_level_id = hl.humidity_level_id
+        left join dd_material_level ml on m.material_level_id = ml.material_level_id
+        left join dd_measure_unit mu on m.measure_unit_id = mu.measure_unit_id
+        left join dd_material_version mv on m.material_version_id = mv.material_version_id
+        left join dd_produce_loss_level pll on m.produce_loss_level_id = pll.produce_loss_level_id
+        left join dd_life_cycle_state lcs on m.life_cycle_state_id = lcs.life_cycle_state_id
+        left join si_supplier s on m.supplier_id = s.supplier_id
+        where m.dr = 1 and m.material_id = #{mid,jdbcType=BIGINT}
     </select>
     <select id="queryBySids" parameterType="java.util.List" resultMap="BaseResultMap">
         select

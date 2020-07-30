@@ -4,15 +4,21 @@ import com.smartindustry.common.pojo.si.MaterialPO;
 import lombok.Data;
 
 /**
- * @author: jiangzhaojie
- * @date: Created in 19:35 2020/7/15
- * @version: 1.0.0
- * @description: 欠料列表实体类
+ * @author: xiahui
+ * @date: Created in 2020/7/30 18:35
+ * @description: 物料 BO
+ * @version: 1.0
  */
 @Data
 public class MaterialBO extends MaterialPO {
     private static final long SerialVersionUID = 1L;
 
-
-
+    private String materialTypeName;
+    private String humidityLevelName;
+    private String materialLevelName;
+    private String measureUnitName;
+    private String materialVersionName;
+    private String produceLossLevelName;
+    private String lifeCycleStateName;
+    private String supplierName;
 }

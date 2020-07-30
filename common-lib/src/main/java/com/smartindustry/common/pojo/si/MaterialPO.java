@@ -26,7 +26,7 @@ public class MaterialPO implements Serializable {
 
     private Long produceLossLevelId;
 
-    private Long liftCycleStateId;
+    private Long lifeCycleStateId;
 
     private String materialName;
 

@@ -31,7 +31,7 @@ DROP TABLE IF EXISTS si_supplier;
 DROP TABLE IF EXISTS dd_cert_status;
 DROP TABLE IF EXISTS dd_currency;
 DROP TABLE IF EXISTS dd_humidity_level;
-DROP TABLE IF EXISTS dd_lift_cycle_state;
+DROP TABLE IF EXISTS dd_life_cycle_state;
 DROP TABLE IF EXISTS dd_material_level;
 DROP TABLE IF EXISTS dd_material_type;
 DROP TABLE IF EXISTS dd_material_version;
@@ -236,14 +236,14 @@ CREATE TABLE dd_humidity_level
 );
 
 
-CREATE TABLE dd_lift_cycle_state
+CREATE TABLE dd_life_cycle_state
 (
-    lift_cycle_state_id bigint unsigned NOT NULL AUTO_INCREMENT,
-    lift_cycle_state_name char(255) NOT NULL,
+    life_cycle_state_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    life_cycle_state_name char(255) NOT NULL,
     user_id bigint unsigned,
     create_time datetime,
-    PRIMARY KEY (lift_cycle_state_id),
-    UNIQUE (lift_cycle_state_id)
+    PRIMARY KEY (life_cycle_state_id),
+    UNIQUE (life_cycle_state_id)
 );
 
 
@@ -603,7 +603,7 @@ CREATE TABLE si_material
     measure_unit_id bigint unsigned,
     material_version_id bigint unsigned,
     produce_loss_level_id bigint unsigned,
-    lift_cycle_state_id bigint unsigned,
+    life_cycle_state_id bigint unsigned,
     material_name char(64) NOT NULL,
     delivery_days int NOT NULL,
     moq char(32) NOT NULL,
@@ -1136,7 +1136,7 @@ ALTER TABLE dd_humidity_level
 ;
 
 
-ALTER TABLE dd_lift_cycle_state
+ALTER TABLE dd_life_cycle_state
     ADD FOREIGN KEY (user_id)
         REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
@@ -1329,8 +1329,8 @@ ALTER TABLE si_material
 
 
 ALTER TABLE si_material
-    ADD FOREIGN KEY (lift_cycle_state_id)
-        REFERENCES dd_lift_cycle_state (lift_cycle_state_id)
+    ADD FOREIGN KEY (life_cycle_state_id)
+        REFERENCES dd_life_cycle_state (life_cycle_state_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
