@@ -321,8 +321,8 @@ public class PickManageServiceImpl implements IPickManageService {
 
 
     @Override
-    public ResultVO updateException(Long pickHeadId, String materialNo, String exception) {
-        int result = pickBodyMapper.updateException(pickHeadId, materialNo, exception);
+    public ResultVO updateException(Long pickHeadId, Long materialId, String exception) {
+        int result = pickBodyMapper.updateException(pickHeadId, materialId, exception);
         return ResultVO.ok();
     }
 
@@ -419,7 +419,7 @@ public class PickManageServiceImpl implements IPickManageService {
         po.setStatus(OutboundConstant.OUTBOUND_STATUS_WAIT);
         po.setCreateTime(date);
         po.setDr((byte) 1);
-        int resultIn = outboundMapper.insert(po);
+        outboundMapper.insert(po);
         outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.AGREE_TO_RELEASE, new Date(), OutboundConstant.MATERIAL_STATUS_CHECK));
         return ResultVO.ok();
     }

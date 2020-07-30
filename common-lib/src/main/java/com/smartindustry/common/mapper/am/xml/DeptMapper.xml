@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.am.DeptPO">
     <id column="dept_id" jdbcType="BIGINT" property="deptId" />
     <result column="parent_id" jdbcType="BIGINT" property="parentId" />
-    <result column="detp_name" jdbcType="CHAR" property="detpName" />
+    <result column="dept_name" jdbcType="CHAR" property="deptName" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
     <result column="dept_desc" jdbcType="CHAR" property="deptDesc" />
     <result column="status" jdbcType="TINYINT" property="status" />
@@ -13,7 +13,7 @@
     <result column="dr" jdbcType="TINYINT" property="dr" />
   </resultMap>
   <sql id="Base_Column_List">
-    dept_id, parent_id, detp_name, user_id, dept_desc, `status`, create_time, update_time, 
+    dept_id, parent_id, dept_name, user_id, dept_desc, `status`, create_time, update_time, 
     dr
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -27,11 +27,11 @@
     where dept_id = #{deptId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.smartindustry.common.pojo.am.DeptPO">
-    insert into am_dept (dept_id, parent_id, detp_name, 
+    insert into am_dept (dept_id, parent_id, dept_name, 
       user_id, dept_desc, `status`, 
       create_time, update_time, dr
       )
-    values (#{deptId,jdbcType=BIGINT}, #{parentId,jdbcType=BIGINT}, #{detpName,jdbcType=CHAR}, 
+    values (#{deptId,jdbcType=BIGINT}, #{parentId,jdbcType=BIGINT}, #{deptName,jdbcType=CHAR}, 
       #{userId,jdbcType=BIGINT}, #{deptDesc,jdbcType=CHAR}, #{status,jdbcType=TINYINT}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT}
       )
@@ -45,8 +45,8 @@
       <if test="parentId != null">
         parent_id,
       </if>
-      <if test="detpName != null">
-        detp_name,
+      <if test="deptName != null">
+        dept_name,
       </if>
       <if test="userId != null">
         user_id,
@@ -74,8 +74,8 @@
       <if test="parentId != null">
         #{parentId,jdbcType=BIGINT},
       </if>
-      <if test="detpName != null">
-        #{detpName,jdbcType=CHAR},
+      <if test="deptName != null">
+        #{deptName,jdbcType=CHAR},
       </if>
       <if test="userId != null">
         #{userId,jdbcType=BIGINT},
@@ -103,8 +103,8 @@
       <if test="parentId != null">
         parent_id = #{parentId,jdbcType=BIGINT},
       </if>
-      <if test="detpName != null">
-        detp_name = #{detpName,jdbcType=CHAR},
+      <if test="deptName != null">
+        dept_name = #{deptName,jdbcType=CHAR},
       </if>
       <if test="userId != null">
         user_id = #{userId,jdbcType=BIGINT},
@@ -130,7 +130,7 @@
   <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.am.DeptPO">
     update am_dept
     set parent_id = #{parentId,jdbcType=BIGINT},
-      detp_name = #{detpName,jdbcType=CHAR},
+      dept_name = #{deptName,jdbcType=CHAR},
       user_id = #{userId,jdbcType=BIGINT},
       dept_desc = #{deptDesc,jdbcType=CHAR},
       `status` = #{status,jdbcType=TINYINT},
@@ -139,4 +139,19 @@
       dr = #{dr,jdbcType=TINYINT}
     where dept_id = #{deptId,jdbcType=BIGINT}
   </update>
+
+  <select id="deptPageQuery" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from am_dept
+    where dr = 1
+    <if test="deptName != null and deptName != ''">
+      and dept_name like concat('%',#{deptName,jdbcType=CHAR},'%')
+    </if>
+    <if test="status != null and status != 0">
+      and  `status` = #{status,jdbcType=TINYINT}
+    </if>
+    order by create_time desc
+  </select>
+
 </mapper>

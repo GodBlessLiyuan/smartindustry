@@ -14,7 +14,7 @@ public class DeptPO implements Serializable {
 
     private Long parentId;
 
-    private String detpName;
+    private String deptName;
 
     private Long userId;
 
