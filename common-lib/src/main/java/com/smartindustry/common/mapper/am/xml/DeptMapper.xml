@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.am.DeptMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.am.DeptPO">
+    <id column="dept_id" jdbcType="BIGINT" property="deptId" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="detp_name" jdbcType="CHAR" property="detpName" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="dept_desc" jdbcType="CHAR" property="deptDesc" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="dr" jdbcType="TINYINT" property="dr" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    dept_id, parent_id, detp_name, user_id, dept_desc, `status`, create_time, update_time, 
+    dr
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from am_dept
+    where dept_id = #{deptId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from am_dept
+    where dept_id = #{deptId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.am.DeptPO">
+    insert into am_dept (dept_id, parent_id, detp_name, 
+      user_id, dept_desc, `status`, 
+      create_time, update_time, dr
+      )
+    values (#{deptId,jdbcType=BIGINT}, #{parentId,jdbcType=BIGINT}, #{detpName,jdbcType=CHAR}, 
+      #{userId,jdbcType=BIGINT}, #{deptDesc,jdbcType=CHAR}, #{status,jdbcType=TINYINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.am.DeptPO">
+    insert into am_dept
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="deptId != null">
+        dept_id,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="detpName != null">
+        detp_name,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="deptDesc != null">
+        dept_desc,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="dr != null">
+        dr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="deptId != null">
+        #{deptId,jdbcType=BIGINT},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="detpName != null">
+        #{detpName,jdbcType=CHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="deptDesc != null">
+        #{deptDesc,jdbcType=CHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dr != null">
+        #{dr,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.am.DeptPO">
+    update am_dept
+    <set>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="detpName != null">
+        detp_name = #{detpName,jdbcType=CHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="deptDesc != null">
+        dept_desc = #{deptDesc,jdbcType=CHAR},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dr != null">
+        dr = #{dr,jdbcType=TINYINT},
+      </if>
+    </set>
+    where dept_id = #{deptId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.am.DeptPO">
+    update am_dept
+    set parent_id = #{parentId,jdbcType=BIGINT},
+      detp_name = #{detpName,jdbcType=CHAR},
+      user_id = #{userId,jdbcType=BIGINT},
+      dept_desc = #{deptDesc,jdbcType=CHAR},
+      `status` = #{status,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      dr = #{dr,jdbcType=TINYINT}
+    where dept_id = #{deptId,jdbcType=BIGINT}
+  </update>
+</mapper>

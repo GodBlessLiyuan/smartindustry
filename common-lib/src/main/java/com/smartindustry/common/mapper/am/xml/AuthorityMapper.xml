@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.am.AuthorityMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.am.AuthorityPO">
+    <id column="authority_id" jdbcType="BIGINT" property="authorityId" />
+    <result column="authority_name" jdbcType="CHAR" property="authorityName" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    authority_id, authority_name, `type`, parent_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from am_authority
+    where authority_id = #{authorityId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from am_authority
+    where authority_id = #{authorityId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.am.AuthorityPO">
+    insert into am_authority (authority_id, authority_name, `type`, 
+      parent_id)
+    values (#{authorityId,jdbcType=BIGINT}, #{authorityName,jdbcType=CHAR}, #{type,jdbcType=TINYINT}, 
+      #{parentId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.am.AuthorityPO">
+    insert into am_authority
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="authorityId != null">
+        authority_id,
+      </if>
+      <if test="authorityName != null">
+        authority_name,
+      </if>
+      <if test="type != null">
+        `type`,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="authorityId != null">
+        #{authorityId,jdbcType=BIGINT},
+      </if>
+      <if test="authorityName != null">
+        #{authorityName,jdbcType=CHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.am.AuthorityPO">
+    update am_authority
+    <set>
+      <if test="authorityName != null">
+        authority_name = #{authorityName,jdbcType=CHAR},
+      </if>
+      <if test="type != null">
+        `type` = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where authority_id = #{authorityId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.am.AuthorityPO">
+    update am_authority
+    set authority_name = #{authorityName,jdbcType=CHAR},
+      `type` = #{type,jdbcType=TINYINT},
+      parent_id = #{parentId,jdbcType=BIGINT}
+    where authority_id = #{authorityId,jdbcType=BIGINT}
+  </update>
+</mapper>
