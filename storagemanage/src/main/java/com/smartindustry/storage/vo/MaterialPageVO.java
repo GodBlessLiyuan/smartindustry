@@ -1,5 +1,6 @@
 package com.smartindustry.storage.vo;
 
+import com.smartindustry.common.bo.si.MaterialBO;
 import com.smartindustry.common.pojo.si.MaterialPO;
 import lombok.Data;
 
@@ -29,14 +30,14 @@ public class MaterialPageVO implements Serializable {
     /**
      * pos 转 vos
      *
-     * @param pos
+     * @param bos
      * @return
      */
-    public static List<MaterialPageVO> convert(List<MaterialPO> pos) {
-        List<MaterialPageVO> vos = new ArrayList<>(pos.size());
+    public static List<MaterialPageVO> convert(List<MaterialBO> bos) {
+        List<MaterialPageVO> vos = new ArrayList<>(bos.size());
 
-        for (MaterialPO po : pos) {
-            vos.add(convert(po));
+        for (MaterialBO bo : bos) {
+            vos.add(convert(bo));
         }
 
         return vos;
@@ -48,7 +49,7 @@ public class MaterialPageVO implements Serializable {
      * @param po
      * @return
      */
-    public static MaterialPageVO convert(MaterialPO po) {
+    public static MaterialPageVO convert(MaterialBO po) {
         MaterialPageVO vo = new MaterialPageVO();
         vo.setMid(po.getMaterialId());
         vo.setMno(po.getMaterialNo());

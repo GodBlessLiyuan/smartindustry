@@ -2,6 +2,7 @@ package com.smartindustry.storage.service.impl;
 
 import com.github.pagehelper.Page;
 import com.smartindustry.common.bo.si.LabelRecordBO;
+import com.smartindustry.common.bo.si.MaterialBO;
 import com.smartindustry.common.bo.sm.ReceiptBO;
 import com.smartindustry.common.bo.sm.ReceiptBodyBO;
 import com.smartindustry.common.constant.ModuleConstant;
@@ -132,8 +133,8 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
 
     @Override
     public ResultVO materialQuery(Map<String, Object> reqData) {
-        Page<MaterialPO> page = PageQueryUtil.startPage(reqData);
-        List<MaterialPO> pos = materialMapper.pageQuery(reqData);
+        Page<MaterialBO> page = PageQueryUtil.startPage(reqData);
+        List<MaterialBO> pos = materialMapper.pageQuery(reqData);
 
         return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), MaterialPageVO.convert(pos)));
     }
