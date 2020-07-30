@@ -19,8 +19,13 @@ public class MaterialDTO implements Serializable {
     private String mno;
 
     public static MaterialPO createPO(MaterialDTO dto) {
+        MaterialPO po = new MaterialPO();
+
+        return buildPO(po, dto);
     }
 
-    public static void buildPO(MaterialPO materialPO, MaterialDTO dto) {
+    public static MaterialPO buildPO(MaterialPO po, MaterialDTO dto) {
+
+        return po;
     }
 }
