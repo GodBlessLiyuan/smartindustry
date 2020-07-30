@@ -152,6 +152,16 @@
         where storage_label_id = #{storageLabelId,jdbcType=BIGINT}
     </update>
 
+    <select id="queryByLids" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_storage_label
+        where location_id in
+        <foreach collection="list" item="lid" open="(" separator="," close=")">
+            #{lid,jdbcType=BIGINT}
+        </foreach>
+    </select>
+
     <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.StorageLabelBO" extends="BaseResultMap">
         <result column="location_no" jdbcType="CHAR" property="locationNo"/>
     </resultMap>
@@ -162,7 +172,7 @@
     </sql>
     <select id="queryNotRecommend" resultMap="BOResultMap">
         select
-        <include refid="BO_Column_List"/>, l.location_no as locationNo
+        <include refid="BO_Column_List"/>
         from si_storage_label sl
         left join si_location l on sl.location_id = l.location_id
         where sl.order_no = #{orderNo,jdbcType=CHAR} and sl.material_id = #{materialId,jdbcType=BIGINT} and type = 1 and

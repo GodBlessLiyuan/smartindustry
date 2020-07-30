@@ -237,4 +237,9 @@
         from si_warehouse
         where dr = 1 and warehouse_type_id = #{wtid,jdbcType=BIGINT}
     </select>
+    <select id="queryAll" resultType="java.util.Map">
+        select warehouse_id as wid, warehouse_name as wname
+        from si_warehouse
+        where dr = 1
+    </select>
 </mapper>

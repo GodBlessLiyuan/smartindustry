@@ -156,4 +156,10 @@ public class WarehouseServiceImpl implements IWarehouseService {
 
         return ResultVO.ok();
     }
+
+    @Override
+    public ResultVO queryAll() {
+        List<Map<String, Object>> res = warehouseMapper.queryAll();
+        return ResultVO.ok().setData(res);
+    }
 }

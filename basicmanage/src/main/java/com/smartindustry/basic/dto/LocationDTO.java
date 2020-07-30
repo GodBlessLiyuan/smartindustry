@@ -1,8 +1,10 @@
 package com.smartindustry.basic.dto;
 
+import com.smartindustry.common.pojo.si.LocationPO;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author: xiahui
@@ -13,4 +15,25 @@ import java.io.Serializable;
 @Data
 public class LocationDTO implements Serializable {
     private static final long SerialVersionUID = 1L;
+
+    private Long lid;
+    private String lno;
+    private String lname;
+    private Long wid;
+    private String remark;
+
+    public static LocationPO createPO(LocationDTO dto) {
+        LocationPO po = new LocationPO();
+        po.setCreateTime(new Date());
+        po.setDr((byte) 1);
+        return buildPO(po, dto);
+    }
+
+    public static LocationPO buildPO(LocationPO po, LocationDTO dto) {
+        po.setLocationNo(dto.getLno());
+        po.setLocationName(dto.getLname());
+        po.setWarehouseId(dto.getWid());
+        po.setRemark(dto.getRemark());
+        return po;
+    }
 }

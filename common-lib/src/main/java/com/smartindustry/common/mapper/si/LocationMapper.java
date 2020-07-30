@@ -6,6 +6,7 @@ import com.smartindustry.common.pojo.si.LocationPO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * LocationMapper继承基类
@@ -27,4 +28,27 @@ public interface LocationMapper extends BaseMapper<LocationPO, Long> {
      * @return
      */
     List<LocationBO> queryByWids(List<Long> wids);
+
+    /**
+     * 分页查询
+     *
+     * @param reqData
+     * @return
+     */
+    List<LocationBO> pageQuery(Map<String, Object> reqData);
+
+    /**
+     * 批量删除
+     *
+     * @param lids
+     */
+    void batchDelete(List<Long> lids);
+
+    /**
+     * 根据Id查询
+     *
+     * @param lid
+     * @return
+     */
+    LocationBO queryById(Long lid);
 }

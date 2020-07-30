@@ -21,4 +21,12 @@ public interface StorageLabelMapper extends BaseMapper<StorageLabelPO, Long> {
      * @return
      */
     List<StorageLabelBO> queryNotRecommend(@Param("orderNo") String orderNo, @Param("materialId") Long materialId);
+
+    /**
+     * 根据 货位id 查询
+     *
+     * @param lids
+     * @return
+     */
+    List<StorageLabelPO> queryByLids(List<Long> lids);
 }

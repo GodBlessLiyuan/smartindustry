@@ -59,7 +59,7 @@ public class WarehouseVO implements Serializable {
     private String remark;
 
     public static List<WarehouseVO> convert(List<WarehouseBO> bos) {
-        List<WarehouseVO> vos = new ArrayList<>();
+        List<WarehouseVO> vos = new ArrayList<>(bos.size());
         for (WarehouseBO bo : bos) {
             vos.add(convert(bo));
         }

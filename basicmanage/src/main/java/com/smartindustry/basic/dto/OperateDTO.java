@@ -16,4 +16,6 @@ public class OperateDTO implements Serializable {
 
     private Long wid;
     private Long wtid;
+
+    private Long lid;
 }

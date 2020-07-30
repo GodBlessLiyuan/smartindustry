@@ -30,4 +30,6 @@ public interface IWarehouseService {
     ResultVO typeEdit(WarehouseTypeDTO dto);
 
     ResultVO typeDelete(OperateDTO dto);
+
+    ResultVO queryAll();
 }

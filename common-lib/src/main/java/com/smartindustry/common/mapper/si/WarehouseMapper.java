@@ -51,4 +51,11 @@ public interface WarehouseMapper extends BaseMapper<WarehousePO, Long> {
      * @return
      */
     List<WarehousePO> queryByWtid(Long wtid);
+
+    /**
+     * 查询所有
+     *
+     * @return
+     */
+    List<Map<String, Object>> queryAll();
 }

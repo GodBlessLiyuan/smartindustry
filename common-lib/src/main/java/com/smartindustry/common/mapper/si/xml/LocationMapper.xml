@@ -27,7 +27,8 @@
         from si_location
         where location_id = #{locationId,jdbcType=BIGINT}
     </delete>
-    <insert id="insert" parameterType="com.smartindustry.common.pojo.si.LocationPO">
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.si.LocationPO" useGeneratedKeys="true"
+            keyProperty="locationId">
         insert into si_location (location_id, location_no, location_name,
                                  warehouse_id, remark, user_id,
                                  create_time, update_time, dr)
@@ -139,12 +140,31 @@
         where location_id = #{locationId,jdbcType=BIGINT}
     </update>
 
-    <resultMap id="BoResultMap" type="com.smartindustry.common.bo.si.LocationBO">
+    <resultMap id="BoResultMap" type="com.smartindustry.common.bo.si.LocationBO" extends="BaseResultMap">
+        <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
     </resultMap>
     <sql id="Bo_Column_List">
         l.location_id, l.location_no, l.location_name, l.warehouse_id, l.remark, l.user_id, l.create_time,
-    l.update_time, l.dr
+    l.update_time, l.dr,
+    w.warehouse_name
     </sql>
+    <select id="pageQuery" parameterType="java.util.Map" resultMap="BoResultMap">
+        select
+        <include refid="Bo_Column_List"/>
+        from si_location l
+        left join si_warehouse w on l.warehouse_id = w.warehouse_id
+        where l.dr = 1
+        <if test="lno != null and lno != ''">
+            and location_no like '%' #{lno,jdbcType=CHAR} '%'
+        </if>
+        <if test="lname != null and lname != ''">
+            and location_name like '%' #{lname,jdbcType=CHAR} '%'
+        </if>
+        <if test="wid != null and wid != 0">
+            and w.warehouse_id = #{wid,jdbcType=BIGINT}
+        </if>
+        order by l.create_time desc
+    </select>
     <select id="queryByLno" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -161,4 +181,18 @@
             #{wid,jdbcType=BIGINT}
         </foreach>
     </select>
+    <select id="queryById" parameterType="java.lang.Long" resultMap="BoResultMap">
+        select
+        <include refid="Bo_Column_List"/>
+        from si_location l
+        left join si_warehouse w on l.warehouse_id = w.warehouse_id
+        where l.dr = 1 and w.dr = 1 and location_id = #{lid,jdbcType=BIGINT}
+    </select>
+    <update id="batchDelete" parameterType="java.util.List">
+        update si_location
+        set dr = 2 where location_id in
+        <foreach collection="list" item="lid" open="(" separator="," close=")">
+            #{lid,jdbcType=BIGINT}
+        </foreach>
+    </update>
 </mapper>

@@ -110,4 +110,15 @@ public class WarehouseController {
     public ResultVO typeDelete(@RequestBody OperateDTO dto) {
         return warehouseService.typeDelete(dto);
     }
+
+    /**
+     * 仓库 查询
+     *
+     * @return
+     */
+    @PostMapping("queryAll")
+    public ResultVO queryAll() {
+        return warehouseService.queryAll();
+    }
+
 }
