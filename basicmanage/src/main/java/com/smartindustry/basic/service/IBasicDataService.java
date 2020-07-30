@@ -36,13 +36,13 @@ public interface IBasicDataService {
 
     ResultVO spQuery();
 
-    ResultVO spEdit(WarehouseTypeDTO dto);
+    ResultVO spEdit(SettlePeriodDTO dto);
 
     ResultVO spDelete(BasicDataDTO dto);
 
     ResultVO currencyQuery();
 
-    ResultVO currencyEdit(WarehouseTypeDTO dto);
+    ResultVO currencyEdit(CurrencyDTO dto);
 
     ResultVO currencyDelete(BasicDataDTO dto);
 }

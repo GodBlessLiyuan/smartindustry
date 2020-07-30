@@ -162,7 +162,7 @@ public class BasicDataController {
      * @return
      */
     @PostMapping("spEdit")
-    public ResultVO spEdit(@RequestBody WarehouseTypeDTO dto) {
+    public ResultVO spEdit(@RequestBody SettlePeriodDTO dto) {
         return basicDataService.spEdit(dto);
     }
 
@@ -193,7 +193,7 @@ public class BasicDataController {
      * @return
      */
     @PostMapping("currencyEdit")
-    public ResultVO currencyEdit(@RequestBody WarehouseTypeDTO dto) {
+    public ResultVO currencyEdit(@RequestBody CurrencyDTO dto) {
         return basicDataService.currencyEdit(dto);
     }
 

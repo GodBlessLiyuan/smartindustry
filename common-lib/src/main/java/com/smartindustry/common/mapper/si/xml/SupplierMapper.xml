@@ -324,4 +324,34 @@
             #{sid,jdbcType=BIGINT}
         </foreach>
     </update>
+    <select id="queryBySgid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_supplier
+        where dr = 1 and supplier_group_id = #{sgid,jdbcType=BIGINT}
+    </select>
+    <select id="queryByCsid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_supplier
+        where dr = 1 and cert_status_id = #{csid,jdbcType=BIGINT}
+    </select>
+    <select id="queryByStid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_supplier
+        where dr = 1 and supplier_type_id = #{stid,jdbcType=BIGINT}
+    </select>
+    <select id="queryBySpid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_supplier
+        where dr = 1 and settle_period_id = #{spid,jdbcType=BIGINT}
+    </select>
+    <select id="queryByCid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_supplier
+        where dr = 1 and currency_id = #{cid,jdbcType=BIGINT}
+    </select>
 </mapper>
