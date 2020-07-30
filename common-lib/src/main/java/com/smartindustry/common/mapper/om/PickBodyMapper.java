@@ -32,11 +32,11 @@ public interface PickBodyMapper extends BaseMapper<PickBodyPO, Long> {
     /**
      * 更新异常信息
      * @param pickHeadId
-     * @param materialNo
+     * @param materialId
      * @param exception
      * @return
      */
     int updateException(@Param("pickHeadId") Long pickHeadId,
-                        @Param("materialNo") String materialNo,
+                        @Param("materialId") Long materialId,
                         @Param("exception") String exception);
 }

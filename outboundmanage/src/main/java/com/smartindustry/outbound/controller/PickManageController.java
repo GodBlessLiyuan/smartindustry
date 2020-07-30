@@ -164,9 +164,9 @@ public class PickManageController {
 
     @RequestMapping("updateException")
     public ResultVO updateException(@RequestParam(value = "phid", required = false) Long pickHeadId,
-                                    @RequestParam(value = "mno", required = false) String materialNo,
+                                    @RequestParam(value = "mid", required = false) Long materialId,
                                     @RequestParam(value = "exce", required = false) String exception){
-        return pickManageService.updateException(pickHeadId,materialNo,exception);
+        return pickManageService.updateException(pickHeadId,materialId,exception);
     }
 
     @RequestMapping("outBoundItems")

@@ -120,11 +120,11 @@ public interface IPickManageService {
     /**
      * 插入工单物料的异常情况
      * @param pickHeadId
-     * @param materialNo
+     * @param materialId
      * @param exception
      * @return
      */
-    ResultVO updateException(Long pickHeadId,String materialNo,String exception);
+    ResultVO updateException(Long pickHeadId,Long materialId,String exception);
 
     /**
      * 根据当前工单拣货单id 生成 出库单
