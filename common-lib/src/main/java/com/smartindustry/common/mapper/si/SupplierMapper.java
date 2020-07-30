@@ -28,4 +28,19 @@ public interface SupplierMapper extends BaseMapper<SupplierPO, Long> {
      * @return
      */
     SupplierPO queryBySno(String sno);
+
+    /**
+     * 批量删除
+     *
+     * @param sids
+     */
+    void batchDelete(List<Long> sids);
+
+    /**
+     * 根据sid 查询
+     *
+     * @param sid
+     * @return
+     */
+    SupplierBO queryBySid(Long sid);
 }

@@ -100,7 +100,7 @@ public class WarehouseServiceImpl implements IWarehouseService {
     public ResultVO detail(OperateDTO dto) {
         WarehouseBO warehouseBO = warehouseMapper.queryById(dto.getWid());
         if (null == warehouseBO) {
-            return new ResultVO(1001);
+            return new ResultVO(1002);
         }
 
         return ResultVO.ok().setData(WarehouseVO.convert(warehouseBO));
@@ -110,51 +110,6 @@ public class WarehouseServiceImpl implements IWarehouseService {
     public ResultVO record(OperateDTO dto) {
         List<WarehouseRecordPO> warehouseRecordPOs = warehouseRecordMapper.queryByWid(dto.getWid());
         return ResultVO.ok().setData(WarehouseRecordVO.convert(warehouseRecordPOs));
-    }
-
-    @Override
-    public ResultVO typeQuery() {
-        List<Map<String, Object>> res = warehouseTypeMapper.queryAll();
-        return ResultVO.ok().setData(res);
-    }
-
-    @Override
-    public ResultVO typeEdit(WarehouseTypeDTO dto) {
-        WarehouseTypePO exitPO = warehouseTypeMapper.queryByName(dto.getWtname());
-        if (null != exitPO && (dto.getWtid() == null || !dto.getWtid().equals(exitPO.getWarehouseTypeId()))) {
-            return new ResultVO(1004);
-        }
-
-        if (null == dto.getWtid()) {
-            // 新增
-            warehouseTypeMapper.insert(WarehouseTypeDTO.createPO(dto, 1L));
-            return ResultVO.ok();
-        }
-        // 修改
-        WarehouseTypePO warehouseTypePO = warehouseTypeMapper.selectByPrimaryKey(dto.getWtid());
-        if (null == warehouseTypePO) {
-            return new ResultVO(1002);
-        }
-
-        warehouseTypeMapper.updateByPrimaryKey(WarehouseTypeDTO.buildPO(warehouseTypePO, dto));
-        return ResultVO.ok();
-    }
-
-    @Override
-    public ResultVO typeDelete(OperateDTO dto) {
-        WarehouseTypePO warehouseTypePO = warehouseTypeMapper.selectByPrimaryKey(dto.getWtid());
-        if (null == warehouseTypePO) {
-            return new ResultVO(1002);
-        }
-
-        List<WarehousePO> warehousePOs = warehouseMapper.queryByWtid(dto.getWtid());
-        if (null != warehousePOs && warehousePOs.size() > 0) {
-            return new ResultVO(1007);
-        }
-
-        warehouseTypeMapper.deleteByPrimaryKey(dto.getWtid());
-
-        return ResultVO.ok();
     }
 
     @Override

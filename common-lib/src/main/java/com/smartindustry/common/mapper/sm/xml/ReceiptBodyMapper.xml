@@ -268,7 +268,7 @@
             </choose>
         </if>
         where rh.dr = 1 and rb.dr = 1
-        <if test="keyword != null and keyword != ''">and (rb.material_no like '%' #{keyword,jdbcType=CHAR} '%' or
+        <if test="keyword != null and keyword != ''">and (m.material_no like '%' #{keyword,jdbcType=CHAR} '%' or
             m.material_desc like '%' #{keyword,jdbcType=CHAR} '%')
         </if>
         <if test="supplier != null and supplier != ''">and rh.supplier like '%' #{supplier,jdbcType=CHAR} '%'</if>

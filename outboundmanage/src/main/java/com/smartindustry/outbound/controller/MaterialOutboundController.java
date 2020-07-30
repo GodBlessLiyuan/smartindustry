@@ -71,10 +71,9 @@ public class MaterialOutboundController {
      * @param file
      * @return
      */
-    @RequestMapping("upload")
+    @PostMapping("upload")
     public ResultVO upload(@Param("file") MultipartFile file) {
         return materialOutboundService.upload(file);
     }
-
 
 }

@@ -293,4 +293,13 @@
         <if test="mmodel != null and mmodel != ''">and material_model like '%' #{mmodel,jdbcType=CHAR} '%'</if>
         order by create_time desc
     </select>
+    <select id="queryBySids" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_material
+        where dr = 1 and supplier_id in
+        <foreach collection="list" item="sid" separator="," open="(" close=")">
+            #{sid,jdbcType=BIGINT}
+        </foreach>
+    </select>
 </mapper>

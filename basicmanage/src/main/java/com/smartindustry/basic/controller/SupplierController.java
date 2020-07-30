@@ -1,7 +1,6 @@
 package com.smartindustry.basic.controller;
 
-import com.smartindustry.basic.dto.OperateDTO;
-import com.smartindustry.basic.dto.SupplierDTO;
+import com.smartindustry.basic.dto.*;
 import com.smartindustry.basic.service.ISupplierService;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,5 +77,4 @@ public class SupplierController {
     public ResultVO record(@RequestBody OperateDTO dto) {
         return supplierService.record(dto);
     }
-
 }

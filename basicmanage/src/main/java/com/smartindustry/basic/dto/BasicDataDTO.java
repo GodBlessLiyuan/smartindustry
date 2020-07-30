@@ -6,15 +6,13 @@ import java.io.Serializable;
 
 /**
  * @author: xiahui
- * @date: Created in 2020/7/29 9:32
- * @description: 操作 DTO
+ * @date: Created in 2020/7/30 14:41
+ * @description: 基础数据
  * @version: 1.0
  */
 @Data
-public class OperateDTO implements Serializable {
+public class BasicDataDTO implements Serializable {
     private static final long SerialVersionUID = 1L;
 
-    private Long wid;
-    private Long lid;
-    private Long sid;
+    private Long wtid;
 }

@@ -25,11 +25,5 @@ public interface IWarehouseService {
 
     ResultVO record(OperateDTO dto);
 
-    ResultVO typeQuery();
-
-    ResultVO typeEdit(WarehouseTypeDTO dto);
-
-    ResultVO typeDelete(OperateDTO dto);
-
     ResultVO queryAll();
 }

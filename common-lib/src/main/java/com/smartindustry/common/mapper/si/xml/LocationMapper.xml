@@ -140,17 +140,17 @@
         where location_id = #{locationId,jdbcType=BIGINT}
     </update>
 
-    <resultMap id="BoResultMap" type="com.smartindustry.common.bo.si.LocationBO" extends="BaseResultMap">
+    <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.LocationBO" extends="BaseResultMap">
         <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
     </resultMap>
-    <sql id="Bo_Column_List">
+    <sql id="BO_Column_List">
         l.location_id, l.location_no, l.location_name, l.warehouse_id, l.remark, l.user_id, l.create_time,
     l.update_time, l.dr,
     w.warehouse_name
     </sql>
-    <select id="pageQuery" parameterType="java.util.Map" resultMap="BoResultMap">
+    <select id="pageQuery" parameterType="java.util.Map" resultMap="BOResultMap">
         select
-        <include refid="Bo_Column_List"/>
+        <include refid="BO_Column_List"/>
         from si_location l
         left join si_warehouse w on l.warehouse_id = w.warehouse_id
         where l.dr = 1
@@ -171,9 +171,9 @@
         from si_location
         where location_no = #{locationNo,jdbcType=CHAR} and dr = 1
     </select>
-    <select id="queryByWids" parameterType="java.util.List" resultMap="BoResultMap">
+    <select id="queryByWids" parameterType="java.util.List" resultMap="BOResultMap">
         select
-        <include refid="Bo_Column_List"/>
+        <include refid="BO_Column_List"/>
         from si_location l
         left join si_warehouse w on l.warehouse_id = w.warehouse_id
         where l.dr = 1 and w.dr = 1 and warehouse_id in
@@ -181,9 +181,9 @@
             #{wid,jdbcType=BIGINT}
         </foreach>
     </select>
-    <select id="queryById" parameterType="java.lang.Long" resultMap="BoResultMap">
+    <select id="queryById" parameterType="java.lang.Long" resultMap="BOResultMap">
         select
-        <include refid="Bo_Column_List"/>
+        <include refid="BO_Column_List"/>
         from si_location l
         left join si_warehouse w on l.warehouse_id = w.warehouse_id
         where l.dr = 1 and w.dr = 1 and location_id = #{lid,jdbcType=BIGINT}

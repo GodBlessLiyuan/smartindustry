@@ -91,7 +91,7 @@ public class LocationServiceImpl implements ILocationService {
     public ResultVO detail(OperateDTO dto) {
         LocationBO locationBO = locationMapper.queryById(dto.getLid());
         if (null == locationBO) {
-            return new ResultVO(1001);
+            return new ResultVO(1002);
         }
 
         return ResultVO.ok().setData(LocationVO.convert(locationBO));

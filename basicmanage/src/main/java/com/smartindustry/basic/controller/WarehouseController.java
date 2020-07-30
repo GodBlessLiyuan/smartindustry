@@ -2,7 +2,6 @@ package com.smartindustry.basic.controller;
 
 import com.smartindustry.basic.dto.OperateDTO;
 import com.smartindustry.basic.dto.WarehouseDTO;
-import com.smartindustry.basic.dto.WarehouseTypeDTO;
 import com.smartindustry.basic.service.IWarehouseService;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,37 +77,6 @@ public class WarehouseController {
     @PostMapping("record")
     public ResultVO record(@RequestBody OperateDTO dto) {
         return warehouseService.record(dto);
-    }
-
-    /**
-     * 仓库类型 查询
-     *
-     * @return
-     */
-    @PostMapping("typeQuery")
-    public ResultVO typeQuery() {
-        return warehouseService.typeQuery();
-    }
-
-    /**
-     * 仓库类型 编辑
-     *
-     * @return
-     */
-    @PostMapping("typeEdit")
-    public ResultVO typeEdit(@RequestBody WarehouseTypeDTO dto) {
-        return warehouseService.typeEdit(dto);
-    }
-
-    /**
-     * 仓库类型 删除
-     *
-     * @param dto
-     * @return
-     */
-    @PostMapping("typeDelete")
-    public ResultVO typeDelete(@RequestBody OperateDTO dto) {
-        return warehouseService.typeDelete(dto);
     }
 
     /**

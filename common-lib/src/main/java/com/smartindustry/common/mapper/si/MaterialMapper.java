@@ -19,4 +19,12 @@ public interface MaterialMapper extends BaseMapper<MaterialPO, Long> {
      * @return
      */
     List<MaterialPO> pageQuery(Map<String, Object> reqData);
+
+    /**
+     * 根据供应商ID 查询
+     *
+     * @param sids
+     * @return
+     */
+    List<MaterialPO> queryBySids(List<Long> sids);
 }

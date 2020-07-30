@@ -5,10 +5,13 @@ import com.smartindustry.basic.constant.BasicConstant;
 import com.smartindustry.basic.dto.OperateDTO;
 import com.smartindustry.basic.dto.SupplierDTO;
 import com.smartindustry.basic.service.ISupplierService;
+import com.smartindustry.basic.vo.SupplierRecordVO;
 import com.smartindustry.basic.vo.SupplierVO;
 import com.smartindustry.common.bo.si.SupplierBO;
+import com.smartindustry.common.mapper.si.MaterialMapper;
 import com.smartindustry.common.mapper.si.SupplierMapper;
 import com.smartindustry.common.mapper.si.SupplierRecordMapper;
+import com.smartindustry.common.pojo.si.MaterialPO;
 import com.smartindustry.common.pojo.si.SupplierPO;
 import com.smartindustry.common.pojo.si.SupplierRecordPO;
 import com.smartindustry.common.util.PageQueryUtil;
@@ -33,6 +36,8 @@ public class SupplierServiceImpl implements ISupplierService {
     private SupplierMapper supplierMapper;
     @Autowired
     private SupplierRecordMapper supplierRecordMapper;
+    @Autowired
+    private MaterialMapper materialMapper;
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData) {
@@ -73,16 +78,28 @@ public class SupplierServiceImpl implements ISupplierService {
 
     @Override
     public ResultVO delete(List<Long> sids) {
-        return null;
+        List<MaterialPO> materialPOs = materialMapper.queryBySids(sids);
+        if (null != materialPOs && materialPOs.size() > 0) {
+            return new ResultVO(1007);
+        }
+
+        supplierMapper.batchDelete(sids);
+        return ResultVO.ok();
     }
 
     @Override
     public ResultVO detail(OperateDTO dto) {
-        return null;
+        SupplierBO supplierBO = supplierMapper.queryBySid(dto.getSid());
+        if (null == supplierBO) {
+            return new ResultVO(1002);
+        }
+
+        return ResultVO.ok().setData(SupplierVO.convert(supplierBO));
     }
 
     @Override
     public ResultVO record(OperateDTO dto) {
-        return null;
+        List<SupplierRecordPO> supplierRecordPOs = supplierRecordMapper.queryBySid(dto.getSid());
+        return ResultVO.ok().setData(SupplierRecordVO.convert(supplierRecordPOs));
     }
 }

@@ -306,4 +306,22 @@
         </if>
         order by s.create_time desc
     </select>
+    <select id="queryBySid" parameterType="java.lang.Long" resultMap="BOResultMap">
+        select
+        <include refid="BO_Column_List"/>
+        from si_supplier s
+        left join dd_supplier_group sg on s.supplier_group_id = sg.supplier_group_id
+        left join dd_cert_status cs on s.cert_status_id = cs.cert_status_id
+        left join dd_supplier_type st on s.supplier_type_id = st.supplier_type_id
+        left join dd_settle_period sp on s.settle_period_id = sp.settle_period_id
+        left join dd_currency c on s.currency_id = c.currency_id
+        where s.dr = 1 and supplier_id = #{sid,jdbcType=BIGINT}
+    </select>
+    <update id="batchDelete" parameterType="java.util.List">
+        update si_supplier
+        set dr = 2 where supplier_id in
+        <foreach collection="list" item="sid" open="(" separator="," close=")">
+            #{sid,jdbcType=BIGINT}
+        </foreach>
+    </update>
 </mapper>
