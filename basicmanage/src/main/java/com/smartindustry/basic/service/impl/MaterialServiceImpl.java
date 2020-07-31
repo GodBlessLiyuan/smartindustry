@@ -9,6 +9,7 @@ import com.smartindustry.basic.vo.MaterialVO;
 import com.smartindustry.basic.vo.SupplierRecordVO;
 import com.smartindustry.common.bo.si.MaterialBO;
 import com.smartindustry.common.config.FilePathConfig;
+import com.smartindustry.common.constant.ResultConstant;
 import com.smartindustry.common.mapper.si.MaterialMapper;
 import com.smartindustry.common.mapper.si.MaterialRecordMapper;
 import com.smartindustry.common.mapper.si.MaterialSpecificationMapper;
@@ -26,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -114,8 +116,10 @@ public class MaterialServiceImpl implements IMaterialService {
 
     @Override
     public ResultVO record(OperateDTO dto) {
+        Map<String, Object> res = new HashMap<>(1);
         List<SupplierRecordPO> supplierRecordPOs = materialRecordMapper.queryByMid(dto.getMid());
-        return ResultVO.ok().setData(SupplierRecordVO.convert(supplierRecordPOs));
+        res.put(ResultConstant.OPERATE_RECORD, SupplierRecordVO.convert(supplierRecordPOs));
+        return ResultVO.ok().setData(res);
     }
 
     @Override

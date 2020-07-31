@@ -1,6 +1,7 @@
 package com.smartindustry.storage.service.impl;
 
 import com.smartindustry.common.mapper.si.MaterialMapper;
+import com.smartindustry.common.util.DateUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.service.IErpExternalService;
@@ -42,7 +43,7 @@ public class ErpExternalServiceImpl implements IErpExternalService {
         head.setOdate(new Date());
         head.setSupplier("东南院供应商");
         head.setBuyer("轩辕先生");
-        head.setPdate(new Date());
+        head.setPdate(DateUtil.date2Str(new Date(), DateUtil.Y_M_D));
         List<ErpOrderVO.ErpOrderBodyVO> body = vo.getBody();
         ErpOrderVO.ErpOrderBodyVO bodyVO = new ErpOrderVO.ErpOrderBodyVO();
         bodyVO.setMid(1L);
@@ -79,7 +80,7 @@ public class ErpExternalServiceImpl implements IErpExternalService {
         head1.setOdate(new Date());
         head1.setSupplier("东南院供应商1");
         head1.setBuyer("轩辕先生1");
-        head1.setPdate(new Date());
+        head1.setPdate(DateUtil.date2Str(new Date(), DateUtil.Y_M_D));
         vos.add(head1);
 
         ErpOrderVO.ErpOrderHeadVO head2 = new ErpOrderVO.ErpOrderHeadVO();
@@ -87,7 +88,7 @@ public class ErpExternalServiceImpl implements IErpExternalService {
         head2.setOdate(new Date());
         head2.setSupplier("东南院供应商2");
         head2.setBuyer("轩辕先生2");
-        head2.setPdate(new Date());
+        head2.setPdate(DateUtil.date2Str(new Date(), DateUtil.Y_M_D));
         vos.add(head2);
 
         ErpOrderVO.ErpOrderHeadVO head3 = new ErpOrderVO.ErpOrderHeadVO();
@@ -95,7 +96,7 @@ public class ErpExternalServiceImpl implements IErpExternalService {
         head3.setOdate(new Date());
         head3.setSupplier("东南院供应商3");
         head3.setBuyer("轩辕先生3");
-        head3.setPdate(new Date());
+        head3.setPdate(DateUtil.date2Str(new Date(), DateUtil.Y_M_D));
         vos.add(head3);
 
         ErpOrderVO.ErpOrderHeadVO head4 = new ErpOrderVO.ErpOrderHeadVO();
@@ -103,7 +104,7 @@ public class ErpExternalServiceImpl implements IErpExternalService {
         head4.setOdate(new Date());
         head4.setSupplier("东南院供应商4");
         head4.setBuyer("轩辕先生4");
-        head4.setPdate(new Date());
+        head4.setPdate(DateUtil.date2Str(new Date(), DateUtil.Y_M_D));
         vos.add(head4);
 
         return ResultVO.ok().setData(new PageInfoVO<>(vos.size(), vos));

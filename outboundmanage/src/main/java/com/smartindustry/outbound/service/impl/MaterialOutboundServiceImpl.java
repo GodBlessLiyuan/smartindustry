@@ -6,6 +6,7 @@ import com.smartindustry.common.bo.om.OutboundBO;
 import com.smartindustry.common.bo.om.PickBodyBO;
 import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.config.FilePathConfig;
+import com.smartindustry.common.constant.ResultConstant;
 import com.smartindustry.common.mapper.om.*;
 import com.smartindustry.common.pojo.om.LogisticsRecordPO;
 import com.smartindustry.common.pojo.om.OutboundPO;
@@ -174,9 +175,9 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
     public ResultVO record(Long oId) {
         Map<String, Object> res = new HashMap<>();
         LogisticsRecordBO logisticsRecordBO = logisticsRecordMapper.queryByOid(oId);
-        res.put("logistics", LogisticsRecordVO.convert(null == logisticsRecordBO ? new LogisticsRecordBO() : logisticsRecordBO, filePathConfig));
+        res.put(ResultConstant.LOGISTICS_RECORD, LogisticsRecordVO.convert(null == logisticsRecordBO ? new LogisticsRecordBO() : logisticsRecordBO, filePathConfig));
         List<OutboundRecordPO> outboundRecordPOs = outboundRecordMapper.queryByOid(oId);
-        res.put("record", OutboundRecordVO.convert(outboundRecordPOs));
+        res.put(ResultConstant.OPERATE_RECORD, OutboundRecordVO.convert(outboundRecordPOs));
         return ResultVO.ok().setData(res);
     }
 }

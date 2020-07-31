@@ -9,6 +9,7 @@ import com.smartindustry.basic.vo.WarehouseRecordVO;
 import com.smartindustry.basic.vo.WarehouseVO;
 import com.smartindustry.common.bo.si.LocationBO;
 import com.smartindustry.common.bo.si.WarehouseBO;
+import com.smartindustry.common.constant.ResultConstant;
 import com.smartindustry.common.mapper.si.LocationMapper;
 import com.smartindustry.common.mapper.si.WarehouseMapper;
 import com.smartindustry.common.mapper.si.WarehouseRecordMapper;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -103,8 +105,10 @@ public class WarehouseServiceImpl implements IWarehouseService {
 
     @Override
     public ResultVO record(OperateDTO dto) {
+        Map<String, Object> res = new HashMap<>(1);
         List<WarehouseRecordPO> warehouseRecordPOs = warehouseRecordMapper.queryByWid(dto.getWid());
-        return ResultVO.ok().setData(WarehouseRecordVO.convert(warehouseRecordPOs));
+        res.put(ResultConstant.OPERATE_RECORD, WarehouseRecordVO.convert(warehouseRecordPOs));
+        return ResultVO.ok().setData(res);
     }
 
     @Override
