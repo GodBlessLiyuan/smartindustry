@@ -182,9 +182,9 @@ public class DataDictionaryController {
      *
      * @return
      */
-    @PostMapping("currencyQuery")
-    public ResultVO currencyQuery() {
-        return dataDictionaryService.currencyQuery();
+    @PostMapping("cQuery")
+    public ResultVO cQuery() {
+        return dataDictionaryService.cQuery();
     }
 
     /**
@@ -192,9 +192,9 @@ public class DataDictionaryController {
      *
      * @return
      */
-    @PostMapping("currencyEdit")
-    public ResultVO currencyEdit(@RequestBody CurrencyDTO dto) {
-        return dataDictionaryService.currencyEdit(dto);
+    @PostMapping("cEdit")
+    public ResultVO cEdit(@RequestBody CurrencyDTO dto) {
+        return dataDictionaryService.cEdit(dto);
     }
 
     /**
@@ -203,9 +203,9 @@ public class DataDictionaryController {
      * @param dto
      * @return
      */
-    @PostMapping("currencyDelete")
-    public ResultVO currencyDelete(@RequestBody BasicDataDTO dto) {
-        return dataDictionaryService.currencyDelete(dto);
+    @PostMapping("cDelete")
+    public ResultVO cDelete(@RequestBody BasicDataDTO dto) {
+        return dataDictionaryService.cDelete(dto);
     }
 
     /**
