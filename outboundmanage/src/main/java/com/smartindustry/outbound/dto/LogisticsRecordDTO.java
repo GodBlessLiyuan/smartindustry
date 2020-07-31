@@ -78,7 +78,7 @@ public class LogisticsRecordDTO implements Serializable {
     }
 
     public static List<LogisticsPicturePO> createPicPO(LogisticsRecordDTO dto, FilePathConfig config) {
-        List<LogisticsPicturePO> pos = new ArrayList<>();
+        List<LogisticsPicturePO> pos = new ArrayList<>(dto.getPicture().size());
         for (String pic : dto.getPicture()) {
             LogisticsPicturePO po = new LogisticsPicturePO();
             po.setLogisticsRecordId(dto.getLid());

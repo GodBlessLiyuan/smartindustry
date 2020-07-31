@@ -85,7 +85,7 @@
         select settle_period_id as spid, settle_period_name as spname
         from dd_settle_period
     </select>
-    <select id="queryByName" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <select id="queryByName" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from dd_settle_period

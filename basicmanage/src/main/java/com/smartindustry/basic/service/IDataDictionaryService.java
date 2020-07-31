@@ -9,7 +9,7 @@ import com.smartindustry.common.vo.ResultVO;
  * @description: 基础数据
  * @version: 1.0
  */
-public interface IBasicDataService {
+public interface IDataDictionaryService {
     ResultVO wtQuery();
 
     ResultVO wtEdit(WarehouseTypeDTO dto);
@@ -45,4 +45,46 @@ public interface IBasicDataService {
     ResultVO currencyEdit(CurrencyDTO dto);
 
     ResultVO currencyDelete(BasicDataDTO dto);
+
+    ResultVO mtQuery();
+
+    ResultVO mtEdit(MaterialTypeDTO dto);
+
+    ResultVO mtDelete(BasicDataDTO dto);
+
+    ResultVO hlQuery();
+
+    ResultVO hlEdit(HumidityLevelDTO dto);
+
+    ResultVO hlDelete(BasicDataDTO dto);
+
+    ResultVO mlQuery();
+
+    ResultVO mlEdit(MaterialLevelDTO dto);
+
+    ResultVO mlDelete(BasicDataDTO dto);
+
+    ResultVO muQuery();
+
+    ResultVO muEdit(MeasureUnitDTO dto);
+
+    ResultVO muDelete(BasicDataDTO dto);
+
+    ResultVO mvQuery();
+
+    ResultVO mvEdit(MaterialVersionDTO dto);
+
+    ResultVO mvDelete(BasicDataDTO dto);
+
+    ResultVO pllQuery();
+
+    ResultVO pllEdit(ProduceLossLevelDTO dto);
+
+    ResultVO pllDelete(BasicDataDTO dto);
+
+    ResultVO lcsQuery();
+
+    ResultVO lcsEdit(LifeCycleStateDTO dto);
+
+    ResultVO lcsDelete(BasicDataDTO dto);
 }

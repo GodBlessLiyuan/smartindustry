@@ -21,6 +21,8 @@ import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
@@ -33,6 +35,7 @@ import java.util.Map;
  * @description: 物料管理
  * @version: 1.0
  */
+@EnableTransactionManagement
 @Service
 public class MaterialServiceImpl implements IMaterialService {
     @Autowired
@@ -52,6 +55,7 @@ public class MaterialServiceImpl implements IMaterialService {
         return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), MaterialVO.convert(bos)));
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO edit(MaterialDTO dto) {
         MaterialPO existPO = materialMapper.queryByMno(dto.getMno());
@@ -64,6 +68,11 @@ public class MaterialServiceImpl implements IMaterialService {
             MaterialPO materialPO = MaterialDTO.createPO(dto);
             materialMapper.insert(materialPO);
             materialRecordMapper.insert(new MaterialRecordPO(materialPO.getMaterialId(), 1L, BasicConstant.RECORD_ADD));
+
+            if (null != dto.getFiles() && dto.getFiles().size() > 0) {
+                dto.setMid(materialPO.getMaterialId());
+                materialSpecificationMapper.batchInsert(MaterialDTO.createFilePO(dto, filePathConfig));
+            }
             return ResultVO.ok();
         }
         // 编辑
@@ -77,6 +86,10 @@ public class MaterialServiceImpl implements IMaterialService {
         materialMapper.updateByPrimaryKey(materialPO);
 
         materialRecordMapper.insert(new MaterialRecordPO(materialPO.getMaterialId(), 1L, BasicConstant.RECORD_MODIFY));
+
+        if (null != dto.getFiles() && dto.getFiles().size() > 0) {
+            materialSpecificationMapper.batchInsert(MaterialDTO.createFilePO(dto, filePathConfig));
+        }
 
         return ResultVO.ok();
     }

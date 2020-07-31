@@ -85,7 +85,7 @@
         select supplier_group_id as sgid, supplier_group_name as wtname
         from dd_supplier_group
     </select>
-    <select id="queryByName" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <select id="queryByName" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from dd_supplier_group

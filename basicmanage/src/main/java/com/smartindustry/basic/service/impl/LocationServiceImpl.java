@@ -19,6 +19,8 @@ import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -30,6 +32,7 @@ import java.util.Map;
  * @description: 货位管理
  * @version: 1.0
  */
+@EnableTransactionManagement
 @Service
 public class LocationServiceImpl implements ILocationService {
     @Autowired
@@ -47,6 +50,7 @@ public class LocationServiceImpl implements ILocationService {
         return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), LocationVO.convert(bos)));
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO edit(LocationDTO dto) {
         LocationPO existPO = locationMapper.queryByLno(dto.getLno());

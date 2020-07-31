@@ -85,7 +85,7 @@
         select cert_status_id as csid, cert_status_name as csname
         from dd_cert_status
     </select>
-    <select id="queryByName" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <select id="queryByName" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from dd_cert_status

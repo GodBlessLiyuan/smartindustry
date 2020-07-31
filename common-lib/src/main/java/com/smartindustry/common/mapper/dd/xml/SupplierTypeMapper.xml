@@ -85,7 +85,7 @@
         select supplier_type_id as stid, supplier_type_name as stname
         from dd_supplier_type
     </select>
-    <select id="queryByName" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <select id="queryByName" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from dd_supplier_type
