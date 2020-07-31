@@ -19,10 +19,25 @@ public class SupplierVO implements Serializable {
 
     private Long sid;
     private String sno;
-    private String sname;
+    private Long sgid;
     private String sgname;
-    private String phone;
+    private Long csid;
+    private String csname;
+    private Long stid;
+    private String stname;
+    private Long spid;
+    private String spname;
+    private Long cid;
     private String cname;
+    private String sname;
+    private String contact;
+    private String phone;
+    private String fax;
+    private String site;
+    private String mail;
+    private String area;
+    private String addr;
+    private String remark;
 
 
     public static List<SupplierVO> convert(List<SupplierBO> bos) {
@@ -37,10 +52,25 @@ public class SupplierVO implements Serializable {
         SupplierVO vo = new SupplierVO();
         vo.setSid(bo.getSupplierId());
         vo.setSno(bo.getSupplierNo());
-        vo.setSname(bo.getSupplierName());
+        vo.setSgid(bo.getSupplierGroupId());
         vo.setSgname(bo.getSupplierGroupName());
-        vo.setPhone(bo.getPhone());
+        vo.setCsid(bo.getCertStatusId());
+        vo.setCsname(bo.getCertStatusName());
+        vo.setStid(bo.getSupplierTypeId());
+        vo.setStname(bo.getSupplierTypeName());
+        vo.setSpid(bo.getSettlePeriodId());
+        vo.setSpname(bo.getSettlePeriodName());
+        vo.setCid(bo.getCurrencyId());
         vo.setCname(bo.getContactName());
+        vo.setSname(bo.getSupplierName());
+        vo.setContact(bo.getContactName());
+        vo.setPhone(bo.getPhone());
+        vo.setFax(bo.getFax());
+        vo.setSite(bo.getSite());
+        vo.setMail(bo.getMail());
+        vo.setArea(bo.getArea());
+        vo.setAddr(bo.getAddress());
+        vo.setRemark(bo.getRemark());
         return vo;
     }
 }

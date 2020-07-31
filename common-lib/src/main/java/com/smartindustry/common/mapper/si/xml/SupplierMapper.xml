@@ -302,7 +302,7 @@
             and supplier_no like '%' #{sno,jdbcType=CHAR} '%'
         </if>
         <if test="sname != null and sname != ''">
-            and supplier_name like '%'#{sname,jdbcType=CHAR} '%'
+            and supplier_name like '%' #{sname,jdbcType=CHAR} '%'
         </if>
         order by s.create_time desc
     </select>

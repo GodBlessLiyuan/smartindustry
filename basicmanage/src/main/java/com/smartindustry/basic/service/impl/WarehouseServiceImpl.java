@@ -4,17 +4,14 @@ import com.github.pagehelper.Page;
 import com.smartindustry.basic.constant.BasicConstant;
 import com.smartindustry.basic.dto.OperateDTO;
 import com.smartindustry.basic.dto.WarehouseDTO;
-import com.smartindustry.basic.dto.WarehouseTypeDTO;
 import com.smartindustry.basic.service.IWarehouseService;
 import com.smartindustry.basic.vo.WarehouseRecordVO;
 import com.smartindustry.basic.vo.WarehouseVO;
 import com.smartindustry.common.bo.si.LocationBO;
 import com.smartindustry.common.bo.si.WarehouseBO;
-import com.smartindustry.common.mapper.dd.WarehouseTypeMapper;
 import com.smartindustry.common.mapper.si.LocationMapper;
 import com.smartindustry.common.mapper.si.WarehouseMapper;
 import com.smartindustry.common.mapper.si.WarehouseRecordMapper;
-import com.smartindustry.common.pojo.dd.WarehouseTypePO;
 import com.smartindustry.common.pojo.si.WarehousePO;
 import com.smartindustry.common.pojo.si.WarehouseRecordPO;
 import com.smartindustry.common.util.PageQueryUtil;
@@ -40,8 +37,6 @@ import java.util.Map;
 public class WarehouseServiceImpl implements IWarehouseService {
     @Autowired
     private WarehouseMapper warehouseMapper;
-    @Autowired
-    private WarehouseTypeMapper warehouseTypeMapper;
     @Autowired
     private LocationMapper locationMapper;
     @Autowired

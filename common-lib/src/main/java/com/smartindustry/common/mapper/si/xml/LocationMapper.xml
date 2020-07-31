@@ -176,7 +176,7 @@
         <include refid="BO_Column_List"/>
         from si_location l
         left join si_warehouse w on l.warehouse_id = w.warehouse_id
-        where l.dr = 1 and w.dr = 1 and warehouse_id in
+        where l.dr = 1 and w.dr = 1 and l.warehouse_id in
         <foreach collection="list" item="wid" separator="," open="(" close=")">
             #{wid,jdbcType=BIGINT}
         </foreach>
