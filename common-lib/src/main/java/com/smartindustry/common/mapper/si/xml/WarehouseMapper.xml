@@ -216,7 +216,7 @@
         <include refid="BO_Column_List"/>
         from si_warehouse w
         left join dd_warehouse_type wt on w.warehouse_type_id = wt.warehouse_type_id
-        where w.dr = 1
+        where w.dr = 1 and warehouse_id = #{wid,jdbcType=BIGINT}
     </select>
     <select id="queryByNo" parameterType="java.lang.String" resultMap="BaseResultMap">
         select

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @description: 基础数据
  * @version: 1.0
  */
-@RequestMapping("basic")
+@RequestMapping("data")
 @RestController
 public class DataDictionaryController {
     @Autowired
