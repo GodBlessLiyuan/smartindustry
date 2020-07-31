@@ -1,6 +1,7 @@
 package com.smartindustry.authority.controller;
 
 import com.smartindustry.authority.dto.DeptDTO;
+import com.smartindustry.authority.dto.OperateDTO;
 import com.smartindustry.authority.service.IDeptService;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +35,9 @@ public class DeptController {
         return deptService.pageQuery(reqData);
     }
 
-    @PostMapping("updateBatch")
-    public ResultVO updateBatch(@RequestBody List<DeptDTO> dtos) {
-        return deptService.updateBatch(dtos);
+    @PostMapping("status")
+    public ResultVO batchUpdate(@RequestBody List<OperateDTO> dtos) {
+        return deptService.batchUpdate(dtos);
     }
 
     @PostMapping("insert")
@@ -44,13 +45,23 @@ public class DeptController {
         return deptService.insert(dto);
     }
 
-    @PostMapping("delete")
-    public ResultVO delete(@RequestBody List<DeptDTO> dtos) {
-        return deptService.deleteBatch(dtos);
+    @PostMapping("update")
+    public ResultVO update(@RequestBody DeptDTO dto) {
+        return deptService.update(dto);
+    }
+
+    @PostMapping("batchDelete")
+    public ResultVO batchDelete(@RequestBody List<OperateDTO> dtos) {
+        return deptService.batchDelete(dtos);
     }
 
     @PostMapping("queryDeptName")
     public ResultVO queryDeptName() {
         return deptService.queryDeptName();
+    }
+
+    @PostMapping("chooseLeader")
+    public ResultVO queryLeader(OperateDTO dto) {
+        return deptService.queryLeader(dto);
     }
 }

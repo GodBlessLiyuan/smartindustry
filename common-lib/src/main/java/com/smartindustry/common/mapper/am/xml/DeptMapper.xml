@@ -157,8 +157,8 @@
     left join am_user u on d.user_id = u.user_id
     left join am_dept d2 on d.parent_id = d2.dept_id
     where d.dr = 1
-    <if test="deptName != null and deptName != ''">
-      and d.dept_name like concat('%',#{deptName,jdbcType=CHAR},'%')
+    <if test="dname != null and dname != ''">
+      and d.dept_name like concat('%',#{dname,jdbcType=CHAR},'%')
     </if>
     <if test="status != null and status != 0">
       and d.`status` = #{status,jdbcType=TINYINT}
@@ -190,9 +190,10 @@
   </update>
 
   <select id="queryChildren" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.am.DeptBO">
-    select d.dept_id as deptId,d.parent_id as parentId,d.dept_name as deptName,u.username as username
+    select d.dept_id as deptId,d.parent_id as parentId,d.dept_name as deptName,u.username as username,d1.dept_name as parentName
     from am_dept d
     left join am_user u on d.user_id = u.user_id
+    left join am_dept d1 on d.parent_id = d1.dept_id
     <choose>
       <when test="parentId != null and parentId !=''">
         where d.parent_id = #{parentId,jdbcType=BIGINT} and d.status = 1
@@ -209,4 +210,6 @@
      then 1
      else 0 end as result
   </select>
+
+
 </mapper>

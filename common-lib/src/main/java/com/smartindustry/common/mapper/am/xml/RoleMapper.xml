@@ -114,4 +114,15 @@
       dr = #{dr,jdbcType=TINYINT}
     where role_id = #{roleId,jdbcType=BIGINT}
   </update>
+
+  <!--  给出所有角色列表，模糊查询-->
+  <select id="selectAll" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from am_role r
+    where r.dr =1
+    <if test="roleName != null and roleName != ''">
+      and r.role_name like concat('%',#{roleName,jdbcType=CHAR},'%')
+    </if>
+  </select>
 </mapper>
