@@ -194,4 +194,12 @@
             #{po.storageTime,jdbcType=TIMESTAMP})
         </foreach>
     </insert>
+    <delete id="deleteByPlids" parameterType="java.util.List">
+        delete
+        from si_storage_label
+        where print_label_id in
+        <foreach collection="list" item="plId" separator="," open="(" close=")">
+            #{plId,jdbcType=BIGINT}
+        </foreach>
+    </delete>
 </mapper>

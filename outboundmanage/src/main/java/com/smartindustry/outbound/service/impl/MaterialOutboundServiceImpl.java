@@ -5,13 +5,12 @@ import com.smartindustry.common.bo.om.LogisticsRecordBO;
 import com.smartindustry.common.bo.om.OutboundBO;
 import com.smartindustry.common.bo.om.PickBodyBO;
 import com.smartindustry.common.bo.si.PrintLabelBO;
+import com.smartindustry.common.bo.si.StorageLabelBO;
 import com.smartindustry.common.config.FilePathConfig;
 import com.smartindustry.common.constant.ResultConstant;
 import com.smartindustry.common.mapper.om.*;
-import com.smartindustry.common.pojo.om.LogisticsRecordPO;
-import com.smartindustry.common.pojo.om.OutboundPO;
-import com.smartindustry.common.pojo.om.OutboundRecordPO;
-import com.smartindustry.common.pojo.om.PickHeadPO;
+import com.smartindustry.common.mapper.si.StorageLabelMapper;
+import com.smartindustry.common.pojo.om.*;
 import com.smartindustry.common.util.FileUtil;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.vo.PageInfoVO;
@@ -29,10 +28,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author: xiahui
@@ -57,6 +53,10 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
     private OutboundRecordMapper outboundRecordMapper;
     @Autowired
     private PickLabelMapper pickLabelMapper;
+    @Autowired
+    private LabelRecommendMapper labelRecommendMapper;
+    @Autowired
+    private StorageLabelMapper storageLabelMapper;
     @Autowired
     private FilePathConfig filePathConfig;
 
@@ -93,9 +93,9 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
         }
 
         Byte ostatus = OutboundConstant.PICK_OUTBOUND_ALL;
-        List<PickBodyBO> bodyBOs = pickBodyMapper.queryByHeadId(headPO.getPickHeadId());
-        for(PickBodyBO bodyBO : bodyBOs) {
-            if(!bodyBO.getDemandNum().equals(bodyBO.getPickNum())) {
+        List<PickBodyBO> bos = pickBodyMapper.queryByHeadId(headPO.getPickHeadId());
+        for (PickBodyBO bo : bos) {
+            if (!bo.getDemandNum().equals(bo.getPickNum())) {
                 ostatus = OutboundConstant.PICK_OUTBOUND_LACK;
                 break;
             }
@@ -115,6 +115,51 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
 
         pickHeadMapper.updateByPrimaryKey(headPO);
         outboundMapper.updateByPrimaryKey(outboundPO);
+
+        // 删除对应标签
+        List<PrintLabelBO> printLabelBOs = pickLabelMapper.queryByPhid(headPO.getPickHeadId());
+        List<Long> plIds = new ArrayList<>();
+        for (PrintLabelBO printLabelBO : printLabelBOs) {
+            plIds.add(printLabelBO.getPrintLabelId());
+        }
+        storageLabelMapper.deleteByPlids(plIds);
+
+        // 重新推荐货位
+        new Thread(() -> {
+            List<PickHeadPO> notRecommendHeadPOs = pickHeadMapper.queryNotRecommodByOno(headPO.getOrderNo());
+            for (PickHeadPO notRecommendHeadPO : notRecommendHeadPOs) {
+                List<PickBodyBO> bodyBOs = pickBodyMapper.queryByHeadId(notRecommendHeadPO.getPickHeadId());
+                Map<Long, LabelRecommendPO> labelRecommendPOs = new HashMap<>();
+                for (PickBodyBO bodyBO : bodyBOs) {
+                    List<StorageLabelBO> storageLabelBOS = storageLabelMapper.queryNotRecommend(notRecommendHeadPO.getOrderNo(), bodyBO.getMaterialId());
+                    int num = 0;
+                    for (StorageLabelBO storageLabelBO : storageLabelBOS) {
+                        if (labelRecommendPOs.containsKey(storageLabelBO.getStorageLabelId())) {
+                            continue;
+                        }
+
+                        LabelRecommendPO labelRecommendPO = new LabelRecommendPO();
+                        labelRecommendPO.setPickBodyId(bodyBO.getPickBodyId());
+                        labelRecommendPO.setStorageLabelId(storageLabelBO.getStorageLabelId());
+                        labelRecommendPOs.put(storageLabelBO.getStorageLabelId(), labelRecommendPO);
+
+                        num += storageLabelBO.getStorageNum();
+                        if (num >= bodyBO.getDemandNum()) {
+                            break;
+                        }
+                    }
+
+                    if (num < bodyBO.getDemandNum()) {
+                        return;
+                    }
+                }
+
+                labelRecommendMapper.batchInsert(new ArrayList<>(labelRecommendPOs.values()));
+
+                notRecommendHeadPO.setMaterialStatus(OutboundConstant.MATERIAL_STATUS_UNPROCESSED);
+                pickHeadMapper.updateByPrimaryKey(notRecommendHeadPO);
+            }
+        }).start();
 
         return ResultVO.ok();
     }

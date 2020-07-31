@@ -253,4 +253,11 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
      * @return
      */
     String queryOnoByPid(@Param("printLabelId") Long printLabelId);
+
+    /**
+     * 根据 ono 查询 尚未推荐的数据
+     * @param orderNo
+     * @return
+     */
+    List<PickHeadPO> queryNotRecommodByOno(String orderNo);
 }
