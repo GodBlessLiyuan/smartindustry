@@ -141,7 +141,7 @@
         <include refid="BO_Column_List"/>
         from om_pick_body pb
         left join si_material m on pb.material_id = m.material_id
-        where pb.pick_head_id = #{pickHeadId,jdbcType=BIGINT}
+        where pb.dr = 1 and pb.pick_head_id = #{pickHeadId,jdbcType=BIGINT}
     </select>
     <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="pickBodyId">
         insert into om_pick_body (pick_body_id, pick_head_id, material_id,

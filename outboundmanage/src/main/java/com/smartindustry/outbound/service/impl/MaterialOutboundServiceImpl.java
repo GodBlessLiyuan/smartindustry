@@ -3,6 +3,7 @@ package com.smartindustry.outbound.service.impl;
 import com.github.pagehelper.Page;
 import com.smartindustry.common.bo.om.LogisticsRecordBO;
 import com.smartindustry.common.bo.om.OutboundBO;
+import com.smartindustry.common.bo.om.PickBodyBO;
 import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.config.FilePathConfig;
 import com.smartindustry.common.mapper.om.*;
@@ -46,6 +47,8 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
     @Autowired
     private PickHeadMapper pickHeadMapper;
     @Autowired
+    private PickBodyMapper pickBodyMapper;
+    @Autowired
     private LogisticsRecordMapper logisticsRecordMapper;
     @Autowired
     private LogisticsPictureMapper logisticsPictureMapper;
@@ -88,10 +91,19 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
             return new ResultVO(1002);
         }
 
+        Byte ostatus = OutboundConstant.PICK_OUTBOUND_ALL;
+        List<PickBodyBO> bodyBOs = pickBodyMapper.queryByHeadId(headPO.getPickHeadId());
+        for(PickBodyBO bodyBO : bodyBOs) {
+            if(!bodyBO.getDemandNum().equals(bodyBO.getPickNum())) {
+                ostatus = OutboundConstant.PICK_OUTBOUND_LACK;
+                break;
+            }
+        }
+
         outboundPO.setOutboundTime(new Date());
         outboundPO.setStatus(OutboundConstant.OUTBOUND_STATUS_FINISH);
         headPO.setMaterialStatus(OutboundConstant.MATERIAL_STATUS_FINISH);
-        headPO.setOutboundStatus(OutboundConstant.OUTBOUND_STATUS_FINISH);
+        headPO.setOutboundStatus(ostatus);
         headPO.setOutboundTime(new Date());
 
         LogisticsRecordPO logisticsRecordPO = logisticsRecordMapper.queryByOid(oId);
