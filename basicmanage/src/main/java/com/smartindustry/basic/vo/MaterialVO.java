@@ -1,6 +1,8 @@
 package com.smartindustry.basic.vo;
 
 import com.smartindustry.common.bo.si.MaterialBO;
+import com.smartindustry.common.config.FilePathConfig;
+import com.smartindustry.common.pojo.si.MaterialSpecificationPO;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -41,16 +43,17 @@ public class MaterialVO implements Serializable {
     private Long sid;
     private String sname;
     private String mdesc;
+    private List<String> files;
 
-    public static List<MaterialVO> convert(List<MaterialBO> bos) {
+    public static List<MaterialVO> convert(List<MaterialBO> bos, FilePathConfig config) {
         List<MaterialVO> vos = new ArrayList<>(bos.size());
         for (MaterialBO bo : bos) {
-            vos.add(convert(bo));
+            vos.add(convert(bo, config));
         }
         return vos;
     }
 
-    public static MaterialVO convert(MaterialBO bo) {
+    public static MaterialVO convert(MaterialBO bo, FilePathConfig config) {
         MaterialVO vo = new MaterialVO();
         vo.setMid(bo.getMaterialId());
         vo.setMno(bo.getMaterialNo());
@@ -76,6 +79,13 @@ public class MaterialVO implements Serializable {
         vo.setSid(bo.getSupplierId());
         vo.setSname(bo.getSupplierName());
         vo.setMdesc(bo.getMaterialDesc());
+        if (null != bo.getFiles() && bo.getFiles().size() > 0) {
+            List<String> files = new ArrayList<>(bo.getFiles().size());
+            for (MaterialSpecificationPO po : bo.getFiles()) {
+                files.add(config.getPublicPath() + po.getFilePath());
+            }
+            vo.setFiles(files);
+        }
         return vo;
     }
 }

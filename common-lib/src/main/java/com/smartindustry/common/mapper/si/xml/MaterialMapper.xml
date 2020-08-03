@@ -41,7 +41,8 @@
         from si_material
         where material_id = #{materialId,jdbcType=BIGINT}
     </delete>
-    <insert id="insert" parameterType="com.smartindustry.common.pojo.si.MaterialPO" useGeneratedKeys="true" keyProperty="materialId">
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.si.MaterialPO" useGeneratedKeys="true"
+            keyProperty="materialId">
         insert into si_material (material_id, material_no, material_type_id,
                                  humidity_level_id, material_level_id, measure_unit_id,
                                  material_version_id, produce_loss_level_id, life_cycle_state_id,
@@ -299,6 +300,10 @@
         <result column="produce_loss_level_name" jdbcType="CHAR" property="produceLossLevelName"/>
         <result column="life_cycle_state_name" jdbcType="CHAR" property="lifeCycleStateName"/>
         <result column="supplier_name" jdbcType="CHAR" property="supplierName"/>
+        <collection property="files" ofType="com.smartindustry.common.pojo.si.MaterialSpecificationPO">
+            <id column="material_specification_id" jdbcType="BIGINT" property="materialSpecificationId"/>
+            <result column="file_path" jdbcType="CHAR" property="filePath"/>
+        </collection>
     </resultMap>
     <sql id="BO_Column_List">
         m.material_id, m.material_no, m.material_type_id, m.humidity_level_id, m.material_level_id,
@@ -328,7 +333,8 @@
     </select>
     <select id="queryByMid" parameterType="java.lang.Long" resultMap="BOResultMap">
         select
-        <include refid="BO_Column_List"/>
+        <include refid="BO_Column_List"/>,
+        ms.material_specification_id, ms.file_path
         from si_material m
         left join dd_material_type mt on m.material_type_id = mt.material_type_id
         left join dd_humidity_level hl on m.humidity_level_id = hl.humidity_level_id
@@ -338,6 +344,7 @@
         left join dd_produce_loss_level pll on m.produce_loss_level_id = pll.produce_loss_level_id
         left join dd_life_cycle_state lcs on m.life_cycle_state_id = lcs.life_cycle_state_id
         left join si_supplier s on m.supplier_id = s.supplier_id
+        left join si_material_specification ms on m.material_id = ms.material_id
         where m.dr = 1 and m.material_id = #{mid,jdbcType=BIGINT}
     </select>
     <select id="queryBySids" parameterType="java.util.List" resultMap="BaseResultMap">
