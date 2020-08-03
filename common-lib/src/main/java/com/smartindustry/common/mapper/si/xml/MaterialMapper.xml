@@ -329,6 +329,7 @@
         <if test="mno != null and mno != ''">and m.material_no like '%' #{mno,jdbcType=CHAR} '%'</if>
         <if test="mname != null and mname != ''">and m.material_name like '%' #{mname,jdbcType=CHAR} '%'</if>
         <if test="mmodel != null and mmodel != ''">and m.material_model like '%' #{mmodel,jdbcType=CHAR} '%'</if>
+        <if test="mdesc != null and mdesc != ''">and m.material_desc like '%' #{mdesc,jdbcType=CHAR} '%'</if>
         order by create_time desc
     </select>
     <select id="queryByMid" parameterType="java.lang.Long" resultMap="BOResultMap">
