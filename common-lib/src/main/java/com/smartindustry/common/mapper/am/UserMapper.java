@@ -50,4 +50,11 @@ public interface UserMapper extends BaseMapper<UserPO, Long> {
      * @return
      */
     List<UserPO> selectAll(@Param("name") String name);
+
+    /**
+     * 根据登入名查询用户
+     * @param username
+     * @return
+     */
+    UserPO queryByName(@Param("username") String username);
 }

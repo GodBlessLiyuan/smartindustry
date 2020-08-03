@@ -125,4 +125,42 @@
       and r.role_name like concat('%',#{roleName,jdbcType=CHAR},'%')
     </if>
   </select>
+
+<!--  查询所有的角色列表-->
+  <select id="rolePageQuery" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from am_role
+    where dr = 1
+    <if test="rname != null and rname != ''">
+      and role_name like concat('%',#{rname,jdbcType=CHAR},'%')
+    </if>
+    <if test="status != null and status != 0">
+      and `status` = #{status,jdbcType=TINYINT}
+    </if>
+    order by create_time desc
+  </select>
+
+<!--  更新角色列表-->
+  <update id="updateBatch" parameterType="java.util.List">
+    <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+      update am_role
+      <set >
+        <if test="item.status != null" >
+          `status` = #{item.status,jdbcType=TINYINT},
+        </if>
+      </set>
+      where role_id = #{item.roleId,jdbcType=BIGINT} and dr =1
+    </foreach>
+  </update>
+
+  <update id="deleteBatch" parameterType="java.util.List">
+    <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+      update am_role
+      <set >
+        dr = 2
+      </set>
+      where role_id = #{item.roleId,jdbcType=BIGINT}
+    </foreach>
+  </update>
 </mapper>

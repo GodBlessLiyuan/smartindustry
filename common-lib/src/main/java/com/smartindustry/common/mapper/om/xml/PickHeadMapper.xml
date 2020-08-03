@@ -533,11 +533,9 @@
     </select>
 
     <select id="queryOnoByPid" parameterType="java.lang.Long" resultType="java.lang.String">
-        select distinct rb.order_no
-        from sm_receipt_body rb
-                 left join sm_receipt_label rl on rb.receipt_body_id = rl.receipt_body_id
-                 left join si_print_label pl on rl.print_label_id = pl.print_label_id
-        where pl.print_label_id = #{printLabelId}
+        select distinct order_no
+        from si_storage_label
+        where print_label_id = #{printLabelId}
     </select>
 
     <select id="queryNotRecommodByOno" parameterType="java.lang.String" resultMap="BaseResultMap">
