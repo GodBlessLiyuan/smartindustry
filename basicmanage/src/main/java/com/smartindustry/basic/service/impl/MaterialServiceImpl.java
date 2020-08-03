@@ -89,6 +89,7 @@ public class MaterialServiceImpl implements IMaterialService {
 
         materialRecordMapper.insert(new MaterialRecordPO(materialPO.getMaterialId(), 1L, BasicConstant.RECORD_MODIFY));
 
+        materialSpecificationMapper.deleteByMid(dto.getMid());
         if (null != dto.getFiles() && dto.getFiles().size() > 0) {
             materialSpecificationMapper.batchInsert(MaterialDTO.createFilePO(dto, filePathConfig));
         }

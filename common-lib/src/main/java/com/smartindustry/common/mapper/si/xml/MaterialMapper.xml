@@ -41,7 +41,7 @@
         from si_material
         where material_id = #{materialId,jdbcType=BIGINT}
     </delete>
-    <insert id="insert" parameterType="com.smartindustry.common.pojo.si.MaterialPO">
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.si.MaterialPO" useGeneratedKeys="true" keyProperty="materialId">
         insert into si_material (material_id, material_no, material_type_id,
                                  humidity_level_id, material_level_id, measure_unit_id,
                                  material_version_id, produce_loss_level_id, life_cycle_state_id,
