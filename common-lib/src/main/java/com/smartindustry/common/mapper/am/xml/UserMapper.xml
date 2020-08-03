@@ -274,4 +274,11 @@
     </if>
   </select>
 
+  <select id="queryByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from am_user u
+    where u.dr =1 and u.username = #{username,jdbcType=CHAR}
+  </select>
+
 </mapper>
