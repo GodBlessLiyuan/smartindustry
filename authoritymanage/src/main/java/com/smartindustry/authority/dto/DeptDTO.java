@@ -33,18 +33,18 @@ public class DeptDTO {
     private Byte status;
 
 
-    public static DeptPO updatePO(DeptDTO dto) {
+    public static DeptPO buildPO(OperateDTO dto) {
         DeptPO po = new DeptPO();
         po.setDeptId(dto.getDid());
-        po.setUpdateTime(new Date());
         po.setStatus(dto.getStatus());
+        po.setUpdateTime(new Date());
         return po;
     }
 
-    public static DeptPO insertPO(DeptDTO dto) {
+    public static DeptPO createPO(DeptDTO dto) {
         DeptPO po = new DeptPO();
         Date date = new Date();
-        po.setUpdateTime(date);
+        po.setDeptId(dto.getDid());
         po.setCreateTime(date);
         po.setStatus(dto.getStatus());
         po.setDeptDesc(dto.getDdesc());
@@ -55,10 +55,10 @@ public class DeptDTO {
         return po;
     }
 
-    public static List<DeptPO> updateList(List<DeptDTO> dtos){
+    public static List<DeptPO> updateList(List<OperateDTO> dtos){
         List<DeptPO> pos = new ArrayList<>(dtos.size());
-        for(DeptDTO dto:dtos) {
-            pos.add(updatePO(dto));
+        for(OperateDTO dto:dtos) {
+            pos.add(buildPO(dto));
         }
         return pos;
     }
