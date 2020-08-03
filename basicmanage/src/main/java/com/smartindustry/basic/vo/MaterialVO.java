@@ -43,7 +43,7 @@ public class MaterialVO implements Serializable {
     private Long sid;
     private String sname;
     private String mdesc;
-    private List<String> files;
+    private List<FileVO> files;
 
     public static List<MaterialVO> convert(List<MaterialBO> bos, FilePathConfig config) {
         List<MaterialVO> vos = new ArrayList<>(bos.size());
@@ -80,12 +80,23 @@ public class MaterialVO implements Serializable {
         vo.setSname(bo.getSupplierName());
         vo.setMdesc(bo.getMaterialDesc());
         if (null != bo.getFiles() && bo.getFiles().size() > 0) {
-            List<String> files = new ArrayList<>(bo.getFiles().size());
+            List<FileVO> files = new ArrayList<>(bo.getFiles().size());
             for (MaterialSpecificationPO po : bo.getFiles()) {
-                files.add(config.getPublicPath() + po.getFilePath());
+                files.add(new FileVO(po.getFileName(), config.getPublicPath() + po.getFilePath()));
             }
             vo.setFiles(files);
         }
         return vo;
+    }
+
+    @Data
+    public static class FileVO {
+        private String name;
+        private String url;
+
+        public FileVO(String name, String url) {
+            this.name = name;
+            this.url = url;
+        }
     }
 }

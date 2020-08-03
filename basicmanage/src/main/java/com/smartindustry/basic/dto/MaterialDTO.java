@@ -87,7 +87,7 @@ public class MaterialDTO implements Serializable {
     /**
      * 物料规格书
      */
-    private List<String> files;
+    private List<FileDTO> files;
 
     public static MaterialPO createPO(MaterialDTO dto) {
         MaterialPO po = new MaterialPO();
@@ -118,14 +118,21 @@ public class MaterialDTO implements Serializable {
     public static List<MaterialSpecificationPO> createFilePO(MaterialDTO dto, FilePathConfig config) {
         List<MaterialSpecificationPO> pos = new ArrayList<>(dto.getFiles().size());
         Date curDate = new Date();
-        for (String file : dto.getFiles()) {
+        for (FileDTO file : dto.getFiles()) {
             MaterialSpecificationPO po = new MaterialSpecificationPO();
             po.setMaterialId(dto.getMid());
-            po.setFilePath(file.split(config.getPublicPath())[1]);
+            po.setFileName(file.getName());
+            po.setFilePath(file.getUrl().split(config.getPublicPath())[1]);
             po.setCreateTime(curDate);
             pos.add(po);
         }
 
         return pos;
+    }
+
+    @Data
+    private static class FileDTO {
+        private String name;
+        private String url;
     }
 }

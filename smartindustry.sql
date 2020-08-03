@@ -641,6 +641,7 @@ CREATE TABLE si_material_specification
 (
     material_specification_id bigint unsigned NOT NULL AUTO_INCREMENT,
     material_id bigint unsigned NOT NULL,
+    file_name char(255) NOT NULL,
     file_path char(255) NOT NULL,
     create_time datetime,
     PRIMARY KEY (material_specification_id),

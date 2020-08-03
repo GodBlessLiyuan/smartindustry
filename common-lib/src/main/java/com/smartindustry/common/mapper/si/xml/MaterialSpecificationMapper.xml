@@ -4,11 +4,12 @@
     <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.MaterialSpecificationPO">
         <id column="material_specification_id" jdbcType="BIGINT" property="materialSpecificationId"/>
         <result column="material_id" jdbcType="BIGINT" property="materialId"/>
+        <result column="file_name" jdbcType="CHAR" property="fileName"/>
         <result column="file_path" jdbcType="CHAR" property="filePath"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
     </resultMap>
     <sql id="Base_Column_List">
-        material_specification_id, material_id, file_path, create_time
+        material_specification_id, material_id, file_name, file_path, create_time
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
@@ -23,9 +24,9 @@
     </delete>
     <insert id="insert" parameterType="com.smartindustry.common.pojo.si.MaterialSpecificationPO">
         insert into si_material_specification (material_specification_id, material_id,
-                                               file_path, create_time)
+                                               file_name, file_path, create_time)
         values (#{materialSpecificationId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT},
-                #{filePath,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP})
+                #{fileName,jdbcType=CHAR}, #{filePath,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP})
     </insert>
     <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.MaterialSpecificationPO">
         insert into si_material_specification
@@ -35,6 +36,9 @@
             </if>
             <if test="materialId != null">
                 material_id,
+            </if>
+            <if test="fileName != null">
+                file_name,
             </if>
             <if test="filePath != null">
                 file_path,
@@ -50,6 +54,9 @@
             <if test="materialId != null">
                 #{materialId,jdbcType=BIGINT},
             </if>
+            <if test="fileName != null">
+                #{fileName,jdbcType=CHAR},
+            </if>
             <if test="filePath != null">
                 #{filePath,jdbcType=CHAR},
             </if>
@@ -64,6 +71,9 @@
             <if test="materialId != null">
                 material_id = #{materialId,jdbcType=BIGINT},
             </if>
+            <if test="fileName != null">
+                file_name = #{fileName,jdbcType=CHAR},
+            </if>
             <if test="filePath != null">
                 file_path = #{filePath,jdbcType=CHAR},
             </if>
@@ -76,6 +86,7 @@
     <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.MaterialSpecificationPO">
         update si_material_specification
         set material_id = #{materialId,jdbcType=BIGINT},
+            file_name   = #{fileName,jdbcType=CHAR},
             file_path   = #{filePath,jdbcType=CHAR},
             create_time = #{createTime,jdbcType=TIMESTAMP}
         where material_specification_id = #{materialSpecificationId,jdbcType=BIGINT}
@@ -83,11 +94,11 @@
 
     <insert id="batchInsert" parameterType="java.util.List">
         insert into si_material_specification (material_specification_id, material_id,
-        file_path, create_time)
+        file_name, file_path, create_time)
         values
         <foreach collection="list" item="po" separator=",">
             (#{po.materialSpecificationId,jdbcType=BIGINT}, #{po.materialId,jdbcType=BIGINT},
-            #{po.filePath,jdbcType=CHAR}, #{po.createTime,jdbcType=TIMESTAMP})
+            #{po.fileName,jdbcType=CHAR}, #{po.filePath,jdbcType=CHAR}, #{po.createTime,jdbcType=TIMESTAMP})
         </foreach>
     </insert>
     <delete id="deleteByMid" parameterType="java.lang.Long">

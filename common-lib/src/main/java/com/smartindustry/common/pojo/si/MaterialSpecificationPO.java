@@ -14,6 +14,8 @@ public class MaterialSpecificationPO implements Serializable {
 
     private Long materialId;
 
+    private String fileName;
+
     private String filePath;
 
     private Date createTime;
