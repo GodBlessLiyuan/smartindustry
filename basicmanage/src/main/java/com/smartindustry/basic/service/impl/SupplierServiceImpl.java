@@ -8,6 +8,7 @@ import com.smartindustry.basic.service.ISupplierService;
 import com.smartindustry.basic.vo.SupplierRecordVO;
 import com.smartindustry.basic.vo.SupplierVO;
 import com.smartindustry.common.bo.si.SupplierBO;
+import com.smartindustry.common.constant.ResultConstant;
 import com.smartindustry.common.mapper.si.MaterialMapper;
 import com.smartindustry.common.mapper.si.SupplierMapper;
 import com.smartindustry.common.mapper.si.SupplierRecordMapper;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -103,8 +105,10 @@ public class SupplierServiceImpl implements ISupplierService {
 
     @Override
     public ResultVO record(OperateDTO dto) {
+        Map<String, Object> res = new HashMap<>(1);
         List<SupplierRecordPO> supplierRecordPOs = supplierRecordMapper.queryBySid(dto.getSid());
-        return ResultVO.ok().setData(SupplierRecordVO.convert(supplierRecordPOs));
+        res.put(ResultConstant.OPERATE_RECORD, SupplierRecordVO.convert(supplierRecordPOs));
+        return ResultVO.ok().setData(res);
     }
 
     @Override

@@ -90,4 +90,9 @@
             #{po.filePath,jdbcType=CHAR}, #{po.createTime,jdbcType=TIMESTAMP})
         </foreach>
     </insert>
+    <delete id="deleteByMid" parameterType="java.lang.Long">
+        delete
+        from si_material_specification
+        where material_id = #{mid,jdbcType=BIGINT}
+    </delete>
 </mapper>

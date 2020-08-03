@@ -29,4 +29,11 @@ public interface StorageLabelMapper extends BaseMapper<StorageLabelPO, Long> {
      * @return
      */
     List<StorageLabelPO> queryByLids(List<Long> lids);
+
+    /**
+     * 根据标签ID删除
+     *
+     * @param plIds
+     */
+    void deleteByPlids(List<Long> plIds);
 }

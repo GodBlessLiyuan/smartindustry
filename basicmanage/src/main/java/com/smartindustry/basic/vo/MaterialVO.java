@@ -1,6 +1,8 @@
 package com.smartindustry.basic.vo;
 
 import com.smartindustry.common.bo.si.MaterialBO;
+import com.smartindustry.common.config.FilePathConfig;
+import com.smartindustry.common.pojo.si.MaterialSpecificationPO;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -19,19 +21,71 @@ public class MaterialVO implements Serializable {
 
     private Long mid;
     private String mno;
+    private Long mtid;
+    private String mtname;
+    private Long hlid;
+    private String hlname;
+    private Long mlid;
+    private String mlname;
+    private Long muid;
+    private String muname;
+    private Long mvid;
+    private String mvname;
+    private Long pllid;
+    private String pllname;
+    private Long lcsid;
+    private String lcsname;
+    private String mname;
+    private Integer ddays;
+    private String moq;
+    private String mmodel;
+    private String mdraw;
+    private Long sid;
+    private String sname;
+    private String mdesc;
+    private List<String> files;
 
-    public static List<MaterialVO> convert(List<MaterialBO> bos) {
+    public static List<MaterialVO> convert(List<MaterialBO> bos, FilePathConfig config) {
         List<MaterialVO> vos = new ArrayList<>(bos.size());
         for (MaterialBO bo : bos) {
-            vos.add(convert(bo));
+            vos.add(convert(bo, config));
         }
         return vos;
     }
 
-    public static MaterialVO convert(MaterialBO bo) {
+    public static MaterialVO convert(MaterialBO bo, FilePathConfig config) {
         MaterialVO vo = new MaterialVO();
         vo.setMid(bo.getMaterialId());
         vo.setMno(bo.getMaterialNo());
+        vo.setMtid(bo.getMaterialTypeId());
+        vo.setMtname(bo.getMaterialTypeName());
+        vo.setHlid(bo.getHumidityLevelId());
+        vo.setHlname(bo.getHumidityLevelName());
+        vo.setMlid(bo.getMaterialLevelId());
+        vo.setMlname(bo.getMaterialLevelName());
+        vo.setMuid(bo.getMeasureUnitId());
+        vo.setMuname(bo.getMeasureUnitName());
+        vo.setMvid(bo.getMaterialVersionId());
+        vo.setMvname(bo.getMaterialVersionName());
+        vo.setPllid(bo.getProduceLossLevelId());
+        vo.setPllname(bo.getProduceLossLevelName());
+        vo.setLcsid(bo.getLifeCycleStateId());
+        vo.setLcsname(bo.getLifeCycleStateName());
+        vo.setMname(bo.getMaterialName());
+        vo.setDdays(bo.getDeliveryDays());
+        vo.setMoq(bo.getMoq());
+        vo.setMmodel(bo.getMaterialModel());
+        vo.setMdraw(bo.getMaterialDraw());
+        vo.setSid(bo.getSupplierId());
+        vo.setSname(bo.getSupplierName());
+        vo.setMdesc(bo.getMaterialDesc());
+        if (null != bo.getFiles() && bo.getFiles().size() > 0) {
+            List<String> files = new ArrayList<>(bo.getFiles().size());
+            for (MaterialSpecificationPO po : bo.getFiles()) {
+                files.add(config.getPublicPath() + po.getFilePath());
+            }
+            vo.setFiles(files);
+        }
         return vo;
     }
 }

@@ -285,13 +285,13 @@ public class DataDictionaryServiceImpl implements IDataDictionaryService {
     }
 
     @Override
-    public ResultVO currencyQuery() {
+    public ResultVO cQuery() {
         List<Map<String, Object>> res = currencyMapper.queryAll();
         return ResultVO.ok().setData(res);
     }
 
     @Override
-    public ResultVO currencyEdit(CurrencyDTO dto) {
+    public ResultVO cEdit(CurrencyDTO dto) {
         CurrencyPO exitPO = currencyMapper.queryByName(dto.getCname());
         if (null != exitPO && (dto.getCid() == null || !dto.getCid().equals(exitPO.getCurrencyId()))) {
             return new ResultVO(1004);
@@ -313,7 +313,7 @@ public class DataDictionaryServiceImpl implements IDataDictionaryService {
     }
 
     @Override
-    public ResultVO currencyDelete(BasicDataDTO dto) {
+    public ResultVO cDelete(BasicDataDTO dto) {
         CurrencyPO currencyPO = currencyMapper.selectByPrimaryKey(dto.getCid());
         if (null == currencyPO) {
             return new ResultVO(1002);

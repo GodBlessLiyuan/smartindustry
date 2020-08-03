@@ -40,11 +40,11 @@ public interface IDataDictionaryService {
 
     ResultVO spDelete(BasicDataDTO dto);
 
-    ResultVO currencyQuery();
+    ResultVO cQuery();
 
-    ResultVO currencyEdit(CurrencyDTO dto);
+    ResultVO cEdit(CurrencyDTO dto);
 
-    ResultVO currencyDelete(BasicDataDTO dto);
+    ResultVO cDelete(BasicDataDTO dto);
 
     ResultVO mtQuery();
 

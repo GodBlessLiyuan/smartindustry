@@ -262,7 +262,7 @@
     </select>
     <!--    查看当前工单拣货单的推荐pid-->
     <select id="queryRecommend" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.om.PickHeadBO">
-        select m.material_no as materialNo,GROUP_CONCAT(sl.package_id) as recommendPid
+        select m.material_no as materialNo, GROUP_CONCAT(sl.package_id) as recommendPid
         from om_pick_head ph
                  left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
                  left join om_label_recommend lr on pb.pick_body_id = lr.pick_body_id
@@ -284,7 +284,7 @@
 
     <!--  当拣货量大于需求量才查询 查询所有当前工单号推荐的pid-->
     <select id="queryAllRePid" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.om.PickHeadBO">
-        select pb.material_id as materialId, GROUP_CONCAT(spl.package_id) as recommendPid,ma.material_no as materialNo
+        select pb.material_id as materialId, GROUP_CONCAT(spl.package_id) as recommendPid, ma.material_no as materialNo
         from om_pick_body pb
                  left join om_pick_head ph on pb.pick_head_id = ph.pick_head_id
                  left join om_pick_label opl on ph.pick_head_id = opl.pick_head_id
@@ -293,7 +293,7 @@
         where opl.recommend = 1
           and ph.pick_head_id = #{pickHeadId}
           and (pb.pick_num - pb.demand_num >= 0)
-        group by pb.material_id,ma.material_no
+        group by pb.material_id, ma.material_no
     </select>
 
     <!--    查看当前工单拣货单的各个物料的真实打印pid-->
@@ -377,7 +377,8 @@
                  left join om_pick_label pl on ph.pick_head_id = pl.pick_head_id
                  left join si_print_label spl on pl.print_label_id = spl.print_label_id
                  left join si_material ma on spl.material_id = ma.material_id
-        where ph.pick_head_id = #{pickHeadId} and spl.package_id is not null
+        where ph.pick_head_id = #{pickHeadId}
+          and spl.package_id is not null
         limit 1
     </select>
 
@@ -535,6 +536,13 @@
         select distinct order_no
         from si_storage_label
         where print_label_id = #{printLabelId}
+    </select>
+
+    <select id="queryNotRecommodByOno" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from om_pick_head ph
+        where ph.dr = 1 and ph.material_status = 1 and ph.order_no = #{orderNo,jdbcType=CHAR}
     </select>
 </mapper>
 

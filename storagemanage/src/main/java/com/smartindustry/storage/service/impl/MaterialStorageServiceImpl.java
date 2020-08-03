@@ -3,6 +3,7 @@ package com.smartindustry.storage.service.impl;
 import com.github.pagehelper.Page;
 import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.bo.sm.*;
+import com.smartindustry.common.constant.ResultConstant;
 import com.smartindustry.common.mapper.si.PrintLabelMapper;
 import com.smartindustry.common.mapper.si.LocationMapper;
 import com.smartindustry.common.mapper.si.StorageLabelMapper;
@@ -378,7 +379,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
     public ResultVO record(@RequestBody OperateDTO dto) {
         Map<String, Object> res = new HashMap<>();
         List<StorageRecordPO> recordPOs = recordMapper.queryBySid(dto.getSid());
-        res.put("record", RecordVO.convert(recordPOs));
+        res.put(ResultConstant.OPERATE_RECORD, RecordVO.convert(recordPOs));
         return ResultVO.ok().setData(res);
     }
 }

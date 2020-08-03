@@ -26,7 +26,7 @@ public class ErpOrderVO implements Serializable {
         private Date odate;
         private String supplier;
         private String buyer;
-        private Date pdate;
+        private String pdate;
     }
 
     @Data

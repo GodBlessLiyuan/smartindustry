@@ -5,16 +5,16 @@ import com.smartindustry.basic.constant.BasicConstant;
 import com.smartindustry.basic.dto.MaterialDTO;
 import com.smartindustry.basic.dto.OperateDTO;
 import com.smartindustry.basic.service.IMaterialService;
+import com.smartindustry.basic.vo.MaterialRecordVO;
 import com.smartindustry.basic.vo.MaterialVO;
-import com.smartindustry.basic.vo.SupplierRecordVO;
 import com.smartindustry.common.bo.si.MaterialBO;
 import com.smartindustry.common.config.FilePathConfig;
+import com.smartindustry.common.constant.ResultConstant;
 import com.smartindustry.common.mapper.si.MaterialMapper;
 import com.smartindustry.common.mapper.si.MaterialRecordMapper;
 import com.smartindustry.common.mapper.si.MaterialSpecificationMapper;
 import com.smartindustry.common.pojo.si.MaterialPO;
 import com.smartindustry.common.pojo.si.MaterialRecordPO;
-import com.smartindustry.common.pojo.si.SupplierRecordPO;
 import com.smartindustry.common.util.FileUtil;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.vo.PageInfoVO;
@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -52,7 +53,7 @@ public class MaterialServiceImpl implements IMaterialService {
         Page<MaterialBO> page = PageQueryUtil.startPage(reqData);
         List<MaterialBO> bos = materialMapper.pageQuery(reqData);
 
-        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), MaterialVO.convert(bos)));
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), MaterialVO.convert(bos, filePathConfig)));
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -87,6 +88,7 @@ public class MaterialServiceImpl implements IMaterialService {
 
         materialRecordMapper.insert(new MaterialRecordPO(materialPO.getMaterialId(), 1L, BasicConstant.RECORD_MODIFY));
 
+        materialSpecificationMapper.deleteByMid(dto.getMid());
         if (null != dto.getFiles() && dto.getFiles().size() > 0) {
             materialSpecificationMapper.batchInsert(MaterialDTO.createFilePO(dto, filePathConfig));
         }
@@ -109,13 +111,15 @@ public class MaterialServiceImpl implements IMaterialService {
             return new ResultVO(1002);
         }
 
-        return ResultVO.ok().setData(MaterialVO.convert(materialBO));
+        return ResultVO.ok().setData(MaterialVO.convert(materialBO, filePathConfig));
     }
 
     @Override
     public ResultVO record(OperateDTO dto) {
-        List<SupplierRecordPO> supplierRecordPOs = materialRecordMapper.queryByMid(dto.getMid());
-        return ResultVO.ok().setData(SupplierRecordVO.convert(supplierRecordPOs));
+        Map<String, Object> res = new HashMap<>(1);
+        List<MaterialRecordPO> materialRecordPOs = materialRecordMapper.queryByMid(dto.getMid());
+        res.put(ResultConstant.OPERATE_RECORD, MaterialRecordVO.convert(materialRecordPOs));
+        return ResultVO.ok().setData(res);
     }
 
     @Override

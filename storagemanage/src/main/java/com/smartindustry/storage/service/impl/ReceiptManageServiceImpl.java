@@ -6,13 +6,13 @@ import com.smartindustry.common.bo.si.MaterialBO;
 import com.smartindustry.common.bo.sm.ReceiptBO;
 import com.smartindustry.common.bo.sm.ReceiptBodyBO;
 import com.smartindustry.common.constant.ModuleConstant;
+import com.smartindustry.common.constant.ResultConstant;
 import com.smartindustry.common.mapper.si.LabelRecordMapper;
 import com.smartindustry.common.mapper.si.MaterialMapper;
 import com.smartindustry.common.mapper.sm.ReceiptBodyMapper;
 import com.smartindustry.common.mapper.sm.ReceiptHeadMapper;
 import com.smartindustry.common.mapper.sm.ReceiptLabelMapper;
 import com.smartindustry.common.mapper.sm.StorageRecordMapper;
-import com.smartindustry.common.pojo.si.MaterialPO;
 import com.smartindustry.common.pojo.sm.ReceiptBodyPO;
 import com.smartindustry.common.pojo.sm.ReceiptHeadPO;
 import com.smartindustry.common.pojo.sm.StorageRecordPO;
@@ -118,15 +118,15 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         Map<String, Object> res = new HashMap<>();
         // 操作记录
         List<StorageRecordPO> recordPOs = recordMapper.queryByReceiptBodyId(dto.getRbid(), dto.getStatus());
-        res.put("record", RecordVO.convert(recordPOs));
+        res.put(ResultConstant.OPERATE_RECORD, RecordVO.convert(recordPOs));
 
         // 物流信息
         ReceiptHeadPO headPO = receiptHeadMapper.selectByPrimaryKey(bodyPO.getReceiptHeadId());
-        res.put("logistics", LogisticsVO.convert(headPO));
+        res.put(ResultConstant.LOGISTICS_RECORD, LogisticsVO.convert(headPO));
 
         // 打印标签
         List<LabelRecordBO> labelRecordBOs = labelRecordMapper.queryByReceiptBodyId(dto.getRbid(), dto.getStatus(), ModuleConstant.STORAGE_MANAGE);
-        res.put("print", LabelRecordVO.convert(labelRecordBOs));
+        res.put(ResultConstant.PRINT_DETAIL, LabelRecordVO.convert(labelRecordBOs));
 
         return ResultVO.ok().setData(res);
     }

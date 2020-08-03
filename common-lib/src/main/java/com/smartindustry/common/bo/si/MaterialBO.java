@@ -1,7 +1,10 @@
 package com.smartindustry.common.bo.si;
 
 import com.smartindustry.common.pojo.si.MaterialPO;
+import com.smartindustry.common.pojo.si.MaterialSpecificationPO;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * @author: xiahui
@@ -21,4 +24,5 @@ public class MaterialBO extends MaterialPO {
     private String produceLossLevelName;
     private String lifeCycleStateName;
     private String supplierName;
+    private List<MaterialSpecificationPO> files;
 }
