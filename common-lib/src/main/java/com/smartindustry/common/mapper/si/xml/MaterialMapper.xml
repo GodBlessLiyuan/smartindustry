@@ -302,6 +302,7 @@
         <result column="supplier_name" jdbcType="CHAR" property="supplierName"/>
         <collection property="files" ofType="com.smartindustry.common.pojo.si.MaterialSpecificationPO">
             <id column="material_specification_id" jdbcType="BIGINT" property="materialSpecificationId"/>
+            <result column="file_name" jdbcType="CHAR" property="fileName"/>
             <result column="file_path" jdbcType="CHAR" property="filePath"/>
         </collection>
     </resultMap>
@@ -335,7 +336,7 @@
     <select id="queryByMid" parameterType="java.lang.Long" resultMap="BOResultMap">
         select
         <include refid="BO_Column_List"/>,
-        ms.material_specification_id, ms.file_path
+        ms.material_specification_id, ms.file_name, ms.file_path
         from si_material m
         left join dd_material_type mt on m.material_type_id = mt.material_type_id
         left join dd_humidity_level hl on m.humidity_level_id = hl.humidity_level_id
