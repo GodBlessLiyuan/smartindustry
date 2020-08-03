@@ -51,7 +51,7 @@ public class SupplierDTO implements Serializable {
     /**
      * 联系人名称
      */
-    private String cname;
+    private String contact;
     /**
      * 联系电话
      */
@@ -96,7 +96,7 @@ public class SupplierDTO implements Serializable {
         po.setSettlePeriodId(dto.getSpid());
         po.setCurrencyId(dto.getCid());
         po.setSupplierName(dto.getSname());
-        po.setContactName(dto.getCname());
+        po.setContactName(dto.getContact());
         po.setPhone(dto.getPhone());
         po.setFax(dto.getFax());
         po.setSite(dto.getSite());
