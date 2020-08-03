@@ -214,7 +214,7 @@
   </resultMap>
   <sql id="BO_Column_List">
         u.user_id, u.`name`, u.sex, u.dept_id, u.username, u.`password`, u.role_id, u.job, u.phone, u.email,
-    u.`status`, u.remark, u.create_time, u.update_time, u.dr,d.dept_name as deptName,r.role_name as roleName
+    u.`status`, u.remark, u.create_time, u.update_time, u.dr,d.dept_name as deptName
   </sql>
 
 <!--  用户角色的分页查询-->
@@ -223,15 +223,14 @@
     <include refid="BO_Column_List"/>
     from am_user u
     left join am_dept d on u.dept_id = d.dept_id
-    left join am_role r on u.role_id = r.role_id
     where d.dr = 1
-    <if test="rname != null and rname != ''">
-      and r.role_name like concat('%',#{rname,jdbcType=CHAR},'%')
+    <if test="name != null and name != ''">
+      and u.name like concat('%',#{name,jdbcType=CHAR},'%')
     </if>
     <if test="status != null and status != 0">
-      and d.`status` = #{status,jdbcType=TINYINT}
+      and u.`status` = #{status,jdbcType=TINYINT}
     </if>
-    order by d.create_time desc
+    order by u.create_time desc
   </select>
 
   <!--  批量禁用用户-->
@@ -243,7 +242,7 @@
           `status` = #{item.status,jdbcType=TINYINT},
         </if>
       </set>
-      where user_id = #{item.userId,jdbcType=BIGINT}
+      where user_id = #{item.userId,jdbcType=BIGINT} and dr =1
     </foreach>
   </update>
 
@@ -253,7 +252,7 @@
       <set >
         dr = 2
       </set>
-      where user_id = #{item.user_id,jdbcType=BIGINT}
+      where user_id = #{item.userId,jdbcType=BIGINT}
     </foreach>
   </update>
 
