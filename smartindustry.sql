@@ -3,7 +3,7 @@ SET SESSION FOREIGN_KEY_CHECKS=0;
 /* Drop Tables */
 
 DROP TABLE IF EXISTS am_m_user_authority;
-DROP TABLE IF EXISTS ba_role_authority;
+DROP TABLE IF EXISTS am_role_authority;
 DROP TABLE IF EXISTS am_authority;
 DROP TABLE IF EXISTS am_dept_record;
 DROP TABLE IF EXISTS am_role_record;
@@ -138,6 +138,16 @@ CREATE TABLE am_role
 );
 
 
+CREATE TABLE am_role_authority
+(
+    role_authority_id bigint NOT NULL AUTO_INCREMENT,
+    role_id bigint unsigned NOT NULL,
+    authority_id bigint unsigned NOT NULL,
+    PRIMARY KEY (role_authority_id),
+    UNIQUE (role_authority_id)
+);
+
+
 CREATE TABLE am_role_record
 (
     role_record_id bigint unsigned NOT NULL AUTO_INCREMENT,
@@ -190,16 +200,6 @@ CREATE TABLE am_user_record
     PRIMARY KEY (user_record_id),
     UNIQUE (user_record_id),
     UNIQUE (operate_id)
-);
-
-
-CREATE TABLE ba_role_authority
-(
-    role_authority_id bigint NOT NULL AUTO_INCREMENT,
-    role_id bigint unsigned NOT NULL,
-    authority_id bigint unsigned NOT NULL,
-    PRIMARY KEY (role_authority_id),
-    UNIQUE (role_authority_id)
 );
 
 
@@ -1016,7 +1016,7 @@ ALTER TABLE am_m_user_authority
 ;
 
 
-ALTER TABLE ba_role_authority
+ALTER TABLE am_role_authority
     ADD FOREIGN KEY (authority_id)
         REFERENCES am_authority (authority_id)
         ON UPDATE RESTRICT
@@ -1048,6 +1048,14 @@ ALTER TABLE am_user
 ;
 
 
+ALTER TABLE am_role_authority
+    ADD FOREIGN KEY (role_id)
+        REFERENCES am_role (role_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
 ALTER TABLE am_role_record
     ADD FOREIGN KEY (role_id)
         REFERENCES am_role (role_id)
@@ -1057,14 +1065,6 @@ ALTER TABLE am_role_record
 
 
 ALTER TABLE am_user
-    ADD FOREIGN KEY (role_id)
-        REFERENCES am_role (role_id)
-        ON UPDATE RESTRICT
-        ON DELETE RESTRICT
-;
-
-
-ALTER TABLE ba_role_authority
     ADD FOREIGN KEY (role_id)
         REFERENCES am_role (role_id)
         ON UPDATE RESTRICT
