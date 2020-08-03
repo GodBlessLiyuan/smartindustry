@@ -20,6 +20,7 @@ public class LocationVO implements Serializable {
     private Long lid;
     private String lno;
     private String lname;
+    private Long wid;
     private String wname;
     private String remark;
 
@@ -36,6 +37,7 @@ public class LocationVO implements Serializable {
         vo.setLid(bo.getLocationId());
         vo.setLno(bo.getLocationNo());
         vo.setLname(bo.getLocationName());
+        vo.setWid(bo.getWarehouseId());
         vo.setWname(bo.getWarehouseName());
         vo.setRemark(bo.getRemark());
         return vo;
