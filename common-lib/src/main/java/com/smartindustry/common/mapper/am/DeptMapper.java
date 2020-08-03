@@ -51,4 +51,6 @@ public interface DeptMapper extends BaseMapper<DeptPO, Long> {
      * @return
      */
     List<DeptBO> queryChildren(@Param("parentId") Long parentId);
+
+
 }

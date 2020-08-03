@@ -207,4 +207,72 @@
       dr = #{dr,jdbcType=TINYINT}
     where user_id = #{userId,jdbcType=BIGINT}
   </update>
+
+  <resultMap id="BOResultMap" type="com.smartindustry.common.bo.am.UserBO" extends="BaseResultMap">
+    <result column="deptName" jdbcType="CHAR" property="deptName"/>
+    <result column="roleName" jdbcType="CHAR" property="roleName"/>
+  </resultMap>
+  <sql id="BO_Column_List">
+        u.user_id, u.`name`, u.sex, u.dept_id, u.username, u.`password`, u.role_id, u.job, u.phone, u.email,
+    u.`status`, u.remark, u.create_time, u.update_time, u.dr,d.dept_name as deptName,r.role_name as roleName
+  </sql>
+
+<!--  用户角色的分页查询-->
+  <select id="userPageQuery" parameterType="java.util.Map" resultMap="BOResultMap">
+    select
+    <include refid="BO_Column_List"/>
+    from am_user u
+    left join am_dept d on u.dept_id = d.dept_id
+    left join am_role r on u.role_id = r.role_id
+    where d.dr = 1
+    <if test="rname != null and rname != ''">
+      and r.role_name like concat('%',#{rname,jdbcType=CHAR},'%')
+    </if>
+    <if test="status != null and status != 0">
+      and d.`status` = #{status,jdbcType=TINYINT}
+    </if>
+    order by d.create_time desc
+  </select>
+
+  <!--  批量禁用用户-->
+  <update id="updateBatch" parameterType="java.util.List">
+    <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+      update am_user
+      <set >
+        <if test="item.status != null" >
+          `status` = #{item.status,jdbcType=TINYINT},
+        </if>
+      </set>
+      where user_id = #{item.userId,jdbcType=BIGINT}
+    </foreach>
+  </update>
+
+  <update id="deleteBatch" parameterType="java.util.List">
+    <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+      update am_user
+      <set >
+        dr = 2
+      </set>
+      where user_id = #{item.user_id,jdbcType=BIGINT}
+    </foreach>
+  </update>
+
+  <!--  给出部门负责人列表-->
+  <select id="queryLeader" resultMap="BaseResultMap">
+    select distinct d.user_id as userId,u.name
+    from am_dept d
+    left join am_user u on d.user_id = u.user_id
+  </select>
+
+<!--  给出所有用户列表，模糊查询-->
+  <select id="selectAll" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from am_user u
+    where u.dr =1
+    <if test="name != null and name != ''">
+      and u.`name` like concat('%',#{name,jdbcType=CHAR},'%')
+    </if>
+  </select>
+
 </mapper>
