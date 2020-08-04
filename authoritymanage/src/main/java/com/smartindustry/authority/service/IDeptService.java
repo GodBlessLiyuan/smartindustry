@@ -49,7 +49,7 @@ public interface IDeptService {
      * @param dtos
      * @return
      */
-    ResultVO batchDelete(List<OperateDTO> dtos);
+    ResultVO delete(List<Long> dtos);
 
     /**
      * 按照树形结构给前端传值部门名字

@@ -32,7 +32,7 @@ public class RoleController {
     }
 
     @PostMapping("status")
-    public ResultVO batchUpdate(@RequestBody List<OperateDTO> dtos) {
+    public ResultVO status(@RequestBody List<OperateDTO> dtos) {
         return roleService.batchUpdate(dtos);
     }
 
@@ -46,8 +46,8 @@ public class RoleController {
         return roleService.update(dto);
     }
 
-    @PostMapping("batchDelete")
-    public ResultVO batchDelete(@RequestBody List<OperateDTO> dtos) {
-        return roleService.batchDelete(dtos);
+    @PostMapping("delete")
+    public ResultVO delete(@RequestBody List<Long> dtos) {
+        return roleService.delete(dtos);
     }
 }

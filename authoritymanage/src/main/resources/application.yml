@@ -12,13 +12,13 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+08
   datasource:
-#    url: jdbc:mysql://39.97.253.38:3306/smartindustry?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
-#    username: root
-#    password: '!qaZXSw2'
-    url: jdbc:mysql://192.168.10.3:3306/smartindustry?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    url: jdbc:mysql://39.97.253.38:3306/smartindustry?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: root
-    password: 1234qwer
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: '!qaZXSw2'
+#    url: jdbc:mysql://192.168.10.3:3306/smartindustry?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+#    username: root
+#    password: 1234qwer
+#    driver-class-name: com.mysql.cj.jdbc.Driver
   servlet:
     multipart:
       enabled: true #是否启用http上传处理
@@ -28,12 +28,26 @@ spring:
     user:
       name: vbooster
       password: 123456a
+  redis:
+    database: 1
+    host: 127.0.0.1
+    port: 6379
+    password:
 mybatis:
   mapper-locations: com/smartindustry/common/mapper/**/*.xml
 eureka:
   client:
     service-url:
       defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@localhost:8030/eureka/
+
+# token配置
+token:
+  # 令牌自定义标识
+  header: Authorization
+  # 令牌密钥
+  secret: abcdefghijklmnopqrstuvwxyz
+  # 令牌有效期（默认30分钟）
+  expireTime: 30
 
 logging:
   level:

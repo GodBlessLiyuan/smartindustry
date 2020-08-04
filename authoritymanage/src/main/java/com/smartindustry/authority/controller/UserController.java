@@ -33,7 +33,7 @@ public class UserController {
     }
 
     @PostMapping("status")
-    public ResultVO batchUpdate(@RequestBody List<OperateDTO> dtos) {
+    public ResultVO status(@RequestBody List<OperateDTO> dtos) {
         return userService.batchUpdate(dtos);
     }
 

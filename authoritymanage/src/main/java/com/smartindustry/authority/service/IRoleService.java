@@ -32,10 +32,10 @@ public interface IRoleService {
 
     /**
      * 批量删除角色
-     * @param dtos
+     * @param rids
      * @return
      */
-    ResultVO batchDelete(List<OperateDTO> dtos);
+    ResultVO delete(List<Long> rids);
 
     /**
      * 新增角色
