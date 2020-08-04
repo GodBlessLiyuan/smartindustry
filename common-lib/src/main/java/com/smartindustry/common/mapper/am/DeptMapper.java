@@ -35,7 +35,7 @@ public interface DeptMapper extends BaseMapper<DeptPO, Long> {
      * @param pos
      * @return
      */
-    Integer deleteBatch(List<DeptPO> pos);
+    Integer deleteBatch(List<Long> pos);
 
 
     /**
@@ -52,5 +52,10 @@ public interface DeptMapper extends BaseMapper<DeptPO, Long> {
      */
     List<DeptBO> queryChildren(@Param("parentId") Long parentId);
 
-
+    /**
+     * 判断当前部门name是否存在/重复
+     * @param deptName
+     * @return
+     */
+    Integer judgeRepeatName(@Param("deptName") String deptName);
 }

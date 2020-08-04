@@ -160,7 +160,8 @@
       <set >
         dr = 2
       </set>
-      where role_id = #{item.roleId,jdbcType=BIGINT}
+      where role_id = #{item,jdbcType=BIGINT}
     </foreach>
   </update>
+
 </mapper>

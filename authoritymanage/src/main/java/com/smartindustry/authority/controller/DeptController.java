@@ -5,6 +5,7 @@ import com.smartindustry.authority.dto.OperateDTO;
 import com.smartindustry.authority.service.IDeptService;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +37,7 @@ public class DeptController {
     }
 
     @PostMapping("status")
-    public ResultVO batchUpdate(@RequestBody List<OperateDTO> dtos) {
+    public ResultVO status(@RequestBody List<OperateDTO> dtos) {
         return deptService.batchUpdate(dtos);
     }
 
@@ -50,12 +51,13 @@ public class DeptController {
         return deptService.update(dto);
     }
 
-    @PostMapping("batchDelete")
-    public ResultVO batchDelete(@RequestBody List<OperateDTO> dtos) {
-        return deptService.batchDelete(dtos);
+    @PostMapping("delete")
+    public ResultVO delete(@RequestBody List<Long> dids) {
+        return deptService.delete(dids);
     }
 
     @PostMapping("queryDeptName")
+//    @PreAuthorize("@ss.hasPermi('system:dept:tree')")
     public ResultVO queryDeptName() {
         return deptService.queryDeptName();
     }

@@ -63,15 +63,4 @@ public class LoginController {
                           HttpServletResponse response, @RequestBody LoginDTO dto){
         return loginService.login(session,response,dto);
     }
-//    {
-//        // 生成令牌
-//        String token = loginService.login(dto);
-//        Map<String,String> map = new HashMap<String,String>(){
-//            {
-//                put(Constants.TOKEN, token);
-//            }
-//        };
-//        return ResultVO.ok().setData(map);
-//    }
-
 }

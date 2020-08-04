@@ -32,6 +32,11 @@ public class DeptDTO {
      */
     private Byte status;
 
+    /**
+     * 从顶级到当前级别的部门列表,例如(1,2,3,4),1为顶级部门,4为当前部门
+     */
+    private List<Long> dcode;
+
 
     public static DeptPO buildPO(OperateDTO dto) {
         DeptPO po = new DeptPO();
@@ -48,7 +53,7 @@ public class DeptDTO {
         po.setCreateTime(date);
         po.setStatus(dto.getStatus());
         po.setDeptDesc(dto.getDdesc());
-        po.setParentId(dto.getPid());
+        po.setParentId(dto.getDcode().get(dto.getDcode().size()-1));
         po.setDeptName(dto.getDname());
         po.setUserId(dto.getUid());
         po.setDr((byte)1);
