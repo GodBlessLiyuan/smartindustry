@@ -179,7 +179,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
 
             status = ReceiptConstant.RECEIPT_IQC_DETECT;
             bodyPO.setStatus(ReceiptConstant.RECEIPT_IQC_DETECT);
-        } else if (ReceiptConstant.MATERIAL_TYPE_SEMI.equals(bodyPO.getMaterialTypeId())) {
+        } else if (ReceiptConstant.MATERIAL_TYPE_SEMI.equals(bodyPO.getMaterialTypeId()) || ReceiptConstant.MATERIAL_TYPE_FINISH.equals(bodyPO.getMaterialTypeId())) {
             // 半成品/成品
             QeDetectPO qePO = new QeDetectPO();
             qePO.setReceiptBodyId(dto.getRbid());
