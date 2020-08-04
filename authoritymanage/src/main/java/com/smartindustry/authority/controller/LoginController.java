@@ -63,4 +63,13 @@ public class LoginController {
                           HttpServletResponse response, @RequestBody LoginDTO dto){
         return loginService.login(session,response,dto);
     }
+
+    /**
+     * 获得用户详情 以及 所有的 权限列表
+     * @return
+     */
+    @PostMapping("/getInfo")
+    public ResultVO getInfo(){
+        return ResultVO.ok();
+    }
 }
