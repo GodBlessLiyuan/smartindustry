@@ -77,7 +77,7 @@ CREATE TABLE am_dept
 (
     dept_id bigint unsigned NOT NULL AUTO_INCREMENT,
     parent_id bigint unsigned,
-    detp_name char(32) NOT NULL,
+    dept_name char(32) NOT NULL,
     user_id bigint unsigned,
     dept_desc char(255),
     -- 1 Æô¶¯
@@ -576,8 +576,7 @@ CREATE TABLE si_location
     dr tinyint COMMENT '1£ºÎ´É¾³ý
 2£ºÒÑÉ¾³ý',
     PRIMARY KEY (location_id),
-    UNIQUE (location_id),
-    UNIQUE (location_no)
+    UNIQUE (location_id)
 );
 
 
@@ -620,8 +619,7 @@ CREATE TABLE si_material
     dr tinyint COMMENT '1£ºÎ´É¾³ý
 2£ºÒÑÉ¾³ý',
     PRIMARY KEY (material_id),
-    UNIQUE (material_id),
-    UNIQUE (material_no)
+    UNIQUE (material_id)
 );
 
 
@@ -731,8 +729,7 @@ CREATE TABLE si_supplier
     dr tinyint COMMENT '1£ºÎ´É¾³ý
 2£ºÒÑÉ¾³ý',
     PRIMARY KEY (supplier_id),
-    UNIQUE (supplier_id),
-    UNIQUE (supplier_no)
+    UNIQUE (supplier_id)
 );
 
 
@@ -767,8 +764,7 @@ CREATE TABLE si_warehouse
     dr tinyint COMMENT '1£ºÎ´É¾³ý
 2£ºÒÑÉ¾³ý',
     PRIMARY KEY (warehouse_id),
-    UNIQUE (warehouse_id),
-    UNIQUE (warehouse_no)
+    UNIQUE (warehouse_id)
 );
 
 
