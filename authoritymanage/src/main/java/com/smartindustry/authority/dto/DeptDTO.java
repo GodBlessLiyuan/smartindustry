@@ -1,7 +1,6 @@
 package com.smartindustry.authority.dto;
 
 import com.smartindustry.common.pojo.am.DeptPO;
-import com.smartindustry.common.pojo.om.LogisticsRecordPO;
 import lombok.Data;
 
 import java.util.ArrayList;

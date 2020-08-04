@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
@@ -40,7 +41,13 @@ public class DeptServiceImpl implements IDeptService {
     public ResultVO pageQuery(Map<String, Object> reqData){
         Page<DeptBO> page = PageQueryUtil.startPage(reqData);
         List<DeptBO> bos = deptMapper.deptPageQuery(reqData);
-        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), DeptVO.convert(bos)));
+        List<DeptVO> vos = DeptVO.convert(bos);
+        for (DeptVO vo:vos){
+            List<Long> deptIds = getDeptLevel(vo.getDid());
+            Collections.reverse(deptIds);
+            vo.setDcode(deptIds);
+        }
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), vos));
     }
 
     @Override
@@ -103,6 +110,21 @@ public class DeptServiceImpl implements IDeptService {
             }
         }
         return vos;
+    }
+
+    /**
+     * 根据当前的部门id,获得父节点列表
+     * @param deptId
+     * @return
+     */
+    private List<Long> getDeptLevel(Long deptId){
+        List<Long> deptIds = new ArrayList<>();
+        while (deptId !=null){
+            DeptPO po = deptMapper.selectByPrimaryKey(deptId);
+            deptIds.add(po.getDeptId());
+            deptId = po.getParentId();
+        }
+        return deptIds;
     }
 
     @Override
