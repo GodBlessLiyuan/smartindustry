@@ -47,6 +47,7 @@ public class RoleServiceImpl implements IRoleService {
 
     @Override
     public ResultVO insert(RoleDTO dto){
+
         RolePO po = RoleDTO.createPO(dto);
         roleMapper.insert(po);
         return ResultVO.ok();
@@ -60,9 +61,8 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
-    public ResultVO batchDelete(List<OperateDTO> dtos){
-        List<RolePO> pos = RoleDTO.updateList(dtos);
-        roleMapper.deleteBatch(pos);
+    public ResultVO delete(List<Long> rids){
+        roleMapper.deleteBatch(rids);
         return ResultVO.ok();
     }
 }

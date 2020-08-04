@@ -53,4 +53,14 @@ public class UserPO implements Serializable {
     private Byte dr;
 
     private static final long serialVersionUID = 1L;
+
+    public boolean isAdmin()
+    {
+        return isAdmin(this.userId);
+    }
+
+    public static boolean isAdmin(Long userId)
+    {
+        return userId != null && 1L == userId;
+    }
 }

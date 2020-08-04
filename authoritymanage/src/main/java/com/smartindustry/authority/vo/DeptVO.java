@@ -35,6 +35,11 @@ public class DeptVO implements Serializable {
     private String ddesc;
 
     /**
+     * 存放着从顶级部门到当前部门的id列表
+     */
+    private List<Long> dcode;
+
+    /**
      * 1 启动
      2 禁用
      */

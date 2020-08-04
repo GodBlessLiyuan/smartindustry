@@ -52,6 +52,10 @@ public class DeptServiceImpl implements IDeptService {
 
     @Override
     public ResultVO insert(DeptDTO dto){
+        Integer result = deptMapper.judgeRepeatName(dto.getDname());
+        if(result.equals(1)){
+            return new ResultVO(1004);
+        }
         DeptPO po = DeptDTO.createPO(dto);
         deptMapper.insert(po);
         return ResultVO.ok();
@@ -59,15 +63,18 @@ public class DeptServiceImpl implements IDeptService {
 
     @Override
     public ResultVO update(DeptDTO dto){
+        Integer result = deptMapper.judgeRepeatName(dto.getDname());
+        if(result.equals(1)){
+            return new ResultVO(1004);
+        }
         DeptPO po = DeptDTO.createPO(dto);
         deptMapper.updateByPrimaryKeySelective(po);
         return ResultVO.ok();
     }
 
     @Override
-    public ResultVO batchDelete(List<OperateDTO> dtos){
-        List<DeptPO> pos = DeptDTO.updateList(dtos);
-        deptMapper.deleteBatch(pos);
+    public ResultVO delete(List<Long> dtos){
+        deptMapper.deleteBatch(dtos);
         return ResultVO.ok();
     }
 

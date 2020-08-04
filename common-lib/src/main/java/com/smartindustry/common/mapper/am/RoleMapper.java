@@ -40,8 +40,8 @@ public interface RoleMapper extends BaseMapper<RolePO, Long> {
 
     /**
      * 批量删除
-     * @param pos
+     * @param rids
      * @return
      */
-    Integer deleteBatch(List<RolePO> pos);
+    Integer deleteBatch(List<Long> rids);
 }
