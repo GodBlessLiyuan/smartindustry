@@ -77,7 +77,9 @@ public class DeptServiceImpl implements IDeptService {
         if (dids.contains(1L)){
             dids.remove(1L);
         }
-        deptMapper.deleteBatch(dids);
+        if(dids.size()!=0){
+            deptMapper.deleteBatch(dids);
+        }
         return ResultVO.ok();
     }
 
