@@ -28,6 +28,7 @@ public class UserDTO {
     private Byte status;
     private Byte sex;
     private String remark;
+    private List<Long> dids;
 
     public static UserPO buildPO(OperateDTO dto) {
         UserPO po = new UserPO();

@@ -52,14 +52,17 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public ResultVO batchDelete(List<OperateDTO> dtos){
-        List<UserPO> pos = UserDTO.updateList(dtos);
-        userMapper.deleteBatch(pos);
+    public ResultVO delete(List<Long> uids){
+        userMapper.deleteBatch(uids);
         return ResultVO.ok();
     }
 
     @Override
     public ResultVO insert(UserDTO dto){
+        Integer result = userMapper.judgeRepeatName(dto.getUname(),dto.getUid());
+        if(result.equals(1)){
+            return new ResultVO(1004);
+        }
         UserPO po = UserDTO.createPO(dto);
         userMapper.insert(po);
         return ResultVO.ok();
@@ -67,6 +70,10 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public ResultVO update(UserDTO dto){
+        Integer result = userMapper.judgeRepeatName(dto.getUname(),dto.getUid());
+        if(result.equals(1)){
+            return new ResultVO(1004);
+        }
         UserPO po = UserDTO.createPO(dto);
         userMapper.updateByPrimaryKeySelective(po);
         return ResultVO.ok();

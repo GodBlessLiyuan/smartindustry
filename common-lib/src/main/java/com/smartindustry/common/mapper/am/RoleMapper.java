@@ -44,4 +44,11 @@ public interface RoleMapper extends BaseMapper<RolePO, Long> {
      * @return
      */
     Integer deleteBatch(List<Long> rids);
+
+    /**
+     * 判断角色名是否重复
+     * @param roleName
+     * @return
+     */
+    Integer judgeRepeatName(@Param("roleName") String roleName,@Param("roleId") Long roleId);
 }
