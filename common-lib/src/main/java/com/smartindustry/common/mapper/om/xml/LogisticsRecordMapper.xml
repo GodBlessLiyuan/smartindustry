@@ -120,7 +120,6 @@
     <resultMap id="BO_ResultMap" extends="BaseResultMap" type="com.smartindustry.common.bo.om.LogisticsRecordBO">
         <collection property="picturePOs" ofType="com.smartindustry.common.pojo.om.LogisticsPicturePO">
             <id column="logistics_picture_id" jdbcType="BIGINT" property="logisticsPictureId"/>
-            <result column="logistics_record_id" jdbcType="BIGINT" property="logisticsRecordId"/>
             <result column="picture" jdbcType="CHAR" property="picture"/>
         </collection>
     </resultMap>
