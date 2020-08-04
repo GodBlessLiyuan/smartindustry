@@ -20,6 +20,7 @@ import com.smartindustry.outbound.vo.PickHeadVO;
 import com.smartindustry.outbound.vo.PrintLabelVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -33,6 +34,7 @@ import java.util.Map;
  * @description: 质量管理
  * @version: 1.0
  */
+@EnableTransactionManagement
 @Service
 public class QualityManageServiceImpl implements IQualityManageService {
     @Autowired
@@ -48,12 +50,12 @@ public class QualityManageServiceImpl implements IQualityManageService {
     @Transactional(rollbackFor = Exception.class)
     public ResultVO pickOqcButton(Long pickHeadId){
         //1 更新物料状态
-        int result = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_CHECK);
+        pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_CHECK);
         //2 新增OQC检测表
         PickCheckPO po = new PickCheckPO();
         po.setPickHeadId(pickHeadId);
         po.setStatus(OutboundConstant.PENDING);
-        int resultIn = pickCheckMapper.insert(po);
+        pickCheckMapper.insert(po);
         outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId,null,1L,"jzj",OutboundConstant.NEW_INSERT,new Date(),OutboundConstant.MATERIAL_STATUS_CHECK));
         return ResultVO.ok();
     }
