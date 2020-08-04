@@ -47,7 +47,10 @@ public class RoleServiceImpl implements IRoleService {
 
     @Override
     public ResultVO insert(RoleDTO dto){
-
+        Integer result = roleMapper.judgeRepeatName(dto.getRname());
+        if(result.equals(1)){
+            return new ResultVO(1004);
+        }
         RolePO po = RoleDTO.createPO(dto);
         roleMapper.insert(po);
         return ResultVO.ok();
@@ -55,6 +58,10 @@ public class RoleServiceImpl implements IRoleService {
 
     @Override
     public ResultVO update(RoleDTO dto){
+        Integer result = roleMapper.judgeRepeatName(dto.getRname());
+        if(result.equals(1)){
+            return new ResultVO(1004);
+        }
         RolePO po = RoleDTO.createPO(dto);
         roleMapper.updateByPrimaryKeySelective(po);
         return ResultVO.ok();

@@ -33,10 +33,10 @@ public interface UserMapper extends BaseMapper<UserPO, Long> {
 
     /**
      * 批量删除部门
-     * @param pos
+     * @param uids
      * @return
      */
-    Integer deleteBatch(List<UserPO> pos);
+    Integer deleteBatch(List<Long> uids);
 
     /**
      * 查询部门负责人列表
@@ -57,4 +57,11 @@ public interface UserMapper extends BaseMapper<UserPO, Long> {
      * @return
      */
     UserPO queryByName(@Param("username") String username);
+
+    /**
+     * 判断登入名是否重复
+     * @param username
+     * @return
+     */
+    Integer judgeRepeatName(@Param("username") String username);
 }

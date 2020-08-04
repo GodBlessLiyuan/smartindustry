@@ -36,7 +36,7 @@ public interface IUserService {
      * @param dtos
      * @return
      */
-    ResultVO batchDelete(List<OperateDTO> dtos);
+    ResultVO delete(List<Long> dtos);
 
     /**
      * 新增用户

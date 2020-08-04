@@ -175,17 +175,21 @@
           `status` = #{item.status,jdbcType=TINYINT},
         </if>
       </set>
-      where dept_id = #{item.deptId,jdbcType=BIGINT}
+      <if test="item.deptId != null">
+        where dept_id = #{item.deptId,jdbcType=BIGINT}
+      </if>
     </foreach>
   </update>
 
   <update id="deleteBatch" parameterType="java.util.List">
-    <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+    <foreach collection="list" item="did" index="index" open="" close="" separator=";">
       update am_dept
-      <set >
+      <set>
           dr = 2
       </set>
-      where dept_id = #{item,jdbcType=BIGINT}
+      <if test="did != null">
+        where dept_id = #{did,jdbcType=BIGINT}
+      </if>
     </foreach>
   </update>
 

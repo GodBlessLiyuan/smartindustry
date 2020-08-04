@@ -37,9 +37,9 @@ public class UserController {
         return userService.batchUpdate(dtos);
     }
 
-    @PostMapping("batchDelete")
-    public ResultVO batchDelete(@RequestBody List<OperateDTO> dtos) {
-        return userService.batchDelete(dtos);
+    @PostMapping("delete")
+    public ResultVO delete(@RequestBody List<Long> uids) {
+        return userService.delete(uids);
     }
 
     @PostMapping("insert")
@@ -51,7 +51,6 @@ public class UserController {
     public ResultVO update(@RequestBody UserDTO dto) {
         return userService.update(dto);
     }
-
 
     @PostMapping("updatePassword")
     public ResultVO updatePassword(@RequestBody OperateDTO dto) {

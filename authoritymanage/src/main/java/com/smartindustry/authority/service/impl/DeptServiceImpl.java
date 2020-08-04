@@ -73,8 +73,11 @@ public class DeptServiceImpl implements IDeptService {
     }
 
     @Override
-    public ResultVO delete(List<Long> dtos){
-        deptMapper.deleteBatch(dtos);
+    public ResultVO delete(List<Long> dids){
+        if (dids.contains(1L)){
+            dids.remove(1L);
+        }
+        deptMapper.deleteBatch(dids);
         return ResultVO.ok();
     }
 
