@@ -50,5 +50,5 @@ public interface RoleMapper extends BaseMapper<RolePO, Long> {
      * @param roleName
      * @return
      */
-    Integer judgeRepeatName(@Param("roleName") String roleName);
+    Integer judgeRepeatName(@Param("roleName") String roleName,@Param("roleId") Long roleId);
 }

@@ -63,5 +63,5 @@ public interface UserMapper extends BaseMapper<UserPO, Long> {
      * @param username
      * @return
      */
-    Integer judgeRepeatName(@Param("username") String username);
+    Integer judgeRepeatName(@Param("username") String username,@Param("userId") Long userId);
 }

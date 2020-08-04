@@ -59,7 +59,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public ResultVO insert(UserDTO dto){
-        Integer result = userMapper.judgeRepeatName(dto.getUname());
+        Integer result = userMapper.judgeRepeatName(dto.getUname(),dto.getUid());
         if(result.equals(1)){
             return new ResultVO(1004);
         }
@@ -70,7 +70,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public ResultVO update(UserDTO dto){
-        Integer result = userMapper.judgeRepeatName(dto.getUname());
+        Integer result = userMapper.judgeRepeatName(dto.getUname(),dto.getUid());
         if(result.equals(1)){
             return new ResultVO(1004);
         }

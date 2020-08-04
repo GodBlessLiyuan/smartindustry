@@ -57,5 +57,5 @@ public interface DeptMapper extends BaseMapper<DeptPO, Long> {
      * @param deptName
      * @return
      */
-    Integer judgeRepeatName(@Param("deptName") String deptName);
+    Integer judgeRepeatName(@Param("deptName") String deptName,@Param("deptId") Long deptId);
 }

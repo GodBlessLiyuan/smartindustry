@@ -165,9 +165,14 @@
   </update>
 
   <!--  判断当前的角色name是否重复-->
-  <select id="judgeRepeatName" parameterType="java.lang.String" resultType="java.lang.Integer">
-     select case when exists(SELECT 1 from am_role where role_name = #{roleName,jdbcType=CHAR} and dr = 1 limit 1)
-     then 1
-     else 0 end as result
+  <select id="judgeRepeatName" resultType="java.lang.Integer">
+    select case when exists(SELECT 1 from am_role
+    where role_name = #{roleName,jdbcType=CHAR}
+    <if test="roleId != null">
+      and role_id != #{roleId,jdbcType=BIGINT}
+    </if>
+    and dr = 1 limit 1)
+    then 1
+    else 0 end as result
   </select>
 </mapper>

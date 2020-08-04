@@ -52,7 +52,7 @@ public class DeptServiceImpl implements IDeptService {
 
     @Override
     public ResultVO insert(DeptDTO dto){
-        Integer result = deptMapper.judgeRepeatName(dto.getDname());
+        Integer result = deptMapper.judgeRepeatName(dto.getDname(),dto.getDid());
         if(result.equals(1)){
             return new ResultVO(1004);
         }
@@ -63,7 +63,7 @@ public class DeptServiceImpl implements IDeptService {
 
     @Override
     public ResultVO update(DeptDTO dto){
-        Integer result = deptMapper.judgeRepeatName(dto.getDname());
+        Integer result = deptMapper.judgeRepeatName(dto.getDname(),dto.getDid());
         if(result.equals(1)){
             return new ResultVO(1004);
         }

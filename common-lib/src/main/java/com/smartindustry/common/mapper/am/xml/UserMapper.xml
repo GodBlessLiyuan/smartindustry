@@ -282,10 +282,15 @@
   </select>
 
   <!--  判断当前的用户name是否重复-->
-  <select id="judgeRepeatName" parameterType="java.lang.String" resultType="java.lang.Integer">
-     select case when exists(SELECT 1 from am_user where username = #{username,jdbcType=CHAR} and dr = 1 limit 1)
-     then 1
-     else 0 end as result
+  <select id="judgeRepeatName" resultType="java.lang.Integer">
+    select case when exists(SELECT 1 from am_user
+    where username = #{username,jdbcType=CHAR}
+    <if test="userId != null">
+      and user_id != #{userId,jdbcType=BIGINT}
+    </if>
+    and dr = 1 limit 1)
+    then 1
+    else 0 end as result
   </select>
 
 </mapper>
