@@ -65,11 +65,13 @@ CREATE TABLE am_authority
 (
     authority_id bigint unsigned NOT NULL AUTO_INCREMENT,
     authority_name char(255) NOT NULL,
+    authority_path char(255) NOT NULL,
     -- 1：菜单   2：按钮
     type tinyint COMMENT '1：菜单   2：按钮',
     parent_id bigint unsigned NOT NULL,
     PRIMARY KEY (authority_id),
-    UNIQUE (authority_id)
+    UNIQUE (authority_id),
+    UNIQUE (authority_path)
 );
 
 
@@ -112,7 +114,7 @@ CREATE TABLE am_m_user_authority
     user_authority_id bigint unsigned NOT NULL AUTO_INCREMENT,
     user_id bigint unsigned NOT NULL,
     authority_id bigint unsigned NOT NULL,
-    authority_name char(255),
+    authority_path char(255),
     PRIMARY KEY (user_authority_id),
     UNIQUE (user_authority_id)
 );
