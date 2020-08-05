@@ -210,7 +210,7 @@
 
 <!--  判断当前部门id不是其他部门的父节点id-->
   <select id="judgeExist" parameterType="java.lang.Long" resultType="java.lang.Integer">
-     select case when exists(SELECT 1 from am_dept where parent_id = 1 and status = 1 limit 1)
+     select case when exists(SELECT 1 from am_dept where parent_id = #{parentId,jdbcType=BIGINT} and status = 1 limit 1)
      then 1
      else 0 end as result
   </select>

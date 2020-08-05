@@ -223,7 +223,7 @@
     <include refid="BO_Column_List"/>
     from am_user u
     left join am_dept d on u.dept_id = d.dept_id
-    where d.dr = 1
+    where u.dr = 1
     <if test="name != null and name != ''">
       and u.name like concat('%',#{name,jdbcType=CHAR},'%')
     </if>
@@ -249,7 +249,7 @@
   <update id="deleteBatch" parameterType="java.util.List">
     <foreach collection="list" item="uid" index="index" open="" close="" separator=";">
       update am_user
-      <set >
+      <set>
         dr = 2
       </set>
       where user_id = #{uid,jdbcType=BIGINT}

@@ -45,7 +45,7 @@ public class DeptServiceImpl implements IDeptService {
         for (DeptVO vo:vos){
             List<Long> deptIds = getDeptLevel(vo.getDid());
             Collections.reverse(deptIds);
-            vo.setDcode(deptIds);
+            vo.setDcode(deptIds.subList(0,deptIds.size()-1));
         }
         return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), vos));
     }
@@ -73,6 +73,9 @@ public class DeptServiceImpl implements IDeptService {
         Integer result = deptMapper.judgeRepeatName(dto.getDname(),dto.getDid());
         if(result.equals(1)){
             return new ResultVO(1004);
+        }
+        if (dto.getDid().equals(dto.getPid())){
+            return new ResultVO(1005);
         }
         DeptPO po = DeptDTO.createPO(dto);
         deptMapper.updateByPrimaryKeySelective(po);
