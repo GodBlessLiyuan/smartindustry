@@ -36,7 +36,7 @@ public class OutboundDetailVO implements Serializable {
     public static OutboundDetailVO convert(OutboundBO outboundBO, List<PrintLabelBO> labelBOs) {
         OutboundDetailVO detailVO = new OutboundDetailVO();
         detailVO.setOid(outboundBO.getOutboundId());
-        detailVO.setOno(outboundBO.getOrderNo());
+        detailVO.setOno(outboundBO.getOutboundNo());
         detailVO.setPno(outboundBO.getPickNo());
         detailVO.setCproject(outboundBO.getCorrespondProject());
         detailVO.setPtime(outboundBO.getPlanTime());
