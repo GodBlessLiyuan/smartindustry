@@ -192,7 +192,7 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
                 logisticsPictureMapper.batchInsert(LogisticsRecordDTO.createPicPO(dto, filePathConfig));
             }
 
-            if (OutboundConstant.OUTBOUND_STATUS_WAIT.equals(outboundPO.getStatus())) {
+            if (OutboundConstant.OUTBOUND_STATUS_FINISH.equals(outboundPO.getStatus())) {
                 // 确认出货
                 pickHeadPO.setMaterialStatus(OutboundConstant.MATERIAL_STATUS_CONFIRM);
                 pickHeadMapper.updateByPrimaryKey(pickHeadPO);
