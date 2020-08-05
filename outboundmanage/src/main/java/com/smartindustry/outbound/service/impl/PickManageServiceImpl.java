@@ -408,7 +408,7 @@ public class PickManageServiceImpl implements IPickManageService {
     @Transactional(rollbackFor = Exception.class)
     public ResultVO agreeOutBound(Long pickHeadId) {
         // 欠料出库，将物料状态改成“物料出库”
-        int result = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_STORAGE);
+        pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_STORAGE);
         // 形成出库单
         OutboundPO po = new OutboundPO();
         po.setPickHeadId(pickHeadId);
@@ -419,6 +419,7 @@ public class PickManageServiceImpl implements IPickManageService {
         po.setDr((byte) 1);
         outboundMapper.insert(po);
         outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.RECORD_AGREE, OutboundConstant.MATERIAL_STATUS_CHECK));
+        outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, po.getOutboundId(), 1L, "jzj", OutboundConstant.RECORD_ADD, OutboundConstant.MATERIAL_STATUS_STORAGE));
         return ResultVO.ok();
     }
 }
