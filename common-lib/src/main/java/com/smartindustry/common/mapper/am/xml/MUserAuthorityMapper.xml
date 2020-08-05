@@ -79,4 +79,14 @@
       authority_name = #{authorityName,jdbcType=CHAR}
     where user_authority_id = #{userAuthorityId,jdbcType=BIGINT}
   </update>
+
+
+<!--  根据parentId父节点找到当前用户所有的子节点-->
+  <select id="queryTreeById" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.am.UserAuthorityBO">
+    select mua.user_id as userId,mua.authority_id as authorityId,mua.authority_name as authorityName,au.type as type
+    from am_m_user_authority mua
+    left join am_authority au on mua.authority_id = au.authority_id
+    where mua.user_id = #{userId,jdbcType=BIGINT} and au.parent_id= #{parentId,jdbcType=BIGINT}
+  </select>
+
 </mapper>

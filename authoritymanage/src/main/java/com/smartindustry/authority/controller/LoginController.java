@@ -3,6 +3,7 @@ package com.smartindustry.authority.controller;
 import com.google.code.kaptcha.Producer;
 import com.smartindustry.authority.constant.Constants;
 import com.smartindustry.authority.dto.LoginDTO;
+import com.smartindustry.authority.dto.OperateDTO;
 import com.smartindustry.authority.service.ILoginService;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,11 +66,11 @@ public class LoginController {
     }
 
     /**
-     * 获得用户详情 以及 所有的 权限列表
+     * 获得用户详情 以及 所有的 权限列表(三级权限)
      * @return
      */
     @PostMapping("/getInfo")
-    public ResultVO getInfo(){
-        return ResultVO.ok();
+    public ResultVO getInfo(@RequestBody OperateDTO dto){
+        return loginService.getInfo(dto);
     }
 }

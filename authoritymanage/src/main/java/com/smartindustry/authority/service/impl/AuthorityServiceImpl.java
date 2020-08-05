@@ -3,7 +3,6 @@ package com.smartindustry.authority.service.impl;
 import com.smartindustry.authority.service.IAuthorityService;
 import com.smartindustry.authority.util.StringUtils;
 import com.smartindustry.common.mapper.am.AuthorityMapper;
-import com.smartindustry.common.pojo.am.AuthorityPO;
 import com.smartindustry.common.pojo.am.UserPO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +30,7 @@ public class AuthorityServiceImpl implements IAuthorityService {
      * @param user 用户信息
      * @return 菜单权限信息
      */
+    @Override
     public Set<String> getMenuPermission(UserPO user) {
         Set<String> perms = new HashSet<String>();
         if ("admin".equals(user.getUsername())) {
@@ -50,7 +50,7 @@ public class AuthorityServiceImpl implements IAuthorityService {
      */
     public Set<String> selectMenuPermsByUserId(Long userId)
     {
-        List<String> perms = authorityMapper.selectPermsByUserId(userId);
+        List<String> perms = authorityMapper.queryPermsByUserId(userId);
         Set<String> permsSet = new HashSet<>();
         for (String perm : perms)
         {

@@ -81,9 +81,38 @@
   </update>
 
 <!--  根据userid获取当前用户权限-->
-  <select id="selectPermsByUserId" parameterType="java.lang.Long" resultType="java.lang.String">
+  <select id="queryPermsByUserId" parameterType="java.lang.Long" resultType="java.lang.String">
     select distinct authority_name
     from am_m_user_authority
     where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+
+<!--  得到所有的权限列表-->
+  <select id="queryAllPerm" resultType="java.lang.String">
+    select authority_name
+    from am_authority
+  </select>
+
+  <!--  判断当前权限id不是其他权限的父节点id-->
+  <select id="judgeExist" parameterType="java.lang.Long" resultType="java.lang.Integer">
+     select case when exists(SELECT 1 from am_authority where parent_id = #{parentId,jdbcType=BIGINT} and `type` = 1 limit 1)
+     then 1
+     else 0 end as result
+  </select>
+
+<!--  查询当前权限节点的用户有的子节点,限菜单权限-->
+  <select id="queryChildren"  resultType="com.smartindustry.common.bo.am.AuthorityBO">
+    select mua.authority_id as authorityId,mua.authority_name as authorityName,au.type as type,au.parent_id as parentId,au1.authority_name as parentName
+    from am_m_user_authority mua
+    left join am_authority au on mua.authority_id = au.authority_id
+    left join am_authority au1 on au.parent_id = au1.authority_id
+    <choose>
+      <when test="parentId != null and parentId !=0">
+        where au.parent_id = #{parentId,jdbcType=BIGINT} and mua.user_id = #{userId,jdbcType=BIGINT} and au.type = 1
+      </when>
+      <otherwise>
+        where au.parent_id = 0 and au.type = 1 and mua.user_id = #{userId,jdbcType=BIGINT}
+      </otherwise>
+    </choose>
   </select>
 </mapper>
