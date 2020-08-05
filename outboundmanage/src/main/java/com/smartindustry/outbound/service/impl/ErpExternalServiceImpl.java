@@ -10,7 +10,6 @@ import com.smartindustry.common.pojo.om.LabelRecommendPO;
 import com.smartindustry.common.pojo.om.OutboundRecordPO;
 import com.smartindustry.common.pojo.om.PickBodyPO;
 import com.smartindustry.common.pojo.om.PickHeadPO;
-import com.smartindustry.common.pojo.si.StorageLabelPO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.constant.OutboundConstant;
 import com.smartindustry.outbound.dto.PickDTO;
@@ -50,7 +49,7 @@ public class ErpExternalServiceImpl implements IErpExternalService {
 
         List<PickBodyPO> bodyPOs = PickDTO.convert(headPO, dto.getBody());
         pickBodyMapper.batchInsert(bodyPOs);
-        outboundRecordMapper.insert(new OutboundRecordPO(headPO.getPickHeadId(), null, 1L, "jzj", OutboundConstant.NEW_INSERT, new Date(), OutboundConstant.MATERIAL_STATUS_PICK));
+        outboundRecordMapper.insert(new OutboundRecordPO(headPO.getPickHeadId(), null, 1L, "jzj", OutboundConstant.RECORD_ADD, OutboundConstant.MATERIAL_STATUS_PICK));
 
         // 推荐货位
         new Thread(() -> {

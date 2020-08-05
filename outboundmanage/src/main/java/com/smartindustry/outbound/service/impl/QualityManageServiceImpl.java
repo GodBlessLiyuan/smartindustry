@@ -56,7 +56,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
         po.setPickHeadId(pickHeadId);
         po.setStatus(OutboundConstant.PENDING);
         pickCheckMapper.insert(po);
-        outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId,null,1L,"jzj",OutboundConstant.NEW_INSERT,new Date(),OutboundConstant.MATERIAL_STATUS_CHECK));
+        outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId,null,1L,"jzj",OutboundConstant.RECORD_ADD,OutboundConstant.MATERIAL_STATUS_CHECK));
         return ResultVO.ok();
     }
 

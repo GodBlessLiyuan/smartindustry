@@ -71,12 +71,13 @@ public class OutboundConstant {
     /**
      * 操作人的操作文案
      */
-    public static final String CANCEL_DELIVERY = "取消发货";
-    public static final String WAIT_FOR_SHIPMENT = "等齐料发货";
-    public static final String AGREE_TO_RELEASE = "同意";
-    public static final String NEW_INSERT = "新增";
+    public static final String RECORD_CANCEL_DELIVERY = "取消发货";
+    public static final String RECORD_WAIT_DELIVERY = "等齐料发货";
+    public static final String RECORD_AGREE = "同意";
+    public static final String RECORD_ADD = "新增";
+    public static final String RECORD_CONFIRM_OUTBOUND = "确认出库";
 
-    public static final String TAKE_OUTBOUND_ORDER = "形成审核单";
+    public static final String RECORD_OUTBOUND_ORDER = "形成审核单";
 
     /**
      * OQC审核的同意

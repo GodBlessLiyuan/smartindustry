@@ -340,7 +340,7 @@ public class PickManageServiceImpl implements IPickManageService {
             int resultIn = pickCheckMapper.insert(po);
             statusCode = 1;
             // 当欠料异常形成出库单，将新增审核操作记录到操作记录表中
-            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.NEW_INSERT, new Date(), OutboundConstant.MATERIAL_STATUS_CHECK));
+            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.RECORD_ADD, OutboundConstant.MATERIAL_STATUS_CHECK));
         } else {
             int resultUp = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_STORAGE);
             OutboundPO po = new OutboundPO();
@@ -351,7 +351,7 @@ public class PickManageServiceImpl implements IPickManageService {
             po.setCreateTime(date);
             po.setDr((byte) 1);
             int result = outboundMapper.insert(po);
-            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.TAKE_OUTBOUND_ORDER, new Date(), OutboundConstant.MATERIAL_STATUS_PICK));
+            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.RECORD_OUTBOUND_ORDER, OutboundConstant.MATERIAL_STATUS_PICK));
         }
         //2 当形成出库单，在不欠料的情况下，则由物料拣货10变成物料出库30
         return ResultVO.ok().setData(statusCode);
@@ -386,19 +386,19 @@ public class PickManageServiceImpl implements IPickManageService {
             int result = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_RETURN);
             po.setStatus(OutboundConstant.TURN_DOWN_CANCEL);
             int resultUp = pickCheckMapper.updateByPrimaryKey(po);
-            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.CANCEL_DELIVERY, new Date(), OutboundConstant.MATERIAL_STATUS_CHECK));
+            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.RECORD_CANCEL_DELIVERY, OutboundConstant.MATERIAL_STATUS_CHECK));
         } else if (status.equals(OutboundConstant.MATERIAL_STATUS_WAIT)) {
             //等齐套发货
             int result = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_WAIT);
             po.setStatus(OutboundConstant.PENDING_WAIT);
             int resultUp = pickCheckMapper.updateByPrimaryKey(po);
-            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.WAIT_FOR_SHIPMENT, new Date(), OutboundConstant.MATERIAL_STATUS_CHECK));
+            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.RECORD_WAIT_DELIVERY, OutboundConstant.MATERIAL_STATUS_CHECK));
         } else if (status.equals(OutboundConstant.MATERIAL_STATUS_RETURN)) {
             //取消发货，退货仓库
             int result = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_RETURN);
             po.setStatus(OutboundConstant.TURN_DOWN_CANCEL);
             int resultUp = pickCheckMapper.updateByPrimaryKey(po);
-            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.CANCEL_DELIVERY, new Date(), OutboundConstant.MATERIAL_STATUS_CHECK));
+            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.RECORD_CANCEL_DELIVERY, OutboundConstant.MATERIAL_STATUS_CHECK));
         }
         return ResultVO.ok();
     }
@@ -418,7 +418,7 @@ public class PickManageServiceImpl implements IPickManageService {
         po.setCreateTime(date);
         po.setDr((byte) 1);
         outboundMapper.insert(po);
-        outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.AGREE_TO_RELEASE, new Date(), OutboundConstant.MATERIAL_STATUS_CHECK));
+        outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.RECORD_AGREE, OutboundConstant.MATERIAL_STATUS_CHECK));
         return ResultVO.ok();
     }
 }
