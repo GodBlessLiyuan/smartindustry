@@ -2,10 +2,18 @@ package com.smartindustry.authority.service.impl;
 
 import com.google.code.kaptcha.Constants;
 import com.smartindustry.authority.dto.LoginDTO;
+import com.smartindustry.authority.dto.OperateDTO;
 import com.smartindustry.authority.service.ILoginService;
 import com.smartindustry.authority.dto.LoginUserDTO;
 import com.smartindustry.authority.service.TokenService;
+import com.smartindustry.authority.util.SecurityUtils;
+import com.smartindustry.authority.vo.AuthorityVO;
+import com.smartindustry.authority.vo.DeptVO;
+import com.smartindustry.common.bo.am.AuthorityBO;
+import com.smartindustry.common.mapper.am.AuthorityMapper;
 import com.smartindustry.common.mapper.am.UserMapper;
+import com.smartindustry.common.pojo.am.AuthorityPO;
+import com.smartindustry.common.pojo.am.UserPO;
 import org.springframework.security.core.Authentication;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +25,10 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author: jiangzhaojie
@@ -32,7 +44,8 @@ public class LoginServiceImpl implements ILoginService {
     private AuthenticationManager authenticationManager;
     @Autowired
     private TokenService tokenService;
-
+    @Autowired
+    AuthorityMapper authorityMapper;
     @Override
     public ResultVO login(HttpSession session,
                         HttpServletResponse response,LoginDTO dto){
@@ -55,6 +68,35 @@ public class LoginServiceImpl implements ILoginService {
         return ResultVO.ok().setData(tokenService.createToken(user));
     }
 
+    /**
+     * 根据当前的用户id得到所有的用户权限,分三级权限,树形结构
+     * @param dto
+     * @return
+     */
+    @Override
+    public ResultVO getInfo(OperateDTO dto){
+        Long userId = dto.getUid();
+        //首先根据parentId找到一级菜单权限
+        List<AuthorityBO> bos = authorityMapper.queryChildren(null,userId);
+        List<AuthorityVO> vos = AuthorityVO.convert(bos);
+        Map<String, Object> res = new HashMap<>();
+        res.put("menu",getAuthTreeList(vos,userId));
 
+
+        return ResultVO.ok().setData(res);
+    }
+
+    /**
+     * 递归查找权限列表
+     */
+    private List<AuthorityVO> getAuthTreeList(List<AuthorityVO> vos,Long userId){
+        for(AuthorityVO vo : vos){
+            if (authorityMapper.judgeExist(vo.getAid()).equals(1)){
+                List<AuthorityVO> vosTemp = getAuthTreeList(AuthorityVO.convert(authorityMapper.queryChildren(vo.getAid(),userId)),userId);
+                vo.setChildren(vosTemp);
+            }
+        }
+        return vos;
+    }
 
 }

@@ -30,6 +30,8 @@ public class UserVO implements Serializable {
      * 用户姓名
      */
     private String name;
+
+    private Long did;
     /**
      * 所属部门
      */
@@ -38,6 +40,8 @@ public class UserVO implements Serializable {
     private String phone;
 
     private Byte status;
+
+    private List<Long> dcode;
 
     public static List<UserVO> convert(List<UserBO> bos) {
         List<UserVO> vos = new ArrayList<>(bos.size());
@@ -55,6 +59,7 @@ public class UserVO implements Serializable {
         vo.setStatus(bo.getStatus());
         vo.setUid(bo.getUserId());
         vo.setUname(bo.getUsername());
+        vo.setDid(bo.getDeptId());
         return vo;
     }
 
