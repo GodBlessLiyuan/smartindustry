@@ -43,7 +43,7 @@ public class UserDTO {
     public static UserPO createPO(UserDTO dto) {
         UserPO po = new UserPO();
         po.setStatus(dto.getStatus());
-        po.setDeptId(dto.getDid());
+        po.setDeptId(dto.getDids().get(dto.getDids().size()-1));
         po.setDr((byte)1);
         po.setUserId(dto.getUid());
         po.setEmail(dto.getEmail());
