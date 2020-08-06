@@ -15,7 +15,5 @@ public class MUserAuthorityPO implements Serializable {
 
     private Long authorityId;
 
-    private String authorityName;
-
     private static final long serialVersionUID = 1L;
 }

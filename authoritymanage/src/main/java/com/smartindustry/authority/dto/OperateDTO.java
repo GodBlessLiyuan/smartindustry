@@ -3,6 +3,7 @@ package com.smartindustry.authority.dto;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author: xiahui
@@ -20,4 +21,8 @@ public class OperateDTO implements Serializable {
     private String name;
     private Long rid;
     private String rname;
+    /**
+     * 存放前端传回来的权限列表
+     */
+    private List<Long> perms;
 }

@@ -13,13 +13,19 @@ import java.util.List;
  */
 @Mapper
 public interface AuthorityMapper extends BaseMapper<AuthorityPO, Long> {
-
     /**
      * 根据userid获取到当前用户的所有权限
      * @param userId
      * @return
      */
     List<String> queryPermsByUserId(@Param("userId") Long userId);
+
+    /**
+     * 根据userid获取到当前用户的所有权限id
+     * @param userId
+     * @return
+     */
+    List<Long> queryByUserId(@Param("userId") Long userId);
 
     /**
      * 查询超级管理员的所有权限
@@ -32,13 +38,22 @@ public interface AuthorityMapper extends BaseMapper<AuthorityPO, Long> {
      * @param parentId
      * @return
      */
-    Integer judgeExist(@Param("parentId") Long parentId);
+    Integer judgeExist(@Param("parentId") Long parentId,@Param("type") Byte type);
 
     /**
      * 查看当前节点的子节点列表
      * @param parentId
-     * @param userId
+     * @param roleId
      * @return
      */
-    List<AuthorityBO> queryChildren(@Param("parentId") Long parentId,@Param("userId") Long userId);
+    List<AuthorityBO> queryChildren(@Param("parentId") Long parentId, @Param("roleId") Long roleId, @Param("type") Byte type);
+
+
+    /**
+     * 查看当前节点的子节点列表,不限角色限制，全权限
+     * @param parentId
+     * @param type
+     * @return
+     */
+    List<AuthorityBO> queryChild(@Param("parentId") Long parentId,@Param("type") Byte type);
 }

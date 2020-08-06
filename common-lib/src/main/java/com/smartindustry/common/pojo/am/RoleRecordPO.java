@@ -21,4 +21,13 @@ public class RoleRecordPO implements Serializable {
     private String type;
 
     private static final long serialVersionUID = 1L;
+
+    public RoleRecordPO(Long roleId, Long userId, Date createTime, String type) {
+        this.roleId = roleId;
+        this.userId = userId;
+        this.createTime = createTime;
+        this.type = type;
+    }
+
+    public RoleRecordPO(){}
 }

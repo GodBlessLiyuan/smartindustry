@@ -61,8 +61,22 @@ public interface IUserService {
 
     /**
      * 查询所有的角色名称
+     * @param
+     * @return
+     */
+    ResultVO queryRole();
+
+    /**
+     * 查询当前用户拥有的所有权限
      * @param dto
      * @return
      */
-    ResultVO queryRole(OperateDTO dto);
+    ResultVO queryHavePerms(OperateDTO dto);
+
+    /**
+     * 根据操作人查询用户操作记录
+     * @param reqData
+     * @return
+     */
+    ResultVO queryUserRecord(Map<String, Object> reqData);
 }

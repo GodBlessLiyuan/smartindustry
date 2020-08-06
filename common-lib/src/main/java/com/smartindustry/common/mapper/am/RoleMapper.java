@@ -18,10 +18,10 @@ public interface RoleMapper extends BaseMapper<RolePO, Long> {
 
     /**
      * 查询所有的角色名列表
-     * @param roleName
+     * @param
      * @return
      */
-    List<RolePO> selectAll(@Param("roleName") String roleName);
+    List<RolePO> selectAll();
 
     /**
      * 角色分页模糊查询

@@ -58,12 +58,17 @@ public class UserController {
     }
 
     @PostMapping("chooseRole")
-    public ResultVO queryRole(OperateDTO dto) {
-        return userService.queryRole(dto);
+    public ResultVO queryRole() {
+        return userService.queryRole();
     }
 
+    @PostMapping("queryHavePerms")
+    public ResultVO queryHavePerms(@RequestBody OperateDTO dto) {
+        return userService.queryHavePerms(dto);
+    }
 
-
-
-
+    @PostMapping("queryUserRecord")
+    public ResultVO queryUserRecord(@RequestBody Map<String, Object> reqData) {
+        return userService.queryUserRecord(reqData);
+    }
 }
