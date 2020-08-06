@@ -26,7 +26,7 @@
     delete from am_dept
     where dept_id = #{deptId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.smartindustry.common.pojo.am.DeptPO">
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.am.DeptPO" useGeneratedKeys="true" keyProperty="deptId">
     insert into am_dept (dept_id, parent_id, dept_name, 
       user_id, dept_desc, `status`, 
       create_time, update_time, dr
@@ -194,23 +194,23 @@
   </update>
 
   <select id="queryChildren" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.am.DeptBO">
-    select d.dept_id as deptId,d.parent_id as parentId,d.dept_name as deptName,u.username as username,d1.dept_name as parentName
+    select d.dept_id as deptId,d.parent_id as parentId,d.status as status,d.dept_name as deptName,u.username as username,d1.dept_name as parentName
     from am_dept d
     left join am_user u on d.user_id = u.user_id
     left join am_dept d1 on d.parent_id = d1.dept_id
     <choose>
       <when test="parentId != null and parentId !=''">
-        where d.parent_id = #{parentId,jdbcType=BIGINT} and d.status = 1
+        where d.parent_id = #{parentId,jdbcType=BIGINT}
       </when>
       <otherwise>
-        where d.parent_id is null and d.status = 1
+        where d.parent_id is null
       </otherwise>
     </choose>
   </select>
 
 <!--  判断当前部门id不是其他部门的父节点id-->
   <select id="judgeExist" parameterType="java.lang.Long" resultType="java.lang.Integer">
-     select case when exists(SELECT 1 from am_dept where parent_id = #{parentId,jdbcType=BIGINT} and status = 1 limit 1)
+     select case when exists(SELECT 1 from am_dept where parent_id = #{parentId,jdbcType=BIGINT} limit 1)
      then 1
      else 0 end as result
   </select>
@@ -226,4 +226,20 @@
      then 1
      else 0 end as result
   </select>
+
+<!--  将上级部门为当前输入的部门id的置空-->
+  <update id="updateParentId" parameterType="java.lang.Long">
+    update am_dept
+    set parent_id = null
+    where parent_id = #{deptId,jdbcType=BIGINT} and dr = 1
+  </update>
+
+  <!--  将上级部门为当前输入的部门id的置空-->
+  <update id="updateBossId" parameterType="java.lang.Long">
+    update am_dept
+    set user_id = null
+    where user_id = #{userId,jdbcType=BIGINT} and dr = 1
+  </update>
+
+
 </mapper>

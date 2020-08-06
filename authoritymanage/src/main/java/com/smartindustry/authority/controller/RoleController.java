@@ -1,6 +1,5 @@
 package com.smartindustry.authority.controller;
 
-import com.smartindustry.authority.dto.DeptDTO;
 import com.smartindustry.authority.dto.OperateDTO;
 import com.smartindustry.authority.dto.RoleDTO;
 import com.smartindustry.authority.service.IRoleService;
@@ -50,4 +49,30 @@ public class RoleController {
     public ResultVO delete(@RequestBody List<Long> dtos) {
         return roleService.delete(dtos);
     }
+
+    @PostMapping("queryAllMenu")
+    public ResultVO queryAllMenu() {
+        return roleService.queryAllMenu();
+    }
+
+    @PostMapping("queryAllButton")
+    public ResultVO queryAllButton() {
+        return roleService.queryAllButton();
+    }
+
+    @PostMapping("updatePerms")
+    public ResultVO updatePerms(@RequestBody OperateDTO dto) {
+        return roleService.updatePerms(dto);
+    }
+
+    @PostMapping("queryRolePerms")
+    public ResultVO queryRolePerms(@RequestBody OperateDTO dto) {
+        return roleService.queryRolePerms(dto);
+    }
+
+    @PostMapping("queryRoleRecord")
+    public ResultVO queryRoleRecord(@RequestBody Map<String, Object> reqData) {
+        return roleService.queryRoleRecord(reqData);
+    }
+
 }

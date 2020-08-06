@@ -90,4 +90,14 @@
       `type` = #{type,jdbcType=CHAR}
     where user_record_id = #{userRecordId,jdbcType=BIGINT}
   </update>
+
+  <!--  根据操作人查询所有的用户操作记录-->
+  <select id="queryUserRecord" parameterType="java.util.Map" resultType="com.smartindustry.common.bo.am.UserRecordBO">
+    select r.name as userName,u.name as operateName,ur.create_time as createTime,ur.type as type
+    from am_user_record ur
+    left join am_user r on ur.user_id = r.user_id
+    left join am_user u on ur.operate_id = u.user_id
+    where ur.user_id = #{uid,jdbcType=BIGINT}
+    order by ur.create_time desc
+  </select>
 </mapper>

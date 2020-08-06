@@ -58,4 +58,18 @@ public interface DeptMapper extends BaseMapper<DeptPO, Long> {
      * @return
      */
     Integer judgeRepeatName(@Param("deptName") String deptName,@Param("deptId") Long deptId);
+
+    /**
+     * 将上级部门为当前输入的部门id的置空
+     * @param deptId
+     * @return
+     */
+    Integer updateParentId(@Param("deptId") Long deptId);
+
+    /**
+     * 将负责人id的置空
+     * @param userId
+     * @return
+     */
+    Integer updateBossId(@Param("userId") Long userId);
 }

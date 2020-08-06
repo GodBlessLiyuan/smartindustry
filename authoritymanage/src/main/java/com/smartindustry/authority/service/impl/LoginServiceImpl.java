@@ -1,19 +1,18 @@
 package com.smartindustry.authority.service.impl;
+import com.alibaba.fastjson.JSON;
+import com.smartindustry.authority.constant.Constants;
 
-import com.google.code.kaptcha.Constants;
 import com.smartindustry.authority.dto.LoginDTO;
 import com.smartindustry.authority.dto.OperateDTO;
 import com.smartindustry.authority.service.ILoginService;
 import com.smartindustry.authority.dto.LoginUserDTO;
 import com.smartindustry.authority.service.TokenService;
-import com.smartindustry.authority.util.SecurityUtils;
 import com.smartindustry.authority.vo.AuthorityVO;
-import com.smartindustry.authority.vo.DeptVO;
 import com.smartindustry.common.bo.am.AuthorityBO;
 import com.smartindustry.common.mapper.am.AuthorityMapper;
 import com.smartindustry.common.mapper.am.UserMapper;
-import com.smartindustry.common.pojo.am.AuthorityPO;
-import com.smartindustry.common.pojo.am.UserPO;
+import net.sf.json.JSONObject;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.security.core.Authentication;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +24,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author: jiangzhaojie
@@ -50,7 +47,7 @@ public class LoginServiceImpl implements ILoginService {
     public ResultVO login(HttpSession session,
                         HttpServletResponse response,LoginDTO dto){
         // 得到验证码
-        String code = (String) session.getAttribute(Constants.KAPTCHA_SESSION_KEY);
+        String code = (String) session.getAttribute(com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY);
         if (null == code) {
             // 验证码过期
             return new ResultVO(2102);
@@ -69,34 +66,43 @@ public class LoginServiceImpl implements ILoginService {
     }
 
     /**
-     * 根据当前的用户id得到所有的用户权限,分三级权限,树形结构
+     * 根据当前的角色id得到所有的角色权限,分三级权限,树形结构
      * @param dto
      * @return
      */
     @Override
     public ResultVO getInfo(OperateDTO dto){
-        Long userId = dto.getUid();
+        Long roleId = dto.getRid();
         //首先根据parentId找到一级菜单权限
-        List<AuthorityBO> bos = authorityMapper.queryChildren(null,userId);
+        List<AuthorityBO> bos = authorityMapper.queryChildren(null,roleId, Constants.MENUTYPE);
         List<AuthorityVO> vos = AuthorityVO.convert(bos);
-        Map<String, Object> res = new HashMap<>();
-        res.put("menu",getAuthTreeList(vos,userId));
+        Map<String, Object> res = new LinkedHashMap<>();
+        List<AuthorityVO> lastMenu = new ArrayList<>();
+        res.put("menu",getAuthTreeList(vos,roleId,lastMenu,Constants.MENUTYPE));
 
+        List<AuthorityVO> lastButton = new ArrayList<>();
+        CollectionUtils.addAll(lastButton, new Object[lastMenu.size()]);
+        Collections.copy(lastButton,lastMenu);
 
+        res.put("button",getAuthTreeList(lastMenu,roleId,new ArrayList<>(),Constants.BUTTONTYPE));
         return ResultVO.ok().setData(res);
     }
 
     /**
      * 递归查找权限列表
      */
-    private List<AuthorityVO> getAuthTreeList(List<AuthorityVO> vos,Long userId){
+    private List<AuthorityVO> getAuthTreeList(List<AuthorityVO> vos,Long roleId, List<AuthorityVO> lastMenu,Byte type){
         for(AuthorityVO vo : vos){
-            if (authorityMapper.judgeExist(vo.getAid()).equals(1)){
-                List<AuthorityVO> vosTemp = getAuthTreeList(AuthorityVO.convert(authorityMapper.queryChildren(vo.getAid(),userId)),userId);
+            System.out.println(vo.getAid());
+            if (authorityMapper.judgeExist(vo.getAid(),type).equals(1)){
+                List<AuthorityVO> vosTemp = getAuthTreeList(AuthorityVO.convert(authorityMapper.queryChildren(vo.getAid(),roleId,type)),roleId,lastMenu,type);
                 vo.setChildren(vosTemp);
+            }else {
+                lastMenu.add((AuthorityVO) vo.clone());
             }
         }
         return vos;
     }
+
 
 }

@@ -34,6 +34,8 @@ public class DeptVO implements Serializable {
 
     private String ddesc;
 
+    private Boolean disabled;
+
     /**
      * 存放着从顶级部门到当前部门的id列表
      */
@@ -71,6 +73,11 @@ public class DeptVO implements Serializable {
         vo.setDdesc(bo.getDeptDesc());
         vo.setPid(bo.getParentId());
         vo.setUid(bo.getUserId());
+        if(bo.getStatus() == 1){
+            vo.setDisabled(Boolean.FALSE);
+        }else {
+            vo.setDisabled(Boolean.TRUE);
+        }
         return vo;
     }
 

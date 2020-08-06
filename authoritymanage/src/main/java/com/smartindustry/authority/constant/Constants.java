@@ -31,6 +31,12 @@ public class Constants {
     public static final String USER_NOTDELETE = "1";
     public static final String USER_DELETE = "2";
 
+    /**
+     * 状态值， 1 启用 2 禁用
+     */
+    public static final Byte STATUS_OK = 1;
+    public static final Byte STATUS_DISABLE = 2;
+
 
     /**
      * 资源映射路径 前缀
@@ -47,4 +53,23 @@ public class Constants {
      */
     public static final Integer CAPTCHA_EXPIRATION = 2;
 
+    /**
+     * 菜单标识
+     */
+    public static final Byte MENUTYPE = 1;
+
+    /**
+     * 按钮标识
+     */
+    public static final Byte BUTTONTYPE = 2;
+
+
+    /**
+     * 操作记录
+     */
+    public static final String INSERTRECORD = "新增";
+    public static final String UPDATERECORD = "修改";
+    public static final String USERECORD = "启用";
+    public static final String DISABLERECORD = "禁用";
+    public static final String DELETERECORD = "删除";
 }

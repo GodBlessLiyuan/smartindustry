@@ -6,9 +6,10 @@
     <result column="authority_name" jdbcType="CHAR" property="authorityName" />
     <result column="type" jdbcType="TINYINT" property="type" />
     <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="authority_path" jdbcType="VARCHAR" property="authorityPath" />
   </resultMap>
   <sql id="Base_Column_List">
-    authority_id, authority_name, `type`, parent_id
+    authority_id, authority_name, `type`, parent_id, authority_path
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -22,9 +23,9 @@
   </delete>
   <insert id="insert" parameterType="com.smartindustry.common.pojo.am.AuthorityPO">
     insert into am_authority (authority_id, authority_name, `type`, 
-      parent_id)
+      parent_id, authority_path)
     values (#{authorityId,jdbcType=BIGINT}, #{authorityName,jdbcType=CHAR}, #{type,jdbcType=TINYINT}, 
-      #{parentId,jdbcType=BIGINT})
+      #{parentId,jdbcType=BIGINT}, #{authorityPath,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.am.AuthorityPO">
     insert into am_authority
@@ -41,6 +42,9 @@
       <if test="parentId != null">
         parent_id,
       </if>
+      <if test="authorityPath != null">
+        authority_path,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="authorityId != null">
@@ -54,6 +58,9 @@
       </if>
       <if test="parentId != null">
         #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="authorityPath != null">
+        #{authorityPath,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -69,6 +76,9 @@
       <if test="parentId != null">
         parent_id = #{parentId,jdbcType=BIGINT},
       </if>
+      <if test="authorityPath != null">
+        authority_path = #{authorityPath,jdbcType=VARCHAR},
+      </if>
     </set>
     where authority_id = #{authorityId,jdbcType=BIGINT}
   </update>
@@ -76,43 +86,68 @@
     update am_authority
     set authority_name = #{authorityName,jdbcType=CHAR},
       `type` = #{type,jdbcType=TINYINT},
-      parent_id = #{parentId,jdbcType=BIGINT}
+      parent_id = #{parentId,jdbcType=BIGINT},
+      authority_path = #{authorityPath,jdbcType=VARCHAR}
     where authority_id = #{authorityId,jdbcType=BIGINT}
   </update>
 
-<!--  根据userid获取当前用户权限-->
+  <!--  根据userid获取当前用户权限-->
   <select id="queryPermsByUserId" parameterType="java.lang.Long" resultType="java.lang.String">
     select distinct authority_name
     from am_m_user_authority
     where user_id = #{userId,jdbcType=BIGINT}
   </select>
 
-<!--  得到所有的权限列表-->
+  <!--  根据userid获取当前用户权限id-->
+  <select id="queryByUserId" parameterType="java.lang.Long" resultType="java.lang.Long">
+    select distinct authority_id
+    from am_m_user_authority
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+
+  <!--  得到所有的权限列表-->
   <select id="queryAllPerm" resultType="java.lang.String">
     select authority_name
     from am_authority
   </select>
 
   <!--  判断当前权限id不是其他权限的父节点id-->
-  <select id="judgeExist" parameterType="java.lang.Long" resultType="java.lang.Integer">
-     select case when exists(SELECT 1 from am_authority where parent_id = #{parentId,jdbcType=BIGINT} and `type` = 1 limit 1)
+  <select id="judgeExist"  resultType="java.lang.Integer">
+     select case when exists(SELECT 1 from am_authority where parent_id = #{parentId,jdbcType=BIGINT} and `type` = #{type,jdbcType=TINYINT} limit 1)
      then 1
      else 0 end as result
   </select>
 
-<!--  查询当前权限节点的用户有的子节点,限菜单权限-->
-  <select id="queryChildren"  resultType="com.smartindustry.common.bo.am.AuthorityBO">
-    select mua.authority_id as authorityId,mua.authority_name as authorityName,au.type as type,au.parent_id as parentId,au1.authority_name as parentName
-    from am_m_user_authority mua
-    left join am_authority au on mua.authority_id = au.authority_id
+  <!--  查询当前权限节点的用户有的子节点,限菜单权限-->
+  <select id="queryChildren" resultType="com.smartindustry.common.bo.am.AuthorityBO">
+    select ra.authority_id as authorityId,au.authority_name as authorityName,au.authority_path as authorityPath,au.type as type,au.parent_id as parentId,au1.authority_name as parentName
+    from am_role r
+    left join am_role_authority ra on r.role_id = ra.role_id
+    left join am_authority au on ra.authority_id = au.authority_id
     left join am_authority au1 on au.parent_id = au1.authority_id
     <choose>
       <when test="parentId != null and parentId !=0">
-        where au.parent_id = #{parentId,jdbcType=BIGINT} and mua.user_id = #{userId,jdbcType=BIGINT} and au.type = 1
+        where au.parent_id = #{parentId,jdbcType=BIGINT} and r.role_id = #{roleId,jdbcType=BIGINT} and au.type = #{type,jdbcType=TINYINT}
       </when>
       <otherwise>
-        where au.parent_id = 0 and au.type = 1 and mua.user_id = #{userId,jdbcType=BIGINT}
+        where au.parent_id = 0 and au.type = #{type,jdbcType=TINYINT} and r.role_id = #{roleId,jdbcType=BIGINT}
       </otherwise>
     </choose>
   </select>
+
+<!--  查询目前所有的权限子节点，不限菜单或者按钮-->
+  <select id="queryChild" resultType="com.smartindustry.common.bo.am.AuthorityBO">
+    select au.authority_id as authorityId,au.authority_name as authorityName,au.authority_path as authorityPath,au.type as type,au.parent_id as parentId,au1.authority_name as parentName
+    from am_authority au
+    left join am_authority au1 on au.parent_id = au1.authority_id
+    <choose>
+      <when test="parentId != null and parentId !=0">
+        where au.parent_id = #{parentId,jdbcType=BIGINT} and au.type = #{type,jdbcType=TINYINT}
+      </when>
+      <otherwise>
+        where au.parent_id = 0 and au.type = #{type,jdbcType=TINYINT}
+      </otherwise>
+    </choose>
+  </select>
+
 </mapper>

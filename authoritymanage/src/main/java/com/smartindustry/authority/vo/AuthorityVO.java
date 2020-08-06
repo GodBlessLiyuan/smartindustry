@@ -15,11 +15,12 @@ import java.util.List;
  * @description:
  */
 @Data
-public class AuthorityVO implements Serializable {
+public class AuthorityVO implements Cloneable {
     private static final long SerialVersionUID = 1L;
 
     private Long aid;
     private String aname;
+    private String apath;
     private Byte type;
     /**
      * 子权限列表
@@ -39,6 +40,18 @@ public class AuthorityVO implements Serializable {
         vo.setAid(bo.getAuthorityId());
         vo.setAname(bo.getAuthorityName());
         vo.setType(bo.getType());
+        vo.setApath(bo.getAuthorityPath());
         return vo;
+    }
+
+    @Override
+    public Object clone() {
+        AuthorityVO o = null;
+        try {
+            o = (AuthorityVO) super.clone();
+        } catch (CloneNotSupportedException e) {
+            System.out.println(e.toString());
+        }
+        return o;
     }
 }

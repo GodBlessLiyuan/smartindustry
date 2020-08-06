@@ -32,7 +32,7 @@
     delete from am_user
     where user_id = #{userId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.smartindustry.common.pojo.am.UserPO">
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.am.UserPO" useGeneratedKeys="true" keyProperty="userId">
     insert into am_user (user_id, `name`, sex, 
       dept_id, username, `password`, 
       role_id, job, phone, email, 
@@ -214,7 +214,7 @@
   </resultMap>
   <sql id="BO_Column_List">
         u.user_id, u.`name`, u.sex, u.dept_id, u.username, u.`password`, u.role_id, u.job, u.phone, u.email,
-    u.`status`, u.remark, u.create_time, u.update_time, u.dr,d.dept_name as deptName
+    u.`status`, u.remark, u.create_time, u.update_time, u.dr,d.dept_name as deptName,r.role_name as roleName
   </sql>
 
 <!--  用户角色的分页查询-->
@@ -223,6 +223,7 @@
     <include refid="BO_Column_List"/>
     from am_user u
     left join am_dept d on u.dept_id = d.dept_id
+    left join am_role r on u.role_id = r.role_id
     where u.dr = 1
     <if test="name != null and name != ''">
       and u.name like concat('%',#{name,jdbcType=CHAR},'%')
@@ -293,4 +294,24 @@
     else 0 end as result
   </select>
 
+<!--  根据角色id找出所有的用户id-->
+  <select id="queryUser" parameterType="java.lang.Long" resultType="java.lang.Long">
+    select distinct user_id
+    from am_user
+    where role_id = #{roleId,jdbcType=BIGINT}
+  </select>
+
+  <!--  将用户所对应的部门id置空-->
+  <update id="updateDeptId" parameterType="java.lang.Long">
+    update am_user
+    set dept_id = null
+    where dept_id = #{deptId,jdbcType=BIGINT} and dr = 1
+  </update>
+
+  <!--  将用户所对应的角色id置空-->
+  <update id="updateRoleId" parameterType="java.lang.Long">
+    update am_user
+    set role_id = null
+    where role_id = #{roleId,jdbcType=BIGINT} and dr = 1
+  </update>
 </mapper>

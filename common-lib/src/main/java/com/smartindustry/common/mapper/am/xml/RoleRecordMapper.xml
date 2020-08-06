@@ -90,4 +90,14 @@
       `type` = #{type,jdbcType=CHAR}
     where role_record_id = #{roleRecordId,jdbcType=BIGINT}
   </update>
+
+  <!--  根据操作人查询所有的角色操作记录-->
+  <select id="queryRoleRecord" parameterType="java.util.Map" resultType="com.smartindustry.common.bo.am.RoleRecordBO">
+    select r.role_name as roleName,u.name as name,rr.create_time as createTime,rr.type as type
+    from am_role_record rr
+    left join am_role r on rr.role_id = r.role_id
+    left join am_user u on rr.user_id = u.user_id
+    where rr.role_id = #{rid,jdbcType=BIGINT}
+    order by rr.create_time desc
+  </select>
 </mapper>

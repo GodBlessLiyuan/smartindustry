@@ -68,4 +68,26 @@
       authority_id = #{authorityId,jdbcType=BIGINT}
     where role_authority_id = #{roleAuthorityId,jdbcType=BIGINT}
   </update>
+
+<!--  根据角色id删除角色权限表中的所有权限-->
+  <delete id="deleteByRoleId" parameterType="java.lang.Long">
+    delete from am_role_authority
+    where role_id = #{roleId,jdbcType=BIGINT}
+  </delete>
+
+<!--  批量新增角色权限表的权限-->
+  <insert id="insertBatch" parameterType="java.util.List">
+    <foreach collection="perms" item="perm" index="index" open="" close="" separator=";">
+      insert into am_role_authority(role_id,authority_id)
+      <if test="perm != null">
+        values(#{roleId,jdbcType=BIGINT}, #{perm,jdbcType=BIGINT})
+      </if>
+    </foreach>
+  </insert>
+
+  <select id="queryByRoleId" parameterType="java.lang.Long" resultType="java.lang.Long">
+    select distinct authority_id
+    from am_role_authority
+    where role_id = #{roleId,jdbcType=BIGINT}
+  </select>
 </mapper>

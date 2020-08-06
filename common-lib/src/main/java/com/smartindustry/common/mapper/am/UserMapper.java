@@ -64,4 +64,26 @@ public interface UserMapper extends BaseMapper<UserPO, Long> {
      * @return
      */
     Integer judgeRepeatName(@Param("username") String username,@Param("userId") Long userId);
+
+    /**
+     * 根据roleId查询所有的相关用户
+     * @param roleId
+     * @return
+     */
+    List<Long> queryUser(@Param("roleId") Long roleId);
+
+
+    /**
+     * 将用户列表的 部门置空
+     * @param deptId
+     * @return
+     */
+    Integer updateDeptId(@Param("deptId") Long deptId);
+
+    /**
+     * 将用户列表的 角色置空
+     * @param roleId
+     * @return
+     */
+    Integer updateRoleId(@Param("roleId") Long roleId);
 }

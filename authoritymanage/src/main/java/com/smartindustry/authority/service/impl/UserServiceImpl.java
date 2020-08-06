@@ -1,31 +1,28 @@
 package com.smartindustry.authority.service.impl;
 
 import com.github.pagehelper.Page;
-import com.smartindustry.authority.dto.DeptDTO;
+import com.smartindustry.authority.constant.Constants;
 import com.smartindustry.authority.dto.OperateDTO;
 import com.smartindustry.authority.dto.UserDTO;
 import com.smartindustry.authority.service.IUserService;
-import com.smartindustry.authority.vo.DeptVO;
 import com.smartindustry.authority.vo.RoleVO;
+import com.smartindustry.authority.vo.UserRecordVO;
 import com.smartindustry.authority.vo.UserVO;
-import com.smartindustry.common.bo.am.DeptBO;
 import com.smartindustry.common.bo.am.UserBO;
-import com.smartindustry.common.mapper.am.DeptMapper;
-import com.smartindustry.common.mapper.am.RoleMapper;
-import com.smartindustry.common.mapper.am.UserMapper;
+import com.smartindustry.common.bo.am.UserRecordBO;
+import com.smartindustry.common.mapper.am.*;
 import com.smartindustry.common.pojo.am.DeptPO;
 import com.smartindustry.common.pojo.am.RolePO;
 import com.smartindustry.common.pojo.am.UserPO;
+import com.smartindustry.common.pojo.am.UserRecordPO;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author: jiangzhaojie
@@ -41,6 +38,12 @@ public class UserServiceImpl implements IUserService {
     RoleMapper roleMapper;
     @Autowired
     DeptMapper deptMapper;
+    @Autowired
+    AuthorityMapper authorityMapper;
+    @Autowired
+    MUserAuthorityMapper mUserAuthorityMapper;
+    @Autowired
+    UserRecordMapper userRecordMapper;
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData){
@@ -74,16 +77,29 @@ public class UserServiceImpl implements IUserService {
     public ResultVO batchUpdate(List<OperateDTO> dtos){
         List<UserPO> pos = UserDTO.updateList(dtos);
         userMapper.updateBatch(pos);
+        for(OperateDTO dto:dtos){
+            if(dto.getStatus().equals(Constants.STATUS_DISABLE)){
+                userRecordMapper.insert(new UserRecordPO(dto.getUid(),1L,new Date(),Constants.DISABLERECORD));
+            }else{
+                userRecordMapper.insert(new UserRecordPO(dto.getUid(),1L,new Date(),Constants.USERECORD));
+            }
+        }
         return ResultVO.ok();
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ResultVO delete(List<Long> uids){
         userMapper.deleteBatch(uids);
+        for(Long uid:uids){
+            deleteUser(uid);
+            userRecordMapper.insert(new UserRecordPO(uid,1L,new Date(),Constants.DELETERECORD));
+        }
         return ResultVO.ok();
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ResultVO insert(UserDTO dto){
         Integer result = userMapper.judgeRepeatName(dto.getUname(),dto.getUid());
         if(result.equals(1)){
@@ -91,10 +107,12 @@ public class UserServiceImpl implements IUserService {
         }
         UserPO po = UserDTO.createPO(dto);
         userMapper.insert(po);
+        userRecordMapper.insert(new UserRecordPO(po.getUserId(),1L,new Date(),Constants.INSERTRECORD));
         return ResultVO.ok();
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ResultVO update(UserDTO dto){
         Integer result = userMapper.judgeRepeatName(dto.getUname(),dto.getUid());
         if(result.equals(1)){
@@ -102,6 +120,7 @@ public class UserServiceImpl implements IUserService {
         }
         UserPO po = UserDTO.createPO(dto);
         userMapper.updateByPrimaryKeySelective(po);
+        userRecordMapper.insert(new UserRecordPO(dto.getUid(),1L,new Date(),Constants.UPDATERECORD));
         return ResultVO.ok();
     }
 
@@ -113,9 +132,32 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public ResultVO queryRole(OperateDTO dto){
-        List<RolePO> pos = roleMapper.selectAll(dto.getRname());
+    public ResultVO queryRole(){
+        List<RolePO> pos = roleMapper.selectAll();
         return ResultVO.ok().setData(RoleVO.convert(pos));
+    }
+
+    @Override
+    public ResultVO queryHavePerms(OperateDTO dto){
+        List<Long> perms = authorityMapper.queryByUserId(dto.getUid());
+        return ResultVO.ok().setData(perms);
+    }
+
+    /**
+     * 当禁用或删除某个用户，那么部门表的负责人需要置空，用户权限中间表需要删除
+     * @param userId
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteUser(Long userId){
+        deptMapper.updateBossId(userId);
+        mUserAuthorityMapper.deleteByUserId(userId);
+    }
+
+
+    @Override
+    public ResultVO queryUserRecord(Map<String, Object> reqData){
+        List<UserRecordBO> bos = userRecordMapper.queryUserRecord(reqData);
+        return ResultVO.ok().setData(UserRecordVO.convert(bos));
     }
 
 

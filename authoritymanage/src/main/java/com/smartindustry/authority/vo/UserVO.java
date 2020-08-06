@@ -41,6 +41,20 @@ public class UserVO implements Serializable {
 
     private Byte status;
 
+    private String email;
+
+    private String job;
+
+    private String password;
+
+    private Long rid;
+
+    private String rname;
+
+    private Byte sex;
+
+    private String remark;
+
     private List<Long> dcode;
 
     public static List<UserVO> convert(List<UserBO> bos) {
@@ -60,6 +74,13 @@ public class UserVO implements Serializable {
         vo.setUid(bo.getUserId());
         vo.setUname(bo.getUsername());
         vo.setDid(bo.getDeptId());
+        vo.setPassword(bo.getPassword());
+        vo.setJob(bo.getJob());
+        vo.setEmail(bo.getEmail());
+        vo.setRname(bo.getRoleName());
+        vo.setSex(bo.getSex());
+        vo.setRemark(bo.getRemark());
+        vo.setRid(bo.getRoleId());
         return vo;
     }
 

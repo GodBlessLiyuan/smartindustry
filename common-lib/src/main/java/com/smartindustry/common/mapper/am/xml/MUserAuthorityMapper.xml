@@ -5,10 +5,9 @@
     <id column="user_authority_id" jdbcType="BIGINT" property="userAuthorityId" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
     <result column="authority_id" jdbcType="BIGINT" property="authorityId" />
-    <result column="authority_name" jdbcType="CHAR" property="authorityName" />
   </resultMap>
   <sql id="Base_Column_List">
-    user_authority_id, user_id, authority_id, authority_name
+    user_authority_id, user_id, authority_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -21,10 +20,10 @@
     where user_authority_id = #{userAuthorityId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.smartindustry.common.pojo.am.MUserAuthorityPO">
-    insert into am_m_user_authority (user_authority_id, user_id, authority_id, 
-      authority_name)
-    values (#{userAuthorityId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{authorityId,jdbcType=BIGINT}, 
-      #{authorityName,jdbcType=CHAR})
+    insert into am_m_user_authority (user_authority_id, user_id, authority_id
+      )
+    values (#{userAuthorityId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{authorityId,jdbcType=BIGINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.am.MUserAuthorityPO">
     insert into am_m_user_authority
@@ -38,9 +37,6 @@
       <if test="authorityId != null">
         authority_id,
       </if>
-      <if test="authorityName != null">
-        authority_name,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="userAuthorityId != null">
@@ -51,9 +47,6 @@
       </if>
       <if test="authorityId != null">
         #{authorityId,jdbcType=BIGINT},
-      </if>
-      <if test="authorityName != null">
-        #{authorityName,jdbcType=CHAR},
       </if>
     </trim>
   </insert>
@@ -66,22 +59,17 @@
       <if test="authorityId != null">
         authority_id = #{authorityId,jdbcType=BIGINT},
       </if>
-      <if test="authorityName != null">
-        authority_name = #{authorityName,jdbcType=CHAR},
-      </if>
     </set>
     where user_authority_id = #{userAuthorityId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.am.MUserAuthorityPO">
     update am_m_user_authority
     set user_id = #{userId,jdbcType=BIGINT},
-      authority_id = #{authorityId,jdbcType=BIGINT},
-      authority_name = #{authorityName,jdbcType=CHAR}
+      authority_id = #{authorityId,jdbcType=BIGINT}
     where user_authority_id = #{userAuthorityId,jdbcType=BIGINT}
   </update>
 
-
-<!--  根据parentId父节点找到当前用户所有的子节点-->
+  <!--  根据parentId父节点找到当前用户所有的子节点-->
   <select id="queryTreeById" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.am.UserAuthorityBO">
     select mua.user_id as userId,mua.authority_id as authorityId,mua.authority_name as authorityName,au.type as type
     from am_m_user_authority mua
@@ -89,4 +77,18 @@
     where mua.user_id = #{userId,jdbcType=BIGINT} and au.parent_id= #{parentId,jdbcType=BIGINT}
   </select>
 
+
+  <!--  先根据用户id删除所有该用户的权限id-->
+  <delete id="deleteByUserId" parameterType="java.lang.Long">
+    delete from am_m_user_authority
+    where user_id = #{userId,jdbcType=BIGINT}
+  </delete>
+
+  <!--  根据userId和权限id批量更新用户权限中间表-->
+  <insert id="insertBatch" parameterType="java.util.List">
+    <foreach collection="perms" item="perm" index="index" open="" close="" separator=";">
+      insert into am_m_user_authority(user_id,authority_id)
+      values(#{userId,jdbcType=BIGINT}, #{perm,jdbcType=BIGINT})
+    </foreach>
+  </insert>
 </mapper>

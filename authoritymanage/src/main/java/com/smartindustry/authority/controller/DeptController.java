@@ -66,4 +66,9 @@ public class DeptController {
     public ResultVO queryLeader(OperateDTO dto) {
         return deptService.queryLeader(dto);
     }
+
+    @PostMapping("queryDeptRecord")
+    public ResultVO queryDeptRecord(@RequestBody Map<String, Object> reqData) {
+        return deptService.queryDeptRecord(reqData);
+    }
 }

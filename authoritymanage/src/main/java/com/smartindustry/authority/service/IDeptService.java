@@ -62,4 +62,11 @@ public interface IDeptService {
      * @return
      */
     ResultVO queryLeader(OperateDTO dto);
+
+    /**
+     * 根据操作人查询部门操作记录
+     * @param reqData
+     * @return
+     */
+    ResultVO queryDeptRecord(Map<String, Object> reqData);
 }

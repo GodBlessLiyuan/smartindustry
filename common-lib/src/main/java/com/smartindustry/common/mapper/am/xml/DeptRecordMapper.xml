@@ -90,4 +90,14 @@
       `type` = #{type,jdbcType=CHAR}
     where dept_record_id = #{deptRecordId,jdbcType=BIGINT}
   </update>
+
+  <!--  根据操作人查询所有的部门操作记录-->
+  <select id="queryDeptRecord" parameterType="java.util.Map" resultType="com.smartindustry.common.bo.am.DeptRecordBO">
+    select dr.dept_record_id as deptRecordId,d.dept_name as deptName,u.name as name,dr.create_time as createTime,dr.type as type
+    from am_dept_record dr
+    left join am_dept d on dr.dept_id = d.dept_id
+    left join am_user u on dr.user_id = u.user_id
+    where dr.dept_id = #{did,jdbcType=BIGINT}
+    order by dr.create_time desc
+  </select>
 </mapper>

@@ -1,7 +1,6 @@
 package com.smartindustry.authority.vo;
 
 import com.smartindustry.common.pojo.am.RolePO;
-import com.smartindustry.common.pojo.am.UserPO;
 import lombok.Data;
 
 import java.io.Serializable;
