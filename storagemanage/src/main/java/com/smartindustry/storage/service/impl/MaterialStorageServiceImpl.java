@@ -313,7 +313,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         if (null == storagePO) {
             return new ResultVO(1002);
         }
-        if (storagePO.getPendingNum() < storagePO.getStoredNum()) {
+        if (storagePO.getPendingNum() > storagePO.getStoredNum()) {
             return new ResultVO(1005);
         }
         if (!ReceiptConstant.MATERIAL_STORAGE_BEING.equals(storagePO.getStatus())) {
