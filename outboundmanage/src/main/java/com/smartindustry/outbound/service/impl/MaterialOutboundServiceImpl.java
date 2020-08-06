@@ -122,9 +122,11 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
         for (PrintLabelBO printLabelBO : printLabelBOs) {
             plIds.add(printLabelBO.getPrintLabelId());
         }
-        storageLabelMapper.deleteByPlids(plIds);
+        if (printLabelBOs.size() != 0) {
+            storageLabelMapper.deleteByPlids(plIds);
+        }
 
-        outboundRecordMapper.insert(new OutboundRecordPO(headPO.getPickHeadId(), outboundPO.getOutboundId(), 1L, "夏慧", OutboundConstant.RECORD_CONFIRM_OUTBOUND,  OutboundConstant.MATERIAL_STATUS_FINISH));
+        outboundRecordMapper.insert(new OutboundRecordPO(headPO.getPickHeadId(), outboundPO.getOutboundId(), 1L, "夏慧", OutboundConstant.RECORD_CONFIRM_OUTBOUND, OutboundConstant.MATERIAL_STATUS_FINISH));
 
         // 重新推荐货位
         new Thread(() -> {
