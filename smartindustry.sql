@@ -114,7 +114,6 @@ CREATE TABLE am_m_user_authority
     user_authority_id bigint unsigned NOT NULL AUTO_INCREMENT,
     user_id bigint unsigned NOT NULL,
     authority_id bigint unsigned NOT NULL,
-    authority_path char(255),
     PRIMARY KEY (user_authority_id),
     UNIQUE (user_authority_id)
 );
@@ -1096,7 +1095,7 @@ ALTER TABLE am_role_record
 
 
 ALTER TABLE am_user_record
-    ADD FOREIGN KEY (user_id)
+    ADD FOREIGN KEY (operate_id)
         REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
@@ -1104,7 +1103,7 @@ ALTER TABLE am_user_record
 
 
 ALTER TABLE am_user_record
-    ADD FOREIGN KEY (operate_id)
+    ADD FOREIGN KEY (user_id)
         REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
