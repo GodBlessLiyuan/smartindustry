@@ -219,7 +219,7 @@
     <sql id="ReceiptBO_Column_List">
         rb.receipt_body_id, rb.receipt_head_id, rb.material_id, rb.order_no, rb.order_type, rb.receipt_no,
     rb.order_total, rb.accept_num, rb.accept_date, rb.good_num, rb.bad_num, rb.stock_num, rb.`status`, rb.create_time, rb.dr,
-    m.material_id, m.material_no, m.material_type_id, m.material_name, m.material_model, m.material_desc, m.test_type,
+    m.material_no, m.material_type_id, m.material_name, m.material_model, m.material_desc, m.test_type,
     rh.order_date, rh.supplier, rh.buyer, rh.plan_date, rh.logistics_company, rh.logistics_no,  rh.receipt_way, rh.remark,
     mt.material_type_name
     </sql>
