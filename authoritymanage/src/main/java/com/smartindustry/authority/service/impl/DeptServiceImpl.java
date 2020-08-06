@@ -94,6 +94,10 @@ public class DeptServiceImpl implements IDeptService {
         if (dto.getDid().equals(dto.getPid())){
             return new ResultVO(1005);
         }
+        DeptPO po1 = deptMapper.selectByPrimaryKey(dto.getPid());
+        if(po1.getParentId().equals(dto.getDid())){
+            return new ResultVO(1008);
+        }
         DeptPO po = DeptDTO.createPO(dto);
         deptMapper.updateByPrimaryKeySelective(po);
         deptRecordMapper.insert(new DeptRecordPO(dto.getDid(),1L,new Date(),Constants.UPDATERECORD));
