@@ -383,7 +383,7 @@ public class PickManageServiceImpl implements IPickManageService {
         po.setRemark(message);
         if (status == null) {
             //OQC检测时的驳回
-            int result = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_CHECK);
+            int result = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_PICK);
             po.setStatus(OutboundConstant.TURN_DOWN_CANCEL);
             int resultUp = pickCheckMapper.updateByPrimaryKey(po);
             outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.RECORD_CANCEL_DELIVERY, OutboundConstant.MATERIAL_STATUS_CHECK));

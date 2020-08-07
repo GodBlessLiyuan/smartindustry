@@ -1,6 +1,7 @@
 package com.smartindustry.outbound.vo;
 
 import com.smartindustry.common.pojo.om.PickHeadPO;
+import com.smartindustry.common.util.DateUtil;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -37,7 +38,7 @@ public class PickHeadVO implements Serializable {
     /**
      * 计算发货时间
      */
-    private Date ptime;
+    private String ptime;
     /**
      * 出库时间
      */
@@ -62,7 +63,7 @@ public class PickHeadVO implements Serializable {
         vo.setMstatus(po.getMaterialStatus());
         vo.setOno(po.getOrderNo());
         vo.setOstatus(po.getOutboundStatus());
-        vo.setPtime(po.getPlanTime());
+        vo.setPtime(DateUtil.date2Str(po.getPlanTime(),DateUtil.Y_M_D));
         vo.setPno(po.getPickNo());
         vo.setOtime(po.getOutboundTime());
         return vo;
