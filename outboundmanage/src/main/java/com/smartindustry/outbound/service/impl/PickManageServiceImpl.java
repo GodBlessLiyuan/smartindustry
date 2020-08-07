@@ -340,7 +340,7 @@ public class PickManageServiceImpl implements IPickManageService {
             int resultIn = pickCheckMapper.insert(po);
             statusCode = 1;
             // 当欠料异常形成出库单，将新增审核操作记录到操作记录表中
-            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.RECORD_ADD, OutboundConstant.MATERIAL_STATUS_CHECK));
+            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.RECORD_SUBMIT, OutboundConstant.MATERIAL_STATUS_CHECK));
         } else {
             int resultUp = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_STORAGE);
             OutboundPO po = new OutboundPO();
@@ -386,7 +386,7 @@ public class PickManageServiceImpl implements IPickManageService {
             int result = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_PICK);
             po.setStatus(OutboundConstant.TURN_DOWN_CANCEL);
             int resultUp = pickCheckMapper.updateByPrimaryKey(po);
-            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.RECORD_CANCEL_DELIVERY, OutboundConstant.MATERIAL_STATUS_CHECK));
+            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.RECORD_DISAGREE, OutboundConstant.MATERIAL_STATUS_CHECK));
         } else if (status.equals(OutboundConstant.MATERIAL_STATUS_WAIT)) {
             //等齐套发货
             int result = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_CHECK);
@@ -418,7 +418,7 @@ public class PickManageServiceImpl implements IPickManageService {
         po.setCreateTime(date);
         po.setDr((byte) 1);
         outboundMapper.insert(po);
-        outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.RECORD_AGREE, OutboundConstant.MATERIAL_STATUS_CHECK));
+        outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.RECORD_AGREE_OUT, OutboundConstant.MATERIAL_STATUS_CHECK));
         outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, po.getOutboundId(), 1L, "jzj", OutboundConstant.RECORD_ADD, OutboundConstant.MATERIAL_STATUS_STORAGE));
         return ResultVO.ok();
     }
