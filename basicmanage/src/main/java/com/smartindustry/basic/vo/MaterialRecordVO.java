@@ -1,6 +1,5 @@
 package com.smartindustry.basic.vo;
 
-import com.smartindustry.common.pojo.si.LocationRecordPO;
 import com.smartindustry.common.pojo.si.MaterialRecordPO;
 import lombok.Data;
 
