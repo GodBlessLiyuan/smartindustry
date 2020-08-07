@@ -2,6 +2,7 @@ package com.smartindustry.outbound.service;
 
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.dto.OperateDTO;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -34,5 +35,7 @@ public interface IQualityManageService {
      * @return
      */
     ResultVO queryRecordMsg(OperateDTO dto);
+
+
 
 }

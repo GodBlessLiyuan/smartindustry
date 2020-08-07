@@ -22,7 +22,7 @@ public class SecurityUtils
         }
         catch (Exception e)
         {
-//            throw new CustomException("获取用户账户异常", HttpStatus.UNAUTHORIZED);
+//            throw new CustomException("获取用户账户异常", conta.UNAUTHORIZED);
             throw new Exception("获取用户账户异常");
         }
     }
@@ -38,7 +38,7 @@ public class SecurityUtils
         catch (Exception e)
         {
             e.printStackTrace();
-//            throw new CustomException("获取用户信息异常", HttpStatus.UNAUTHORIZED);
+//            throw new CustomException("获取用户信息异常", Conta.UNAUTHORIZED);
             throw new Exception("获取用户信息异常");
         }
     }

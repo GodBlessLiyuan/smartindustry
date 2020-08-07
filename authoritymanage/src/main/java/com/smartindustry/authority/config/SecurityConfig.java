@@ -96,7 +96,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 // 过滤请求
                 .authorizeRequests()
-                // 对于登录login 验证码captchaImage 允许匿名访问
+                // 对于登录login 验证码getcode 允许匿名访问
                 .antMatchers("/**").anonymous()
                 .antMatchers("/login/login", "/login/getCode").anonymous()
                 .antMatchers(
@@ -106,14 +106,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                         "/**/*.css",
                         "/**/*.js"
                 ).permitAll()
-                .antMatchers("/profile/**").anonymous()
-                .antMatchers("/common/download**").anonymous()
-                .antMatchers("/common/download/resource**").anonymous()
-                .antMatchers("/swagger-ui.html").anonymous()
-                .antMatchers("/swagger-resources/**").anonymous()
-                .antMatchers("/webjars/**").anonymous()
-                .antMatchers("/*/api-docs").anonymous()
-                .antMatchers("/druid/**").anonymous()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated()
                 .and()

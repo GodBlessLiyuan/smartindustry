@@ -35,4 +35,5 @@ public class QualityManageController {
     public ResultVO queryRecordMsg(@RequestBody OperateDTO dto){
         return qualityManageService.queryRecordMsg(dto);
     }
+
 }
