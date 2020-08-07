@@ -11,5 +11,6 @@ import lombok.Data;
  */
 @Data
 public class LocationBO extends LocationPO {
+    private String locationTypeName;
     private String warehouseName;
 }

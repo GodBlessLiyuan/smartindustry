@@ -8,6 +8,8 @@
         <result column="order_type" jdbcType="TINYINT" property="orderType"/>
         <result column="material_status" jdbcType="TINYINT" property="materialStatus"/>
         <result column="correspond_project" jdbcType="CHAR" property="correspondProject"/>
+        <result column="accept_customer" jdbcType="CHAR" property="acceptCustomer"/>
+        <result column="accept_address" jdbcType="CHAR" property="acceptAddress"/>
         <result column="plan_time" jdbcType="TIMESTAMP" property="planTime"/>
         <result column="outbound_time" jdbcType="TIMESTAMP" property="outboundTime"/>
         <result column="outbound_status" jdbcType="TINYINT" property="outboundStatus"/>
@@ -16,7 +18,8 @@
     </resultMap>
     <sql id="Base_Column_List">
         pick_head_id, pick_no, order_no, order_type, material_status, correspond_project,
-    plan_time, outbound_time, outbound_status, create_time, dr
+    accept_customer, accept_address, plan_time, outbound_time, outbound_status, create_time, 
+    dr
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
@@ -29,16 +32,18 @@
         from om_pick_head
         where pick_head_id = #{pickHeadId,jdbcType=BIGINT}
     </delete>
-    <insert id="insert" parameterType="com.smartindustry.common.pojo.om.PickHeadPO" useGeneratedKeys="true"
-            keyProperty="pickHeadId">
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.om.PickHeadPO">
         insert into om_pick_head (pick_head_id, pick_no, order_no,
                                   order_type, material_status, correspond_project,
-                                  plan_time, outbound_time, outbound_status,
-                                  create_time, dr)
+                                  accept_customer, accept_address, plan_time,
+                                  outbound_time, outbound_status, create_time,
+                                  dr)
         values (#{pickHeadId,jdbcType=BIGINT}, #{pickNo,jdbcType=CHAR}, #{orderNo,jdbcType=CHAR},
                 #{orderType,jdbcType=TINYINT}, #{materialStatus,jdbcType=TINYINT}, #{correspondProject,jdbcType=CHAR},
-                #{planTime,jdbcType=TIMESTAMP}, #{outboundTime,jdbcType=TIMESTAMP}, #{outboundStatus,jdbcType=TINYINT},
-                #{createTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
+                #{acceptCustomer,jdbcType=CHAR}, #{acceptAddress,jdbcType=CHAR}, #{planTime,jdbcType=TIMESTAMP},
+                #{outboundTime,jdbcType=TIMESTAMP}, #{outboundStatus,jdbcType=TINYINT},
+                #{createTime,jdbcType=TIMESTAMP},
+                #{dr,jdbcType=TINYINT})
     </insert>
     <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.om.PickHeadPO">
         insert into om_pick_head
@@ -60,6 +65,12 @@
             </if>
             <if test="correspondProject != null">
                 correspond_project,
+            </if>
+            <if test="acceptCustomer != null">
+                accept_customer,
+            </if>
+            <if test="acceptAddress != null">
+                accept_address,
             </if>
             <if test="planTime != null">
                 plan_time,
@@ -96,6 +107,12 @@
             <if test="correspondProject != null">
                 #{correspondProject,jdbcType=CHAR},
             </if>
+            <if test="acceptCustomer != null">
+                #{acceptCustomer,jdbcType=CHAR},
+            </if>
+            <if test="acceptAddress != null">
+                #{acceptAddress,jdbcType=CHAR},
+            </if>
             <if test="planTime != null">
                 #{planTime,jdbcType=TIMESTAMP},
             </if>
@@ -131,6 +148,12 @@
             <if test="correspondProject != null">
                 correspond_project = #{correspondProject,jdbcType=CHAR},
             </if>
+            <if test="acceptCustomer != null">
+                accept_customer = #{acceptCustomer,jdbcType=CHAR},
+            </if>
+            <if test="acceptAddress != null">
+                accept_address = #{acceptAddress,jdbcType=CHAR},
+            </if>
             <if test="planTime != null">
                 plan_time = #{planTime,jdbcType=TIMESTAMP},
             </if>
@@ -156,6 +179,8 @@
             order_type         = #{orderType,jdbcType=TINYINT},
             material_status    = #{materialStatus,jdbcType=TINYINT},
             correspond_project = #{correspondProject,jdbcType=CHAR},
+            accept_customer    = #{acceptCustomer,jdbcType=CHAR},
+            accept_address     = #{acceptAddress,jdbcType=CHAR},
             plan_time          = #{planTime,jdbcType=TIMESTAMP},
             outbound_time      = #{outboundTime,jdbcType=TIMESTAMP},
             outbound_status    = #{outboundStatus,jdbcType=TINYINT},
@@ -545,4 +570,3 @@
         where ph.dr = 1 and ph.material_status = 1 and ph.order_no = #{orderNo,jdbcType=CHAR}
     </select>
 </mapper>
-

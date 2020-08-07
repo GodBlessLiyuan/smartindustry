@@ -5,6 +5,7 @@
         <id column="location_id" jdbcType="BIGINT" property="locationId"/>
         <result column="location_no" jdbcType="CHAR" property="locationNo"/>
         <result column="location_name" jdbcType="CHAR" property="locationName"/>
+        <result column="location_type_id" jdbcType="BIGINT" property="locationTypeId"/>
         <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId"/>
         <result column="remark" jdbcType="CHAR" property="remark"/>
         <result column="user_id" jdbcType="BIGINT" property="userId"/>
@@ -13,8 +14,8 @@
         <result column="dr" jdbcType="TINYINT" property="dr"/>
     </resultMap>
     <sql id="Base_Column_List">
-        location_id, location_no, location_name, warehouse_id, remark, user_id, create_time,
-    update_time, dr
+        location_id, location_no, location_name, location_type_id, warehouse_id, remark,
+    user_id, create_time, update_time, dr
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
@@ -27,14 +28,15 @@
         from si_location
         where location_id = #{locationId,jdbcType=BIGINT}
     </delete>
-    <insert id="insert" parameterType="com.smartindustry.common.pojo.si.LocationPO" useGeneratedKeys="true"
-            keyProperty="locationId">
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.si.LocationPO">
         insert into si_location (location_id, location_no, location_name,
-                                 warehouse_id, remark, user_id,
-                                 create_time, update_time, dr)
+                                 location_type_id, warehouse_id, remark,
+                                 user_id, create_time, update_time,
+                                 dr)
         values (#{locationId,jdbcType=BIGINT}, #{locationNo,jdbcType=CHAR}, #{locationName,jdbcType=CHAR},
-                #{warehouseId,jdbcType=BIGINT}, #{remark,jdbcType=CHAR}, #{userId,jdbcType=BIGINT},
-                #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
+                #{locationTypeId,jdbcType=BIGINT}, #{warehouseId,jdbcType=BIGINT}, #{remark,jdbcType=CHAR},
+                #{userId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+                #{dr,jdbcType=TINYINT})
     </insert>
     <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.LocationPO">
         insert into si_location
@@ -47,6 +49,9 @@
             </if>
             <if test="locationName != null">
                 location_name,
+            </if>
+            <if test="locationTypeId != null">
+                location_type_id,
             </if>
             <if test="warehouseId != null">
                 warehouse_id,
@@ -77,6 +82,9 @@
             <if test="locationName != null">
                 #{locationName,jdbcType=CHAR},
             </if>
+            <if test="locationTypeId != null">
+                #{locationTypeId,jdbcType=BIGINT},
+            </if>
             <if test="warehouseId != null">
                 #{warehouseId,jdbcType=BIGINT},
             </if>
@@ -106,6 +114,9 @@
             <if test="locationName != null">
                 location_name = #{locationName,jdbcType=CHAR},
             </if>
+            <if test="locationTypeId != null">
+                location_type_id = #{locationTypeId,jdbcType=BIGINT},
+            </if>
             <if test="warehouseId != null">
                 warehouse_id = #{warehouseId,jdbcType=BIGINT},
             </if>
@@ -129,29 +140,32 @@
     </update>
     <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.LocationPO">
         update si_location
-        set location_no   = #{locationNo,jdbcType=CHAR},
-            location_name = #{locationName,jdbcType=CHAR},
-            warehouse_id  = #{warehouseId,jdbcType=BIGINT},
-            remark        = #{remark,jdbcType=CHAR},
-            user_id       = #{userId,jdbcType=BIGINT},
-            create_time   = #{createTime,jdbcType=TIMESTAMP},
-            update_time   = #{updateTime,jdbcType=TIMESTAMP},
-            dr            = #{dr,jdbcType=TINYINT}
+        set location_no      = #{locationNo,jdbcType=CHAR},
+            location_name    = #{locationName,jdbcType=CHAR},
+            location_type_id = #{locationTypeId,jdbcType=BIGINT},
+            warehouse_id     = #{warehouseId,jdbcType=BIGINT},
+            remark           = #{remark,jdbcType=CHAR},
+            user_id          = #{userId,jdbcType=BIGINT},
+            create_time      = #{createTime,jdbcType=TIMESTAMP},
+            update_time      = #{updateTime,jdbcType=TIMESTAMP},
+            dr               = #{dr,jdbcType=TINYINT}
         where location_id = #{locationId,jdbcType=BIGINT}
     </update>
 
     <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.LocationBO" extends="BaseResultMap">
+        <result column="location_type_name" jdbcType="CHAR" property="locationTypeName"/>
         <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
     </resultMap>
     <sql id="BO_Column_List">
-        l.location_id, l.location_no, l.location_name, l.warehouse_id, l.remark, l.user_id, l.create_time,
+        l.location_id, l.location_no, l.location_name, l.location_type_id, l.warehouse_id, l.remark, l.user_id, l.create_time,
     l.update_time, l.dr,
-    w.warehouse_name
+    lt.location_type_name, w.warehouse_name
     </sql>
     <select id="pageQuery" parameterType="java.util.Map" resultMap="BOResultMap">
         select
         <include refid="BO_Column_List"/>
         from si_location l
+        left join dd_location_type lt on l.location_type_id = lt.location_type_id
         left join si_warehouse w on l.warehouse_id = w.warehouse_id
         where l.dr = 1
         <if test="lno != null and lno != ''">
@@ -175,6 +189,7 @@
         select
         <include refid="BO_Column_List"/>
         from si_location l
+        left join dd_location_type lt on l.location_type_id = lt.location_type_id
         left join si_warehouse w on l.warehouse_id = w.warehouse_id
         where l.dr = 1 and w.dr = 1 and l.warehouse_id in
         <foreach collection="list" item="wid" separator="," open="(" close=")">
@@ -185,6 +200,7 @@
         select
         <include refid="BO_Column_List"/>
         from si_location l
+        left join dd_location_type lt on l.location_type_id = lt.location_type_id
         left join si_warehouse w on l.warehouse_id = w.warehouse_id
         where l.dr = 1 and w.dr = 1 and location_id = #{lid,jdbcType=BIGINT}
     </select>
@@ -195,4 +211,10 @@
             #{lid,jdbcType=BIGINT}
         </foreach>
     </update>
+    <select id="queryByLtid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_location
+        where dr = 1 and location_type_id = #{ltid,jdbcType=BIGINT}
+    </select>
 </mapper>

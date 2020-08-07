@@ -16,6 +16,12 @@ public interface IDataDictionaryService {
 
     ResultVO wtDelete(BasicDataDTO dto);
 
+    ResultVO ltQuery();
+
+    ResultVO ltEdit(LocationTypeDTO dto);
+
+    ResultVO ltDelete(BasicDataDTO dto);
+
     ResultVO sgQuery();
 
     ResultVO sgEdit(SupplierGroupDTO dto);

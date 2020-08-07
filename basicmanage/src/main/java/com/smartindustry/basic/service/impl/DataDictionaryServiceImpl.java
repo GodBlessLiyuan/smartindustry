@@ -3,10 +3,12 @@ package com.smartindustry.basic.service.impl;
 import com.smartindustry.basic.dto.*;
 import com.smartindustry.basic.service.IDataDictionaryService;
 import com.smartindustry.common.mapper.dd.*;
+import com.smartindustry.common.mapper.si.LocationMapper;
 import com.smartindustry.common.mapper.si.MaterialMapper;
 import com.smartindustry.common.mapper.si.SupplierMapper;
 import com.smartindustry.common.mapper.si.WarehouseMapper;
 import com.smartindustry.common.pojo.dd.*;
+import com.smartindustry.common.pojo.si.LocationPO;
 import com.smartindustry.common.pojo.si.SupplierPO;
 import com.smartindustry.common.pojo.si.WarehousePO;
 import com.smartindustry.common.vo.ResultVO;
@@ -28,6 +30,11 @@ public class DataDictionaryServiceImpl implements IDataDictionaryService {
     private WarehouseMapper warehouseMapper;
     @Autowired
     private WarehouseTypeMapper warehouseTypeMapper;
+
+    @Autowired
+    private LocationMapper locationMapper;
+    @Autowired
+    private LocationTypeMapper locationTypeMapper;
 
     @Autowired
     private SupplierMapper supplierMapper;
@@ -100,6 +107,51 @@ public class DataDictionaryServiceImpl implements IDataDictionaryService {
         }
 
         warehouseTypeMapper.deleteByPrimaryKey(dto.getWtid());
+
+        return ResultVO.ok();
+    }
+
+    @Override
+    public ResultVO ltQuery() {
+        List<Map<String, Object>> res = locationTypeMapper.queryAll();
+        return ResultVO.ok().setData(res);
+    }
+
+    @Override
+    public ResultVO ltEdit(LocationTypeDTO dto) {
+        LocationTypePO exitPO = locationTypeMapper.queryByName(dto.getLtname());
+        if (null != exitPO && (dto.getLtid() == null || !dto.getLtid().equals(exitPO.getLocationTypeId()))) {
+            return new ResultVO(1004);
+        }
+
+        if (null == dto.getLtid()) {
+            // 新增
+            locationTypeMapper.insert(LocationTypeDTO.createPO(dto, 1L));
+            return ResultVO.ok();
+        }
+        // 修改
+        LocationTypePO locationTypePO = locationTypeMapper.selectByPrimaryKey(dto.getLtid());
+        if (null == locationTypePO) {
+            return new ResultVO(1002);
+        }
+
+        locationTypeMapper.updateByPrimaryKey(LocationTypeDTO.buildPO(locationTypePO, dto));
+        return ResultVO.ok();
+    }
+
+    @Override
+    public ResultVO ltDelete(BasicDataDTO dto) {
+        LocationTypePO locationTypePO = locationTypeMapper.selectByPrimaryKey(dto.getLtid());
+        if (null == locationTypePO) {
+            return new ResultVO(1002);
+        }
+
+        List<LocationPO> locationPOs = locationMapper.queryByLtid(dto.getLtid());
+        if (null != locationPOs && locationPOs.size() > 0) {
+            return new ResultVO(1007);
+        }
+
+        locationTypeMapper.deleteByPrimaryKey(dto.getLtid());
 
         return ResultVO.ok();
     }

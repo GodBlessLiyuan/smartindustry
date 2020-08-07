@@ -16,6 +16,8 @@ public class LocationPO implements Serializable {
 
     private String locationName;
 
+    private Long locationTypeId;
+
     private Long warehouseId;
 
     private String remark;

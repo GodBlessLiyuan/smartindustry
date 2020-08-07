@@ -51,4 +51,12 @@ public interface LocationMapper extends BaseMapper<LocationPO, Long> {
      * @return
      */
     LocationBO queryById(Long lid);
+
+    /**
+     * 根据 货位类型 查询
+     *
+     * @param ltid
+     * @return
+     */
+    List<LocationPO> queryByLtid(Long ltid);
 }

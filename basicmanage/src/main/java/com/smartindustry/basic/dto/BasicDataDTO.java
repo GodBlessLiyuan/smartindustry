@@ -15,6 +15,7 @@ public class BasicDataDTO implements Serializable {
     private static final long SerialVersionUID = 1L;
 
     private Long wtid;
+    private Long ltid;
     private Long sgid;
     private Long csid;
     private Long stid;

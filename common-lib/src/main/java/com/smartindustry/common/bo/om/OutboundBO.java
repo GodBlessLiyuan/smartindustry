@@ -33,6 +33,14 @@ public class OutboundBO extends OutboundPO {
      */
     private String correspondProject;
     /**
+     * 接受客户
+     */
+    private String acceptCustomer;
+    /**
+     * 接受地址
+     */
+    private String acceptAddress;
+    /**
      * 计划发货时间
      */
     private Date planTime;

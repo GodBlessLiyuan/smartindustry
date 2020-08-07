@@ -52,6 +52,37 @@ public class DataDictionaryController {
         return dataDictionaryService.wtDelete(dto);
     }
 
+    /**
+     * 货位类型 查询
+     *
+     * @return
+     */
+    @PostMapping("ltQuery")
+    public ResultVO ltQuery() {
+        return dataDictionaryService.ltQuery();
+    }
+
+    /**
+     * 货位类型 编辑
+     *
+     * @return
+     */
+    @PostMapping("ltEdit")
+    public ResultVO ltEdit(@RequestBody LocationTypeDTO dto) {
+        return dataDictionaryService.ltEdit(dto);
+    }
+
+    /**
+     * 货位类型 删除
+     *
+     * @param dto
+     * @return
+     */
+    @PostMapping("ltDelete")
+    public ResultVO ltDelete(@RequestBody BasicDataDTO dto) {
+        return dataDictionaryService.ltDelete(dto);
+    }
+
 
     /**
      * 供应商组 查询
@@ -116,7 +147,7 @@ public class DataDictionaryController {
     }
 
     /**
-     * 类型 查询
+     * 供应商类型 查询
      *
      * @return
      */
@@ -126,7 +157,7 @@ public class DataDictionaryController {
     }
 
     /**
-     * 类型 编辑
+     * 供应商类型 编辑
      *
      * @return
      */
@@ -136,7 +167,7 @@ public class DataDictionaryController {
     }
 
     /**
-     * 类型 删除
+     * 供应商类型 删除
      *
      * @param dto
      * @return

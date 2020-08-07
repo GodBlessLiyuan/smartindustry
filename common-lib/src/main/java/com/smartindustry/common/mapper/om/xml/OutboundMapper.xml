@@ -134,11 +134,13 @@
         <result column="order_no" jdbcType="CHAR" property="orderNo"/>
         <result column="order_type" jdbcType="TINYINT" property="orderType"/>
         <result column="correspond_project" jdbcType="CHAR" property="correspondProject"/>
+        <result column="accept_customer" jdbcType="CHAR" property="acceptCustomer"/>
+        <result column="accept_address" jdbcType="CHAR" property="acceptAddress"/>
         <result column="plan_time" jdbcType="TIMESTAMP" property="planTime"/>
     </resultMap>
     <sql id="BO_Column_List">
         o.outbound_id, o.pick_head_id, o.outbound_no, o.outbound_time, o.ship_time, o.`status`, o.create_time, o.dr,
-        ph.pick_no, ph.order_no, ph.order_type, ph.correspond_project, ph.plan_time
+        ph.pick_no, ph.order_no, ph.order_type, ph.correspond_project, ph.accept_customer, ph.accept_address, ph.plan_time
     </sql>
     <select id="pageQuery" parameterType="java.util.Map" resultMap="BOResultMap">
         select

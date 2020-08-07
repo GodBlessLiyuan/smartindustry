@@ -32,6 +32,9 @@ DROP TABLE IF EXISTS dd_cert_status;
 DROP TABLE IF EXISTS dd_currency;
 DROP TABLE IF EXISTS dd_humidity_level;
 DROP TABLE IF EXISTS dd_life_cycle_state;
+DROP TABLE IF EXISTS si_location_record;
+DROP TABLE IF EXISTS si_location;
+DROP TABLE IF EXISTS dd_location_type;
 DROP TABLE IF EXISTS dd_material_level;
 DROP TABLE IF EXISTS dd_material_type;
 DROP TABLE IF EXISTS dd_material_version;
@@ -40,8 +43,6 @@ DROP TABLE IF EXISTS dd_produce_loss_level;
 DROP TABLE IF EXISTS dd_settle_period;
 DROP TABLE IF EXISTS dd_supplier_group;
 DROP TABLE IF EXISTS dd_supplier_type;
-DROP TABLE IF EXISTS si_location_record;
-DROP TABLE IF EXISTS si_location;
 DROP TABLE IF EXISTS si_warehouse_record;
 DROP TABLE IF EXISTS si_warehouse;
 DROP TABLE IF EXISTS dd_warehouse_type;
@@ -245,6 +246,17 @@ CREATE TABLE dd_life_cycle_state
     create_time datetime,
     PRIMARY KEY (life_cycle_state_id),
     UNIQUE (life_cycle_state_id)
+);
+
+
+CREATE TABLE dd_location_type
+(
+    location_type_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    location_type_name char(255) NOT NULL,
+    user_id bigint unsigned,
+    create_time datetime,
+    PRIMARY KEY (location_type_id),
+    UNIQUE (location_type_id)
 );
 
 
@@ -500,6 +512,8 @@ CREATE TABLE om_pick_head
 35：完成出库
 40：确认出库',
     correspond_project char(255),
+    accept_customer char(255),
+    accept_address char(255),
     plan_time datetime,
     outbound_time datetime,
     -- 1：全部出库
@@ -567,6 +581,7 @@ CREATE TABLE si_location
     location_id bigint unsigned NOT NULL AUTO_INCREMENT,
     location_no char(64) NOT NULL,
     location_name char(255) NOT NULL,
+    location_type_id bigint unsigned NOT NULL,
     warehouse_id bigint unsigned NOT NULL,
     remark char(255),
     user_id bigint unsigned,
@@ -1095,7 +1110,7 @@ ALTER TABLE am_role_record
 
 
 ALTER TABLE am_user_record
-    ADD FOREIGN KEY (operate_id)
+    ADD FOREIGN KEY (user_id)
         REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
@@ -1103,7 +1118,7 @@ ALTER TABLE am_user_record
 
 
 ALTER TABLE am_user_record
-    ADD FOREIGN KEY (user_id)
+    ADD FOREIGN KEY (operate_id)
         REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
@@ -1135,6 +1150,14 @@ ALTER TABLE dd_humidity_level
 
 
 ALTER TABLE dd_life_cycle_state
+    ADD FOREIGN KEY (user_id)
+        REFERENCES am_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE dd_location_type
     ADD FOREIGN KEY (user_id)
         REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
@@ -1329,6 +1352,14 @@ ALTER TABLE si_material
 ALTER TABLE si_material
     ADD FOREIGN KEY (life_cycle_state_id)
         REFERENCES dd_life_cycle_state (life_cycle_state_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_location
+    ADD FOREIGN KEY (location_type_id)
+        REFERENCES dd_location_type (location_type_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
