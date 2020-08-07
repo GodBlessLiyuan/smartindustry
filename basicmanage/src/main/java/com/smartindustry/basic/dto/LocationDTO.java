@@ -19,6 +19,7 @@ public class LocationDTO implements Serializable {
     private Long lid;
     private String lno;
     private String lname;
+    private Long ltid;
     private Long wid;
     private String remark;
 
@@ -32,6 +33,7 @@ public class LocationDTO implements Serializable {
     public static LocationPO buildPO(LocationPO po, LocationDTO dto) {
         po.setLocationNo(dto.getLno());
         po.setLocationName(dto.getLname());
+        po.setLocationTypeId(dto.getLtid());
         po.setWarehouseId(dto.getWid());
         po.setRemark(dto.getRemark());
         return po;

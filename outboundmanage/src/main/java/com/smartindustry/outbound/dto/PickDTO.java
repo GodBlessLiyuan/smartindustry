@@ -38,6 +38,8 @@ public class PickDTO implements Serializable {
         headPO.setOrderType(dto.getOtype());
         headPO.setMaterialStatus(OutboundConstant.MATERIAL_STATUS_NOT_RECOMMEND);
         headPO.setCorrespondProject(dto.getCproject());
+        headPO.setAcceptCustomer(dto.getAcustomer());
+        headPO.setAcceptAddress(dto.getAaddress());
         if (!StringUtils.isEmpty(dto.getPtime())) {
             headPO.setPlanTime(DateUtil.str2Date(dto.getPtime(), DateUtil.Y_M_D));
         }
@@ -97,6 +99,14 @@ public class PickDTO implements Serializable {
          * 对应项目
          */
         private String cproject;
+        /**
+         * 接受客户
+         */
+        private String acustomer;
+        /**
+         * 接受数量
+         */
+        private String aaddress;
         /**
          * 计划发货日期
          */
