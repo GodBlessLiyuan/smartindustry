@@ -1,7 +1,7 @@
 package com.smartindustry.authority.util;
 
 
-import com.smartindustry.authority.constant.HttpStatus;
+import com.smartindustry.authority.constant.Constants;
 
 import java.util.HashMap;
 
@@ -99,7 +99,7 @@ public class AjaxResult extends HashMap<String, Object>
      */
     public static AjaxResult success(String msg, Object data)
     {
-        return new AjaxResult(HttpStatus.SUCCESS, msg, data);
+        return new AjaxResult(Constants.SUCCESS, msg, data);
     }
 
     /**
@@ -132,7 +132,7 @@ public class AjaxResult extends HashMap<String, Object>
      */
     public static AjaxResult error(String msg, Object data)
     {
-        return new AjaxResult(HttpStatus.ERROR, msg, data);
+        return new AjaxResult(Constants.ERROR, msg, data);
     }
 
     /**

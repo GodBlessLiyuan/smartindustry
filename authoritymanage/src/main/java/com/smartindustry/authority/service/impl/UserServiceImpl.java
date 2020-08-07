@@ -65,7 +65,7 @@ public class UserServiceImpl implements IUserService {
      */
     private List<Long> getDeptLevel(Long deptId){
         List<Long> deptIds = new ArrayList<>();
-        while (deptId !=null){
+        while (deptId != null){
             DeptPO po = deptMapper.selectByPrimaryKey(deptId);
             deptIds.add(po.getDeptId());
             deptId = po.getParentId();

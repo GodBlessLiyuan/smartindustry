@@ -72,4 +72,11 @@ public interface DeptMapper extends BaseMapper<DeptPO, Long> {
      * @return
      */
     Integer updateBossId(@Param("userId") Long userId);
+
+    /**
+     * 根据父节点找到子节点列表
+     * @param parentId
+     * @return
+     */
+    List<DeptPO> queryByParent(@Param("parentId") Long parentId);
 }

@@ -110,10 +110,13 @@ public class DeptServiceImpl implements IDeptService {
         if (dids.contains(1L)){
             dids.remove(1L);
         }
-        if(dids.size()!=0){
-            deptMapper.deleteBatch(dids);
-        }
         for(Long did:dids){
+            List<DeptPO> pos = deptMapper.queryByParent(did);
+            if(pos!=null && pos.size()!=0){
+               return new ResultVO(1009);
+            }else {
+                deptMapper.deleteByPrimaryKey(did);
+            }
             deleteDept(did);
             deptRecordMapper.insert(new DeptRecordPO(did,1L,new Date(),Constants.DELETERECORD));
         }

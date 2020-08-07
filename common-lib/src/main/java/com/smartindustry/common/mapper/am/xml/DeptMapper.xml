@@ -200,10 +200,10 @@
     left join am_dept d1 on d.parent_id = d1.dept_id
     <choose>
       <when test="parentId != null and parentId !=''">
-        where d.parent_id = #{parentId,jdbcType=BIGINT}
+        where d.parent_id = #{parentId,jdbcType=BIGINT} and d.dr = 1
       </when>
       <otherwise>
-        where d.parent_id is null
+        where d.parent_id is null and d.dr = 1
       </otherwise>
     </choose>
   </select>
@@ -240,6 +240,12 @@
     set user_id = null
     where user_id = #{userId,jdbcType=BIGINT} and dr = 1
   </update>
-
-
+   
+<!--   根据父节点找到子节点-->
+  <select id="queryByParent" resultType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from am_dept
+    where parent_id = #{parentId,jdbcType=BIGINT}
+  </select>
 </mapper>

@@ -72,4 +72,18 @@ public class Constants {
     public static final String USERECORD = "启用";
     public static final String DISABLERECORD = "禁用";
     public static final String DELETERECORD = "删除";
+
+    /**
+     * 操作成功
+     */
+    public static final int SUCCESS = 200;
+    /**
+     * 系统内部错误
+     */
+    public static final int ERROR = 500;
+
+    /**
+     * 未授权
+     */
+    public static final int UNAUTHORIZED = 401;
 }

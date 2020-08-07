@@ -8,8 +8,7 @@
 
 package com.smartindustry.authority.config;
 
-
-import com.smartindustry.authority.RRException.RRException;
+import com.smartindustry.common.vo.ResultVO;
 
 import java.security.MessageDigest;
 import java.util.UUID;
@@ -21,7 +20,7 @@ import java.util.UUID;
  */
 public class TokenGenerator {
 
-    public static String generateValue() {
+    public static ResultVO generateValue() {
         return generateValue(UUID.randomUUID().toString());
     }
 
@@ -39,15 +38,16 @@ public class TokenGenerator {
         return r.toString();
     }
 
-    public static String generateValue(String param) {
+    public static ResultVO generateValue(String param){
         try {
             MessageDigest algorithm = MessageDigest.getInstance("MD5");
             algorithm.reset();
             algorithm.update(param.getBytes());
             byte[] messageDigest = algorithm.digest();
-            return toHexString(messageDigest);
+            return ResultVO.ok().setData(toHexString(messageDigest));
         } catch (Exception e) {
-            throw new RRException("生成Token失败", e);
+//            throw new eRRException("生成Token失败", e);
+            return new ResultVO(2020);
         }
     }
 }

@@ -141,6 +141,6 @@
         <include refid="Base_Column_List"/>
         from om_outbound_record
         where pick_head_id = #{pickHeadId} and `status` = #{status}
-        order by create_time asc
+        order by create_time desc
     </select>
 </mapper>
