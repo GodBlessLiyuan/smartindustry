@@ -1,6 +1,7 @@
 package com.smartindustry.outbound.vo;
 
 import com.smartindustry.common.bo.om.OutboundBO;
+import com.smartindustry.common.util.DateUtil;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -47,7 +48,7 @@ public class OutboundVO implements Serializable {
     /**
      * 计划发货时间
      */
-    private Date ptime;
+    private String ptime;
     /**
      * 完成出库时间
      */
@@ -86,7 +87,7 @@ public class OutboundVO implements Serializable {
         vo.setCproject(bo.getCorrespondProject());
         vo.setAcustomer(bo.getAcceptCustomer());
         vo.setAaddress(bo.getAcceptAddress());
-        vo.setPtime(bo.getPlanTime());
+        vo.setPtime(DateUtil.date2Str(bo.getPlanTime(), DateUtil.Y_M_D));
         vo.setOtime(bo.getOutboundTime());
         vo.setStatus(bo.getStatus());
         return vo;
