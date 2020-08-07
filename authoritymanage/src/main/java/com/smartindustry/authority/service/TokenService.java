@@ -1,10 +1,9 @@
 package com.smartindustry.authority.service;
 
-import com.smartindustry.authority.constant.Constants;
+import com.smartindustry.authority.constant.AuthorityConstant;
 import com.smartindustry.authority.dto.LoginUserDTO;
 import com.smartindustry.authority.util.RedisCache;
 import com.smartindustry.authority.util.StringUtils;
-import com.smartindustry.authority.util.UUID;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,7 @@ import io.jsonwebtoken.Claims;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -64,9 +64,11 @@ public class TokenService {
         {
             Claims claims = parseToken(token);
             // 解析对应的权限以及用户信息
-            String uuid = (String) claims.get(Constants.LOGIN_USER_KEY);
+            String uuid = (String) claims.get(AuthorityConstant.LOGIN_USER_KEY);
             String userKey = getTokenKey(uuid);
             LoginUserDTO user = redisCache.getCacheObject(userKey);
+
+            System.out.println("user验证"+user);
             return user;
         }
         return null;
@@ -103,12 +105,12 @@ public class TokenService {
      */
     public String createToken(LoginUserDTO loginUserDTO)
     {
-        String token = UUID.fastUUID().toString();
+        String token = UUID.randomUUID().toString();
         loginUserDTO.setToken(token);
         refreshToken(loginUserDTO);
 
         Map<String, Object> claims = new HashMap<>();
-        claims.put(Constants.LOGIN_USER_KEY, token);
+        claims.put(AuthorityConstant.LOGIN_USER_KEY, token);
         return createToken(claims);
     }
 
@@ -193,15 +195,15 @@ public class TokenService {
     private String getToken(HttpServletRequest request)
     {
         String token = request.getHeader(header);
-        if (StringUtils.isNotEmpty(token) && token.startsWith(Constants.TOKEN_PREFIX))
+        if (StringUtils.isNotEmpty(token) && token.startsWith(AuthorityConstant.TOKEN_PREFIX))
         {
-            token = token.replace(Constants.TOKEN_PREFIX, "");
+            token = token.replace(AuthorityConstant.TOKEN_PREFIX, "");
         }
         return token;
     }
 
     private String getTokenKey(String uuid)
     {
-        return Constants.LOGIN_TOKEN_KEY + uuid;
+        return AuthorityConstant.LOGIN_TOKEN_KEY + uuid;
     }
 }

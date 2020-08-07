@@ -7,10 +7,7 @@ import com.smartindustry.common.pojo.am.UserPO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author: jiangzhaojie
@@ -40,7 +37,6 @@ public class AuthorityServiceImpl implements IAuthorityService {
         }
         return perms;
     }
-
 
     /**
      * 根据用户ID查询权限

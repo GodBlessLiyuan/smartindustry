@@ -1,10 +1,12 @@
 package com.smartindustry.authority.service.impl;
 
 import com.github.pagehelper.Page;
-import com.smartindustry.authority.constant.Constants;
+import com.smartindustry.authority.constant.AuthorityConstant;
+import com.smartindustry.authority.dto.EditDTO;
 import com.smartindustry.authority.dto.OperateDTO;
 import com.smartindustry.authority.dto.UserDTO;
 import com.smartindustry.authority.service.IUserService;
+import com.smartindustry.authority.util.SecurityUtils;
 import com.smartindustry.authority.vo.RoleVO;
 import com.smartindustry.authority.vo.UserRecordVO;
 import com.smartindustry.authority.vo.UserVO;
@@ -22,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpSession;
 import java.util.*;
 
 /**
@@ -78,10 +81,10 @@ public class UserServiceImpl implements IUserService {
         List<UserPO> pos = UserDTO.updateList(dtos);
         userMapper.updateBatch(pos);
         for(OperateDTO dto:dtos){
-            if(dto.getStatus().equals(Constants.STATUS_DISABLE)){
-                userRecordMapper.insert(new UserRecordPO(dto.getUid(),1L,new Date(),Constants.DISABLERECORD));
+            if(dto.getStatus().equals(AuthorityConstant.STATUS_DISABLE)){
+                userRecordMapper.insert(new UserRecordPO(dto.getUid(),1L,new Date(), AuthorityConstant.DISABLERECORD));
             }else{
-                userRecordMapper.insert(new UserRecordPO(dto.getUid(),1L,new Date(),Constants.USERECORD));
+                userRecordMapper.insert(new UserRecordPO(dto.getUid(),1L,new Date(), AuthorityConstant.USERECORD));
             }
         }
         return ResultVO.ok();
@@ -93,7 +96,7 @@ public class UserServiceImpl implements IUserService {
         userMapper.deleteBatch(uids);
         for(Long uid:uids){
             deleteUser(uid);
-            userRecordMapper.insert(new UserRecordPO(uid,1L,new Date(),Constants.DELETERECORD));
+            userRecordMapper.insert(new UserRecordPO(uid,1L,new Date(), AuthorityConstant.DELETERECORD));
         }
         return ResultVO.ok();
     }
@@ -107,7 +110,7 @@ public class UserServiceImpl implements IUserService {
         }
         UserPO po = UserDTO.createPO(dto);
         userMapper.insert(po);
-        userRecordMapper.insert(new UserRecordPO(po.getUserId(),1L,new Date(),Constants.INSERTRECORD));
+        userRecordMapper.insert(new UserRecordPO(po.getUserId(),1L,new Date(), AuthorityConstant.INSERTRECORD));
         return ResultVO.ok();
     }
 
@@ -120,7 +123,7 @@ public class UserServiceImpl implements IUserService {
         }
         UserPO po = UserDTO.createPO(dto);
         userMapper.updateByPrimaryKeySelective(po);
-        userRecordMapper.insert(new UserRecordPO(dto.getUid(),1L,new Date(),Constants.UPDATERECORD));
+        userRecordMapper.insert(new UserRecordPO(dto.getUid(),1L,new Date(), AuthorityConstant.UPDATERECORD));
         return ResultVO.ok();
     }
 
@@ -158,6 +161,34 @@ public class UserServiceImpl implements IUserService {
     public ResultVO queryUserRecord(Map<String, Object> reqData){
         List<UserRecordBO> bos = userRecordMapper.queryUserRecord(reqData);
         return ResultVO.ok().setData(UserRecordVO.convert(bos));
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public ResultVO editPassword(EditDTO dto){
+        //从session中获取userId的值
+        Long userId = dto.getUid();
+        if (userId == null) {
+            // 用户过期
+            return new ResultVO(2104);
+        }
+        //根据id,检索到当前用户，以便获得password
+        UserPO userPo = userMapper.selectByPrimaryKey(userId);
+        // 比较输入旧密码是否等于用户本身存在数据库的密码
+        if (!SecurityUtils.matchesPassword(dto.getOpassword(),userPo.getPassword())) {
+            // 旧密码输入错误
+            return new ResultVO(2105);
+        }else {
+            // 如果没有问题，则将当前userId用户更新密码
+            userMapper.updatePassword(SecurityUtils.encryptPassword(dto.getNpassword()),userId);
+        }
+        return new ResultVO(1000);
+    }
+
+    @Override
+    public ResultVO queryUserMsg(OperateDTO dto){
+        UserBO bo = userMapper.queryUserMsg(dto.getUid());
+        return ResultVO.ok().setData(UserVO.convert(bo));
     }
 
 

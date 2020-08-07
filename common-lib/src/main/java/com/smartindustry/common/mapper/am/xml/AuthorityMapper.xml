@@ -93,11 +93,18 @@
 
   <!--  根据userid获取当前用户权限-->
   <select id="queryPermsByUserId" parameterType="java.lang.Long" resultType="java.lang.String">
-    select distinct authority_name
-    from am_m_user_authority
+    select distinct au.authority_path
+    from am_m_user_authority mua
+    left join am_authority au on mua.authority_id = au.authority_id
     where user_id = #{userId,jdbcType=BIGINT}
   </select>
 
+  <!--  根据userid获取当前用户权限-->
+  <select id="queryPermissionId" parameterType="java.lang.Long" resultType="java.lang.Long">
+    select distinct authority_id
+    from am_m_user_authority
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
   <!--  根据userid获取当前用户权限id-->
   <select id="queryByUserId" parameterType="java.lang.Long" resultType="java.lang.Long">
     select distinct authority_id

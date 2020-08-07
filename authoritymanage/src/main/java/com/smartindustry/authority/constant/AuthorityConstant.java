@@ -5,7 +5,7 @@ package com.smartindustry.authority.constant;
  * 
  * @author jiangzhaojie
  */
-public class Constants {
+public class AuthorityConstant {
     /**
      * 令牌前缀
      */
@@ -76,7 +76,7 @@ public class Constants {
     /**
      * 操作成功
      */
-    public static final int SUCCESS = 200;
+    public static final int SUCCESS = 1000;
     /**
      * 系统内部错误
      */
@@ -86,4 +86,6 @@ public class Constants {
      * 未授权
      */
     public static final int UNAUTHORIZED = 401;
+
+
 }

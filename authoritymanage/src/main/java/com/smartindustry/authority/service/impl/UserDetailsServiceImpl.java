@@ -1,9 +1,10 @@
 package com.smartindustry.authority.service.impl;
 
-import com.smartindustry.authority.constant.Constants;
+import com.smartindustry.authority.constant.AuthorityConstant;
 import com.smartindustry.authority.service.IAuthorityService;
 import com.smartindustry.authority.util.StringUtils;
 import com.smartindustry.authority.dto.LoginUserDTO;
+import com.smartindustry.common.mapper.am.AuthorityMapper;
 import com.smartindustry.common.mapper.am.UserMapper;
 import com.smartindustry.common.pojo.am.UserPO;
 import org.slf4j.Logger;
@@ -25,6 +26,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private static final Logger log = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private AuthorityMapper authorityMapper;
 
     @Autowired
     private IAuthorityService authorityService;
@@ -38,12 +41,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             log.info("登录用户：{} 不存在.", username);
             throw new UsernameNotFoundException("登录用户：" + username + " 不存在");
         }
-        else if (Constants.USER_DELETE.equals(user.getDr()))
+        else if (AuthorityConstant.USER_DELETE.equals(user.getDr()))
         {
             log.info("登录用户：{} 已被删除.", username);
 //            throw new BaseException("对不起，您的账号：" + username + " 已被删除");
         }
-        else if (Constants.USER_DISABLE.equals(user.getStatus()))
+        else if (AuthorityConstant.USER_DISABLE.equals(user.getStatus()))
         {
             log.info("登录用户：{} 已被停用.", username);
 //            throw new BaseException("对不起，您的账号：" + username + " 已停用");
@@ -53,7 +56,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     // 获得当前用户的信息以及所有权限
     public UserDetails createLoginUser(UserPO user) {
-        System.out.println("权限查询"+authorityService.getMenuPermission(user));
-        return new LoginUserDTO(user,authorityService.getMenuPermission(user));
+        return new LoginUserDTO(user,authorityService.getMenuPermission(user),authorityMapper.queryPermissionId(user.getUserId()));
     }
 }

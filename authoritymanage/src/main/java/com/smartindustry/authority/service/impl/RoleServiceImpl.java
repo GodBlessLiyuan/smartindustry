@@ -1,7 +1,7 @@
 package com.smartindustry.authority.service.impl;
 
 import com.github.pagehelper.Page;
-import com.smartindustry.authority.constant.Constants;
+import com.smartindustry.authority.constant.AuthorityConstant;
 import com.smartindustry.authority.dto.OperateDTO;
 import com.smartindustry.authority.dto.RoleDTO;
 import com.smartindustry.authority.service.IRoleService;
@@ -13,7 +13,6 @@ import com.smartindustry.common.bo.am.RoleRecordBO;
 import com.smartindustry.common.mapper.am.*;
 import com.smartindustry.common.pojo.am.RolePO;
 import com.smartindustry.common.pojo.am.RoleRecordPO;
-import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
@@ -60,10 +59,10 @@ public class RoleServiceImpl implements IRoleService {
         List<RolePO> pos = RoleDTO.updateList(dtos);
         roleMapper.updateBatch(pos);
         for(OperateDTO dto:dtos){
-            if(dto.getStatus().equals(Constants.STATUS_DISABLE)){
-                roleRecordMapper.insert(new RoleRecordPO(dto.getRid(),1L,new Date(),Constants.DISABLERECORD));
+            if(dto.getStatus().equals(AuthorityConstant.STATUS_DISABLE)){
+                roleRecordMapper.insert(new RoleRecordPO(dto.getRid(),1L,new Date(), AuthorityConstant.DISABLERECORD));
             }else{
-                roleRecordMapper.insert(new RoleRecordPO(dto.getRid(),1L,new Date(),Constants.USERECORD));
+                roleRecordMapper.insert(new RoleRecordPO(dto.getRid(),1L,new Date(), AuthorityConstant.USERECORD));
             }
         }
         return ResultVO.ok();
@@ -78,7 +77,7 @@ public class RoleServiceImpl implements IRoleService {
         }
         RolePO po = RoleDTO.createPO(dto);
         roleMapper.insert(po);
-        roleRecordMapper.insert(new RoleRecordPO(po.getRoleId(),1L,new Date(),Constants.INSERTRECORD));
+        roleRecordMapper.insert(new RoleRecordPO(po.getRoleId(),1L,new Date(), AuthorityConstant.INSERTRECORD));
         return ResultVO.ok();
     }
 
@@ -91,7 +90,7 @@ public class RoleServiceImpl implements IRoleService {
         }
         RolePO po = RoleDTO.createPO(dto);
         roleMapper.updateByPrimaryKeySelective(po);
-        roleRecordMapper.insert(new RoleRecordPO(dto.getRid(),1L,new Date(),Constants.UPDATERECORD));
+        roleRecordMapper.insert(new RoleRecordPO(dto.getRid(),1L,new Date(), AuthorityConstant.UPDATERECORD));
         return ResultVO.ok();
     }
 
@@ -101,31 +100,31 @@ public class RoleServiceImpl implements IRoleService {
         roleMapper.deleteBatch(rids);
         for(Long rid:rids){
             deleteRole(rid);
-            roleRecordMapper.insert(new RoleRecordPO(rid,1L,new Date(),Constants.DELETERECORD));
+            roleRecordMapper.insert(new RoleRecordPO(rid,1L,new Date(), AuthorityConstant.DELETERECORD));
         }
         return ResultVO.ok();
     }
 
     @Override
     public ResultVO queryAllMenu(){
-        List<AuthorityBO> bos = authorityMapper.queryChild(null,Constants.MENUTYPE);
+        List<AuthorityBO> bos = authorityMapper.queryChild(null, AuthorityConstant.MENUTYPE);
         List<AuthorityVO> vos = AuthorityVO.convert(bos);
         Map<String, Object> menuMap = new LinkedHashMap<>();
         List<AuthorityVO> lastMenu = new ArrayList<>();
-        menuMap.put("menu",getAuthTree(vos,lastMenu,Constants.MENUTYPE));
+        menuMap.put("menu",getAuthTree(vos,lastMenu, AuthorityConstant.MENUTYPE));
         return ResultVO.ok().setData(menuMap);
     }
 
     @Override
     public ResultVO queryAllButton(){
-        List<AuthorityBO> bos = authorityMapper.queryChild(null,Constants.MENUTYPE);        List<AuthorityVO> vos = AuthorityVO.convert(bos);
+        List<AuthorityBO> bos = authorityMapper.queryChild(null, AuthorityConstant.MENUTYPE);        List<AuthorityVO> vos = AuthorityVO.convert(bos);
         Map<String, Object> res = new HashMap<>();
         List<AuthorityVO> lastMenu = new ArrayList<>();
-        getAuthTree(vos,lastMenu,Constants.MENUTYPE);
+        getAuthTree(vos,lastMenu, AuthorityConstant.MENUTYPE);
         List<AuthorityVO> lastButton = new ArrayList<>();
         CollectionUtils.addAll(lastButton, new Object[lastMenu.size()]);
         Collections.copy(lastButton,lastMenu);
-        res.put("button",getAuthTree(lastMenu,new ArrayList<>(),Constants.BUTTONTYPE));
+        res.put("button",getAuthTree(lastMenu,new ArrayList<>(), AuthorityConstant.BUTTONTYPE));
         return ResultVO.ok().setData(res);
     }
 

@@ -1,6 +1,5 @@
 package com.smartindustry.authority.service.impl;
-import com.alibaba.fastjson.JSON;
-import com.smartindustry.authority.constant.Constants;
+import com.smartindustry.authority.constant.AuthorityConstant;
 
 import com.smartindustry.authority.dto.LoginDTO;
 import com.smartindustry.authority.dto.OperateDTO;
@@ -11,7 +10,6 @@ import com.smartindustry.authority.vo.AuthorityVO;
 import com.smartindustry.common.bo.am.AuthorityBO;
 import com.smartindustry.common.mapper.am.AuthorityMapper;
 import com.smartindustry.common.mapper.am.UserMapper;
-import net.sf.json.JSONObject;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.security.core.Authentication;
 import com.smartindustry.common.vo.ResultVO;
@@ -25,7 +23,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author: jiangzhaojie
@@ -58,11 +55,14 @@ public class LoginServiceImpl implements ILoginService {
         }
         // 用户验证
         Authentication authentication = null;
-        // 生成token
+        // 生成token  该方法会去调用UserDetailsServiceImpl.loadUserByUsername
         authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()));
         LoginUserDTO user = (LoginUserDTO) authentication.getPrincipal();
-        return ResultVO.ok().setData(tokenService.createToken(user));
+        Map<String,Object> map = new HashMap<>();
+        map.put("token",tokenService.createToken(user));
+        map.put("authAndUser",user);
+        return ResultVO.ok().setData(map);
     }
 
     /**
@@ -74,17 +74,17 @@ public class LoginServiceImpl implements ILoginService {
     public ResultVO getInfo(OperateDTO dto){
         Long roleId = dto.getRid();
         //首先根据parentId找到一级菜单权限
-        List<AuthorityBO> bos = authorityMapper.queryChildren(null,roleId, Constants.MENUTYPE);
+        List<AuthorityBO> bos = authorityMapper.queryChildren(null,roleId, AuthorityConstant.MENUTYPE);
         List<AuthorityVO> vos = AuthorityVO.convert(bos);
         Map<String, Object> res = new LinkedHashMap<>();
         List<AuthorityVO> lastMenu = new ArrayList<>();
-        res.put("menu",getAuthTreeList(vos,roleId,lastMenu,Constants.MENUTYPE));
+        res.put("menu",getAuthTreeList(vos,roleId,lastMenu, AuthorityConstant.MENUTYPE));
 
         List<AuthorityVO> lastButton = new ArrayList<>();
         CollectionUtils.addAll(lastButton, new Object[lastMenu.size()]);
         Collections.copy(lastButton,lastMenu);
 
-        res.put("button",getAuthTreeList(lastMenu,roleId,new ArrayList<>(),Constants.BUTTONTYPE));
+        res.put("button",getAuthTreeList(lastMenu,roleId,new ArrayList<>(), AuthorityConstant.BUTTONTYPE));
         return ResultVO.ok().setData(res);
     }
 
