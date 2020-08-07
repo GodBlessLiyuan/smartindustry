@@ -7,7 +7,6 @@
  */
 
 package com.smartindustry.authority.config;
-
 import com.smartindustry.common.vo.ResultVO;
 
 import java.security.MessageDigest;

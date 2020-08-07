@@ -1,7 +1,7 @@
 package com.smartindustry.authority.service.impl;
 
 import com.github.pagehelper.Page;
-import com.smartindustry.authority.constant.Constants;
+import com.smartindustry.authority.constant.AuthorityConstant;
 import com.smartindustry.authority.dto.DeptDTO;
 import com.smartindustry.authority.dto.OperateDTO;
 import com.smartindustry.authority.service.IDeptService;
@@ -10,7 +10,6 @@ import com.smartindustry.authority.vo.DeptVO;
 import com.smartindustry.authority.vo.UserVO;
 import com.smartindustry.common.bo.am.DeptBO;
 import com.smartindustry.common.bo.am.DeptRecordBO;
-import com.smartindustry.common.bo.om.OutboundBO;
 import com.smartindustry.common.mapper.am.DeptMapper;
 import com.smartindustry.common.mapper.am.DeptRecordMapper;
 import com.smartindustry.common.mapper.am.UserMapper;
@@ -26,7 +25,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.IntStream;
 
 /**
  * @author: jiangzhaojie
@@ -62,10 +60,10 @@ public class DeptServiceImpl implements IDeptService {
         List<DeptPO> pos = DeptDTO.updateList(dtos);
         deptMapper.updateBatch(pos);
         for(OperateDTO dto:dtos){
-            if(dto.getStatus().equals(Constants.STATUS_DISABLE)){
-                deptRecordMapper.insert(new DeptRecordPO(dto.getDid(),1L,new Date(),Constants.DISABLERECORD));
+            if(dto.getStatus().equals(AuthorityConstant.STATUS_DISABLE)){
+                deptRecordMapper.insert(new DeptRecordPO(dto.getDid(),1L,new Date(), AuthorityConstant.DISABLERECORD));
             }else {
-                deptRecordMapper.insert(new DeptRecordPO(dto.getDid(),1L,new Date(),Constants.USERECORD));
+                deptRecordMapper.insert(new DeptRecordPO(dto.getDid(),1L,new Date(), AuthorityConstant.USERECORD));
             }
         }
         return ResultVO.ok();
@@ -80,7 +78,7 @@ public class DeptServiceImpl implements IDeptService {
         }
         DeptPO po = DeptDTO.createPO(dto);
         deptMapper.insert(po);
-        deptRecordMapper.insert(new DeptRecordPO(po.getDeptId(),1L,new Date(),Constants.INSERTRECORD));
+        deptRecordMapper.insert(new DeptRecordPO(po.getDeptId(),1L,new Date(), AuthorityConstant.INSERTRECORD));
         return ResultVO.ok();
     }
 
@@ -100,7 +98,7 @@ public class DeptServiceImpl implements IDeptService {
         }
         DeptPO po = DeptDTO.createPO(dto);
         deptMapper.updateByPrimaryKeySelective(po);
-        deptRecordMapper.insert(new DeptRecordPO(dto.getDid(),1L,new Date(),Constants.UPDATERECORD));
+        deptRecordMapper.insert(new DeptRecordPO(dto.getDid(),1L,new Date(), AuthorityConstant.UPDATERECORD));
         return ResultVO.ok();
     }
 
@@ -118,7 +116,7 @@ public class DeptServiceImpl implements IDeptService {
                 deptMapper.deleteByPrimaryKey(did);
             }
             deleteDept(did);
-            deptRecordMapper.insert(new DeptRecordPO(did,1L,new Date(),Constants.DELETERECORD));
+            deptRecordMapper.insert(new DeptRecordPO(did,1L,new Date(), AuthorityConstant.DELETERECORD));
         }
         return ResultVO.ok();
     }

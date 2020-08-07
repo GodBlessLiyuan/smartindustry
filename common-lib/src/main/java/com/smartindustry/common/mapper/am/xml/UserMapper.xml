@@ -234,6 +234,15 @@
     order by u.create_time desc
   </select>
 
+<!--  查询具体的个人信息-->
+  <select id="queryUserMsg" parameterType="java.lang.Long" resultMap="BOResultMap">
+    select
+    <include refid="BO_Column_List"/>
+    from am_user u
+    left join am_dept d on u.dept_id = d.dept_id
+    left join am_role r on u.role_id = r.role_id
+    where u.dr = 1 and u.user_id = #{userId,jdbcType=BIGINT}
+  </select>
   <!--  批量禁用用户-->
   <update id="updateBatch" parameterType="java.util.List">
     <foreach collection="list" item="item" index="index" open="" close="" separator=";">
@@ -313,5 +322,12 @@
     update am_user
     set role_id = null
     where role_id = #{roleId,jdbcType=BIGINT} and dr = 1
+  </update>
+
+<!--  更新用户密码-->
+  <update id="updatePassword">
+    update am_user
+    set `password` = #{password,jdbcType=CHAR}
+    where user_id = #{userId,jdbcType=BIGINT}
   </update>
 </mapper>

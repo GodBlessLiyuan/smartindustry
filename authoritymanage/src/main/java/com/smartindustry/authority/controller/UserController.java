@@ -1,6 +1,7 @@
 package com.smartindustry.authority.controller;
 
 import com.smartindustry.authority.dto.DeptDTO;
+import com.smartindustry.authority.dto.EditDTO;
 import com.smartindustry.authority.dto.OperateDTO;
 import com.smartindustry.authority.dto.UserDTO;
 import com.smartindustry.authority.service.IUserService;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
@@ -70,5 +72,20 @@ public class UserController {
     @PostMapping("queryUserRecord")
     public ResultVO queryUserRecord(@RequestBody Map<String, Object> reqData) {
         return userService.queryUserRecord(reqData);
+    }
+
+    @PostMapping("editPassword")
+    public ResultVO editPassword(@RequestBody EditDTO dto) {
+        return userService.editPassword(dto);
+    }
+
+    @PostMapping("queryUserMsg")
+    public ResultVO queryUserMsg(@RequestBody OperateDTO dto){
+        return userService.queryUserMsg(dto);
+    }
+
+    @PostMapping("updateUser")
+    public ResultVO updateUser(@RequestBody UserDTO dto) {
+        return userService.update(dto);
     }
 }

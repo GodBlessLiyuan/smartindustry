@@ -1,10 +1,9 @@
 package com.smartindustry.authority.security.handle;
 
 import com.alibaba.fastjson.JSON;
-import com.smartindustry.authority.constant.Constants;
-import com.smartindustry.authority.util.AjaxResult;
+import com.smartindustry.authority.constant.AuthorityConstant;
 import com.smartindustry.authority.util.ServletUtils;
-import com.smartindustry.authority.util.StringUtils;
+import com.smartindustry.common.vo.ResultVO;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -28,8 +27,8 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint, S
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e)
             throws IOException
     {
-        int code = Constants.UNAUTHORIZED;
-        String msg = StringUtils.format("请求访问：{}，认证失败，无法访问系统资源", request.getRequestURI());
-        ServletUtils.renderString(response, JSON.toJSONString(AjaxResult.error(code, msg)));
+        int code = AuthorityConstant.UNAUTHORIZED;
+//        String msg = StringUtils.format("请求访问：{}，认证失败，无法访问系统资源", request.getRequestURI());
+        ServletUtils.renderString(response, JSON.toJSONString(new ResultVO(code)));
     }
 }

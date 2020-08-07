@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -39,11 +40,16 @@ public class LoginUserDTO implements UserDetails {
      * 权限列表
      */
     private Set<String> permissions;
+    /**
+     * 权限列表ID
+     */
+    private List<Long> permissionIds;
 
-    public LoginUserDTO(UserPO user, Set<String> permissions)
+    public LoginUserDTO(UserPO user, Set<String> permissions, List<Long> permissionIds)
     {
         this.user = user;
         this.permissions = permissions;
+        this.permissionIds = permissionIds;
     }
 
     @JsonIgnore

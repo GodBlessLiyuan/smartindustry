@@ -1,6 +1,5 @@
 package com.smartindustry.authority.config;
 
-import com.smartindustry.authority.constant.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

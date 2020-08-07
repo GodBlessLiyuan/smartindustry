@@ -86,4 +86,19 @@ public interface UserMapper extends BaseMapper<UserPO, Long> {
      * @return
      */
     Integer updateRoleId(@Param("roleId") Long roleId);
+
+    /**
+     * 更新用户密码
+     * @param password
+     * @param userId
+     * @return
+     */
+    Integer updatePassword(@Param("password") String password,@Param("userId") Long userId);
+
+    /**
+     * 查询用户详细的个人信息
+     * @param userId
+     * @return
+     */
+    UserBO queryUserMsg(@Param("userId") Long userId);
 }

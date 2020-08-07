@@ -1,11 +1,13 @@
 package com.smartindustry.authority.service;
 
 import com.smartindustry.authority.dto.DeptDTO;
+import com.smartindustry.authority.dto.EditDTO;
 import com.smartindustry.authority.dto.OperateDTO;
 import com.smartindustry.authority.dto.UserDTO;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
@@ -79,4 +81,18 @@ public interface IUserService {
      * @return
      */
     ResultVO queryUserRecord(Map<String, Object> reqData);
+
+    /**
+     * 更新用户密码
+     * @param dto
+     * @return
+     */
+    ResultVO editPassword(EditDTO dto);
+
+    /**
+     * 查询详细的个人信息
+     * @param dto
+     * @return
+     */
+    ResultVO queryUserMsg(OperateDTO dto);
 }

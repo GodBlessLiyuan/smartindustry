@@ -21,6 +21,13 @@ public interface AuthorityMapper extends BaseMapper<AuthorityPO, Long> {
     List<String> queryPermsByUserId(@Param("userId") Long userId);
 
     /**
+     * 根据userid查询所有的权限id列表
+     * @param userId
+     * @return
+     */
+    List<Long> queryPermissionId(@Param("userId") Long userId);
+
+    /**
      * 根据userid获取到当前用户的所有权限id
      * @param userId
      * @return
