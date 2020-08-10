@@ -5,7 +5,6 @@ values(1, '5101000496', 1, '原料物料001', 30, 'MOQ00001', 'SH0001', '测试�
 insert into si_warehouse(warehouse_id, warehouse_no, warehouse_name, warehouse_type_id, dr) values(1, 'CK00001', '测试仓库1', 1, 1);
 insert into si_location(location_id, location_no, location_name, location_type_id, warehouse_id, user_id, dr ) values(1, '8-10', '测试货位1', 1, 1, 1, 1), (2, '8-11', '测试货位2', 1, 1, 1, 1);
 
-
 INSERT INTO `am_authority` VALUES (1, '系统管理', 'am', 1, 0);
 INSERT INTO `am_authority` VALUES (2, '部门管理', 'am:dept', 1, 1);
 INSERT INTO `am_authority` VALUES (3, '角色管理', 'am:role', 1, 1);
@@ -33,5 +32,4 @@ INSERT INTO `am_authority` VALUES (24, '用户删除', 'am:user:delete', 2, 4);
 INSERT INTO `am_authority` VALUES (25, '用户密码更新', 'am:user:password', 2, 4);
 INSERT INTO `am_authority` VALUES (26, '基本资料修改', 'am:userinfo:update', 2, 5);
 INSERT INTO `am_authority` VALUES (27, '登入密码修改', 'am:userinfo:password', 2, 5);
-
 
