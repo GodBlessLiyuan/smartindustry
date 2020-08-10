@@ -44,6 +44,6 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler
             tokenService.delLoginUser(loginUserDTO.getToken());
             // 记录用户退出日志
         }
-        ServletUtils.renderString(response, JSON.toJSONString(ResultVO.ok().setData(200)));
+        ServletUtils.renderString(response, JSON.toJSONString(ResultVO.ok()));
     }
 }
