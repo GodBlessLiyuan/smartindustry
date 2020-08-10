@@ -10,6 +10,8 @@ DROP TABLE IF EXISTS am_role_record;
 DROP TABLE IF EXISTS am_user_record;
 DROP TABLE IF EXISTS om_label_recommend;
 DROP TABLE IF EXISTS om_pick_body;
+DROP TABLE IF EXISTS si_bom_body;
+DROP TABLE IF EXISTS si_bom_head;
 DROP TABLE IF EXISTS si_material_record;
 DROP TABLE IF EXISTS si_material_specification;
 DROP TABLE IF EXISTS om_pick_label;
@@ -36,9 +38,13 @@ DROP TABLE IF EXISTS si_location_record;
 DROP TABLE IF EXISTS si_location;
 DROP TABLE IF EXISTS dd_location_type;
 DROP TABLE IF EXISTS dd_material_level;
+DROP TABLE IF EXISTS dd_material_lock;
+DROP TABLE IF EXISTS dd_material_property;
 DROP TABLE IF EXISTS dd_material_type;
+DROP TABLE IF EXISTS dd_material_unit;
 DROP TABLE IF EXISTS dd_material_version;
 DROP TABLE IF EXISTS dd_measure_unit;
+DROP TABLE IF EXISTS dd_process;
 DROP TABLE IF EXISTS dd_produce_loss_level;
 DROP TABLE IF EXISTS dd_settle_period;
 DROP TABLE IF EXISTS dd_supplier_group;
@@ -55,6 +61,7 @@ DROP TABLE IF EXISTS om_logistics_record;
 DROP TABLE IF EXISTS om_outbound;
 DROP TABLE IF EXISTS om_pick_check;
 DROP TABLE IF EXISTS om_pick_head;
+DROP TABLE IF EXISTS si_config;
 DROP TABLE IF EXISTS sm_receipt_head;
 
 
@@ -271,6 +278,28 @@ CREATE TABLE dd_material_level
 );
 
 
+CREATE TABLE dd_material_lock
+(
+    material_lock_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    material_lock_name char(255) NOT NULL,
+    user_id bigint unsigned,
+    create_time datetime,
+    PRIMARY KEY (material_lock_id),
+    UNIQUE (material_lock_id)
+);
+
+
+CREATE TABLE dd_material_property
+(
+    material_property_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    material_property_name char(255) NOT NULL,
+    user_id bigint unsigned,
+    create_time datetime,
+    PRIMARY KEY (material_property_id),
+    UNIQUE (material_property_id)
+);
+
+
 CREATE TABLE dd_material_type
 (
     material_type_id bigint NOT NULL AUTO_INCREMENT,
@@ -278,6 +307,17 @@ CREATE TABLE dd_material_type
     user_id bigint unsigned,
     create_time datetime,
     PRIMARY KEY (material_type_id)
+);
+
+
+CREATE TABLE dd_material_unit
+(
+    material_unit_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    material_unit_name char(255) NOT NULL,
+    user_id bigint unsigned,
+    create_time datetime,
+    PRIMARY KEY (material_unit_id),
+    UNIQUE (material_unit_id)
 );
 
 
@@ -300,6 +340,17 @@ CREATE TABLE dd_measure_unit
     create_time datetime,
     PRIMARY KEY (measure_unit_id),
     UNIQUE (measure_unit_id)
+);
+
+
+CREATE TABLE dd_process
+(
+    process_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    process_name char(255) NOT NULL,
+    user_id bigint unsigned,
+    create_time datetime,
+    PRIMARY KEY (process_id),
+    UNIQUE (process_id)
 );
 
 
@@ -548,6 +599,65 @@ CREATE TABLE om_pick_label
 );
 
 
+CREATE TABLE si_bom_body
+(
+    bom_body_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    bom_head_id bigint unsigned NOT NULL,
+    material_id bigint unsigned NOT NULL,
+    material_property_id bigint unsigned NOT NULL,
+    material_unit_id bigint unsigned NOT NULL,
+    material_demand float(5,2) NOT NULL,
+    -- 1：配比/比例
+    -- 2：计数
+    demand_type tinyint NOT NULL COMMENT '1：配比/比例
+2：计数',
+    material_loss float(5,2),
+    -- 1：配比/比例
+    -- 2：计数
+    loss_type tinyint COMMENT '1：配比/比例
+2：计数',
+    process_id bigint unsigned,
+    parent_id bigint unsigned NOT NULL,
+    user_id bigint unsigned,
+    create_time datetime,
+    update_time datetime,
+    -- 1：未删除
+    -- 2：已删除
+    dr tinyint COMMENT '1：未删除
+2：已删除',
+    PRIMARY KEY (bom_body_id),
+    UNIQUE (bom_body_id)
+);
+
+
+CREATE TABLE si_bom_head
+(
+    bom_head_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    material_id bigint unsigned NOT NULL,
+    relate_num int,
+    user_id bigint unsigned,
+    create_time datetime,
+    update_time datetime,
+    -- 1：未删除
+    -- 2：已删除
+    dr tinyint COMMENT '1：未删除
+2：已删除',
+    PRIMARY KEY (bom_head_id),
+    UNIQUE (bom_head_id)
+);
+
+
+CREATE TABLE si_config
+(
+    config_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    config_name char(255) NOT NULL,
+    config_value char(255),
+    PRIMARY KEY (config_id),
+    UNIQUE (config_id),
+    UNIQUE (config_name)
+);
+
+
 CREATE TABLE si_label_record
 (
     label_record_id bigint unsigned NOT NULL AUTO_INCREMENT,
@@ -612,7 +722,13 @@ CREATE TABLE si_material
 (
     material_id bigint unsigned NOT NULL AUTO_INCREMENT,
     material_no char(64) NOT NULL,
-    material_type_id bigint NOT NULL,
+    -- 1：原材料
+    -- 2：半成品
+    -- 3：成品
+    material_type tinyint COMMENT '1：原材料
+2：半成品
+3：成品',
+    material_type_id bigint,
     humidity_level_id bigint unsigned,
     material_level_id bigint unsigned,
     measure_unit_id bigint unsigned,
@@ -713,6 +829,8 @@ CREATE TABLE si_storage_label
 2：非良品',
     storage_num int,
     storage_time datetime,
+    material_lock_id bigint unsigned,
+    status tinyint,
     PRIMARY KEY (storage_label_id),
     UNIQUE (storage_label_id),
     UNIQUE (print_label_id)
@@ -1173,7 +1291,31 @@ ALTER TABLE dd_material_level
 ;
 
 
+ALTER TABLE dd_material_lock
+    ADD FOREIGN KEY (user_id)
+        REFERENCES am_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE dd_material_property
+    ADD FOREIGN KEY (user_id)
+        REFERENCES am_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
 ALTER TABLE dd_material_type
+    ADD FOREIGN KEY (user_id)
+        REFERENCES am_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE dd_material_unit
     ADD FOREIGN KEY (user_id)
         REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
@@ -1190,6 +1332,14 @@ ALTER TABLE dd_material_version
 
 
 ALTER TABLE dd_measure_unit
+    ADD FOREIGN KEY (user_id)
+        REFERENCES am_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE dd_process
     ADD FOREIGN KEY (user_id)
         REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
@@ -1238,6 +1388,22 @@ ALTER TABLE dd_warehouse_type
 
 
 ALTER TABLE om_outbound_record
+    ADD FOREIGN KEY (user_id)
+        REFERENCES am_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_bom_body
+    ADD FOREIGN KEY (user_id)
+        REFERENCES am_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_bom_head
     ADD FOREIGN KEY (user_id)
         REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
@@ -1373,9 +1539,33 @@ ALTER TABLE si_material
 ;
 
 
+ALTER TABLE si_storage_label
+    ADD FOREIGN KEY (material_lock_id)
+        REFERENCES dd_material_lock (material_lock_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_bom_body
+    ADD FOREIGN KEY (material_property_id)
+        REFERENCES dd_material_property (material_property_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
 ALTER TABLE si_material
     ADD FOREIGN KEY (material_type_id)
         REFERENCES dd_material_type (material_type_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_bom_body
+    ADD FOREIGN KEY (material_unit_id)
+        REFERENCES dd_material_unit (material_unit_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -1392,6 +1582,14 @@ ALTER TABLE si_material
 ALTER TABLE si_material
     ADD FOREIGN KEY (measure_unit_id)
         REFERENCES dd_measure_unit (measure_unit_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_bom_body
+    ADD FOREIGN KEY (process_id)
+        REFERENCES dd_process (process_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
@@ -1509,6 +1707,22 @@ ALTER TABLE om_pick_label
 ;
 
 
+ALTER TABLE si_bom_body
+    ADD FOREIGN KEY (parent_id)
+        REFERENCES si_bom_body (bom_body_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_bom_body
+    ADD FOREIGN KEY (bom_head_id)
+        REFERENCES si_bom_head (bom_head_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
 ALTER TABLE si_location_record
     ADD FOREIGN KEY (location_id)
         REFERENCES si_location (location_id)
@@ -1542,6 +1756,22 @@ ALTER TABLE sm_storage_group
 
 
 ALTER TABLE om_pick_body
+    ADD FOREIGN KEY (material_id)
+        REFERENCES si_material (material_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_bom_body
+    ADD FOREIGN KEY (material_id)
+        REFERENCES si_material (material_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_bom_head
     ADD FOREIGN KEY (material_id)
         REFERENCES si_material (material_id)
         ON UPDATE RESTRICT
