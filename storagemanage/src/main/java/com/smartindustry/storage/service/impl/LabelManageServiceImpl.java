@@ -170,7 +170,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
         }
 
         Byte status;    // 操作记录类型
-        if (ReceiptConstant.MATERIAL_TYPE_RAW.equals(bodyPO.getMaterialTypeId())) {
+        if (ReceiptConstant.MATERIAL_TYPE_RAW.equals(bodyPO.getMaterialType())) {
             // 原材料
             IqcDetectPO iqcPO = new IqcDetectPO();
             iqcPO.setReceiptBodyId(dto.getRbid());
@@ -179,7 +179,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
 
             status = ReceiptConstant.RECEIPT_IQC_DETECT;
             bodyPO.setStatus(ReceiptConstant.RECEIPT_IQC_DETECT);
-        } else if (ReceiptConstant.MATERIAL_TYPE_SEMI.equals(bodyPO.getMaterialTypeId()) || ReceiptConstant.MATERIAL_TYPE_FINISH.equals(bodyPO.getMaterialTypeId())) {
+        } else if (ReceiptConstant.MATERIAL_TYPE_SEMI.equals(bodyPO.getMaterialType()) || ReceiptConstant.MATERIAL_TYPE_FINISH.equals(bodyPO.getMaterialType())) {
             // 半成品/成品
             QeDetectPO qePO = new QeDetectPO();
             qePO.setReceiptBodyId(dto.getRbid());

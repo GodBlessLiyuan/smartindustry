@@ -213,21 +213,18 @@
     <sql id="ReceiptBodyBO_Column_List">
         rb.receipt_body_id, rb.receipt_head_id, rb.material_id, rb.order_no, rb.order_type, rb.receipt_no,
     rb.order_total, rb.accept_num, rb.accept_date, rb.good_num, rb.bad_num, rb.stock_num, rb.`status`, rb.create_time, rb.dr,
-    m.material_id, m.material_no, m.material_type_id, m.material_name, m.material_model, m.material_desc, m.test_type,
-    mt.material_type_name
+    m.material_id, m.material_no, m.material_type, m.material_name, m.material_model, m.material_desc, m.test_type
     </sql>
     <sql id="ReceiptBO_Column_List">
         rb.receipt_body_id, rb.receipt_head_id, rb.material_id, rb.order_no, rb.order_type, rb.receipt_no,
     rb.order_total, rb.accept_num, rb.accept_date, rb.good_num, rb.bad_num, rb.stock_num, rb.`status`, rb.create_time, rb.dr,
-    m.material_no, m.material_type_id, m.material_name, m.material_model, m.material_desc, m.test_type,
-    rh.order_date, rh.supplier, rh.buyer, rh.plan_date, rh.logistics_company, rh.logistics_no,  rh.receipt_way, rh.remark,
-    mt.material_type_name
+    m.material_no, m.material_type, m.material_name, m.material_model, m.material_desc, m.test_type,
+    rh.order_date, rh.supplier, rh.buyer, rh.plan_date, rh.logistics_company, rh.logistics_no,  rh.receipt_way, rh.remark
     </sql>
     <resultMap id="ReceiptBodyBOResultMap" type="com.smartindustry.common.bo.sm.ReceiptBodyBO" extends="BaseResultMap">
         <result column="material_id" jdbcType="BIGINT" property="materialId"/>
         <result column="material_no" jdbcType="CHAR" property="materialNo"/>
-        <result column="material_type_id" jdbcType="BIGINT" property="materialTypeId"/>
-        <result column="material_type_name" jdbcType="CHAR" property="materialTypeName"/>
+        <result column="material_type" jdbcType="TINYINT" property="materialType"/>
         <result column="material_name" jdbcType="CHAR" property="materialName"/>
         <result column="material_model" jdbcType="CHAR" property="materialModel"/>
         <result column="material_desc" jdbcType="CHAR" property="materialDesc"/>
@@ -252,7 +249,6 @@
         </if>
         from sm_receipt_body rb
         left join si_material m on rb.material_id = m.material_id
-        left join dd_material_type mt on m.material_type_id = mt.material_type_id
         left join sm_receipt_head rh on rb.receipt_head_id = rh.receipt_head_id
         <if test="qa">
             <choose>
@@ -333,7 +329,6 @@
         <include refid="ReceiptBodyBO_Column_List"/>
         from sm_receipt_body rb
         left join si_material m on rb.material_id = m.material_id
-        left join dd_material_type mt on m.material_type_id = mt.material_type_id
         where rb.receipt_body_id = #{rbId,jdbcType=BIGINT} and rb.dr = 1
     </select>
 </mapper>
