@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 通用http工具封装
@@ -52,9 +52,5 @@ public class HttpHelper
             }
         }
         return sb.toString();
-    }
-
-    public static void main(String[] args) {
-        System.out.println(SecurityUtils.encryptPassword("admin123"));
     }
 }

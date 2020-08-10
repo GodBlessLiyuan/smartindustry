@@ -31,33 +31,37 @@ public class DeptController {
      * @param reqData
      * @return
      */
+    @PreAuthorize("@ss.hasPermi('am:dept:query')")
     @PostMapping("pageQuery")
     public ResultVO pageQuery(@RequestBody Map<String, Object> reqData) {
         return deptService.pageQuery(reqData);
     }
 
     @PostMapping("status")
+    @PreAuthorize("@ss.hasPermi('am:dept:disable')")
     public ResultVO status(@RequestBody List<OperateDTO> dtos) {
         return deptService.batchUpdate(dtos);
     }
 
+    @PreAuthorize("@ss.hasPermi('am:dept:insert')")
     @PostMapping("insert")
     public ResultVO insert(@RequestBody DeptDTO dto) {
         return deptService.insert(dto);
     }
 
     @PostMapping("update")
+    @PreAuthorize("@ss.hasPermi('am:dept:update')")
     public ResultVO update(@RequestBody DeptDTO dto) {
         return deptService.update(dto);
     }
 
+    @PreAuthorize("@ss.hasPermi('am:dept:delete')")
     @PostMapping("delete")
     public ResultVO delete(@RequestBody List<Long> dids) {
         return deptService.delete(dids);
     }
 
     @PostMapping("queryDeptName")
-//    @PreAuthorize("@ss.hasPermi('system:dept:tree')")
     public ResultVO queryDeptName() {
         return deptService.queryDeptName();
     }

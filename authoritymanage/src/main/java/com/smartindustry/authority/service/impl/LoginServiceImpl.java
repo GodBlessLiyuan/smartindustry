@@ -11,6 +11,7 @@ import com.smartindustry.common.bo.am.AuthorityBO;
 import com.smartindustry.common.mapper.am.AuthorityMapper;
 import com.smartindustry.common.mapper.am.UserMapper;
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,17 +48,24 @@ public class LoginServiceImpl implements ILoginService {
         String code = (String) session.getAttribute(com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY);
         if (null == code) {
             // 验证码过期
-            return new ResultVO(2102);
+            return new ResultVO(1010);
         }
         if (!code.equalsIgnoreCase(dto.getCode())) {
             //验证码错误
-            return new ResultVO(2103);
+            return new ResultVO(1011);
         }
         // 用户验证
         Authentication authentication = null;
         // 生成token  该方法会去调用UserDetailsServiceImpl.loadUserByUsername
-        authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()));
+        try{
+            authentication = authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()));
+        }catch (Exception e){
+            if (e instanceof BadCredentialsException) {
+                //输入密码错误
+                return new ResultVO(1012);
+            }
+        }
         LoginUserDTO user = (LoginUserDTO) authentication.getPrincipal();
         Map<String,Object> map = new HashMap<>();
         map.put("token",tokenService.createToken(user));

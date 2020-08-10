@@ -13,7 +13,6 @@ import java.io.Serializable;
 @Data
 public class EditDTO implements Serializable {
     private static final long serialVersionUID = 1L;
-    private Long uid;
     /**
      * 新密码
      */
