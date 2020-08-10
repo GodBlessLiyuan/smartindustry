@@ -71,7 +71,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
 
     @Override
     public ResultVO queryRecordMsg(OperateDTO dto){
-        List<OutboundRecordPO> outs= outboundRecordMapper.queryByPhid(dto.getPhid(),OutboundConstant.MATERIAL_STATUS_CHECK);
+        List<OutboundRecordPO> outs= outboundRecordMapper.queryByPhid(dto.getPhid(),dto.getStatus());
         List<PrintLabelPO> prints = pickHeadMapper.queryByPhidItems(dto.getPhid());
         Map<String,Object> listMap = new HashMap<String,Object>(){
             {
