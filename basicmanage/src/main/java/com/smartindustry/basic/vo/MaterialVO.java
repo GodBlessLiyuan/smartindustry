@@ -21,6 +21,7 @@ public class MaterialVO implements Serializable {
 
     private Long mid;
     private String mno;
+    private Byte mtype;
     private Long mtid;
     private String mtname;
     private Long hlid;
@@ -57,6 +58,7 @@ public class MaterialVO implements Serializable {
         MaterialVO vo = new MaterialVO();
         vo.setMid(bo.getMaterialId());
         vo.setMno(bo.getMaterialNo());
+        vo.setMtype(bo.getMaterialType());
         vo.setMtid(bo.getMaterialTypeId());
         vo.setMtname(bo.getMaterialTypeName());
         vo.setHlid(bo.getHumidityLevelId());
