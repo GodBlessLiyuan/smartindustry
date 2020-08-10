@@ -189,7 +189,7 @@
     </resultMap>
     <sql id="BO_Column_List">
         sl.storage_label_id, sl.print_label_id, sl.material_id, sl.location_id, sl.package_id, sl.order_no,
-    sl.order_type, sl.`type`, sl.storage_num, sl.storage_time, sl.material_lock_id, sl.`status`
+    sl.order_type, sl.`type`, sl.storage_num, sl.storage_time, sl.material_lock_id, sl.`status`,
     l.location_no
     </sql>
     <select id="queryNotRecommend" resultMap="BOResultMap">
