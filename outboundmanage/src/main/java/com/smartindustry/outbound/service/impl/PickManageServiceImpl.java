@@ -333,18 +333,18 @@ public class PickManageServiceImpl implements IPickManageService {
         int statusCode = 0;
         Integer resultEx = pickHeadMapper.judgeIsEx(pickHeadId);
         Integer resultLack = pickHeadMapper.judgeIsLack(pickHeadId);
-        if (resultEx != null  || resultLack != null) {
-            int resultUp = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_CHECK);
+        if (resultEx != null || resultLack != null) {
+            pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_CHECK);
             PickCheckPO po = new PickCheckPO();
             po.setPickHeadId(pickHeadId);
             po.setStatus(OutboundConstant.OUTBOUND_STATUS_WAIT);
-            int resultIn = pickCheckMapper.insert(po);
+            pickCheckMapper.insert(po);
             statusCode = 1;
             // 当欠料异常形成出库单，将新增审核操作记录到操作记录表中
             outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.RECORD_SUBMIT, OutboundConstant.MATERIAL_STATUS_PICK));
             outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.RECORD_ADD, OutboundConstant.MATERIAL_STATUS_CHECK));
         } else {
-            int resultUp = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_STORAGE);
+            pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_STORAGE);
             OutboundPO po = new OutboundPO();
             po.setPickHeadId(pickHeadId);
             Date date = new Date();
@@ -352,8 +352,10 @@ public class PickManageServiceImpl implements IPickManageService {
             po.setStatus(OutboundConstant.OUTBOUND_STATUS_WAIT);
             po.setCreateTime(date);
             po.setDr((byte) 1);
-            int result = outboundMapper.insert(po);
+            outboundMapper.insert(po);
             outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.RECORD_SUBMIT, OutboundConstant.MATERIAL_STATUS_PICK));
+            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, po.getOutboundId(), 1L, "jzj", OutboundConstant.RECORD_ADD, OutboundConstant.MATERIAL_STATUS_STORAGE));
+
         }
         //2 当形成出库单，在不欠料的情况下，则由物料拣货10变成物料出库30
         return ResultVO.ok().setData(statusCode);
