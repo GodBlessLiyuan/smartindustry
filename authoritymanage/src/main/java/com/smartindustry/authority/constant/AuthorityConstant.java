@@ -73,19 +73,11 @@ public class AuthorityConstant {
     public static final String DISABLERECORD = "禁用";
     public static final String DELETERECORD = "删除";
 
-    /**
-     * 操作成功
-     */
-    public static final int SUCCESS = 1000;
-    /**
-     * 系统内部错误
-     */
-    public static final int ERROR = 500;
 
     /**
      * 未授权
      */
-    public static final int UNAUTHORIZED = 401;
+    public static final int UNAUTHORIZED = 1020;
 
 
 }

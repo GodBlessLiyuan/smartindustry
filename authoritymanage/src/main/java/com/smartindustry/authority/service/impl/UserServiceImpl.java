@@ -3,9 +3,11 @@ package com.smartindustry.authority.service.impl;
 import com.github.pagehelper.Page;
 import com.smartindustry.authority.constant.AuthorityConstant;
 import com.smartindustry.authority.dto.EditDTO;
+import com.smartindustry.authority.dto.LoginUserDTO;
 import com.smartindustry.authority.dto.OperateDTO;
 import com.smartindustry.authority.dto.UserDTO;
 import com.smartindustry.authority.service.IUserService;
+import com.smartindustry.authority.service.TokenService;
 import com.smartindustry.authority.util.SecurityUtils;
 import com.smartindustry.authority.vo.RoleVO;
 import com.smartindustry.authority.vo.UserRecordVO;
@@ -23,7 +25,10 @@ import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.*;
 
@@ -47,6 +52,8 @@ public class UserServiceImpl implements IUserService {
     MUserAuthorityMapper mUserAuthorityMapper;
     @Autowired
     UserRecordMapper userRecordMapper;
+    @Autowired
+    TokenService tokenService;
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData){
@@ -128,6 +135,18 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
+    public  ResultVO updateUser(HttpServletRequest session,@RequestBody UserDTO dto){
+        LoginUserDTO userDto = tokenService.getLoginUser(session);
+        //从session中获取userId的值
+        Long userId = userDto.getUser().getUserId();
+        UserPO po = UserDTO.createPO(dto);
+        po.setUserId(userId);
+        userMapper.updateByPrimaryKeySelective(po);
+        return ResultVO.ok();
+    }
+
+    @Override
     public ResultVO updatePassword(OperateDTO dto){
         UserPO po = UserDTO.buildPO(dto);
         userMapper.updateByPrimaryKeySelective(po);
@@ -165,30 +184,32 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ResultVO editPassword(EditDTO dto){
+    public ResultVO editPassword(HttpServletRequest session,@RequestBody EditDTO dto){
+        LoginUserDTO userDto = tokenService.getLoginUser(session);
         //从session中获取userId的值
-        Long userId = dto.getUid();
+        Long userId = userDto.getUser().getUserId();
         if (userId == null) {
             // 用户过期
-            return new ResultVO(2104);
+            return new ResultVO(1013);
         }
         //根据id,检索到当前用户，以便获得password
         UserPO userPo = userMapper.selectByPrimaryKey(userId);
         // 比较输入旧密码是否等于用户本身存在数据库的密码
         if (!SecurityUtils.matchesPassword(dto.getOpassword(),userPo.getPassword())) {
             // 旧密码输入错误
-            return new ResultVO(2105);
+            return new ResultVO(1023);
         }else {
             // 如果没有问题，则将当前userId用户更新密码
             userMapper.updatePassword(SecurityUtils.encryptPassword(dto.getNpassword()),userId);
         }
-        return new ResultVO(1000);
+        return ResultVO.ok();
     }
 
     @Override
-    public ResultVO queryUserMsg(OperateDTO dto){
-        UserBO bo = userMapper.queryUserMsg(dto.getUid());
-        return ResultVO.ok().setData(UserVO.convert(bo));
+    public ResultVO queryUserMsg(HttpServletRequest session){
+        LoginUserDTO dto = tokenService.getLoginUser(session);
+        UserBO bo = userMapper.queryUserMsg(dto.getUser().getUserId());
+        return ResultVO.ok().setData(UserVO.convertToUserMsg(bo));
     }
 
 

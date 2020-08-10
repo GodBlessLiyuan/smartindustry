@@ -56,6 +56,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
         po.setPickHeadId(pickHeadId);
         po.setStatus(OutboundConstant.PENDING);
         pickCheckMapper.insert(po);
+        outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId,null,1L,"jzj",OutboundConstant.RECORD_OQC,OutboundConstant.MATERIAL_STATUS_PICK));
         outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId,null,1L,"jzj",OutboundConstant.RECORD_ADD,OutboundConstant.MATERIAL_STATUS_CHECK));
         return ResultVO.ok();
     }
@@ -70,7 +71,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
 
     @Override
     public ResultVO queryRecordMsg(OperateDTO dto){
-        List<OutboundRecordPO> outs= outboundRecordMapper.queryByPhid(dto.getPhid(),OutboundConstant.MATERIAL_STATUS_CHECK);
+        List<OutboundRecordPO> outs= outboundRecordMapper.queryByPhid(dto.getPhid(),dto.getStatus());
         List<PrintLabelPO> prints = pickHeadMapper.queryByPhidItems(dto.getPhid());
         Map<String,Object> listMap = new HashMap<String,Object>(){
             {

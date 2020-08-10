@@ -7,6 +7,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -57,6 +58,8 @@ public class UserVO implements Serializable {
 
     private List<Long> dcode;
 
+    private Date ctime;
+
     public static List<UserVO> convert(List<UserBO> bos) {
         List<UserVO> vos = new ArrayList<>(bos.size());
         for (UserBO bo : bos) {
@@ -74,13 +77,27 @@ public class UserVO implements Serializable {
         vo.setUid(bo.getUserId());
         vo.setUname(bo.getUsername());
         vo.setDid(bo.getDeptId());
-        vo.setPassword(bo.getPassword());
+        vo.setPassword("******");
         vo.setJob(bo.getJob());
         vo.setEmail(bo.getEmail());
         vo.setRname(bo.getRoleName());
         vo.setSex(bo.getSex());
         vo.setRemark(bo.getRemark());
         vo.setRid(bo.getRoleId());
+        vo.setCtime(bo.getCreateTime());
+        return vo;
+    }
+
+    public static UserVO convertToUserMsg(UserBO bo) {
+        UserVO vo = new UserVO();
+        vo.setName(bo.getName());
+        vo.setUname(bo.getUsername());
+        vo.setPhone(bo.getPhone());
+        vo.setEmail(bo.getEmail());
+        vo.setDname(bo.getDeptName());
+        vo.setRname(bo.getRoleName());
+        vo.setCtime(bo.getCreateTime());
+        vo.setSex(bo.getSex());
         return vo;
     }
 
