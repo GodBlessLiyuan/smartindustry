@@ -16,6 +16,7 @@
         <module>industryzuul</module>
         <module>authoritymanage</module>
         <module>basicmanage</module>
+        <module>inventorymanage</module>
     </modules>
 
     <name>smartindustry</name>

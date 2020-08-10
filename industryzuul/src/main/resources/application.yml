@@ -23,6 +23,7 @@ zuul:
     outboundmanage: /om/**
     basicmanage: /ba/**
     authoritymanage: /am/**
+    inventorymanage: /im/**
   host:
     connect-timeout-millis: 15000
     socket-timeout-millis: 60000

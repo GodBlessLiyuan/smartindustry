@@ -41,5 +41,9 @@ public class StorageLabelPO implements Serializable {
 
     private Date storageTime;
 
+    private Long materialLockId;
+
+    private Byte status;
+
     private static final long serialVersionUID = 1L;
 }
