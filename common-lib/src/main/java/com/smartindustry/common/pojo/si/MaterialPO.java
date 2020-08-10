@@ -2,17 +2,26 @@ package com.smartindustry.common.pojo.si;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import lombok.Data;
 
 /**
  * si_material
- * @author 
+ *
+ * @author
  */
 @Data
 public class MaterialPO implements Serializable {
     private Long materialId;
 
     private String materialNo;
+
+    /**
+     * 1：原材料
+     * 2：半成品
+     * 3：成品
+     */
+    private Byte materialType;
 
     private Long materialTypeId;
 
@@ -52,7 +61,7 @@ public class MaterialPO implements Serializable {
 
     /**
      * 1：未删除
-2：已删除
+     * 2：已删除
      */
     private Byte dr;
 
