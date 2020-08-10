@@ -93,7 +93,7 @@ public class DeptServiceImpl implements IDeptService {
             return new ResultVO(1005);
         }
         DeptPO po1 = deptMapper.selectByPrimaryKey(dto.getPid());
-        if(po1.getParentId().equals(dto.getDid())){
+        if(po1.getParentId()!=null && po1.getParentId().equals(dto.getDid())){
             return new ResultVO(1008);
         }
         DeptPO po = DeptDTO.createPO(dto);
