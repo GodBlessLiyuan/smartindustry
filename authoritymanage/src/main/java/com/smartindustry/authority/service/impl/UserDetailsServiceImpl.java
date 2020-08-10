@@ -7,6 +7,7 @@ import com.smartindustry.authority.dto.LoginUserDTO;
 import com.smartindustry.common.mapper.am.AuthorityMapper;
 import com.smartindustry.common.mapper.am.UserMapper;
 import com.smartindustry.common.pojo.am.UserPO;
+import com.smartindustry.common.vo.ResultVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

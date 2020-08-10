@@ -53,6 +53,7 @@ public class LoginController {
         String png_base64 = null;
         //获取图片验证码
         String capText = producer.createText();
+        System.out.println("验证码"+capText);
         session.setAttribute(com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY, capText);
         //向客户端写出
         BufferedImage bi = producer.createImage(capText);

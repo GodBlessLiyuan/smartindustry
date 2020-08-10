@@ -68,7 +68,6 @@ public class TokenService {
             String userKey = getTokenKey(uuid);
             LoginUserDTO user = redisCache.getCacheObject(userKey);
 
-            System.out.println("user验证"+user);
             return user;
         }
         return null;

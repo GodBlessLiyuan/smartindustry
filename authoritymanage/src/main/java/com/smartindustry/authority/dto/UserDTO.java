@@ -1,5 +1,6 @@
 package com.smartindustry.authority.dto;
 
+import com.smartindustry.authority.util.SecurityUtils;
 import com.smartindustry.common.pojo.am.DeptPO;
 import com.smartindustry.common.pojo.am.UserPO;
 import lombok.Data;
@@ -49,7 +50,9 @@ public class UserDTO {
         po.setDr((byte)1);
         po.setUserId(dto.getUid());
         po.setEmail(dto.getEmail());
-        po.setPassword(dto.getPassword());
+        if(dto.getPassword()!=null){
+            po.setPassword(SecurityUtils.encryptPassword(dto.getPassword()));
+        }
         po.setJob(dto.getJob());
         po.setCreateTime(new Date());
         po.setName(dto.getName());

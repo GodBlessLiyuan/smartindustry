@@ -7,6 +7,8 @@ import com.smartindustry.authority.dto.UserDTO;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
@@ -84,15 +86,22 @@ public interface IUserService {
 
     /**
      * 更新用户密码
-     * @param dto
+     * @param session
      * @return
      */
-    ResultVO editPassword(EditDTO dto);
+    ResultVO editPassword(HttpServletRequest session,@RequestBody EditDTO dto);
 
     /**
      * 查询详细的个人信息
+     * @return
+     */
+    ResultVO queryUserMsg(HttpServletRequest session);
+
+    /**
+     * 更新个人用户token
+     * @param session
      * @param dto
      * @return
      */
-    ResultVO queryUserMsg(OperateDTO dto);
+    ResultVO updateUser(HttpServletRequest session,@RequestBody UserDTO dto);
 }
