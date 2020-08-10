@@ -208,6 +208,7 @@
         location_id, package_id, order_no,
         order_type, `type`, storage_num,
         storage_time, material_lock_id, `status`)
+        values
         <foreach collection="list" separator="," item="po">
             (#{po.storageLabelId,jdbcType=BIGINT}, #{po.printLabelId,jdbcType=BIGINT}, #{po.materialId,jdbcType=BIGINT},
             #{po.locationId,jdbcType=BIGINT}, #{po.packageId,jdbcType=CHAR}, #{po.orderNo,jdbcType=CHAR},
