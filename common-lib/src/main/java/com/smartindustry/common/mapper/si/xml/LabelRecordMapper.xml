@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.si.LabelRecordMapper">
+    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.LabelRecordPO">
+        <id column="label_record_id" jdbcType="BIGINT" property="labelRecordId"/>
+        <result column="print_label_id" jdbcType="BIGINT" property="printLabelId"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="name" jdbcType="CHAR" property="name"/>
+        <result column="module" jdbcType="TINYINT" property="module"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        label_record_id, print_label_id, user_id, `name`, `module`, create_time, `status`
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_label_record
+        where label_record_id = #{labelRecordId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from si_label_record
+        where label_record_id = #{labelRecordId,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.si.LabelRecordPO">
+        insert into si_label_record (label_record_id, print_label_id, user_id,
+                                     `name`, `module`, create_time,
+                                     `status`)
+        values (#{labelRecordId,jdbcType=BIGINT}, #{printLabelId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},
+                #{name,jdbcType=CHAR}, #{module,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP},
+                #{status,jdbcType=TINYINT})
+    </insert>
+    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.LabelRecordPO">
+        insert into si_label_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="labelRecordId != null">
+                label_record_id,
+            </if>
+            <if test="printLabelId != null">
+                print_label_id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="name != null">
+                `name`,
+            </if>
+            <if test="module != null">
+                `module`,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="status != null">
+                `status`,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="labelRecordId != null">
+                #{labelRecordId,jdbcType=BIGINT},
+            </if>
+            <if test="printLabelId != null">
+                #{printLabelId,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=CHAR},
+            </if>
+            <if test="module != null">
+                #{module,jdbcType=TINYINT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.si.LabelRecordPO">
+        update si_label_record
+        <set>
+            <if test="printLabelId != null">
+                print_label_id = #{printLabelId,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="name != null">
+                `name` = #{name,jdbcType=CHAR},
+            </if>
+            <if test="module != null">
+                `module` = #{module,jdbcType=TINYINT},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                `status` = #{status,jdbcType=TINYINT},
+            </if>
+        </set>
+        where label_record_id = #{labelRecordId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.LabelRecordPO">
+        update si_label_record
+        set print_label_id = #{printLabelId,jdbcType=BIGINT},
+            user_id        = #{userId,jdbcType=BIGINT},
+            `name`         = #{name,jdbcType=CHAR},
+            `module`       = #{module,jdbcType=TINYINT},
+            create_time    = #{createTime,jdbcType=TIMESTAMP},
+            `status`       = #{status,jdbcType=TINYINT}
+        where label_record_id = #{labelRecordId,jdbcType=BIGINT}
+    </update>
+
+    <sql id="RecordBO_Column_List">
+        lr.label_record_id, lr.print_label_id, lr.user_id, lr.`name`, lr.`module`, lr.create_time, lr.`status`,
+        pl.package_id, pl.num, pl.relate_package_id
+    </sql>
+    <resultMap id="RecordBOResultMap" type="com.smartindustry.common.bo.si.LabelRecordBO" extends="BaseResultMap">
+        <result column="package_id" jdbcType="CHAR" property="packageId"/>
+        <result column="num" jdbcType="INTEGER" property="num"/>
+        <result column="relate_package_id" jdbcType="CHAR" property="relatePackageId"/>
+    </resultMap>
+    <select id="queryByReceiptBodyId" resultMap="RecordBOResultMap">
+        select
+        <include refid="RecordBO_Column_List"/>
+        from si_label_record lr
+        left join si_print_label pl on lr.print_label_id = pl.print_label_id
+        left join sm_receipt_label rl on pl.print_label_id = rl.print_label_id
+        where rl.receipt_body_id = #{rbId,jdbcType=BIGINT} and lr.status = #{status,jdbcType=TINYINT} and lr.module =
+        #{module,jdbcType=TINYINT}
+        order by lr.create_time desc, lr.print_label_id desc
+    </select>
+</mapper>

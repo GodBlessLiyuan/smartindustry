@@ -1,6 +1,6 @@
 package com.smartindustry.storage.vo;
 
-import com.smartindustry.common.bo.MaterialStorageBO;
+import com.smartindustry.common.bo.sm.StorageBO;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -25,7 +25,7 @@ public class StoragePageVO implements Serializable {
     /**
      * 收料单ID
      */
-    private Long rid;
+    private Long rbid;
     /**
      * 入库单号
      */
@@ -45,7 +45,7 @@ public class StoragePageVO implements Serializable {
     /**
      * 物料类型
      */
-    private Byte mtype;
+    private String mtype;
     /**
      * 物料描述
      */
@@ -77,9 +77,9 @@ public class StoragePageVO implements Serializable {
      * @param bos
      * @return
      */
-    public static List<StoragePageVO> convert(List<MaterialStorageBO> bos) {
-        List<StoragePageVO> vos = new ArrayList<>();
-        for (MaterialStorageBO bo : bos) {
+    public static List<StoragePageVO> convert(List<StorageBO> bos) {
+        List<StoragePageVO> vos = new ArrayList<>(bos.size());
+        for (StorageBO bo : bos) {
             vos.add(convert(bo));
         }
         return vos;
@@ -91,15 +91,15 @@ public class StoragePageVO implements Serializable {
      * @param bo
      * @return
      */
-    public static StoragePageVO convert(MaterialStorageBO bo) {
+    public static StoragePageVO convert(StorageBO bo) {
         StoragePageVO vo = new StoragePageVO();
         vo.setSid(bo.getStorageId());
-        vo.setRid(bo.getReceiptBodyId());
+        vo.setRbid(bo.getReceiptBodyId());
         vo.setSno(bo.getStorageNo());
         vo.setRno(bo.getReceiptNo());
         vo.setRtype(bo.getOrderType());
         vo.setMno(bo.getMaterialNo());
-        vo.setMtype(bo.getMaterialType());
+        vo.setMtype(bo.getMaterialTypeName());
         vo.setMdesc(bo.getMaterialDesc());
         vo.setCtime(bo.getCreateTime());
         vo.setStatus(bo.getStatus());

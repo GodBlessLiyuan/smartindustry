@@ -28,29 +28,25 @@ public class ReceiptConstant {
      * IQC检验 状态
      */
     //  允许良品
-    public static final Byte IQC_DETECT_GOOD = 1;
+    public static final Byte IQC_ALLOW = 1;
     //  QE驳回重检验
-    public static final Byte IQC_DETECT_REJECT = 2;
+    public static final Byte IQC_REJECT = 2;
     //  未检验
-    public static final Byte IQC_DETECT_WAIT = 3;
+    public static final Byte IQC_WAIT = 3;
 
     /**
-     * QE检验 状态
+     * QE确认|检验 状态
      */
-    //  允许良品
-    public static final Byte QE_DETECT_GOOD = 1;
+    //  允许
+    public static final Byte QE_ALLOW = 1;
+    // 驳回
+    public static final Byte QE_REJECT = 2;
     //  未检验
-    public static final Byte QE_DETECT_WAIT = 3;
-
-    /**
-     * QE确认 状态
-     **/
+    public static final Byte QE_WAIT = 3;
     //  特采
-    public static final Byte QE_CONFIRM_FRANCHISE = 1;
+    public static final Byte QE_FRANCHISE = 4;
     //  退供应商
-    public static final Byte QE_CONFIRM_RETURN = 2;
-    //  不良，待确认
-    public static final Byte QE_CONFIRM_WAIT = 3;
+    public static final Byte QE_RETURN = 5;
 
     /**
      * 物料入库
@@ -62,34 +58,52 @@ public class ReceiptConstant {
     //  待入库
     public static final Byte MATERIAL_STORAGE_PENDING = 3;
 
-    /**
-     * 打印标签 状态
-     */
-    public static final Byte LABEL_STORAGE_FINISH = 1;
-    public static final Byte LABEL_STORAGE_BEING = 2;
-    public static final Byte LABEL_STORAGE_PENDING = 3;
+    // 良品
+    public static final Byte MATERIAL_STORAGE_GOOD = 1;
 
+    /**
+     * 打印标签 类型
+     */
     public static final Byte LABEL_ORIGIN_SCAN = 1;
     public static final Byte LABEL_ORIGIN_ENTRY = 2;
+    public static final Byte LABEL_TYPE_GOOD = 1;
+    public static final Byte LABEL_TYPE_BAD = 2;
 
     /**
      * 物料类型： 良品 非良品
      */
     public static final Byte MATERIAL_TYPE_GOOD = 1;
     public static final Byte MATERIAL_TYPE_BAD = 2;
+    /**
+     * 原材料
+     */
+    public static final Long MATERIAL_TYPE_RAW = 1L;
+    /**
+     * 半成品
+     */
+    public static final Long MATERIAL_TYPE_SEMI = 2L;
+    /**
+     * 成品
+     */
+    public static final Long MATERIAL_TYPE_FINISH = 3L;
 
     /**
      * 操作记录
      */
     public static final String RECORD_TYPE_ADD = "新增";
-    public static final String RECORD_TYPE_MODIFY = "修改";
     public static final String RECORD_TYPE_FINISH = "完成录入";
-    public static final String RECORD_TYPE_IQC_DETECT = "IQC检验";
-    public static final String RECORD_TYPE_QE_REJECT = "QE驳回";
-    public static final String RECORD_TYPE_IQC_RECHECK = "IQC重检";
-    public static final String RECORD_TYPE_QE_DETECT = "QE检验";
-    public static final String RECORD_TYPE_QE_FRANCHISE = "QE特采";
-    public static final String RECORD_TYPE_QE_RETURN = "QE退供应商";
+    public static final String RECORD_TYPE_IQC_DETECT_ALLOW = "IQC检验-允许";
+    public static final String RECORD_TYPE_IQC_DETECT_BAD = "IQC检验-不良";
+    public static final String RECORD_TYPE_IQC_QE_REJECT = "QE驳回";
+    public static final String RECORD_TYPE_IQC_RECHECK_ALLOW = "IQC重检-允许";
+    public static final String RECORD_TYPE_IQC_RECHECK_BAD = "IQC重检-不良";
+    public static final String RECORD_TYPE_QE_DETECT_ALLOW = "QE检验-允许";
+    public static final String RECORD_TYPE_QE_DETECT_FRANCHISE = "QE检验-特采";
+    public static final String RECORD_TYPE_QE_DETECT_RETURN = "QE检验-退供应商";
+    public static final String RECORD_TYPE_QE_CONFIRM_ADD = "形成QE确认单";
+    public static final String RECORD_TYPE_QE_CONFIRM_FRANCHISE = "QE确认-特采";
+    public static final String RECORD_TYPE_QE_CONFIRM_REJECT = "QE确认-驳回";
+    public static final String RECORD_TYPE_QE_CONFIRM_RETURN = "QE确认-退供应商";
     public static final String RECORD_TYPE_STORAGE_INVOICE = "生成入库单";
     public static final String RECORD_TYPE_STORAGE_CONFIRM = "确认入库";
 }

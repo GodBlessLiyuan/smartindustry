@@ -1,6 +1,6 @@
 package com.smartindustry.storage.vo;
 
-import com.smartindustry.common.bo.PrintLabelBO;
+import com.smartindustry.common.bo.si.PrintLabelBO;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -15,6 +15,10 @@ import java.io.Serializable;
 public class StorageLabelVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 物料入库组ID
+     */
+    private Long sgid;
     /**
      * 打印标签ID
      */
@@ -36,13 +40,14 @@ public class StorageLabelVO implements Serializable {
      */
     private Integer num;
 
-    public static StorageLabelVO convert(PrintLabelBO bo) {
+    public static StorageLabelVO convert(PrintLabelBO bo, Long sgid) {
         StorageLabelVO vo = new StorageLabelVO();
         vo.setPlid(bo.getPrintLabelId());
         vo.setPid(bo.getPackageId());
         vo.setMno(bo.getMaterialNo());
         vo.setMdesc(bo.getMaterialDesc());
         vo.setNum(bo.getNum());
+        vo.setSgid(sgid);
         return vo;
     }
 }

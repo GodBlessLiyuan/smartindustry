@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.om.PickLabelMapper">
+    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.om.PickLabelPO">
+        <id column="pick_label_id" jdbcType="BIGINT" property="pickLabelId"/>
+        <result column="pick_head_id" jdbcType="BIGINT" property="pickHeadId"/>
+        <result column="print_label_id" jdbcType="BIGINT" property="printLabelId"/>
+        <result column="recommend" jdbcType="TINYINT" property="recommend"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        pick_label_id, pick_head_id, print_label_id, recommend,  create_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from om_pick_label
+        where pick_label_id = #{pickLabelId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from om_pick_label
+        where pick_label_id = #{pickLabelId,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.om.PickLabelPO">
+        insert into om_pick_label (pick_label_id, pick_head_id, print_label_id,
+                                   recommend,  create_time)
+        values (#{pickLabelId,jdbcType=BIGINT}, #{pickHeadId,jdbcType=BIGINT}, #{printLabelId,jdbcType=BIGINT},
+                #{recommend,jdbcType=TINYINT},  #{createTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.om.PickLabelPO">
+        insert into om_pick_label
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pickLabelId != null">
+                pick_label_id,
+            </if>
+            <if test="pickHeadId != null">
+                pick_head_id,
+            </if>
+            <if test="printLabelId != null">
+                print_label_id,
+            </if>
+            <if test="recommend != null">
+                recommend,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="pickLabelId != null">
+                #{pickLabelId,jdbcType=BIGINT},
+            </if>
+            <if test="pickHeadId != null">
+                #{pickHeadId,jdbcType=BIGINT},
+            </if>
+            <if test="printLabelId != null">
+                #{printLabelId,jdbcType=BIGINT},
+            </if>
+            <if test="recommend != null">
+                #{recommend,jdbcType=TINYINT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.om.PickLabelPO">
+        update om_pick_label
+        <set>
+            <if test="pickHeadId != null">
+                pick_head_id = #{pickHeadId,jdbcType=BIGINT},
+            </if>
+            <if test="printLabelId != null">
+                print_label_id = #{printLabelId,jdbcType=BIGINT},
+            </if>
+            <if test="recommend != null">
+                recommend = #{recommend,jdbcType=TINYINT},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where pick_label_id = #{pickLabelId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.om.PickLabelPO">
+        update om_pick_label
+        set pick_head_id   = #{pickHeadId,jdbcType=BIGINT},
+            print_label_id = #{printLabelId,jdbcType=BIGINT},
+            recommend      = #{recommend,jdbcType=TINYINT},
+            create_time    = #{createTime,jdbcType=TIMESTAMP}
+        where pick_label_id = #{pickLabelId,jdbcType=BIGINT}
+    </update>
+
+    <select id="queryByPhid" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.si.PrintLabelBO">
+        select spl.package_id  as packageId,
+               m.material_no   as materialNo,
+               m.material_name   as materialName,
+               m.material_desc as materialDesc,
+               spl.num
+        from om_pick_label opl
+                 left join si_print_label spl on opl.print_label_id = spl.print_label_id
+                 left join si_material m on spl.material_id = m.material_id
+        where opl.pick_head_id = #{pickHeadId,jdbcType=BIGINT}
+    </select>
+</mapper>

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.om.LogisticsRecordMapper">
+    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.om.LogisticsRecordPO">
+        <id column="logistics_record_id" jdbcType="BIGINT" property="logisticsRecordId"/>
+        <result column="outbound_id" jdbcType="BIGINT" property="outboundId"/>
+        <result column="ship_date" jdbcType="DATE" property="shipDate"/>
+        <result column="logistics_no" jdbcType="CHAR" property="logisticsNo"/>
+        <result column="ship_way" jdbcType="TINYINT" property="shipWay"/>
+        <result column="remark" jdbcType="CHAR" property="remark"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        logistics_record_id, outbound_id, ship_date, logistics_no, ship_way, remark, create_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from om_logistics_record
+        where logistics_record_id = #{logisticsRecordId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from om_logistics_record
+        where logistics_record_id = #{logisticsRecordId,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.om.LogisticsRecordPO" useGeneratedKeys="true"
+            keyProperty="logisticsRecordId">
+        insert into om_logistics_record (logistics_record_id, outbound_id, ship_date,
+                                         logistics_no, ship_way, remark,
+                                         create_time)
+        values (#{logisticsRecordId,jdbcType=BIGINT}, #{outboundId,jdbcType=BIGINT}, #{shipDate,jdbcType=DATE},
+                #{logisticsNo,jdbcType=CHAR}, #{shipWay,jdbcType=TINYINT}, #{remark,jdbcType=CHAR},
+                #{createTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.om.LogisticsRecordPO">
+        insert into om_logistics_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="logisticsRecordId != null">
+                logistics_record_id,
+            </if>
+            <if test="outboundId != null">
+                outbound_id,
+            </if>
+            <if test="shipDate != null">
+                ship_date,
+            </if>
+            <if test="logisticsNo != null">
+                logistics_no,
+            </if>
+            <if test="shipWay != null">
+                ship_way,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="logisticsRecordId != null">
+                #{logisticsRecordId,jdbcType=BIGINT},
+            </if>
+            <if test="outboundId != null">
+                #{outboundId,jdbcType=BIGINT},
+            </if>
+            <if test="shipDate != null">
+                #{shipDate,jdbcType=DATE},
+            </if>
+            <if test="logisticsNo != null">
+                #{logisticsNo,jdbcType=CHAR},
+            </if>
+            <if test="shipWay != null">
+                #{shipWay,jdbcType=TINYINT},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=CHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.om.LogisticsRecordPO">
+        update om_logistics_record
+        <set>
+            <if test="outboundId != null">
+                outbound_id = #{outboundId,jdbcType=BIGINT},
+            </if>
+            <if test="shipDate != null">
+                ship_date = #{shipDate,jdbcType=DATE},
+            </if>
+            <if test="logisticsNo != null">
+                logistics_no = #{logisticsNo,jdbcType=CHAR},
+            </if>
+            <if test="shipWay != null">
+                ship_way = #{shipWay,jdbcType=TINYINT},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=CHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where logistics_record_id = #{logisticsRecordId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.om.LogisticsRecordPO">
+        update om_logistics_record
+        set outbound_id  = #{outboundId,jdbcType=BIGINT},
+            ship_date    = #{shipDate,jdbcType=DATE},
+            logistics_no = #{logisticsNo,jdbcType=CHAR},
+            ship_way     = #{shipWay,jdbcType=TINYINT},
+            remark       = #{remark,jdbcType=CHAR},
+            create_time  = #{createTime,jdbcType=TIMESTAMP}
+        where logistics_record_id = #{logisticsRecordId,jdbcType=BIGINT}
+    </update>
+
+    <resultMap id="BO_ResultMap" extends="BaseResultMap" type="com.smartindustry.common.bo.om.LogisticsRecordBO">
+        <collection property="picturePOs" ofType="com.smartindustry.common.pojo.om.LogisticsPicturePO">
+            <id column="logistics_picture_id" jdbcType="BIGINT" property="logisticsPictureId"/>
+            <result column="picture" jdbcType="CHAR" property="picture"/>
+        </collection>
+    </resultMap>
+    <sql id="BO_Column_List">
+        lr.logistics_record_id, lr.outbound_id, lr.ship_date, lr.logistics_no, lr.ship_way, lr.remark, lr.create_time,
+        lp.logistics_picture_id, lp.logistics_record_id, lp.picture
+    </sql>
+    <select id="queryByOid" parameterType="java.lang.Long" resultMap="BO_ResultMap">
+        select
+        <include refid="BO_Column_List"/>
+        from om_logistics_record lr
+        left join om_logistics_picture lp on lr.logistics_record_id = lp.logistics_record_id
+        where lr.outbound_id = #{oId,jdbcType=BIGINT}
+    </select>
+</mapper>

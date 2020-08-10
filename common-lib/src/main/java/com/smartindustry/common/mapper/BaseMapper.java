@@ -1,6 +1,7 @@
 package com.smartindustry.common.mapper;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Mapper公共基类，由MybatisGenerator自动生成请勿修改
@@ -28,4 +29,11 @@ public interface BaseMapper<Model, PK extends Serializable> {
      * @return
      */
     Model queryNo(String no);
+
+    /**
+     * 批量插入
+     *
+     * @param pos
+     */
+    void batchInsert(List<Model> pos);
 }

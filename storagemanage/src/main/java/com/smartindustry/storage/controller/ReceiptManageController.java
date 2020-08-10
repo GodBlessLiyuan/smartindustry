@@ -2,13 +2,11 @@ package com.smartindustry.storage.controller;
 
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.dto.LogisticsDTO;
+import com.smartindustry.storage.dto.OperateDTO;
 import com.smartindustry.storage.dto.ReceiptDTO;
 import com.smartindustry.storage.service.IReceiptManageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,41 +24,33 @@ public class ReceiptManageController {
     @Autowired
     private IReceiptManageService receiptManageService;
 
-    @RequestMapping("pageQuery")
-    public ResultVO pageQuery(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                              @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                              @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-                              @RequestParam(value = "supplier", required = false, defaultValue = "") String supplier,
-                              @RequestParam(value = "ono", required = false, defaultValue = "") String ono,
-                              @RequestParam(value = "status", required = false, defaultValue = "0") Byte status,
-                              @RequestParam(value = "type") Byte type) {
-        Map<String, Object> reqData = new HashMap<>(8);
-        reqData.put("keyword", keyword);
-        reqData.put("supplier", supplier);
-        reqData.put("ono", ono);
-        reqData.put("status", status);
-        reqData.put("type", type);
-
-        return receiptManageService.pageQuery(pageNum, pageSize, reqData);
+    @PostMapping("pageQuery")
+    public ResultVO pageQuery(@RequestBody Map<String, Object> reqData) {
+        return receiptManageService.pageQuery(reqData);
     }
 
-    @RequestMapping("insert")
+    @PostMapping("insert")
     public ResultVO insert(@RequestBody ReceiptDTO dto) {
         return receiptManageService.insert(dto);
     }
 
-    @RequestMapping("delete")
-    public ResultVO delete(@RequestParam(value = "rbids[]") List<Long> rbIds) {
+    @PostMapping("delete")
+    public ResultVO delete(@RequestBody List<Long> rbIds) {
         return receiptManageService.delete(rbIds);
     }
 
-    @RequestMapping("editLog")
+    @PostMapping("editLog")
     public ResultVO editLog(@RequestBody LogisticsDTO dto) {
         return receiptManageService.editLog(dto);
     }
 
-    @RequestMapping("record")
-    public ResultVO record(@RequestParam(value = "rbid") Long rbId, @RequestParam(value = "status", required = false, defaultValue = "1") Byte status) {
-        return receiptManageService.record(rbId, status);
+    @PostMapping("record")
+    public ResultVO record(@RequestBody OperateDTO dto) {
+        return receiptManageService.record(dto);
+    }
+
+    @PostMapping("materialQuery")
+    public ResultVO materialQuery(@RequestBody Map<String, Object> reqData) {
+        return receiptManageService.materialQuery(reqData);
     }
 }

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.sm.StorageRecordMapper">
+    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.sm.StorageRecordPO">
+        <id column="record_id" jdbcType="BIGINT" property="recordId"/>
+        <result column="receipt_body_id" jdbcType="BIGINT" property="receiptBodyId"/>
+        <result column="storage_id" jdbcType="BIGINT" property="storageId"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="name" jdbcType="CHAR" property="name"/>
+        <result column="type" jdbcType="CHAR" property="type"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        record_id, receipt_body_id, storage_id, user_id, `name`, `type`, create_time, `status`
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sm_storage_record
+        where record_id = #{recordId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from sm_storage_record
+        where record_id = #{recordId,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.StorageRecordPO">
+        insert into sm_storage_record (record_id, receipt_body_id, storage_id,
+                                       user_id, `name`, `type`, create_time,
+                                       `status`)
+        values (#{recordId,jdbcType=BIGINT}, #{receiptBodyId,jdbcType=BIGINT}, #{storageId,jdbcType=BIGINT},
+                #{userId,jdbcType=BIGINT}, #{name,jdbcType=CHAR}, #{type,jdbcType=CHAR},
+                #{createTime,jdbcType=TIMESTAMP},
+                #{status,jdbcType=TINYINT})
+    </insert>
+    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.sm.StorageRecordPO">
+        insert into sm_storage_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="recordId != null">
+                record_id,
+            </if>
+            <if test="receiptBodyId != null">
+                receipt_body_id,
+            </if>
+            <if test="storageId != null">
+                storage_id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="name != null">
+                `name`,
+            </if>
+            <if test="type != null">
+                `type`,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="status != null">
+                `status`,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="recordId != null">
+                #{recordId,jdbcType=BIGINT},
+            </if>
+            <if test="receiptBodyId != null">
+                #{receiptBodyId,jdbcType=BIGINT},
+            </if>
+            <if test="storageId != null">
+                #{storageId,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=CHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=CHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.sm.StorageRecordPO">
+        update sm_storage_record
+        <set>
+            <if test="receiptBodyId != null">
+                receipt_body_id = #{receiptBodyId,jdbcType=BIGINT},
+            </if>
+            <if test="storageId != null">
+                storage_id = #{storageId,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="name != null">
+                `name` = #{name,jdbcType=CHAR},
+            </if>
+            <if test="type != null">
+                `type` = #{type,jdbcType=CHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                `status` = #{status,jdbcType=TINYINT},
+            </if>
+        </set>
+        where record_id = #{recordId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.sm.StorageRecordPO">
+        update sm_storage_record
+        set receipt_body_id = #{receiptBodyId,jdbcType=BIGINT},
+            storage_id      = #{storageId,jdbcType=BIGINT},
+            user_id         = #{userId,jdbcType=BIGINT},
+            `name`          = #{name,jdbcType=CHAR},
+            `type`          = #{type,jdbcType=CHAR},
+            create_time     = #{createTime,jdbcType=TIMESTAMP},
+            `status`        = #{status,jdbcType=TINYINT}
+        where record_id = #{recordId,jdbcType=BIGINT}
+    </update>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        insert into sm_storage_record (record_id, receipt_body_id, user_id,
+        `name`, `type`, create_time, `status`)
+        values
+        <foreach collection="list" item="po" separator=",">
+            (#{po.recordId,jdbcType=BIGINT}, #{po.receiptBodyId,jdbcType=BIGINT}, #{po.userId,jdbcType=BIGINT},
+            #{po.name,jdbcType=CHAR}, #{po.type,jdbcType=CHAR}, #{po.createTime,jdbcType=TIMESTAMP},
+            #{po.status,jdbcType=TINYINT})
+        </foreach>
+    </insert>
+    <select id="queryByReceiptBodyId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sm_storage_record
+        where receipt_body_id = #{receiptBodyId,jdbcType=BIGINT} and `status` = #{status,jdbcType=TINYINT}
+        order by create_time desc
+    </select>
+    <select id="queryBySid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sm_storage_record
+        where storage_id = #{sid,jdbcType=BIGINT}
+        order by create_time desc
+    </select>
+</mapper>

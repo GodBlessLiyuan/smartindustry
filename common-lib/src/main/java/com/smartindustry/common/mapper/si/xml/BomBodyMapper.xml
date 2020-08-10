@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.si.BomBodyMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.BomBodyPO">
+    <id column="bom_body_id" jdbcType="BIGINT" property="bomBodyId" />
+    <result column="bom_head_id" jdbcType="BIGINT" property="bomHeadId" />
+    <result column="material_id" jdbcType="BIGINT" property="materialId" />
+    <result column="material_property_id" jdbcType="BIGINT" property="materialPropertyId" />
+    <result column="material_unit_id" jdbcType="BIGINT" property="materialUnitId" />
+    <result column="material_demand" jdbcType="REAL" property="materialDemand" />
+    <result column="demand_type" jdbcType="TINYINT" property="demandType" />
+    <result column="material_loss" jdbcType="REAL" property="materialLoss" />
+    <result column="loss_type" jdbcType="TINYINT" property="lossType" />
+    <result column="process_id" jdbcType="BIGINT" property="processId" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="dr" jdbcType="TINYINT" property="dr" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    bom_body_id, bom_head_id, material_id, material_property_id, material_unit_id, material_demand, 
+    demand_type, material_loss, loss_type, process_id, parent_id, user_id, create_time, 
+    update_time, dr
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from si_bom_body
+    where bom_body_id = #{bomBodyId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from si_bom_body
+    where bom_body_id = #{bomBodyId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.si.BomBodyPO">
+    insert into si_bom_body (bom_body_id, bom_head_id, material_id, 
+      material_property_id, material_unit_id, material_demand, 
+      demand_type, material_loss, loss_type, 
+      process_id, parent_id, user_id, 
+      create_time, update_time, dr
+      )
+    values (#{bomBodyId,jdbcType=BIGINT}, #{bomHeadId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT}, 
+      #{materialPropertyId,jdbcType=BIGINT}, #{materialUnitId,jdbcType=BIGINT}, #{materialDemand,jdbcType=REAL}, 
+      #{demandType,jdbcType=TINYINT}, #{materialLoss,jdbcType=REAL}, #{lossType,jdbcType=TINYINT}, 
+      #{processId,jdbcType=BIGINT}, #{parentId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.BomBodyPO">
+    insert into si_bom_body
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="bomBodyId != null">
+        bom_body_id,
+      </if>
+      <if test="bomHeadId != null">
+        bom_head_id,
+      </if>
+      <if test="materialId != null">
+        material_id,
+      </if>
+      <if test="materialPropertyId != null">
+        material_property_id,
+      </if>
+      <if test="materialUnitId != null">
+        material_unit_id,
+      </if>
+      <if test="materialDemand != null">
+        material_demand,
+      </if>
+      <if test="demandType != null">
+        demand_type,
+      </if>
+      <if test="materialLoss != null">
+        material_loss,
+      </if>
+      <if test="lossType != null">
+        loss_type,
+      </if>
+      <if test="processId != null">
+        process_id,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="dr != null">
+        dr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="bomBodyId != null">
+        #{bomBodyId,jdbcType=BIGINT},
+      </if>
+      <if test="bomHeadId != null">
+        #{bomHeadId,jdbcType=BIGINT},
+      </if>
+      <if test="materialId != null">
+        #{materialId,jdbcType=BIGINT},
+      </if>
+      <if test="materialPropertyId != null">
+        #{materialPropertyId,jdbcType=BIGINT},
+      </if>
+      <if test="materialUnitId != null">
+        #{materialUnitId,jdbcType=BIGINT},
+      </if>
+      <if test="materialDemand != null">
+        #{materialDemand,jdbcType=REAL},
+      </if>
+      <if test="demandType != null">
+        #{demandType,jdbcType=TINYINT},
+      </if>
+      <if test="materialLoss != null">
+        #{materialLoss,jdbcType=REAL},
+      </if>
+      <if test="lossType != null">
+        #{lossType,jdbcType=TINYINT},
+      </if>
+      <if test="processId != null">
+        #{processId,jdbcType=BIGINT},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dr != null">
+        #{dr,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.si.BomBodyPO">
+    update si_bom_body
+    <set>
+      <if test="bomHeadId != null">
+        bom_head_id = #{bomHeadId,jdbcType=BIGINT},
+      </if>
+      <if test="materialId != null">
+        material_id = #{materialId,jdbcType=BIGINT},
+      </if>
+      <if test="materialPropertyId != null">
+        material_property_id = #{materialPropertyId,jdbcType=BIGINT},
+      </if>
+      <if test="materialUnitId != null">
+        material_unit_id = #{materialUnitId,jdbcType=BIGINT},
+      </if>
+      <if test="materialDemand != null">
+        material_demand = #{materialDemand,jdbcType=REAL},
+      </if>
+      <if test="demandType != null">
+        demand_type = #{demandType,jdbcType=TINYINT},
+      </if>
+      <if test="materialLoss != null">
+        material_loss = #{materialLoss,jdbcType=REAL},
+      </if>
+      <if test="lossType != null">
+        loss_type = #{lossType,jdbcType=TINYINT},
+      </if>
+      <if test="processId != null">
+        process_id = #{processId,jdbcType=BIGINT},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dr != null">
+        dr = #{dr,jdbcType=TINYINT},
+      </if>
+    </set>
+    where bom_body_id = #{bomBodyId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.BomBodyPO">
+    update si_bom_body
+    set bom_head_id = #{bomHeadId,jdbcType=BIGINT},
+      material_id = #{materialId,jdbcType=BIGINT},
+      material_property_id = #{materialPropertyId,jdbcType=BIGINT},
+      material_unit_id = #{materialUnitId,jdbcType=BIGINT},
+      material_demand = #{materialDemand,jdbcType=REAL},
+      demand_type = #{demandType,jdbcType=TINYINT},
+      material_loss = #{materialLoss,jdbcType=REAL},
+      loss_type = #{lossType,jdbcType=TINYINT},
+      process_id = #{processId,jdbcType=BIGINT},
+      parent_id = #{parentId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      dr = #{dr,jdbcType=TINYINT}
+    where bom_body_id = #{bomBodyId,jdbcType=BIGINT}
+  </update>
+</mapper>

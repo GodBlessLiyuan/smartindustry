@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.si.SupplierMapper">
+    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.SupplierPO">
+        <id column="supplier_id" jdbcType="BIGINT" property="supplierId"/>
+        <result column="supplier_no" jdbcType="CHAR" property="supplierNo"/>
+        <result column="supplier_group_id" jdbcType="BIGINT" property="supplierGroupId"/>
+        <result column="cert_status_id" jdbcType="BIGINT" property="certStatusId"/>
+        <result column="supplier_type_id" jdbcType="BIGINT" property="supplierTypeId"/>
+        <result column="settle_period_id" jdbcType="BIGINT" property="settlePeriodId"/>
+        <result column="currency_id" jdbcType="BIGINT" property="currencyId"/>
+        <result column="supplier_name" jdbcType="CHAR" property="supplierName"/>
+        <result column="contact_name" jdbcType="CHAR" property="contactName"/>
+        <result column="phone" jdbcType="CHAR" property="phone"/>
+        <result column="fax" jdbcType="CHAR" property="fax"/>
+        <result column="site" jdbcType="CHAR" property="site"/>
+        <result column="mail" jdbcType="CHAR" property="mail"/>
+        <result column="area" jdbcType="CHAR" property="area"/>
+        <result column="address" jdbcType="CHAR" property="address"/>
+        <result column="remark" jdbcType="CHAR" property="remark"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="dr" jdbcType="TINYINT" property="dr"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        supplier_id, supplier_no, supplier_group_id, cert_status_id, supplier_type_id, settle_period_id,
+    currency_id, supplier_name, contact_name, phone, fax, site, mail, area, address, 
+    remark, user_id, create_time, update_time, dr
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_supplier
+        where supplier_id = #{supplierId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from si_supplier
+        where supplier_id = #{supplierId,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.si.SupplierPO" useGeneratedKeys="true"
+            keyProperty="supplierId">
+        insert into si_supplier (supplier_id, supplier_no, supplier_group_id,
+                                 cert_status_id, supplier_type_id, settle_period_id,
+                                 currency_id, supplier_name, contact_name,
+                                 phone, fax, site, mail,
+                                 area, address, remark, user_id,
+                                 create_time, update_time, dr)
+        values (#{supplierId,jdbcType=BIGINT}, #{supplierNo,jdbcType=CHAR}, #{supplierGroupId,jdbcType=BIGINT},
+                #{certStatusId,jdbcType=BIGINT}, #{supplierTypeId,jdbcType=BIGINT}, #{settlePeriodId,jdbcType=BIGINT},
+                #{currencyId,jdbcType=BIGINT}, #{supplierName,jdbcType=CHAR}, #{contactName,jdbcType=CHAR},
+                #{phone,jdbcType=CHAR}, #{fax,jdbcType=CHAR}, #{site,jdbcType=CHAR}, #{mail,jdbcType=CHAR},
+                #{area,jdbcType=CHAR}, #{address,jdbcType=CHAR}, #{remark,jdbcType=CHAR}, #{userId,jdbcType=BIGINT},
+                #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
+    </insert>
+    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.SupplierPO">
+        insert into si_supplier
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="supplierId != null">
+                supplier_id,
+            </if>
+            <if test="supplierNo != null">
+                supplier_no,
+            </if>
+            <if test="supplierGroupId != null">
+                supplier_group_id,
+            </if>
+            <if test="certStatusId != null">
+                cert_status_id,
+            </if>
+            <if test="supplierTypeId != null">
+                supplier_type_id,
+            </if>
+            <if test="settlePeriodId != null">
+                settle_period_id,
+            </if>
+            <if test="currencyId != null">
+                currency_id,
+            </if>
+            <if test="supplierName != null">
+                supplier_name,
+            </if>
+            <if test="contactName != null">
+                contact_name,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="fax != null">
+                fax,
+            </if>
+            <if test="site != null">
+                site,
+            </if>
+            <if test="mail != null">
+                mail,
+            </if>
+            <if test="area != null">
+                area,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="dr != null">
+                dr,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="supplierId != null">
+                #{supplierId,jdbcType=BIGINT},
+            </if>
+            <if test="supplierNo != null">
+                #{supplierNo,jdbcType=CHAR},
+            </if>
+            <if test="supplierGroupId != null">
+                #{supplierGroupId,jdbcType=BIGINT},
+            </if>
+            <if test="certStatusId != null">
+                #{certStatusId,jdbcType=BIGINT},
+            </if>
+            <if test="supplierTypeId != null">
+                #{supplierTypeId,jdbcType=BIGINT},
+            </if>
+            <if test="settlePeriodId != null">
+                #{settlePeriodId,jdbcType=BIGINT},
+            </if>
+            <if test="currencyId != null">
+                #{currencyId,jdbcType=BIGINT},
+            </if>
+            <if test="supplierName != null">
+                #{supplierName,jdbcType=CHAR},
+            </if>
+            <if test="contactName != null">
+                #{contactName,jdbcType=CHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=CHAR},
+            </if>
+            <if test="fax != null">
+                #{fax,jdbcType=CHAR},
+            </if>
+            <if test="site != null">
+                #{site,jdbcType=CHAR},
+            </if>
+            <if test="mail != null">
+                #{mail,jdbcType=CHAR},
+            </if>
+            <if test="area != null">
+                #{area,jdbcType=CHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=CHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=CHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dr != null">
+                #{dr,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.si.SupplierPO">
+        update si_supplier
+        <set>
+            <if test="supplierNo != null">
+                supplier_no = #{supplierNo,jdbcType=CHAR},
+            </if>
+            <if test="supplierGroupId != null">
+                supplier_group_id = #{supplierGroupId,jdbcType=BIGINT},
+            </if>
+            <if test="certStatusId != null">
+                cert_status_id = #{certStatusId,jdbcType=BIGINT},
+            </if>
+            <if test="supplierTypeId != null">
+                supplier_type_id = #{supplierTypeId,jdbcType=BIGINT},
+            </if>
+            <if test="settlePeriodId != null">
+                settle_period_id = #{settlePeriodId,jdbcType=BIGINT},
+            </if>
+            <if test="currencyId != null">
+                currency_id = #{currencyId,jdbcType=BIGINT},
+            </if>
+            <if test="supplierName != null">
+                supplier_name = #{supplierName,jdbcType=CHAR},
+            </if>
+            <if test="contactName != null">
+                contact_name = #{contactName,jdbcType=CHAR},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=CHAR},
+            </if>
+            <if test="fax != null">
+                fax = #{fax,jdbcType=CHAR},
+            </if>
+            <if test="site != null">
+                site = #{site,jdbcType=CHAR},
+            </if>
+            <if test="mail != null">
+                mail = #{mail,jdbcType=CHAR},
+            </if>
+            <if test="area != null">
+                area = #{area,jdbcType=CHAR},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=CHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=CHAR},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dr != null">
+                dr = #{dr,jdbcType=TINYINT},
+            </if>
+        </set>
+        where supplier_id = #{supplierId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.SupplierPO">
+        update si_supplier
+        set supplier_no       = #{supplierNo,jdbcType=CHAR},
+            supplier_group_id = #{supplierGroupId,jdbcType=BIGINT},
+            cert_status_id    = #{certStatusId,jdbcType=BIGINT},
+            supplier_type_id  = #{supplierTypeId,jdbcType=BIGINT},
+            settle_period_id  = #{settlePeriodId,jdbcType=BIGINT},
+            currency_id       = #{currencyId,jdbcType=BIGINT},
+            supplier_name     = #{supplierName,jdbcType=CHAR},
+            contact_name      = #{contactName,jdbcType=CHAR},
+            phone             = #{phone,jdbcType=CHAR},
+            fax               = #{fax,jdbcType=CHAR},
+            site              = #{site,jdbcType=CHAR},
+            mail              = #{mail,jdbcType=CHAR},
+            area              = #{area,jdbcType=CHAR},
+            address           = #{address,jdbcType=CHAR},
+            remark            = #{remark,jdbcType=CHAR},
+            user_id           = #{userId,jdbcType=BIGINT},
+            create_time       = #{createTime,jdbcType=TIMESTAMP},
+            update_time       = #{updateTime,jdbcType=TIMESTAMP},
+            dr                = #{dr,jdbcType=TINYINT}
+        where supplier_id = #{supplierId,jdbcType=BIGINT}
+    </update>
+
+    <select id="queryBySno" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_supplier
+        where dr = 1 and supplier_no = #{sno,jdbcType=CHAR}
+    </select>
+
+    <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.SupplierBO" extends="BaseResultMap">
+        <result column="supplier_group_name" jdbcType="CHAR" property="supplierGroupName"/>
+        <result column="cert_status_name" jdbcType="CHAR" property="certStatusName"/>
+        <result column="supplier_type_name" jdbcType="CHAR" property="supplierTypeName"/>
+        <result column="settle_period_name" jdbcType="CHAR" property="settlePeriodName"/>
+        <result column="currency_name" jdbcType="CHAR" property="currencyName"/>
+    </resultMap>
+    <sql id="BO_Column_List">
+        s.supplier_id, s.supplier_no, s.supplier_group_id, s.cert_status_id, s.supplier_type_id, s.settle_period_id,
+    s.currency_id, s.supplier_name, s.contact_name, s.phone, s.fax, s.site, s.mail, s.area, s.address,
+    s.remark, s.user_id, s.create_time, s.update_time, s.dr,
+    sg.supplier_group_name, cs.cert_status_name, st.supplier_type_name, sp.settle_period_name, c.currency_name
+    </sql>
+    <select id="pageQuery" parameterType="java.lang.Long" resultMap="BOResultMap">
+        select
+        <include refid="BO_Column_List"/>
+        from si_supplier s
+        left join dd_supplier_group sg on s.supplier_group_id = sg.supplier_group_id
+        left join dd_cert_status cs on s.cert_status_id = cs.cert_status_id
+        left join dd_supplier_type st on s.supplier_type_id = st.supplier_type_id
+        left join dd_settle_period sp on s.settle_period_id = sp.settle_period_id
+        left join dd_currency c on s.currency_id = c.currency_id
+        where s.dr = 1
+        <if test="sno != null and sno != ''">
+            and supplier_no like '%' #{sno,jdbcType=CHAR} '%'
+        </if>
+        <if test="sname != null and sname != ''">
+            and supplier_name like '%' #{sname,jdbcType=CHAR} '%'
+        </if>
+        order by s.create_time desc
+    </select>
+    <select id="queryBySid" parameterType="java.lang.Long" resultMap="BOResultMap">
+        select
+        <include refid="BO_Column_List"/>
+        from si_supplier s
+        left join dd_supplier_group sg on s.supplier_group_id = sg.supplier_group_id
+        left join dd_cert_status cs on s.cert_status_id = cs.cert_status_id
+        left join dd_supplier_type st on s.supplier_type_id = st.supplier_type_id
+        left join dd_settle_period sp on s.settle_period_id = sp.settle_period_id
+        left join dd_currency c on s.currency_id = c.currency_id
+        where s.dr = 1 and supplier_id = #{sid,jdbcType=BIGINT}
+    </select>
+    <update id="batchDelete" parameterType="java.util.List">
+        update si_supplier
+        set dr = 2 where supplier_id in
+        <foreach collection="list" item="sid" open="(" separator="," close=")">
+            #{sid,jdbcType=BIGINT}
+        </foreach>
+    </update>
+    <select id="queryBySgid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_supplier
+        where dr = 1 and supplier_group_id = #{sgid,jdbcType=BIGINT}
+    </select>
+    <select id="queryByCsid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_supplier
+        where dr = 1 and cert_status_id = #{csid,jdbcType=BIGINT}
+    </select>
+    <select id="queryByStid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_supplier
+        where dr = 1 and supplier_type_id = #{stid,jdbcType=BIGINT}
+    </select>
+    <select id="queryBySpid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_supplier
+        where dr = 1 and settle_period_id = #{spid,jdbcType=BIGINT}
+    </select>
+    <select id="queryByCid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_supplier
+        where dr = 1 and currency_id = #{cid,jdbcType=BIGINT}
+    </select>
+    <select id="queryAll" resultType="java.util.Map">
+        select supplier_id as sid, supplier_name as sname
+        from si_supplier
+        where dr = 1
+    </select>
+</mapper>

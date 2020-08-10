@@ -1,13 +1,12 @@
 package com.smartindustry.storage.controller;
 
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.storage.dto.MaterialStorageDTO;
+import com.smartindustry.storage.dto.OperateDTO;
+import com.smartindustry.storage.dto.StorageDetailDTO;
+import com.smartindustry.storage.dto.StorageGroupDTO;
 import com.smartindustry.storage.service.IMaterialStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,44 +26,50 @@ public class MaterialStorageController {
     /**
      * 入库单 分页查询
      *
-     * @param pageNum  页号
-     * @param pageSize 页大小
-     * @param rno      收料单号
-     * @param rtype    收料类型 0 全部、1 PO单收料、2 样品采购、3 生产退料
-     * @param mtype    物料类型 0 全部、1 原材料、2 半成品、3 成品
-     * @param status   入库状态 0 全部、1 已入库、2 入库中、3 待入库
-     * @param type     入库类型 1 良品、2 非良品
      * @return
      */
-    @RequestMapping("pageQuery")
-    public ResultVO pageQuery(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                              @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                              @RequestParam(value = "rno", required = false, defaultValue = "") String rno,
-                              @RequestParam(value = "rtype", required = false, defaultValue = "0") Byte rtype,
-                              @RequestParam(value = "mtype", required = false, defaultValue = "0") Byte mtype,
-                              @RequestParam(value = "status", required = false, defaultValue = "0") Byte status,
-                              @RequestParam(value = "type") Byte type) {
-        Map<String, Object> reqData = new HashMap<>(8);
-        reqData.put("rno", rno);
-        reqData.put("rtype", rtype);
-        reqData.put("mtype", mtype);
-        reqData.put("status", status);
-        reqData.put("type", type);
-        return materialStorageService.pageQuery(pageNum, pageSize, reqData);
+    @PostMapping("pageQuery")
+    public ResultVO pageQuery(@RequestBody Map<String, Object> reqData) {
+        return materialStorageService.pageQuery(reqData);
     }
 
-    @RequestMapping("location")
-    public ResultVO location(@RequestParam(value = "lno") String lno) {
-        return materialStorageService.location(lno);
+    @PostMapping("location")
+    public ResultVO location(@RequestBody OperateDTO dto) {
+        return materialStorageService.location(dto);
     }
 
-    @RequestMapping("label")
-    public ResultVO label(@RequestParam("rbid") Long rbid, @RequestParam("pid") String pid) {
-        return materialStorageService.label(rbid, pid);
+    @PostMapping("label")
+    public ResultVO label(@RequestBody StorageGroupDTO dto) {
+        return materialStorageService.label(dto);
     }
 
-    @RequestMapping("storage")
-    public ResultVO storage(@RequestBody MaterialStorageDTO dto) {
+    @PostMapping("edit")
+    public ResultVO edit(@RequestBody StorageDetailDTO dto) {
+        return materialStorageService.edit(dto);
+    }
+
+    @PostMapping("delete")
+    public ResultVO delete(@RequestBody StorageDetailDTO dto) {
+        return materialStorageService.delete(dto);
+    }
+
+    @PostMapping("save")
+    public ResultVO save(@RequestBody StorageGroupDTO dto) {
+        return materialStorageService.save(dto);
+    }
+
+    @PostMapping("storage")
+    public ResultVO storage(@RequestBody OperateDTO dto) {
         return materialStorageService.storage(dto);
+    }
+
+    @PostMapping("detail")
+    public ResultVO detail(@RequestBody OperateDTO dto) {
+        return materialStorageService.detail(dto);
+    }
+
+    @PostMapping("record")
+    public ResultVO record(@RequestBody OperateDTO dto) {
+        return materialStorageService.record(dto);
     }
 }

@@ -2,6 +2,8 @@ package com.smartindustry.storage.service;
 
 import com.smartindustry.common.vo.ResultVO;
 
+import java.util.Map;
+
 /**
  * @author: xiahui
  * @date: Created in 2020/6/30 9:12
@@ -12,9 +14,16 @@ public interface IErpExternalService {
     /**
      * 获取订单信息
      *
-     * @param ono
-     * @param otype
+     * @param reqData
      * @return
      */
-    ResultVO order(String ono, Byte otype);
+    ResultVO order(Map<String, Object> reqData);
+
+    /**
+     * 查询
+     *
+     * @param reqData
+     * @return
+     */
+    ResultVO pageQuery(Map<String, Object> reqData);
 }

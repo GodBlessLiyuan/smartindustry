@@ -1,7 +1,10 @@
 package com.smartindustry.storage.service;
 
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.storage.dto.MaterialStorageDTO;
+import com.smartindustry.storage.dto.OperateDTO;
+import com.smartindustry.storage.dto.StorageDetailDTO;
+import com.smartindustry.storage.dto.StorageGroupDTO;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Map;
 
@@ -15,35 +18,71 @@ public interface IMaterialStorageService {
     /**
      * 入库单 分页查询
      *
-     * @param pageNum
-     * @param pageSize
      * @param reqData
      * @return
      */
-    ResultVO pageQuery(int pageNum, int pageSize, Map<String, Object> reqData);
+    ResultVO pageQuery(Map<String, Object> reqData);
 
     /**
      * 库位查询
      *
-     * @param lno
+     * @param dto
      * @return
      */
-    ResultVO location(String lno);
+    ResultVO location(@RequestBody OperateDTO dto);
 
     /**
      * 打印标签查询
      *
-     * @param rbid
-     * @param pid
      * @return
      */
-    ResultVO label(Long rbid, String pid);
+    ResultVO label(StorageGroupDTO dto);
 
     /**
-     * 入库
+     * 编辑
      *
      * @param dto
      * @return
      */
-    ResultVO storage(MaterialStorageDTO dto);
+    ResultVO edit(StorageDetailDTO dto);
+
+    /**
+     * 删除
+     *
+     * @param dto
+     * @return
+     */
+    ResultVO delete(StorageDetailDTO dto);
+
+    /**
+     * 保存
+     *
+     * @param dto
+     * @return
+     */
+    ResultVO save(StorageGroupDTO dto);
+
+    /**
+     * 入库
+     *
+     * @param sid
+     * @return
+     */
+    ResultVO storage(@RequestBody OperateDTO dto);
+
+    /**
+     * 详情
+     *
+     * @param sid
+     * @return
+     */
+    ResultVO detail(@RequestBody OperateDTO dto);
+
+    /**
+     * 查询操作记录
+     *
+     * @param sid
+     * @return
+     */
+    ResultVO record(@RequestBody OperateDTO dto);
 }

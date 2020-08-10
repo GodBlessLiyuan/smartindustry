@@ -1,8 +1,8 @@
 package com.smartindustry.storage.dto;
 
-import com.smartindustry.common.bo.ReceiptBodyBO;
-import com.smartindustry.common.mapper.ReceiptBodyMapper;
-import com.smartindustry.common.pojo.ReceiptHeadPO;
+import com.smartindustry.common.bo.sm.ReceiptBodyBO;
+import com.smartindustry.common.mapper.sm.ReceiptBodyMapper;
+import com.smartindustry.common.pojo.sm.ReceiptHeadPO;
 import com.smartindustry.storage.constant.ReceiptConstant;
 import com.smartindustry.storage.util.ReceiptNoUtil;
 import lombok.Data;
@@ -22,6 +22,10 @@ import java.util.List;
 public class ReceiptBodyDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 物料ID
+     */
+    private Long mid;
     /**
      * 物料编码
      */
@@ -77,10 +81,15 @@ public class ReceiptBodyDTO implements Serializable {
     public static List<ReceiptBodyBO> createPOs(ReceiptHeadPO headPO, List<ReceiptBodyDTO> dtos, ReceiptBodyMapper mapper) {
         List<ReceiptBodyBO> bos = new ArrayList<>(dtos.size());
 
-        String head = headPO.getOrderType() == 1 ? ReceiptNoUtil.RECEIPT_BODY_PO : headPO.getOrderType() == 2 ? ReceiptNoUtil.RECEIPT_BODY_RP : ReceiptNoUtil.RECEIPT_BODY_YP;
+        String head = headPO.getOrderType() == 1 ? ReceiptNoUtil.RECEIPT_BODY_PO : headPO.getOrderType() == 2 ? ReceiptNoUtil.RECEIPT_BODY_YP : ReceiptNoUtil.RECEIPT_BODY_RP;
         int curNum = ReceiptNoUtil.getReceiptBodyNum(mapper, head, new Date());
         for (ReceiptBodyDTO dto : dtos) {
-            bos.add(ReceiptBodyDTO.createPO(headPO.getReceiptHeadId(), dto, head, ++curNum));
+            // 过滤接受数量为空的数据
+            if (null == dto.getAnum() || dto.getAnum() <= 0) {
+                continue;
+            }
+
+            bos.add(ReceiptBodyDTO.createPO(headPO, dto, ReceiptNoUtil.genReceiptBodyNo(head, new Date(), ++curNum)));
         }
         return bos;
     }
@@ -88,17 +97,19 @@ public class ReceiptBodyDTO implements Serializable {
     /**
      * 创建 po
      *
-     * @param headId
+     * @param headPO
      * @param dto
      * @return
      */
-    private static ReceiptBodyBO createPO(Long headId, ReceiptBodyDTO dto, String head, int num) {
+    private static ReceiptBodyBO createPO(ReceiptHeadPO headPO, ReceiptBodyDTO dto, String no) {
         ReceiptBodyBO bo = new ReceiptBodyBO();
-        bo.setReceiptHeadId(headId);
-        bo.setReceiptNo(ReceiptNoUtil.genReceiptBodyNo(head, new Date(), num));
+        bo.setReceiptHeadId(headPO.getReceiptHeadId());
+        bo.setOrderNo(headPO.getOrderNo());
+        bo.setOrderType(headPO.getOrderType());
+        bo.setReceiptNo(no);
+        bo.setMaterialId(dto.getMid());
         bo.setMaterialNo(dto.getMno());
         bo.setMaterialName(dto.getMname());
-        bo.setMaterialType(dto.getMtype());
         bo.setMaterialModel(dto.getMmodel());
         bo.setMaterialDesc(dto.getMdesc());
         bo.setOrderTotal(dto.getOtotal());

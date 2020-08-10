@@ -1,14 +1,14 @@
 package com.smartindustry.storage.controller;
 
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.storage.dto.TestDTO;
+import com.smartindustry.storage.constant.ReceiptConstant;
+import com.smartindustry.storage.dto.IqcTestDTO;
+import com.smartindustry.storage.dto.OperateDTO;
 import com.smartindustry.storage.dto.QeConfirmDTO;
+import com.smartindustry.storage.dto.QeTestDTO;
 import com.smartindustry.storage.service.IQualityManageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,42 +25,33 @@ public class QualityManageController {
     @Autowired
     private IQualityManageService qualityManageService;
 
-    @RequestMapping("pageQuery")
-    public ResultVO pageQuery(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                              @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                              @RequestParam(value = "rno", required = false, defaultValue = "") String rno,
-                              @RequestParam(value = "type", required = false, defaultValue = "0") Byte type,
-                              @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-                              @RequestParam(value = "qaStatus", required = false, defaultValue = "0") Byte qaStatus,
-                              @RequestParam(value = "status") Byte status) {
-        Map<String, Object> reqData = new HashMap<>(8);
-        // 质量管理 分页查询查询
-        reqData.put("qa", true);
-        reqData.put("rno", rno);
-        reqData.put("type", type);
-        reqData.put("keyword", keyword);
-        reqData.put("qaStatus", qaStatus);
-        reqData.put("status", status);
-        return qualityManageService.pageQuery(pageNum, pageSize, reqData);
+    @PostMapping("pageQuery")
+    public ResultVO pageQuery(@RequestBody Map<String, Object> reqData) {
+        return qualityManageService.pageQuery(reqData);
     }
 
-    @RequestMapping("test")
-    public ResultVO test(@RequestBody TestDTO dto) {
-        return qualityManageService.test(dto);
+    @PostMapping("iqcTest")
+    public ResultVO iqcTest(@RequestBody IqcTestDTO dto) {
+        return qualityManageService.iqcTest(dto);
     }
 
-    @RequestMapping("qeConfirm")
+    @PostMapping("qeConfirm")
     public ResultVO qeConfirm(@RequestBody QeConfirmDTO dto) {
         return qualityManageService.qeConfirm(dto);
     }
 
-    @RequestMapping("storage")
-    public ResultVO storage(@RequestParam(value = "rbid") Long rbid) {
-        return qualityManageService.storage(rbid);
+    @PostMapping("qeTest")
+    public ResultVO qeTest(@RequestBody QeTestDTO dto) {
+        return qualityManageService.qeTest(dto);
     }
 
-    @RequestMapping("record")
-    public ResultVO record(@RequestParam(value = "rbid") Long rbid, @RequestParam(value = "status", required = false, defaultValue = "1") Byte status) {
-        return qualityManageService.record(rbid, status);
+    @PostMapping("storage")
+    public ResultVO storage(@RequestBody OperateDTO dto) {
+        return qualityManageService.storage(dto);
+    }
+
+    @PostMapping("record")
+    public ResultVO record(@RequestBody OperateDTO dto) {
+        return qualityManageService.record(dto);
     }
 }

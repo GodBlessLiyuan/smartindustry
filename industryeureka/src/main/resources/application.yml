@@ -1,0 +1,18 @@
+server:
+  port: 8030
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: true
+    service-url:
+      defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@localhost:8030/eureka/
+logging:
+  config: classpath:logback-spring-test.xml
+
+spring:
+  application:
+    name: industryeureka
+  security:
+    user:
+      name: vbooster
+      password: 123456a

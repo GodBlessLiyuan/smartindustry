@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.am.UserMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.am.UserPO">
+    <id column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="name" jdbcType="CHAR" property="name" />
+    <result column="sex" jdbcType="TINYINT" property="sex" />
+    <result column="dept_id" jdbcType="BIGINT" property="deptId" />
+    <result column="username" jdbcType="CHAR" property="username" />
+    <result column="password" jdbcType="CHAR" property="password" />
+    <result column="role_id" jdbcType="BIGINT" property="roleId" />
+    <result column="job" jdbcType="CHAR" property="job" />
+    <result column="phone" jdbcType="CHAR" property="phone" />
+    <result column="email" jdbcType="CHAR" property="email" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="remark" jdbcType="CHAR" property="remark" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="dr" jdbcType="TINYINT" property="dr" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_id, `name`, sex, dept_id, username, `password`, role_id, job, phone, email, 
+    `status`, remark, create_time, update_time, dr
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from am_user
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from am_user
+    where user_id = #{userId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.am.UserPO" useGeneratedKeys="true" keyProperty="userId">
+    insert into am_user (user_id, `name`, sex, 
+      dept_id, username, `password`, 
+      role_id, job, phone, email, 
+      `status`, remark, create_time, 
+      update_time, dr)
+    values (#{userId,jdbcType=BIGINT}, #{name,jdbcType=CHAR}, #{sex,jdbcType=TINYINT}, 
+      #{deptId,jdbcType=BIGINT}, #{username,jdbcType=CHAR}, #{password,jdbcType=CHAR}, 
+      #{roleId,jdbcType=BIGINT}, #{job,jdbcType=CHAR}, #{phone,jdbcType=CHAR}, #{email,jdbcType=CHAR}, 
+      #{status,jdbcType=TINYINT}, #{remark,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.am.UserPO">
+    insert into am_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="deptId != null">
+        dept_id,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="password != null">
+        `password`,
+      </if>
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="job != null">
+        job,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="dr != null">
+        dr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=CHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="deptId != null">
+        #{deptId,jdbcType=BIGINT},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=CHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=CHAR},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=BIGINT},
+      </if>
+      <if test="job != null">
+        #{job,jdbcType=CHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=CHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=CHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dr != null">
+        #{dr,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.am.UserPO">
+    update am_user
+    <set>
+      <if test="name != null">
+        `name` = #{name,jdbcType=CHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="deptId != null">
+        dept_id = #{deptId,jdbcType=BIGINT},
+      </if>
+      <if test="username != null">
+        username = #{username,jdbcType=CHAR},
+      </if>
+      <if test="password != null">
+        `password` = #{password,jdbcType=CHAR},
+      </if>
+      <if test="roleId != null">
+        role_id = #{roleId,jdbcType=BIGINT},
+      </if>
+      <if test="job != null">
+        job = #{job,jdbcType=CHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=CHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=CHAR},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dr != null">
+        dr = #{dr,jdbcType=TINYINT},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.am.UserPO">
+    update am_user
+    set `name` = #{name,jdbcType=CHAR},
+      sex = #{sex,jdbcType=TINYINT},
+      dept_id = #{deptId,jdbcType=BIGINT},
+      username = #{username,jdbcType=CHAR},
+      `password` = #{password,jdbcType=CHAR},
+      role_id = #{roleId,jdbcType=BIGINT},
+      job = #{job,jdbcType=CHAR},
+      phone = #{phone,jdbcType=CHAR},
+      email = #{email,jdbcType=CHAR},
+      `status` = #{status,jdbcType=TINYINT},
+      remark = #{remark,jdbcType=CHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      dr = #{dr,jdbcType=TINYINT}
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+
+  <resultMap id="BOResultMap" type="com.smartindustry.common.bo.am.UserBO" extends="BaseResultMap">
+    <result column="deptName" jdbcType="CHAR" property="deptName"/>
+    <result column="roleName" jdbcType="CHAR" property="roleName"/>
+  </resultMap>
+  <sql id="BO_Column_List">
+        u.user_id, u.`name`, u.sex, u.dept_id, u.username, u.`password`, u.role_id, u.job, u.phone, u.email,
+    u.`status`, u.remark, u.create_time, u.update_time, u.dr,d.dept_name as deptName,r.role_name as roleName
+  </sql>
+
+<!--  用户角色的分页查询-->
+  <select id="userPageQuery" parameterType="java.util.Map" resultMap="BOResultMap">
+    select
+    <include refid="BO_Column_List"/>
+    from am_user u
+    left join am_dept d on u.dept_id = d.dept_id
+    left join am_role r on u.role_id = r.role_id
+    where u.dr = 1
+    <if test="name != null and name != ''">
+      and u.name like concat('%',#{name,jdbcType=CHAR},'%')
+    </if>
+    <if test="status != null and status != 0">
+      and u.`status` = #{status,jdbcType=TINYINT}
+    </if>
+    order by u.create_time desc
+  </select>
+
+<!--  查询具体的个人信息-->
+  <select id="queryUserMsg" parameterType="java.lang.Long" resultMap="BOResultMap">
+    select
+    <include refid="BO_Column_List"/>
+    from am_user u
+    left join am_dept d on u.dept_id = d.dept_id
+    left join am_role r on u.role_id = r.role_id
+    where u.dr = 1 and u.user_id = #{userId,jdbcType=BIGINT}
+  </select>
+  <!--  批量禁用用户-->
+  <update id="updateBatch" parameterType="java.util.List">
+    <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+      update am_user
+      <set >
+        <if test="item.status != null" >
+          `status` = #{item.status,jdbcType=TINYINT},
+        </if>
+      </set>
+      where user_id = #{item.userId,jdbcType=BIGINT} and dr =1
+    </foreach>
+  </update>
+
+  <update id="deleteBatch" parameterType="java.util.List">
+    <foreach collection="list" item="uid" index="index" open="" close="" separator=";">
+      update am_user
+      <set>
+        dr = 2
+      </set>
+      where user_id = #{uid,jdbcType=BIGINT}
+    </foreach>
+  </update>
+
+  <!--  给出部门负责人列表-->
+  <select id="queryLeader" resultMap="BaseResultMap">
+    select distinct d.user_id as userId,u.name
+    from am_dept d
+    left join am_user u on d.user_id = u.user_id
+  </select>
+
+<!--  给出所有用户列表，模糊查询-->
+  <select id="selectAll" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from am_user u
+    where u.dr =1
+    <if test="name != null and name != ''">
+      and u.`name` like concat('%',#{name,jdbcType=CHAR},'%')
+    </if>
+  </select>
+
+  <select id="queryByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from am_user u
+    where u.dr =1 and u.username = #{username,jdbcType=CHAR}
+  </select>
+
+  <!--  判断当前的用户name是否重复-->
+  <select id="judgeRepeatName" resultType="java.lang.Integer">
+    select case when exists(SELECT 1 from am_user
+    where username = #{username,jdbcType=CHAR}
+    <if test="userId != null">
+      and user_id != #{userId,jdbcType=BIGINT}
+    </if>
+    and dr = 1 limit 1)
+    then 1
+    else 0 end as result
+  </select>
+
+<!--  根据角色id找出所有的用户id-->
+  <select id="queryUser" parameterType="java.lang.Long" resultType="java.lang.Long">
+    select distinct user_id
+    from am_user
+    where role_id = #{roleId,jdbcType=BIGINT}
+  </select>
+
+  <!--  将用户所对应的部门id置空-->
+  <update id="updateDeptId" parameterType="java.lang.Long">
+    update am_user
+    set dept_id = null
+    where dept_id = #{deptId,jdbcType=BIGINT} and dr = 1
+  </update>
+
+  <!--  将用户所对应的角色id置空-->
+  <update id="updateRoleId" parameterType="java.lang.Long">
+    update am_user
+    set role_id = null
+    where role_id = #{roleId,jdbcType=BIGINT} and dr = 1
+  </update>
+
+<!--  更新用户密码-->
+  <update id="updatePassword">
+    update am_user
+    set `password` = #{password,jdbcType=CHAR}
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+</mapper>

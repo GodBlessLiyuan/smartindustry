@@ -1,6 +1,6 @@
 package com.smartindustry.storage.dto;
 
-import com.smartindustry.common.pojo.ReceiptHeadPO;
+import com.smartindustry.common.pojo.sm.ReceiptHeadPO;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -33,7 +33,7 @@ public class LogisticsDTO implements Serializable {
      */
     private Byte way;
     /**
-     * 备注（采购员等）i
+     * 备注（采购员等）
      */
     private String remark;
 

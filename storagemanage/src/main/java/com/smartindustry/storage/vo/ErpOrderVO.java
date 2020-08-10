@@ -26,11 +26,12 @@ public class ErpOrderVO implements Serializable {
         private Date odate;
         private String supplier;
         private String buyer;
-        private Date pdate;
+        private String pdate;
     }
 
     @Data
     public static class ErpOrderBodyVO {
+        private Long mid;
         private String mno;
         private Byte mtype;
         private String mname;

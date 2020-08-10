@@ -1,7 +1,6 @@
 package com.smartindustry.storage.dto;
 
-import com.smartindustry.common.pojo.PrintLabelPO;
-import com.smartindustry.storage.constant.ReceiptConstant;
+import com.smartindustry.common.pojo.si.PrintLabelPO;
 import com.smartindustry.storage.util.ReceiptNoUtil;
 import lombok.Data;
 
@@ -23,6 +22,10 @@ public class PrintLabelDTO implements Serializable {
      * 收料单ID
      */
     private Long rbid;
+    /**
+     * 物料编码
+     */
+    private Long mid;
 
     /**
      * 扫描条形码
@@ -31,7 +34,7 @@ public class PrintLabelDTO implements Serializable {
     /**
      * 生产日期
      */
-    private Date pdate;
+    private String pdate;
     /**
      * 生产批号
      */
@@ -54,14 +57,13 @@ public class PrintLabelDTO implements Serializable {
      */
     public static PrintLabelPO createPO(PrintLabelDTO dto, int num, Byte origin) {
         PrintLabelPO po = new PrintLabelPO();
-        po.setReceiptBodyId(dto.getRbid());
         po.setPackageId(ReceiptNoUtil.genLabelNo(null, new Date(), num));
         po.setProduceDate(dto.getPdate());
         po.setProduceBatch(dto.getPbatch());
         po.setNum(dto.getMnum());
         po.setOrigin(origin);
+        po.setMaterialId(dto.getMid());
         po.setCreateTime(new Date());
-        po.setStatus(ReceiptConstant.LABEL_STORAGE_PENDING);
         po.setDr((byte) 1);
 
         return po;

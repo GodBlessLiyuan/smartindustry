@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.dd.MeasureUnitMapper">
+    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.dd.MeasureUnitPO">
+        <id column="measure_unit_id" jdbcType="BIGINT" property="measureUnitId"/>
+        <result column="measure_unit_name" jdbcType="CHAR" property="measureUnitName"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        measure_unit_id, measure_unit_name, user_id, create_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from dd_measure_unit
+        where measure_unit_id = #{measureUnitId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from dd_measure_unit
+        where measure_unit_id = #{measureUnitId,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.dd.MeasureUnitPO">
+        insert into dd_measure_unit (measure_unit_id, measure_unit_name, user_id,
+                                     create_time)
+        values (#{measureUnitId,jdbcType=BIGINT}, #{measureUnitName,jdbcType=CHAR}, #{userId,jdbcType=BIGINT},
+                #{createTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.dd.MeasureUnitPO">
+        insert into dd_measure_unit
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="measureUnitId != null">
+                measure_unit_id,
+            </if>
+            <if test="measureUnitName != null">
+                measure_unit_name,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="measureUnitId != null">
+                #{measureUnitId,jdbcType=BIGINT},
+            </if>
+            <if test="measureUnitName != null">
+                #{measureUnitName,jdbcType=CHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.dd.MeasureUnitPO">
+        update dd_measure_unit
+        <set>
+            <if test="measureUnitName != null">
+                measure_unit_name = #{measureUnitName,jdbcType=CHAR},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where measure_unit_id = #{measureUnitId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.dd.MeasureUnitPO">
+        update dd_measure_unit
+        set measure_unit_name = #{measureUnitName,jdbcType=CHAR},
+            user_id           = #{userId,jdbcType=BIGINT},
+            create_time       = #{createTime,jdbcType=TIMESTAMP}
+        where measure_unit_id = #{measureUnitId,jdbcType=BIGINT}
+    </update>
+
+    <select id="queryByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from dd_measure_unit
+        where measure_unit_name = #{muname,jdbcType=CHAR}
+    </select>
+    <select id="queryAll" resultType="java.util.Map">
+        select measure_unit_id as muid, measure_unit_name as muname
+        from dd_measure_unit
+    </select>
+</mapper>

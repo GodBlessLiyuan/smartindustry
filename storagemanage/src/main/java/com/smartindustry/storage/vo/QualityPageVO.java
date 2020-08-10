@@ -1,6 +1,6 @@
 package com.smartindustry.storage.vo;
 
-import com.smartindustry.common.bo.ReceiptBO;
+import com.smartindustry.common.bo.sm.ReceiptBO;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -35,6 +35,10 @@ public class QualityPageVO implements Serializable {
      * 物料描述
      */
     private String mdesc;
+    /**
+     * 检验类型
+     */
+    private Byte ttype;
     /**
      * 收料类型
      * 1：PO单收料
@@ -90,6 +94,7 @@ public class QualityPageVO implements Serializable {
         vo.setRno(bo.getReceiptNo());
         vo.setMno(bo.getMaterialNo());
         vo.setMdesc(bo.getMaterialDesc());
+        vo.setTtype(bo.getTestType());
         vo.setOtype(bo.getOrderType());
         vo.setAnum(bo.getAcceptNum());
         vo.setGnum(bo.getGoodNum());
