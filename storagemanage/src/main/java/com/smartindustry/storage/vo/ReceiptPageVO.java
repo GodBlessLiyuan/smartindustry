@@ -51,7 +51,7 @@ public class ReceiptPageVO implements Serializable {
     /**
      * 物料类型
      */
-    private String mtype;
+    private Byte mtype;
     /**
      * 物料描述
      */
@@ -119,7 +119,7 @@ public class ReceiptPageVO implements Serializable {
         vo.setMid(bo.getMaterialId());
         vo.setMno(bo.getMaterialNo());
         vo.setMname(bo.getMaterialName());
-        vo.setMtype(bo.getMaterialTypeName());
+        vo.setMtype(bo.getMaterialType());
         vo.setMdesc(bo.getMaterialDesc());
         vo.setOtotal(bo.getOrderTotal());
         if(!StringUtils.isEmpty(bo.getOrderDate())) {
