@@ -87,4 +87,9 @@ public class LoginController {
     public ResultVO getInfo(@RequestBody OperateDTO dto){
         return loginService.getInfo(dto);
     }
+
+    @PostMapping("/logout")
+    public ResultVO logout(){
+        return ResultVO.ok();
+    }
 }

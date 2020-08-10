@@ -36,7 +36,9 @@ public class UserDTO {
         po.setDeptId(dto.getDid());
         po.setStatus(dto.getStatus());
         po.setUpdateTime(new Date());
-        po.setPassword(dto.getPassword());
+        if(dto.getPassword()!=null){
+            po.setPassword(SecurityUtils.encryptPassword(dto.getPassword()));
+        }
         po.setUserId(dto.getUid());
         return po;
     }
