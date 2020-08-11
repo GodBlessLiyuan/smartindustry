@@ -1,4 +1,4 @@
-package com.smartindustry.authority.annotation;
+package com.smartindustry.common.annotation;
 
 import java.lang.annotation.*;
 
@@ -12,7 +12,6 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface RepeatSubmit
-{
+public @interface RepeatSubmit{
 
 }

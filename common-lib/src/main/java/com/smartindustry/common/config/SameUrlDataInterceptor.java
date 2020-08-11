@@ -1,10 +1,10 @@
-package com.smartindustry.authority.config;
+package com.smartindustry.common.config;
 
 import com.alibaba.fastjson.JSONObject;
-import com.smartindustry.authority.filter.RepeatedlyRequestWrapper;
-import com.smartindustry.authority.util.HttpHelper;
-import com.smartindustry.authority.util.RedisCache;
-import com.smartindustry.authority.util.StringUtils;
+import com.smartindustry.common.filter.RepeatedlyRequestWrapper;
+import com.smartindustry.common.util.HttpHelper;
+import com.smartindustry.common.util.RedisCache;
+import com.smartindustry.common.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -51,7 +51,7 @@ public class SameUrlDataInterceptor extends RepeatSubmitInterceptor
         String nowParams = HttpHelper.getBodyString(repeatedlyRequest);
 
         // body参数为空，获取Parameter的数据
-        if (StringUtils.isEmpty(nowParams))
+        if (StringUtil.isEmpty(nowParams))
         {
             nowParams = JSONObject.toJSONString(request.getParameterMap());
         }

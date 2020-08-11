@@ -1,9 +1,8 @@
-package com.smartindustry.authority.security.filter;
-
-import com.smartindustry.authority.dto.LoginUserDTO;
-import com.smartindustry.authority.service.TokenService;
-import com.smartindustry.authority.util.SecurityUtils;
-import com.smartindustry.authority.util.StringUtils;
+package com.smartindustry.common.security.filter;
+import com.smartindustry.common.bo.am.LoginUserBO;
+import com.smartindustry.common.service.TokenService;
+import com.smartindustry.common.util.SecurityUtil;
+import com.smartindustry.common.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,7 +14,6 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotNull;
 import java.io.IOException;
 
 /**
@@ -33,11 +31,11 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException
     {
-        LoginUserDTO loginUserDTO = tokenService.getLoginUser(request);
-        if (StringUtils.isNotNull(loginUserDTO) && StringUtils.isNull(SecurityUtils.getAuthentication()))
+        LoginUserBO loginUserBO = tokenService.getLoginUser(request);
+        if (StringUtil.isNotNull(loginUserBO) && StringUtil.isNull(SecurityUtil.getAuthentication()))
         {
-            tokenService.verifyToken(loginUserDTO);
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUserDTO, null, loginUserDTO.getAuthorities());
+            tokenService.verifyToken(loginUserBO);
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUserBO, null, loginUserBO.getAuthorities());
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }

@@ -1,4 +1,4 @@
-package com.smartindustry.authority.dto;
+package com.smartindustry.common.bo.am;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smartindustry.common.pojo.am.UserPO;
@@ -17,7 +17,7 @@ import java.util.Set;
  * @description:
  */
 @Data
-public class LoginUserDTO implements UserDetails {
+public class LoginUserBO implements UserDetails {
     private static final long SerialVersionUID = 1L;
     /**
      * 用户唯一标识
@@ -45,7 +45,7 @@ public class LoginUserDTO implements UserDetails {
      */
     private List<Long> permissionIds;
 
-    public LoginUserDTO(UserPO user, Set<String> permissions, List<Long> permissionIds)
+    public LoginUserBO(UserPO user, Set<String> permissions, List<Long> permissionIds)
     {
         this.user = user;
         this.permissions = permissions;

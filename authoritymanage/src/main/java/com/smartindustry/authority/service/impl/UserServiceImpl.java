@@ -3,12 +3,10 @@ package com.smartindustry.authority.service.impl;
 import com.github.pagehelper.Page;
 import com.smartindustry.authority.constant.AuthorityConstant;
 import com.smartindustry.authority.dto.EditDTO;
-import com.smartindustry.authority.dto.LoginUserDTO;
+import com.smartindustry.common.bo.am.LoginUserBO;
 import com.smartindustry.authority.dto.OperateDTO;
 import com.smartindustry.authority.dto.UserDTO;
 import com.smartindustry.authority.service.IUserService;
-import com.smartindustry.authority.service.TokenService;
-import com.smartindustry.authority.util.SecurityUtils;
 import com.smartindustry.authority.vo.RoleVO;
 import com.smartindustry.authority.vo.UserRecordVO;
 import com.smartindustry.authority.vo.UserVO;
@@ -19,7 +17,9 @@ import com.smartindustry.common.pojo.am.DeptPO;
 import com.smartindustry.common.pojo.am.RolePO;
 import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.am.UserRecordPO;
+import com.smartindustry.common.service.TokenService;
 import com.smartindustry.common.util.PageQueryUtil;
+import com.smartindustry.common.util.SecurityUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.*;
 
 /**
@@ -89,9 +87,9 @@ public class UserServiceImpl implements IUserService {
         userMapper.updateBatch(pos);
         for(OperateDTO dto:dtos){
             if(dto.getStatus().equals(AuthorityConstant.STATUS_DISABLE)){
-                userRecordMapper.insert(new UserRecordPO(dto.getUid(),1L,new Date(), AuthorityConstant.DISABLERECORD));
+                userRecordMapper.insert(new UserRecordPO(dto.getUid(),1L,new Date(), AuthorityConstant.RECORD_DISABLE));
             }else{
-                userRecordMapper.insert(new UserRecordPO(dto.getUid(),1L,new Date(), AuthorityConstant.USERECORD));
+                userRecordMapper.insert(new UserRecordPO(dto.getUid(),1L,new Date(), AuthorityConstant.RECORD_USE));
             }
         }
         return ResultVO.ok();
@@ -103,7 +101,7 @@ public class UserServiceImpl implements IUserService {
         userMapper.deleteBatch(uids);
         for(Long uid:uids){
             deleteUser(uid);
-            userRecordMapper.insert(new UserRecordPO(uid,1L,new Date(), AuthorityConstant.DELETERECORD));
+            userRecordMapper.insert(new UserRecordPO(uid,1L,new Date(), AuthorityConstant.RECORD_DELETE));
         }
         return ResultVO.ok();
     }
@@ -117,7 +115,7 @@ public class UserServiceImpl implements IUserService {
         }
         UserPO po = UserDTO.createPO(dto);
         userMapper.insert(po);
-        userRecordMapper.insert(new UserRecordPO(po.getUserId(),1L,new Date(), AuthorityConstant.INSERTRECORD));
+        userRecordMapper.insert(new UserRecordPO(po.getUserId(),1L,new Date(), AuthorityConstant.RECORD_INSERT));
         return ResultVO.ok();
     }
 
@@ -130,14 +128,14 @@ public class UserServiceImpl implements IUserService {
         }
         UserPO po = UserDTO.createPO(dto);
         userMapper.updateByPrimaryKeySelective(po);
-        userRecordMapper.insert(new UserRecordPO(dto.getUid(),1L,new Date(), AuthorityConstant.UPDATERECORD));
+        userRecordMapper.insert(new UserRecordPO(dto.getUid(),1L,new Date(), AuthorityConstant.RECORD_UPDATE));
         return ResultVO.ok();
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public  ResultVO updateUser(HttpServletRequest session,@RequestBody UserDTO dto){
-        LoginUserDTO userDto = tokenService.getLoginUser(session);
+        LoginUserBO userDto = tokenService.getLoginUser(session);
         //从session中获取userId的值
         Long userId = userDto.getUser().getUserId();
         UserPO po = UserDTO.createPO(dto);
@@ -185,7 +183,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO editPassword(HttpServletRequest session,@RequestBody EditDTO dto){
-        LoginUserDTO userDto = tokenService.getLoginUser(session);
+        LoginUserBO userDto = tokenService.getLoginUser(session);
         //从session中获取userId的值
         Long userId = userDto.getUser().getUserId();
         if (userId == null) {
@@ -195,19 +193,19 @@ public class UserServiceImpl implements IUserService {
         //根据id,检索到当前用户，以便获得password
         UserPO userPo = userMapper.selectByPrimaryKey(userId);
         // 比较输入旧密码是否等于用户本身存在数据库的密码
-        if (!SecurityUtils.matchesPassword(dto.getOpassword(),userPo.getPassword())) {
+        if (!SecurityUtil.matchesPassword(dto.getOpassword(),userPo.getPassword())) {
             // 旧密码输入错误
             return new ResultVO(1023);
         }else {
             // 如果没有问题，则将当前userId用户更新密码
-            userMapper.updatePassword(SecurityUtils.encryptPassword(dto.getNpassword()),userId);
+            userMapper.updatePassword(SecurityUtil.encryptPassword(dto.getNpassword()),userId);
         }
         return ResultVO.ok();
     }
 
     @Override
     public ResultVO queryUserMsg(HttpServletRequest session){
-        LoginUserDTO dto = tokenService.getLoginUser(session);
+        LoginUserBO dto = tokenService.getLoginUser(session);
         UserBO bo = userMapper.queryUserMsg(dto.getUser().getUserId());
         return ResultVO.ok().setData(UserVO.convertToUserMsg(bo));
     }

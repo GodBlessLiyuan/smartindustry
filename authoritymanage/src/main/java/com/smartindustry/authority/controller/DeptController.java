@@ -26,6 +26,7 @@ public class DeptController {
     @Autowired
     private IDeptService deptService;
 
+
     /**
      * 对部门信息进行分页模糊查询
      * @param reqData

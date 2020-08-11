@@ -2,12 +2,10 @@ package com.smartindustry.authority.service.impl;
 
 import com.smartindustry.authority.constant.AuthorityConstant;
 import com.smartindustry.authority.service.IAuthorityService;
-import com.smartindustry.authority.util.StringUtils;
-import com.smartindustry.authority.dto.LoginUserDTO;
+import com.smartindustry.common.bo.am.LoginUserBO;
 import com.smartindustry.common.mapper.am.AuthorityMapper;
 import com.smartindustry.common.mapper.am.UserMapper;
 import com.smartindustry.common.pojo.am.UserPO;
-import com.smartindustry.common.vo.ResultVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +35,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
     {
         UserPO user = userMapper.queryByName(username);
-        if (StringUtils.isNull(user))
+        if (user == null)
         {
             log.info("登录用户：{} 不存在.", username);
             throw new UsernameNotFoundException("登录用户：" + username + " 不存在");
@@ -57,6 +55,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     // 获得当前用户的信息以及所有权限
     public UserDetails createLoginUser(UserPO user) {
-        return new LoginUserDTO(user,authorityService.getMenuPermission(user),authorityMapper.queryPermissionId(user.getUserId()));
+        return new LoginUserBO(user,authorityService.getMenuPermission(user),authorityMapper.queryPermissionId(user.getUserId()));
     }
 }

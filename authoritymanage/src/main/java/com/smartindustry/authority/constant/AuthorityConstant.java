@@ -7,20 +7,6 @@ package com.smartindustry.authority.constant;
  */
 public class AuthorityConstant {
     /**
-     * 令牌前缀
-     */
-    public static final String TOKEN_PREFIX = "Bearer ";
-
-    /**
-     * 登录用户 redis key
-     */
-    public static final String LOGIN_TOKEN_KEY = "login_tokens:";
-    /**
-     * 令牌前缀
-     */
-    public static final String LOGIN_USER_KEY = "login_user_key";
-
-    /**
      * 用户的状态 1 启用2  禁用
      */
     public static final String USER_OK = "1";
@@ -37,47 +23,22 @@ public class AuthorityConstant {
     public static final Byte STATUS_OK = 1;
     public static final Byte STATUS_DISABLE = 2;
 
-
-    /**
-     * 资源映射路径 前缀
-     */
-    public static final String RESOURCE_PREFIX = "/profile";
-
-    /**
-     * 验证码 redis key
-     */
-    public static final String CAPTCHA_CODE_KEY = "captcha_codes:";
-
-    /**
-     * 验证码有效期（分钟）
-     */
-    public static final Integer CAPTCHA_EXPIRATION = 2;
-
     /**
      * 菜单标识
      */
-    public static final Byte MENUTYPE = 1;
+    public static final Byte TYPE_MENU = 1;
 
     /**
      * 按钮标识
      */
-    public static final Byte BUTTONTYPE = 2;
-
+    public static final Byte TYPE_BUTTON = 2;
 
     /**
      * 操作记录
      */
-    public static final String INSERTRECORD = "新增";
-    public static final String UPDATERECORD = "修改";
-    public static final String USERECORD = "启用";
-    public static final String DISABLERECORD = "禁用";
-    public static final String DELETERECORD = "删除";
-
-
-    /**
-     * 未授权
-     */
-    public static final int UNAUTHORIZED = 1020;
-
-
+    public static final String RECORD_INSERT = "新增";
+    public static final String RECORD_UPDATE = "修改";
+    public static final String RECORD_USE = "启用";
+    public static final String RECORD_DISABLE = "禁用";
+    public static final String RECORD_DELETE = "删除";
 }

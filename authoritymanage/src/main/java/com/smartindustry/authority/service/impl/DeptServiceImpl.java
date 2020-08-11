@@ -61,9 +61,9 @@ public class DeptServiceImpl implements IDeptService {
         deptMapper.updateBatch(pos);
         for(OperateDTO dto:dtos){
             if(dto.getStatus().equals(AuthorityConstant.STATUS_DISABLE)){
-                deptRecordMapper.insert(new DeptRecordPO(dto.getDid(),1L,new Date(), AuthorityConstant.DISABLERECORD));
+                deptRecordMapper.insert(new DeptRecordPO(dto.getDid(),1L,new Date(), AuthorityConstant.RECORD_DISABLE));
             }else {
-                deptRecordMapper.insert(new DeptRecordPO(dto.getDid(),1L,new Date(), AuthorityConstant.USERECORD));
+                deptRecordMapper.insert(new DeptRecordPO(dto.getDid(),1L,new Date(), AuthorityConstant.RECORD_USE));
             }
         }
         return ResultVO.ok();
@@ -78,7 +78,7 @@ public class DeptServiceImpl implements IDeptService {
         }
         DeptPO po = DeptDTO.createPO(dto);
         deptMapper.insert(po);
-        deptRecordMapper.insert(new DeptRecordPO(po.getDeptId(),1L,new Date(), AuthorityConstant.INSERTRECORD));
+        deptRecordMapper.insert(new DeptRecordPO(po.getDeptId(),1L,new Date(), AuthorityConstant.RECORD_INSERT));
         return ResultVO.ok();
     }
 
@@ -98,7 +98,7 @@ public class DeptServiceImpl implements IDeptService {
         }
         DeptPO po = DeptDTO.createPO(dto);
         deptMapper.updateByPrimaryKeySelective(po);
-        deptRecordMapper.insert(new DeptRecordPO(dto.getDid(),1L,new Date(), AuthorityConstant.UPDATERECORD));
+        deptRecordMapper.insert(new DeptRecordPO(dto.getDid(),1L,new Date(), AuthorityConstant.RECORD_UPDATE));
         return ResultVO.ok();
     }
 
@@ -116,7 +116,7 @@ public class DeptServiceImpl implements IDeptService {
                 deptMapper.deleteByPrimaryKey(did);
             }
             deleteDept(did);
-            deptRecordMapper.insert(new DeptRecordPO(did,1L,new Date(), AuthorityConstant.DELETERECORD));
+            deptRecordMapper.insert(new DeptRecordPO(did,1L,new Date(), AuthorityConstant.RECORD_DELETE));
         }
         return ResultVO.ok();
     }
