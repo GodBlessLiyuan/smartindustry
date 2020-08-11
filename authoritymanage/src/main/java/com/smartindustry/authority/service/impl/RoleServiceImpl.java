@@ -111,7 +111,7 @@ public class RoleServiceImpl implements IRoleService {
         List<AuthorityVO> vos = AuthorityVO.convert(bos);
         Map<String, Object> menuMap = new LinkedHashMap<>();
         List<AuthorityVO> lastMenu = new ArrayList<>();
-        menuMap.put("menu",getAuthTree(vos,lastMenu, AuthorityConstant.TYPE_MENU));
+        menuMap.put(AuthorityConstant.NAME_MENU,getAuthTree(vos,lastMenu, AuthorityConstant.TYPE_MENU));
         return ResultVO.ok().setData(menuMap);
     }
 
@@ -125,7 +125,7 @@ public class RoleServiceImpl implements IRoleService {
         List<AuthorityVO> lastButton = new ArrayList<>();
         CollectionUtils.addAll(lastButton, new Object[lastMenu.size()]);
         Collections.copy(lastButton,lastMenu);
-        res.put("button",getAuthTree(lastMenu,new ArrayList<>(), AuthorityConstant.TYPE_BUTTON));
+        res.put(AuthorityConstant.NAME_BUTTON,getAuthTree(lastMenu,new ArrayList<>(), AuthorityConstant.TYPE_BUTTON));
         return ResultVO.ok().setData(res);
     }
 

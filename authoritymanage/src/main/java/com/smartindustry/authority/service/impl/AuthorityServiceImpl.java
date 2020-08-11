@@ -3,6 +3,7 @@ package com.smartindustry.authority.service.impl;
 import com.smartindustry.authority.service.IAuthorityService;
 import com.smartindustry.common.mapper.am.AuthorityMapper;
 import com.smartindustry.common.pojo.am.UserPO;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,7 +50,7 @@ public class AuthorityServiceImpl implements IAuthorityService {
         Set<String> permsSet = new HashSet<>();
         for (String perm : perms)
         {
-            if (perm != null)
+            if (!StringUtils.isEmpty(perm))
             {
                 permsSet.addAll(Arrays.asList(perm.trim().split(",")));
             }
