@@ -41,4 +41,10 @@ public class AuthorityConstant {
     public static final String RECORD_USE = "启用";
     public static final String RECORD_DISABLE = "禁用";
     public static final String RECORD_DELETE = "删除";
+
+    /**
+     * 权限类型名称
+     */
+    public static final String NAME_MENU= "menu";
+    public static final String NAME_BUTTON= "button";
 }

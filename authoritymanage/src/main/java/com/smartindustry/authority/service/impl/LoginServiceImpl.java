@@ -83,13 +83,13 @@ public class LoginServiceImpl implements ILoginService {
         List<AuthorityVO> vos = AuthorityVO.convert(bos);
         Map<String, Object> res = new LinkedHashMap<>();
         List<AuthorityVO> lastMenu = new ArrayList<>();
-        res.put("menu",getAuthTreeList(vos,roleId,lastMenu, AuthorityConstant.TYPE_MENU));
+        res.put(AuthorityConstant.NAME_MENU,getAuthTreeList(vos,roleId,lastMenu, AuthorityConstant.TYPE_MENU));
 
         List<AuthorityVO> lastButton = new ArrayList<>();
         CollectionUtils.addAll(lastButton, new Object[lastMenu.size()]);
         Collections.copy(lastButton,lastMenu);
 
-        res.put("button",getAuthTreeList(lastMenu,roleId,new ArrayList<>(), AuthorityConstant.TYPE_BUTTON));
+        res.put(AuthorityConstant.NAME_BUTTON,getAuthTreeList(lastMenu,roleId,new ArrayList<>(), AuthorityConstant.TYPE_BUTTON));
         return ResultVO.ok().setData(res);
     }
 
