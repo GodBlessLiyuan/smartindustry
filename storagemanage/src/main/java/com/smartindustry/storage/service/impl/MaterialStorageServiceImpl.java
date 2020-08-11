@@ -333,7 +333,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         receiptBodyPO.setStatus(ReceiptConstant.RECEIPT_STORAGE_FINISH);
         receiptBodyMapper.updateByPrimaryKey(receiptBodyPO);
 
-        // 库位标签，出库管理使用
+        // 入库标签（出库管理、库内信息使用）
         List<StorageGroupBO> storageGroupBOs = storageGroupMapper.queryBySid(storagePO.getStorageId());
         List<StorageLabelPO> storageLabelPOs = new ArrayList<>();
         for (StorageGroupBO groupBO : storageGroupBOs) {
@@ -348,6 +348,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
                 po.setType(storagePO.getType());
                 po.setStorageNum(detailBO.getNum());
                 po.setStorageTime(storagePO.getStorageTime());
+                po.setStatus((byte) 1);
                 storageLabelPOs.add(po);
             }
         }

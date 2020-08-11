@@ -79,6 +79,7 @@ public class ErpExternalServiceImpl implements IErpExternalService {
             }
 
             labelRecommendMapper.batchInsert(new ArrayList<>(labelRecommendPOs.values()));
+            storageLabelMapper.updateStatus(new ArrayList<>(labelRecommendPOs.keySet()), (byte) 10);
 
             headPO.setMaterialStatus(OutboundConstant.MATERIAL_STATUS_UNPROCESSED);
             pickHeadMapper.updateByPrimaryKey(headPO);
