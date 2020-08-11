@@ -21,4 +21,11 @@ public class BasicDataDTO implements Serializable {
     private Long stid;
     private Long spid;
     private Long cid;
+    private Long mtid;
+    private Long hlid;
+    private Long mlid;
+    private Long muid;
+    private Long mvid;
+    private Long pllid;
+    private Long lcsid;
 }

@@ -9,6 +9,7 @@ import com.smartindustry.common.mapper.si.SupplierMapper;
 import com.smartindustry.common.mapper.si.WarehouseMapper;
 import com.smartindustry.common.pojo.dd.*;
 import com.smartindustry.common.pojo.si.LocationPO;
+import com.smartindustry.common.pojo.si.MaterialPO;
 import com.smartindustry.common.pojo.si.SupplierPO;
 import com.smartindustry.common.pojo.si.WarehousePO;
 import com.smartindustry.common.vo.ResultVO;
@@ -411,7 +412,19 @@ public class DataDictionaryServiceImpl implements IDataDictionaryService {
 
     @Override
     public ResultVO mtDelete(BasicDataDTO dto) {
-        return null;
+        MaterialTypePO materialTypePO = materialTypeMapper.selectByPrimaryKey(dto.getMtid());
+        if (null == materialTypePO) {
+            return new ResultVO(1002);
+        }
+
+        List<MaterialPO> materialPOs = materialMapper.queryByMtid(dto.getMtid());
+        if (null != materialPOs && materialPOs.size() > 0) {
+            return new ResultVO(1007);
+        }
+
+        materialTypeMapper.deleteByPrimaryKey(dto.getMtid());
+
+        return ResultVO.ok();
     }
 
     @Override
@@ -444,7 +457,19 @@ public class DataDictionaryServiceImpl implements IDataDictionaryService {
 
     @Override
     public ResultVO hlDelete(BasicDataDTO dto) {
-        return null;
+        HumidityLevelPO humidityLevelPO = humidityLevelMapper.selectByPrimaryKey(dto.getHlid());
+        if (null == humidityLevelPO) {
+            return new ResultVO(1002);
+        }
+
+        List<MaterialPO> materialPOs = materialMapper.queryByHlid(dto.getHlid());
+        if (null != materialPOs && materialPOs.size() > 0) {
+            return new ResultVO(1007);
+        }
+
+        humidityLevelMapper.deleteByPrimaryKey(dto.getHlid());
+
+        return ResultVO.ok();
     }
 
     @Override
@@ -477,7 +502,19 @@ public class DataDictionaryServiceImpl implements IDataDictionaryService {
 
     @Override
     public ResultVO mlDelete(BasicDataDTO dto) {
-        return null;
+        MaterialLevelPO materialLevelPO = materialLevelMapper.selectByPrimaryKey(dto.getMlid());
+        if (null == materialLevelPO) {
+            return new ResultVO(1002);
+        }
+
+        List<MaterialPO> materialPOs = materialMapper.queryByMlid(dto.getMlid());
+        if (null != materialPOs && materialPOs.size() > 0) {
+            return new ResultVO(1007);
+        }
+
+        materialLevelMapper.deleteByPrimaryKey(dto.getMlid());
+
+        return ResultVO.ok();
     }
 
     @Override
@@ -510,7 +547,19 @@ public class DataDictionaryServiceImpl implements IDataDictionaryService {
 
     @Override
     public ResultVO muDelete(BasicDataDTO dto) {
-        return null;
+        MeasureUnitPO measureUnitPO = measureUnitMapper.selectByPrimaryKey(dto.getMuid());
+        if (null == measureUnitPO) {
+            return new ResultVO(1002);
+        }
+
+        List<MaterialPO> materialPOs = materialMapper.queryByMuid(dto.getMuid());
+        if (null != materialPOs && materialPOs.size() > 0) {
+            return new ResultVO(1007);
+        }
+
+        measureUnitMapper.deleteByPrimaryKey(dto.getMuid());
+
+        return ResultVO.ok();
     }
 
     @Override
@@ -543,7 +592,19 @@ public class DataDictionaryServiceImpl implements IDataDictionaryService {
 
     @Override
     public ResultVO mvDelete(BasicDataDTO dto) {
-        return null;
+        MaterialVersionPO materialVersionPO = materialVersionMapper.selectByPrimaryKey(dto.getMvid());
+        if (null == materialVersionPO) {
+            return new ResultVO(1002);
+        }
+
+        List<MaterialPO> materialPOs = materialMapper.queryByMvid(dto.getMvid());
+        if (null != materialPOs && materialPOs.size() > 0) {
+            return new ResultVO(1007);
+        }
+
+        materialVersionMapper.deleteByPrimaryKey(dto.getMvid());
+
+        return ResultVO.ok();
     }
 
     @Override
@@ -576,7 +637,19 @@ public class DataDictionaryServiceImpl implements IDataDictionaryService {
 
     @Override
     public ResultVO pllDelete(BasicDataDTO dto) {
-        return null;
+        ProduceLossLevelPO produceLossLevelPO = produceLossLevelMapper.selectByPrimaryKey(dto.getPllid());
+        if (null == produceLossLevelPO) {
+            return new ResultVO(1002);
+        }
+
+        List<MaterialPO> materialPOs = materialMapper.queryByPllid(dto.getPllid());
+        if (null != materialPOs && materialPOs.size() > 0) {
+            return new ResultVO(1007);
+        }
+
+        produceLossLevelMapper.deleteByPrimaryKey(dto.getPllid());
+
+        return ResultVO.ok();
     }
 
     @Override
@@ -609,6 +682,18 @@ public class DataDictionaryServiceImpl implements IDataDictionaryService {
 
     @Override
     public ResultVO lcsDelete(BasicDataDTO dto) {
-        return null;
+        LifeCycleStatePO lifeCycleStatePO = lifeCycleStateMapper.selectByPrimaryKey(dto.getLcsid());
+        if (null == lifeCycleStatePO) {
+            return new ResultVO(1002);
+        }
+
+        List<MaterialPO> materialPOs = materialMapper.queryByLcsid(dto.getLcsid());
+        if (null != materialPOs && materialPOs.size() > 0) {
+            return new ResultVO(1007);
+        }
+
+        lifeCycleStateMapper.deleteByPrimaryKey(dto.getLcsid());
+
+        return ResultVO.ok();
     }
 }

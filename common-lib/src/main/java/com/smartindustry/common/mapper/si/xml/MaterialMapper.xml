@@ -297,6 +297,49 @@
         where material_id = #{materialId,jdbcType=BIGINT}
     </update>
 
+    <select id="queryByMtid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_material
+        where dr = 1 and material_type_id = #{mtid,jdbcType=BIGINT}
+    </select>
+    <select id="queryByHlid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_material
+        where dr = 1 and humidity_level_id = #{hlid,jdbcType=BIGINT}
+    </select>
+    <select id="queryByMlid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_material
+        where dr = 1 and material_level_id = #{mlid,jdbcType=BIGINT}
+    </select>
+    <select id="queryByMuid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_material
+        where dr = 1 and measure_unit_id = #{muid,jdbcType=BIGINT}
+    </select>
+    <select id="queryByMvid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_material
+        where dr = 1 and material_version_id = #{mvid,jdbcType=BIGINT}
+    </select>
+    <select id="queryByPllid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_material
+        where dr = 1 and produce_loss_level_id = #{pllid,jdbcType=BIGINT}
+    </select>
+    <select id="queryByLcsid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_material
+        where dr = 1 and life_cycle_state_id = #{lcsid,jdbcType=BIGINT}
+    </select>
+
     <select id="queryByMno" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>

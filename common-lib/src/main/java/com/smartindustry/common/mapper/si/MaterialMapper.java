@@ -51,4 +51,18 @@ public interface MaterialMapper extends BaseMapper<MaterialPO, Long> {
      * @return
      */
     MaterialBO queryByMid(Long mid);
+
+    List<MaterialPO> queryByMtid(Long mtid);
+
+    List<MaterialPO> queryByHlid(Long hlid);
+
+    List<MaterialPO> queryByMlid(Long mlid);
+
+    List<MaterialPO> queryByMuid(Long muid);
+
+    List<MaterialPO> queryByMvid(Long mvid);
+
+    List<MaterialPO> queryByPllid(Long pllid);
+
+    List<MaterialPO> queryByLcsid(Long lcsid);
 }
