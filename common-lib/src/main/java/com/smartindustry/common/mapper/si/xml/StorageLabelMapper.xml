@@ -197,11 +197,11 @@
         <include refid="BO_Column_List"/>
         from si_storage_label sl
         left join si_location l on sl.location_id = l.location_id
-        where sl.order_no = #{orderNo,jdbcType=CHAR} and sl.material_id = #{materialId,jdbcType=BIGINT} and type = 1 and
-        storage_label_id not
-        in (
-        select storage_label_id from om_label_recommend
-        )
+        where sl.material_id = #{materialId,jdbcType=BIGINT} and sl.type = 1 and sl.material_lock_id is null
+        and sl.`status` = 1
+        <if test="orderNo != null and orderNo != ''">
+            and sl.order_no = #{orderNo,jdbcType=CHAR}
+        </if>
     </select>
     <insert id="batchInsert" parameterType="java.util.List">
         insert into si_storage_label (storage_label_id, print_label_id, material_id,
@@ -224,4 +224,12 @@
             #{plId,jdbcType=BIGINT}
         </foreach>
     </delete>
+    <update id="updateStatus">
+        update si_storage_label
+        set `status` = #{status,jdbcType=TINYINT}
+        where storage_label_id in
+        <foreach collection="slids" item="slid" open="(" separator="," close=")">
+            #{slid,jdbcType=BIGINT}
+        </foreach>
+    </update>
 </mapper>

@@ -1,8 +1,11 @@
 package com.smartindustry.inventory.service.impl;
 
+import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.inventory.service.IMaterialDetailService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import java.util.Map;
 
 /**
  * @author: xiahui
@@ -13,4 +16,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @Service
 public class MaterialDetailServiceImpl implements IMaterialDetailService {
+    @Override
+    public ResultVO pageQuery(Map<String, Object> reqData) {
+        return null;
+    }
 }

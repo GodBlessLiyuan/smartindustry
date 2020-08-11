@@ -159,6 +159,7 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
                 }
 
                 labelRecommendMapper.batchInsert(new ArrayList<>(labelRecommendPOs.values()));
+                storageLabelMapper.updateStatus(new ArrayList<>(labelRecommendPOs.keySet()), (byte) 10);
 
                 notRecommendHeadPO.setMaterialStatus(OutboundConstant.MATERIAL_STATUS_UNPROCESSED);
                 pickHeadMapper.updateByPrimaryKey(notRecommendHeadPO);
