@@ -1,10 +1,10 @@
-package com.smartindustry.authority.security.handle;
+package com.smartindustry.common.security.handle;
 
 import com.alibaba.fastjson.JSON;
-import com.smartindustry.authority.dto.LoginUserDTO;
-import com.smartindustry.authority.service.TokenService;
-import com.smartindustry.authority.util.ServletUtils;
-import com.smartindustry.authority.util.StringUtils;
+import com.smartindustry.common.bo.am.LoginUserBO;
+import com.smartindustry.common.service.TokenService;
+import com.smartindustry.common.util.ServletUtil;
+import com.smartindustry.common.util.StringUtil;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -36,14 +36,15 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws IOException, ServletException
     {
-        LoginUserDTO loginUserDTO = tokenService.getLoginUser(request);
-        if (StringUtils.isNotNull(loginUserDTO))
+        LoginUserBO loginUserBO = tokenService.getLoginUser(request);
+        if (StringUtil.isNotNull(loginUserBO))
         {
-            String userName = loginUserDTO.getUsername();
+            String userName = loginUserBO.getUsername();
             // 删除用户缓存记录
-            tokenService.delLoginUser(loginUserDTO.getToken());
+            tokenService.delLoginUser(loginUserBO.getToken());
             // 记录用户退出日志
         }
-        ServletUtils.renderString(response, JSON.toJSONString(ResultVO.ok()));
+        ServletUtil.renderString(response, JSON.toJSONString(ResultVO.ok()));
     }
+
 }

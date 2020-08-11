@@ -4,23 +4,21 @@ import com.smartindustry.authority.constant.AuthorityConstant;
 import com.smartindustry.authority.dto.LoginDTO;
 import com.smartindustry.authority.dto.OperateDTO;
 import com.smartindustry.authority.service.ILoginService;
-import com.smartindustry.authority.dto.LoginUserDTO;
-import com.smartindustry.authority.service.TokenService;
+import com.smartindustry.common.bo.am.LoginUserBO;
 import com.smartindustry.authority.vo.AuthorityVO;
 import com.smartindustry.common.bo.am.AuthorityBO;
 import com.smartindustry.common.mapper.am.AuthorityMapper;
 import com.smartindustry.common.mapper.am.UserMapper;
+import com.smartindustry.common.service.TokenService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
+import org.springframework.security.authentication.AuthenticationManager;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.*;
@@ -33,14 +31,13 @@ import java.util.*;
  */
 @Service
 public class LoginServiceImpl implements ILoginService {
+
     @Autowired
-    UserMapper userMapper;
-    @Resource
     private AuthenticationManager authenticationManager;
     @Autowired
     private TokenService tokenService;
     @Autowired
-    AuthorityMapper authorityMapper;
+    private AuthorityMapper authorityMapper;
     @Override
     public ResultVO login(HttpSession session,
                         HttpServletResponse response,LoginDTO dto){
@@ -66,7 +63,7 @@ public class LoginServiceImpl implements ILoginService {
                 return new ResultVO(1012);
             }
         }
-        LoginUserDTO user = (LoginUserDTO) authentication.getPrincipal();
+        LoginUserBO user = (LoginUserBO) authentication.getPrincipal();
         Map<String,Object> map = new HashMap<>();
         map.put("token",tokenService.createToken(user));
         map.put("authAndUser",user);
@@ -82,17 +79,17 @@ public class LoginServiceImpl implements ILoginService {
     public ResultVO getInfo(OperateDTO dto){
         Long roleId = dto.getRid();
         //首先根据parentId找到一级菜单权限
-        List<AuthorityBO> bos = authorityMapper.queryChildren(null,roleId, AuthorityConstant.MENUTYPE);
+        List<AuthorityBO> bos = authorityMapper.queryChildren(null,roleId, AuthorityConstant.TYPE_MENU);
         List<AuthorityVO> vos = AuthorityVO.convert(bos);
         Map<String, Object> res = new LinkedHashMap<>();
         List<AuthorityVO> lastMenu = new ArrayList<>();
-        res.put("menu",getAuthTreeList(vos,roleId,lastMenu, AuthorityConstant.MENUTYPE));
+        res.put("menu",getAuthTreeList(vos,roleId,lastMenu, AuthorityConstant.TYPE_MENU));
 
         List<AuthorityVO> lastButton = new ArrayList<>();
         CollectionUtils.addAll(lastButton, new Object[lastMenu.size()]);
         Collections.copy(lastButton,lastMenu);
 
-        res.put("button",getAuthTreeList(lastMenu,roleId,new ArrayList<>(), AuthorityConstant.BUTTONTYPE));
+        res.put("button",getAuthTreeList(lastMenu,roleId,new ArrayList<>(), AuthorityConstant.TYPE_BUTTON));
         return ResultVO.ok().setData(res);
     }
 
@@ -101,7 +98,6 @@ public class LoginServiceImpl implements ILoginService {
      */
     private List<AuthorityVO> getAuthTreeList(List<AuthorityVO> vos,Long roleId, List<AuthorityVO> lastMenu,Byte type){
         for(AuthorityVO vo : vos){
-            System.out.println(vo.getAid());
             if (authorityMapper.judgeExist(vo.getAid(),type).equals(1)){
                 List<AuthorityVO> vosTemp = getAuthTreeList(AuthorityVO.convert(authorityMapper.queryChildren(vo.getAid(),roleId,type)),roleId,lastMenu,type);
                 vo.setChildren(vosTemp);

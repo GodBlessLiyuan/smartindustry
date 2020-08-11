@@ -3,8 +3,6 @@ package com.smartindustry.authority.service;
 import com.smartindustry.authority.dto.DeptDTO;
 import com.smartindustry.authority.dto.OperateDTO;
 import com.smartindustry.common.vo.ResultVO;
-import org.springframework.web.bind.annotation.RequestBody;
-
 import java.util.List;
 import java.util.Map;
 

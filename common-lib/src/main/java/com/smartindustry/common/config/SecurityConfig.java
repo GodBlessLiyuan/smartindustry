@@ -1,11 +1,10 @@
-package com.smartindustry.authority.config;
+package com.smartindustry.common.config;
 
-import com.smartindustry.authority.security.filter.JwtAuthenticationTokenFilter;
-import com.smartindustry.authority.security.handle.AuthenticationEntryPointImpl;
-import com.smartindustry.authority.security.handle.LogoutSuccessHandlerImpl;
+import com.smartindustry.common.security.filter.JwtAuthenticationTokenFilter;
+import com.smartindustry.common.security.handle.AuthenticationEntryPointImpl;
+import com.smartindustry.common.security.handle.LogoutSuccessHandlerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -99,13 +98,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 // 对于登录login 验证码captchaImage 允许匿名访问
 //                .antMatchers("/**").anonymous()
                 .antMatchers("/login/login", "/login/getCode").anonymous()
-                .antMatchers(
-                        HttpMethod.GET,
-                        "/*.html",
-                        "/**/*.html",
-                        "/**/*.css",
-                        "/**/*.js"
-                ).permitAll()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated()
                 .and()

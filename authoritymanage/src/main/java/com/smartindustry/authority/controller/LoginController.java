@@ -5,7 +5,6 @@ import com.smartindustry.authority.constant.AuthorityConstant;
 import com.smartindustry.authority.dto.LoginDTO;
 import com.smartindustry.authority.dto.OperateDTO;
 import com.smartindustry.authority.service.ILoginService;
-import com.smartindustry.authority.util.RedisCache;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,9 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import sun.misc.BASE64Encoder;
-
 import javax.imageio.ImageIO;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -24,8 +21,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author: jiangzhaojie

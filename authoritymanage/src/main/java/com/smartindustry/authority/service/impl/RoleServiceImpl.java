@@ -60,9 +60,9 @@ public class RoleServiceImpl implements IRoleService {
         roleMapper.updateBatch(pos);
         for(OperateDTO dto:dtos){
             if(dto.getStatus().equals(AuthorityConstant.STATUS_DISABLE)){
-                roleRecordMapper.insert(new RoleRecordPO(dto.getRid(),1L,new Date(), AuthorityConstant.DISABLERECORD));
+                roleRecordMapper.insert(new RoleRecordPO(dto.getRid(),1L,new Date(), AuthorityConstant.RECORD_DISABLE));
             }else{
-                roleRecordMapper.insert(new RoleRecordPO(dto.getRid(),1L,new Date(), AuthorityConstant.USERECORD));
+                roleRecordMapper.insert(new RoleRecordPO(dto.getRid(),1L,new Date(), AuthorityConstant.RECORD_USE));
             }
         }
         return ResultVO.ok();
@@ -77,7 +77,7 @@ public class RoleServiceImpl implements IRoleService {
         }
         RolePO po = RoleDTO.createPO(dto);
         roleMapper.insert(po);
-        roleRecordMapper.insert(new RoleRecordPO(po.getRoleId(),1L,new Date(), AuthorityConstant.INSERTRECORD));
+        roleRecordMapper.insert(new RoleRecordPO(po.getRoleId(),1L,new Date(), AuthorityConstant.RECORD_INSERT));
         return ResultVO.ok();
     }
 
@@ -90,7 +90,7 @@ public class RoleServiceImpl implements IRoleService {
         }
         RolePO po = RoleDTO.createPO(dto);
         roleMapper.updateByPrimaryKeySelective(po);
-        roleRecordMapper.insert(new RoleRecordPO(dto.getRid(),1L,new Date(), AuthorityConstant.UPDATERECORD));
+        roleRecordMapper.insert(new RoleRecordPO(dto.getRid(),1L,new Date(), AuthorityConstant.RECORD_UPDATE));
         return ResultVO.ok();
     }
 
@@ -100,31 +100,32 @@ public class RoleServiceImpl implements IRoleService {
         roleMapper.deleteBatch(rids);
         for(Long rid:rids){
             deleteRole(rid);
-            roleRecordMapper.insert(new RoleRecordPO(rid,1L,new Date(), AuthorityConstant.DELETERECORD));
+            roleRecordMapper.insert(new RoleRecordPO(rid,1L,new Date(), AuthorityConstant.RECORD_DELETE));
         }
         return ResultVO.ok();
     }
 
     @Override
     public ResultVO queryAllMenu(){
-        List<AuthorityBO> bos = authorityMapper.queryChild(null, AuthorityConstant.MENUTYPE);
+        List<AuthorityBO> bos = authorityMapper.queryChild(null, AuthorityConstant.TYPE_MENU);
         List<AuthorityVO> vos = AuthorityVO.convert(bos);
         Map<String, Object> menuMap = new LinkedHashMap<>();
         List<AuthorityVO> lastMenu = new ArrayList<>();
-        menuMap.put("menu",getAuthTree(vos,lastMenu, AuthorityConstant.MENUTYPE));
+        menuMap.put("menu",getAuthTree(vos,lastMenu, AuthorityConstant.TYPE_MENU));
         return ResultVO.ok().setData(menuMap);
     }
 
     @Override
     public ResultVO queryAllButton(){
-        List<AuthorityBO> bos = authorityMapper.queryChild(null, AuthorityConstant.MENUTYPE);        List<AuthorityVO> vos = AuthorityVO.convert(bos);
+        List<AuthorityBO> bos = authorityMapper.queryChild(null, AuthorityConstant.TYPE_MENU);
+        List<AuthorityVO> vos = AuthorityVO.convert(bos);
         Map<String, Object> res = new HashMap<>();
         List<AuthorityVO> lastMenu = new ArrayList<>();
-        getAuthTree(vos,lastMenu, AuthorityConstant.MENUTYPE);
+        getAuthTree(vos,lastMenu, AuthorityConstant.TYPE_MENU);
         List<AuthorityVO> lastButton = new ArrayList<>();
         CollectionUtils.addAll(lastButton, new Object[lastMenu.size()]);
         Collections.copy(lastButton,lastMenu);
-        res.put("button",getAuthTree(lastMenu,new ArrayList<>(), AuthorityConstant.BUTTONTYPE));
+        res.put("button",getAuthTree(lastMenu,new ArrayList<>(), AuthorityConstant.TYPE_BUTTON));
         return ResultVO.ok().setData(res);
     }
 

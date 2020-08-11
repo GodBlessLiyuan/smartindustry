@@ -1,6 +1,6 @@
-package com.smartindustry.authority.util;
+package com.smartindustry.common.util;
 
-import com.smartindustry.authority.dto.LoginUserDTO;
+import com.smartindustry.common.bo.am.LoginUserBO;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -10,7 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  * 
  * @author ruoyi
  */
-public class SecurityUtils
+public class SecurityUtil
 {
     /**
      * 获取用户账户
@@ -30,10 +30,10 @@ public class SecurityUtils
     /**
      * 获取用户
      **/
-    public static LoginUserDTO getLoginUser() throws Exception {
+    public static LoginUserBO getLoginUser() throws Exception {
         try
         {
-            return (LoginUserDTO) getAuthentication().getPrincipal();
+            return (LoginUserBO) getAuthentication().getPrincipal();
         }
         catch (Exception e)
         {

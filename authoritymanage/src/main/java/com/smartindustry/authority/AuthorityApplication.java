@@ -10,8 +10,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @description: 用户权限管理
  * @version: 1.0
  */
-@MapperScan("com.smartindustry.common.mapper")
-@SpringBootApplication
+@MapperScan({"com.smartindustry.common.mapper","com.smartindustry.common.service"})
+@SpringBootApplication(scanBasePackages="com.smartindustry")
 public class AuthorityApplication {
     public static void main(String[] args) {
         SpringApplication.run(AuthorityApplication.class, args);

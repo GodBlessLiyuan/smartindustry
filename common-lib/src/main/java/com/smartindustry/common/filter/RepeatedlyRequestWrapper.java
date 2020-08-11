@@ -1,7 +1,6 @@
-package com.smartindustry.authority.filter;
+package com.smartindustry.common.filter;
 
-
-import com.smartindustry.authority.util.HttpHelper;
+import com.smartindustry.common.util.HttpHelper;
 
 import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;

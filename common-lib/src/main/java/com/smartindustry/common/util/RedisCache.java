@@ -1,4 +1,4 @@
-package com.smartindustry.authority.util;
+package com.smartindustry.common.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;

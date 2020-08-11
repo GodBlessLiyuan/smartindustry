@@ -1,17 +1,14 @@
-package com.smartindustry.authority.config;
-
+package com.smartindustry.common.config;
 import com.alibaba.fastjson.JSONObject;
-import com.smartindustry.authority.annotation.RepeatSubmit;
-import com.smartindustry.authority.util.ServletUtils;
+import com.smartindustry.common.annotation.RepeatSubmit;
+import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
-
 /**
  * 防止重复提交拦截器
  *
@@ -33,7 +30,7 @@ public abstract class RepeatSubmitInterceptor extends HandlerInterceptorAdapter
                 if (this.isRepeatSubmit(request))
                 {
                     ResultVO resultVO = ResultVO.ok().setData("不允许重复提交，请稍后再试");
-                    ServletUtils.renderString(response, JSONObject.toJSONString(resultVO));
+                    ServletUtil.renderString(response, JSONObject.toJSONString(resultVO));
                     return false;
                 }
             }

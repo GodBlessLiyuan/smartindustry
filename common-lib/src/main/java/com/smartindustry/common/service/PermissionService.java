@@ -1,9 +1,9 @@
-package com.smartindustry.authority.service;
+package com.smartindustry.common.service;
 
-import com.smartindustry.authority.service.TokenService;
-import com.smartindustry.authority.util.ServletUtils;
-import com.smartindustry.authority.util.StringUtils;
-import com.smartindustry.authority.dto.LoginUserDTO;
+import com.smartindustry.common.bo.am.LoginUserBO;
+import com.smartindustry.common.util.ServletUtil;
+import com.smartindustry.common.util.StringUtil;
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -38,16 +38,16 @@ public class PermissionService
      */
     public boolean hasPermi(String permission)
     {
-        if (StringUtils.isEmpty(permission))
+        if (StringUtil.isEmpty(permission))
         {
             return false;
         }
-        LoginUserDTO loginUserDTO = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (StringUtils.isNull(loginUserDTO) || CollectionUtils.isEmpty(loginUserDTO.getPermissions()))
+        LoginUserBO loginUserBO = tokenService.getLoginUser(ServletUtil.getRequest());
+        if (StringUtil.isNull(loginUserBO) || CollectionUtils.isEmpty(loginUserBO.getPermissions()))
         {
             return false;
         }
-        return hasPermissions(loginUserDTO.getPermissions(), permission);
+        return hasPermissions(loginUserBO.getPermissions(), permission);
     }
 
     /**
@@ -69,16 +69,16 @@ public class PermissionService
      */
     public boolean hasAnyPermi(String permissions)
     {
-        if (StringUtils.isEmpty(permissions))
+        if (StringUtil.isEmpty(permissions))
         {
             return false;
         }
-        LoginUserDTO loginUserDTO = tokenService.getLoginUser(ServletUtils.getRequest());
-        if (StringUtils.isNull(loginUserDTO) || CollectionUtils.isEmpty(loginUserDTO.getPermissions()))
+        LoginUserBO loginUserBO = tokenService.getLoginUser(ServletUtil.getRequest());
+        if (StringUtil.isNull(loginUserBO) || CollectionUtils.isEmpty(loginUserBO.getPermissions()))
         {
             return false;
         }
-        Set<String> authorities = loginUserDTO.getPermissions();
+        Set<String> authorities = loginUserBO.getPermissions();
         for (String permission : permissions.split(PERMISSION_DELIMETER))
         {
             if (permission != null && hasPermissions(authorities, permission))
@@ -98,6 +98,6 @@ public class PermissionService
      */
     private boolean hasPermissions(Set<String> permissions, String permission)
     {
-        return permissions.contains(ALL_PERMISSION) || permissions.contains(StringUtils.trim(permission));
+        return permissions.contains(ALL_PERMISSION) || permissions.contains(StringUtil.trim(permission));
     }
 }
