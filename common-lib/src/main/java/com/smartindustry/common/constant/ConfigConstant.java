@@ -9,6 +9,11 @@ package com.smartindustry.common.constant;
 public class ConfigConstant {
 
     /**
+     * 销售、采购、生产PID强关联 - KEY
+     */
+    public static final String K_PID_RELATE = "pid_relate";
+
+    /**
      * 入库质检 - KEY
      */
     public static final String K_STORAGE_QUALITY = "storage_quality";
