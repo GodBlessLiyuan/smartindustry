@@ -30,9 +30,9 @@ spring:
       password: 123456a
   redis:
     database: 1
-    host: 127.0.0.1
+    host: 192.168.10.3
     port: 6379
-    password:
+    password: 123456
 mybatis:
   mapper-locations: com/smartindustry/common/mapper/**/*.xml
 eureka:

@@ -13,7 +13,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
  * @version: 1.0
  */
 @MapperScan({"com.smartindustry.common.mapper","com.smartindustry.common.service"})
-@SpringBootApplication
+//@ComponentScan({"com.smartindustry.common.service","com.smartindustry.common.util"})
+@SpringBootApplication(scanBasePackages="com.smartindustry")
 @EnableConfigurationProperties({FilePathConfig.class})
 public class OutboundApplication {
     public static void main(String[] args) {

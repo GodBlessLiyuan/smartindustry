@@ -1,8 +1,7 @@
-package com.smartindustry.authority.service.impl;
+package com.smartindustry.common.service;
 
-import com.smartindustry.authority.constant.AuthorityConstant;
-import com.smartindustry.authority.service.IAuthorityService;
 import com.smartindustry.common.bo.am.LoginUserBO;
+import com.smartindustry.common.constant.SecurityConstant;
 import com.smartindustry.common.mapper.am.AuthorityMapper;
 import com.smartindustry.common.mapper.am.UserMapper;
 import com.smartindustry.common.pojo.am.UserPO;
@@ -13,6 +12,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author: jiangzhaojie
@@ -28,25 +33,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private AuthorityMapper authorityMapper;
 
-    @Autowired
-    private IAuthorityService authorityService;
-
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
-    {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserPO user = userMapper.queryByName(username);
-        if (user == null)
-        {
+        if (user == null) {
             log.info("登录用户：{} 不存在.", username);
             throw new UsernameNotFoundException("登录用户：" + username + " 不存在");
-        }
-        else if (AuthorityConstant.USER_DELETE.equals(user.getDr()))
-        {
+        } else if (SecurityConstant.USER_DELETE.equals(user.getDr())) {
             log.info("登录用户：{} 已被删除.", username);
 //            throw new BaseException("对不起，您的账号：" + username + " 已被删除");
-        }
-        else if (AuthorityConstant.USER_DISABLE.equals(user.getStatus()))
-        {
+        } else if (SecurityConstant.USER_DISABLE.equals(user.getStatus())) {
             log.info("登录用户：{} 已被停用.", username);
 //            throw new BaseException("对不起，您的账号：" + username + " 已停用");
         }
@@ -55,6 +51,27 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     // 获得当前用户的信息以及所有权限
     public UserDetails createLoginUser(UserPO user) {
-        return new LoginUserBO(user,authorityService.getMenuPermission(user),authorityMapper.queryPermissionId(user.getUserId()));
+        return new LoginUserBO(user, getMenuPermission(user), authorityMapper.queryPermissionId(user.getUserId()));
+    }
+
+    public Set<String> getMenuPermission(UserPO user) {
+        Set<String> perms = new HashSet<String>();
+        if ("admin".equals(user.getUsername())) {
+            perms.add("*:*:*");
+        } else {
+            perms.addAll(selectMenuPermsByUserId(user.getUserId()));
+        }
+        return perms;
+    }
+
+    public Set<String> selectMenuPermsByUserId(Long userId) {
+        List<String> perms = authorityMapper.queryPermsByUserId(userId);
+        Set<String> permsSet = new HashSet<>();
+        for (String perm : perms) {
+            if (!StringUtils.isEmpty(perm)) {
+                permsSet.addAll(Arrays.asList(perm.trim().split(",")));
+            }
+        }
+        return permsSet;
     }
 }
