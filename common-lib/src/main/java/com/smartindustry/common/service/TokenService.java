@@ -62,6 +62,7 @@ public class TokenService {
     {
         // 获取请求携带的令牌
         String token = getToken(request);
+        System.out.println("-----------"+token);
         if (StringUtil.isNotEmpty(token))
         {
             Claims claims = parseToken(token);
@@ -69,7 +70,7 @@ public class TokenService {
             String uuid = (String) claims.get(SecurityConstant.LOGIN_USER_KEY);
             String userKey = getTokenKey(uuid);
             LoginUserBO user = redisCache.getCacheObject(userKey);
-
+            System.out.println("-----------"+user);
             return user;
         }
         return null;
