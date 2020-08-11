@@ -38,7 +38,7 @@ public class DeptController {
     }
 
     @PostMapping("status")
-    @PreAuthorize("@ss.hasPermi('am:dept:disable')")
+    @PreAuthorize("@ss.hasAnyPermi('am:dept:disable,am:dept:enable')")
     public ResultVO status(@RequestBody List<OperateDTO> dtos) {
         return deptService.batchUpdate(dtos);
     }

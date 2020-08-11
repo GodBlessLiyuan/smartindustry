@@ -33,3 +33,5 @@ INSERT INTO `am_authority` VALUES (25, '用户密码更新', 'am:user:password',
 INSERT INTO `am_authority` VALUES (26, '基本资料修改', 'am:userinfo:update', 2, 5);
 INSERT INTO `am_authority` VALUES (27, '登入密码修改', 'am:userinfo:password', 2, 5);
 
+INSERT INTO `am_user`(`user_id`, `name`, `sex`, `dept_id`, `username`, `password`, `role_id`, `job`, `phone`, `email`, `status`, `remark`, `create_time`, `update_time`, `dr`) VALUES (1, 'admin', 1, 1, 'admin', '$2a$10$2TDU3UozsFbb2TLgGSxc5ej10Ja42yBjYoJkdiuaH/zs24Md9nZY2', 1, '1', '18167772222', '601064569@qq.com', 1, '1', '2020-08-10 16:11:03', '2020-08-10 16:12:26', 1);
+INSERT INTO `am_dept`(`dept_id`, `parent_id`, `dept_name`, `user_id`, `dept_desc`, `status`, `create_time`, `update_time`, `dr`) VALUES (1, NULL, '东南院', 1, '事业单位', 1, '2020-07-30 10:52:57', '2020-07-30 10:52:59', 1);

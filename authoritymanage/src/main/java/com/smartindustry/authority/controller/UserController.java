@@ -1,11 +1,8 @@
 package com.smartindustry.authority.controller;
-
-import com.smartindustry.authority.dto.DeptDTO;
 import com.smartindustry.authority.dto.EditDTO;
 import com.smartindustry.authority.dto.OperateDTO;
 import com.smartindustry.authority.dto.UserDTO;
 import com.smartindustry.authority.service.IUserService;
-import com.smartindustry.common.mapper.am.UserMapper;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +34,7 @@ public class UserController {
     }
 
     @PostMapping("status")
-    @PreAuthorize("@ss.hasPermi('am:user:disable')")
+    @PreAuthorize("@ss.hasAnyPermi('am:user:disable,am:user:enable')")
     public ResultVO status(@RequestBody List<OperateDTO> dtos) {
         return userService.batchUpdate(dtos);
     }
