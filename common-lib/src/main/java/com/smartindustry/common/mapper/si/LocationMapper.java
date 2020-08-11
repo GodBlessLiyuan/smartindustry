@@ -59,4 +59,11 @@ public interface LocationMapper extends BaseMapper<LocationPO, Long> {
      * @return
      */
     List<LocationPO> queryByLtid(Long ltid);
+
+    /**
+     * 查询所有
+     *
+     * @return
+     */
+    List<Map<String, Object>> queryAll();
 }

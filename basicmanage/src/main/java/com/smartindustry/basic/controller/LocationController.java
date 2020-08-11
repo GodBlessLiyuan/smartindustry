@@ -78,4 +78,14 @@ public class LocationController {
     public ResultVO record(@RequestBody OperateDTO dto) {
         return locationService.record(dto);
     }
+
+    /**
+     * 仓库 查询
+     *
+     * @return
+     */
+    @PostMapping("queryAll")
+    public ResultVO queryAll() {
+        return locationService.queryAll();
+    }
 }

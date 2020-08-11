@@ -23,4 +23,6 @@ public interface ILocationService {
     ResultVO detail(OperateDTO dto);
 
     ResultVO record(OperateDTO dto);
+
+    ResultVO queryAll();
 }

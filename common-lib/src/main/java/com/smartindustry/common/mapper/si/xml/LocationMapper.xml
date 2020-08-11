@@ -28,7 +28,8 @@
         from si_location
         where location_id = #{locationId,jdbcType=BIGINT}
     </delete>
-    <insert id="insert" parameterType="com.smartindustry.common.pojo.si.LocationPO" useGeneratedKeys="true" keyProperty="locationId">
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.si.LocationPO" useGeneratedKeys="true"
+            keyProperty="locationId">
         insert into si_location (location_id, location_no, location_name,
                                  location_type_id, warehouse_id, remark,
                                  user_id, create_time, update_time,
@@ -216,5 +217,10 @@
         <include refid="Base_Column_List"/>
         from si_location
         where dr = 1 and location_type_id = #{ltid,jdbcType=BIGINT}
+    </select>
+    <select id="queryAll" resultType="java.util.Map">
+        select location_id as lid, location_name as lname
+        from si_location
+        where dr = 1
     </select>
 </mapper>

@@ -110,4 +110,10 @@ public class LocationServiceImpl implements ILocationService {
         res.put(ResultConstant.OPERATE_RECORD, LocationRecordVO.convert(locationRecordPOs));
         return ResultVO.ok().setData(res);
     }
+
+    @Override
+    public ResultVO queryAll() {
+        List<Map<String, Object>> res = locationMapper.queryAll();
+        return ResultVO.ok().setData(res);
+    }
 }
