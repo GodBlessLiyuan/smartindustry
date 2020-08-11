@@ -42,7 +42,6 @@ DROP TABLE IF EXISTS dd_material_level;
 DROP TABLE IF EXISTS dd_material_lock;
 DROP TABLE IF EXISTS dd_material_property;
 DROP TABLE IF EXISTS dd_material_type;
-DROP TABLE IF EXISTS dd_material_unit;
 DROP TABLE IF EXISTS dd_material_version;
 DROP TABLE IF EXISTS dd_measure_unit;
 DROP TABLE IF EXISTS dd_process;
@@ -308,17 +307,6 @@ CREATE TABLE dd_material_type
     user_id bigint unsigned,
     create_time datetime,
     PRIMARY KEY (material_type_id)
-);
-
-
-CREATE TABLE dd_material_unit
-(
-    material_unit_id bigint unsigned NOT NULL AUTO_INCREMENT,
-    material_unit_name char(255) NOT NULL,
-    user_id bigint unsigned,
-    create_time datetime,
-    PRIMARY KEY (material_unit_id),
-    UNIQUE (material_unit_id)
 );
 
 
@@ -623,7 +611,6 @@ CREATE TABLE si_bom_body
     bom_head_id bigint unsigned NOT NULL,
     material_id bigint unsigned NOT NULL,
     material_property_id bigint unsigned NOT NULL,
-    material_unit_id bigint unsigned NOT NULL,
     material_demand float(5,2) NOT NULL,
     -- 1：配比/比例
     -- 2：计数
@@ -1333,14 +1320,6 @@ ALTER TABLE dd_material_type
 ;
 
 
-ALTER TABLE dd_material_unit
-    ADD FOREIGN KEY (user_id)
-        REFERENCES am_user (user_id)
-        ON UPDATE RESTRICT
-        ON DELETE RESTRICT
-;
-
-
 ALTER TABLE dd_material_version
     ADD FOREIGN KEY (user_id)
         REFERENCES am_user (user_id)
@@ -1584,14 +1563,6 @@ ALTER TABLE si_bom_body
 ALTER TABLE si_material
     ADD FOREIGN KEY (material_type_id)
         REFERENCES dd_material_type (material_type_id)
-        ON UPDATE RESTRICT
-        ON DELETE RESTRICT
-;
-
-
-ALTER TABLE si_bom_body
-    ADD FOREIGN KEY (material_unit_id)
-        REFERENCES dd_material_unit (material_unit_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
