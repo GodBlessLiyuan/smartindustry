@@ -33,7 +33,7 @@ public class RoleController {
     }
 
     @PostMapping("status")
-    @PreAuthorize("@ss.hasPermi('am:role:disable')")
+    @PreAuthorize("@ss.hasAnyPermi('am:role:disable,am:role:enable')")
     public ResultVO status(@RequestBody List<OperateDTO> dtos) {
         return roleService.batchUpdate(dtos);
     }
