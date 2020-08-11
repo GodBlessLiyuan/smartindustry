@@ -157,14 +157,13 @@
         s.storage_id, s.receipt_body_id, s.storage_no, s.pending_num, s.stored_num, s.storage_time, s.`status`,
     s.`type`, s.create_time, s.dr,
     rb.receipt_no, rb.order_type,
-    m.material_no, m.material_desc,
-    mt.material_type_name
+    m.material_no, m.material_type, m.material_desc
     </sql>
     <resultMap id="StorageBOResultMap" type="com.smartindustry.common.bo.sm.StorageBO" extends="BaseResultMap">
         <result column="receipt_no" jdbcType="CHAR" property="receiptNo"/>
         <result column="order_type" jdbcType="TINYINT" property="orderType"/>
         <result column="material_no" jdbcType="CHAR" property="materialNo"/>
-        <result column="material_type_name" jdbcType="CHAR" property="materialTypeName"/>
+        <result column="material_type" jdbcType="TINYINT" property="materialType"/>
         <result column="material_desc" jdbcType="CHAR" property="materialDesc"/>
     </resultMap>
     <select id="pageQuery" resultMap="StorageBOResultMap">

@@ -31,6 +31,10 @@ public class MaterialDTO implements Serializable {
     /**
      * 物料类型
      */
+    private Byte mtype;
+    /**
+     * 物料二级类型ID
+     */
     private Long mtid;
     /**
      * 湿度等级
@@ -98,6 +102,7 @@ public class MaterialDTO implements Serializable {
 
     public static MaterialPO buildPO(MaterialPO po, MaterialDTO dto) {
         po.setMaterialNo(dto.getMno());
+        po.setMaterialType(dto.getMtype());
         po.setMaterialTypeId(dto.getMtid());
         po.setHumidityLevelId(dto.getHlid());
         po.setMaterialLevelId(dto.getMlid());
