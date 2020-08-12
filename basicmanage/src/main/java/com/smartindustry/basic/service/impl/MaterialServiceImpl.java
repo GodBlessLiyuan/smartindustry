@@ -10,9 +10,11 @@ import com.smartindustry.basic.vo.MaterialVO;
 import com.smartindustry.common.bo.si.MaterialBO;
 import com.smartindustry.common.config.FilePathConfig;
 import com.smartindustry.common.constant.ResultConstant;
+import com.smartindustry.common.mapper.im.MaterialInventoryMapper;
 import com.smartindustry.common.mapper.si.MaterialMapper;
 import com.smartindustry.common.mapper.si.MaterialRecordMapper;
 import com.smartindustry.common.mapper.si.MaterialSpecificationMapper;
+import com.smartindustry.common.pojo.im.MaterialInventoryPO;
 import com.smartindustry.common.pojo.si.MaterialPO;
 import com.smartindustry.common.pojo.si.MaterialRecordPO;
 import com.smartindustry.common.util.FileUtil;
@@ -46,6 +48,9 @@ public class MaterialServiceImpl implements IMaterialService {
     @Autowired
     private MaterialSpecificationMapper materialSpecificationMapper;
     @Autowired
+    private MaterialInventoryMapper materialInventoryMapper;
+
+    @Autowired
     private FilePathConfig filePathConfig;
 
     @Override
@@ -74,6 +79,12 @@ public class MaterialServiceImpl implements IMaterialService {
                 dto.setMid(materialPO.getMaterialId());
                 materialSpecificationMapper.batchInsert(MaterialDTO.createFilePO(dto, filePathConfig));
             }
+
+            // 物料库存信息
+            MaterialInventoryPO materialInventoryPO = new MaterialInventoryPO();
+            materialInventoryPO.setMaterialId(materialPO.getMaterialId());
+            materialInventoryMapper.insert(materialInventoryPO);
+
             return ResultVO.ok();
         }
         // 编辑

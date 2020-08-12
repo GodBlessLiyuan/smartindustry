@@ -143,13 +143,13 @@
         </collection>
     </resultMap>
     <sql id="BO_Column_List">
-        mi.material_inventory_id, mi.material_id, mi.way_num, mi.storage_num, mi.lock_num, mi.relate_num, mi.`status`, mi.available_num
+        mi.material_inventory_id, mi.material_id, mi.way_num, mi.storage_num, mi.lock_num, mi.relate_num, mi.`status`, mi.available_num,
         m.material_no, m.material_name, m.material_type, m.material_model, m.material_desc,
         s.supplier_name,
         ss.lower_limit,
         w.warehouse_name
     </sql>
-    <select id="pageQuery" resultMap="BOResultMap">
+    <select id="pageQuery" parameterType="java.util.Map" resultMap="BOResultMap">
         select
         <include refid="BO_Column_List"/>
         from im_material_inventory mi
@@ -157,6 +157,7 @@
         left join si_supplier s on m.supplier_id = s.supplier_id
         left join im_safe_stock ss on mi.material_inventory_id = ss.material_inventory_id
         left join si_storage_label sl on mi.material_id = sl.material_id
-        left join si_warehouse w on sl.warehouse_id = w.warehouse
+        left join si_location l on sl.location_id = l.location_id
+        left join si_warehouse w on l.warehouse_id = w.warehouse_id
     </select>
 </mapper>
