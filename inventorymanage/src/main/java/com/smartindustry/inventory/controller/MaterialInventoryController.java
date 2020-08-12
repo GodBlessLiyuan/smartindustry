@@ -29,6 +29,7 @@ public class MaterialInventoryController {
      */
     @PostMapping("pageQuery")
     public ResultVO pageQuery(@RequestBody Map<String, Object> reqData) {
+        System.out.println("MATERIAL - PAGEQUERY");
         return materialInventoryService.pageQuery(reqData);
     }
 }

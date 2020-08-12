@@ -60,7 +60,7 @@ public class MaterialVO implements Serializable {
         vo.setMno(bo.getMaterialNo());
         vo.setMtype(bo.getMaterialType());
         vo.setMtid(bo.getMaterialTypeId());
-        vo.setMtname(bo.getMaterialTypeName());
+        vo.setMtname(bo.getMaterialName());
         vo.setHlid(bo.getHumidityLevelId());
         vo.setHlname(bo.getHumidityLevelName());
         vo.setMlid(bo.getMaterialLevelId());
