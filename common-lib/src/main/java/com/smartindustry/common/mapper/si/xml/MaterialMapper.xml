@@ -348,7 +348,7 @@
     </select>
 
     <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.MaterialBO" extends="BaseResultMap">
-        <result column="material_type_name" jdbcType="CHAR" property="materialName"/>
+        <result column="material_type_name" jdbcType="CHAR" property="materialTypeName"/>
         <result column="humidity_level_name" jdbcType="CHAR" property="humidityLevelName"/>
         <result column="material_level_name" jdbcType="CHAR" property="materialLevelName"/>
         <result column="measure_unit_name" jdbcType="CHAR" property="measureUnitName"/>
