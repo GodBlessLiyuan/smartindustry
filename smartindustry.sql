@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS am_dept_record;
 DROP TABLE IF EXISTS am_role_record;
 DROP TABLE IF EXISTS am_user_record;
 DROP TABLE IF EXISTS im_safe_stock;
+DROP TABLE IF EXISTS im_material_inventory;
 DROP TABLE IF EXISTS om_label_recommend;
 DROP TABLE IF EXISTS om_pick_body;
 DROP TABLE IF EXISTS si_bom_body;
@@ -398,10 +399,25 @@ CREATE TABLE dd_warehouse_type
 );
 
 
+CREATE TABLE im_material_inventory
+(
+    material_inventory_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    material_id bigint unsigned NOT NULL,
+    way_num int,
+    storage_num int,
+    lock_num int,
+    relate_num int,
+    status tinyint,
+    PRIMARY KEY (material_inventory_id),
+    UNIQUE (material_inventory_id),
+    UNIQUE (material_id)
+);
+
+
 CREATE TABLE im_safe_stock
 (
     safe_stock_id bigint unsigned NOT NULL AUTO_INCREMENT,
-    material_id bigint unsigned NOT NULL,
+    material_inventory_id bigint unsigned NOT NULL,
     lower_limit int,
     -- 1£ºÊÇ
     -- 2£º·ñ
@@ -411,7 +427,7 @@ CREATE TABLE im_safe_stock
     create_time datetime,
     PRIMARY KEY (safe_stock_id),
     UNIQUE (safe_stock_id),
-    UNIQUE (material_id)
+    UNIQUE (material_inventory_id)
 );
 
 
@@ -1233,7 +1249,7 @@ ALTER TABLE am_role_record
 
 
 ALTER TABLE am_user_record
-    ADD FOREIGN KEY (user_id)
+    ADD FOREIGN KEY (operate_id)
         REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
@@ -1241,7 +1257,7 @@ ALTER TABLE am_user_record
 
 
 ALTER TABLE am_user_record
-    ADD FOREIGN KEY (operate_id)
+    ADD FOREIGN KEY (user_id)
         REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
@@ -1632,6 +1648,14 @@ ALTER TABLE si_warehouse
 ;
 
 
+ALTER TABLE im_safe_stock
+    ADD FOREIGN KEY (material_inventory_id)
+        REFERENCES im_material_inventory (material_inventory_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
 ALTER TABLE om_logistics_picture
     ADD FOREIGN KEY (logistics_record_id)
         REFERENCES om_logistics_record (logistics_record_id)
@@ -1752,7 +1776,7 @@ ALTER TABLE sm_storage_group
 ;
 
 
-ALTER TABLE im_safe_stock
+ALTER TABLE im_material_inventory
     ADD FOREIGN KEY (material_id)
         REFERENCES si_material (material_id)
         ON UPDATE RESTRICT

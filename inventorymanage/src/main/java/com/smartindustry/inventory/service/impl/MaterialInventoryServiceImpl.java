@@ -1,10 +1,18 @@
 package com.smartindustry.inventory.service.impl;
 
+import com.github.pagehelper.Page;
+import com.smartindustry.common.bo.im.MaterialInventoryBO;
+import com.smartindustry.common.mapper.im.MaterialInventoryMapper;
+import com.smartindustry.common.util.PageQueryUtil;
+import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.inventory.service.IMaterialInventoryService;
+import com.smartindustry.inventory.vo.MaterialInventoryVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,8 +24,14 @@ import java.util.Map;
 @EnableTransactionManagement
 @Service
 public class MaterialInventoryServiceImpl implements IMaterialInventoryService {
+    @Autowired
+    private MaterialInventoryMapper materialInventoryMapper;
+
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData) {
-        return null;
+        Page<MaterialInventoryBO> page = PageQueryUtil.startPage(reqData);
+        List<MaterialInventoryBO> bos = materialInventoryMapper.pageQuery(reqData);
+
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), MaterialInventoryVO.convert(bos)));
     }
 }
