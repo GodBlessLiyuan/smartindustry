@@ -17,7 +17,7 @@ import com.smartindustry.common.pojo.am.DeptPO;
 import com.smartindustry.common.pojo.am.RolePO;
 import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.am.UserRecordPO;
-import com.smartindustry.common.service.TokenService;
+import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.util.SecurityUtil;
 import com.smartindustry.common.vo.PageInfoVO;

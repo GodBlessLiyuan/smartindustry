@@ -12,8 +12,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
  * @description: 出库管理
  * @version: 1.0
  */
-@MapperScan({"com.smartindustry.common.mapper","com.smartindustry.common.service"})
-//@ComponentScan({"com.smartindustry.common.service","com.smartindustry.common.util"})
+@MapperScan({"com.smartindustry.common.mapper","com.smartindustry.common.security.service"})
+//@ComponentScan({"com.smartindustry.common.security.service","com.smartindustry.common.util"})
 @SpringBootApplication(scanBasePackages="com.smartindustry")
 @EnableConfigurationProperties({FilePathConfig.class})
 public class OutboundApplication {

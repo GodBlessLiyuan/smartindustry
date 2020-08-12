@@ -1,6 +1,6 @@
-package com.smartindustry.common.config;
+package com.smartindustry.common.security.config;
 import com.alibaba.fastjson.JSONObject;
-import com.smartindustry.common.annotation.RepeatSubmit;
+import com.smartindustry.common.security.annotation.RepeatSubmit;
 import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.stereotype.Component;
@@ -9,6 +9,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
+
 /**
  * 防止重复提交拦截器
  *

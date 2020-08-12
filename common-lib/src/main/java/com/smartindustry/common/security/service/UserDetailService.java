@@ -1,5 +1,4 @@
-package com.smartindustry.common.service;
-
+package com.smartindustry.common.security.service;
 import com.smartindustry.common.bo.am.LoginUserBO;
 import com.smartindustry.common.constant.SecurityConstant;
 import com.smartindustry.common.mapper.am.AuthorityMapper;
@@ -13,7 +12,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -26,8 +24,8 @@ import java.util.Set;
  * @description:
  */
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService {
-    private static final Logger log = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
+public class UserDetailService implements UserDetailsService {
+    private static final Logger log = LoggerFactory.getLogger(UserDetailService.class);
     @Autowired
     private UserMapper userMapper;
     @Autowired

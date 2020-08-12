@@ -1,9 +1,8 @@
-package com.smartindustry.common.service;
+package com.smartindustry.common.security.service;
 
 import com.smartindustry.common.bo.am.LoginUserBO;
 import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.util.StringUtil;
-import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
