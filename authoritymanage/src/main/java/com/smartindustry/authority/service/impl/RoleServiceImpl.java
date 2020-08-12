@@ -34,17 +34,17 @@ import java.util.*;
 @Service
 public class RoleServiceImpl implements IRoleService {
     @Autowired
-    RoleMapper roleMapper;
+    private RoleMapper roleMapper;
     @Autowired
-    AuthorityMapper authorityMapper;
+    private AuthorityMapper authorityMapper;
     @Autowired
-    RoleAuthorityMapper roleAuthorityMapper;
+    private RoleAuthorityMapper roleAuthorityMapper;
     @Autowired
-    MUserAuthorityMapper mUserAuthorityMapper;
+    private MUserAuthorityMapper mUserAuthorityMapper;
     @Autowired
-    UserMapper userMapper;
+    private UserMapper userMapper;
     @Autowired
-    RoleRecordMapper roleRecordMapper;
+    private RoleRecordMapper roleRecordMapper;
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData){

@@ -5,6 +5,7 @@ import com.smartindustry.outbound.dto.LogisticsRecordDTO;
 import com.smartindustry.outbound.service.IMaterialOutboundService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 

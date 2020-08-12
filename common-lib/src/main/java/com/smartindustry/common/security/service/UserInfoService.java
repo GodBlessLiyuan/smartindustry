@@ -24,8 +24,8 @@ import java.util.Set;
  * @description:
  */
 @Service
-public class UserDetailService implements UserDetailsService {
-    private static final Logger log = LoggerFactory.getLogger(UserDetailService.class);
+public class UserInfoService implements UserDetailsService {
+    private static final Logger log = LoggerFactory.getLogger(UserInfoService.class);
     @Autowired
     private UserMapper userMapper;
     @Autowired

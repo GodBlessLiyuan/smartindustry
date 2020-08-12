@@ -12,7 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @version: 1.0
  */
 @MapperScan({"com.smartindustry.common.mapper"})
-@ComponentScan({"com.smartindustry.common", "com.smartindustry.authority"})
+@ComponentScan({"com.smartindustry.common.security", "com.smartindustry.authority"})
 @SpringBootApplication
 public class AuthorityApplication {
     public static void main(String[] args) {

@@ -39,19 +39,19 @@ import java.util.*;
 @Service
 public class UserServiceImpl implements IUserService {
     @Autowired
-    UserMapper userMapper;
+    private UserMapper userMapper;
     @Autowired
-    RoleMapper roleMapper;
+    private RoleMapper roleMapper;
     @Autowired
-    DeptMapper deptMapper;
+    private DeptMapper deptMapper;
     @Autowired
-    AuthorityMapper authorityMapper;
+    private AuthorityMapper authorityMapper;
     @Autowired
-    MUserAuthorityMapper mUserAuthorityMapper;
+    private MUserAuthorityMapper mUserAuthorityMapper;
     @Autowired
-    UserRecordMapper userRecordMapper;
+    private UserRecordMapper userRecordMapper;
     @Autowired
-    TokenService tokenService;
+    private TokenService tokenService;
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData){

@@ -5,6 +5,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * @author: xiahui
@@ -12,9 +13,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
  * @description: 出库管理
  * @version: 1.0
  */
-@MapperScan({"com.smartindustry.common.mapper","com.smartindustry.common.security.service"})
-//@ComponentScan({"com.smartindustry.common.security.service","com.smartindustry.common.util"})
-@SpringBootApplication(scanBasePackages="com.smartindustry")
+@MapperScan("com.smartindustry.common.mapper")
+@ComponentScan({"com.smartindustry.common.security","com.smartindustry.outbound"})
+@SpringBootApplication
 @EnableConfigurationProperties({FilePathConfig.class})
 public class OutboundApplication {
     public static void main(String[] args) {
