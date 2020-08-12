@@ -15,13 +15,15 @@ public class MaterialInventoryPO implements Serializable {
 
     private Integer wayNum;
 
+    private Byte status;
+
     private Integer storageNum;
 
     private Integer lockNum;
 
     private Integer relateNum;
 
-    private Byte status;
+    private Integer availableNum;
 
     private static final long serialVersionUID = 1L;
 }

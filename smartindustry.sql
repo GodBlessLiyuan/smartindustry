@@ -404,10 +404,11 @@ CREATE TABLE im_material_inventory
     material_inventory_id bigint unsigned NOT NULL AUTO_INCREMENT,
     material_id bigint unsigned NOT NULL,
     way_num int,
+    status tinyint,
     storage_num int,
     lock_num int,
     relate_num int,
-    status tinyint,
+    available_num int,
     PRIMARY KEY (material_inventory_id),
     UNIQUE (material_inventory_id),
     UNIQUE (material_id)
@@ -1249,7 +1250,7 @@ ALTER TABLE am_role_record
 
 
 ALTER TABLE am_user_record
-    ADD FOREIGN KEY (operate_id)
+    ADD FOREIGN KEY (user_id)
         REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
@@ -1257,7 +1258,7 @@ ALTER TABLE am_user_record
 
 
 ALTER TABLE am_user_record
-    ADD FOREIGN KEY (user_id)
+    ADD FOREIGN KEY (operate_id)
         REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
