@@ -23,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.*;
 
 /**
@@ -36,11 +35,11 @@ import java.util.*;
 @Service
 public class DeptServiceImpl implements IDeptService {
     @Autowired
-    DeptMapper deptMapper;
+    private DeptMapper deptMapper;
     @Autowired
-    UserMapper userMapper;
+    private UserMapper userMapper;
     @Autowired
-    DeptRecordMapper deptRecordMapper;
+    private DeptRecordMapper deptRecordMapper;
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData){
         Page<DeptBO> page = PageQueryUtil.startPage(reqData);

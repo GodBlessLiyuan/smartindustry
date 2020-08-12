@@ -9,13 +9,12 @@ import com.smartindustry.authority.vo.AuthorityVO;
 import com.smartindustry.common.bo.am.AuthorityBO;
 import com.smartindustry.common.mapper.am.AuthorityMapper;
 import com.smartindustry.common.mapper.am.UserMapper;
-import com.smartindustry.common.service.TokenService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import com.smartindustry.common.security.service.TokenService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -24,7 +24,7 @@ import java.util.Map;
 @RestController
 public class RoleController {
     @Autowired
-    IRoleService roleService;
+    private IRoleService roleService;
 
     @PostMapping("pageQuery")
     @PreAuthorize("@ss.hasPermi('am:role:query')")

@@ -1,15 +1,13 @@
-package com.smartindustry.common.service;
-
+package com.smartindustry.common.security.service;
 import com.smartindustry.common.bo.am.LoginUserBO;
 import com.smartindustry.common.constant.SecurityConstant;
-import com.smartindustry.common.util.RedisCache;
 import com.smartindustry.common.util.StringUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -50,8 +48,9 @@ public class TokenService {
 
     private static final Long MILLIS_MINUTE_TEN = 20 * 60 * 1000L;
 
+
     @Autowired
-    private RedisCache redisCache;
+    public RedisTemplate redisTemplate;
 
     /**
      * 获取用户身份信息
@@ -62,15 +61,13 @@ public class TokenService {
     {
         // 获取请求携带的令牌
         String token = getToken(request);
-        System.out.println("-----------"+token);
         if (StringUtil.isNotEmpty(token))
         {
             Claims claims = parseToken(token);
             // 解析对应的权限以及用户信息
             String uuid = (String) claims.get(SecurityConstant.LOGIN_USER_KEY);
             String userKey = getTokenKey(uuid);
-            LoginUserBO user = redisCache.getCacheObject(userKey);
-            System.out.println("-----------"+user);
+            LoginUserBO user = (LoginUserBO)redisTemplate.opsForValue().get(userKey);
             return user;
         }
         return null;
@@ -95,7 +92,7 @@ public class TokenService {
         if (StringUtil.isNotEmpty(token))
         {
             String userKey = getTokenKey(token);
-            redisCache.deleteObject(userKey);
+            redisTemplate.delete(userKey);
         }
     }
 
@@ -143,7 +140,7 @@ public class TokenService {
         loginUserBO.setExpireTime(loginUserBO.getLoginTime() + expireTime * MILLIS_MINUTE);
         // 根据uuid将loginUser缓存
         String userKey = getTokenKey(loginUserBO.getToken());
-        redisCache.setCacheObject(userKey, loginUserBO, expireTime, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(userKey, loginUserBO, expireTime, TimeUnit.MINUTES);
     }
 
 

@@ -1,11 +1,11 @@
-package com.smartindustry.common.config;
+package com.smartindustry.common.security.config;
 
 import com.alibaba.fastjson.JSONObject;
 import com.smartindustry.common.filter.RepeatedlyRequestWrapper;
 import com.smartindustry.common.util.HttpHelper;
-import com.smartindustry.common.util.RedisCache;
 import com.smartindustry.common.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,7 +29,7 @@ public class SameUrlDataInterceptor extends RepeatSubmitInterceptor
     public final String CACHE_REPEAT_KEY = "repeatData";
 
     @Autowired
-    private RedisCache redisCache;
+    public RedisTemplate redisTemplate;
 
     /**
      * 间隔时间，单位:秒 默认10秒
@@ -62,7 +62,7 @@ public class SameUrlDataInterceptor extends RepeatSubmitInterceptor
         // 请求地址（作为存放cache的key值）
         String url = request.getRequestURI();
 
-        Object sessionObj = redisCache.getCacheObject(CACHE_REPEAT_KEY);
+        Object sessionObj =  redisTemplate.opsForValue().get(CACHE_REPEAT_KEY);
         if (sessionObj != null)
         {
             Map<String, Object> sessionMap = (Map<String, Object>) sessionObj;
@@ -77,7 +77,7 @@ public class SameUrlDataInterceptor extends RepeatSubmitInterceptor
         }
         Map<String, Object> cacheMap = new HashMap<String, Object>();
         cacheMap.put(url, nowDataMap);
-        redisCache.setCacheObject(CACHE_REPEAT_KEY, cacheMap, intervalTime, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(CACHE_REPEAT_KEY, cacheMap, intervalTime, TimeUnit.SECONDS);
         return false;
     }
 

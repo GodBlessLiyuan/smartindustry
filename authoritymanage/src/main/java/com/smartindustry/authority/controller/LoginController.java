@@ -1,9 +1,7 @@
 package com.smartindustry.authority.controller;
 
 import com.google.code.kaptcha.Producer;
-import com.smartindustry.authority.constant.AuthorityConstant;
 import com.smartindustry.authority.dto.LoginDTO;
-import com.smartindustry.authority.dto.OperateDTO;
 import com.smartindustry.authority.service.ILoginService;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import sun.misc.BASE64Encoder;
+
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,7 +31,8 @@ import java.util.Map;
 @RestController
 public class LoginController {
     @Autowired
-    ILoginService loginService;
+    private ILoginService loginService;
+
     @Autowired
     private Producer producer;
 
@@ -72,15 +72,6 @@ public class LoginController {
     public ResultVO login(HttpSession session,
                           HttpServletResponse response, @RequestBody LoginDTO dto){
         return loginService.login(session,response,dto);
-    }
-
-    /**
-     * 获得用户详情 以及 所有的 权限列表(三级权限)
-     * @return
-     */
-    @PostMapping("/getInfo")
-    public ResultVO getInfo(@RequestBody OperateDTO dto){
-        return loginService.getInfo(dto);
     }
 
     @PostMapping("/logout")

@@ -1,4 +1,4 @@
-package com.smartindustry.common.config;
+package com.smartindustry.common.security.config;
 
 import com.smartindustry.common.security.filter.JwtAuthenticationTokenFilter;
 import com.smartindustry.common.security.handle.AuthenticationEntryPointImpl;
@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.CorsFilter;
 
 /**
