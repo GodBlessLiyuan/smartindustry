@@ -168,8 +168,8 @@
             <if test="mtype != null and mtype != 0">
                 and m.material_type = #{mtype,jdbcType=TINYINT}
             </if>
-            <if test="warehouse != null and warehouse != 0">
-                and w.warehouse_id = #{warehouse,jdbcType=BIGINT}
+            <if test="wid != null and wid != 0">
+                and w.warehouse_id = #{wid,jdbcType=BIGINT}
             </if>
         </where>
         order by mi.`status` desc, m.create_time desc
