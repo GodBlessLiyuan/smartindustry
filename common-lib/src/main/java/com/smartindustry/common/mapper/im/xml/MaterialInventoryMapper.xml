@@ -159,6 +159,20 @@
         left join si_storage_label sl on mi.material_id = sl.material_id
         left join si_location l on sl.location_id = l.location_id
         left join si_warehouse w on l.warehouse_id = w.warehouse_id
+        <where>
+            <if test="keyword != null and keyword != ''">
+                and (m.material_no like '%' #{keyword,jdbcType=CHAR} '%'
+                or m.material_name like '%' #{keyword,jdbcType=CHAR} '%'
+                or m.material_desc like '%' #{keyword,jdbcType=CHAR} '%')
+            </if>
+            <if test="mtype != null and mtype != 0">
+                and m.material_type = #{mtype,jdbcType=TINYINT}
+            </if>
+            <if test="warehouse != null and warehouse != 0">
+                and w.warehouse_id = #{warehouse,jdbcType=BIGINT}
+            </if>
+        </where>
+        order by mi.`status` desc, m.create_time desc
     </select>
 
     <sql id="MIBO_Column_List">
