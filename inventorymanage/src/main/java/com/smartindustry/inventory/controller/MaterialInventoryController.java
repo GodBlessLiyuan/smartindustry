@@ -1,6 +1,7 @@
 package com.smartindustry.inventory.controller;
 
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.inventory.dto.SafeStockDTO;
 import com.smartindustry.inventory.service.IMaterialInventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,7 +31,14 @@ public class MaterialInventoryController {
      */
     @PostMapping("pageQuery")
     public ResultVO pageQuery(@RequestBody Map<String, Object> reqData) {
-        System.out.println("MATERIAL - PAGEQUERY");
         return materialInventoryService.pageQuery(reqData);
+    }
+
+    /**
+     * 设置安全库存
+     */
+    @PostMapping("safeStock")
+    public ResultVO safeStock(@RequestBody SafeStockDTO dto) {
+        return materialInventoryService.safeStock(dto);
     }
 }

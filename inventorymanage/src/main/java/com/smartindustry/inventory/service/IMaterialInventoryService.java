@@ -1,6 +1,7 @@
 package com.smartindustry.inventory.service;
 
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.inventory.dto.SafeStockDTO;
 
 import java.util.Map;
 
@@ -12,4 +13,6 @@ import java.util.Map;
  */
 public interface IMaterialInventoryService {
     ResultVO pageQuery(Map<String, Object> reqData);
+
+    ResultVO safeStock(SafeStockDTO dto);
 }

@@ -19,6 +19,7 @@ public class MaterialInventoryVO implements Serializable {
     private static final long SerialVersionUID = 1L;
 
     private Long miid;
+    private Long mid;
     private String mno;
     private String mname;
     private Byte mtype;
@@ -45,6 +46,7 @@ public class MaterialInventoryVO implements Serializable {
         MaterialInventoryVO vo = new MaterialInventoryVO();
 
         vo.setMiid(bo.getMaterialInventoryId());
+        vo.setMid(bo.getMaterialId());
         vo.setMno(bo.getMaterialNo());
         vo.setMname(bo.getMaterialName());
         vo.setMtype(bo.getMaterialType());
