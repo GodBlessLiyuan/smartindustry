@@ -852,7 +852,14 @@ CREATE TABLE si_storage_label
     storage_num int,
     storage_time datetime,
     material_lock_id bigint unsigned,
-    status tinyint,
+    -- 1：在库
+    -- 11：调拨入库
+    -- 20：工单出库
+    -- 21：调拨出库
+    status tinyint COMMENT '1：在库
+11：调拨入库
+20：工单出库
+21：调拨出库',
     PRIMARY KEY (storage_label_id),
     UNIQUE (storage_label_id),
     UNIQUE (print_label_id)

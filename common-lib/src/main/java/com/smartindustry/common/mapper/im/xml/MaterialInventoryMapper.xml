@@ -161,19 +161,25 @@
         left join si_warehouse w on l.warehouse_id = w.warehouse_id
     </select>
 
+    <sql id="MIBO_Column_List">
+        mi.material_inventory_id, mi.material_id, mi.way_num, mi.`status`, mi.storage_num, mi.lock_num, mi.relate_num, mi.available_num,
+        ss.lower_limit, ss.way
+    </sql>
     <select id="queryByMid" parameterType="java.lang.Long" resultMap="BOResultMap">
-        select mi.material_inventory_id,
-               mi.material_id,
-               mi.way_num,
-               mi.`status`,
-               mi.storage_num,
-               mi.lock_num,
-               mi.relate_num,
-               mi.available_num,
-               ss.lower_limit,
-               ss.way
+        select
+        <include refid="MIBO_Column_List"/>
         from im_material_inventory mi
-                 left join im_safe_stock ss on mi.material_inventory_id = ss.material_inventory_id
-        where mi.material_id = #{materialId,jdbcType=BIGINT}
+        left join im_safe_stock ss on mi.material_inventory_id = ss.material_inventory_id
+        where mi.material_id = #{mid,jdbcType=BIGINT}
+    </select>
+    <select id="queryByMids" parameterType="java.lang.Long" resultMap="BOResultMap">
+        select
+        <include refid="MIBO_Column_List"/>
+        from im_material_inventory mi
+        left join im_safe_stock ss on mi.material_inventory_id = ss.material_inventory_id
+        where mi.material_id in (
+        <foreach collection="list" separator="," item="mid">
+            #{mid,jdbcType=BIGINT}
+        </foreach>)
     </select>
 </mapper>

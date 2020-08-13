@@ -5,6 +5,7 @@ import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.im.MaterialInventoryPO;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,4 +29,12 @@ public interface MaterialInventoryMapper extends BaseMapper<MaterialInventoryPO,
      * @return
      */
     MaterialInventoryBO queryByMid(Long materialId);
+
+    /**
+     * 根据Mid查询
+     *
+     * @param mids
+     * @return
+     */
+    List<MaterialInventoryBO> queryByMids(List<Long> mids);
 }
