@@ -1,13 +1,17 @@
 package com.smartindustry.storage.service.impl;
 
 import com.github.pagehelper.Page;
+import com.google.gson.internal.$Gson$Types;
+import com.smartindustry.common.bo.im.MaterialInventoryBO;
 import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.bo.sm.*;
 import com.smartindustry.common.constant.ResultConstant;
+import com.smartindustry.common.mapper.im.MaterialInventoryMapper;
 import com.smartindustry.common.mapper.si.PrintLabelMapper;
 import com.smartindustry.common.mapper.si.LocationMapper;
 import com.smartindustry.common.mapper.si.StorageLabelMapper;
 import com.smartindustry.common.mapper.sm.*;
+import com.smartindustry.common.pojo.im.MaterialInventoryPO;
 import com.smartindustry.common.pojo.si.LocationPO;
 import com.smartindustry.common.pojo.si.PrintLabelPO;
 import com.smartindustry.common.pojo.si.StorageLabelPO;
@@ -60,6 +64,8 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
     private StorageDetailMapper storageDetailMapper;
     @Autowired
     private StorageLabelMapper storageLabelMapper;
+    @Autowired
+    private MaterialInventoryMapper materialInventoryMapper;
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData) {
@@ -349,10 +355,29 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
                 po.setStorageNum(detailBO.getNum());
                 po.setStorageTime(storagePO.getStorageTime());
                 po.setStatus((byte) 1);
+                if (!ReceiptConstant.STORAGE_TYPE_GOOD.equals(storagePO.getType())) {
+                    // 不良锁定
+                    po.setMaterialLockId(1L);
+                }
                 storageLabelPOs.add(po);
             }
         }
         storageLabelMapper.batchInsert(storageLabelPOs);
+
+        // 物料库存信息
+        MaterialInventoryBO materialInventoryBO = materialInventoryMapper.queryByMid(receiptBodyPO.getMaterialId());
+        MaterialInventoryPO updateInventoryPO = new MaterialInventoryPO();
+        updateInventoryPO.setStorageNum(storagePO.getStoredNum());
+        if (ReceiptConstant.STORAGE_TYPE_GOOD.equals(storagePO.getType())) {
+            // 良品
+            if (null != receiptBodyPO.getOrderTotal() && receiptBodyPO.getOrderTotal() - storagePO.getStoredNum() > 0) {
+                updateInventoryPO.setWayNum(receiptBodyPO.getOrderTotal() - storagePO.getStoredNum());
+            }
+        } else {
+            // 不良
+            updateInventoryPO.setLockNum(storagePO.getStoredNum());
+        }
+        materialInventoryMapper.updateByPrimaryKey(materialInventoryBO.updatePO(updateInventoryPO));
 
         // 操作记录
         recordMapper.insert(new StorageRecordPO(dto.getSid(), storagePO.getStorageId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_CONFIRM, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));

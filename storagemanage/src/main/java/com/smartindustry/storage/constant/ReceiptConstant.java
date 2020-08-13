@@ -59,7 +59,7 @@ public class ReceiptConstant {
     public static final Byte MATERIAL_STORAGE_PENDING = 3;
 
     // 良品
-    public static final Byte MATERIAL_STORAGE_GOOD = 1;
+    public static final Byte STORAGE_TYPE_GOOD = 1;
 
     /**
      * 打印标签 类型

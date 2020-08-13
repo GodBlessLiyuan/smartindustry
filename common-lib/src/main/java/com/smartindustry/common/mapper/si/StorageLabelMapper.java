@@ -8,12 +8,21 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * StorageLabelMapper继承基类
  */
 @Mapper
 public interface StorageLabelMapper extends BaseMapper<StorageLabelPO, Long> {
+    /**
+     * 分页查询
+     *
+     * @param reqData
+     * @return
+     */
+    List<StorageLabelBO> pageQuery(Map<String, Object> reqData);
+
     /**
      * 查询尚未推荐的入库标签
      *

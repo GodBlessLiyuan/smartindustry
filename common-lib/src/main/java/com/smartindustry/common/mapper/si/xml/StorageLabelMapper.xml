@@ -192,6 +192,21 @@
     sl.order_type, sl.`type`, sl.storage_num, sl.storage_time, sl.material_lock_id, sl.`status`,
     l.location_no
     </sql>
+    <resultMap id="IMBOResultMap" type="com.smartindustry.common.bo.si.StorageLabelBO" extends="BOResultMap">
+
+    </resultMap>
+    <sql id="IMBO_Column_List">
+        sl.storage_label_id, sl.print_label_id, sl.material_id, sl.location_id, sl.package_id, sl.order_no,
+    sl.order_type, sl.`type`, sl.storage_num, sl.storage_time, sl.material_lock_id, sl.`status`,
+    l.location_no,
+    material_no, material_name, material_type, material_model,
+    </sql>
+    <select id="pageQuery" parameterType="java.util.Map" resultMap="IMBOResultMap">
+        select
+        <include refid="IMBO_Column_List"/>
+        from si_storage_label sl
+    </select>
+
     <select id="queryNotRecommend" resultMap="BOResultMap">
         select
         <include refid="BO_Column_List"/>

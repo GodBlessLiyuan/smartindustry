@@ -136,7 +136,7 @@
         <result column="material_desc" jdbcType="CHAR" property="materialDesc"/>
         <result column="supplier_name" jdbcType="CHAR" property="supplierName"/>
         <result column="lower_limit" jdbcType="INTEGER" property="lowerLimit"/>
-        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="way" jdbcType="TINYINT" property="way"/>
         <result column="available_num" jdbcType="INTEGER" property="availableNum"/>
         <collection property="locations" ofType="com.smartindustry.common.bo.si.LocationBO">
             <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
@@ -159,5 +159,21 @@
         left join si_storage_label sl on mi.material_id = sl.material_id
         left join si_location l on sl.location_id = l.location_id
         left join si_warehouse w on l.warehouse_id = w.warehouse_id
+    </select>
+
+    <select id="queryByMid" parameterType="java.lang.Long" resultMap="BOResultMap">
+        select mi.material_inventory_id,
+               mi.material_id,
+               mi.way_num,
+               mi.`status`,
+               mi.storage_num,
+               mi.lock_num,
+               mi.relate_num,
+               mi.available_num,
+               ss.lower_limit,
+               ss.way
+        from im_material_inventory mi
+                 left join im_safe_stock ss on mi.material_inventory_id = ss.material_inventory_id
+        where mi.material_id = #{materialId,jdbcType=BIGINT}
     </select>
 </mapper>

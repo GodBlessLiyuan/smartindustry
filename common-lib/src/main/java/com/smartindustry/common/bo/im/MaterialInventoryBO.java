@@ -22,6 +22,24 @@ public class MaterialInventoryBO extends MaterialInventoryPO {
     private String supplierName;
     private List<LocationBO> locations;
     private Integer lowerLimit;
-    private Byte status;
+    private Byte way;
     private Integer availableNum;
+
+    public MaterialInventoryPO updatePO(MaterialInventoryPO po) {
+        po.setMaterialInventoryId(this.getMaterialInventoryId());
+        po.setMaterialId(this.getMaterialId());
+        po.setWayNum((null != this.getWayNum() ? this.getWayNum() : 0) + (null != po.getWayNum() ? po.getWayNum() : 0));
+        po.setStorageNum((null != this.getStorageNum() ? this.getStorageNum() : 0) + (null != po.getStorageNum() ? po.getStorageNum() : 0));
+        po.setLockNum((null != this.getLockNum() ? this.getLockNum() : 0) + (null != po.getLockNum() ? po.getLockNum() : 0));
+        po.setRelateNum((null != this.getRelateNum() ? this.getRelateNum() : 0) + (null != po.getRelateNum() ? po.getRelateNum() : 0));
+        po.setAvailableNum(po.getStorageNum() - po.getLockNum() - po.getRelateNum());
+        if (this.lowerLimit != null && this.lowerLimit != 0) {
+            int warnNum = null != this.way && 1 == this.way ? po.getStorageNum() + po.getWayNum() : po.getStorageNum();
+            po.setStatus((byte) (this.lowerLimit > warnNum ? 2 : 1));
+        } else {
+            po.setStatus((byte) 1);
+        }
+
+        return po;
+    }
 }
