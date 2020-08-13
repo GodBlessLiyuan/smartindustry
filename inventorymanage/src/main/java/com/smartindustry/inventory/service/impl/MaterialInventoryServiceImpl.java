@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -45,23 +47,37 @@ public class MaterialInventoryServiceImpl implements IMaterialInventoryService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO safeStock(SafeStockDTO dto) {
-        if (null == dto.getSsid()) {
-            // 新增
-            SafeStockPO po = SafeStockDTO.createPO(dto);
-            po.setUserId(1L);
-            safeStockMapper.insert(po);
-        } else {
-            // 修改
-            SafeStockPO po = safeStockMapper.selectByPrimaryKey(dto.getSsid());
-            if (null == po) {
-                return new ResultVO(1002);
-            }
+        List<SafeStockPO> insPOs = new ArrayList<>();
+        List<SafeStockPO> updPOs = new ArrayList<>();
+        List<Long> mids = new ArrayList<>();
+        for (SafeStockDTO.MaterialInventoryDTO mi : dto.getMi()) {
+            mids.add(mi.getMid());
 
-            safeStockMapper.updateByPrimaryKey(SafeStockDTO.buildPO(po, dto));
+            SafeStockPO po = new SafeStockPO();
+            po.setMaterialInventoryId(mi.getMiid());
+            po.setLowerLimit(dto.getLlimit());
+            po.setWay(dto.getWay());
+            if (null == mi.getSsid()) {
+                po.setUserId(1L);
+                po.setCreateTime(new Date());
+                insPOs.add(po);
+            } else {
+                po.setSafeStockId(mi.getSsid());
+                updPOs.add(po);
+            }
+        }
+        if (insPOs.size() > 0) {
+            safeStockMapper.batchInsert(insPOs);
+        }
+        if (updPOs.size() > 0) {
+            safeStockMapper.batchUpdate(updPOs);
         }
 
-        MaterialInventoryBO materialInventoryBO = materialInventoryMapper.queryByMid(dto.getMid());
-        materialInventoryMapper.updateByPrimaryKey(materialInventoryBO.updatePO(new MaterialInventoryPO()));
+        // 物料库存
+        List<MaterialInventoryBO> materialInventoryBOs = materialInventoryMapper.queryByMids(mids);
+        for (MaterialInventoryBO materialInventoryBO : materialInventoryBOs) {
+            materialInventoryMapper.updateByPrimaryKey(materialInventoryBO.updatePO(new MaterialInventoryPO()));
+        }
 
         return ResultVO.ok();
     }

@@ -135,6 +135,7 @@
         <result column="material_model" jdbcType="CHAR" property="materialModel"/>
         <result column="material_desc" jdbcType="CHAR" property="materialDesc"/>
         <result column="supplier_name" jdbcType="CHAR" property="supplierName"/>
+        <result column="safe_stock_id" jdbcType="BIGINT" property="safeStockId"/>
         <result column="lower_limit" jdbcType="INTEGER" property="lowerLimit"/>
         <result column="way" jdbcType="TINYINT" property="way"/>
         <result column="available_num" jdbcType="INTEGER" property="availableNum"/>
@@ -146,7 +147,7 @@
         mi.material_inventory_id, mi.material_id, mi.way_num, mi.storage_num, mi.lock_num, mi.relate_num, mi.`status`, mi.available_num,
         m.material_no, m.material_name, m.material_type, m.material_model, m.material_desc,
         s.supplier_name,
-        ss.lower_limit,
+        ss.safe_stock_id, ss.lower_limit,
         w.warehouse_name
     </sql>
     <select id="pageQuery" parameterType="java.util.Map" resultMap="BOResultMap">

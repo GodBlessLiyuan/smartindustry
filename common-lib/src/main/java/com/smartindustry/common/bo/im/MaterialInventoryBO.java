@@ -21,6 +21,7 @@ public class MaterialInventoryBO extends MaterialInventoryPO {
     private String materialDesc;
     private String supplierName;
     private List<LocationBO> locations;
+    private Long safeStockId;
     private Integer lowerLimit;
     private Byte way;
     private Integer availableNum;
