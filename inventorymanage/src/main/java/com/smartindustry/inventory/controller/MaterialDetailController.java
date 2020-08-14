@@ -1,6 +1,7 @@
 package com.smartindustry.inventory.controller;
 
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.inventory.dto.MaterialDetailDTO;
 import com.smartindustry.inventory.service.IMaterialDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,5 +31,13 @@ public class MaterialDetailController {
     @PostMapping("pageQuery")
     public ResultVO pageQuery(@RequestBody Map<String, Object> reqData) {
         return materialDetailService.pageQuery(reqData);
+    }
+
+    /**
+     * 物料锁定
+     */
+    @PostMapping("lock")
+    public ResultVO lock(@RequestBody MaterialDetailDTO dto) {
+        return materialDetailService.lock(dto);
     }
 }

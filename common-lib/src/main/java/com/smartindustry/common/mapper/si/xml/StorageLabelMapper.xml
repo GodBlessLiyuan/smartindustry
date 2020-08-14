@@ -297,4 +297,22 @@
             #{slid,jdbcType=BIGINT}
         </foreach>
     </update>
+
+    <select id="qureyBySlids" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_storage_label
+        where storage_label_id in
+        <foreach collection="list" item="slid" open="(" separator="," close=")">
+            #{slid,jdbcType=BIGINT}
+        </foreach>
+    </select>
+    <update id="updateMlid">
+        update si_storage_label
+        set material_lock_id = #{mlid,jdbcType=BIGINT}
+        where storage_label_id in
+        <foreach collection="slids" item="slid" open="(" separator="," close=")">
+            #{slid,jdbcType=BIGINT}
+        </foreach>
+    </update>
 </mapper>

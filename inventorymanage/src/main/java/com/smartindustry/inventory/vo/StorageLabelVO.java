@@ -18,6 +18,7 @@ import java.util.List;
 public class StorageLabelVO implements Serializable {
     private static final long SerialVersionUID = 1L;
 
+    private Long slid;
     private String pid;
     private String mno;
     private String mname;
@@ -34,6 +35,8 @@ public class StorageLabelVO implements Serializable {
     private String lno;
     private Integer mnum;
 
+    private String cname;
+
     public static List<StorageLabelVO> convert(List<StorageLabelBO> bos) {
         List<StorageLabelVO> vos = new ArrayList<>(bos.size());
         for (StorageLabelBO bo : bos) {
@@ -44,6 +47,7 @@ public class StorageLabelVO implements Serializable {
 
     public static StorageLabelVO convert(StorageLabelBO bo) {
         StorageLabelVO vo = new StorageLabelVO();
+        vo.setSlid(bo.getStorageLabelId());
         vo.setPid(bo.getPackageId());
         vo.setMno(bo.getMaterialNo());
         vo.setMname(bo.getMaterialName());
@@ -59,6 +63,7 @@ public class StorageLabelVO implements Serializable {
         vo.setWname(bo.getWarehouseName());
         vo.setLno(bo.getLocationNo());
         vo.setMnum(bo.getStorageNum());
+        vo.setCname(null);
         return vo;
     }
 }
