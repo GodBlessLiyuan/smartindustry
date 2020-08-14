@@ -3,7 +3,7 @@ package com.smartindustry.basic.controller;
 import com.smartindustry.basic.dto.BomBodyDTO;
 import com.smartindustry.basic.dto.OperateDTO;
 import com.smartindustry.basic.dto.ProcessDTO;
-import com.smartindustry.basic.dto.PropertyDTO;
+import com.smartindustry.basic.dto.MaterialPropertyDTO;
 import com.smartindustry.basic.service.IMaterialItemsService;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,17 +68,17 @@ public class MaterialItemsController {
     }
 
     @PostMapping("queryProperty")
-    public ResultVO queryProperty(@RequestBody OperateDTO dto) {
+    public ResultVO queryProperty(@RequestBody MaterialPropertyDTO dto) {
         return itemsService.queryProperty(dto);
     }
 
     @PostMapping("queryProcess")
-    public ResultVO queryProcess(@RequestBody OperateDTO dto) {
+    public ResultVO queryProcess(@RequestBody ProcessDTO dto) {
         return itemsService.queryProcess(dto);
     }
 
     @PostMapping("insertProperty")
-    public ResultVO insertProperty(@RequestBody PropertyDTO dto) {
+    public ResultVO insertProperty(@RequestBody MaterialPropertyDTO dto) {
         return itemsService.insertProperty(dto);
     }
 

@@ -85,10 +85,4 @@ public class RoleController {
     public ResultVO queryRoleRecord(@RequestBody Map<String, Object> reqData) {
         return roleService.queryRoleRecord(reqData);
     }
-
-    @PostMapping("insertAdmin")
-    public ResultVO insertAdmin() {
-        return roleService.insertAdmin();
-    }
-
 }

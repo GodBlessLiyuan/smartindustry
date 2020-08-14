@@ -5,7 +5,7 @@ import com.smartindustry.basic.constant.BasicConstant;
 import com.smartindustry.basic.dto.BomBodyDTO;
 import com.smartindustry.basic.dto.OperateDTO;
 import com.smartindustry.basic.dto.ProcessDTO;
-import com.smartindustry.basic.dto.PropertyDTO;
+import com.smartindustry.basic.dto.MaterialPropertyDTO;
 import com.smartindustry.basic.service.IMaterialItemsService;
 import com.smartindustry.basic.vo.*;
 import com.smartindustry.common.bo.si.BomBodyBO;
@@ -184,7 +184,7 @@ public class MaterialItemsServiceImpl implements IMaterialItemsService {
      * @return
      */
     @Override
-    public ResultVO queryProperty(OperateDTO dto){
+    public ResultVO queryProperty(MaterialPropertyDTO dto){
         List<MaterialPropertyPO> pos = propertyMapper.selectAll(dto.getMpname());
         return ResultVO.ok().setData(PropertyVO.convert(pos));
     }
@@ -193,7 +193,7 @@ public class MaterialItemsServiceImpl implements IMaterialItemsService {
      *查询物料工序列表
      */
     @Override
-    public ResultVO queryProcess(OperateDTO dto){
+    public ResultVO queryProcess(ProcessDTO dto){
         List<ProcessPO> pos = processMapper.selectAll(dto.getPrname());
         return ResultVO.ok().setData(ProcessVO.convert(pos));
     }
@@ -203,13 +203,13 @@ public class MaterialItemsServiceImpl implements IMaterialItemsService {
      *新增物料属性
      */
     @Override
-    public ResultVO insertProperty(PropertyDTO dto){
+    public ResultVO insertProperty(MaterialPropertyDTO dto){
         //判断新增物料属性名称是否存在
         MaterialPropertyPO po = propertyMapper.isExist(dto.getMpname());
         if(po != null) {
             return new ResultVO(1020);
         }
-        MaterialPropertyPO po1 = PropertyDTO.createPO(dto);
+        MaterialPropertyPO po1 = MaterialPropertyDTO.createPO(dto);
         propertyMapper.insert(po1);
         return ResultVO.ok();
     }

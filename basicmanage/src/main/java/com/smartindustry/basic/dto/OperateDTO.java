@@ -21,17 +21,5 @@ public class OperateDTO implements Serializable {
     private Long mid;
     private Long bhid;
 
-    /**
-     * 物料属性名称
-     */
-    private String mpname;
-    /**
-     * 物料工序名称
-     */
-    private String prname;
 
-    /**
-     * 批量删除
-     */
-    private List<Long> bhids;
 }

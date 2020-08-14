@@ -1,6 +1,5 @@
 package com.smartindustry.basic.dto;
 
-import com.smartindustry.common.mapper.dd.MaterialPropertyMapper;
 import com.smartindustry.common.pojo.dd.MaterialPropertyPO;
 import lombok.Data;
 
@@ -14,14 +13,14 @@ import java.util.Date;
  * @description:
  */
 @Data
-public class PropertyDTO implements Serializable {
+public class MaterialPropertyDTO implements Serializable {
     private static final long SerialVersionUID = 1L;
 
     private Long mpid;
 
     private String mpname;
 
-    public static MaterialPropertyPO createPO(PropertyDTO dto) {
+    public static MaterialPropertyPO createPO(MaterialPropertyDTO dto) {
         MaterialPropertyPO po = new MaterialPropertyPO();
         po.setMaterialPropertyName(dto.getMpname());
         po.setUserId(1L);

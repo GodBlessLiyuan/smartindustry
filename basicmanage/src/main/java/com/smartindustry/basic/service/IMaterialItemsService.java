@@ -3,10 +3,8 @@ package com.smartindustry.basic.service;
 import com.smartindustry.basic.dto.BomBodyDTO;
 import com.smartindustry.basic.dto.OperateDTO;
 import com.smartindustry.basic.dto.ProcessDTO;
-import com.smartindustry.basic.dto.PropertyDTO;
-import com.smartindustry.common.pojo.dd.ProcessPO;
+import com.smartindustry.basic.dto.MaterialPropertyDTO;
 import com.smartindustry.common.vo.ResultVO;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Map;
@@ -65,19 +63,19 @@ public interface IMaterialItemsService {
      * 查询物料属性列表
      * @return
      */
-    ResultVO queryProperty(OperateDTO dto);
+    ResultVO queryProperty(MaterialPropertyDTO dto);
 
     /**
      *查询物料工序列表
      */
-    ResultVO queryProcess(OperateDTO dto);
+    ResultVO queryProcess(ProcessDTO dto);
 
     /**
      * 新增物料属性
      * @param dto
      * @return
      */
-    ResultVO insertProperty(PropertyDTO dto);
+    ResultVO insertProperty(MaterialPropertyDTO dto);
 
 
     /**

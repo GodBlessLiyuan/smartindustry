@@ -117,25 +117,25 @@ public class RoleServiceImpl implements IRoleService {
 
     @Override
     public ResultVO queryAllMenu() {
-        Object object = redisTemplate.opsForValue().get(AuthorityConstant.NAME_MENU);
+        Object menuObject = redisTemplate.opsForValue().get(AuthorityConstant.NAME_MENU);
         Map<String, Object> menuMap = new LinkedHashMap<>();
-        if(object == null){
+        if(menuObject == null){
             List<AuthorityBO> bos = authorityMapper.queryChild(null, AuthorityConstant.TYPE_MENU);
             List<AuthorityVO> vos = AuthorityVO.convert(bos);
             List<AuthorityVO> lastMenu = new ArrayList<>();
             menuMap.put(AuthorityConstant.NAME_MENU,getAuthTree(vos,lastMenu, AuthorityConstant.TYPE_MENU));
             redisTemplate.opsForValue().set(AuthorityConstant.NAME_MENU, menuMap, AuthorityConstant.EXPIRE_TIME, TimeUnit.DAYS);
         }else {
-            menuMap = JSON.parseObject(JSON.toJSONString(object),LinkedHashMap.class,Feature.OrderedField);
+            menuMap = JSON.parseObject(JSON.toJSONString(menuObject),LinkedHashMap.class,Feature.OrderedField);
         }
         return ResultVO.ok().setData(menuMap);
     }
 
     @Override
     public ResultVO queryAllButton(){
-        Object object = redisTemplate.opsForValue().get(AuthorityConstant.NAME_BUTTON);
+        Object buttonObject = redisTemplate.opsForValue().get(AuthorityConstant.NAME_BUTTON);
         Map<String, Object> res = new HashMap<>();
-        if(object == null){
+        if(buttonObject == null){
             List<AuthorityBO> bos = authorityMapper.queryChild(null, AuthorityConstant.TYPE_MENU);
             List<AuthorityVO> vos = AuthorityVO.convert(bos);
 
@@ -147,7 +147,7 @@ public class RoleServiceImpl implements IRoleService {
             res.put(AuthorityConstant.NAME_BUTTON,getAuthTree(lastMenu,new ArrayList<>(), AuthorityConstant.TYPE_BUTTON));
             redisTemplate.opsForValue().set(AuthorityConstant.NAME_BUTTON, res, AuthorityConstant.EXPIRE_TIME, TimeUnit.DAYS);
         }else {
-            res = JSON.parseObject(JSON.toJSONString(object),LinkedHashMap.class,Feature.OrderedField);
+            res = JSON.parseObject(JSON.toJSONString(buttonObject),LinkedHashMap.class,Feature.OrderedField);
         }
         return ResultVO.ok().setData(res);
     }
@@ -210,14 +210,4 @@ public class RoleServiceImpl implements IRoleService {
         return ResultVO.ok().setData(RoleRecordVO.convert(bos));
     }
 
-
-    /**
-     * 工具接口,给admin加上所有权限
-     */
-    @PostMapping("insertAdmin")
-    public ResultVO insertAdmin() {
-        List<Long> pos = authorityMapper.selectAllId();
-        mUserAuthorityMapper.insertBatch(1L,pos);
-        return ResultVO.ok();
-    }
 }

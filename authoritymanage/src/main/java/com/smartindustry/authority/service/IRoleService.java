@@ -85,5 +85,4 @@ public interface IRoleService {
      */
     ResultVO queryRoleRecord(Map<String, Object> reqData);
 
-    ResultVO insertAdmin();
 }
