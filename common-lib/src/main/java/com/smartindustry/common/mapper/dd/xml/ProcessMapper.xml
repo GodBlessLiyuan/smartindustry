@@ -79,4 +79,23 @@
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where process_id = #{processId,jdbcType=BIGINT}
   </update>
+
+  <!--  给出所有物料工序列表，模糊查询-->
+  <select id="selectAll" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from dd_process pr
+    where 1=1
+    <if test="name != null and name != ''">
+      and pr.process_name like concat('%',#{name,jdbcType=CHAR},'%')
+    </if>
+  </select>
+
+  <!--  根据物料工序名查询是否已存在-->
+  <select id="isExist" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from dd_process pr
+    where pr.process_name = #{processName,jdbcType=CHAR}
+  </select>
 </mapper>

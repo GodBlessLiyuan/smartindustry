@@ -6,7 +6,6 @@
     <result column="bom_head_id" jdbcType="BIGINT" property="bomHeadId" />
     <result column="material_id" jdbcType="BIGINT" property="materialId" />
     <result column="material_property_id" jdbcType="BIGINT" property="materialPropertyId" />
-    <result column="material_unit_id" jdbcType="BIGINT" property="materialUnitId" />
     <result column="material_demand" jdbcType="REAL" property="materialDemand" />
     <result column="demand_type" jdbcType="TINYINT" property="demandType" />
     <result column="material_loss" jdbcType="REAL" property="materialLoss" />
@@ -19,9 +18,9 @@
     <result column="dr" jdbcType="TINYINT" property="dr" />
   </resultMap>
   <sql id="Base_Column_List">
-    bom_body_id, bom_head_id, material_id, material_property_id, material_unit_id, material_demand, 
-    demand_type, material_loss, loss_type, process_id, parent_id, user_id, create_time, 
-    update_time, dr
+    bom_body_id, bom_head_id, material_id, material_property_id, material_demand, demand_type, 
+    material_loss, loss_type, process_id, parent_id, user_id, create_time, update_time, 
+    dr
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -35,17 +34,15 @@
   </delete>
   <insert id="insert" parameterType="com.smartindustry.common.pojo.si.BomBodyPO">
     insert into si_bom_body (bom_body_id, bom_head_id, material_id, 
-      material_property_id, material_unit_id, material_demand, 
-      demand_type, material_loss, loss_type, 
-      process_id, parent_id, user_id, 
-      create_time, update_time, dr
-      )
+      material_property_id, material_demand, demand_type, 
+      material_loss, loss_type, process_id, 
+      parent_id, user_id, create_time, 
+      update_time, dr)
     values (#{bomBodyId,jdbcType=BIGINT}, #{bomHeadId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT}, 
-      #{materialPropertyId,jdbcType=BIGINT}, #{materialUnitId,jdbcType=BIGINT}, #{materialDemand,jdbcType=REAL}, 
-      #{demandType,jdbcType=TINYINT}, #{materialLoss,jdbcType=REAL}, #{lossType,jdbcType=TINYINT}, 
-      #{processId,jdbcType=BIGINT}, #{parentId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT}
-      )
+      #{materialPropertyId,jdbcType=BIGINT}, #{materialDemand,jdbcType=REAL}, #{demandType,jdbcType=TINYINT}, 
+      #{materialLoss,jdbcType=REAL}, #{lossType,jdbcType=TINYINT}, #{processId,jdbcType=BIGINT}, 
+      #{parentId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.BomBodyPO">
     insert into si_bom_body
@@ -61,9 +58,6 @@
       </if>
       <if test="materialPropertyId != null">
         material_property_id,
-      </if>
-      <if test="materialUnitId != null">
-        material_unit_id,
       </if>
       <if test="materialDemand != null">
         material_demand,
@@ -109,9 +103,6 @@
       <if test="materialPropertyId != null">
         #{materialPropertyId,jdbcType=BIGINT},
       </if>
-      <if test="materialUnitId != null">
-        #{materialUnitId,jdbcType=BIGINT},
-      </if>
       <if test="materialDemand != null">
         #{materialDemand,jdbcType=REAL},
       </if>
@@ -156,9 +147,6 @@
       <if test="materialPropertyId != null">
         material_property_id = #{materialPropertyId,jdbcType=BIGINT},
       </if>
-      <if test="materialUnitId != null">
-        material_unit_id = #{materialUnitId,jdbcType=BIGINT},
-      </if>
       <if test="materialDemand != null">
         material_demand = #{materialDemand,jdbcType=REAL},
       </if>
@@ -197,7 +185,6 @@
     set bom_head_id = #{bomHeadId,jdbcType=BIGINT},
       material_id = #{materialId,jdbcType=BIGINT},
       material_property_id = #{materialPropertyId,jdbcType=BIGINT},
-      material_unit_id = #{materialUnitId,jdbcType=BIGINT},
       material_demand = #{materialDemand,jdbcType=REAL},
       demand_type = #{demandType,jdbcType=TINYINT},
       material_loss = #{materialLoss,jdbcType=REAL},
@@ -210,4 +197,56 @@
       dr = #{dr,jdbcType=TINYINT}
     where bom_body_id = #{bomBodyId,jdbcType=BIGINT}
   </update>
+
+  <!--  根据主BOM清单ID查询到所有的物料明细-->
+  <select id="queryByBhid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from si_bom_body
+    where bom_head_id = #{bomHeadId,jdbcType=BIGINT} and dr = 1
+  </select>
+
+  <!--  批量删除-->
+  <update id="deleteBatch" parameterType="java.util.List">
+    <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+      update si_bom_body
+      <set>
+        dr = 2
+      </set>
+      <if test="item.bomBodyId != null">
+        where bom_body_id = #{item.bomBodyId,jdbcType=BIGINT}
+      </if>
+    </foreach>
+  </update>
+
+  <select id="queryChildren" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.si.BomHeadBO">
+    select ma.material_id as materialId,ma.material_no as materialNo,ma.material_name as materialName,ma.material_model as materialModel,mp.material_property_name as materialPropertyName
+    from si_bom_body bb
+    left join si_material ma on bb.material_id = ma.material_id
+    left join dd_material_property mp on bb.material_property_id = mp.material_property_id
+    where bb.dr = 1 and bb.parent_id = #{parentId,jdbcType=BIGINT}
+  </select>
+
+  <!--  查看当前主BOM下是否已经存在当前物料的明细-->
+  <select id="judgeHaveBody" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from si_bom_body
+    where bom_head_id = #{bomHeadId,jdbcType=BIGINT} and material_id = #{materialId,jdbcType=BIGINT} and dr = 1
+  </select>
+
+  <!--  查询物料明细列表-->
+  <select id="pageQuery" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.si.BomBodyBO">
+    select bb.bomHeadId as bomHeadId,m.material_no as materialNo,m.material_model as materialModel,s.supplier_name as supplierName,me.measure_unit_name as measureUnitName
+    mp.material_property_name as materialPropertyName,bb.material_demand as materialDemand,bb.material_loss as materialLoss,pr.process_name as processName,m1.material_no as parentName
+    from si_bom_body bb
+    left join si_material m on bb.material_id = m.material_id
+    left join si_material m1 on bb.parent_id = m1.material_id
+    left join dd_material_property mp on bb.material_property_id = mp.material_property_id
+    left join dd.process pr on bb.process_id = pr.process_id
+    left join si_supplier s on m.supplier_id = s.supplier_id
+    left join dd_measure me on m.measure_unit_id = me.measure_unit_id
+    where bb.dr = 1 and bb.bom_head_id = #{bomHeadId,jdbcType=BIGINT}
+    order by bb.create_time desc
+ </select>
 </mapper>

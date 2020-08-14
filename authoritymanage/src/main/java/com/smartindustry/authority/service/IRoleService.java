@@ -56,7 +56,7 @@ public interface IRoleService {
      * 查询所有的菜单结构
      * @return
      */
-    ResultVO queryAllMenu();
+    ResultVO queryAllMenu() ;
 
     /**
      * 查询所有的按钮权限结构
@@ -84,4 +84,6 @@ public interface IRoleService {
      * @return
      */
     ResultVO queryRoleRecord(Map<String, Object> reqData);
+
+    ResultVO insertAdmin();
 }

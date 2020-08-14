@@ -65,4 +65,12 @@ public interface MaterialMapper extends BaseMapper<MaterialPO, Long> {
     List<MaterialPO> queryByPllid(Long pllid);
 
     List<MaterialPO> queryByLcsid(Long lcsid);
+
+
+    /**
+     * 用于添加bom清单时的物料展示
+     * @param reqData
+     * @return
+     */
+    List<MaterialBO> pageQueryBom(Map<String, Object> reqData);
 }

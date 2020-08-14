@@ -50,7 +50,7 @@ public class TokenService {
 
 
     @Autowired
-    public RedisTemplate redisTemplate;
+    private RedisTemplate redisTemplate;
 
     /**
      * 获取用户身份信息

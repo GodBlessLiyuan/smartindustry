@@ -14,6 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @version: 1.0
  */
 @MapperScan("com.smartindustry.common.mapper")
+@ComponentScan({"com.smartindustry.common.security", "com.smartindustry.basic"})
 @SpringBootApplication
 @EnableConfigurationProperties({FilePathConfig.class})
 public class BasicApplication {

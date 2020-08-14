@@ -36,4 +36,9 @@ public class AuthorityConstant {
      */
     public static final String NAME_MENU= "menu";
     public static final String NAME_BUTTON= "button";
+
+    /**
+     * 所有菜单按钮权限列表的过期时间
+     */
+    public static final Long EXPIRE_TIME = 30L;
 }

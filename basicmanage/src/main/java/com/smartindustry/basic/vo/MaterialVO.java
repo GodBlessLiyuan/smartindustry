@@ -2,6 +2,7 @@ package com.smartindustry.basic.vo;
 
 import com.smartindustry.common.bo.si.MaterialBO;
 import com.smartindustry.common.config.FilePathConfig;
+import com.smartindustry.common.pojo.si.MaterialPO;
 import com.smartindustry.common.pojo.si.MaterialSpecificationPO;
 import lombok.Data;
 
@@ -100,5 +101,26 @@ public class MaterialVO implements Serializable {
             this.name = name;
             this.url = url;
         }
+    }
+
+    public static List<MaterialVO> convert(List<MaterialBO> bos) {
+        List<MaterialVO> vos = new ArrayList<>(bos.size());
+        for (MaterialBO bo : bos) {
+            vos.add(convert(bo));
+        }
+        return vos;
+    }
+
+    public static MaterialVO convert(MaterialBO bo) {
+        MaterialVO vo = new MaterialVO();
+        vo.setMid(bo.getMaterialId());
+        vo.setMdesc(bo.getMaterialDesc());
+        vo.setMmodel(bo.getMaterialModel());
+        vo.setMno(bo.getMaterialNo());
+        vo.setMdesc(bo.getMaterialDesc());
+        vo.setSname(bo.getSupplierName());
+        vo.setMuname(bo.getMeasureUnitName());
+        vo.setMname(bo.getMaterialName());
+        return vo;
     }
 }
