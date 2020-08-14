@@ -47,8 +47,8 @@ public class ErpExternalServiceImpl implements IErpExternalService {
     private LabelRecommendMapper labelRecommendMapper;
     @Autowired
     private OutboundRecordMapper outboundRecordMapper;
-    @Autowired
-    private MaterialInventoryMapper materialInventoryMapper;
+//    @Autowired
+//    private MaterialInventoryMapper materialInventoryMapper;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -63,7 +63,7 @@ public class ErpExternalServiceImpl implements IErpExternalService {
         // 推荐货位
         new Thread(() -> {
             Map<Long, LabelRecommendPO> labelRecommendPOs = new HashMap<>();
-            Map<Long, Integer> materialInventoryMap = new HashMap<>();
+//            Map<Long, Integer> materialInventoryMap = new HashMap<>();
             for (PickBodyPO bodyPO : bodyPOs) {
                 List<StorageLabelBO> storageLabelBOS = storageLabelMapper.queryNotRecommend(headPO.getOrderNo(), bodyPO.getMaterialId());
                 int num = 0;
@@ -79,7 +79,7 @@ public class ErpExternalServiceImpl implements IErpExternalService {
 
                     num += storageLabelBO.getStorageNum();
                     if (num >= bodyPO.getDemandNum()) {
-                        materialInventoryMap.put(storageLabelBO.getMaterialId(), num);
+//                        materialInventoryMap.put(storageLabelBO.getMaterialId(), num);
                         break;
                     }
                 }
@@ -90,18 +90,18 @@ public class ErpExternalServiceImpl implements IErpExternalService {
             }
 
             labelRecommendMapper.batchInsert(new ArrayList<>(labelRecommendPOs.values()));
-            storageLabelMapper.updateStatus(new ArrayList<>(labelRecommendPOs.keySet()), (byte) 20);
+            storageLabelMapper.updateStatus(new ArrayList<>(labelRecommendPOs.keySet()), OutboundConstant.WORK_ORDER_OUTBOUND);
 
             headPO.setMaterialStatus(OutboundConstant.MATERIAL_STATUS_UNPROCESSED);
             pickHeadMapper.updateByPrimaryKey(headPO);
 
-            // 物料库存信息
-            List<MaterialInventoryBO> materialInventoryBOs = materialInventoryMapper.queryByMids(new ArrayList<>(materialInventoryMap.keySet()));
-            MaterialInventoryPO updateInventoryPO = new MaterialInventoryPO();
-            for (MaterialInventoryBO materialInventoryBO : materialInventoryBOs) {
-                updateInventoryPO.setStorageNum(-materialInventoryMap.get(materialInventoryBO.getMaterialId()));
-                materialInventoryMapper.updateByPrimaryKey(materialInventoryBO.updatePO(updateInventoryPO));
-            }
+//            // 物料库存信息
+//            List<MaterialInventoryBO> materialInventoryBOs = materialInventoryMapper.queryByMids(new ArrayList<>(materialInventoryMap.keySet()));
+//            MaterialInventoryPO updateInventoryPO = new MaterialInventoryPO();
+//            for (MaterialInventoryBO materialInventoryBO : materialInventoryBOs) {
+//                updateInventoryPO.setStorageNum(-materialInventoryMap.get(materialInventoryBO.getMaterialId()));
+//                materialInventoryMapper.updateByPrimaryKey(materialInventoryBO.updatePO(updateInventoryPO));
+//            }
         }).start();
 
         return ResultVO.ok();

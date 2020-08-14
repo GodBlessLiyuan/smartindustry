@@ -99,6 +99,6 @@ public class OutboundConstant {
      */
     public static final Byte PENDING_WAIT = 4;
 
-
+    public static final Byte WORK_ORDER_OUTBOUND = 20;
 
 }

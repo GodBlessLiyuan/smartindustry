@@ -1,6 +1,7 @@
 package com.smartindustry.outbound.service.impl;
 
 import com.github.pagehelper.Page;
+import com.smartindustry.common.bo.im.MaterialInventoryBO;
 import com.smartindustry.common.bo.om.LogisticsRecordBO;
 import com.smartindustry.common.bo.om.OutboundBO;
 import com.smartindustry.common.bo.om.PickBodyBO;
@@ -8,8 +9,10 @@ import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.bo.si.StorageLabelBO;
 import com.smartindustry.common.config.FilePathConfig;
 import com.smartindustry.common.constant.ResultConstant;
+import com.smartindustry.common.mapper.im.MaterialInventoryMapper;
 import com.smartindustry.common.mapper.om.*;
 import com.smartindustry.common.mapper.si.StorageLabelMapper;
+import com.smartindustry.common.pojo.im.MaterialInventoryPO;
 import com.smartindustry.common.pojo.om.*;
 import com.smartindustry.common.util.FileUtil;
 import com.smartindustry.common.util.PageQueryUtil;
@@ -58,6 +61,8 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
     @Autowired
     private StorageLabelMapper storageLabelMapper;
     @Autowired
+    private MaterialInventoryMapper materialInventoryMapper;
+    @Autowired
     private FilePathConfig filePathConfig;
 
     @Override
@@ -94,7 +99,9 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
 
         Byte ostatus = OutboundConstant.PICK_OUTBOUND_ALL;
         List<PickBodyBO> bos = pickBodyMapper.queryByHeadId(headPO.getPickHeadId());
+        Map<Long, Integer> materialInventoryMap = new HashMap<>();
         for (PickBodyBO bo : bos) {
+            materialInventoryMap.put(bo.getMaterialId(), bo.getPickNum());
             if (!bo.getDemandNum().equals(bo.getPickNum())) {
                 ostatus = OutboundConstant.PICK_OUTBOUND_LACK;
                 break;
@@ -124,6 +131,14 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
         }
         if (printLabelBOs.size() != 0) {
             storageLabelMapper.deleteByPlids(plIds);
+
+            // 物料库存信息
+            List<MaterialInventoryBO> materialInventoryBOs = materialInventoryMapper.queryByMids(new ArrayList<>(materialInventoryMap.keySet()));
+            MaterialInventoryPO updateInventoryPO = new MaterialInventoryPO();
+            for (MaterialInventoryBO materialInventoryBO : materialInventoryBOs) {
+                updateInventoryPO.setStorageNum(-materialInventoryMap.get(materialInventoryBO.getMaterialId()));
+                materialInventoryMapper.updateByPrimaryKey(materialInventoryBO.updatePO(updateInventoryPO));
+            }
         }
 
         outboundRecordMapper.insert(new OutboundRecordPO(headPO.getPickHeadId(), outboundPO.getOutboundId(), 1L, "夏慧", OutboundConstant.RECORD_CONFIRM_OUTBOUND, OutboundConstant.MATERIAL_STATUS_FINISH));
@@ -159,7 +174,7 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
                 }
 
                 labelRecommendMapper.batchInsert(new ArrayList<>(labelRecommendPOs.values()));
-                storageLabelMapper.updateStatus(new ArrayList<>(labelRecommendPOs.keySet()), (byte) 10);
+                storageLabelMapper.updateStatus(new ArrayList<>(labelRecommendPOs.keySet()), OutboundConstant.WORK_ORDER_OUTBOUND);
 
                 notRecommendHeadPO.setMaterialStatus(OutboundConstant.MATERIAL_STATUS_UNPROCESSED);
                 pickHeadMapper.updateByPrimaryKey(notRecommendHeadPO);
