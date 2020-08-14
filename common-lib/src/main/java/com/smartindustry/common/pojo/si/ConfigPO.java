@@ -11,7 +11,7 @@ import lombok.Data;
 public class ConfigPO implements Serializable {
     private Long configId;
 
-    private String configName;
+    private String configKey;
 
     private String configValue;
 
