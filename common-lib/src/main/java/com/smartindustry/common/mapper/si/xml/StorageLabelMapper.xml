@@ -192,19 +192,69 @@
     sl.order_type, sl.`type`, sl.storage_num, sl.storage_time, sl.material_lock_id, sl.`status`,
     l.location_no
     </sql>
-    <resultMap id="IMBOResultMap" type="com.smartindustry.common.bo.si.StorageLabelBO" extends="BOResultMap">
 
+    <resultMap id="IMBOResultMap" type="com.smartindustry.common.bo.si.StorageLabelBO" extends="BOResultMap">
+        <result column="material_no" jdbcType="CHAR" property="materialNo"/>
+        <result column="material_name" jdbcType="CHAR" property="materialName"/>
+        <result column="material_type" jdbcType="TINYINT" property="materialType"/>
+        <result column="material_model" jdbcType="CHAR" property="materialModel"/>
+        <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
+        <result column="material_lock_name" jdbcType="CHAR" property="materialLockName"/>
+        <result column="supplier_name" jdbcType="CHAR" property="supplierName"/>
+        <result column="produce_batch" jdbcType="CHAR" property="produceBatch"/>
     </resultMap>
     <sql id="IMBO_Column_List">
         sl.storage_label_id, sl.print_label_id, sl.material_id, sl.location_id, sl.package_id, sl.order_no,
     sl.order_type, sl.`type`, sl.storage_num, sl.storage_time, sl.material_lock_id, sl.`status`,
     l.location_no,
-    material_no, material_name, material_type, material_model,
+    m.material_no, m.material_name, m.material_type, m.material_model,
+    w.warehouse_name,
+    ml.material_lock_name,
+    s.supplier_name,
+    pl.produce_batch
     </sql>
     <select id="pageQuery" parameterType="java.util.Map" resultMap="IMBOResultMap">
         select
         <include refid="IMBO_Column_List"/>
         from si_storage_label sl
+        left join si_material m on sl.material_id = m.material_id
+        left join si_location l on sl.location_id = l.location_id
+        left join si_warehouse w on l.warehouse_id = w.warehouse_id
+        left join dd_material_lock ml on sl.material_lock_id = ml.material_lock_id
+        left join si_supplier s on m.supplier_id = s.supplier_id
+        left join si_print_label pl on sl.print_label_id = pl.print_label_id
+        <where>
+            <if test="keyword != null and keyword != ''">
+                and (m.material_no like '%' #{keyword,jdbcType=CHAR} '%'
+                or m.material_name like '%' #{keyword,jdbcType=CHAR} '%'
+                or sl.package_id like '%' #{keyword,jdbcType=CHAR} '%')
+            </if>
+            <if test="pbatch != null and pbatch != ''">
+                and pl.produce_batch like '%' #{pbatch,jdbcType=CHAR} '%'
+            </if>
+            <if test="wid != null and wid != 0">
+                and w.warehouse_id = #{wid,jdbcType=BIGINT}
+            </if>
+            <if test="lid != null and lid != 0">
+                and l.location_id = #{lid,jdbcType=BIGINT}
+            </if>
+            <if test="sname != null and sname != ''">
+                and s.supplier_name like '%' #{sname,jdbcType=CHAR} '%'
+            </if>
+            <if test="mstatus != null and mstatus == 1">
+                and sl.material_lock_id is not null
+            </if>
+            <if test="mstatus != null and mstatus == 2">
+                and sl.material_lock_id is null
+            </if>
+            <if test="mtype != null and mtype == 0">
+                and m.material_type != 3
+            </if>
+            <if test="mtype != null and mtype != 0">
+                and m.material_type = #{mtype,jdbcType=TINYINT}
+            </if>
+        </where>
+        order by sl.storage_time desc
     </select>
 
     <select id="queryNotRecommend" resultMap="BOResultMap">

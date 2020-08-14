@@ -12,4 +12,13 @@ import lombok.Data;
 @Data
 public class StorageLabelBO extends StorageLabelPO {
     private String locationNo;
+
+    private String materialNo;
+    private String materialName;
+    private Byte materialType;
+    private String materialModel;
+    private String warehouseName;
+    private String materialLockName;
+    private String supplierName;
+    private String produceBatch;
 }
