@@ -9,4 +9,11 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface ConfigMapper extends BaseMapper<ConfigPO, Long> {
+    /**
+     * 根据 关键字 查询
+     *
+     * @param key
+     * @return
+     */
+    ConfigPO queryByKey(String key);
 }

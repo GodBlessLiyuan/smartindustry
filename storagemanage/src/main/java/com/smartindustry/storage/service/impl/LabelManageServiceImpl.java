@@ -1,10 +1,13 @@
 package com.smartindustry.storage.service.impl;
 
 import com.smartindustry.common.bo.sm.ReceiptBodyBO;
+import com.smartindustry.common.constant.ConfigConstant;
 import com.smartindustry.common.constant.ModuleConstant;
+import com.smartindustry.common.mapper.si.ConfigMapper;
 import com.smartindustry.common.mapper.si.LabelRecordMapper;
 import com.smartindustry.common.mapper.si.PrintLabelMapper;
 import com.smartindustry.common.mapper.sm.*;
+import com.smartindustry.common.pojo.si.ConfigPO;
 import com.smartindustry.common.pojo.si.LabelRecordPO;
 import com.smartindustry.common.pojo.si.PrintLabelPO;
 import com.smartindustry.common.pojo.sm.*;
@@ -52,6 +55,10 @@ public class LabelManageServiceImpl implements ILabelManageService {
     private StorageRecordMapper recordMapper;
     @Autowired
     private LabelRecordMapper labelRecordMapper;
+    @Autowired
+    private ConfigMapper configMapper;
+    @Autowired
+    private StorageMapper storageMapper;
 
     @Override
     public ResultVO query(@RequestBody OperateDTO dto) {
@@ -167,6 +174,34 @@ public class LabelManageServiceImpl implements ILabelManageService {
         }
         if (labelNum < bodyPO.getAcceptNum()) {
             return new ResultVO(1005);
+        }
+
+        ConfigPO configPO = configMapper.queryByKey(ConfigConstant.K_STORAGE_QUALITY);
+        if (null != configPO && ConfigConstant.V_NO.equals(configPO.getConfigValue())) {
+            // 不进行质量管理
+            // 更新收料单状态
+            bodyPO.setStatus(ReceiptConstant.RECEIPT_MATERIAL_STORAGE);
+            bodyPO.setGoodNum(labelNum);
+            bodyPO.setBadNum(0);
+            receiptBodyMapper.updateByPrimaryKey(bodyPO);
+
+            // 生产出库单
+            StoragePO storagePO = new StoragePO();
+            storagePO.setReceiptBodyId(dto.getRbid());
+            storagePO.setStorageNo(ReceiptNoUtil.genStorageNo(storageMapper, ReceiptNoUtil.MATERIAL_STORAGE_LPPK, new Date()));
+            storagePO.setPendingNum(bodyPO.getGoodNum());
+            storagePO.setStoredNum(0);
+            storagePO.setStatus(ReceiptConstant.MATERIAL_STORAGE_PENDING);
+            storagePO.setType(ReceiptConstant.MATERIAL_TYPE_GOOD);
+            storagePO.setCreateTime(new Date());
+            storagePO.setDr((byte) 1);
+            storageMapper.insert(storagePO);
+
+            // 操作记录
+            recordMapper.insert(new StorageRecordPO(dto.getRbid(), storagePO.getStorageId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
+            recordMapper.insert(new StorageRecordPO(dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_FINISH, ReceiptConstant.RECEIPT_ENTRY_LABEL));
+
+            return ResultVO.ok();
         }
 
         Byte status;    // 操作记录类型

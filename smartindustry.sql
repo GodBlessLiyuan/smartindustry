@@ -672,11 +672,11 @@ CREATE TABLE si_bom_head
 CREATE TABLE si_config
 (
     config_id bigint unsigned NOT NULL AUTO_INCREMENT,
-    config_name char(255) NOT NULL,
+    config_key char(255) NOT NULL,
     config_value char(255),
     PRIMARY KEY (config_id),
     UNIQUE (config_id),
-    UNIQUE (config_name)
+    UNIQUE (config_key)
 );
 
 
@@ -854,12 +854,16 @@ CREATE TABLE si_storage_label
     material_lock_id bigint unsigned,
     -- 1：在库
     -- 11：调拨入库
+    -- 14：生产入库
     -- 20：工单出库
     -- 21：调拨出库
+    -- 23：销售出库
     status tinyint COMMENT '1：在库
 11：调拨入库
+14：生产入库
 20：工单出库
-21：调拨出库',
+21：调拨出库
+23：销售出库',
     PRIMARY KEY (storage_label_id),
     UNIQUE (storage_label_id),
     UNIQUE (print_label_id)
