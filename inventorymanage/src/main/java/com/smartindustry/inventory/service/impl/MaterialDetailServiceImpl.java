@@ -53,24 +53,36 @@ public class MaterialDetailServiceImpl implements IMaterialDetailService {
             return new ResultVO(1002);
         }
 
-        storageLabelMapper.updateMlid(dto.getSlids(), dto.getMlid());
-
         // 物料库存
         Map<Long, Integer> msMap = new HashMap<>();
         for (StorageLabelPO po : pos) {
             Long mid = po.getMaterialId();
-            if (msMap.containsKey(mid)) {
-                msMap.put(mid, msMap.get(mid) + po.getStorageNum());
-            } else {
-                msMap.put(mid, po.getStorageNum());
+            if (null != dto.getMlid() && null == po.getMaterialLockId()) {
+                // 锁定
+                if (msMap.containsKey(mid)) {
+                    msMap.put(mid, msMap.get(mid) + po.getStorageNum());
+                } else {
+                    msMap.put(mid, po.getStorageNum());
+                }
+            } else if (null == dto.getMlid() && null != po.getMaterialLockId()) {
+                // 解锁
+                if (msMap.containsKey(mid)) {
+                    msMap.put(mid, msMap.get(mid) - po.getStorageNum());
+                } else {
+                    msMap.put(mid, -po.getStorageNum());
+                }
             }
         }
 
-        List<MaterialInventoryBO> bos = materialInventoryMapper.queryByMids(new ArrayList<>(msMap.keySet()));
-        MaterialInventoryPO updatePO = new MaterialInventoryPO();
-        for (MaterialInventoryBO bo : bos) {
-            updatePO.setLockNum(msMap.get(bo.getMaterialId()));
-            materialInventoryMapper.updateByPrimaryKey(bo.updatePO(updatePO));
+        storageLabelMapper.updateMlid(dto.getSlids(), dto.getMlid());
+
+        if (msMap.size() > 0) {
+            List<MaterialInventoryBO> bos = materialInventoryMapper.queryByMids(new ArrayList<>(msMap.keySet()));
+            MaterialInventoryPO updatePO = new MaterialInventoryPO();
+            for (MaterialInventoryBO bo : bos) {
+                updatePO.setLockNum(msMap.get(bo.getMaterialId()));
+                materialInventoryMapper.updateByPrimaryKey(bo.updatePO(updatePO));
+            }
         }
 
         return ResultVO.ok();
