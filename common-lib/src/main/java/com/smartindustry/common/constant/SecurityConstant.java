@@ -22,7 +22,7 @@ public class SecurityConstant {
     /**
      * 未授权
      */
-    public static final int UNAUTHORIZED = 1020;
+    public static final int UNAUTHORIZED = 1401;
 
     /**
      * 用户的状态 1 启用2  禁用

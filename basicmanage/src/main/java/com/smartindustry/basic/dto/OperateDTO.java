@@ -3,6 +3,7 @@ package com.smartindustry.basic.dto;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author: xiahui
@@ -18,4 +19,7 @@ public class OperateDTO implements Serializable {
     private Long lid;
     private Long sid;
     private Long mid;
+    private Long bhid;
+
+
 }

@@ -1,10 +1,14 @@
 package com.smartindustry.authority.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
+import com.alibaba.fastjson.parser.Feature;
 import com.github.pagehelper.Page;
 import com.smartindustry.authority.constant.AuthorityConstant;
 import com.smartindustry.authority.dto.OperateDTO;
 import com.smartindustry.authority.dto.RoleDTO;
 import com.smartindustry.authority.service.IRoleService;
+import com.smartindustry.authority.util.ObiectToMapUtil;
 import com.smartindustry.authority.vo.AuthorityVO;
 import com.smartindustry.authority.vo.RoleRecordVO;
 import com.smartindustry.authority.vo.RoleVO;
@@ -16,13 +20,17 @@ import com.smartindustry.common.pojo.am.RoleRecordPO;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author: jiangzhaojie
@@ -45,6 +53,8 @@ public class RoleServiceImpl implements IRoleService {
     private UserMapper userMapper;
     @Autowired
     private RoleRecordMapper roleRecordMapper;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData){
@@ -106,26 +116,39 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
-    public ResultVO queryAllMenu(){
-        List<AuthorityBO> bos = authorityMapper.queryChild(null, AuthorityConstant.TYPE_MENU);
-        List<AuthorityVO> vos = AuthorityVO.convert(bos);
+    public ResultVO queryAllMenu() {
+        Object menuObject = redisTemplate.opsForValue().get(AuthorityConstant.NAME_MENU);
         Map<String, Object> menuMap = new LinkedHashMap<>();
-        List<AuthorityVO> lastMenu = new ArrayList<>();
-        menuMap.put(AuthorityConstant.NAME_MENU,getAuthTree(vos,lastMenu, AuthorityConstant.TYPE_MENU));
+        if(menuObject == null){
+            List<AuthorityBO> bos = authorityMapper.queryChild(null, AuthorityConstant.TYPE_MENU);
+            List<AuthorityVO> vos = AuthorityVO.convert(bos);
+            List<AuthorityVO> lastMenu = new ArrayList<>();
+            menuMap.put(AuthorityConstant.NAME_MENU,getAuthTree(vos,lastMenu, AuthorityConstant.TYPE_MENU));
+            redisTemplate.opsForValue().set(AuthorityConstant.NAME_MENU, menuMap, AuthorityConstant.EXPIRE_TIME, TimeUnit.DAYS);
+        }else {
+            menuMap = JSON.parseObject(JSON.toJSONString(menuObject),LinkedHashMap.class,Feature.OrderedField);
+        }
         return ResultVO.ok().setData(menuMap);
     }
 
     @Override
     public ResultVO queryAllButton(){
-        List<AuthorityBO> bos = authorityMapper.queryChild(null, AuthorityConstant.TYPE_MENU);
-        List<AuthorityVO> vos = AuthorityVO.convert(bos);
+        Object buttonObject = redisTemplate.opsForValue().get(AuthorityConstant.NAME_BUTTON);
         Map<String, Object> res = new HashMap<>();
-        List<AuthorityVO> lastMenu = new ArrayList<>();
-        getAuthTree(vos,lastMenu, AuthorityConstant.TYPE_MENU);
-        List<AuthorityVO> lastButton = new ArrayList<>();
-        CollectionUtils.addAll(lastButton, new Object[lastMenu.size()]);
-        Collections.copy(lastButton,lastMenu);
-        res.put(AuthorityConstant.NAME_BUTTON,getAuthTree(lastMenu,new ArrayList<>(), AuthorityConstant.TYPE_BUTTON));
+        if(buttonObject == null){
+            List<AuthorityBO> bos = authorityMapper.queryChild(null, AuthorityConstant.TYPE_MENU);
+            List<AuthorityVO> vos = AuthorityVO.convert(bos);
+
+            List<AuthorityVO> lastMenu = new ArrayList<>();
+            getAuthTree(vos,lastMenu, AuthorityConstant.TYPE_MENU);
+            List<AuthorityVO> lastButton = new ArrayList<>();
+            CollectionUtils.addAll(lastButton, new Object[lastMenu.size()]);
+            Collections.copy(lastButton,lastMenu);
+            res.put(AuthorityConstant.NAME_BUTTON,getAuthTree(lastMenu,new ArrayList<>(), AuthorityConstant.TYPE_BUTTON));
+            redisTemplate.opsForValue().set(AuthorityConstant.NAME_BUTTON, res, AuthorityConstant.EXPIRE_TIME, TimeUnit.DAYS);
+        }else {
+            res = JSON.parseObject(JSON.toJSONString(buttonObject),LinkedHashMap.class,Feature.OrderedField);
+        }
         return ResultVO.ok().setData(res);
     }
 
@@ -186,4 +209,5 @@ public class RoleServiceImpl implements IRoleService {
         List<RoleRecordBO> bos = roleRecordMapper.queryRoleRecord(reqData);
         return ResultVO.ok().setData(RoleRecordVO.convert(bos));
     }
+
 }

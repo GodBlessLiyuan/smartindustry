@@ -114,4 +114,39 @@
       dr = #{dr,jdbcType=TINYINT}
     where bom_head_id = #{bomHeadId,jdbcType=BIGINT}
   </update>
+
+<!--  物料清单管理分页查询-->
+  <select id="pageQuery" parameterType="java.util.Map" resultType="com.smartindustry.common.bo.si.BomHeadBO">
+    select bh.bom_head_id as bomHeadId,bh.material_id as materialId,bh.relate_num as relateNum,ma.material_no as materialNo,ma.material_name as materialName,ma.material_model as materialModel,ma.material_desc as materialDesc,ml.material_level_name as materialLevelName
+    from si_bom_head bh
+    left join si_material ma on bh.material_id = ma.material_id
+    left join dd_material_level ml on ma.material_level_id = ml.material_level_id
+    where bh.dr = 1
+    <if test="mno != null and mno != ''">
+      and ma.material_no like concat('%',#{mno,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="mname != null and mname != ''">
+      and ma.material_name like concat('%',#{mname,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="mdesc != null and mdesc != ''">
+      and ma.material_desc like concat('%',#{mdesc,jdbcType=VARCHAR},'%')
+    </if>
+    order by bh.create_time desc
+  </select>
+
+<!--  判断当前物料是够已经生成主BOM清单-->
+  <select id="judgeHaveBom" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from si_bom_head
+    where material_id = #{materialId,jdbcType=BIGINT} and dr = 1
+  </select>
+
+<!--  根据主BOM清单ID查询详细的物料信息-->
+  <select id="queryMainMaterial" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.si.BomHeadBO">
+    select bh.material_id as materialId,ma.material_no as materialNo,ma.material_name as materialName,ma.material_model as materialModel
+    from si_bom_head bh
+    left join si_material ma on bh.material_id = ma.material_id
+    where bh.dr = 1 and bh.bom_head_id = #{bomHeadId,jdbcType=BIGINT}
+  </select>
 </mapper>

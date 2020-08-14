@@ -118,6 +118,11 @@
     from am_authority
   </select>
 
+  <select id="selectAllId" resultType="java.lang.Long">
+    select authority_Id
+    from am_authority
+  </select>
+
   <!--  判断当前权限id不是其他权限的父节点id-->
   <select id="judgeExist"  resultType="java.lang.Integer">
      select case when exists(SELECT 1 from am_authority where parent_id = #{parentId,jdbcType=BIGINT} and `type` = #{type,jdbcType=TINYINT} limit 1)
