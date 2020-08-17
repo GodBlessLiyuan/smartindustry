@@ -63,16 +63,14 @@ public class DataDictionaryServiceImpl implements IDataDictionaryService {
     @Autowired
     private LifeCycleStateMapper lifeCycleStateMapper;
     @Autowired
-<<<<<<< HEAD
     private MaterialPropertyMapper materialPropertyMapper;
     @Autowired
     private ProcessMapper processMapper;
-=======
+    @Autowired
     private MaterialLockMapper materialLockMapper;
-
     @Autowired
     private StorageLabelMapper storageLabelMapper;
->>>>>>> 1920221422b4747ca227e99144b4ec1d80b9c113
+
 
     @Override
     public ResultVO wtQuery() {
@@ -704,7 +702,6 @@ public class DataDictionaryServiceImpl implements IDataDictionaryService {
         return ResultVO.ok();
     }
 
-<<<<<<< HEAD
     /**
      * 查询物料属性列表
      * @return
@@ -744,15 +741,17 @@ public class DataDictionaryServiceImpl implements IDataDictionaryService {
      *新增物料工序
      */
     @Override
-    public ResultVO prInsert(ProcessDTO dto){
+    public ResultVO prInsert(ProcessDTO dto) {
         ProcessPO po = processMapper.isExist(dto.getPrname());
-        if(po != null) {
+        if (po != null) {
             //物料工序名称已被使用
             return new ResultVO(1004);
         }
         ProcessPO po1 = ProcessDTO.createPO(dto);
         processMapper.insert(po1);
-=======
+        return ResultVO.ok();
+    }
+
     @Override
     public ResultVO mlkQuery() {
         List<Map<String, Object>> res = materialLockMapper.queryAll();
@@ -795,7 +794,6 @@ public class DataDictionaryServiceImpl implements IDataDictionaryService {
 
         materialLockMapper.deleteByPrimaryKey(dto.getMlkid());
 
->>>>>>> 1920221422b4747ca227e99144b4ec1d80b9c113
         return ResultVO.ok();
     }
 }
