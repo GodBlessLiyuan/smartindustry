@@ -1,6 +1,7 @@
 package com.smartindustry.outbound.service;
 
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.outbound.dto.OperateDTO;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -51,10 +52,10 @@ public interface IPickManageService {
     /**
      * 拣货单打印-详情
      *
-     * @param phId
+     * @param dto
      * @return
      */
-    ResultVO detail(Long phId);
+    ResultVO detail(OperateDTO dto);
 
     /**
      * 根据当前选中的工单拣货单和扫码入库的PID进行物料入库

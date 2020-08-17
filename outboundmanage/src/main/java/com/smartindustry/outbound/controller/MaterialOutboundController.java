@@ -2,6 +2,7 @@ package com.smartindustry.outbound.controller;
 
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.dto.LogisticsRecordDTO;
+import com.smartindustry.outbound.dto.OperateDTO;
 import com.smartindustry.outbound.service.IMaterialOutboundService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,25 +33,25 @@ public class MaterialOutboundController {
         return materialOutboundService.pageQuery(reqData);
     }
 
-    @RequestMapping("detail")
-    public ResultVO detail(@RequestParam(value = "oid") Long oId) {
-        return materialOutboundService.detail(oId);
+    @PostMapping("detail")
+    public ResultVO detail(@RequestBody OperateDTO dto) {
+        return materialOutboundService.detail(dto);
     }
 
-    @RequestMapping("outbound")
-    public ResultVO outbound(@RequestParam(value = "oid") Long oId) {
-        return materialOutboundService.outbound(oId);
+    @PostMapping("outbound")
+    public ResultVO outbound(@RequestBody OperateDTO dto) {
+        return materialOutboundService.outbound(dto);
     }
 
     /**
      * 记录信息
      *
-     * @param oId
+     * @param dto
      * @return
      */
-    @RequestMapping("record")
-    public ResultVO record(@RequestParam(value = "oid") Long oId) {
-        return materialOutboundService.record(oId);
+    @PostMapping("record")
+    public ResultVO record(@RequestBody OperateDTO dto) {
+        return materialOutboundService.record(dto);
     }
 
     /**

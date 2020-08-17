@@ -14,6 +14,7 @@ import java.io.Serializable;
 public class OperateDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    private Long oid;
     private Long rbid;
     private Long plid;
     private Long phid;

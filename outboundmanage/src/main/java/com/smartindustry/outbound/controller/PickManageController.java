@@ -1,6 +1,7 @@
 package com.smartindustry.outbound.controller;
 
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.outbound.dto.OperateDTO;
 import com.smartindustry.outbound.service.IPickManageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -107,13 +108,13 @@ public class PickManageController {
     /**
      * 拣货单打印-详情
      *
-     * @param phId
+     * @param dto
      * @return
      * @author xiahui
      */
     @RequestMapping("detail")
-    public ResultVO detail(@RequestParam("phid") Long phId) {
-        return pickManageService.detail(phId);
+    public ResultVO detail(OperateDTO dto) {
+        return pickManageService.detail(dto);
     }
 
 

@@ -2,6 +2,7 @@ package com.smartindustry.outbound.service;
 
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.dto.LogisticsRecordDTO;
+import com.smartindustry.outbound.dto.OperateDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
@@ -24,18 +25,18 @@ public interface IMaterialOutboundService {
     /**
      * 详情
      *
-     * @param oId
+     * @param dto
      * @return
      */
-    ResultVO detail(Long oId);
+    ResultVO detail(OperateDTO dto);
 
     /**
      * 出库
      *
-     * @param oId
+     * @param dto
      * @return
      */
-    ResultVO outbound(Long oId);
+    ResultVO outbound(OperateDTO dto);
 
     /**
      * 文件上传
@@ -56,10 +57,10 @@ public interface IMaterialOutboundService {
     /**
      * 记录信息
      *
-     * @param oId
+     * @param dto
      * @return
      */
-    ResultVO record(Long oId);
+    ResultVO record(OperateDTO dto);
 
 
 }

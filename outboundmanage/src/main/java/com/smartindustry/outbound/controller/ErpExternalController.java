@@ -4,6 +4,7 @@ import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.dto.PickDTO;
 import com.smartindustry.outbound.service.IErpExternalService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +21,7 @@ public class ErpExternalController {
     @Autowired
     private IErpExternalService erpExternalService;
 
-    @RequestMapping("pick")
+    @PostMapping("pick")
     public ResultVO pick(@RequestBody PickDTO dto) {
         return erpExternalService.pick(dto);
     }

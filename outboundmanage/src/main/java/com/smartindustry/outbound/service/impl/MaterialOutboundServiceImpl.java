@@ -20,6 +20,7 @@ import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.constant.OutboundConstant;
 import com.smartindustry.outbound.dto.LogisticsRecordDTO;
+import com.smartindustry.outbound.dto.OperateDTO;
 import com.smartindustry.outbound.service.IMaterialOutboundService;
 import com.smartindustry.outbound.vo.LogisticsRecordVO;
 import com.smartindustry.outbound.vo.OutboundDetailVO;
@@ -74,8 +75,8 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
     }
 
     @Override
-    public ResultVO detail(Long oId) {
-        OutboundBO outboundBO = outboundMapper.queryByOid(oId);
+    public ResultVO detail(OperateDTO dto) {
+        OutboundBO outboundBO = outboundMapper.queryByOid(dto.getOid());
         if (null == outboundBO) {
             return new ResultVO(1002);
         }
@@ -87,8 +88,8 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public ResultVO outbound(Long oId) {
-        OutboundPO outboundPO = outboundMapper.selectByPrimaryKey(oId);
+    public ResultVO outbound(OperateDTO dto) {
+        OutboundPO outboundPO = outboundMapper.selectByPrimaryKey(dto.getOid());
         if (null == outboundPO) {
             return new ResultVO(1002);
         }
@@ -114,7 +115,7 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
         headPO.setOutboundStatus(ostatus);
         headPO.setOutboundTime(new Date());
 
-        LogisticsRecordPO logisticsRecordPO = logisticsRecordMapper.queryByOid(oId);
+        LogisticsRecordPO logisticsRecordPO = logisticsRecordMapper.queryByOid(dto.getOid());
         if (null != logisticsRecordPO) {
             outboundPO.setShipTime(new Date());
             headPO.setMaterialStatus(OutboundConstant.MATERIAL_STATUS_CONFIRM);
@@ -237,11 +238,11 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
     }
 
     @Override
-    public ResultVO record(Long oId) {
+    public ResultVO record(OperateDTO dto) {
         Map<String, Object> res = new HashMap<>();
-        LogisticsRecordBO logisticsRecordBO = logisticsRecordMapper.queryByOid(oId);
+        LogisticsRecordBO logisticsRecordBO = logisticsRecordMapper.queryByOid(dto.getOid());
         res.put(ResultConstant.LOGISTICS_RECORD, LogisticsRecordVO.convert(null == logisticsRecordBO ? new LogisticsRecordBO() : logisticsRecordBO, filePathConfig));
-        List<OutboundRecordPO> outboundRecordPOs = outboundRecordMapper.queryByOid(oId);
+        List<OutboundRecordPO> outboundRecordPOs = outboundRecordMapper.queryByOid(dto.getOid());
         res.put(ResultConstant.OPERATE_RECORD, OutboundRecordVO.convert(outboundRecordPOs));
         return ResultVO.ok().setData(res);
     }

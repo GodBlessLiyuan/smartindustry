@@ -15,6 +15,7 @@ import com.smartindustry.common.pojo.si.PrintLabelPO;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.constant.OutboundConstant;
+import com.smartindustry.outbound.dto.OperateDTO;
 import com.smartindustry.outbound.util.OmNoUtil;
 import com.smartindustry.outbound.vo.*;
 import com.smartindustry.outbound.service.IPickManageService;
@@ -143,8 +144,8 @@ public class PickManageServiceImpl implements IPickManageService {
     }
 
     @Override
-    public ResultVO detail(Long phId) {
-        PickHeadPO headPO = pickHeadMapper.selectByPrimaryKey(phId);
+    public ResultVO detail(OperateDTO dto) {
+        PickHeadPO headPO = pickHeadMapper.selectByPrimaryKey(dto.getPhid());
         if (null == headPO) {
             return new ResultVO(1002);
         }
@@ -152,7 +153,7 @@ public class PickManageServiceImpl implements IPickManageService {
         PickDetailVO vo = new PickDetailVO();
         vo.setPickHeadVO(headPO);
 
-        List<PickBodyBO> bodyBOs = pickBodyMapper.queryByHeadId(phId);
+        List<PickBodyBO> bodyBOs = pickBodyMapper.queryByHeadId(dto.getPhid());
         List<PickDetailVO.PickItemVO> itemVOs = new ArrayList<>(bodyBOs.size());
         for (PickBodyBO bo : bodyBOs) {
             PickDetailVO.PickItemVO itemVO = new PickDetailVO.PickItemVO();
@@ -243,8 +244,8 @@ public class PickManageServiceImpl implements IPickManageService {
         }
         PrintLabelPO poDivOne = new PrintLabelPO();
         PrintLabelPO poDivTwo = new PrintLabelPO();
-        BeanUtils.copyProperties(po, poDivOne, new String[]{"printLabelId", "dr"});
-        BeanUtils.copyProperties(po, poDivTwo, new String[]{"printLabelId", "dr"});
+        BeanUtils.copyProperties(po, poDivOne, "printLabelId", "dr");
+        BeanUtils.copyProperties(po, poDivTwo, "printLabelId", "dr");
         // 生成分料pid1
         Date divOneTime = new Date();
         poDivOne.setCreateTime(divOneTime);
@@ -263,9 +264,9 @@ public class PickManageServiceImpl implements IPickManageService {
         poDivTwo.setRelatePackageId(po.getPackageId());
         poDivTwo.setNum(po.getNum() - num);
         poDivTwo.setDr((byte) 1);
-        int resultDivTwo = printLabelMapper.insert(poDivTwo);
+        printLabelMapper.insert(poDivTwo);
         po.setDr((byte) 2);
-        int result = printLabelMapper.updateByPrimaryKey(po);
+        printLabelMapper.updateByPrimaryKey(po);
         return ResultVO.ok();
     }
 
@@ -294,13 +295,16 @@ public class PickManageServiceImpl implements IPickManageService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO deleteScanPid(Long pickHeadId, Long printLabelId) {
-        int result = pickHeadMapper.deleteScanPid(pickHeadId, printLabelId);
+        pickHeadMapper.deleteScanPid(pickHeadId, printLabelId);
         // 删除的时候需要将已拣货量相应的减去
         PrintLabelPO po = printLabelMapper.selectByPrimaryKey(printLabelId);
         pickHeadMapper.updatePickNum(pickHeadId, po.getNum(), po.getMaterialId());
         Integer flag = pickHeadMapper.judgeIsPick(pickHeadId);
 
-        int resultStatus = (flag == null) ? pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_UNPROCESSED) : 0;
+        if (null == flag) {
+            pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_UNPROCESSED);
+        }
+
         return ResultVO.ok();
     }
 
@@ -321,7 +325,7 @@ public class PickManageServiceImpl implements IPickManageService {
 
     @Override
     public ResultVO updateException(Long pickHeadId, Long materialId, String exception) {
-        int result = pickBodyMapper.updateException(pickHeadId, materialId, exception);
+        pickBodyMapper.updateException(pickHeadId, materialId, exception);
         return ResultVO.ok();
     }
 
@@ -374,8 +378,8 @@ public class PickManageServiceImpl implements IPickManageService {
                 return new ResultVO(1022);
             }
         }
-        int resultDe = pickHeadMapper.deletePid(packageId);
-        int resultRe = pickHeadMapper.resumePid(packageId);
+        pickHeadMapper.deletePid(packageId);
+        pickHeadMapper.resumePid(packageId);
         return ResultVO.ok();
     }
 
@@ -387,21 +391,21 @@ public class PickManageServiceImpl implements IPickManageService {
         po.setRemark(message);
         if (status == null) {
             //OQC检测时的驳回
-            int result = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_RETURN);
+            pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_RETURN);
             po.setStatus(OutboundConstant.TURN_DOWN_CANCEL);
-            int resultUp = pickCheckMapper.updateByPrimaryKey(po);
+            pickCheckMapper.updateByPrimaryKey(po);
             outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.RECORD_DISAGREE, OutboundConstant.MATERIAL_STATUS_CHECK));
         } else if (status.equals(OutboundConstant.MATERIAL_STATUS_WAIT)) {
             //等齐套发货
-            int result = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_PICK);
+            pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_PICK);
             po.setStatus(OutboundConstant.PENDING_WAIT);
-            int resultUp = pickCheckMapper.updateByPrimaryKey(po);
+            pickCheckMapper.updateByPrimaryKey(po);
             outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.RECORD_DISAGREE, OutboundConstant.MATERIAL_STATUS_CHECK));
         } else if (status.equals(OutboundConstant.MATERIAL_STATUS_RETURN)) {
             //取消发货，退货仓库
-            int result = pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_RETURN);
+            pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_RETURN);
             po.setStatus(OutboundConstant.TURN_DOWN_CANCEL);
-            int resultUp = pickCheckMapper.updateByPrimaryKey(po);
+            pickCheckMapper.updateByPrimaryKey(po);
             outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.RECORD_DISAGREE, OutboundConstant.MATERIAL_STATUS_CHECK));
         }
         return ResultVO.ok();
