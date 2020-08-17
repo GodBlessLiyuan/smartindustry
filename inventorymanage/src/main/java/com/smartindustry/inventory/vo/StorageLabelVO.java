@@ -56,7 +56,7 @@ public class StorageLabelVO implements Serializable {
         vo.setMmodel(bo.getMaterialModel());
         vo.setSname(bo.getSupplierName());
         vo.setStime(bo.getStorageTime());
-        vo.setMstatus((byte) (null == bo.getMaterialLockId() ? 2 : 1));
+        vo.setMstatus((byte) (null == bo.getMaterialLockId() ? 1 : 2));
         vo.setMlname(bo.getMaterialLockName());
         vo.setStatus(bo.getStatus());
         vo.setRsale((byte) 2);

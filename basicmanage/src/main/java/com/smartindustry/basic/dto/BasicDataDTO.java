@@ -28,4 +28,5 @@ public class BasicDataDTO implements Serializable {
     private Long mvid;
     private Long pllid;
     private Long lcsid;
+    private Long mlkid;
 }

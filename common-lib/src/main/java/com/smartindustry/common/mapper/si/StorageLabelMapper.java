@@ -70,4 +70,12 @@ public interface StorageLabelMapper extends BaseMapper<StorageLabelPO, Long> {
      * @param slids
      */
     void updateMlid(@Param("slids") List<Long> slids, @Param("mlid") Long mlid);
+
+    /**
+     * 根据 物料锁定ID 查询
+     *
+     * @param mlid
+     * @return
+     */
+    List<StorageLabelPO> queryByMlid(Long mlid);
 }

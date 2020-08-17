@@ -455,4 +455,35 @@ public class DataDictionaryController {
     public ResultVO lcsDelete(@RequestBody BasicDataDTO dto) {
         return dataDictionaryService.lcsDelete(dto);
     }
+
+    /**
+     * 物料锁定 查询
+     *
+     * @return
+     */
+    @PostMapping("mlkQuery")
+    public ResultVO mlkQuery() {
+        return dataDictionaryService.mlkQuery();
+    }
+
+    /**
+     * 物料锁定 编辑
+     *
+     * @return
+     */
+    @PostMapping("mlkEdit")
+    public ResultVO mlkEdit(@RequestBody MaterialLockDTO dto) {
+        return dataDictionaryService.mlkEdit(dto);
+    }
+
+    /**
+     * 物料锁定 删除
+     *
+     * @param dto
+     * @return
+     */
+    @PostMapping("mlkDelete")
+    public ResultVO mlkDelete(@RequestBody BasicDataDTO dto) {
+        return dataDictionaryService.mlkDelete(dto);
+    }
 }
