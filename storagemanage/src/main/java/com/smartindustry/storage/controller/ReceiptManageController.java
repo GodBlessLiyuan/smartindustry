@@ -6,6 +6,7 @@ import com.smartindustry.storage.dto.OperateDTO;
 import com.smartindustry.storage.dto.ReceiptDTO;
 import com.smartindustry.storage.service.IReceiptManageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -25,16 +26,19 @@ public class ReceiptManageController {
     private IReceiptManageService receiptManageService;
 
     @PostMapping("pageQuery")
+    @PreAuthorize("@ss.hasAnyPermi('sm:rm:porc:query,sm:rm:src:query,sm:rm:prm:query')")
     public ResultVO pageQuery(@RequestBody Map<String, Object> reqData) {
         return receiptManageService.pageQuery(reqData);
     }
 
     @PostMapping("insert")
+    @PreAuthorize("@ss.hasAnyPermi('sm:rm:porc:insert,sm:rm:src:insert,sm:rm:prm:insert')")
     public ResultVO insert(@RequestBody ReceiptDTO dto) {
         return receiptManageService.insert(dto);
     }
 
     @PostMapping("delete")
+    @PreAuthorize("@ss.hasAnyPermi('sm:rm:porc:delete,sm:rm:src:delete,sm:rm:prm:delete')")
     public ResultVO delete(@RequestBody List<Long> rbIds) {
         return receiptManageService.delete(rbIds);
     }

@@ -4,9 +4,7 @@ import com.github.pagehelper.Page;
 import com.smartindustry.basic.constant.BasicConstant;
 import com.smartindustry.basic.dto.BomBodyDTO;
 import com.smartindustry.basic.dto.OperateDTO;
-import com.smartindustry.basic.dto.ProcessDTO;
-import com.smartindustry.basic.dto.MaterialPropertyDTO;
-import com.smartindustry.basic.service.IMaterialItemsService;
+import com.smartindustry.basic.service.IBomService;
 import com.smartindustry.basic.vo.*;
 import com.smartindustry.common.bo.si.BomBodyBO;
 import com.smartindustry.common.bo.si.BomHeadBO;
@@ -16,8 +14,6 @@ import com.smartindustry.common.mapper.dd.ProcessMapper;
 import com.smartindustry.common.mapper.si.BomBodyMapper;
 import com.smartindustry.common.mapper.si.BomHeadMapper;
 import com.smartindustry.common.mapper.si.MaterialMapper;
-import com.smartindustry.common.pojo.dd.MaterialPropertyPO;
-import com.smartindustry.common.pojo.dd.ProcessPO;
 import com.smartindustry.common.pojo.si.BomBodyPO;
 import com.smartindustry.common.pojo.si.BomHeadPO;
 import com.smartindustry.common.util.PageQueryUtil;
@@ -40,7 +36,7 @@ import java.util.Map;
  */
 @EnableTransactionManagement
 @Service
-public class MaterialItemsServiceImpl implements IMaterialItemsService {
+public class BomServiceImpl implements IBomService {
     @Autowired
     private BomHeadMapper bomHeadMapper;
     @Autowired
@@ -147,9 +143,8 @@ public class MaterialItemsServiceImpl implements IMaterialItemsService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO insertDetail(BomBodyDTO dto){
-        List<BomHeadPO> pos = bomHeadMapper.judgeHaveBom(dto.getMid());
         List<BomBodyPO> pos1 = bomBodyMapper.judgeHaveBody(dto.getMid(),dto.getBhid());
-        if (!pos.isEmpty() || !pos1.isEmpty()){
+        if (!pos1.isEmpty()){
             //已经有当前物料的主BOM清单
             return new ResultVO(1004);
         }else{
@@ -166,72 +161,17 @@ public class MaterialItemsServiceImpl implements IMaterialItemsService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO updateDetail(BomBodyDTO dto){
-        List<BomHeadPO> pos = bomHeadMapper.judgeHaveBom(dto.getMid());
-        List<BomBodyPO> pos1 = bomBodyMapper.judgeHaveBody(dto.getMid(),dto.getBhid());
-        if (!pos.isEmpty() || !pos1.isEmpty()){
-            //已经有当前物料的主BOM清单
-            return new ResultVO(1004);
-        }else{
-            BomBodyPO po = BomBodyDTO.buildPO(dto);
-            bomBodyMapper.updateByPrimaryKey(po);
-        }
+        BomBodyPO po = bomBodyMapper.selectByPrimaryKey(dto.getBbid());
+        BomBodyPO po1 = BomBodyDTO.buildPO(po,dto);
+        bomBodyMapper.updateByPrimaryKey(po1);
         return ResultVO.ok();
     }
 
 
-    /**
-     * 查询物料属性列表
-     * @return
-     */
     @Override
-    public ResultVO queryProperty(MaterialPropertyDTO dto){
-        List<MaterialPropertyPO> pos = propertyMapper.selectAll(dto.getMpname());
-        return ResultVO.ok().setData(PropertyVO.convert(pos));
-    }
-
-    /**
-     *查询物料工序列表
-     */
-    @Override
-    public ResultVO queryProcess(ProcessDTO dto){
-        List<ProcessPO> pos = processMapper.selectAll(dto.getPrname());
-        return ResultVO.ok().setData(ProcessVO.convert(pos));
-    }
-
-
-    /**
-     *新增物料属性
-     */
-    @Override
-    public ResultVO insertProperty(MaterialPropertyDTO dto){
-        //判断新增物料属性名称是否存在
-        MaterialPropertyPO po = propertyMapper.isExist(dto.getMpname());
-        if(po != null) {
-            return new ResultVO(1020);
-        }
-        MaterialPropertyPO po1 = MaterialPropertyDTO.createPO(dto);
-        propertyMapper.insert(po1);
-        return ResultVO.ok();
-    }
-
-    /**
-     *新增物料属性
-     */
-    @Override
-    public ResultVO insertProcess(ProcessDTO dto){
-        ProcessPO po = processMapper.isExist(dto.getPrname());
-        if(po != null) {
-            return new ResultVO(1020);
-        }
-        ProcessPO po1 = ProcessDTO.createPO(dto);
-        processMapper.insert(po1);
-        return ResultVO.ok();
-    }
-
-    @Override
-    public ResultVO queryBomBody(OperateDTO dto){
-        Page<BomBodyBO> page = PageQueryUtil.startPage(dto);
-        List<BomBodyBO> bos = bomBodyMapper.pageQuery(dto.getBhid());
+    public ResultVO queryBomBody(Map<String, Object> reqData){
+        Page<BomBodyBO> page = PageQueryUtil.startPage(reqData);
+        List<BomBodyBO> bos = bomBodyMapper.pageQuery(reqData);
         return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), BomBodyVO.convert(bos)));
     }
 }

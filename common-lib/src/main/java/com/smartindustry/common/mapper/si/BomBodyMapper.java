@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * BomBodyMapper继承基类
@@ -42,8 +43,8 @@ public interface BomBodyMapper extends BaseMapper<BomBodyPO, Long> {
 
     /**
      * 根据主BOM的ID查询所有的物料明细
-     * @param bomHeadId
+     * @param reqData
      * @return
      */
-    List<BomBodyBO> pageQuery(@Param("bomHeadId") Long bomHeadId);
+    List<BomBodyBO> pageQuery(Map<String, Object> reqData);
 }

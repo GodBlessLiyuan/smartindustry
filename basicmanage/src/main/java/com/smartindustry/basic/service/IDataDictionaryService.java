@@ -93,4 +93,30 @@ public interface IDataDictionaryService {
     ResultVO lcsEdit(LifeCycleStateDTO dto);
 
     ResultVO lcsDelete(BasicDataDTO dto);
+
+    /**
+     * 查询物料属性列表
+     * @return
+     */
+    ResultVO mpQuery(MaterialPropertyDTO dto);
+
+    /**
+     *查询物料工序列表
+     */
+    ResultVO prQuery(ProcessDTO dto);
+
+    /**
+     * 新增物料属性
+     * @param dto
+     * @return
+     */
+    ResultVO mpInsert(MaterialPropertyDTO dto);
+
+
+    /**
+     * 新增工序
+     * @param dto
+     * @return
+     */
+    ResultVO prInsert(ProcessDTO dto);
 }

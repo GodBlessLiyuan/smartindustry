@@ -8,7 +8,6 @@ import com.smartindustry.authority.constant.AuthorityConstant;
 import com.smartindustry.authority.dto.OperateDTO;
 import com.smartindustry.authority.dto.RoleDTO;
 import com.smartindustry.authority.service.IRoleService;
-import com.smartindustry.authority.util.ObiectToMapUtil;
 import com.smartindustry.authority.vo.AuthorityVO;
 import com.smartindustry.authority.vo.RoleRecordVO;
 import com.smartindustry.authority.vo.RoleVO;
@@ -20,7 +19,6 @@ import com.smartindustry.common.pojo.am.RoleRecordPO;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -31,6 +29,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+
 
 /**
  * @author: jiangzhaojie
@@ -147,7 +146,7 @@ public class RoleServiceImpl implements IRoleService {
             res.put(AuthorityConstant.NAME_BUTTON,getAuthTree(lastMenu,new ArrayList<>(), AuthorityConstant.TYPE_BUTTON));
             redisTemplate.opsForValue().set(AuthorityConstant.NAME_BUTTON, res, AuthorityConstant.EXPIRE_TIME, TimeUnit.DAYS);
         }else {
-            res = JSON.parseObject(JSON.toJSONString(buttonObject),LinkedHashMap.class,Feature.OrderedField);
+            res = JSON.parseObject(JSON.toJSONString(buttonObject), LinkedHashMap.class,Feature.OrderedField);
         }
         return ResultVO.ok().setData(res);
     }

@@ -8,6 +8,7 @@ import com.smartindustry.storage.dto.QeConfirmDTO;
 import com.smartindustry.storage.dto.QeTestDTO;
 import com.smartindustry.storage.service.IQualityManageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -26,16 +27,19 @@ public class QualityManageController {
     private IQualityManageService qualityManageService;
 
     @PostMapping("pageQuery")
+    @PreAuthorize("@ss.hasAnyPermi('sm:qm:iqctest:query,sm:qm:iqcqe:query')")
     public ResultVO pageQuery(@RequestBody Map<String, Object> reqData) {
         return qualityManageService.pageQuery(reqData);
     }
 
     @PostMapping("iqcTest")
+    @PreAuthorize("@ss.hasAnyPermi('sm:qm:iqctest:iqc')")
     public ResultVO iqcTest(@RequestBody IqcTestDTO dto) {
         return qualityManageService.iqcTest(dto);
     }
 
     @PostMapping("qeConfirm")
+    @PreAuthorize("@ss.hasPermi('sm:qm:iqcqe:qeconfirm')")
     public ResultVO qeConfirm(@RequestBody QeConfirmDTO dto) {
         return qualityManageService.qeConfirm(dto);
     }
@@ -46,6 +50,7 @@ public class QualityManageController {
     }
 
     @PostMapping("storage")
+    @PreAuthorize("@ss.hasPermi('sm:qm:iqctest:storage')")
     public ResultVO storage(@RequestBody OperateDTO dto) {
         return qualityManageService.storage(dto);
     }

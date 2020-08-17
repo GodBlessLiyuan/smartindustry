@@ -15,7 +15,7 @@ import java.util.Map;
  * @version: 1.0.0
  * @description:
  */
-public interface IMaterialItemsService {
+public interface IBomService {
 
     /**
      * 物料清单管理的 分页查询
@@ -59,38 +59,14 @@ public interface IMaterialItemsService {
      */
     ResultVO insertDetail(BomBodyDTO dto);
 
-    /**
-     * 查询物料属性列表
-     * @return
-     */
-    ResultVO queryProperty(MaterialPropertyDTO dto);
 
-    /**
-     *查询物料工序列表
-     */
-    ResultVO queryProcess(ProcessDTO dto);
-
-    /**
-     * 新增物料属性
-     * @param dto
-     * @return
-     */
-    ResultVO insertProperty(MaterialPropertyDTO dto);
-
-
-    /**
-     * 新增工序
-     * @param dto
-     * @return
-     */
-    ResultVO insertProcess(ProcessDTO dto);
 
     /**
      * 根据主BOM的ID查询子物料清单明细
-     * @param dto
+     * @param reqData
      * @return
      */
-    ResultVO queryBomBody(OperateDTO dto);
+    ResultVO queryBomBody(Map<String, Object> reqData);
 
 
     /**
