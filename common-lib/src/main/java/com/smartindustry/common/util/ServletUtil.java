@@ -11,61 +11,46 @@ import java.io.IOException;
 
 /**
  * 客户端工具类
- * 
+ *
  * @author ruoyi
  */
-public class ServletUtil
-{
+public class ServletUtil {
     /**
      * 获取request
      */
-    public static HttpServletRequest getRequest()
-    {
+    public static HttpServletRequest getRequest() {
         return getRequestAttributes().getRequest();
     }
 
     /**
      * 获取response
      */
-    public static HttpServletResponse getResponse()
-    {
+    public static HttpServletResponse getResponse() {
         return getRequestAttributes().getResponse();
     }
 
-    /**
-     * 获取session
-     */
-    public static HttpSession getSession()
-    {
-        return getRequest().getSession();
-    }
-
-    public static ServletRequestAttributes getRequestAttributes()
-    {
+    public static ServletRequestAttributes getRequestAttributes() {
         RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
         return (ServletRequestAttributes) attributes;
     }
 
     /**
      * 将字符串渲染到客户端
-     * 
+     *
      * @param response 渲染对象
-     * @param string 待渲染的字符串
+     * @param string   待渲染的字符串
      * @return null
      */
-    public static String renderString(HttpServletResponse response, String string)
-    {
-        try
-        {
+    public static String renderString(HttpServletResponse response, String string) {
+        try {
             response.setStatus(200);
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
             response.getWriter().print(string);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
+
         return null;
     }
 }

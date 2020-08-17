@@ -1,4 +1,5 @@
 package com.smartindustry.common.security.service;
+
 import com.smartindustry.common.bo.am.LoginUserBO;
 import com.smartindustry.common.constant.SecurityConstant;
 import com.smartindustry.common.mapper.am.AuthorityMapper;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -26,6 +28,7 @@ import java.util.Set;
 @Service
 public class UserInfoService implements UserDetailsService {
     private static final Logger log = LoggerFactory.getLogger(UserInfoService.class);
+
     @Autowired
     private UserMapper userMapper;
     @Autowired
@@ -37,37 +40,35 @@ public class UserInfoService implements UserDetailsService {
         if (user == null) {
             log.info("登录用户：{} 不存在.", username);
             throw new UsernameNotFoundException("登录用户：" + username + " 不存在");
-        } else if (SecurityConstant.USER_DELETE.equals(user.getDr())) {
-            log.info("登录用户：{} 已被删除.", username);
-//            throw new BaseException("对不起，您的账号：" + username + " 已被删除");
         } else if (SecurityConstant.USER_DISABLE.equals(user.getStatus())) {
             log.info("登录用户：{} 已被停用.", username);
 //            throw new BaseException("对不起，您的账号：" + username + " 已停用");
         }
+
         return createLoginUser(user);
     }
 
     // 获得当前用户的信息以及所有权限
-    public UserDetails createLoginUser(UserPO user) {
+    private UserDetails createLoginUser(UserPO user) {
         return new LoginUserBO(user, getMenuPermission(user), authorityMapper.queryPermissionId(user.getUserId()));
     }
 
-    public Set<String> getMenuPermission(UserPO user) {
-        Set<String> perms = new HashSet<String>();
-        if ("admin".equals(user.getUsername())) {
-            perms.add("*:*:*");
+    private Set<String> getMenuPermission(UserPO user) {
+        Set<String> perms = new HashSet<>();
+        if (SecurityConstant.SUPER_ADMIN.equals(user.getUsername())) {
+            perms.add(SecurityConstant.ALL_PERMISSION);
         } else {
             perms.addAll(selectMenuPermsByUserId(user.getUserId()));
         }
         return perms;
     }
 
-    public Set<String> selectMenuPermsByUserId(Long userId) {
+    private Set<String> selectMenuPermsByUserId(Long userId) {
         List<String> perms = authorityMapper.queryPermsByUserId(userId);
         Set<String> permsSet = new HashSet<>();
         for (String perm : perms) {
             if (!StringUtils.isEmpty(perm)) {
-                permsSet.addAll(Arrays.asList(perm.trim().split(",")));
+                permsSet.addAll(Arrays.asList(perm.trim().split(SecurityConstant.PERMISSION_SEPARATOR)));
             }
         }
         return permsSet;

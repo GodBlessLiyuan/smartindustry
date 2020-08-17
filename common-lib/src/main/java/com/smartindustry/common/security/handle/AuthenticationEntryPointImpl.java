@@ -15,19 +15,15 @@ import java.io.Serializable;
 
 /**
  * 认证失败处理类 返回未授权
- * 
+ *
  * @author ruoyi
  */
 @Component
-public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint, Serializable
-{
+public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint, Serializable {
     private static final long serialVersionUID = -8970718410437077606L;
 
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e)
-            throws IOException
-    {
-        int code = SecurityConstant.UNAUTHORIZED;
-        ServletUtil.renderString(response, JSON.toJSONString(new ResultVO(code)));
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) {
+        ServletUtil.renderString(response, JSON.toJSONString(new ResultVO(SecurityConstant.UNAUTHORIZED)));
     }
 }
