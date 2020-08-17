@@ -3,15 +3,9 @@ package com.smartindustry.basic.service.impl;
 import com.smartindustry.basic.dto.*;
 import com.smartindustry.basic.service.IDataDictionaryService;
 import com.smartindustry.common.mapper.dd.*;
-import com.smartindustry.common.mapper.si.LocationMapper;
-import com.smartindustry.common.mapper.si.MaterialMapper;
-import com.smartindustry.common.mapper.si.SupplierMapper;
-import com.smartindustry.common.mapper.si.WarehouseMapper;
+import com.smartindustry.common.mapper.si.*;
 import com.smartindustry.common.pojo.dd.*;
-import com.smartindustry.common.pojo.si.LocationPO;
-import com.smartindustry.common.pojo.si.MaterialPO;
-import com.smartindustry.common.pojo.si.SupplierPO;
-import com.smartindustry.common.pojo.si.WarehousePO;
+import com.smartindustry.common.pojo.si.*;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,6 +60,11 @@ public class DataDictionaryServiceImpl implements IDataDictionaryService {
     private ProduceLossLevelMapper produceLossLevelMapper;
     @Autowired
     private LifeCycleStateMapper lifeCycleStateMapper;
+    @Autowired
+    private MaterialLockMapper materialLockMapper;
+
+    @Autowired
+    private StorageLabelMapper storageLabelMapper;
 
     @Override
     public ResultVO wtQuery() {
@@ -693,6 +692,51 @@ public class DataDictionaryServiceImpl implements IDataDictionaryService {
         }
 
         lifeCycleStateMapper.deleteByPrimaryKey(dto.getLcsid());
+
+        return ResultVO.ok();
+    }
+
+    @Override
+    public ResultVO mlkQuery() {
+        List<Map<String, Object>> res = materialLockMapper.queryAll();
+        return ResultVO.ok().setData(res);
+    }
+
+    @Override
+    public ResultVO mlkEdit(MaterialLockDTO dto) {
+        MaterialLockPO exitPO = materialLockMapper.queryByName(dto.getMlkname());
+        if (null != exitPO && (dto.getMlkid() == null || !dto.getMlkid().equals(exitPO.getMaterialLockId()))) {
+            return new ResultVO(1004);
+        }
+
+        if (null == dto.getMlkid()) {
+            // 新增
+            materialLockMapper.insert(MaterialLockDTO.createPO(dto, 1L));
+            return ResultVO.ok();
+        }
+        // 修改
+        MaterialLockPO materialLockPO = materialLockMapper.selectByPrimaryKey(dto.getMlkid());
+        if (null == materialLockPO) {
+            return new ResultVO(1002);
+        }
+
+        materialLockMapper.updateByPrimaryKey(MaterialLockDTO.buildPO(materialLockPO, dto));
+        return ResultVO.ok();
+    }
+
+    @Override
+    public ResultVO mlkDelete(BasicDataDTO dto) {
+        MaterialLockPO materialLockPO = materialLockMapper.selectByPrimaryKey(dto.getMlkid());
+        if (null == materialLockPO) {
+            return new ResultVO(1002);
+        }
+
+        List<StorageLabelPO> storageLabelPOs = storageLabelMapper.queryByMlid(dto.getMlkid());
+        if (null != storageLabelPOs && storageLabelPOs.size() > 0) {
+            return new ResultVO(1007);
+        }
+
+        materialLockMapper.deleteByPrimaryKey(dto.getMlkid());
 
         return ResultVO.ok();
     }

@@ -93,4 +93,10 @@ public interface IDataDictionaryService {
     ResultVO lcsEdit(LifeCycleStateDTO dto);
 
     ResultVO lcsDelete(BasicDataDTO dto);
+
+    ResultVO mlkQuery();
+
+    ResultVO mlkEdit(MaterialLockDTO dto);
+
+    ResultVO mlkDelete(BasicDataDTO dto);
 }

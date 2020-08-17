@@ -315,4 +315,11 @@
             #{slid,jdbcType=BIGINT}
         </foreach>
     </update>
+
+    <select id="queryByMlid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_storage_label
+        where material_lock_id = #{mlid,jdbcType=BIGINT}
+    </select>
 </mapper>
