@@ -94,9 +94,37 @@ public interface IDataDictionaryService {
 
     ResultVO lcsDelete(BasicDataDTO dto);
 
+<<<<<<< HEAD
+    /**
+     * 查询物料属性列表
+     * @return
+     */
+    ResultVO mpQuery(MaterialPropertyDTO dto);
+
+    /**
+     *查询物料工序列表
+     */
+    ResultVO prQuery(ProcessDTO dto);
+
+    /**
+     * 新增物料属性
+     * @param dto
+     * @return
+     */
+    ResultVO mpInsert(MaterialPropertyDTO dto);
+
+
+    /**
+     * 新增工序
+     * @param dto
+     * @return
+     */
+    ResultVO prInsert(ProcessDTO dto);
+=======
     ResultVO mlkQuery();
 
     ResultVO mlkEdit(MaterialLockDTO dto);
 
     ResultVO mlkDelete(BasicDataDTO dto);
+>>>>>>> 1920221422b4747ca227e99144b4ec1d80b9c113
 }

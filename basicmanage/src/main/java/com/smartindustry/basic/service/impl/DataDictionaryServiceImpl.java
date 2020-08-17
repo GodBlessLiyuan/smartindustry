@@ -2,6 +2,8 @@ package com.smartindustry.basic.service.impl;
 
 import com.smartindustry.basic.dto.*;
 import com.smartindustry.basic.service.IDataDictionaryService;
+import com.smartindustry.basic.vo.ProcessVO;
+import com.smartindustry.basic.vo.PropertyVO;
 import com.smartindustry.common.mapper.dd.*;
 import com.smartindustry.common.mapper.si.*;
 import com.smartindustry.common.pojo.dd.*;
@@ -61,10 +63,16 @@ public class DataDictionaryServiceImpl implements IDataDictionaryService {
     @Autowired
     private LifeCycleStateMapper lifeCycleStateMapper;
     @Autowired
+<<<<<<< HEAD
+    private MaterialPropertyMapper materialPropertyMapper;
+    @Autowired
+    private ProcessMapper processMapper;
+=======
     private MaterialLockMapper materialLockMapper;
 
     @Autowired
     private StorageLabelMapper storageLabelMapper;
+>>>>>>> 1920221422b4747ca227e99144b4ec1d80b9c113
 
     @Override
     public ResultVO wtQuery() {
@@ -696,6 +704,55 @@ public class DataDictionaryServiceImpl implements IDataDictionaryService {
         return ResultVO.ok();
     }
 
+<<<<<<< HEAD
+    /**
+     * 查询物料属性列表
+     * @return
+     */
+    @Override
+    public ResultVO mpQuery(MaterialPropertyDTO dto){
+        List<MaterialPropertyPO> pos = materialPropertyMapper.selectAll(dto.getMpname());
+        return ResultVO.ok().setData(PropertyVO.convert(pos));
+    }
+
+    /**
+     *查询物料工序列表
+     */
+    @Override
+    public ResultVO prQuery(ProcessDTO dto){
+        List<ProcessPO> pos = processMapper.selectAll(dto.getPrname());
+        return ResultVO.ok().setData(ProcessVO.convert(pos));
+    }
+
+
+    /**
+     *新增物料属性
+     */
+    @Override
+    public ResultVO mpInsert(MaterialPropertyDTO dto){
+        //判断新增物料属性名称是否存在
+        MaterialPropertyPO po = materialPropertyMapper.isExist(dto.getMpname());
+        if(po != null) {
+            return new ResultVO(1004);
+        }
+        MaterialPropertyPO po1 = MaterialPropertyDTO.createPO(dto);
+        materialPropertyMapper.insert(po1);
+        return ResultVO.ok();
+    }
+
+    /**
+     *新增物料工序
+     */
+    @Override
+    public ResultVO prInsert(ProcessDTO dto){
+        ProcessPO po = processMapper.isExist(dto.getPrname());
+        if(po != null) {
+            //物料工序名称已被使用
+            return new ResultVO(1004);
+        }
+        ProcessPO po1 = ProcessDTO.createPO(dto);
+        processMapper.insert(po1);
+=======
     @Override
     public ResultVO mlkQuery() {
         List<Map<String, Object>> res = materialLockMapper.queryAll();
@@ -738,6 +795,7 @@ public class DataDictionaryServiceImpl implements IDataDictionaryService {
 
         materialLockMapper.deleteByPrimaryKey(dto.getMlkid());
 
+>>>>>>> 1920221422b4747ca227e99144b4ec1d80b9c113
         return ResultVO.ok();
     }
 }

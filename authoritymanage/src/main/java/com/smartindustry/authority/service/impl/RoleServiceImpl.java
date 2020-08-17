@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+
 /**
  * @author: jiangzhaojie
  * @date: Created in 15:27 2020/7/31
@@ -143,7 +144,7 @@ public class RoleServiceImpl implements IRoleService {
             res.put(AuthorityConstant.NAME_BUTTON,getAuthTree(lastMenu,new ArrayList<>(), AuthorityConstant.TYPE_BUTTON));
             redisTemplate.opsForValue().set(AuthorityConstant.NAME_BUTTON, res, AuthorityConstant.EXPIRE_TIME, TimeUnit.DAYS);
         }else {
-            res = JSON.parseObject(JSON.toJSONString(buttonObject),LinkedHashMap.class,Feature.OrderedField);
+            res = JSON.parseObject(JSON.toJSONString(buttonObject), LinkedHashMap.class,Feature.OrderedField);
         }
         return ResultVO.ok().setData(res);
     }

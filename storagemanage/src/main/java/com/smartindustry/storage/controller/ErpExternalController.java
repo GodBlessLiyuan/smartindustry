@@ -3,6 +3,7 @@ package com.smartindustry.storage.controller;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.service.IErpExternalService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -25,6 +26,7 @@ public class ErpExternalController {
     }
 
     @PostMapping("order")
+    @PreAuthorize("@ss.hasPermi('sm:rm:prm:insert')")
     public ResultVO order(@RequestBody Map<String, Object> reqData) {
         return erpExternalService.order(reqData);
     }

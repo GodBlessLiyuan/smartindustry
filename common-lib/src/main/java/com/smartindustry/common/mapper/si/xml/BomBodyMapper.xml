@@ -236,17 +236,17 @@
   </select>
 
   <!--  查询物料明细列表-->
-  <select id="pageQuery" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.si.BomBodyBO">
-    select bb.bomHeadId as bomHeadId,m.material_no as materialNo,m.material_model as materialModel,s.supplier_name as supplierName,me.measure_unit_name as measureUnitName
+  <select id="pageQuery" parameterType="java.util.Map" resultType="com.smartindustry.common.bo.si.BomBodyBO">
+    select bb.bom_body_Id as bomBodyId,m.material_no as materialNo,m.material_model as materialModel,m.material_name as materialName,s.supplier_name as supplierName,me.measure_unit_name as measureUnitName,
     mp.material_property_name as materialPropertyName,bb.material_demand as materialDemand,bb.material_loss as materialLoss,pr.process_name as processName,m1.material_no as parentName
     from si_bom_body bb
     left join si_material m on bb.material_id = m.material_id
     left join si_material m1 on bb.parent_id = m1.material_id
     left join dd_material_property mp on bb.material_property_id = mp.material_property_id
-    left join dd.process pr on bb.process_id = pr.process_id
+    left join dd_process pr on bb.process_id = pr.process_id
     left join si_supplier s on m.supplier_id = s.supplier_id
-    left join dd_measure me on m.measure_unit_id = me.measure_unit_id
-    where bb.dr = 1 and bb.bom_head_id = #{bomHeadId,jdbcType=BIGINT}
+    left join dd_measure_unit me on m.measure_unit_id = me.measure_unit_id
+    where bb.dr = 1 and bb.bom_head_id = #{bhid,jdbcType=BIGINT}
     order by bb.create_time desc
  </select>
 </mapper>

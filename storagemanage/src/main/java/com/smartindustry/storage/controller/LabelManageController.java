@@ -6,6 +6,7 @@ import com.smartindustry.storage.dto.OperateDTO;
 import com.smartindustry.storage.dto.PrintLabelDTO;
 import com.smartindustry.storage.service.ILabelManageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -41,6 +42,7 @@ public class LabelManageController {
     }
 
     @PostMapping("insert")
+    @PreAuthorize("@ss.hasAnyPermi('sm:rm:porc:entrylabel,sm:rm:src:entrylabel,sm:rm:prm:entrylabel')")
     public ResultVO insert(@RequestBody PrintLabelDTO dto) {
         return labelManageService.insert(dto);
     }
@@ -51,11 +53,13 @@ public class LabelManageController {
     }
 
     @PostMapping("finish")
+    @PreAuthorize("@ss.hasAnyPermi('sm:rm:porc:entrylabel,sm:rm:src:entrylabel,sm:rm:prm:entrylabel')")
     public ResultVO finish(@RequestBody OperateDTO dto) {
         return labelManageService.finish(dto);
     }
 
     @PostMapping("split")
+    @PreAuthorize("@ss.hasAnyPermi('sm:qm:iqctest:entrylabel')")
     public ResultVO split(@RequestBody LabelSplitDTO dto) {
         return labelManageService.split(dto);
     }

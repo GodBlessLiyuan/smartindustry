@@ -4,7 +4,8 @@ import com.smartindustry.basic.dto.BomBodyDTO;
 import com.smartindustry.basic.dto.OperateDTO;
 import com.smartindustry.basic.dto.ProcessDTO;
 import com.smartindustry.basic.dto.MaterialPropertyDTO;
-import com.smartindustry.basic.service.IMaterialItemsService;
+import com.smartindustry.basic.service.IDataDictionaryService;
+import com.smartindustry.basic.service.IBomService;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,9 +24,11 @@ import java.util.Map;
  */
 @RequestMapping("items")
 @RestController
-public class MaterialItemsController {
+public class BomController {
     @Autowired
-    IMaterialItemsService itemsService;
+    IBomService itemsService;
+    @Autowired
+    IDataDictionaryService dataDictionaryService;
     /**
      * 分页查询
      *
@@ -69,27 +72,27 @@ public class MaterialItemsController {
 
     @PostMapping("queryProperty")
     public ResultVO queryProperty(@RequestBody MaterialPropertyDTO dto) {
-        return itemsService.queryProperty(dto);
+        return dataDictionaryService.mpQuery(dto);
     }
 
     @PostMapping("queryProcess")
     public ResultVO queryProcess(@RequestBody ProcessDTO dto) {
-        return itemsService.queryProcess(dto);
+        return dataDictionaryService.prQuery(dto);
     }
 
     @PostMapping("insertProperty")
     public ResultVO insertProperty(@RequestBody MaterialPropertyDTO dto) {
-        return itemsService.insertProperty(dto);
+        return dataDictionaryService.mpInsert(dto);
     }
 
     @PostMapping("insertProcess")
     public ResultVO insertProcess(@RequestBody ProcessDTO dto) {
-        return itemsService.insertProcess(dto);
+        return dataDictionaryService.prInsert(dto);
     }
 
     @PostMapping("queryBomBody")
-    public ResultVO queryBomBody(@RequestBody OperateDTO dto) {
-        return itemsService.queryBomBody(dto);
+    public ResultVO queryBomBody(@RequestBody Map<String, Object> reqData) {
+        return itemsService.queryBomBody(reqData);
     }
 
     @PostMapping("updateDetail")

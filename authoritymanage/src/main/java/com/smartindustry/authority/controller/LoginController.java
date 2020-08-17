@@ -3,6 +3,8 @@ package com.smartindustry.authority.controller;
 import com.google.code.kaptcha.Producer;
 import com.smartindustry.authority.dto.LoginDTO;
 import com.smartindustry.authority.service.ILoginService;
+import com.smartindustry.common.mapper.am.AuthorityMapper;
+import com.smartindustry.common.mapper.am.MUserAuthorityMapper;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +21,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
