@@ -219,6 +219,18 @@
     </foreach>
   </update>
 
+  <update id="deleteBodyBatch" parameterType="java.util.List">
+    <foreach collection="list" item="bbid" index="index" open="" close="" separator=";">
+      update si_bom_body
+      <set>
+        dr = 2
+      </set>
+      <if test="bbid != null">
+        where bom_body_id = #{bbid,jdbcType=BIGINT}
+      </if>
+    </foreach>
+  </update>
+
   <select id="queryChildren" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.si.BomHeadBO">
     select ma.material_id as materialId,ma.material_no as materialNo,ma.material_name as materialName,ma.material_model as materialModel,mp.material_property_name as materialPropertyName
     from si_bom_body bb

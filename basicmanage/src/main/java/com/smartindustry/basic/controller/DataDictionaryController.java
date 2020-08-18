@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * @author: xiahui
  * @date: Created in 2020/7/30 14:41
@@ -485,5 +487,15 @@ public class DataDictionaryController {
     @PostMapping("mlkDelete")
     public ResultVO mlkDelete(@RequestBody BasicDataDTO dto) {
         return dataDictionaryService.mlkDelete(dto);
+    }
+
+    /**
+     * 更新流程配置的状态值
+     * @param dto
+     * @return
+     */
+    @PostMapping("configSet")
+    public ResultVO configSet(@RequestBody ConfigDTO dto) {
+        return dataDictionaryService.configSet(dto);
     }
 }

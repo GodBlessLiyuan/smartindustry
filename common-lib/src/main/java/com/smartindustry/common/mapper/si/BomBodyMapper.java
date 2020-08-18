@@ -29,6 +29,14 @@ public interface BomBodyMapper extends BaseMapper<BomBodyPO, Long> {
      */
     Integer deleteBatch(List<BomBodyPO> pos);
 
+
+    /**
+     * 批量删除物料明细2
+     * @param bbids
+     * @return
+     */
+    Integer deleteBodyBatch(List<Long> bbids);
+
     /**
      * 查询当前物料的子物料列表
      */

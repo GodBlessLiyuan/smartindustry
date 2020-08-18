@@ -74,4 +74,17 @@
         from si_config
         where config_key = #{key,jdbcType=CHAR}
     </select>
+
+    <update id="updateConfig" parameterType="com.smartindustry.common.pojo.si.ConfigPO">
+        update si_config
+        <set >
+            <if test="configValue != null">
+                config_value = #{configValue,jdbcType=CHAR},
+            </if>
+        </set>
+        <if test="configKey != null">
+             where config_key = #{configKey,jdbcType=CHAR}
+        </if>
+    </update>
+
 </mapper>

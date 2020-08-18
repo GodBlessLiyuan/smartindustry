@@ -111,6 +111,16 @@ public class BomServiceImpl implements IBomService {
     }
 
     /**
+     * 批量删除物料明细
+     * @param bbids
+     * @return
+     */
+    @Override
+    public ResultVO deleteBody(List<Long> bbids){
+        bomBodyMapper.deleteBodyBatch(bbids);
+        return ResultVO.ok();
+    }
+    /**
      * 根据主bom的ID查询得到所有层级物料明细
      * @param dto
      * @return

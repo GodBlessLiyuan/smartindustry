@@ -3,6 +3,8 @@ package com.smartindustry.basic.service;
 import com.smartindustry.basic.dto.*;
 import com.smartindustry.common.vo.ResultVO;
 
+import java.util.List;
+
 /**
  * @author: xiahui
  * @date: Created in 2020/7/30 14:42
@@ -126,5 +128,7 @@ public interface IDataDictionaryService {
     ResultVO mlkEdit(MaterialLockDTO dto);
 
     ResultVO mlkDelete(BasicDataDTO dto);
+
+    ResultVO configSet(ConfigDTO dto);
 
 }

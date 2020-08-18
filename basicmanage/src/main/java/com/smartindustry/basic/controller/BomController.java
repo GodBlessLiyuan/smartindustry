@@ -60,6 +60,11 @@ public class BomController {
         return itemsService.delete(bhids);
     }
 
+    @PostMapping("deleteBody")
+    public ResultVO deleteBody(@RequestBody List<Long> bbids) {
+        return itemsService.deleteBody(bbids);
+    }
+
     @PostMapping("queryTreeBom")
     public ResultVO queryTreeBom(@RequestBody OperateDTO dto) {
         return itemsService.queryTreeBom(dto);
