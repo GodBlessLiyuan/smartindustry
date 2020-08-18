@@ -431,6 +431,14 @@
         <if test="mno != null and mno != ''">and m.material_no like '%' #{mno,jdbcType=CHAR} '%'</if>
         <if test="mname != null and mname != ''">and m.material_name like '%' #{mname,jdbcType=CHAR} '%'</if>
         <if test="mmodel != null and mmodel != ''">and m.material_model like '%' #{mmodel,jdbcType=CHAR} '%'</if>
+        <choose>
+            <when test="bhid !=null and bhid != ''">
+                and not exists (select bb.material_id from si_bom_body bb where bb.dr = 1 and bb.bom_body_id = #{bhid,jdbcType=BIGINT} and m.material_id = bb.material_id)
+            </when>
+            <otherwise>
+                and not exists (select bh.material_id from si_bom_head bh where bh.dr = 1 and m.material_id = bh.material_id)
+            </otherwise>
+        </choose>
         order by m.create_time desc
     </select>
 </mapper>
