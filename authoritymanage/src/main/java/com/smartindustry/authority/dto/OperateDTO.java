@@ -36,7 +36,7 @@ public class OperateDTO implements Serializable {
     }
 
     public static boolean hasAdmin(OperateDTO dto) {
-        return null != dto.getRid() && dto.getRid() == 1L;
+        return isAdmin(dto.getRid());
     }
 
     public static boolean isAdmin(Long roleid) {
