@@ -22,8 +22,8 @@ public interface ConfigMapper extends BaseMapper<ConfigPO, Long> {
 
     /**
      * 批量更新流程配置的状态
-     * @param pos
+     * @param po
      * @return
      */
-    Integer updateBatch(List<ConfigPO> pos);
+    Integer updateConfig(ConfigPO po);
 }

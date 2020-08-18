@@ -491,11 +491,11 @@ public class DataDictionaryController {
 
     /**
      * 更新流程配置的状态值
-     * @param dtos
+     * @param dto
      * @return
      */
     @PostMapping("configSet")
-    public ResultVO configSet(@RequestBody List<ConfigDTO> dtos) {
-        return dataDictionaryService.configSet(dtos);
+    public ResultVO configSet(@RequestBody ConfigDTO dto) {
+        return dataDictionaryService.configSet(dto);
     }
 }

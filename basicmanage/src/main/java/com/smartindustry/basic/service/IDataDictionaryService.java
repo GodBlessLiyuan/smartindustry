@@ -129,6 +129,6 @@ public interface IDataDictionaryService {
 
     ResultVO mlkDelete(BasicDataDTO dto);
 
-    ResultVO configSet(List<ConfigDTO> dtos);
+    ResultVO configSet(ConfigDTO dto);
 
 }

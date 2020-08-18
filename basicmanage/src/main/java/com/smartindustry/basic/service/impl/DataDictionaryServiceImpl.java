@@ -802,10 +802,9 @@ public class DataDictionaryServiceImpl implements IDataDictionaryService {
 
 
     @Override
-    public ResultVO configSet(List<ConfigDTO> dtos){
-        List<ConfigPO> pos = ConfigDTO.updateList(dtos);
-        System.out.println("=========="+pos);
-        configMapper.updateBatch(pos);
+    public ResultVO configSet(ConfigDTO dto){
+        ConfigPO po = ConfigDTO.buildPO(dto);
+        configMapper.updateConfig(po);
         return ResultVO.ok();
     }
 }

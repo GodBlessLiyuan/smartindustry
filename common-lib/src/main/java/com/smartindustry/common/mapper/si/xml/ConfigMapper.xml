@@ -75,18 +75,16 @@
         where config_key = #{key,jdbcType=CHAR}
     </select>
 
-    <update id="updateBatch" parameterType="java.util.List">
-        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
-            update si_config
-            <set >
-                <if test="item.configValue != null">
-                    config_value = #{item.configValue,jdbcType=CHAR},
-                </if>
-            </set>
-            <if test="item.configKey != null">
-                where config_key   = #{item.configKey,jdbcType=CHAR}
+    <update id="updateConfig" parameterType="com.smartindustry.common.pojo.si.ConfigPO">
+        update si_config
+        <set >
+            <if test="configValue != null">
+                config_value = #{configValue,jdbcType=CHAR},
             </if>
-        </foreach>
+        </set>
+        <if test="configKey != null">
+             where config_key = #{configKey,jdbcType=CHAR}
+        </if>
     </update>
 
 </mapper>
