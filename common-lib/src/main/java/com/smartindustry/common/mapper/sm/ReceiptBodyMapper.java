@@ -59,4 +59,12 @@ public interface ReceiptBodyMapper extends BaseMapper<ReceiptBodyPO, Long> {
      * @return
      */
     ReceiptBodyBO queryByBodyId(Long rbId);
+
+    /**
+     * 根據物流IDs 查詢
+     *
+     * @param mids
+     * @return
+     */
+    List<ReceiptBodyPO> queryByMids(List<Long> mids);
 }

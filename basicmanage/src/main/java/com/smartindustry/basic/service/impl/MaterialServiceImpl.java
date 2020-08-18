@@ -11,12 +11,16 @@ import com.smartindustry.common.bo.si.MaterialBO;
 import com.smartindustry.common.config.FilePathConfig;
 import com.smartindustry.common.constant.ResultConstant;
 import com.smartindustry.common.mapper.im.MaterialInventoryMapper;
+import com.smartindustry.common.mapper.om.PickBodyMapper;
 import com.smartindustry.common.mapper.si.MaterialMapper;
 import com.smartindustry.common.mapper.si.MaterialRecordMapper;
 import com.smartindustry.common.mapper.si.MaterialSpecificationMapper;
+import com.smartindustry.common.mapper.sm.ReceiptBodyMapper;
 import com.smartindustry.common.pojo.im.MaterialInventoryPO;
+import com.smartindustry.common.pojo.om.PickBodyPO;
 import com.smartindustry.common.pojo.si.MaterialPO;
 import com.smartindustry.common.pojo.si.MaterialRecordPO;
+import com.smartindustry.common.pojo.sm.ReceiptBodyPO;
 import com.smartindustry.common.util.FileUtil;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.vo.PageInfoVO;
@@ -27,10 +31,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author: xiahui
@@ -49,6 +50,10 @@ public class MaterialServiceImpl implements IMaterialService {
     private MaterialSpecificationMapper materialSpecificationMapper;
     @Autowired
     private MaterialInventoryMapper materialInventoryMapper;
+    @Autowired
+    private ReceiptBodyMapper receiptBodyMapper;
+    @Autowired
+    private PickBodyMapper pickBodyMapper;
 
     @Autowired
     private FilePathConfig filePathConfig;
@@ -110,6 +115,24 @@ public class MaterialServiceImpl implements IMaterialService {
     @Override
     public ResultVO delete(List<Long> sids) {
         // TODO : 采购、销售、工单、出入库、收料单关联，则提示“该物料有关联单据，不可删除”
+        List<MaterialPO> materialPOs = materialMapper.queryBySids(sids);
+        if (null == materialPOs || materialPOs.size() != sids.size()) {
+            return new ResultVO(1002);
+        }
+
+        List<Long> mids = new ArrayList<>(sids.size());
+        for (MaterialPO materialPO : materialPOs) {
+            mids.add(materialPO.getMaterialId());
+        }
+        List<ReceiptBodyPO> receiptBodyPOs = receiptBodyMapper.queryByMids(mids);
+        if (null != receiptBodyPOs && receiptBodyPOs.size() > 0) {
+            return new ResultVO(1007);
+        }
+
+        List<PickBodyPO> pickBodyPOs = pickBodyMapper.queryByMids(mids);
+        if (null != pickBodyPOs && pickBodyPOs.size() > 0) {
+            return new ResultVO(1007);
+        }
 
         materialMapper.batchDelete(sids);
         return ResultVO.ok();

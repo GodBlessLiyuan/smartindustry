@@ -331,4 +331,13 @@
         left join si_material m on rb.material_id = m.material_id
         where rb.receipt_body_id = #{rbId,jdbcType=BIGINT} and rb.dr = 1
     </select>
+    <select id="queryByMids" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sm_receipt_body
+        where dr = 1 and material_id in
+        <foreach collection="list" separator="," item="mid" open="(" close=")">
+            #{mid,jdbcType=BIGINT}
+        </foreach>
+    </select>
 </mapper>

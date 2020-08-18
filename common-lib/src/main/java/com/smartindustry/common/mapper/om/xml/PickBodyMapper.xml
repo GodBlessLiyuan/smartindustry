@@ -169,4 +169,14 @@
         where pick_head_id = #{pickHeadId}
           and material_id = #{materialId}
     </update>
+
+    <select id="queryByMids" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from om_pick_body
+        where dr = 1 and material_id in
+        <foreach collection="list" separator="," item="mid" open="(" close=")">
+            #{mid,jdbcType=BIGINT}
+        </foreach>
+    </select>
 </mapper>
