@@ -176,7 +176,7 @@
         <where>
             <if test="rno != null and rno != ''">and rb.receipt_no like '%' #{rno,jdbcType=CHAR} '%'</if>
             <if test="rtype != null and rtype != 0">and rb.order_type = #{rtype,jdbcType=TINYINT}</if>
-            <if test="mtype != null and mtype != 0">and m.material_type_id = #{mtype,jdbcType=BIGINT}</if>
+            <if test="mtype != null and mtype != 0">and m.material_type = #{mtype,jdbcType=TINYINT}</if>
             <if test="status != null and status != 0">and s.`status` = #{status,jdbcType=TINYINT}</if>
             <if test="type != null and type != 0">and s.`type` = #{type,jdbcType=TINYINT}</if>
         </where>
