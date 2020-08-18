@@ -15,10 +15,9 @@ public interface MaterialPropertyMapper extends BaseMapper<MaterialPropertyPO, L
 
     /**
      * 查询所有物料属性的列表
-     * @param name
      * @return
      */
-    List<MaterialPropertyPO> selectAll(@Param("name") String name);
+    List<MaterialPropertyPO> queryAll();
 
     /**
      * 判断属性名是否存在

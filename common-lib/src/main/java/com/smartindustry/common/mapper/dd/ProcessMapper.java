@@ -15,10 +15,9 @@ public interface ProcessMapper extends BaseMapper<ProcessPO, Long> {
 
     /**
      * 查询所有物料工序的列表
-     * @param name
      * @return
      */
-    List<ProcessPO> selectAll(@Param("name") String name);
+    List<ProcessPO> queryAll();
 
     /**
      * 判断工序名是否存在

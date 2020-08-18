@@ -710,8 +710,8 @@ public class DataDictionaryServiceImpl implements IDataDictionaryService {
      * @return
      */
     @Override
-    public ResultVO mpQuery(MaterialPropertyDTO dto){
-        List<MaterialPropertyPO> pos = materialPropertyMapper.selectAll(dto.getMpname());
+    public ResultVO mpQuery(){
+        List<MaterialPropertyPO> pos = materialPropertyMapper.queryAll();
         return ResultVO.ok().setData(PropertyVO.convert(pos));
     }
 
@@ -719,8 +719,8 @@ public class DataDictionaryServiceImpl implements IDataDictionaryService {
      *查询物料工序列表
      */
     @Override
-    public ResultVO prQuery(ProcessDTO dto){
-        List<ProcessPO> pos = processMapper.selectAll(dto.getPrname());
+    public ResultVO prQuery(){
+        List<ProcessPO> pos = processMapper.queryAll();
         return ResultVO.ok().setData(ProcessVO.convert(pos));
     }
 

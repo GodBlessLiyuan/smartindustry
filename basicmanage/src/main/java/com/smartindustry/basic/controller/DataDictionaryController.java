@@ -509,13 +509,13 @@ public class DataDictionaryController {
     }
 
     @PostMapping("mpQuery")
-    public ResultVO mpQuery(@RequestBody MaterialPropertyDTO dto) {
-        return dataDictionaryService.mpQuery(dto);
+    public ResultVO mpQuery() {
+        return dataDictionaryService.mpQuery();
     }
 
     @PostMapping("prQuery")
-    public ResultVO prQuery(@RequestBody ProcessDTO dto) {
-        return dataDictionaryService.prQuery(dto);
+    public ResultVO prQuery() {
+        return dataDictionaryService.prQuery();
     }
 
     @PostMapping("mpEdit")
