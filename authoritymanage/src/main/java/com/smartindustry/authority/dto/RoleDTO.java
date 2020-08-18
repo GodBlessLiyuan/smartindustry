@@ -48,4 +48,5 @@ public class RoleDTO implements Serializable {
         }
         return pos;
     }
+
 }

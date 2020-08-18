@@ -28,9 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-import static com.smartindustry.common.pojo.am.RolePO.isAdmin;
-
-
 /**
  * @author: jiangzhaojie
  * @date: Created in 15:27 2020/7/31
@@ -65,12 +62,10 @@ public class RoleServiceImpl implements IRoleService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO batchUpdate(List<OperateDTO> dtos){
-        List<RolePO> pos = RoleDTO.updateList(dtos);
-        for(RolePO po:pos){
-            if(po.isAdmin()){
-                return new ResultVO(1023);
-            }
+        if (OperateDTO.hasAdmin(dtos)){
+            return new ResultVO(1023);
         }
+        List<RolePO> pos = RoleDTO.updateList(dtos);
         roleMapper.updateBatch(pos);
         for(OperateDTO dto:dtos){
             if(dto.getStatus().equals(AuthorityConstant.STATUS_DISABLE)){
@@ -103,7 +98,7 @@ public class RoleServiceImpl implements IRoleService {
             return new ResultVO(1004);
         }
         RolePO po = RoleDTO.createPO(dto);
-        if(po.isAdmin()){
+        if(OperateDTO.isAdmin(po.getRoleId())){
             return new ResultVO(1023);
         }
         roleMapper.updateByPrimaryKeySelective(po);
@@ -116,7 +111,7 @@ public class RoleServiceImpl implements IRoleService {
     public ResultVO delete(List<Long> rids){
         roleMapper.deleteBatch(rids);
         for(Long rid:rids){
-            if(RolePO.isAdmin(rid)){
+            if(OperateDTO.isAdmin(rid)){
                 return new ResultVO(1023);
             }
             deleteRole(rid);
@@ -182,7 +177,7 @@ public class RoleServiceImpl implements IRoleService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO updatePerms(OperateDTO dto){
-        if(isAdmin(dto.getRid())){
+        if(OperateDTO.isAdmin(dto.getRid())){
             return new ResultVO(1023);
         }
         // 先删除角色权限表关于当前角色的所有权限

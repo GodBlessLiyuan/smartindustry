@@ -32,13 +32,5 @@ public class RolePO implements Serializable {
      */
     private Byte dr;
 
-    public boolean isAdmin() {
-        return isAdmin(this.roleId);
-    }
-
-    public static boolean isAdmin(Long roleId) {
-        return roleId != null && 1L == roleId;
-    }
-
     private static final long serialVersionUID = 1L;
 }
