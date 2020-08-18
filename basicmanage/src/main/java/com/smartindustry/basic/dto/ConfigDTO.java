@@ -18,4 +18,17 @@ public class FlowLayoutDTO implements Serializable {
      * 销售，采购，生产PID强关联
      */
     private Boolean rpid;
+    /**
+     * 原材料入库质检
+     */
+    private Boolean storage;
+    /**
+     * 成品出库质检
+     */
+    private Boolean outbound;
+
+
+
+
+    
 }
