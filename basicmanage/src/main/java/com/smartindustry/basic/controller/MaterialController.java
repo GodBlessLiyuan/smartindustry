@@ -7,6 +7,7 @@ import com.smartindustry.basic.service.IMaterialService;
 import com.smartindustry.common.vo.ResultVO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +36,7 @@ public class MaterialController {
      * @return
      */
     @PostMapping("pageQuery")
+    @PreAuthorize("@ss.hasPermi('bm:mm:main:query')")
     public ResultVO pageQuery(@RequestBody Map<String, Object> reqData) {
         return materialService.pageQuery(reqData);
     }
@@ -45,6 +47,7 @@ public class MaterialController {
      * @return
      */
     @PostMapping("edit")
+    @PreAuthorize("@ss.hasAnyPermi('bm:mm:main:update,bm:mm:main:insert')")
     public ResultVO edit(@RequestBody MaterialDTO dto) {
         return materialService.edit(dto);
     }
@@ -56,6 +59,7 @@ public class MaterialController {
      * @return
      */
     @PostMapping("delete")
+    @PreAuthorize("@ss.hasPermi('bm:mm:main:delete')")
     public ResultVO delete(@RequestBody List<Long> mids) {
         return materialService.delete(mids);
     }
@@ -67,6 +71,7 @@ public class MaterialController {
      * @return
      */
     @PostMapping("detail")
+    @PreAuthorize("@ss.hasAnyPermi('bm:mm:main:queryinfo,bm:mm:main:update')")
     public ResultVO detail(@RequestBody OperateDTO dto) {
         return materialService.detail(dto);
     }
@@ -89,6 +94,7 @@ public class MaterialController {
      * @return
      */
     @PostMapping("upload")
+    @PreAuthorize("@ss.hasPermi('bm:mm:main:update')")
     public ResultVO upload(@Param("file") MultipartFile file) {
         return materialService.upload(file);
     }

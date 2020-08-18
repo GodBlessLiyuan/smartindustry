@@ -4,6 +4,7 @@ import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.dto.OperateDTO;
 import com.smartindustry.outbound.service.IPickManageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -35,6 +36,7 @@ public class PickManageController {
      * @author jiangzhaojie
      */
     @RequestMapping("queryPick")
+    @PreAuthorize("@ss.hasPermi('om:pm:wopick:query')")
     public ResultVO queryPickHeadMsg(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                      @RequestParam(value = "pageSize", defaultValue = "100000000") int pageSize,
                                      @RequestParam(value = "pno", required = false) String pickNo,
@@ -50,6 +52,7 @@ public class PickManageController {
     }
 
     @RequestMapping("queryPickGoods")
+    @PreAuthorize("@ss.hasPermi('om:pm:fppick:query')")
     public ResultVO queryPickGoods(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                      @RequestParam(value = "pageSize", defaultValue = "100000000") int pageSize,
                                      @RequestParam(value = "pno", required = false) String pickNo,
@@ -65,6 +68,7 @@ public class PickManageController {
     }
 
     @RequestMapping("outOrderCheck")
+    @PreAuthorize("@ss.hasPermi('om:pm:check:query')")
     public ResultVO outOrderCheck(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                   @RequestParam(value = "pageSize", defaultValue = "100000000") int pageSize,
                                   @RequestParam(value = "pno",required = false) String pickNo,
@@ -85,6 +89,7 @@ public class PickManageController {
      * @author jiangzhaojie
      */
     @RequestMapping("materialLoss")
+    @PreAuthorize("@ss.hasAnyPermi('om:pm:wopick:queryinfo,om:pm:wopick:scan,om:pm:fppick:queryinfo,om:pm:fppick:scan,om:pm:check:check,om:qm:oqctest:check')")
     public ResultVO materialLoss(@RequestParam(value = "phid", required = false) Long pickHeadId,
                                  @RequestParam(value = "mno", required = false) String materialNo,
                                  @RequestParam(value = "mname", required = false) String materialName) {
@@ -101,6 +106,7 @@ public class PickManageController {
      * @return
      */
     @RequestMapping("queryExItems")
+    @PreAuthorize("@ss.hasAnyPermi('om:pm:wopick:queryinfo,om:pm:wopick:scan,om:pm:fppick:queryinfo,om:pm:fppick:scan,om:pm:check:check,om:qm:oqctest:check')")
     public ResultVO queryExItems(@RequestParam(value = "phid", required = false) Long pickHeadId) {
         return pickManageService.queryExItems(pickHeadId);
     }
@@ -119,6 +125,7 @@ public class PickManageController {
 
 
     @RequestMapping("pickPidOut")
+    @PreAuthorize("@ss.hasAnyPermi('om:pm:wopick:scan,om:pm:fppick:scan')")
     public ResultVO pickPidOut(@RequestParam(value = "phid", required = false) Long pickHeadId,
                                @RequestParam(value = "pid", required = false) String packageId){
         return pickManageService.pickPidOut(pickHeadId,packageId);
@@ -130,6 +137,7 @@ public class PickManageController {
     }
 
     @RequestMapping("packageIdDiv")
+    @PreAuthorize("@ss.hasAnyPermi('om:pm:wopick:scan,om:pm:fppick:scan')")
     public ResultVO packageIdDiv(@RequestParam(value = "plid", required = false) Long printLabelId,
                                  @RequestParam(value = "snum", required = false) Integer num){
         return pickManageService.packageIdDiv(printLabelId,num);
@@ -141,6 +149,7 @@ public class PickManageController {
     }
 
     @RequestMapping("showScanItems")
+    @PreAuthorize("@ss.hasAnyPermi('om:pm:wopick:queryinfo,om:pm:wopick:scan,om:pm:fppick:queryinfo,om:pm:fppick:scan')")
     public ResultVO showScanItems(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                   @RequestParam(value = "pageSize", defaultValue = "100000000") int pageSize,
                                   @RequestParam(value = "phid", required = false) Long pickHeadId){
@@ -154,6 +163,7 @@ public class PickManageController {
     }
 
     @RequestMapping("printLabelSplit")
+    @PreAuthorize("@ss.hasAnyPermi('om:pm:wopick:scan,om:pm:fppick:scan')")
     public ResultVO printLabelSplit(@RequestParam(value = "pid", required = false) String packageId){
         return pickManageService.printLabelSplit(packageId);
     }
@@ -171,16 +181,19 @@ public class PickManageController {
     }
 
     @RequestMapping("outBoundItems")
+    @PreAuthorize("@ss.hasAnyPermi('om:pm:wopick:scan')")
     public ResultVO outBoundItems(@RequestParam(value = "phid", required = false) Long pickHeadId){
         return pickManageService.outBoundItems(pickHeadId);
     }
 
     @RequestMapping("deleteSplit")
+    @PreAuthorize("@ss.hasAnyPermi('om:pm:wopick:scan,om:pm:fppick:scan')")
     public ResultVO deleteSplit(@RequestParam(value = "pid", required = false) String packageId){
         return pickManageService.deleteSplit(packageId);
     }
 
     @RequestMapping("disAgree")
+    @PreAuthorize("@ss.hasAnyPermi('om:pm:check:check,om:qm:oqctest:check')")
     public ResultVO disAgree(@RequestParam(value = "phid", required = false) Long pickHeadId,
                              @RequestParam(value = "status", required = false) Byte status,
                              @RequestParam(value = "msg", required = false) String message){
@@ -188,6 +201,7 @@ public class PickManageController {
     }
 
     @RequestMapping("agreeOutBound")
+    @PreAuthorize("@ss.hasAnyPermi('om:pm:check:check,om:qm:oqctest:check')")
     public ResultVO agreeOutBound(@RequestParam(value = "phid", required = false) Long pickHeadId){
         return pickManageService.agreeOutBound(pickHeadId);
     }

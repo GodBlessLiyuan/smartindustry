@@ -4,6 +4,7 @@ import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.inventory.dto.SafeStockDTO;
 import com.smartindustry.inventory.service.IMaterialInventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,7 @@ public class MaterialInventoryController {
      * @return
      */
     @PostMapping("pageQuery")
+    @PreAuthorize("@ss.hasPermi('im:info:mtotal:query')")
     public ResultVO pageQuery(@RequestBody Map<String, Object> reqData) {
         return materialInventoryService.pageQuery(reqData);
     }
@@ -38,6 +40,7 @@ public class MaterialInventoryController {
      * 设置安全库存
      */
     @PostMapping("safeStock")
+    @PreAuthorize("@ss.hasPermi('im:info:mtotal:setsafe')")
     public ResultVO safeStock(@RequestBody SafeStockDTO dto) {
         return materialInventoryService.safeStock(dto);
     }
