@@ -366,18 +366,20 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
 
         // 物料库存信息
         MaterialInventoryBO materialInventoryBO = materialInventoryMapper.queryByMid(receiptBodyPO.getMaterialId());
-        MaterialInventoryPO updateInventoryPO = new MaterialInventoryPO();
-        updateInventoryPO.setStorageNum(storagePO.getStoredNum());
-        if (ReceiptConstant.STORAGE_TYPE_GOOD.equals(storagePO.getType())) {
-            // 良品
-            if (null != receiptBodyPO.getOrderTotal() && receiptBodyPO.getOrderTotal() - storagePO.getStoredNum() > 0) {
-                updateInventoryPO.setWayNum(receiptBodyPO.getOrderTotal() - storagePO.getStoredNum());
+        if (null != materialInventoryBO) {
+            MaterialInventoryPO updateInventoryPO = new MaterialInventoryPO();
+            updateInventoryPO.setStorageNum(storagePO.getStoredNum());
+            if (ReceiptConstant.STORAGE_TYPE_GOOD.equals(storagePO.getType())) {
+                // 良品
+                if (null != receiptBodyPO.getOrderTotal() && receiptBodyPO.getOrderTotal() - storagePO.getStoredNum() > 0) {
+                    updateInventoryPO.setWayNum(receiptBodyPO.getOrderTotal() - storagePO.getStoredNum());
+                }
+            } else {
+                // 不良
+                updateInventoryPO.setLockNum(storagePO.getStoredNum());
             }
-        } else {
-            // 不良
-            updateInventoryPO.setLockNum(storagePO.getStoredNum());
+            materialInventoryMapper.updateByPrimaryKey(materialInventoryBO.updatePO(updateInventoryPO));
         }
-        materialInventoryMapper.updateByPrimaryKey(materialInventoryBO.updatePO(updateInventoryPO));
 
         // 操作记录
         recordMapper.insert(new StorageRecordPO(dto.getSid(), storagePO.getStorageId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_CONFIRM, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
