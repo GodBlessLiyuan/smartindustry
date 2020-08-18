@@ -31,5 +31,5 @@ public interface ConfigMapper extends BaseMapper<ConfigPO, Long> {
      * 查询所有流程配置
      * @return
      */
-    List<ConfigPO> selectAll();
+    List<ConfigPO> queryAll();
 }
