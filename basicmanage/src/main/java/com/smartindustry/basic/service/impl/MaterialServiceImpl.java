@@ -113,17 +113,8 @@ public class MaterialServiceImpl implements IMaterialService {
     }
 
     @Override
-    public ResultVO delete(List<Long> sids) {
+    public ResultVO delete(List<Long> mids) {
         // TODO : 采购、销售、工单、出入库、收料单关联，则提示“该物料有关联单据，不可删除”
-        List<MaterialPO> materialPOs = materialMapper.queryBySids(sids);
-        if (null == materialPOs || materialPOs.size() != sids.size()) {
-            return new ResultVO(1002);
-        }
-
-        List<Long> mids = new ArrayList<>(sids.size());
-        for (MaterialPO materialPO : materialPOs) {
-            mids.add(materialPO.getMaterialId());
-        }
         List<ReceiptBodyPO> receiptBodyPOs = receiptBodyMapper.queryByMids(mids);
         if (null != receiptBodyPOs && receiptBodyPOs.size() > 0) {
             return new ResultVO(1007);
@@ -134,7 +125,7 @@ public class MaterialServiceImpl implements IMaterialService {
             return new ResultVO(1007);
         }
 
-        materialMapper.batchDelete(sids);
+        materialMapper.batchDelete(mids);
         return ResultVO.ok();
     }
 

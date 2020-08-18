@@ -40,9 +40,9 @@ public interface MaterialMapper extends BaseMapper<MaterialPO, Long> {
     /**
      * 批量删除
      *
-     * @param sids
+     * @param mids
      */
-    void batchDelete(List<Long> sids);
+    void batchDelete(List<Long> mids);
 
     /**
      * 根据mid 查询
