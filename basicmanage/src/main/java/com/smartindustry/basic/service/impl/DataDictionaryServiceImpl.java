@@ -807,4 +807,10 @@ public class DataDictionaryServiceImpl implements IDataDictionaryService {
         configMapper.updateConfig(po);
         return ResultVO.ok();
     }
+
+    @Override
+    public ResultVO configQuery(){
+        List<ConfigPO> pos = configMapper.selectAll();
+        return ResultVO.ok().setData(pos);
+    }
 }

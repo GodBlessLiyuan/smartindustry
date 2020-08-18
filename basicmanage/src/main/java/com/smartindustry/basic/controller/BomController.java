@@ -75,26 +75,6 @@ public class BomController {
         return itemsService.insertDetail(dto);
     }
 
-    @PostMapping("queryProperty")
-    public ResultVO queryProperty(@RequestBody MaterialPropertyDTO dto) {
-        return dataDictionaryService.mpQuery(dto);
-    }
-
-    @PostMapping("queryProcess")
-    public ResultVO queryProcess(@RequestBody ProcessDTO dto) {
-        return dataDictionaryService.prQuery(dto);
-    }
-
-    @PostMapping("insertProperty")
-    public ResultVO insertProperty(@RequestBody MaterialPropertyDTO dto) {
-        return dataDictionaryService.mpInsert(dto);
-    }
-
-    @PostMapping("insertProcess")
-    public ResultVO insertProcess(@RequestBody ProcessDTO dto) {
-        return dataDictionaryService.prInsert(dto);
-    }
-
     @PostMapping("queryBomBody")
     public ResultVO queryBomBody(@RequestBody Map<String, Object> reqData) {
         return itemsService.queryBomBody(reqData);

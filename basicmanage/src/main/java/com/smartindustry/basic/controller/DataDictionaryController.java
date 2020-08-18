@@ -494,8 +494,38 @@ public class DataDictionaryController {
      * @param dto
      * @return
      */
-    @PostMapping("configSet")
+    @PostMapping("configEdit")
     public ResultVO configSet(@RequestBody ConfigDTO dto) {
         return dataDictionaryService.configSet(dto);
     }
+
+    /**
+     * 查询流程配置的状态值
+     * @return
+     */
+    @PostMapping("configQuery")
+    public ResultVO configQuery() {
+        return dataDictionaryService.configQuery();
+    }
+
+    @PostMapping("mpQuery")
+    public ResultVO mpQuery(@RequestBody MaterialPropertyDTO dto) {
+        return dataDictionaryService.mpQuery(dto);
+    }
+
+    @PostMapping("prQuery")
+    public ResultVO prQuery(@RequestBody ProcessDTO dto) {
+        return dataDictionaryService.prQuery(dto);
+    }
+
+    @PostMapping("mpEdit")
+    public ResultVO mpEdit(@RequestBody MaterialPropertyDTO dto) {
+        return dataDictionaryService.mpInsert(dto);
+    }
+
+    @PostMapping("prEdit")
+    public ResultVO prEdit(@RequestBody ProcessDTO dto) {
+        return dataDictionaryService.prInsert(dto);
+    }
+
 }
