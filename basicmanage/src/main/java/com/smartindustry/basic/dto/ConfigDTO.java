@@ -1,8 +1,12 @@
 package com.smartindustry.basic.dto;
 
+import com.smartindustry.common.constant.ConfigConstant;
+import com.smartindustry.common.pojo.si.ConfigPO;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author: jiangzhaojie
@@ -11,24 +15,36 @@ import java.io.Serializable;
  * @description:
  */
 @Data
-public class FlowLayoutDTO implements Serializable {
+public class ConfigDTO implements Serializable {
     private static final long SerialVersionUID = 1L;
 
     /**
-     * 销售，采购，生产PID强关联
+     * 流程配置的名称
      */
-    private Boolean rpid;
+    private String cname;
+
     /**
-     * 原材料入库质检
+     * 流程配置的状态，默认开启
      */
-    private Boolean storage;
-    /**
-     * 成品出库质检
-     */
-    private Boolean outbound;
+    private Boolean status;
 
+    public static ConfigPO buildPO(ConfigDTO dto) {
+        ConfigPO po = new ConfigPO();
+        po.setConfigKey(dto.getCname());
+        if(dto.getStatus().equals(Boolean.TRUE)){
+            po.setConfigValue(ConfigConstant.V_YES);
+        }else {
+            po.setConfigValue(ConfigConstant.V_NO);
+        }
+        return po;
+    }
 
+    public static List<ConfigPO> updateList(List<ConfigDTO> dtos){
+        List<ConfigPO> pos = new ArrayList<>(dtos.size());
+        for(ConfigDTO dto:dtos) {
+            pos.add(buildPO(dto));
+        }
+        return pos;
+    }
 
-
-    
 }

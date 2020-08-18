@@ -12,6 +12,7 @@ import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -70,6 +71,8 @@ public class DataDictionaryServiceImpl implements IDataDictionaryService {
     private MaterialLockMapper materialLockMapper;
     @Autowired
     private StorageLabelMapper storageLabelMapper;
+    @Autowired
+    private ConfigMapper configMapper;
 
 
     @Override
@@ -794,6 +797,15 @@ public class DataDictionaryServiceImpl implements IDataDictionaryService {
 
         materialLockMapper.deleteByPrimaryKey(dto.getMlkid());
 
+        return ResultVO.ok();
+    }
+
+
+    @Override
+    public ResultVO configSet(List<ConfigDTO> dtos){
+        List<ConfigPO> pos = ConfigDTO.updateList(dtos);
+        System.out.println("=========="+pos);
+        configMapper.updateBatch(pos);
         return ResultVO.ok();
     }
 }
