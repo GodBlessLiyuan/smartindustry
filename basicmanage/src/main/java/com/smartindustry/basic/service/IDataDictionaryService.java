@@ -131,4 +131,6 @@ public interface IDataDictionaryService {
 
     ResultVO configSet(ConfigDTO dto);
 
+    ResultVO configQuery();
+
 }

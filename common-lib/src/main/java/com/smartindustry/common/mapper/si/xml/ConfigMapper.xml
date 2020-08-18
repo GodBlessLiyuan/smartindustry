@@ -87,4 +87,10 @@
         </if>
     </update>
 
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_config
+    </select>
+
 </mapper>
