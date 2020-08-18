@@ -19,7 +19,7 @@ import java.util.Map;
 /**
  * @author: jiangzhaojie
  * @date: Created in 10:23 2020/8/13
- * @version: 1.0.0
+ * @version: 1.0.0im:info:mquery:unlock
  * @description: 物料清单管理
  */
 @RequestMapping("items")

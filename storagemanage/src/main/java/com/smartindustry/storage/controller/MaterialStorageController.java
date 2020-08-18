@@ -6,6 +6,7 @@ import com.smartindustry.storage.dto.StorageDetailDTO;
 import com.smartindustry.storage.dto.StorageGroupDTO;
 import com.smartindustry.storage.service.IMaterialStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -29,6 +30,7 @@ public class MaterialStorageController {
      * @return
      */
     @PostMapping("pageQuery")
+    @PreAuthorize("@ss.hasAnyPermi('sm:ms:gpwl:query,sm:ms:ndgr:query')")
     public ResultVO pageQuery(@RequestBody Map<String, Object> reqData) {
         return materialStorageService.pageQuery(reqData);
     }
@@ -54,16 +56,19 @@ public class MaterialStorageController {
     }
 
     @PostMapping("save")
+    @PreAuthorize("@ss.hasAnyPermi('sm:ms:gpwl:scan,sm:ms:ndgr:scan')")
     public ResultVO save(@RequestBody StorageGroupDTO dto) {
         return materialStorageService.save(dto);
     }
 
     @PostMapping("storage")
+    @PreAuthorize("@ss.hasAnyPermi('sm:ms:gpwl:scan,sm:ms:ndgr:scan')")
     public ResultVO storage(@RequestBody OperateDTO dto) {
         return materialStorageService.storage(dto);
     }
 
     @PostMapping("detail")
+    @PreAuthorize("@ss.hasAnyPermi('sm:ms:gpwl:queryinfo,sm:ms:ndgr:queryinfo')")
     public ResultVO detail(@RequestBody OperateDTO dto) {
         return materialStorageService.detail(dto);
     }

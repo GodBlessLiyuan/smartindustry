@@ -28,6 +28,11 @@ spring:
     user:
       name: vbooster
       password: 123456a
+  redis:
+    database: 1
+    host: 192.168.10.3
+    port: 6379
+    password: 123456
 mybatis:
   mapper-locations: com/smartindustry/common/mapper/**/*.xml
 eureka:

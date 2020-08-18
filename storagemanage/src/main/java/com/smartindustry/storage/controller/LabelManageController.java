@@ -59,7 +59,7 @@ public class LabelManageController {
     }
 
     @PostMapping("split")
-    @PreAuthorize("@ss.hasAnyPermi('sm:qm:iqctest:entrylabel')")
+    @PreAuthorize("@ss.hasAnyPermi('sm:qm:iqctest:entrylabel,sm:qm:iqcqe:printlabel,sm:qm:qetest:printlabel')")
     public ResultVO split(@RequestBody LabelSplitDTO dto) {
         return labelManageService.split(dto);
     }

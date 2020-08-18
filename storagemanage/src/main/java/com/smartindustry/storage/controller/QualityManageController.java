@@ -27,7 +27,7 @@ public class QualityManageController {
     private IQualityManageService qualityManageService;
 
     @PostMapping("pageQuery")
-    @PreAuthorize("@ss.hasAnyPermi('sm:qm:iqctest:query,sm:qm:iqcqe:query')")
+    @PreAuthorize("@ss.hasAnyPermi('sm:qm:iqctest:query,sm:qm:iqcqe:query,sm:qm:qetest:query')")
     public ResultVO pageQuery(@RequestBody Map<String, Object> reqData) {
         return qualityManageService.pageQuery(reqData);
     }
@@ -45,12 +45,13 @@ public class QualityManageController {
     }
 
     @PostMapping("qeTest")
+    @PreAuthorize("@ss.hasPermi('sm:qm:qetest:qetest')")
     public ResultVO qeTest(@RequestBody QeTestDTO dto) {
         return qualityManageService.qeTest(dto);
     }
 
     @PostMapping("storage")
-    @PreAuthorize("@ss.hasPermi('sm:qm:iqctest:storage')")
+    @PreAuthorize("@ss.hasAnyPermi('sm:qm:iqctest:storage,sm:qm:iqcqe:storage,sm:qm:qetest:storage')")
     public ResultVO storage(@RequestBody OperateDTO dto) {
         return qualityManageService.storage(dto);
     }

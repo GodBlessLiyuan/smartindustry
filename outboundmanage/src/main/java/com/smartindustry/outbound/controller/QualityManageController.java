@@ -4,6 +4,7 @@ import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.dto.OperateDTO;
 import com.smartindustry.outbound.service.IQualityManageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -19,11 +20,13 @@ public class QualityManageController {
     private IQualityManageService qualityManageService;
 
     @RequestMapping("pickOqcButton")
+    @PreAuthorize("@ss.hasPermi('om:pm:fppick:scan')")
     public ResultVO pickOqcButton(@RequestParam(value = "phid", required = false) Long pickHeadId){
         return qualityManageService.pickOqcButton(pickHeadId);
     }
 
     @RequestMapping("queryOqc")
+    @PreAuthorize("@ss.hasPermi('om:qm:oqctest:query')")
     public ResultVO queryOqc(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                              @RequestParam(value = "pageSize", defaultValue = "100000000") int pageSize,
                              @RequestParam(value = "pno", required = false) String pickNo,
