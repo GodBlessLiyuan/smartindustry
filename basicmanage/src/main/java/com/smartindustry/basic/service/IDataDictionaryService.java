@@ -101,12 +101,12 @@ public interface IDataDictionaryService {
      * 查询物料属性列表
      * @return
      */
-    ResultVO mpQuery(MaterialPropertyDTO dto);
+    ResultVO mpQuery();
 
     /**
      *查询物料工序列表
      */
-    ResultVO prQuery(ProcessDTO dto);
+    ResultVO prQuery();
 
     /**
      * 新增物料属性

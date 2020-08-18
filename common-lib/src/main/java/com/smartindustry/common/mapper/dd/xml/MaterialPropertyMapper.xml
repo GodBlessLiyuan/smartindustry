@@ -82,14 +82,10 @@
 
 
   <!--  给出所有物料属性列表，模糊查询-->
-  <select id="selectAll" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="queryAll" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from dd_material_property mp
-    where 1=1
-    <if test="name != null and name != ''">
-      and mp.material_property_name like concat('%',#{name,jdbcType=CHAR},'%')
-    </if>
   </select>
 
 <!--  根据物料属性名查询是否已存在-->
