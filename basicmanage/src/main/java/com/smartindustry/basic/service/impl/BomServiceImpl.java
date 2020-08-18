@@ -69,6 +69,8 @@ public class BomServiceImpl implements IBomService {
         return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), MaterialBomVO.convert(pos)));
     }
 
+
+
     /**
      * 新增主bom清单
      * @param dto

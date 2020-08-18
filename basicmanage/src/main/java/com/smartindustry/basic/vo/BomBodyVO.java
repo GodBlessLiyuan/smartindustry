@@ -21,6 +21,10 @@ public class BomBodyVO implements Serializable {
      */
     private Long bbid;
     /**
+     * 物料id
+     */
+    private Long mid;
+    /**
      * 物料编号
      */
     private String mno;
@@ -32,6 +36,10 @@ public class BomBodyVO implements Serializable {
      * 物料型号
      */
     private String mmodel;
+    /**
+     * 物料属性id
+     */
+    private Long mpid;
     /**
      * 物料属性
      */
@@ -53,9 +61,17 @@ public class BomBodyVO implements Serializable {
      */
     private Float mloss;
     /**
+     * 工序id
+     */
+    private Long prid;
+    /**
      * 工序名称
      */
     private String prname;
+    /**
+     * 上级物料id
+     */
+    private Long pid;
     /**
      * 上级物料编号
      */
@@ -73,14 +89,18 @@ public class BomBodyVO implements Serializable {
         BomBodyVO vo = new BomBodyVO();
         vo.setBbid(bo.getBomBodyId());
         vo.setMno(bo.getMaterialNo());
+        vo.setMid(bo.getMaterialId());
         vo.setMname(bo.getMaterialName());
         vo.setMmodel(bo.getMaterialModel());
+        vo.setMpid(bo.getMaterialPropertyId());
         vo.setMpname(bo.getMaterialPropertyName());
         vo.setSname(bo.getSupplierName());
         vo.setMdemand(bo.getMaterialDemand());
         vo.setMuname(bo.getMeasureUnitName());
         vo.setMloss(bo.getMaterialLoss());
+        vo.setPrid(bo.getProcessId());
         vo.setPrname(bo.getProcessName());
+        vo.setPid(bo.getParentId());
         vo.setPname(bo.getParentName());
         return vo;
     }

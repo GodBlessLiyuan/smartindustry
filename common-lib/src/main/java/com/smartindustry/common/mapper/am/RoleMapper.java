@@ -17,7 +17,7 @@ import java.util.Map;
 public interface RoleMapper extends BaseMapper<RolePO, Long> {
 
     /**
-     * 查询所有的角色名列表
+     * 查询所有的角色名列表,除了超级管理员
      * @param
      * @return
      */

@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
+
 /**
  * @author: jiangzhaojie
  * @date: Created in 18:53 2020/7/30
@@ -84,6 +85,11 @@ public class UserServiceImpl implements IUserService {
     @Override
     public ResultVO batchUpdate(List<OperateDTO> dtos){
         List<UserPO> pos = UserDTO.updateList(dtos);
+        for(UserPO po:pos){
+            if(po.isAdmin()){
+                return new ResultVO(1023);
+            }
+        }
         userMapper.updateBatch(pos);
         for(OperateDTO dto:dtos){
             if(dto.getStatus().equals(AuthorityConstant.STATUS_DISABLE)){
@@ -100,6 +106,9 @@ public class UserServiceImpl implements IUserService {
     public ResultVO delete(List<Long> uids){
         userMapper.deleteBatch(uids);
         for(Long uid:uids){
+            if(UserPO.isAdmin(uid)){
+                return new ResultVO(1023);
+            }
             deleteUser(uid);
             userRecordMapper.insert(new UserRecordPO(uid,1L,new Date(), AuthorityConstant.RECORD_DELETE));
         }
@@ -127,6 +136,9 @@ public class UserServiceImpl implements IUserService {
             return new ResultVO(1004);
         }
         UserPO po = UserDTO.createPO(dto);
+        if(po.isAdmin()){
+            return new ResultVO(1023);
+        }
         userMapper.updateByPrimaryKeySelective(po);
         userRecordMapper.insert(new UserRecordPO(dto.getUid(),1L,new Date(), AuthorityConstant.RECORD_UPDATE));
         return ResultVO.ok();
@@ -147,6 +159,9 @@ public class UserServiceImpl implements IUserService {
     @Override
     public ResultVO updatePassword(OperateDTO dto){
         UserPO po = UserDTO.buildPO(dto);
+        if(po.isAdmin()){
+            return new ResultVO(1023);
+        }
         userMapper.updateByPrimaryKeySelective(po);
         return ResultVO.ok();
     }
