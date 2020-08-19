@@ -398,8 +398,7 @@ public class PickManageServiceImpl implements IPickManageService {
         } else if (status.equals(OutboundConstant.MATERIAL_STATUS_WAIT)) {
             //等齐套发货
             pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_PICK);
-            po.setStatus(OutboundConstant.PENDING_WAIT);
-            pickCheckMapper.updateByPrimaryKey(po);
+            pickCheckMapper.deleteByPrimaryKey(pickHeadId);
             outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.RECORD_DISAGREE, OutboundConstant.MATERIAL_STATUS_CHECK));
         } else if (status.equals(OutboundConstant.MATERIAL_STATUS_RETURN)) {
             //取消发货，退货仓库
