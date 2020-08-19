@@ -12,6 +12,7 @@ import com.smartindustry.authority.vo.UserRecordVO;
 import com.smartindustry.authority.vo.UserVO;
 import com.smartindustry.common.bo.am.UserBO;
 import com.smartindustry.common.bo.am.UserRecordBO;
+import com.smartindustry.common.constant.SecurityConstant;
 import com.smartindustry.common.mapper.am.*;
 import com.smartindustry.common.pojo.am.DeptPO;
 import com.smartindustry.common.pojo.am.RolePO;
@@ -136,7 +137,7 @@ public class UserServiceImpl implements IUserService {
             return new ResultVO(1004);
         }
         UserPO po = UserDTO.createPO(dto);
-        if(po.isAdmin()){
+        if(po.isAdmin() || OperateDTO.isAdmin(po.getRoleId()) || SecurityConstant.SUPER_ADMIN.equals(po.getUsername())){
             return new ResultVO(1023);
         }
         userMapper.updateByPrimaryKeySelective(po);

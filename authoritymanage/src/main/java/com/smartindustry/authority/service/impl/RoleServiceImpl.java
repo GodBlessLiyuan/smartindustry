@@ -109,14 +109,14 @@ public class RoleServiceImpl implements IRoleService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO delete(List<Long> rids){
-        roleMapper.deleteBatch(rids);
+        if(OperateDTO.isAdmin(rids)){
+            return new ResultVO(1023);
+        }
         for(Long rid:rids){
-            if(OperateDTO.isAdmin(rid)){
-                return new ResultVO(1023);
-            }
             deleteRole(rid);
             roleRecordMapper.insert(new RoleRecordPO(rid,1L,new Date(), AuthorityConstant.RECORD_DELETE));
         }
+        roleMapper.deleteBatch(rids);
         return ResultVO.ok();
     }
 

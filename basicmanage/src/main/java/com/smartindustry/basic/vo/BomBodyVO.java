@@ -49,6 +49,10 @@ public class BomBodyVO implements Serializable {
      */
     private String sname;
     /**
+     * 需求量类型
+     */
+    private Byte dtype;
+    /**
      * 需求量
      */
     private Float mdemand;
@@ -56,6 +60,10 @@ public class BomBodyVO implements Serializable {
      * 计量单位名称
      */
     private String muname;
+    /**
+     * 损耗类型
+     */
+    private Byte ltype;
     /**
      * 损耗
      */
@@ -102,6 +110,8 @@ public class BomBodyVO implements Serializable {
         vo.setPrname(bo.getProcessName());
         vo.setPid(bo.getParentId());
         vo.setPname(bo.getParentName());
+        vo.setDtype(bo.getDemandType());
+        vo.setLtype(bo.getLossType());
         return vo;
     }
 

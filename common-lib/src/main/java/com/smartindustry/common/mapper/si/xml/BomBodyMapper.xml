@@ -249,7 +249,7 @@
 
   <!--  查询物料明细列表-->
   <select id="pageQuery" parameterType="java.util.Map" resultType="com.smartindustry.common.bo.si.BomBodyBO">
-    select bb.bom_body_Id as bomBodyId,m.material_id as materialId,m.material_no as materialNo,m.material_model as materialModel,m.material_name as materialName,s.supplier_name as supplierName,me.measure_unit_name as measureUnitName,
+    select bb.bom_body_Id as bomBodyId,m.material_id as materialId,m.material_no as materialNo,m.material_model as materialModel,m.material_name as materialName,s.supplier_name as supplierName,me.measure_unit_name as measureUnitName,bb.demand_type as demandType,bb.loss_type as lossType,
     mp.material_property_name as materialPropertyName,mp.material_property_id as materialPropertyId,bb.material_demand as materialDemand,bb.material_loss as materialLoss,pr.process_id as processId,pr.process_name as processName,m1.material_id as parentId,m1.material_no as parentName
     from si_bom_body bb
     left join si_material m on bb.material_id = m.material_id
