@@ -86,22 +86,20 @@ public interface IUserService {
 
     /**
      * 更新用户密码
-     * @param session
      * @return
      */
-    ResultVO editPassword(HttpServletRequest session,@RequestBody EditDTO dto);
+    ResultVO editPassword(@RequestBody EditDTO dto);
 
     /**
      * 查询详细的个人信息
      * @return
      */
-    ResultVO queryUserMsg(HttpServletRequest session);
+    ResultVO queryUserMsg();
 
     /**
      * 更新个人用户token
-     * @param session
      * @param dto
      * @return
      */
-    ResultVO updateUser(HttpServletRequest session,@RequestBody UserDTO dto);
+    ResultVO updateUser(@RequestBody UserDTO dto);
 }

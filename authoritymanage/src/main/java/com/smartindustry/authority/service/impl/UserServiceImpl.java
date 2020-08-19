@@ -21,6 +21,7 @@ import com.smartindustry.common.pojo.am.UserRecordPO;
 import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.util.SecurityUtil;
+import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,7 +138,8 @@ public class UserServiceImpl implements IUserService {
             return new ResultVO(1004);
         }
         UserPO po = UserDTO.createPO(dto);
-        if(po.isAdmin() || OperateDTO.isAdmin(po.getRoleId()) || SecurityConstant.SUPER_ADMIN.equals(po.getUsername())){
+        boolean specialUserInfo = OperateDTO.isAdmin(po.getRoleId()) && SecurityConstant.SUPER_ADMIN.equals(po.getUsername());
+        if(po.isAdmin() && !specialUserInfo){
             return new ResultVO(1023);
         }
         userMapper.updateByPrimaryKeySelective(po);
@@ -147,10 +149,10 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public  ResultVO updateUser(HttpServletRequest session,@RequestBody UserDTO dto){
-        LoginUserBO userDto = tokenService.getLoginUser(session);
+    public  ResultVO updateUser(@RequestBody UserDTO dto){
+        LoginUserBO loginUserBo = tokenService.getLoginUser(ServletUtil.getRequest());
         //从session中获取userId的值
-        Long userId = userDto.getUser().getUserId();
+        Long userId = loginUserBo.getUser().getUserId();
         UserPO po = UserDTO.createPO(dto);
         po.setUserId(userId);
         userMapper.updateByPrimaryKeySelective(po);
@@ -198,10 +200,10 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ResultVO editPassword(HttpServletRequest session,@RequestBody EditDTO dto){
-        LoginUserBO userDto = tokenService.getLoginUser(session);
+    public ResultVO editPassword(@RequestBody EditDTO dto){
+        LoginUserBO loginUserBo = tokenService.getLoginUser(ServletUtil.getRequest());
         //从session中获取userId的值
-        Long userId = userDto.getUser().getUserId();
+        Long userId = loginUserBo.getUser().getUserId();
         if (userId == null) {
             // 用户过期
             return new ResultVO(1013);
@@ -220,9 +222,9 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public ResultVO queryUserMsg(HttpServletRequest session){
-        LoginUserBO dto = tokenService.getLoginUser(session);
-        UserBO bo = userMapper.queryUserMsg(dto.getUser().getUserId());
+    public ResultVO queryUserMsg(){
+        LoginUserBO loginUserBo = tokenService.getLoginUser(ServletUtil.getRequest());
+        UserBO bo = userMapper.queryUserMsg(loginUserBo.getUser().getUserId());
         return ResultVO.ok().setData(UserVO.convertToUserMsg(bo));
     }
 
