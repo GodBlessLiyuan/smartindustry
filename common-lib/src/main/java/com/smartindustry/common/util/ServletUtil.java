@@ -1,5 +1,7 @@
 package com.smartindustry.common.util;
 
+import com.smartindustry.common.bo.am.LoginUserBO;
+import com.smartindustry.common.constant.SecurityConstant;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -27,6 +29,15 @@ public class ServletUtil {
      */
     public static HttpServletResponse getResponse() {
         return getRequestAttributes().getResponse();
+    }
+
+    /**
+     * 获取 session
+     *
+     * @return
+     */
+    public static LoginUserBO getUserBO() {
+        return (LoginUserBO) getRequest().getSession().getAttribute(SecurityConstant.SESSION_USER);
     }
 
     public static ServletRequestAttributes getRequestAttributes() {
