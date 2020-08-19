@@ -33,9 +33,8 @@ public class SupplierRecordVO implements Serializable {
     }
 
     public static SupplierRecordVO convert(SupplierRecordPO po) {
-        UserPO user = ServletUtil.getUserBO().getUser();
         SupplierRecordVO vo = new SupplierRecordVO();
-        vo.setName(user.getName());
+        vo.setName("夏慧");
         vo.setCtime(po.getCreateTime());
         vo.setType(po.getType());
         return vo;

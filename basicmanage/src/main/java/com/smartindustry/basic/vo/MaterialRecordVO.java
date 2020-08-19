@@ -33,9 +33,8 @@ public class MaterialRecordVO implements Serializable {
     }
 
     public static MaterialRecordVO convert(MaterialRecordPO po) {
-        UserPO user = ServletUtil.getUserBO().getUser();
         MaterialRecordVO vo = new MaterialRecordVO();
-        vo.setName(user.getName());
+        vo.setName("夏慧");
         vo.setCtime(po.getCreateTime());
         vo.setType(po.getType());
         return vo;

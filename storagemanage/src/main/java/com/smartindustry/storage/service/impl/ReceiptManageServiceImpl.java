@@ -17,6 +17,7 @@ import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.sm.ReceiptBodyPO;
 import com.smartindustry.common.pojo.sm.ReceiptHeadPO;
 import com.smartindustry.common.pojo.sm.StorageRecordPO;
+import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
@@ -57,6 +58,9 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
     private LabelRecordMapper labelRecordMapper;
     @Autowired
     private MaterialMapper materialMapper;
+    @Autowired
+    TokenService tokenService;
+
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData) {
@@ -68,7 +72,7 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO insert(ReceiptDTO dto) {
-        UserPO user = ServletUtil.getUserBO().getUser();
+        UserPO user = tokenService.getLoginUser();
         ReceiptHeadPO headPO = ReceiptHeadDTO.createPO(receiptHeadMapper, new ReceiptHeadPO(), dto.getHead());
         receiptHeadMapper.insert(headPO);
 

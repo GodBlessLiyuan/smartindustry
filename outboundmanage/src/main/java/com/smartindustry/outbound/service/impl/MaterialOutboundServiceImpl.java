@@ -15,6 +15,7 @@ import com.smartindustry.common.mapper.si.StorageLabelMapper;
 import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.im.MaterialInventoryPO;
 import com.smartindustry.common.pojo.om.*;
+import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.FileUtil;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.util.ServletUtil;
@@ -67,6 +68,8 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
     private MaterialInventoryMapper materialInventoryMapper;
     @Autowired
     private FilePathConfig filePathConfig;
+    @Autowired
+    TokenService tokenService;
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData) {
@@ -91,7 +94,7 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO outbound(OperateDTO dto) {
-        UserPO user = ServletUtil.getUserBO().getUser();
+        UserPO user = tokenService.getLoginUser();
         OutboundPO outboundPO = outboundMapper.selectByPrimaryKey(dto.getOid());
         if (null == outboundPO) {
             return new ResultVO(1002);

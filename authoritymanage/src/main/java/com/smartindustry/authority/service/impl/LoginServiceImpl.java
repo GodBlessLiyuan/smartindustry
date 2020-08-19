@@ -71,6 +71,7 @@ public class LoginServiceImpl implements ILoginService {
         map.put(SecurityConstant.SESSION_TOKEN, tokenService.createToken(user));
         map.put(SecurityConstant.SESSION_USER, user);
         session.setAttribute(SecurityConstant.SESSION_USER, user);
+        session.setMaxInactiveInterval(30*60*60);
         return ResultVO.ok().setData(map);
     }
 

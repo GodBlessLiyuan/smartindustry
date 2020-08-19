@@ -16,6 +16,7 @@ import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.si.MaterialPO;
 import com.smartindustry.common.pojo.si.SupplierPO;
 import com.smartindustry.common.pojo.si.SupplierRecordPO;
+import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
@@ -45,6 +46,8 @@ public class SupplierServiceImpl implements ISupplierService {
     private SupplierRecordMapper supplierRecordMapper;
     @Autowired
     private MaterialMapper materialMapper;
+    @Autowired
+    TokenService tokenService;
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData) {
@@ -57,7 +60,7 @@ public class SupplierServiceImpl implements ISupplierService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO edit(SupplierDTO dto) {
-        UserPO user = ServletUtil.getUserBO().getUser();
+        UserPO user = tokenService.getLoginUser();
         SupplierPO existPO = supplierMapper.queryBySno(dto.getSno());
         if (null != existPO && (null == dto.getSid() || !dto.getSid().equals(existPO.getSupplierId()))) {
             return new ResultVO(1004);

@@ -16,6 +16,7 @@ import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.si.LocationPO;
 import com.smartindustry.common.pojo.si.LocationRecordPO;
 import com.smartindustry.common.pojo.si.StorageLabelPO;
+import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
@@ -45,6 +46,8 @@ public class LocationServiceImpl implements ILocationService {
     private LocationRecordMapper locationRecordMapper;
     @Autowired
     private StorageLabelMapper storageLabelMapper;
+    @Autowired
+    TokenService tokenService;
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData) {
@@ -57,7 +60,7 @@ public class LocationServiceImpl implements ILocationService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO edit(LocationDTO dto) {
-        UserPO user = ServletUtil.getUserBO().getUser();
+        UserPO user = tokenService.getLoginUser();
         LocationPO existPO = locationMapper.queryByLno(dto.getLno());
         if (null != existPO && (null == dto.getLid() || !dto.getLid().equals(existPO.getLocationId()))) {
             return new ResultVO(1004);

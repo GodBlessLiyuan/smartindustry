@@ -16,6 +16,7 @@ import com.smartindustry.common.mapper.am.*;
 import com.smartindustry.common.pojo.am.RolePO;
 import com.smartindustry.common.pojo.am.RoleRecordPO;
 import com.smartindustry.common.pojo.am.UserPO;
+import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
@@ -53,6 +54,8 @@ public class RoleServiceImpl implements IRoleService {
     private RoleRecordMapper roleRecordMapper;
     @Autowired
     private RedisTemplate redisTemplate;
+    @Autowired
+    TokenService tokenService;
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData){
@@ -64,7 +67,7 @@ public class RoleServiceImpl implements IRoleService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO batchUpdate(List<OperateDTO> dtos){
-        UserPO user = ServletUtil.getUserBO().getUser();
+        UserPO user = tokenService.getLoginUser();
         if (OperateDTO.hasAdmin(dtos)){
             return new ResultVO(1023);
         }

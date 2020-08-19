@@ -17,6 +17,7 @@ import com.smartindustry.common.pojo.om.PickCheckPO;
 import com.smartindustry.common.pojo.om.PickHeadPO;
 import com.smartindustry.common.pojo.si.ConfigPO;
 import com.smartindustry.common.pojo.si.PrintLabelPO;
+import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
@@ -58,11 +59,13 @@ public class QualityManageServiceImpl implements IQualityManageService {
     private ConfigMapper configMapper;
     @Autowired
     private OutboundMapper outboundMapper;
+    @Autowired
+    TokenService tokenService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO pickOqcButton(Long pickHeadId){
-        UserPO user = ServletUtil.getUserBO().getUser();
+        UserPO user = tokenService.getLoginUser();
         ConfigPO configPo = configMapper.queryByKey(ConfigConstant.K_OUTBOUND_QUALITY_KEY);
         if (null != configPo && ConfigConstant.V_NO.equals(configPo.getConfigValue())) {
             pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_STORAGE);
