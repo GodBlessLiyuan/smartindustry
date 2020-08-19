@@ -41,4 +41,13 @@ public class SecurityConstant {
      * 用户的状态 1 启用2  禁用
      */
     public static final Byte USER_DISABLE = 2;
+
+    /**
+     * session token
+     */
+    public static final String SESSION_TOKEN = "token";
+    /**
+     * session user
+     */
+    public static final String SESSION_USER = "user";
 }

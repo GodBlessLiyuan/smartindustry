@@ -54,11 +54,11 @@ public class PickManageController {
     @RequestMapping("queryPickGoods")
     @PreAuthorize("@ss.hasPermi('om:pm:fppick:query')")
     public ResultVO queryPickGoods(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                                     @RequestParam(value = "pageSize", defaultValue = "100000000") int pageSize,
-                                     @RequestParam(value = "pno", required = false) String pickNo,
-                                     @RequestParam(value = "ono", required = false) String orderNo,
-                                     @RequestParam(value = "cproject", required = false) String correspondProject,
-                                     @RequestParam(value = "mstatus", defaultValue = "") Byte materialStatus) {
+                                   @RequestParam(value = "pageSize", defaultValue = "100000000") int pageSize,
+                                   @RequestParam(value = "pno", required = false) String pickNo,
+                                   @RequestParam(value = "ono", required = false) String orderNo,
+                                   @RequestParam(value = "cproject", required = false) String correspondProject,
+                                   @RequestParam(value = "mstatus", defaultValue = "") Byte materialStatus) {
         Map<String, Object> reqData = new HashMap<>(4);
         reqData.put("pickNo", pickNo);
         reqData.put("orderNo", orderNo);
@@ -71,12 +71,12 @@ public class PickManageController {
     @PreAuthorize("@ss.hasPermi('om:pm:check:query')")
     public ResultVO outOrderCheck(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                   @RequestParam(value = "pageSize", defaultValue = "100000000") int pageSize,
-                                  @RequestParam(value = "pno",required = false) String pickNo,
-                                  @RequestParam(value = "cproject",required = false) String correspondProject){
+                                  @RequestParam(value = "pno", required = false) String pickNo,
+                                  @RequestParam(value = "cproject", required = false) String correspondProject) {
         Map<String, Object> reqData = new HashMap<>(2);
         reqData.put("pickNo", pickNo);
         reqData.put("correspondProject", correspondProject);
-        return pickManageService.outOrderCheck(pageNum, pageSize,reqData);
+        return pickManageService.outOrderCheck(pageNum, pageSize, reqData);
     }
 
     /**
@@ -102,6 +102,7 @@ public class PickManageController {
 
     /**
      * 查看当前拣货工单号的异常数据（未扫描优先推荐的pid）
+     *
      * @param pickHeadId
      * @return
      */
@@ -119,7 +120,7 @@ public class PickManageController {
      * @author xiahui
      */
     @RequestMapping("detail")
-    public ResultVO detail(OperateDTO dto) {
+    public ResultVO detail(@RequestBody OperateDTO dto) {
         return pickManageService.detail(dto);
     }
 
@@ -127,24 +128,24 @@ public class PickManageController {
     @RequestMapping("pickPidOut")
     @PreAuthorize("@ss.hasAnyPermi('om:pm:wopick:scan,om:pm:fppick:scan')")
     public ResultVO pickPidOut(@RequestParam(value = "phid", required = false) Long pickHeadId,
-                               @RequestParam(value = "pid", required = false) String packageId){
-        return pickManageService.pickPidOut(pickHeadId,packageId);
+                               @RequestParam(value = "pid", required = false) String packageId) {
+        return pickManageService.pickPidOut(pickHeadId, packageId);
     }
 
     @RequestMapping("queryByPhId")
-    public ResultVO queryByPhId(@RequestParam(value = "phid", required = false) Long pickHeadId){
+    public ResultVO queryByPhId(@RequestParam(value = "phid", required = false) Long pickHeadId) {
         return pickManageService.queryByPhId(pickHeadId);
     }
 
     @RequestMapping("packageIdDiv")
     @PreAuthorize("@ss.hasAnyPermi('om:pm:wopick:scan,om:pm:fppick:scan')")
     public ResultVO packageIdDiv(@RequestParam(value = "plid", required = false) Long printLabelId,
-                                 @RequestParam(value = "snum", required = false) Integer num){
-        return pickManageService.packageIdDiv(printLabelId,num);
+                                 @RequestParam(value = "snum", required = false) Integer num) {
+        return pickManageService.packageIdDiv(printLabelId, num);
     }
 
     @RequestMapping("showMsgByPid")
-    public ResultVO showMsgByPid(@RequestParam(value = "pid", required = false) String packageId){
+    public ResultVO showMsgByPid(@RequestParam(value = "pid", required = false) String packageId) {
         return pickManageService.showMsgByPid(packageId);
     }
 
@@ -152,43 +153,43 @@ public class PickManageController {
     @PreAuthorize("@ss.hasAnyPermi('om:pm:wopick:queryinfo,om:pm:wopick:scan,om:pm:fppick:queryinfo,om:pm:fppick:scan')")
     public ResultVO showScanItems(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                   @RequestParam(value = "pageSize", defaultValue = "100000000") int pageSize,
-                                  @RequestParam(value = "phid", required = false) Long pickHeadId){
-        return pickManageService.showScanItems(pageNum,pageSize,pickHeadId);
+                                  @RequestParam(value = "phid", required = false) Long pickHeadId) {
+        return pickManageService.showScanItems(pageNum, pageSize, pickHeadId);
     }
 
     @RequestMapping("deleteScanPid")
     public ResultVO deleteScanPid(@RequestParam(value = "phid", required = false) Long pickHeadId,
-                                  @RequestParam(value = "plid", required = false) Long printLabelId){
-        return pickManageService.deleteScanPid(pickHeadId,printLabelId);
+                                  @RequestParam(value = "plid", required = false) Long printLabelId) {
+        return pickManageService.deleteScanPid(pickHeadId, printLabelId);
     }
 
     @RequestMapping("printLabelSplit")
     @PreAuthorize("@ss.hasAnyPermi('om:pm:wopick:scan,om:pm:fppick:scan')")
-    public ResultVO printLabelSplit(@RequestParam(value = "pid", required = false) String packageId){
+    public ResultVO printLabelSplit(@RequestParam(value = "pid", required = false) String packageId) {
         return pickManageService.printLabelSplit(packageId);
     }
 
     @RequestMapping("judgeStatus")
-    public ResultVO judgeStatus(@RequestParam(value = "phid", required = false) Long pickHeadId){
+    public ResultVO judgeStatus(@RequestParam(value = "phid", required = false) Long pickHeadId) {
         return pickManageService.judgeStatus(pickHeadId);
     }
 
     @RequestMapping("updateException")
     public ResultVO updateException(@RequestParam(value = "phid", required = false) Long pickHeadId,
                                     @RequestParam(value = "mid", required = false) Long materialId,
-                                    @RequestParam(value = "exce", required = false) String exception){
-        return pickManageService.updateException(pickHeadId,materialId,exception);
+                                    @RequestParam(value = "exce", required = false) String exception) {
+        return pickManageService.updateException(pickHeadId, materialId, exception);
     }
 
     @RequestMapping("outBoundItems")
     @PreAuthorize("@ss.hasAnyPermi('om:pm:wopick:scan')")
-    public ResultVO outBoundItems(@RequestParam(value = "phid", required = false) Long pickHeadId){
+    public ResultVO outBoundItems(@RequestParam(value = "phid", required = false) Long pickHeadId) {
         return pickManageService.outBoundItems(pickHeadId);
     }
 
     @RequestMapping("deleteSplit")
     @PreAuthorize("@ss.hasAnyPermi('om:pm:wopick:scan,om:pm:fppick:scan')")
-    public ResultVO deleteSplit(@RequestParam(value = "pid", required = false) String packageId){
+    public ResultVO deleteSplit(@RequestParam(value = "pid", required = false) String packageId) {
         return pickManageService.deleteSplit(packageId);
     }
 
@@ -196,13 +197,13 @@ public class PickManageController {
     @PreAuthorize("@ss.hasAnyPermi('om:pm:check:check,om:qm:oqctest:check')")
     public ResultVO disAgree(@RequestParam(value = "phid", required = false) Long pickHeadId,
                              @RequestParam(value = "status", required = false) Byte status,
-                             @RequestParam(value = "msg", required = false) String message){
-        return pickManageService.disAgree(pickHeadId,status,message);
+                             @RequestParam(value = "msg", required = false) String message) {
+        return pickManageService.disAgree(pickHeadId, status, message);
     }
 
     @RequestMapping("agreeOutBound")
     @PreAuthorize("@ss.hasAnyPermi('om:pm:check:check,om:qm:oqctest:check')")
-    public ResultVO agreeOutBound(@RequestParam(value = "phid", required = false) Long pickHeadId){
+    public ResultVO agreeOutBound(@RequestParam(value = "phid", required = false) Long pickHeadId) {
         return pickManageService.agreeOutBound(pickHeadId);
     }
 
