@@ -1,5 +1,6 @@
 package com.smartindustry.authority.dto;
 
+import com.smartindustry.authority.constant.AuthorityConstant;
 import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.util.SecurityUtil;
 import lombok.Data;

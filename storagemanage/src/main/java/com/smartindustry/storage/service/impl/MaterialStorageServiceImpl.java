@@ -11,12 +11,14 @@ import com.smartindustry.common.mapper.si.PrintLabelMapper;
 import com.smartindustry.common.mapper.si.LocationMapper;
 import com.smartindustry.common.mapper.si.StorageLabelMapper;
 import com.smartindustry.common.mapper.sm.*;
+import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.im.MaterialInventoryPO;
 import com.smartindustry.common.pojo.si.LocationPO;
 import com.smartindustry.common.pojo.si.PrintLabelPO;
 import com.smartindustry.common.pojo.si.StorageLabelPO;
 import com.smartindustry.common.pojo.sm.*;
 import com.smartindustry.common.util.PageQueryUtil;
+import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.ReceiptConstant;
@@ -315,6 +317,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO storage(@RequestBody OperateDTO dto) {
+        UserPO user = ServletUtil.getUserBO().getUser();
         StoragePO storagePO = storageMapper.selectByPrimaryKey(dto.getSid());
         if (null == storagePO) {
             return new ResultVO(1002);
@@ -382,7 +385,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         }
 
         // 操作记录
-        recordMapper.insert(new StorageRecordPO(dto.getSid(), storagePO.getStorageId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_CONFIRM, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
+        recordMapper.insert(new StorageRecordPO(dto.getSid(), storagePO.getStorageId(), user.getUserId(), user.getName(), ReceiptConstant.RECORD_TYPE_STORAGE_CONFIRM, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
 
         return ResultVO.ok();
     }

@@ -12,10 +12,12 @@ import com.smartindustry.common.constant.ResultConstant;
 import com.smartindustry.common.mapper.si.LocationMapper;
 import com.smartindustry.common.mapper.si.LocationRecordMapper;
 import com.smartindustry.common.mapper.si.StorageLabelMapper;
+import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.si.LocationPO;
 import com.smartindustry.common.pojo.si.LocationRecordPO;
 import com.smartindustry.common.pojo.si.StorageLabelPO;
 import com.smartindustry.common.util.PageQueryUtil;
+import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +57,7 @@ public class LocationServiceImpl implements ILocationService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO edit(LocationDTO dto) {
+        UserPO user = ServletUtil.getUserBO().getUser();
         LocationPO existPO = locationMapper.queryByLno(dto.getLno());
         if (null != existPO && (null == dto.getLid() || !dto.getLid().equals(existPO.getLocationId()))) {
             return new ResultVO(1004);
@@ -64,7 +67,7 @@ public class LocationServiceImpl implements ILocationService {
             // 新增
             LocationPO locationPO = LocationDTO.createPO(dto);
             locationMapper.insert(locationPO);
-            locationRecordMapper.insert(new LocationRecordPO(locationPO.getLocationId(), 1L, BasicConstant.RECORD_ADD));
+            locationRecordMapper.insert(new LocationRecordPO(locationPO.getLocationId(), user.getUserId(), BasicConstant.RECORD_ADD));
             return ResultVO.ok();
         }
         // 编辑

@@ -12,10 +12,12 @@ import com.smartindustry.common.constant.ResultConstant;
 import com.smartindustry.common.mapper.im.MaterialInventoryMapper;
 import com.smartindustry.common.mapper.om.*;
 import com.smartindustry.common.mapper.si.StorageLabelMapper;
+import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.im.MaterialInventoryPO;
 import com.smartindustry.common.pojo.om.*;
 import com.smartindustry.common.util.FileUtil;
 import com.smartindustry.common.util.PageQueryUtil;
+import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.constant.OutboundConstant;
@@ -89,6 +91,7 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO outbound(OperateDTO dto) {
+        UserPO user = ServletUtil.getUserBO().getUser();
         OutboundPO outboundPO = outboundMapper.selectByPrimaryKey(dto.getOid());
         if (null == outboundPO) {
             return new ResultVO(1002);
@@ -142,7 +145,7 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
             }
         }
 
-        outboundRecordMapper.insert(new OutboundRecordPO(headPO.getPickHeadId(), outboundPO.getOutboundId(), 1L, "夏慧", OutboundConstant.RECORD_CONFIRM_OUTBOUND, OutboundConstant.MATERIAL_STATUS_FINISH));
+        outboundRecordMapper.insert(new OutboundRecordPO(headPO.getPickHeadId(), outboundPO.getOutboundId(), user.getUserId(), user.getName(), OutboundConstant.RECORD_CONFIRM_OUTBOUND, OutboundConstant.MATERIAL_STATUS_FINISH));
 
         // 重新推荐货位
         new Thread(() -> {

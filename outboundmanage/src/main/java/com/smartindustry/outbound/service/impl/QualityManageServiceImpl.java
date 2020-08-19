@@ -2,6 +2,7 @@ package com.smartindustry.outbound.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.smartindustry.common.bo.am.LoginUserBO;
 import com.smartindustry.common.constant.ConfigConstant;
 import com.smartindustry.common.mapper.om.OutboundMapper;
 import com.smartindustry.common.mapper.om.OutboundRecordMapper;
@@ -9,12 +10,14 @@ import com.smartindustry.common.mapper.om.PickCheckMapper;
 import com.smartindustry.common.mapper.om.PickHeadMapper;
 import com.smartindustry.common.mapper.si.ConfigMapper;
 import com.smartindustry.common.mapper.si.PrintLabelMapper;
+import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.om.OutboundPO;
 import com.smartindustry.common.pojo.om.OutboundRecordPO;
 import com.smartindustry.common.pojo.om.PickCheckPO;
 import com.smartindustry.common.pojo.om.PickHeadPO;
 import com.smartindustry.common.pojo.si.ConfigPO;
 import com.smartindustry.common.pojo.si.PrintLabelPO;
+import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.constant.OutboundConstant;
@@ -59,6 +62,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO pickOqcButton(Long pickHeadId){
+        UserPO user = ServletUtil.getUserBO().getUser();
         ConfigPO configPo = configMapper.queryByKey(ConfigConstant.K_OUTBOUND_QUALITY_KEY);
         if (null != configPo && ConfigConstant.V_NO.equals(configPo.getConfigValue())) {
             pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_STORAGE);
@@ -70,8 +74,8 @@ public class QualityManageServiceImpl implements IQualityManageService {
             po.setCreateTime(date);
             po.setDr((byte) 1);
             outboundMapper.insert(po);
-            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.RECORD_AGREE, OutboundConstant.MATERIAL_STATUS_CHECK));
-            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, po.getOutboundId(), 1L, "jzj", OutboundConstant.RECORD_ADD, OutboundConstant.MATERIAL_STATUS_STORAGE));
+            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, user.getUserId(), user.getName(), OutboundConstant.RECORD_AGREE, OutboundConstant.MATERIAL_STATUS_CHECK));
+            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, po.getOutboundId(), user.getUserId(), user.getName(), OutboundConstant.RECORD_ADD, OutboundConstant.MATERIAL_STATUS_STORAGE));
         } else{
             //1 更新物料状态
             pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_CHECK);
@@ -80,8 +84,8 @@ public class QualityManageServiceImpl implements IQualityManageService {
             po.setPickHeadId(pickHeadId);
             po.setStatus(OutboundConstant.PENDING);
             pickCheckMapper.insert(po);
-            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId,null,1L,"jzj",OutboundConstant.RECORD_OQC,OutboundConstant.MATERIAL_STATUS_PICK));
-            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId,null,1L,"jzj",OutboundConstant.RECORD_ADD,OutboundConstant.MATERIAL_STATUS_CHECK));
+            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId,null,user.getUserId(), user.getName(),OutboundConstant.RECORD_OQC,OutboundConstant.MATERIAL_STATUS_PICK));
+            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId,null,user.getUserId(), user.getName(),OutboundConstant.RECORD_ADD,OutboundConstant.MATERIAL_STATUS_CHECK));
         }
         return ResultVO.ok();
     }

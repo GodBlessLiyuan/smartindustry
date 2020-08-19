@@ -13,10 +13,12 @@ import com.smartindustry.common.mapper.sm.ReceiptBodyMapper;
 import com.smartindustry.common.mapper.sm.ReceiptHeadMapper;
 import com.smartindustry.common.mapper.sm.ReceiptLabelMapper;
 import com.smartindustry.common.mapper.sm.StorageRecordMapper;
+import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.sm.ReceiptBodyPO;
 import com.smartindustry.common.pojo.sm.ReceiptHeadPO;
 import com.smartindustry.common.pojo.sm.StorageRecordPO;
 import com.smartindustry.common.util.PageQueryUtil;
+import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.ReceiptConstant;
@@ -66,6 +68,7 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO insert(ReceiptDTO dto) {
+        UserPO user = ServletUtil.getUserBO().getUser();
         ReceiptHeadPO headPO = ReceiptHeadDTO.createPO(receiptHeadMapper, new ReceiptHeadPO(), dto.getHead());
         receiptHeadMapper.insert(headPO);
 
@@ -80,7 +83,7 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
         // 操作记录
         List<StorageRecordPO> recordPOs = new ArrayList<>(bodyBOs.size());
         for (ReceiptBodyBO bodyBO : bodyBOs) {
-            recordPOs.add(new StorageRecordPO(bodyBO.getReceiptBodyId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_ADD, ReceiptConstant.RECEIPT_ENTRY_LABEL));
+            recordPOs.add(new StorageRecordPO(bodyBO.getReceiptBodyId(), user.getUserId(), user.getName(), ReceiptConstant.RECORD_TYPE_ADD, ReceiptConstant.RECEIPT_ENTRY_LABEL));
         }
         recordMapper.batchInsert(recordPOs);
 

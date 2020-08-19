@@ -9,11 +9,13 @@ import com.smartindustry.common.mapper.om.OutboundRecordMapper;
 import com.smartindustry.common.mapper.om.PickBodyMapper;
 import com.smartindustry.common.mapper.om.PickHeadMapper;
 import com.smartindustry.common.mapper.si.StorageLabelMapper;
+import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.im.MaterialInventoryPO;
 import com.smartindustry.common.pojo.om.LabelRecommendPO;
 import com.smartindustry.common.pojo.om.OutboundRecordPO;
 import com.smartindustry.common.pojo.om.PickBodyPO;
 import com.smartindustry.common.pojo.om.PickHeadPO;
+import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.constant.OutboundConstant;
 import com.smartindustry.outbound.dto.PickDTO;
@@ -53,12 +55,13 @@ public class ErpExternalServiceImpl implements IErpExternalService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO pick(PickDTO dto) {
+        UserPO user = ServletUtil.getUserBO().getUser();
         PickHeadPO headPO = PickDTO.convert(dto.getHead());
         pickHeadMapper.insert(headPO);
 
         List<PickBodyPO> bodyPOs = PickDTO.convert(headPO, dto.getBody());
         pickBodyMapper.batchInsert(bodyPOs);
-        outboundRecordMapper.insert(new OutboundRecordPO(headPO.getPickHeadId(), null, 1L, "jzj", OutboundConstant.RECORD_ADD, OutboundConstant.MATERIAL_STATUS_PICK));
+        outboundRecordMapper.insert(new OutboundRecordPO(headPO.getPickHeadId(), null, user.getUserId(), user.getName(), OutboundConstant.RECORD_ADD, OutboundConstant.MATERIAL_STATUS_PICK));
 
         // 推荐货位
         new Thread(() -> {

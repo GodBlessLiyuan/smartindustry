@@ -1,6 +1,8 @@
 package com.smartindustry.basic.vo;
 
+import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.si.MaterialRecordPO;
+import com.smartindustry.common.util.ServletUtil;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -31,8 +33,9 @@ public class MaterialRecordVO implements Serializable {
     }
 
     public static MaterialRecordVO convert(MaterialRecordPO po) {
+        UserPO user = ServletUtil.getUserBO().getUser();
         MaterialRecordVO vo = new MaterialRecordVO();
-        vo.setName("夏慧");
+        vo.setName(user.getName());
         vo.setCtime(po.getCreateTime());
         vo.setType(po.getType());
         return vo;
