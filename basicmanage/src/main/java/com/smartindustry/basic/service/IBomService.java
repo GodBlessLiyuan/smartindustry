@@ -60,11 +60,11 @@ public interface IBomService {
     ResultVO queryTreeBom(OperateDTO dto);
 
     /**
-     * 新增物料明细
+     * 新增/修改物料明细
      * @param dto
      * @return
      */
-    ResultVO insertDetail(BomBodyDTO dto);
+    ResultVO editDetail(BomBodyDTO dto);
 
 
 
@@ -75,11 +75,4 @@ public interface IBomService {
      */
     ResultVO queryBomBody(Map<String, Object> reqData);
 
-
-    /**
-     * 修改/更新 物料明细表
-     * @param dto
-     * @return
-     */
-    ResultVO updateDetail(BomBodyDTO dto);
 }
