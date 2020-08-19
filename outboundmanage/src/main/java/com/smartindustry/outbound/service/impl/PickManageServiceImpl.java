@@ -2,6 +2,7 @@ package com.smartindustry.outbound.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.smartindustry.common.bo.am.LoginUserBO;
 import com.smartindustry.common.bo.om.LabelRecommendBO;
 import com.smartindustry.common.bo.om.PickBodyBO;
 import com.smartindustry.common.bo.om.PickHeadBO;
@@ -13,6 +14,7 @@ import com.smartindustry.common.mapper.si.StorageLabelMapper;
 import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.om.*;
 import com.smartindustry.common.pojo.si.PrintLabelPO;
+import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
@@ -56,6 +58,8 @@ public class PickManageServiceImpl implements IPickManageService {
     private PickCheckMapper pickCheckMapper;
     @Autowired
     private OutboundRecordMapper outboundRecordMapper;
+    @Autowired
+    TokenService tokenService;
 
     @Override
     public ResultVO pageQueryPickHead(int pageNum, int pageSize, Map<String, Object> reqMap) {
@@ -335,7 +339,7 @@ public class PickManageServiceImpl implements IPickManageService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO outBoundItems(Long pickHeadId) {
-        UserPO user = ServletUtil.getUserBO().getUser();
+        UserPO user = tokenService.getLoginUser().getUser();
         //1 当形成出库单，由于物料欠缺，异常数据，则由物料拣货10变成工单审核15
         int statusCode = 0;
         Integer resultEx = pickHeadMapper.judgeIsEx(pickHeadId);
@@ -389,7 +393,7 @@ public class PickManageServiceImpl implements IPickManageService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO disAgree(Long pickHeadId, Byte status, String message) {
-        UserPO user = ServletUtil.getUserBO().getUser();
+        UserPO user = tokenService.getLoginUser().getUser();
         PickCheckPO po = new PickCheckPO();
         po.setPickHeadId(pickHeadId);
         po.setRemark(message);
@@ -418,7 +422,7 @@ public class PickManageServiceImpl implements IPickManageService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO agreeOutBound(Long pickHeadId) {
-        UserPO user = ServletUtil.getUserBO().getUser();
+        UserPO user = tokenService.getLoginUser().getUser();
         // 欠料出库，将物料状态改成“物料出库”
         pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_STORAGE);
         // 形成出库单

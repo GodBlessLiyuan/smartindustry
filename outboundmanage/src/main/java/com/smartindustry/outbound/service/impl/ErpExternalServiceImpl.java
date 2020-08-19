@@ -15,6 +15,7 @@ import com.smartindustry.common.pojo.om.LabelRecommendPO;
 import com.smartindustry.common.pojo.om.OutboundRecordPO;
 import com.smartindustry.common.pojo.om.PickBodyPO;
 import com.smartindustry.common.pojo.om.PickHeadPO;
+import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.constant.OutboundConstant;
@@ -49,13 +50,14 @@ public class ErpExternalServiceImpl implements IErpExternalService {
     private LabelRecommendMapper labelRecommendMapper;
     @Autowired
     private OutboundRecordMapper outboundRecordMapper;
-//    @Autowired
-//    private MaterialInventoryMapper materialInventoryMapper;
+    @Autowired
+    TokenService tokenService;
+
 
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO pick(PickDTO dto) {
-        UserPO user = ServletUtil.getUserBO().getUser();
+        UserPO user = tokenService.getLoginUser().getUser();
         PickHeadPO headPO = PickDTO.convert(dto.getHead());
         pickHeadMapper.insert(headPO);
 

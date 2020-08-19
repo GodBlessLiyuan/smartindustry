@@ -17,6 +17,7 @@ import com.smartindustry.common.pojo.si.LocationPO;
 import com.smartindustry.common.pojo.si.PrintLabelPO;
 import com.smartindustry.common.pojo.si.StorageLabelPO;
 import com.smartindustry.common.pojo.sm.*;
+import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
@@ -68,6 +69,8 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
     private StorageLabelMapper storageLabelMapper;
     @Autowired
     private MaterialInventoryMapper materialInventoryMapper;
+    @Autowired
+    TokenService tokenService;
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData) {
@@ -317,7 +320,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO storage(@RequestBody OperateDTO dto) {
-        UserPO user = ServletUtil.getUserBO().getUser();
+        UserPO user = tokenService.getLoginUser().getUser();
         StoragePO storagePO = storageMapper.selectByPrimaryKey(dto.getSid());
         if (null == storagePO) {
             return new ResultVO(1002);

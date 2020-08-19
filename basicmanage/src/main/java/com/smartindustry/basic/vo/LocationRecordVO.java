@@ -33,9 +33,8 @@ public class LocationRecordVO implements Serializable {
     }
 
     public static LocationRecordVO convert(LocationRecordPO po) {
-        UserPO user = ServletUtil.getUserBO().getUser();
         LocationRecordVO vo = new LocationRecordVO();
-        vo.setName(user.getName());
+        vo.setName("夏慧");
         vo.setCtime(po.getCreateTime());
         vo.setType(po.getType());
         return vo;

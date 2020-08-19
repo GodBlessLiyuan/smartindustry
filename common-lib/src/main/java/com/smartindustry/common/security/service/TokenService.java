@@ -2,6 +2,7 @@ package com.smartindustry.common.security.service;
 
 import com.smartindustry.common.bo.am.LoginUserBO;
 import com.smartindustry.common.constant.SecurityConstant;
+import com.smartindustry.common.util.ServletUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -50,6 +51,10 @@ public class TokenService {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    public LoginUserBO getLoginUser() {
+        return getLoginUser(ServletUtil.getRequest());
+    }
 
     /**
      * 获取用户身份信息

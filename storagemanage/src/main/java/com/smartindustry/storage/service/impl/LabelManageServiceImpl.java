@@ -12,6 +12,7 @@ import com.smartindustry.common.pojo.si.ConfigPO;
 import com.smartindustry.common.pojo.si.LabelRecordPO;
 import com.smartindustry.common.pojo.si.PrintLabelPO;
 import com.smartindustry.common.pojo.sm.*;
+import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.ReceiptConstant;
@@ -61,6 +62,8 @@ public class LabelManageServiceImpl implements ILabelManageService {
     private ConfigMapper configMapper;
     @Autowired
     private StorageMapper storageMapper;
+    @Autowired
+    TokenService tokenService;
 
     @Override
     public ResultVO query(@RequestBody OperateDTO dto) {
@@ -82,7 +85,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
 
     @Override
     public ResultVO print(@RequestBody OperateDTO dto) {
-        UserPO user = ServletUtil.getUserBO().getUser();
+        UserPO user = tokenService.getLoginUser().getUser();
         PrintLabelPO labelPO = printLabelMapper.queryByPidAndDr(dto.getPid(), (byte) 1);
         if (null == labelPO) {
             return new ResultVO(1002);
@@ -161,7 +164,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO finish(@RequestBody OperateDTO dto) {
-        UserPO user = ServletUtil.getUserBO().getUser();
+        UserPO user = tokenService.getLoginUser().getUser();
         ReceiptBodyBO bodyPO = receiptBodyMapper.queryByBodyId(dto.getRbid());
         if (null == bodyPO) {
             return new ResultVO(1002);

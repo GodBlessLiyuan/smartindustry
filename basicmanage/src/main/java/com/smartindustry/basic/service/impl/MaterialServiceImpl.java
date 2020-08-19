@@ -22,6 +22,7 @@ import com.smartindustry.common.pojo.om.PickBodyPO;
 import com.smartindustry.common.pojo.si.MaterialPO;
 import com.smartindustry.common.pojo.si.MaterialRecordPO;
 import com.smartindustry.common.pojo.sm.ReceiptBodyPO;
+import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.FileUtil;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.util.ServletUtil;
@@ -56,7 +57,8 @@ public class MaterialServiceImpl implements IMaterialService {
     private ReceiptBodyMapper receiptBodyMapper;
     @Autowired
     private PickBodyMapper pickBodyMapper;
-
+    @Autowired
+    TokenService tokenService;
     @Autowired
     private FilePathConfig filePathConfig;
 
@@ -71,7 +73,7 @@ public class MaterialServiceImpl implements IMaterialService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO edit(MaterialDTO dto) {
-        UserPO user = ServletUtil.getUserBO().getUser();
+        UserPO user = tokenService.getLoginUser().getUser();
         MaterialPO existPO = materialMapper.queryByMno(dto.getMno());
         if (null != existPO && (null == dto.getMid() || !dto.getMid().equals(existPO.getMaterialId()))) {
             return new ResultVO(1004);
