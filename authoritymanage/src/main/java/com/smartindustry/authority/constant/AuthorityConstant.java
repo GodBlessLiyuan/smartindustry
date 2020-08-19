@@ -42,5 +42,4 @@ public class AuthorityConstant {
      */
     public static final Long EXPIRE_TIME = 30L;
 
-    public static final String ADMIN = "admin";
 }
