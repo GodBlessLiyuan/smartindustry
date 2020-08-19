@@ -80,18 +80,18 @@ public class UserController {
 
     @PostMapping("editPassword")
     @PreAuthorize("@ss.hasPermi('am:userinfo:password')")
-    public ResultVO editPassword(@RequestBody EditDTO dto) {
-        return userService.editPassword(dto);
+    public ResultVO editPassword(HttpServletRequest session,@RequestBody EditDTO dto) {
+        return userService.editPassword(session,dto);
     }
 
     @PostMapping("queryUserMsg")
-    public ResultVO queryUserMsg(){
-        return userService.queryUserMsg();
+    public ResultVO queryUserMsg(HttpServletRequest session){
+        return userService.queryUserMsg(session);
     }
 
     @PostMapping("updateUser")
     @PreAuthorize("@ss.hasPermi('am:userinfo:update')")
-    public ResultVO updateUser(@RequestBody UserDTO dto) {
-        return userService.updateUser(dto);
+    public ResultVO updateUser(HttpServletRequest session,@RequestBody UserDTO dto) {
+        return userService.updateUser(session,dto);
     }
 }
