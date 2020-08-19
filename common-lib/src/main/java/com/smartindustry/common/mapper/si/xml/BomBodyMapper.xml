@@ -232,11 +232,11 @@
   </update>
 
   <select id="queryChildren" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.si.BomHeadBO">
-    select ma.material_id as materialId,ma.material_no as materialNo,ma.material_name as materialName,ma.material_model as materialModel,mp.material_property_name as materialPropertyName
+    select bb.bom_head_id as bomHeadId,ma.material_id as materialId,ma.material_no as materialNo,ma.material_name as materialName,ma.material_model as materialModel,mp.material_property_name as materialPropertyName
     from si_bom_body bb
     left join si_material ma on bb.material_id = ma.material_id
     left join dd_material_property mp on bb.material_property_id = mp.material_property_id
-    where bb.dr = 1 and bb.parent_id = #{parentId,jdbcType=BIGINT}
+    where bb.dr = 1 and bb.parent_id = #{parentId,jdbcType=BIGINT} and bb.bom_head_id = #{bomHeadId,jdbcType=BIGINT}
   </select>
 
   <!--  查看当前主BOM下是否已经存在当前物料的明细-->
