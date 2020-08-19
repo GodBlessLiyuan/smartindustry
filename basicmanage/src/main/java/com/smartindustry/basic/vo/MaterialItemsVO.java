@@ -17,6 +17,10 @@ import java.util.List;
 public class MaterialItemsVO implements Serializable {
     private static final long SerialVersionUID = 1L;
     /**
+     * 主物料id
+     */
+    private Long bhid;
+    /**
      * 物料ID
      */
     private Long mid;
@@ -52,6 +56,7 @@ public class MaterialItemsVO implements Serializable {
 
     public static MaterialItemsVO convert(BomHeadBO bo) {
         MaterialItemsVO vo = new MaterialItemsVO();
+        vo.setBhid(bo.getBomHeadId());
         vo.setMmodel(bo.getMaterialModel());
         vo.setMno(bo.getMaterialNo());
         vo.setMname(bo.getMaterialName());

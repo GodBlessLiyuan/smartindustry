@@ -132,7 +132,7 @@ public class BomServiceImpl implements IBomService {
         //从主BOM清单查询根节点
         BomHeadBO bo = bomHeadMapper.queryMainMaterial(dto.getBhid());
         MaterialItemsVO vo = MaterialItemsVO.convert(bo);
-        List<BomHeadBO> bos = bomBodyMapper.queryChildren(vo.getMid());
+        List<BomHeadBO> bos = bomBodyMapper.queryChildren(vo.getMid(),vo.getBhid());
         List<MaterialItemsVO> children= getBomTreeList(MaterialItemsVO.convert(bos));
         vo.setChildren(children);
         return ResultVO.ok().setData(vo);
@@ -143,7 +143,7 @@ public class BomServiceImpl implements IBomService {
      */
     private List<MaterialItemsVO> getBomTreeList(List<MaterialItemsVO> vos){
         for(MaterialItemsVO vo : vos){
-            List<BomHeadBO> bos = bomBodyMapper.queryChildren(vo.getMid());
+            List<BomHeadBO> bos = bomBodyMapper.queryChildren(vo.getMid(),vo.getBhid());
             if(bos!=null && bos.size()!=0){
                 List<MaterialItemsVO> vosTemp = getBomTreeList(MaterialItemsVO.convert(bos));
                 vo.setChildren(vosTemp);

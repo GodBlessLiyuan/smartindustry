@@ -40,7 +40,7 @@ public interface BomBodyMapper extends BaseMapper<BomBodyPO, Long> {
     /**
      * 查询当前物料的子物料列表
      */
-    List<BomHeadBO> queryChildren(@Param("parentId") Long parentId);
+    List<BomHeadBO> queryChildren(@Param("parentId") Long parentId,@Param("bomHeadId") Long bomHeadId);
 
     /**
      *查看当前主BOM下是否已经存在当前物料的明细
