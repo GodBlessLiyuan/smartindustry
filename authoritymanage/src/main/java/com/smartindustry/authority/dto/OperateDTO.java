@@ -42,4 +42,13 @@ public class OperateDTO implements Serializable {
     public static boolean isAdmin(Long roleid) {
         return null != roleid && roleid == 1L;
     }
+
+    public static boolean isAdmin(List<Long> roleid) {
+       for(Long id:roleid){
+           if (isAdmin(id)){
+               return true;
+           }
+       }
+       return false;
+    }
 }

@@ -136,7 +136,7 @@ public class UserServiceImpl implements IUserService {
             return new ResultVO(1004);
         }
         UserPO po = UserDTO.createPO(dto);
-        if(po.isAdmin()){
+        if(po.isAdmin() || OperateDTO.isAdmin(po.getRoleId()) || AuthorityConstant.ADMIN.equals(po.getUsername())){
             return new ResultVO(1023);
         }
         userMapper.updateByPrimaryKeySelective(po);
