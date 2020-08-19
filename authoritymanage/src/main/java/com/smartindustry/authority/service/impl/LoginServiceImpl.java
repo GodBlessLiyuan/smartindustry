@@ -70,6 +70,7 @@ public class LoginServiceImpl implements ILoginService {
         Map<String, Object> map = new HashMap<>();
         map.put(SecurityConstant.SESSION_TOKEN, tokenService.createToken(user));
         map.put(SecurityConstant.SESSION_USER, user);
+        session.setAttribute(SecurityConstant.SESSION_USER, user);
         return ResultVO.ok().setData(map);
     }
 

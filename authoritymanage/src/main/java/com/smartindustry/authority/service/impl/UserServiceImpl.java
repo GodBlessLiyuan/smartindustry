@@ -56,11 +56,11 @@ public class UserServiceImpl implements IUserService {
     private TokenService tokenService;
 
     @Override
-    public ResultVO pageQuery(Map<String, Object> reqData){
+    public ResultVO pageQuery(Map<String, Object> reqData) {
         Page<UserBO> page = PageQueryUtil.startPage(reqData);
         List<UserBO> bos = userMapper.userPageQuery(reqData);
         List<UserVO> vos = UserVO.convert(bos);
-        for (UserVO vo:vos){
+        for (UserVO vo : vos) {
             List<Long> deptIds = getDeptLevel(vo.getDid());
             Collections.reverse(deptIds);
             vo.setDcode(deptIds);
@@ -70,12 +70,13 @@ public class UserServiceImpl implements IUserService {
 
     /**
      * 根据当前的部门id,获得父节点列表
+     *
      * @param deptId
      * @return
      */
-    private List<Long> getDeptLevel(Long deptId){
+    private List<Long> getDeptLevel(Long deptId) {
         List<Long> deptIds = new ArrayList<>();
-        while (deptId != null){
+        while (deptId != null) {
             DeptPO po = deptMapper.selectByPrimaryKey(deptId);
             deptIds.add(po.getDeptId());
             deptId = po.getParentId();
@@ -84,19 +85,19 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public ResultVO batchUpdate(List<OperateDTO> dtos){
+    public ResultVO batchUpdate(List<OperateDTO> dtos) {
         List<UserPO> pos = UserDTO.updateList(dtos);
-        for(UserPO po:pos){
-            if(po.isAdmin()){
+        for (UserPO po : pos) {
+            if (po.isAdmin()) {
                 return new ResultVO(1023);
             }
         }
         userMapper.updateBatch(pos);
-        for(OperateDTO dto:dtos){
-            if(dto.getStatus().equals(AuthorityConstant.STATUS_DISABLE)){
-                userRecordMapper.insert(new UserRecordPO(dto.getUid(),1L,new Date(), AuthorityConstant.RECORD_DISABLE));
-            }else{
-                userRecordMapper.insert(new UserRecordPO(dto.getUid(),1L,new Date(), AuthorityConstant.RECORD_USE));
+        for (OperateDTO dto : dtos) {
+            if (dto.getStatus().equals(AuthorityConstant.STATUS_DISABLE)) {
+                userRecordMapper.insert(new UserRecordPO(dto.getUid(), 1L, new Date(), AuthorityConstant.RECORD_DISABLE));
+            } else {
+                userRecordMapper.insert(new UserRecordPO(dto.getUid(), 1L, new Date(), AuthorityConstant.RECORD_USE));
             }
         }
         return ResultVO.ok();
@@ -104,50 +105,50 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ResultVO delete(List<Long> uids){
+    public ResultVO delete(List<Long> uids) {
         userMapper.deleteBatch(uids);
-        for(Long uid:uids){
-            if(UserPO.isAdmin(uid)){
+        for (Long uid : uids) {
+            if (UserPO.isAdmin(uid)) {
                 return new ResultVO(1023);
             }
             deleteUser(uid);
-            userRecordMapper.insert(new UserRecordPO(uid,1L,new Date(), AuthorityConstant.RECORD_DELETE));
+            userRecordMapper.insert(new UserRecordPO(uid, 1L, new Date(), AuthorityConstant.RECORD_DELETE));
         }
         return ResultVO.ok();
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ResultVO insert(UserDTO dto){
-        Integer result = userMapper.judgeRepeatName(dto.getUname(),dto.getUid());
-        if(result.equals(1)){
+    public ResultVO insert(UserDTO dto) {
+        Integer result = userMapper.judgeRepeatName(dto.getUname(), dto.getUid());
+        if (result.equals(1)) {
             return new ResultVO(1004);
         }
         UserPO po = UserDTO.createPO(dto);
         userMapper.insert(po);
-        userRecordMapper.insert(new UserRecordPO(po.getUserId(),1L,new Date(), AuthorityConstant.RECORD_INSERT));
+        userRecordMapper.insert(new UserRecordPO(po.getUserId(), 1L, new Date(), AuthorityConstant.RECORD_INSERT));
         return ResultVO.ok();
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ResultVO update(UserDTO dto){
-        Integer result = userMapper.judgeRepeatName(dto.getUname(),dto.getUid());
-        if(result.equals(1)){
+    public ResultVO update(UserDTO dto) {
+        Integer result = userMapper.judgeRepeatName(dto.getUname(), dto.getUid());
+        if (result.equals(1)) {
             return new ResultVO(1004);
         }
         UserPO po = UserDTO.createPO(dto);
-        if(po.isAdmin() || OperateDTO.isAdmin(po.getRoleId()) || SecurityConstant.SUPER_ADMIN.equals(po.getUsername())){
+        if (po.isAdmin() || OperateDTO.isAdmin(po.getRoleId()) || SecurityConstant.SUPER_ADMIN.equals(po.getUsername())) {
             return new ResultVO(1023);
         }
         userMapper.updateByPrimaryKeySelective(po);
-        userRecordMapper.insert(new UserRecordPO(dto.getUid(),1L,new Date(), AuthorityConstant.RECORD_UPDATE));
+        userRecordMapper.insert(new UserRecordPO(dto.getUid(), 1L, new Date(), AuthorityConstant.RECORD_UPDATE));
         return ResultVO.ok();
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public  ResultVO updateUser(HttpServletRequest session,@RequestBody UserDTO dto){
+    public ResultVO updateUser(HttpServletRequest session, @RequestBody UserDTO dto) {
         LoginUserBO userDto = tokenService.getLoginUser(session);
         //从session中获取userId的值
         Long userId = userDto.getUser().getUserId();
@@ -158,9 +159,9 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public ResultVO updatePassword(OperateDTO dto){
+    public ResultVO updatePassword(OperateDTO dto) {
         UserPO po = UserDTO.buildPO(dto);
-        if(po.isAdmin()){
+        if (po.isAdmin()) {
             return new ResultVO(1023);
         }
         userMapper.updateByPrimaryKeySelective(po);
@@ -168,37 +169,38 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public ResultVO queryRole(){
+    public ResultVO queryRole() {
         List<RolePO> pos = roleMapper.selectAll();
         return ResultVO.ok().setData(RoleVO.convert(pos));
     }
 
     @Override
-    public ResultVO queryHavePerms(OperateDTO dto){
+    public ResultVO queryHavePerms(OperateDTO dto) {
         List<Long> perms = authorityMapper.queryByUserId(dto.getUid());
         return ResultVO.ok().setData(perms);
     }
 
     /**
      * 当禁用或删除某个用户，那么部门表的负责人需要置空，用户权限中间表需要删除
+     *
      * @param userId
      */
     @Transactional(rollbackFor = Exception.class)
-    public void deleteUser(Long userId){
+    public void deleteUser(Long userId) {
         deptMapper.updateBossId(userId);
         mUserAuthorityMapper.deleteByUserId(userId);
     }
 
 
     @Override
-    public ResultVO queryUserRecord(Map<String, Object> reqData){
+    public ResultVO queryUserRecord(Map<String, Object> reqData) {
         List<UserRecordBO> bos = userRecordMapper.queryUserRecord(reqData);
         return ResultVO.ok().setData(UserRecordVO.convert(bos));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ResultVO editPassword(HttpServletRequest session,@RequestBody EditDTO dto){
+    public ResultVO editPassword(HttpServletRequest session, @RequestBody EditDTO dto) {
         LoginUserBO userDto = tokenService.getLoginUser(session);
         //从session中获取userId的值
         Long userId = userDto.getUser().getUserId();
@@ -209,18 +211,18 @@ public class UserServiceImpl implements IUserService {
         //根据id,检索到当前用户，以便获得password
         UserPO userPo = userMapper.selectByPrimaryKey(userId);
         // 比较输入旧密码是否等于用户本身存在数据库的密码
-        if (!SecurityUtil.matchesPassword(dto.getOpassword(),userPo.getPassword())) {
+        if (!SecurityUtil.matchesPassword(dto.getOpassword(), userPo.getPassword())) {
             // 旧密码输入错误
             return new ResultVO(1023);
-        }else {
+        } else {
             // 如果没有问题，则将当前userId用户更新密码
-            userMapper.updatePassword(SecurityUtil.encryptPassword(dto.getNpassword()),userId);
+            userMapper.updatePassword(SecurityUtil.encryptPassword(dto.getNpassword()), userId);
         }
         return ResultVO.ok();
     }
 
     @Override
-    public ResultVO queryUserMsg(HttpServletRequest session){
+    public ResultVO queryUserMsg(HttpServletRequest session) {
         LoginUserBO dto = tokenService.getLoginUser(session);
         UserBO bo = userMapper.queryUserMsg(dto.getUser().getUserId());
         return ResultVO.ok().setData(UserVO.convertToUserMsg(bo));
