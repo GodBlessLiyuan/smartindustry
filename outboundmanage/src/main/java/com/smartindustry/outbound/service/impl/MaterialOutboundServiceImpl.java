@@ -94,7 +94,7 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO outbound(OperateDTO dto) {
-        UserPO user = tokenService.getLoginUser().getUser();
+        UserPO user = tokenService.getLoginUser();
         OutboundPO outboundPO = outboundMapper.selectByPrimaryKey(dto.getOid());
         if (null == outboundPO) {
             return new ResultVO(1002);

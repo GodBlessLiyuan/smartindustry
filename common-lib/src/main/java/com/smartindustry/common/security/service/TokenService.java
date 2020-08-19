@@ -2,6 +2,7 @@ package com.smartindustry.common.security.service;
 
 import com.smartindustry.common.bo.am.LoginUserBO;
 import com.smartindustry.common.constant.SecurityConstant;
+import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.util.ServletUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -52,8 +53,8 @@ public class TokenService {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    public LoginUserBO getLoginUser() {
-        return getLoginUser(ServletUtil.getRequest());
+    public UserPO getLoginUser() {
+        return getLoginUser(ServletUtil.getRequest()).getUser();
     }
 
     /**

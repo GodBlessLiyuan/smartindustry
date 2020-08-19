@@ -67,7 +67,7 @@ public class RoleServiceImpl implements IRoleService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO batchUpdate(List<OperateDTO> dtos){
-        UserPO user = tokenService.getLoginUser().getUser();
+        UserPO user = tokenService.getLoginUser();
         if (OperateDTO.hasAdmin(dtos)){
             return new ResultVO(1023);
         }

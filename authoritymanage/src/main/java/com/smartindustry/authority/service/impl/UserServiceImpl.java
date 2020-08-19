@@ -87,7 +87,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public ResultVO batchUpdate(List<OperateDTO> dtos) {
-        UserPO user = tokenService.getLoginUser().getUser();
+        UserPO user = tokenService.getLoginUser();
         List<UserPO> pos = UserDTO.updateList(dtos);
         for (UserPO po : pos) {
             if (po.isAdmin()) {
@@ -108,7 +108,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO delete(List<Long> uids) {
-        UserPO user = tokenService.getLoginUser().getUser();
+        UserPO user = tokenService.getLoginUser();
         userMapper.deleteBatch(uids);
         for (Long uid : uids) {
             if (UserPO.isAdmin(uid)) {
@@ -123,7 +123,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO insert(UserDTO dto) {
-        UserPO user = tokenService.getLoginUser().getUser();
+        UserPO user = tokenService.getLoginUser();
         Integer result = userMapper.judgeRepeatName(dto.getUname(), dto.getUid());
         if (result.equals(1)) {
             return new ResultVO(1004);
@@ -137,7 +137,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO update(UserDTO dto) {
-        UserPO user = tokenService.getLoginUser().getUser();
+        UserPO user = tokenService.getLoginUser();
         Integer result = userMapper.judgeRepeatName(dto.getUname(), dto.getUid());
         if (result.equals(1)) {
             return new ResultVO(1004);
@@ -159,7 +159,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO updateUser(@RequestBody UserDTO dto) {
-        UserPO user = tokenService.getLoginUser().getUser();
+        UserPO user = tokenService.getLoginUser();
         //从session中获取userId的值
         Long userId = user.getUserId();
         UserPO po = UserDTO.createPO(dto);
@@ -211,7 +211,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO editPassword(@RequestBody EditDTO dto) {
-        UserPO user = tokenService.getLoginUser().getUser();
+        UserPO user = tokenService.getLoginUser();
         //从session中获取userId的值
         Long userId = user.getUserId();
         if (userId == null) {
@@ -233,8 +233,8 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public ResultVO queryUserMsg() {
-        LoginUserBO userBo = tokenService.getLoginUser();
-        UserBO bo = userMapper.queryUserMsg(userBo.getUser().getUserId());
+        UserPO user = tokenService.getLoginUser();
+        UserBO bo = userMapper.queryUserMsg(user.getUserId());
         return ResultVO.ok().setData(UserVO.convertToUserMsg(bo));
     }
 }

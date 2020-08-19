@@ -73,7 +73,7 @@ public class MaterialServiceImpl implements IMaterialService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO edit(MaterialDTO dto) {
-        UserPO user = tokenService.getLoginUser().getUser();
+        UserPO user = tokenService.getLoginUser();
         MaterialPO existPO = materialMapper.queryByMno(dto.getMno());
         if (null != existPO && (null == dto.getMid() || !dto.getMid().equals(existPO.getMaterialId()))) {
             return new ResultVO(1004);

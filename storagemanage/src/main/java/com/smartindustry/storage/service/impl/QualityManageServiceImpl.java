@@ -80,7 +80,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO iqcTest(IqcTestDTO dto) {
-        UserPO user = tokenService.getLoginUser().getUser();
+        UserPO user = tokenService.getLoginUser();
         ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(dto.getRbid());
         if (null == receiptBodyPO) {
             return new ResultVO(1002);
@@ -141,7 +141,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
 
     @Override
     public ResultVO qeTest(QeTestDTO dto) {
-        UserPO user = tokenService.getLoginUser().getUser();
+        UserPO user = tokenService.getLoginUser();
         ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(dto.getRbid());
         if (null == receiptBodyPO) {
             return new ResultVO(1002);
@@ -199,7 +199,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO qeConfirm(QeConfirmDTO dto) {
-        UserPO user = tokenService.getLoginUser().getUser();
+        UserPO user = tokenService.getLoginUser();
         ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(dto.getRbid());
         if (null == receiptBodyPO) {
             return new ResultVO(1002);
@@ -270,7 +270,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO storage(@RequestBody OperateDTO dto) {
-        UserPO user = tokenService.getLoginUser().getUser();
+        UserPO user = tokenService.getLoginUser();
         Byte status;    // 操作记录状态
         IqcDetectPO iqcDetectPO = iqcDetectMapper.selectByPrimaryKey(dto.getRbid());
         if (null != iqcDetectPO) {

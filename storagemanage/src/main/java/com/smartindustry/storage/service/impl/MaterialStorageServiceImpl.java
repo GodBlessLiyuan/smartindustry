@@ -320,7 +320,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO storage(@RequestBody OperateDTO dto) {
-        UserPO user = tokenService.getLoginUser().getUser();
+        UserPO user = tokenService.getLoginUser();
         StoragePO storagePO = storageMapper.selectByPrimaryKey(dto.getSid());
         if (null == storagePO) {
             return new ResultVO(1002);

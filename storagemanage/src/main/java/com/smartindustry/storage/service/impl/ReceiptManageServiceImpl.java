@@ -72,7 +72,7 @@ public class ReceiptManageServiceImpl implements IReceiptManageService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO insert(ReceiptDTO dto) {
-        UserPO user = tokenService.getLoginUser().getUser();
+        UserPO user = tokenService.getLoginUser();
         ReceiptHeadPO headPO = ReceiptHeadDTO.createPO(receiptHeadMapper, new ReceiptHeadPO(), dto.getHead());
         receiptHeadMapper.insert(headPO);
 

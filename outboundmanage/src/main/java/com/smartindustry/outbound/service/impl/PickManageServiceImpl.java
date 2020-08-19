@@ -339,7 +339,7 @@ public class PickManageServiceImpl implements IPickManageService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO outBoundItems(Long pickHeadId) {
-        UserPO user = tokenService.getLoginUser().getUser();
+        UserPO user = tokenService.getLoginUser();
         //1 当形成出库单，由于物料欠缺，异常数据，则由物料拣货10变成工单审核15
         int statusCode = 0;
         Integer resultEx = pickHeadMapper.judgeIsEx(pickHeadId);
@@ -393,7 +393,7 @@ public class PickManageServiceImpl implements IPickManageService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO disAgree(Long pickHeadId, Byte status, String message) {
-        UserPO user = tokenService.getLoginUser().getUser();
+        UserPO user = tokenService.getLoginUser();
         PickCheckPO po = new PickCheckPO();
         po.setPickHeadId(pickHeadId);
         po.setRemark(message);
@@ -422,7 +422,7 @@ public class PickManageServiceImpl implements IPickManageService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO agreeOutBound(Long pickHeadId) {
-        UserPO user = tokenService.getLoginUser().getUser();
+        UserPO user = tokenService.getLoginUser();
         // 欠料出库，将物料状态改成“物料出库”
         pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_STORAGE);
         // 形成出库单

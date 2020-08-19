@@ -60,7 +60,7 @@ public class SupplierServiceImpl implements ISupplierService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO edit(SupplierDTO dto) {
-        UserPO user = tokenService.getLoginUser().getUser();
+        UserPO user = tokenService.getLoginUser();
         SupplierPO existPO = supplierMapper.queryBySno(dto.getSno());
         if (null != existPO && (null == dto.getSid() || !dto.getSid().equals(existPO.getSupplierId()))) {
             return new ResultVO(1004);

@@ -57,7 +57,7 @@ public class ErpExternalServiceImpl implements IErpExternalService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO pick(PickDTO dto) {
-        UserPO user = tokenService.getLoginUser().getUser();
+        UserPO user = tokenService.getLoginUser();
         PickHeadPO headPO = PickDTO.convert(dto.getHead());
         pickHeadMapper.insert(headPO);
 

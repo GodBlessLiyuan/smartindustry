@@ -60,7 +60,7 @@ public class DeptServiceImpl implements IDeptService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO batchUpdate(List<OperateDTO> dtos){
-        UserPO user = tokenService.getLoginUser().getUser();
+        UserPO user = tokenService.getLoginUser();
         List<DeptPO> pos = DeptDTO.updateList(dtos);
         deptMapper.updateBatch(pos);
         for(OperateDTO dto:dtos){
@@ -76,7 +76,7 @@ public class DeptServiceImpl implements IDeptService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO insert(DeptDTO dto){
-        UserPO user = tokenService.getLoginUser().getUser();
+        UserPO user = tokenService.getLoginUser();
         Integer result = deptMapper.judgeRepeatName(dto.getDname(),dto.getDid());
         if(result.equals(1)){
             return new ResultVO(1004);
@@ -90,7 +90,7 @@ public class DeptServiceImpl implements IDeptService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO update(DeptDTO dto){
-        UserPO user = tokenService.getLoginUser().getUser();
+        UserPO user = tokenService.getLoginUser();
         Integer result = deptMapper.judgeRepeatName(dto.getDname(),dto.getDid());
         if(result.equals(1)){
             return new ResultVO(1004);
@@ -111,7 +111,7 @@ public class DeptServiceImpl implements IDeptService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO delete(List<Long> dids){
-        UserPO user = tokenService.getLoginUser().getUser();
+        UserPO user = tokenService.getLoginUser();
         if (dids.contains(1L)){
             dids.remove(1L);
         }

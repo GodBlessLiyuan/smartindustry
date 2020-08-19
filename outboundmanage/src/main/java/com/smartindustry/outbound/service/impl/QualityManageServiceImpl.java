@@ -65,7 +65,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO pickOqcButton(Long pickHeadId){
-        UserPO user = tokenService.getLoginUser().getUser();
+        UserPO user = tokenService.getLoginUser();
         ConfigPO configPo = configMapper.queryByKey(ConfigConstant.K_OUTBOUND_QUALITY_KEY);
         if (null != configPo && ConfigConstant.V_NO.equals(configPo.getConfigValue())) {
             pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_STORAGE);

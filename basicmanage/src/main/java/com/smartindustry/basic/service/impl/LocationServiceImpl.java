@@ -60,7 +60,7 @@ public class LocationServiceImpl implements ILocationService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO edit(LocationDTO dto) {
-        UserPO user = tokenService.getLoginUser().getUser();
+        UserPO user = tokenService.getLoginUser();
         LocationPO existPO = locationMapper.queryByLno(dto.getLno());
         if (null != existPO && (null == dto.getLid() || !dto.getLid().equals(existPO.getLocationId()))) {
             return new ResultVO(1004);

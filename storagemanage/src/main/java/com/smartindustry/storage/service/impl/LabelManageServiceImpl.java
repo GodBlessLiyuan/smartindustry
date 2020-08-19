@@ -85,7 +85,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
 
     @Override
     public ResultVO print(@RequestBody OperateDTO dto) {
-        UserPO user = tokenService.getLoginUser().getUser();
+        UserPO user = tokenService.getLoginUser();
         PrintLabelPO labelPO = printLabelMapper.queryByPidAndDr(dto.getPid(), (byte) 1);
         if (null == labelPO) {
             return new ResultVO(1002);
@@ -164,7 +164,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO finish(@RequestBody OperateDTO dto) {
-        UserPO user = tokenService.getLoginUser().getUser();
+        UserPO user = tokenService.getLoginUser();
         ReceiptBodyBO bodyPO = receiptBodyMapper.queryByBodyId(dto.getRbid());
         if (null == bodyPO) {
             return new ResultVO(1002);
