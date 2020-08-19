@@ -10,8 +10,10 @@ import com.smartindustry.common.bo.si.StorageLabelBO;
 import com.smartindustry.common.mapper.om.*;
 import com.smartindustry.common.mapper.si.PrintLabelMapper;
 import com.smartindustry.common.mapper.si.StorageLabelMapper;
+import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.om.*;
 import com.smartindustry.common.pojo.si.PrintLabelPO;
+import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.constant.OutboundConstant;
@@ -333,6 +335,7 @@ public class PickManageServiceImpl implements IPickManageService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO outBoundItems(Long pickHeadId) {
+        UserPO user = ServletUtil.getUserBO().getUser();
         //1 当形成出库单，由于物料欠缺，异常数据，则由物料拣货10变成工单审核15
         int statusCode = 0;
         Integer resultEx = pickHeadMapper.judgeIsEx(pickHeadId);
@@ -345,8 +348,8 @@ public class PickManageServiceImpl implements IPickManageService {
             pickCheckMapper.insert(po);
             statusCode = 1;
             // 当欠料异常形成出库单，将新增审核操作记录到操作记录表中
-            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.RECORD_SUBMIT, OutboundConstant.MATERIAL_STATUS_PICK));
-            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.RECORD_ADD, OutboundConstant.MATERIAL_STATUS_CHECK));
+            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, user.getUserId(), user.getName(), OutboundConstant.RECORD_SUBMIT, OutboundConstant.MATERIAL_STATUS_PICK));
+            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, user.getUserId(), user.getName(), OutboundConstant.RECORD_ADD, OutboundConstant.MATERIAL_STATUS_CHECK));
         } else {
             pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_STORAGE);
             OutboundPO po = new OutboundPO();
@@ -357,8 +360,8 @@ public class PickManageServiceImpl implements IPickManageService {
             po.setCreateTime(date);
             po.setDr((byte) 1);
             outboundMapper.insert(po);
-            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.RECORD_SUBMIT, OutboundConstant.MATERIAL_STATUS_PICK));
-            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, po.getOutboundId(), 1L, "jzj", OutboundConstant.RECORD_ADD, OutboundConstant.MATERIAL_STATUS_STORAGE));
+            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, user.getUserId(), user.getName(), OutboundConstant.RECORD_SUBMIT, OutboundConstant.MATERIAL_STATUS_PICK));
+            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, po.getOutboundId(), user.getUserId(), user.getName(), OutboundConstant.RECORD_ADD, OutboundConstant.MATERIAL_STATUS_STORAGE));
 
         }
         //2 当形成出库单，在不欠料的情况下，则由物料拣货10变成物料出库30
@@ -386,6 +389,7 @@ public class PickManageServiceImpl implements IPickManageService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO disAgree(Long pickHeadId, Byte status, String message) {
+        UserPO user = ServletUtil.getUserBO().getUser();
         PickCheckPO po = new PickCheckPO();
         po.setPickHeadId(pickHeadId);
         po.setRemark(message);
@@ -394,18 +398,18 @@ public class PickManageServiceImpl implements IPickManageService {
             pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_RETURN);
             po.setStatus(OutboundConstant.TURN_DOWN_CANCEL);
             pickCheckMapper.updateByPrimaryKey(po);
-            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.RECORD_DISAGREE, OutboundConstant.MATERIAL_STATUS_CHECK));
+            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, user.getUserId(), user.getName(), OutboundConstant.RECORD_DISAGREE, OutboundConstant.MATERIAL_STATUS_CHECK));
         } else if (status.equals(OutboundConstant.MATERIAL_STATUS_WAIT)) {
             //等齐套发货
             pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_PICK);
             pickCheckMapper.deleteByPrimaryKey(pickHeadId);
-            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.RECORD_DISAGREE, OutboundConstant.MATERIAL_STATUS_CHECK));
+            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, user.getUserId(), user.getName(), OutboundConstant.RECORD_DISAGREE, OutboundConstant.MATERIAL_STATUS_CHECK));
         } else if (status.equals(OutboundConstant.MATERIAL_STATUS_RETURN)) {
             //取消发货，退货仓库
             pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_RETURN);
             po.setStatus(OutboundConstant.TURN_DOWN_CANCEL);
             pickCheckMapper.updateByPrimaryKey(po);
-            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.RECORD_DISAGREE, OutboundConstant.MATERIAL_STATUS_CHECK));
+            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, user.getUserId(), user.getName(), OutboundConstant.RECORD_DISAGREE, OutboundConstant.MATERIAL_STATUS_CHECK));
         }
         return ResultVO.ok();
     }
@@ -414,6 +418,7 @@ public class PickManageServiceImpl implements IPickManageService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO agreeOutBound(Long pickHeadId) {
+        UserPO user = ServletUtil.getUserBO().getUser();
         // 欠料出库，将物料状态改成“物料出库”
         pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_STORAGE);
         // 形成出库单
@@ -425,8 +430,8 @@ public class PickManageServiceImpl implements IPickManageService {
         po.setCreateTime(date);
         po.setDr((byte) 1);
         outboundMapper.insert(po);
-        outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, 1L, "jzj", OutboundConstant.RECORD_AGREE, OutboundConstant.MATERIAL_STATUS_CHECK));
-        outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, po.getOutboundId(), 1L, "jzj", OutboundConstant.RECORD_ADD, OutboundConstant.MATERIAL_STATUS_STORAGE));
+        outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, user.getUserId(), user.getName(), OutboundConstant.RECORD_AGREE, OutboundConstant.MATERIAL_STATUS_CHECK));
+        outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, po.getOutboundId(), user.getUserId(), user.getName(), OutboundConstant.RECORD_ADD, OutboundConstant.MATERIAL_STATUS_STORAGE));
         return ResultVO.ok();
     }
 }

@@ -42,4 +42,9 @@ public class AuthorityConstant {
      */
     public static final Long EXPIRE_TIME = 30L;
 
+    /**
+     * 假的密码标识
+     */
+    public static final String FLAG_FAKE_PASSWORD = "******";
+
 }

@@ -8,8 +8,10 @@ import com.smartindustry.common.constant.ModuleConstant;
 import com.smartindustry.common.constant.ResultConstant;
 import com.smartindustry.common.mapper.si.LabelRecordMapper;
 import com.smartindustry.common.mapper.sm.*;
+import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.sm.*;
 import com.smartindustry.common.util.PageQueryUtil;
+import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.ReceiptConstant;
@@ -75,6 +77,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO iqcTest(IqcTestDTO dto) {
+        UserPO user = ServletUtil.getUserBO().getUser();
         ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(dto.getRbid());
         if (null == receiptBodyPO) {
             return new ResultVO(1002);
@@ -116,7 +119,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
 
             if (!ReceiptConstant.IQC_REJECT.equals(iqcDetectPO.getStatus())) {
                 // QE确认新增操作记录
-                recordMapper.insert(new StorageRecordPO(dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_QE_CONFIRM_ADD, ReceiptConstant.RECEIPT_QE_CONFIRM));
+                recordMapper.insert(new StorageRecordPO(dto.getRbid(), user.getUserId(), user.getName(), ReceiptConstant.RECORD_TYPE_QE_CONFIRM_ADD, ReceiptConstant.RECEIPT_QE_CONFIRM));
             }
         } else {
             return new ResultVO(1001);
@@ -128,13 +131,14 @@ public class QualityManageServiceImpl implements IQualityManageService {
         receiptBodyMapper.updateByPrimaryKey(receiptBodyPO);
 
         // 操作记录
-        recordMapper.insert(new StorageRecordPO(dto.getRbid(), 1L, "夏慧", type, ReceiptConstant.RECEIPT_IQC_DETECT));
+        recordMapper.insert(new StorageRecordPO(dto.getRbid(), user.getUserId(), user.getName(), type, ReceiptConstant.RECEIPT_IQC_DETECT));
 
         return ResultVO.ok();
     }
 
     @Override
     public ResultVO qeTest(QeTestDTO dto) {
+        UserPO user = ServletUtil.getUserBO().getUser();
         ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(dto.getRbid());
         if (null == receiptBodyPO) {
             return new ResultVO(1002);
@@ -184,7 +188,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
         // 更新收料单
         receiptBodyMapper.updateByPrimaryKey(receiptBodyPO);
         // 操作记录
-        recordMapper.insert(new StorageRecordPO(dto.getRbid(), 1L, "夏慧", type, ReceiptConstant.RECEIPT_QE_DETECT));
+        recordMapper.insert(new StorageRecordPO(dto.getRbid(), user.getUserId(), user.getName(), type, ReceiptConstant.RECEIPT_QE_DETECT));
 
         return ResultVO.ok();
     }
@@ -192,6 +196,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO qeConfirm(QeConfirmDTO dto) {
+        UserPO user = ServletUtil.getUserBO().getUser();
         ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(dto.getRbid());
         if (null == receiptBodyPO) {
             return new ResultVO(1002);
@@ -236,7 +241,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
             receiptBodyPO.setStatus(ReceiptConstant.RECEIPT_IQC_DETECT);
 
             // IQC 操作记录
-            recordMapper.insert(new StorageRecordPO(dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_IQC_QE_REJECT, ReceiptConstant.RECEIPT_IQC_DETECT));
+            recordMapper.insert(new StorageRecordPO(dto.getRbid(), user.getUserId(), user.getName(), ReceiptConstant.RECORD_TYPE_IQC_QE_REJECT, ReceiptConstant.RECEIPT_IQC_DETECT));
         } else if (ReceiptConstant.QE_RETURN.equals(dto.getStatus())) {
             // 退供应商
             type = ReceiptConstant.RECORD_TYPE_QE_CONFIRM_RETURN;
@@ -254,7 +259,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
         // 更新收料单
         receiptBodyMapper.updateByPrimaryKey(receiptBodyPO);
         // QE 操作记录
-        recordMapper.insert(new StorageRecordPO(dto.getRbid(), 1L, "夏慧", type, ReceiptConstant.RECEIPT_QE_CONFIRM));
+        recordMapper.insert(new StorageRecordPO(dto.getRbid(), user.getUserId(), user.getName(), type, ReceiptConstant.RECEIPT_QE_CONFIRM));
 
         return ResultVO.ok();
     }
@@ -262,6 +267,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO storage(@RequestBody OperateDTO dto) {
+        UserPO user = ServletUtil.getUserBO().getUser();
         Byte status;    // 操作记录状态
         IqcDetectPO iqcDetectPO = iqcDetectMapper.selectByPrimaryKey(dto.getRbid());
         if (null != iqcDetectPO) {
@@ -313,7 +319,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
             storagePO.setDr((byte) 1);
             storageMapper.insert(storagePO);
 
-            recordMapper.insert(new StorageRecordPO(dto.getRbid(), storagePO.getStorageId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
+            recordMapper.insert(new StorageRecordPO(dto.getRbid(), storagePO.getStorageId(), user.getUserId(), user.getName(), ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
         }
         if (receiptBodyPO.getBadNum() > 0) {
             // 非良品入库单
@@ -328,11 +334,11 @@ public class QualityManageServiceImpl implements IQualityManageService {
             storagePO.setDr((byte) 1);
             storageMapper.insert(storagePO);
 
-            recordMapper.insert(new StorageRecordPO(dto.getRbid(), storagePO.getStorageId(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
+            recordMapper.insert(new StorageRecordPO(dto.getRbid(), storagePO.getStorageId(), user.getUserId(), user.getName(), ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
         }
 
         // 操作记录
-        recordMapper.insert(new StorageRecordPO(dto.getRbid(), 1L, "夏慧", ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, status));
+        recordMapper.insert(new StorageRecordPO(dto.getRbid(), user.getUserId(), user.getName(), ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, status));
 
         return ResultVO.ok();
     }

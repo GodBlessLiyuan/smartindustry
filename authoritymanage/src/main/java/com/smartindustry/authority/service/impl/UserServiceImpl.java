@@ -21,6 +21,7 @@ import com.smartindustry.common.pojo.am.UserRecordPO;
 import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.util.SecurityUtil;
+import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,8 +53,6 @@ public class UserServiceImpl implements IUserService {
     private MUserAuthorityMapper mUserAuthorityMapper;
     @Autowired
     private UserRecordMapper userRecordMapper;
-    @Autowired
-    private TokenService tokenService;
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData) {
@@ -86,6 +85,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public ResultVO batchUpdate(List<OperateDTO> dtos) {
+        UserPO user = ServletUtil.getUserBO().getUser();
         List<UserPO> pos = UserDTO.updateList(dtos);
         for (UserPO po : pos) {
             if (po.isAdmin()) {
@@ -95,9 +95,9 @@ public class UserServiceImpl implements IUserService {
         userMapper.updateBatch(pos);
         for (OperateDTO dto : dtos) {
             if (dto.getStatus().equals(AuthorityConstant.STATUS_DISABLE)) {
-                userRecordMapper.insert(new UserRecordPO(dto.getUid(), 1L, new Date(), AuthorityConstant.RECORD_DISABLE));
+                userRecordMapper.insert(new UserRecordPO(dto.getUid(), user.getUserId(), new Date(), AuthorityConstant.RECORD_DISABLE));
             } else {
-                userRecordMapper.insert(new UserRecordPO(dto.getUid(), 1L, new Date(), AuthorityConstant.RECORD_USE));
+                userRecordMapper.insert(new UserRecordPO(dto.getUid(), user.getUserId(), new Date(), AuthorityConstant.RECORD_USE));
             }
         }
         return ResultVO.ok();
@@ -106,13 +106,14 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO delete(List<Long> uids) {
+        UserPO user = ServletUtil.getUserBO().getUser();
         userMapper.deleteBatch(uids);
         for (Long uid : uids) {
             if (UserPO.isAdmin(uid)) {
                 return new ResultVO(1023);
             }
             deleteUser(uid);
-            userRecordMapper.insert(new UserRecordPO(uid, 1L, new Date(), AuthorityConstant.RECORD_DELETE));
+            userRecordMapper.insert(new UserRecordPO(uid, user.getUserId(), new Date(), AuthorityConstant.RECORD_DELETE));
         }
         return ResultVO.ok();
     }
@@ -120,39 +121,45 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO insert(UserDTO dto) {
+        UserPO user = ServletUtil.getUserBO().getUser();
         Integer result = userMapper.judgeRepeatName(dto.getUname(), dto.getUid());
         if (result.equals(1)) {
             return new ResultVO(1004);
         }
         UserPO po = UserDTO.createPO(dto);
         userMapper.insert(po);
-        userRecordMapper.insert(new UserRecordPO(po.getUserId(), 1L, new Date(), AuthorityConstant.RECORD_INSERT));
+        userRecordMapper.insert(new UserRecordPO(po.getUserId(), user.getUserId(), new Date(), AuthorityConstant.RECORD_INSERT));
         return ResultVO.ok();
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO update(UserDTO dto) {
+        UserPO user = ServletUtil.getUserBO().getUser();
         Integer result = userMapper.judgeRepeatName(dto.getUname(), dto.getUid());
         if (result.equals(1)) {
             return new ResultVO(1004);
         }
+        UserPO oldpo = userMapper.selectByPrimaryKey(dto.getUid());
         UserPO po = UserDTO.createPO(dto);
+        if(AuthorityConstant.FLAG_FAKE_PASSWORD.equals(dto.getPassword())){
+            po.setPassword(oldpo.getPassword());
+        }
         boolean specialUserInfo = OperateDTO.isAdmin(po.getRoleId()) && SecurityConstant.SUPER_ADMIN.equals(po.getUsername());
         if (po.isAdmin() && !specialUserInfo) {
             return new ResultVO(1023);
         }
         userMapper.updateByPrimaryKeySelective(po);
-        userRecordMapper.insert(new UserRecordPO(dto.getUid(), 1L, new Date(), AuthorityConstant.RECORD_UPDATE));
+        userRecordMapper.insert(new UserRecordPO(dto.getUid(), user.getUserId(), new Date(), AuthorityConstant.RECORD_UPDATE));
         return ResultVO.ok();
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ResultVO updateUser(HttpServletRequest session, @RequestBody UserDTO dto) {
-        LoginUserBO userDto = tokenService.getLoginUser(session);
+    public ResultVO updateUser(@RequestBody UserDTO dto) {
+        LoginUserBO userBo = ServletUtil.getUserBO();
         //从session中获取userId的值
-        Long userId = userDto.getUser().getUserId();
+        Long userId = userBo.getUser().getUserId();
         UserPO po = UserDTO.createPO(dto);
         po.setUserId(userId);
         userMapper.updateByPrimaryKeySelective(po);
@@ -201,10 +208,10 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ResultVO editPassword(HttpServletRequest session, @RequestBody EditDTO dto) {
-        LoginUserBO userDto = tokenService.getLoginUser(session);
+    public ResultVO editPassword(@RequestBody EditDTO dto) {
+        LoginUserBO userBo = ServletUtil.getUserBO();
         //从session中获取userId的值
-        Long userId = userDto.getUser().getUserId();
+        Long userId = userBo.getUser().getUserId();
         if (userId == null) {
             // 用户过期
             return new ResultVO(1013);
@@ -223,11 +230,9 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public ResultVO queryUserMsg(HttpServletRequest session) {
-        LoginUserBO dto = tokenService.getLoginUser(session);
-        UserBO bo = userMapper.queryUserMsg(dto.getUser().getUserId());
+    public ResultVO queryUserMsg() {
+        LoginUserBO userBo = ServletUtil.getUserBO();
+        UserBO bo = userMapper.queryUserMsg(userBo.getUser().getUserId());
         return ResultVO.ok().setData(UserVO.convertToUserMsg(bo));
     }
-
-
 }

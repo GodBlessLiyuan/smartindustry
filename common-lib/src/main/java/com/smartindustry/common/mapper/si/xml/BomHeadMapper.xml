@@ -149,4 +149,11 @@
     left join si_material ma on bh.material_id = ma.material_id
     where bh.dr = 1 and bh.bom_head_id = #{bomHeadId,jdbcType=BIGINT}
   </select>
+
+<!--  根据bhid删除主物料，假删-->
+  <update id="deleteBom" parameterType="java.lang.Long">
+    update si_bom_head
+    set dr = #{dr,jdbcType=TINYINT}
+    where bom_head_id = #{bomHeadId,jdbcType=BIGINT}
+  </update>
 </mapper>

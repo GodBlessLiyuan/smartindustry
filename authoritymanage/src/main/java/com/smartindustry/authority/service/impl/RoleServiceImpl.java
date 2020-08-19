@@ -15,7 +15,9 @@ import com.smartindustry.common.bo.am.RoleRecordBO;
 import com.smartindustry.common.mapper.am.*;
 import com.smartindustry.common.pojo.am.RolePO;
 import com.smartindustry.common.pojo.am.RoleRecordPO;
+import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.util.PageQueryUtil;
+import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import org.apache.commons.collections.CollectionUtils;
@@ -62,6 +64,7 @@ public class RoleServiceImpl implements IRoleService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO batchUpdate(List<OperateDTO> dtos){
+        UserPO user = ServletUtil.getUserBO().getUser();
         if (OperateDTO.hasAdmin(dtos)){
             return new ResultVO(1023);
         }
@@ -69,9 +72,9 @@ public class RoleServiceImpl implements IRoleService {
         roleMapper.updateBatch(pos);
         for(OperateDTO dto:dtos){
             if(dto.getStatus().equals(AuthorityConstant.STATUS_DISABLE)){
-                roleRecordMapper.insert(new RoleRecordPO(dto.getRid(),1L,new Date(), AuthorityConstant.RECORD_DISABLE));
+                roleRecordMapper.insert(new RoleRecordPO(dto.getRid(),user.getUserId(),new Date(), AuthorityConstant.RECORD_DISABLE));
             }else{
-                roleRecordMapper.insert(new RoleRecordPO(dto.getRid(),1L,new Date(), AuthorityConstant.RECORD_USE));
+                roleRecordMapper.insert(new RoleRecordPO(dto.getRid(),user.getUserId(),new Date(), AuthorityConstant.RECORD_USE));
             }
         }
         return ResultVO.ok();

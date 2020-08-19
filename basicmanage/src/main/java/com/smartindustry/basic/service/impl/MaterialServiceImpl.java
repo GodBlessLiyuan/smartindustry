@@ -16,6 +16,7 @@ import com.smartindustry.common.mapper.si.MaterialMapper;
 import com.smartindustry.common.mapper.si.MaterialRecordMapper;
 import com.smartindustry.common.mapper.si.MaterialSpecificationMapper;
 import com.smartindustry.common.mapper.sm.ReceiptBodyMapper;
+import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.im.MaterialInventoryPO;
 import com.smartindustry.common.pojo.om.PickBodyPO;
 import com.smartindustry.common.pojo.si.MaterialPO;
@@ -23,6 +24,7 @@ import com.smartindustry.common.pojo.si.MaterialRecordPO;
 import com.smartindustry.common.pojo.sm.ReceiptBodyPO;
 import com.smartindustry.common.util.FileUtil;
 import com.smartindustry.common.util.PageQueryUtil;
+import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +71,7 @@ public class MaterialServiceImpl implements IMaterialService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO edit(MaterialDTO dto) {
+        UserPO user = ServletUtil.getUserBO().getUser();
         MaterialPO existPO = materialMapper.queryByMno(dto.getMno());
         if (null != existPO && (null == dto.getMid() || !dto.getMid().equals(existPO.getMaterialId()))) {
             return new ResultVO(1004);
@@ -78,7 +81,7 @@ public class MaterialServiceImpl implements IMaterialService {
             // 新增
             MaterialPO materialPO = MaterialDTO.createPO(dto);
             materialMapper.insert(materialPO);
-            materialRecordMapper.insert(new MaterialRecordPO(materialPO.getMaterialId(), 1L, BasicConstant.RECORD_ADD));
+            materialRecordMapper.insert(new MaterialRecordPO(materialPO.getMaterialId(), user.getUserId(), BasicConstant.RECORD_ADD));
 
             if (null != dto.getFiles() && dto.getFiles().size() > 0) {
                 dto.setMid(materialPO.getMaterialId());
@@ -102,7 +105,7 @@ public class MaterialServiceImpl implements IMaterialService {
         materialPO.setUpdateTime(new Date());
         materialMapper.updateByPrimaryKey(materialPO);
 
-        materialRecordMapper.insert(new MaterialRecordPO(materialPO.getMaterialId(), 1L, BasicConstant.RECORD_MODIFY));
+        materialRecordMapper.insert(new MaterialRecordPO(materialPO.getMaterialId(), user.getUserId(), BasicConstant.RECORD_MODIFY));
 
         materialSpecificationMapper.deleteByMid(dto.getMid());
         if (null != dto.getFiles() && dto.getFiles().size() > 0) {

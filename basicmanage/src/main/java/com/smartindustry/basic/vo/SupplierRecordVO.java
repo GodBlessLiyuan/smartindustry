@@ -1,6 +1,8 @@
 package com.smartindustry.basic.vo;
 
+import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.si.SupplierRecordPO;
+import com.smartindustry.common.util.ServletUtil;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -31,8 +33,9 @@ public class SupplierRecordVO implements Serializable {
     }
 
     public static SupplierRecordVO convert(SupplierRecordPO po) {
+        UserPO user = ServletUtil.getUserBO().getUser();
         SupplierRecordVO vo = new SupplierRecordVO();
-        vo.setName("夏慧");
+        vo.setName(user.getName());
         vo.setCtime(po.getCreateTime());
         vo.setType(po.getType());
         return vo;

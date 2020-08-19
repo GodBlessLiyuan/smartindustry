@@ -17,6 +17,7 @@ import com.smartindustry.common.pojo.am.DeptPO;
 import com.smartindustry.common.pojo.am.DeptRecordPO;
 import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.util.PageQueryUtil;
+import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,13 +57,14 @@ public class DeptServiceImpl implements IDeptService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO batchUpdate(List<OperateDTO> dtos){
+        UserPO user = ServletUtil.getUserBO().getUser();
         List<DeptPO> pos = DeptDTO.updateList(dtos);
         deptMapper.updateBatch(pos);
         for(OperateDTO dto:dtos){
             if(dto.getStatus().equals(AuthorityConstant.STATUS_DISABLE)){
-                deptRecordMapper.insert(new DeptRecordPO(dto.getDid(),1L,new Date(), AuthorityConstant.RECORD_DISABLE));
+                deptRecordMapper.insert(new DeptRecordPO(dto.getDid(),user.getUserId(),new Date(), AuthorityConstant.RECORD_DISABLE));
             }else {
-                deptRecordMapper.insert(new DeptRecordPO(dto.getDid(),1L,new Date(), AuthorityConstant.RECORD_USE));
+                deptRecordMapper.insert(new DeptRecordPO(dto.getDid(),user.getUserId(),new Date(), AuthorityConstant.RECORD_USE));
             }
         }
         return ResultVO.ok();
@@ -71,19 +73,21 @@ public class DeptServiceImpl implements IDeptService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO insert(DeptDTO dto){
+        UserPO user = ServletUtil.getUserBO().getUser();
         Integer result = deptMapper.judgeRepeatName(dto.getDname(),dto.getDid());
         if(result.equals(1)){
             return new ResultVO(1004);
         }
         DeptPO po = DeptDTO.createPO(dto);
         deptMapper.insert(po);
-        deptRecordMapper.insert(new DeptRecordPO(po.getDeptId(),1L,new Date(), AuthorityConstant.RECORD_INSERT));
+        deptRecordMapper.insert(new DeptRecordPO(po.getDeptId(),user.getUserId(),new Date(), AuthorityConstant.RECORD_INSERT));
         return ResultVO.ok();
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO update(DeptDTO dto){
+        UserPO user = ServletUtil.getUserBO().getUser();
         Integer result = deptMapper.judgeRepeatName(dto.getDname(),dto.getDid());
         if(result.equals(1)){
             return new ResultVO(1004);
@@ -97,13 +101,14 @@ public class DeptServiceImpl implements IDeptService {
         }
         DeptPO po = DeptDTO.createPO(dto);
         deptMapper.updateByPrimaryKeySelective(po);
-        deptRecordMapper.insert(new DeptRecordPO(dto.getDid(),1L,new Date(), AuthorityConstant.RECORD_UPDATE));
+        deptRecordMapper.insert(new DeptRecordPO(dto.getDid(),user.getUserId(),new Date(), AuthorityConstant.RECORD_UPDATE));
         return ResultVO.ok();
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO delete(List<Long> dids){
+        UserPO user = ServletUtil.getUserBO().getUser();
         if (dids.contains(1L)){
             dids.remove(1L);
         }
@@ -115,7 +120,7 @@ public class DeptServiceImpl implements IDeptService {
                 deptMapper.deleteByPrimaryKey(did);
             }
             deleteDept(did);
-            deptRecordMapper.insert(new DeptRecordPO(did,1L,new Date(), AuthorityConstant.RECORD_DELETE));
+            deptRecordMapper.insert(new DeptRecordPO(did,user.getUserId(),new Date(), AuthorityConstant.RECORD_DELETE));
         }
         return ResultVO.ok();
     }

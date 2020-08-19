@@ -35,4 +35,11 @@ public interface BomHeadMapper extends BaseMapper<BomHeadPO, Long> {
      * @return
      */
     BomHeadBO queryMainMaterial(@Param("bomHeadId") Long bomHeadId);
+
+    /**
+     * 删除主物料，假删
+     * @param bomHeadId
+     * @return
+     */
+    Integer deleteBom(@Param("bomHeadId") Long bomHeadId);
 }

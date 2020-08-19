@@ -107,7 +107,7 @@ public class BomServiceImpl implements IBomService {
             if(!pos.isEmpty()){
                 bomBodyMapper.deleteBatch(pos);
             }
-            bomHeadMapper.deleteByPrimaryKey(bhid);
+            bomHeadMapper.deleteBom(bhid);
         }
         return ResultVO.ok();
     }

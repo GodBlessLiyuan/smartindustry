@@ -12,10 +12,12 @@ import com.smartindustry.common.constant.ResultConstant;
 import com.smartindustry.common.mapper.si.MaterialMapper;
 import com.smartindustry.common.mapper.si.SupplierMapper;
 import com.smartindustry.common.mapper.si.SupplierRecordMapper;
+import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.si.MaterialPO;
 import com.smartindustry.common.pojo.si.SupplierPO;
 import com.smartindustry.common.pojo.si.SupplierRecordPO;
 import com.smartindustry.common.util.PageQueryUtil;
+import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +57,7 @@ public class SupplierServiceImpl implements ISupplierService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO edit(SupplierDTO dto) {
+        UserPO user = ServletUtil.getUserBO().getUser();
         SupplierPO existPO = supplierMapper.queryBySno(dto.getSno());
         if (null != existPO && (null == dto.getSid() || !dto.getSid().equals(existPO.getSupplierId()))) {
             return new ResultVO(1004);
@@ -64,7 +67,7 @@ public class SupplierServiceImpl implements ISupplierService {
             // 新增
             SupplierPO supplierPO = SupplierDTO.createPO(dto);
             supplierMapper.insert(supplierPO);
-            supplierRecordMapper.insert(new SupplierRecordPO(supplierPO.getSupplierId(), 1L, BasicConstant.RECORD_ADD));
+            supplierRecordMapper.insert(new SupplierRecordPO(supplierPO.getSupplierId(), user.getUserId(), BasicConstant.RECORD_ADD));
             return ResultVO.ok();
         }
         // 编辑
@@ -77,7 +80,7 @@ public class SupplierServiceImpl implements ISupplierService {
         supplierPO.setUpdateTime(new Date());
         supplierMapper.updateByPrimaryKey(supplierPO);
 
-        supplierRecordMapper.insert(new SupplierRecordPO(supplierPO.getSupplierId(), 1L, BasicConstant.RECORD_MODIFY));
+        supplierRecordMapper.insert(new SupplierRecordPO(supplierPO.getSupplierId(), user.getUserId(), BasicConstant.RECORD_MODIFY));
 
         return ResultVO.ok();
     }
