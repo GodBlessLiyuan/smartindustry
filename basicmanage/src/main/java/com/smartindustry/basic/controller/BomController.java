@@ -70,18 +70,13 @@ public class BomController {
         return itemsService.queryTreeBom(dto);
     }
 
-    @PostMapping("insertDetail")
-    public ResultVO insertDetail(@RequestBody BomBodyDTO dto) {
-        return itemsService.insertDetail(dto);
+    @PostMapping("editDetail")
+    public ResultVO editDetail(@RequestBody BomBodyDTO dto) {
+        return itemsService.editDetail(dto);
     }
 
     @PostMapping("queryBomBody")
     public ResultVO queryBomBody(@RequestBody Map<String, Object> reqData) {
         return itemsService.queryBomBody(reqData);
-    }
-
-    @PostMapping("updateDetail")
-    public ResultVO updateDetail(@RequestBody BomBodyDTO dto) {
-        return itemsService.updateDetail(dto);
     }
 }

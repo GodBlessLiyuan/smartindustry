@@ -154,31 +154,27 @@ public class BomServiceImpl implements IBomService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ResultVO insertDetail(BomBodyDTO dto){
-        List<BomBodyPO> pos1 = bomBodyMapper.judgeHaveBody(dto.getMid(),dto.getBhid());
-        if (!pos1.isEmpty()){
-            //已经有当前物料的主BOM清单
-            return new ResultVO(1004);
-        }else{
-            BomBodyPO po = BomBodyDTO.createPO(dto);
-            bomBodyMapper.insert(po);
-            // 将主BOM清单中的关联物料+1
-            BomHeadPO bhpo = bomHeadMapper.selectByPrimaryKey(dto.getBhid());
-            bhpo.setRelateNum(bhpo.getRelateNum()+1);
-            bomHeadMapper.updateByPrimaryKey(bhpo);
+    public ResultVO editDetail(BomBodyDTO dto){
+        if(dto.getBbid()==null){
+            List<BomBodyPO> pos1 = bomBodyMapper.judgeHaveBody(dto.getMid(),dto.getBhid());
+            if (!pos1.isEmpty()){
+                //已经有当前物料的主BOM清单
+                return new ResultVO(1004);
+            }else{
+                BomBodyPO po = BomBodyDTO.createPO(dto);
+                bomBodyMapper.insert(po);
+                // 将主BOM清单中的关联物料+1
+                BomHeadPO bhpo = bomHeadMapper.selectByPrimaryKey(dto.getBhid());
+                bhpo.setRelateNum(bhpo.getRelateNum()+1);
+                bomHeadMapper.updateByPrimaryKey(bhpo);
+            }
+        }else {
+            BomBodyPO po = bomBodyMapper.selectByPrimaryKey(dto.getBbid());
+            BomBodyPO po1 = BomBodyDTO.buildPO(po,dto);
+            bomBodyMapper.updateByPrimaryKey(po1);
         }
         return ResultVO.ok();
     }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public ResultVO updateDetail(BomBodyDTO dto){
-        BomBodyPO po = bomBodyMapper.selectByPrimaryKey(dto.getBbid());
-        BomBodyPO po1 = BomBodyDTO.buildPO(po,dto);
-        bomBodyMapper.updateByPrimaryKey(po1);
-        return ResultVO.ok();
-    }
-
 
     @Override
     public ResultVO queryBomBody(Map<String, Object> reqData){

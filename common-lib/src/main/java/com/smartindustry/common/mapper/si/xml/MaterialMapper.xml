@@ -434,6 +434,7 @@
         <choose>
             <when test="bhid !=null and bhid != ''">
                 and not exists (select bb.material_id from si_bom_body bb where bb.dr = 1 and bb.bom_head_id = #{bhid,jdbcType=BIGINT} and m.material_id = bb.material_id)
+                and not exists (select bh.material_id from si_bom_head bh where bh.dr = 1 and bh.bom_head_id = #{bhid,jdbcType=BIGINT} and m.material_id = bh.material_id)
             </when>
             <otherwise>
                 and not exists (select bh.material_id from si_bom_head bh where bh.dr = 1 and m.material_id = bh.material_id)
