@@ -428,9 +428,9 @@
         left join si_supplier s on m.supplier_id = s.supplier_id
         left join dd_measure_unit me on m.measure_unit_id = me.measure_unit_id
         where m.dr = 1
-<!--        <if test="mno != null and mno != ''">and m.material_no like '%' #{mno,jdbcType=CHAR} '%'</if>-->
-<!--        <if test="mname != null and mname != ''">and m.material_name like '%' #{mname,jdbcType=CHAR} '%'</if>-->
-<!--        <if test="mmodel != null and mmodel != ''">and m.material_model like '%' #{mmodel,jdbcType=CHAR} '%'</if>-->
+        <if test="mno != null and mno != ''">and m.material_no like '%' #{mno,jdbcType=CHAR} '%'</if>
+        <if test="mname != null and mname != ''">and m.material_name like '%' #{mname,jdbcType=CHAR} '%'</if>
+        <if test="mmodel != null and mmodel != ''">and m.material_model like '%' #{mmodel,jdbcType=CHAR} '%'</if>
         <choose>
             <when test="bhid !=null and bhid != ''">
                 and not exists (select bb.material_id from si_bom_body bb where bb.dr = 1 and bb.bom_head_id = #{bhid,jdbcType=BIGINT} and m.material_id = bb.material_id)
