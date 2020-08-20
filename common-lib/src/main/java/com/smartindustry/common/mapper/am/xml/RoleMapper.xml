@@ -119,7 +119,7 @@
   <select id="selectAll" parameterType="java.lang.String" resultMap="BaseResultMap">
     select r.role_id,r.role_name
     from am_role r
-    where r.dr =1 and r.status = 1 and r.role_id &lt;&gt; 1
+    where r.dr =1 and r.status = 1
   </select>
 
 <!--  查询所有的角色列表-->
