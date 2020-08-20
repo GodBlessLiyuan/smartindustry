@@ -23,7 +23,7 @@
     delete from si_bom_head
     where bom_head_id = #{bomHeadId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.smartindustry.common.pojo.si.BomHeadPO">
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.si.BomHeadPO" useGeneratedKeys="true" keyProperty="bomHeadId">
     insert into si_bom_head (bom_head_id, material_id, relate_num, 
       user_id, create_time, update_time, 
       dr)
