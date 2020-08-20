@@ -2,6 +2,7 @@ package com.smartindustry.basic.service.impl;
 
 import com.smartindustry.basic.dto.*;
 import com.smartindustry.basic.service.IDataDictionaryService;
+import com.smartindustry.basic.vo.ConfigVO;
 import com.smartindustry.basic.vo.ProcessVO;
 import com.smartindustry.basic.vo.PropertyVO;
 import com.smartindustry.common.mapper.dd.*;
@@ -811,6 +812,6 @@ public class DataDictionaryServiceImpl implements IDataDictionaryService {
     @Override
     public ResultVO configQuery(){
         List<ConfigPO> pos = configMapper.queryAll();
-        return ResultVO.ok().setData(pos);
+        return ResultVO.ok().setData(ConfigVO.convert(pos));
     }
 }
