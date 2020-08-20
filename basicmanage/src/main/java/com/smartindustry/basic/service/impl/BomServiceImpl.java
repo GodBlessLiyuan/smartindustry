@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -201,6 +202,14 @@ public class BomServiceImpl implements IBomService {
     @Override
     public ResultVO queryBomRecord(OperateDTO dto){
         List<BomRecordBO> bos = bomRecordMapper.queryByBhid(dto.getBhid());
-        return ResultVO.ok().setData(BomRecordVO.convert(bos));
+        Map<String,Object> map = new HashMap<String,Object>(){
+            {
+                put("record",null);
+            }
+        };
+        if(!bos.isEmpty()){
+            map.put("record",BomRecordVO.convert(bos));
+        }
+        return ResultVO.ok().setData(map);
     }
 }
