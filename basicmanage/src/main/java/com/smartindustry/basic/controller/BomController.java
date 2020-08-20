@@ -79,4 +79,9 @@ public class BomController {
     public ResultVO queryBomBody(@RequestBody Map<String, Object> reqData) {
         return itemsService.queryBomBody(reqData);
     }
+
+    @PostMapping("queryBomRecord")
+    public ResultVO queryBomRecord(@RequestBody OperateDTO dto) {
+        return itemsService.queryBomRecord(dto);
+    }
 }

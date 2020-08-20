@@ -8,15 +8,21 @@ import com.smartindustry.basic.service.IBomService;
 import com.smartindustry.basic.vo.*;
 import com.smartindustry.common.bo.si.BomBodyBO;
 import com.smartindustry.common.bo.si.BomHeadBO;
+import com.smartindustry.common.bo.si.BomRecordBO;
 import com.smartindustry.common.bo.si.MaterialBO;
 import com.smartindustry.common.mapper.dd.MaterialPropertyMapper;
 import com.smartindustry.common.mapper.dd.ProcessMapper;
 import com.smartindustry.common.mapper.si.BomBodyMapper;
 import com.smartindustry.common.mapper.si.BomHeadMapper;
+import com.smartindustry.common.mapper.si.BomRecordMapper;
 import com.smartindustry.common.mapper.si.MaterialMapper;
+import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.si.BomBodyPO;
 import com.smartindustry.common.pojo.si.BomHeadPO;
+import com.smartindustry.common.pojo.si.BomRecordPO;
+import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.PageQueryUtil;
+import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +53,10 @@ public class BomServiceImpl implements IBomService {
     private MaterialPropertyMapper propertyMapper;
     @Autowired
     private ProcessMapper processMapper;
+    @Autowired
+    private BomRecordMapper bomRecordMapper;
+    @Autowired
+    private TokenService tokenService;
 
 
 
@@ -77,7 +87,9 @@ public class BomServiceImpl implements IBomService {
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ResultVO insert(OperateDTO dto){
+        UserPO user = tokenService.getLoginUser();
         List<BomHeadPO> pos = bomHeadMapper.judgeHaveBom(dto.getMid());
         if (!pos.isEmpty()){
             //已经有当前物料的主BOM清单
@@ -90,6 +102,7 @@ public class BomServiceImpl implements IBomService {
             po.setCreateTime(new Date());
             po.setDr((byte)1);
             bomHeadMapper.insert(po);
+            bomRecordMapper.insert(new BomRecordPO(po.getBomHeadId(),user.getUserId(),new Date(),BasicConstant.RECORD_ADD));
         }
         return ResultVO.ok();
     }
@@ -155,6 +168,7 @@ public class BomServiceImpl implements IBomService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO editDetail(BomBodyDTO dto){
+        UserPO user = tokenService.getLoginUser();
         if(dto.getBbid()==null){
             List<BomBodyPO> pos1 = bomBodyMapper.judgeHaveBody(dto.getMid(),dto.getBhid());
             if (!pos1.isEmpty()){
@@ -173,6 +187,7 @@ public class BomServiceImpl implements IBomService {
             BomBodyPO po1 = BomBodyDTO.buildPO(po,dto);
             bomBodyMapper.updateByPrimaryKey(po1);
         }
+        bomRecordMapper.insert(new BomRecordPO(dto.getBhid(),user.getUserId(),new Date(),BasicConstant.RECORD_MODIFY));
         return ResultVO.ok();
     }
 
@@ -181,5 +196,11 @@ public class BomServiceImpl implements IBomService {
         Page<BomBodyBO> page = PageQueryUtil.startPage(reqData);
         List<BomBodyBO> bos = bomBodyMapper.pageQuery(reqData);
         return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), BomBodyVO.convert(bos)));
+    }
+
+    @Override
+    public ResultVO queryBomRecord(OperateDTO dto){
+        List<BomRecordBO> bos = bomRecordMapper.queryByBhid(dto.getBhid());
+        return ResultVO.ok().setData(BomRecordVO.convert(bos));
     }
 }

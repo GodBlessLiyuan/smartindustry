@@ -75,4 +75,11 @@ public interface IBomService {
      */
     ResultVO queryBomBody(Map<String, Object> reqData);
 
+    /**
+     * 查询BOM清单的操作记录
+     * @param dto
+     * @return
+     */
+    ResultVO queryBomRecord(OperateDTO dto);
+
 }
