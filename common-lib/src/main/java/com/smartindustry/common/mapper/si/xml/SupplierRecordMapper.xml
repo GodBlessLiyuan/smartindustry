@@ -103,7 +103,7 @@
                sr.`type`,
                u.name
         from si_supplier_record sr
-                 left join am.user u on sr.user_id = u.user_id
+                 left join am_user u on sr.user_id = u.user_id
         where sr.supplier_id = #{sid,jdbcType=BIGINT}
         order by sr.create_time desc
     </select>

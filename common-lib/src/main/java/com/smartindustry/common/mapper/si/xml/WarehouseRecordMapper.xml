@@ -103,7 +103,7 @@
                wr.`type`,
                u.name
         from si_warehouse_record wr
-                 left join am.user u on wr.user_id = u.user_id
+                 left join am_user u on wr.user_id = u.user_id
         where wr.warehouse_id = #{wid,jdbcType=BIGINT}
         order by wr.create_time desc
     </select>
