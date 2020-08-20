@@ -17,7 +17,7 @@ import java.util.List;
 public class BomRecordVO implements Serializable {
     private static final long SerialVersionUID = 1L;
 
-    private String uname;
+    private String name;
 
     private Date ctime;
 
@@ -33,7 +33,7 @@ public class BomRecordVO implements Serializable {
 
     public static BomRecordVO convert(BomRecordBO bo) {
         BomRecordVO vo = new BomRecordVO();
-        vo.setUname(bo.getName());
+        vo.setName(bo.getName());
         vo.setCtime(bo.getCreateTime());
         vo.setType(bo.getType());
         return vo;
