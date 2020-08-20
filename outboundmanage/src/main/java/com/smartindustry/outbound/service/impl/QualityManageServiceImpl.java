@@ -2,7 +2,6 @@ package com.smartindustry.outbound.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.smartindustry.common.bo.am.LoginUserBO;
 import com.smartindustry.common.constant.ConfigConstant;
 import com.smartindustry.common.mapper.om.OutboundMapper;
 import com.smartindustry.common.mapper.om.OutboundRecordMapper;
@@ -18,7 +17,6 @@ import com.smartindustry.common.pojo.om.PickHeadPO;
 import com.smartindustry.common.pojo.si.ConfigPO;
 import com.smartindustry.common.pojo.si.PrintLabelPO;
 import com.smartindustry.common.security.service.TokenService;
-import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.constant.OutboundConstant;
@@ -68,7 +66,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
         UserPO user = tokenService.getLoginUser();
         ConfigPO configPo = configMapper.queryByKey(ConfigConstant.K_OUTBOUND_QUALITY_KEY);
         if (null != configPo && ConfigConstant.V_NO.equals(configPo.getConfigValue())) {
-            pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_STORAGE);
+            pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_STORAGE,new Date());
             OutboundPO po = new OutboundPO();
             po.setPickHeadId(pickHeadId);
             Date date = new Date();
@@ -81,7 +79,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
             outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, po.getOutboundId(), user.getUserId(), user.getName(), OutboundConstant.RECORD_ADD, OutboundConstant.MATERIAL_STATUS_STORAGE));
         } else{
             //1 更新物料状态
-            pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_CHECK);
+            pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_CHECK,new Date());
             //2 新增OQC检测表
             PickCheckPO po = new PickCheckPO();
             po.setPickHeadId(pickHeadId);
