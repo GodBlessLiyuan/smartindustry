@@ -320,18 +320,18 @@
           and dr = 1
     </update>
 
-    <!--  将用户所对应的角色id置空-->
-    <update id="updateRoleId" parameterType="java.lang.Long">
-        update am_user
-        set role_id = null
-        where role_id = #{roleId,jdbcType=BIGINT}
-          and dr = 1
-    </update>
-
     <!--  更新用户密码-->
     <update id="updatePassword">
         update am_user
         set `password` = #{password,jdbcType=CHAR}
         where user_id = #{userId,jdbcType=BIGINT}
     </update>
+
+<!--    查询当前即将删除的角色是否被用户所拥有，若拥有则无法删除-->
+    <select id="queryUserRole" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from am_user u
+        where u.role_id = #{roleId,jdbcType=BIGINT} and u.dr = 1
+    </select>
 </mapper>
