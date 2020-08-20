@@ -10,6 +10,7 @@ import com.smartindustry.common.pojo.si.PrintLabelPO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -146,7 +147,7 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
      * @param materialStatus
      * @return
      */
-    int updateStatus(@Param("pickHeadId") Long pickHeadId,@Param("materialStatus") Byte materialStatus);
+    int updateStatus(@Param("pickHeadId") Long pickHeadId,@Param("materialStatus") Byte materialStatus,@Param("updateTime") Date updateTime);
 
     /**
      * 更新出库状态
