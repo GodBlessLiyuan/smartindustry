@@ -225,9 +225,7 @@
       <set>
         dr = 2
       </set>
-      <if test="bbid != null">
-        where bom_body_id = #{bbid,jdbcType=BIGINT}
-      </if>
+      where bom_body_id = #{bbid,jdbcType=BIGINT}
     </foreach>
   </update>
 

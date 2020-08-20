@@ -107,7 +107,6 @@ public class UserServiceImpl implements IUserService {
     @Transactional(rollbackFor = Exception.class)
     public ResultVO delete(List<Long> uids) {
         UserPO user = tokenService.getLoginUser();
-        userMapper.deleteBatch(uids);
         for (Long uid : uids) {
             if (UserPO.isAdmin(uid)) {
                 return new ResultVO(1023);
@@ -115,6 +114,7 @@ public class UserServiceImpl implements IUserService {
             deleteUser(uid);
             userRecordMapper.insert(new UserRecordPO(uid, user.getUserId(), new Date(), AuthorityConstant.RECORD_DELETE));
         }
+        userMapper.deleteBatch(uids);
         return ResultVO.ok();
     }
 

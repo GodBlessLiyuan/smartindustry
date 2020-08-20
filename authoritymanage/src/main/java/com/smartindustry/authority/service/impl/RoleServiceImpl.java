@@ -119,6 +119,10 @@ public class RoleServiceImpl implements IRoleService {
             return new ResultVO(1023);
         }
         for(Long rid:rids){
+            List<UserPO> pos = userMapper.queryUserRole(rid);
+            if(pos.isEmpty()){
+                return new ResultVO(1007);
+            }
             deleteRole(rid);
             roleRecordMapper.insert(new RoleRecordPO(rid,1L,new Date(), AuthorityConstant.RECORD_DELETE));
         }
@@ -214,7 +218,6 @@ public class RoleServiceImpl implements IRoleService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void deleteRole(Long roleId){
-        userMapper.updateRoleId(roleId);
         roleAuthorityMapper.deleteByRoleId(roleId);
     }
 
