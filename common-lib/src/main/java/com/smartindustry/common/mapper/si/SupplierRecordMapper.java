@@ -1,5 +1,6 @@
 package com.smartindustry.common.mapper.si;
 
+import com.smartindustry.common.bo.si.SupplierRecordBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.si.SupplierRecordPO;
 import org.apache.ibatis.annotations.Mapper;
@@ -17,5 +18,5 @@ public interface SupplierRecordMapper extends BaseMapper<SupplierRecordPO, Long>
      * @param sid
      * @return
      */
-    List<SupplierRecordPO> queryBySid(Long sid);
+    List<SupplierRecordBO> queryBySid(Long sid);
 }

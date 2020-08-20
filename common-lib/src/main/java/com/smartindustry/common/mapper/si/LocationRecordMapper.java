@@ -1,5 +1,6 @@
 package com.smartindustry.common.mapper.si;
 
+import com.smartindustry.common.bo.si.LocationRecordBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.si.LocationRecordPO;
 import org.apache.ibatis.annotations.Mapper;
@@ -17,5 +18,5 @@ public interface LocationRecordMapper extends BaseMapper<LocationRecordPO, Long>
      * @param lid
      * @return
      */
-    List<LocationRecordPO> queryByLid(Long lid);
+    List<LocationRecordBO> queryByLid(Long lid);
 }

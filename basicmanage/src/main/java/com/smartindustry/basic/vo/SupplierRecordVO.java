@@ -1,8 +1,6 @@
 package com.smartindustry.basic.vo;
 
-import com.smartindustry.common.pojo.am.UserPO;
-import com.smartindustry.common.pojo.si.SupplierRecordPO;
-import com.smartindustry.common.util.ServletUtil;
+import com.smartindustry.common.bo.si.SupplierRecordBO;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -24,19 +22,19 @@ public class SupplierRecordVO implements Serializable {
     private Date ctime;
     private String type;
 
-    public static List<SupplierRecordVO> convert(List<SupplierRecordPO> pos) {
-        List<SupplierRecordVO> vos = new ArrayList<>(pos.size());
-        for (SupplierRecordPO po : pos) {
-            vos.add(convert(po));
+    public static List<SupplierRecordVO> convert(List<SupplierRecordBO> bos) {
+        List<SupplierRecordVO> vos = new ArrayList<>(bos.size());
+        for (SupplierRecordBO bo : bos) {
+            vos.add(convert(bo));
         }
         return vos;
     }
 
-    public static SupplierRecordVO convert(SupplierRecordPO po) {
+    public static SupplierRecordVO convert(SupplierRecordBO bo) {
         SupplierRecordVO vo = new SupplierRecordVO();
-        vo.setName("夏慧");
-        vo.setCtime(po.getCreateTime());
-        vo.setType(po.getType());
+        vo.setName(bo.getName());
+        vo.setCtime(bo.getCreateTime());
+        vo.setType(bo.getType());
         return vo;
     }
 }

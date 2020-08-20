@@ -8,6 +8,7 @@ import com.smartindustry.basic.service.ISupplierService;
 import com.smartindustry.basic.vo.SupplierRecordVO;
 import com.smartindustry.basic.vo.SupplierVO;
 import com.smartindustry.common.bo.si.SupplierBO;
+import com.smartindustry.common.bo.si.SupplierRecordBO;
 import com.smartindustry.common.constant.ResultConstant;
 import com.smartindustry.common.mapper.si.MaterialMapper;
 import com.smartindustry.common.mapper.si.SupplierMapper;
@@ -18,7 +19,6 @@ import com.smartindustry.common.pojo.si.SupplierPO;
 import com.smartindustry.common.pojo.si.SupplierRecordPO;
 import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.PageQueryUtil;
-import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,8 +112,8 @@ public class SupplierServiceImpl implements ISupplierService {
     @Override
     public ResultVO record(OperateDTO dto) {
         Map<String, Object> res = new HashMap<>(1);
-        List<SupplierRecordPO> supplierRecordPOs = supplierRecordMapper.queryBySid(dto.getSid());
-        res.put(ResultConstant.OPERATE_RECORD, SupplierRecordVO.convert(supplierRecordPOs));
+        List<SupplierRecordBO> supplierRecordBOs = supplierRecordMapper.queryBySid(dto.getSid());
+        res.put(ResultConstant.OPERATE_RECORD, SupplierRecordVO.convert(supplierRecordBOs));
         return ResultVO.ok().setData(res);
     }
 

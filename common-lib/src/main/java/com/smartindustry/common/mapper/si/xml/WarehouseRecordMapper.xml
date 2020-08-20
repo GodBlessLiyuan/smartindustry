@@ -92,11 +92,19 @@
         where warehouse_record_id = #{warehouseRecordId,jdbcType=BIGINT}
     </update>
 
-    <select id="queryByWid" parameterType="java.lang.Long" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from si_warehouse_record
-        where warehouse_id = #{wid,jdbcType=BIGINT}
-        order by create_time desc
+    <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.WarehouseRecordBO">
+        <result column="name" jdbcType="CHAR" property="name"/>
+    </resultMap>
+    <select id="queryByWid" parameterType="java.lang.Long" resultMap="BOResultMap">
+        select wr.warehouse_record_id,
+               wr.warehouse_id,
+               wr.user_id,
+               wr.create_time,
+               wr.`type`,
+               u.name
+        from si_warehouse_record wr
+                 left join am.user u on wr.user_id = u.user_id
+        where wr.warehouse_id = #{wid,jdbcType=BIGINT}
+        order by wr.create_time desc
     </select>
 </mapper>

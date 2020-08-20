@@ -1,5 +1,6 @@
 package com.smartindustry.common.mapper.si;
 
+import com.smartindustry.common.bo.si.MaterialRecordBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.si.MaterialRecordPO;
 import org.apache.ibatis.annotations.Mapper;
@@ -11,5 +12,5 @@ import java.util.List;
  */
 @Mapper
 public interface MaterialRecordMapper extends BaseMapper<MaterialRecordPO, Long> {
-    List<MaterialRecordPO> queryByMid(Long mid);
+    List<MaterialRecordBO> queryByMid(Long mid);
 }

@@ -92,11 +92,19 @@
         where supplier_record_id = #{supplierRecordId,jdbcType=BIGINT}
     </update>
 
-    <select id="queryBySid" parameterType="java.lang.Long" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from si_supplier_record
-        where supplier_id = #{sid,jdbcType=BIGINT}
-        order by create_time desc
+    <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.SupplierRecordBO">
+        <result column="name" jdbcType="CHAR" property="name"/>
+    </resultMap>
+    <select id="queryBySid" parameterType="java.lang.Long" resultMap="BOResultMap">
+        select sr.supplier_record_id,
+               sr.supplier_id,
+               sr.user_id,
+               sr.create_time,
+               sr.`type`,
+               u.name
+        from si_supplier_record sr
+                 left join am.user u on sr.user_id = u.user_id
+        where sr.supplier_id = #{sid,jdbcType=BIGINT}
+        order by sr.create_time desc
     </select>
 </mapper>

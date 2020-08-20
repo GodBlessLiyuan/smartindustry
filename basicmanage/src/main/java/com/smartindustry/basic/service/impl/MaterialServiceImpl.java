@@ -8,6 +8,7 @@ import com.smartindustry.basic.service.IMaterialService;
 import com.smartindustry.basic.vo.MaterialRecordVO;
 import com.smartindustry.basic.vo.MaterialVO;
 import com.smartindustry.common.bo.si.MaterialBO;
+import com.smartindustry.common.bo.si.MaterialRecordBO;
 import com.smartindustry.common.config.FilePathConfig;
 import com.smartindustry.common.constant.ResultConstant;
 import com.smartindustry.common.mapper.im.MaterialInventoryMapper;
@@ -147,8 +148,8 @@ public class MaterialServiceImpl implements IMaterialService {
     @Override
     public ResultVO record(OperateDTO dto) {
         Map<String, Object> res = new HashMap<>(1);
-        List<MaterialRecordPO> materialRecordPOs = materialRecordMapper.queryByMid(dto.getMid());
-        res.put(ResultConstant.OPERATE_RECORD, MaterialRecordVO.convert(materialRecordPOs));
+        List<MaterialRecordBO> materialRecordBOs = materialRecordMapper.queryByMid(dto.getMid());
+        res.put(ResultConstant.OPERATE_RECORD, MaterialRecordVO.convert(materialRecordBOs));
         return ResultVO.ok().setData(res);
     }
 
