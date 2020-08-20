@@ -1,8 +1,6 @@
 package com.smartindustry.basic.vo;
 
-import com.smartindustry.common.pojo.am.UserPO;
-import com.smartindustry.common.pojo.si.LocationRecordPO;
-import com.smartindustry.common.util.ServletUtil;
+import com.smartindustry.common.bo.si.LocationRecordBO;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -24,19 +22,19 @@ public class LocationRecordVO implements Serializable {
     private Date ctime;
     private String type;
 
-    public static List<LocationRecordVO> convert(List<LocationRecordPO> pos) {
-        List<LocationRecordVO> vos = new ArrayList<>(pos.size());
-        for (LocationRecordPO po : pos) {
-            vos.add(convert(po));
+    public static List<LocationRecordVO> convert(List<LocationRecordBO> bos) {
+        List<LocationRecordVO> vos = new ArrayList<>(bos.size());
+        for (LocationRecordBO bo : bos) {
+            vos.add(convert(bo));
         }
         return vos;
     }
 
-    public static LocationRecordVO convert(LocationRecordPO po) {
+    public static LocationRecordVO convert(LocationRecordBO bo) {
         LocationRecordVO vo = new LocationRecordVO();
-        vo.setName("夏慧");
-        vo.setCtime(po.getCreateTime());
-        vo.setType(po.getType());
+        vo.setName(bo.getName());
+        vo.setCtime(bo.getCreateTime());
+        vo.setType(bo.getType());
         return vo;
     }
 }

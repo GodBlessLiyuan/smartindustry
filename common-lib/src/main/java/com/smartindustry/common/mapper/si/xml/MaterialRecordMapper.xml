@@ -92,11 +92,19 @@
         where material_record_id = #{materialRecordId,jdbcType=BIGINT}
     </update>
 
-    <select id="queryByMid" parameterType="java.lang.Long" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from si_material_record
-        where material_id = #{mid,jdbcType=BIGINT}
-        order by create_time desc
+    <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.MaterialRecordBO">
+        <result column="name" jdbcType="CHAR" property="name"/>
+    </resultMap>
+    <select id="queryByMid" parameterType="java.lang.Long" resultMap="BOResultMap">
+        select mr.material_record_id,
+               mr.material_id,
+               mr.user_id,
+               mr.create_time,
+               mr.`type`,
+               u.name
+        from si_material_record mr
+                 left join am_user u on mr.user_id = u.user_id
+        where mr.material_id = #{mid,jdbcType=BIGINT}
+        order by mr.create_time desc
     </select>
 </mapper>

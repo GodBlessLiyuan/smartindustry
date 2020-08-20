@@ -1,15 +1,17 @@
 package com.smartindustry.common.pojo.si;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 import java.util.Date;
-
-import lombok.Data;
 
 /**
  * si_material_record
  *
  * @author
  */
+@NoArgsConstructor
 @Data
 public class MaterialRecordPO implements Serializable {
     private Long materialRecordId;

@@ -8,6 +8,7 @@ import com.smartindustry.basic.service.ILocationService;
 import com.smartindustry.basic.vo.LocationRecordVO;
 import com.smartindustry.basic.vo.LocationVO;
 import com.smartindustry.common.bo.si.LocationBO;
+import com.smartindustry.common.bo.si.LocationRecordBO;
 import com.smartindustry.common.constant.ResultConstant;
 import com.smartindustry.common.mapper.si.LocationMapper;
 import com.smartindustry.common.mapper.si.LocationRecordMapper;
@@ -112,8 +113,8 @@ public class LocationServiceImpl implements ILocationService {
     @Override
     public ResultVO record(OperateDTO dto) {
         Map<String, Object> res = new HashMap<>(1);
-        List<LocationRecordPO> locationRecordPOs = locationRecordMapper.queryByLid(dto.getLid());
-        res.put(ResultConstant.OPERATE_RECORD, LocationRecordVO.convert(locationRecordPOs));
+        List<LocationRecordBO> locationRecordBOs = locationRecordMapper.queryByLid(dto.getLid());
+        res.put(ResultConstant.OPERATE_RECORD, LocationRecordVO.convert(locationRecordBOs));
         return ResultVO.ok().setData(res);
     }
 

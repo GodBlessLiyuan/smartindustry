@@ -92,11 +92,19 @@
         where location_record_id = #{locationRecordId,jdbcType=BIGINT}
     </update>
 
-    <select id="queryByLid" parameterType="java.lang.Long" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from si_location_record
-        where location_id = #{lid,jdbcType=BIGINT}
-        order by create_time desc
+    <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.LocationRecordBO">
+        <result column="name" jdbcType="CHAR" property="name"/>
+    </resultMap>
+    <select id="queryByLid" parameterType="java.lang.Long" resultMap="BOResultMap">
+        select lr.location_record_id,
+               lr.location_id,
+               lr.user_id,
+               lr.create_time,
+               lr.`type`,
+               u.`name`
+        from si_location_record lr
+                 left join am_user u on lr.user_id = u.user_id
+        where lr.location_id = #{lid,jdbcType=BIGINT}
+        order by lr.create_time desc
     </select>
 </mapper>

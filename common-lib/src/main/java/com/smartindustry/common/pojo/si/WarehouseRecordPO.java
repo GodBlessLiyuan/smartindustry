@@ -5,13 +5,14 @@ import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * si_warehouse_record
  *
  * @author
  */
-@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class WarehouseRecordPO implements Serializable {
     private Long warehouseRecordId;

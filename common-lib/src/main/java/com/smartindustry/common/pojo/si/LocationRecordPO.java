@@ -1,17 +1,17 @@
 package com.smartindustry.common.pojo.si;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 import java.util.Date;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
 
 /**
  * si_location_record
  *
  * @author
  */
-@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class LocationRecordPO implements Serializable {
     private Long locationRecordId;

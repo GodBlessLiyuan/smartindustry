@@ -1,5 +1,6 @@
 package com.smartindustry.basic.vo;
 
+import com.smartindustry.common.bo.si.WarehouseRecordBO;
 import com.smartindustry.common.pojo.si.WarehouseRecordPO;
 import lombok.Data;
 
@@ -22,19 +23,19 @@ public class WarehouseRecordVO implements Serializable {
     private Date ctime;
     private String type;
 
-    public static List<WarehouseRecordVO> convert(List<WarehouseRecordPO> pos) {
-        List<WarehouseRecordVO> vos = new ArrayList<>(pos.size());
-        for (WarehouseRecordPO po : pos) {
-            vos.add(convert(po));
+    public static List<WarehouseRecordVO> convert(List<WarehouseRecordBO> bos) {
+        List<WarehouseRecordVO> vos = new ArrayList<>(bos.size());
+        for (WarehouseRecordBO bo : bos) {
+            vos.add(convert(bo));
         }
         return vos;
     }
 
-    public static WarehouseRecordVO convert(WarehouseRecordPO po) {
+    public static WarehouseRecordVO convert(WarehouseRecordBO bo) {
         WarehouseRecordVO vo = new WarehouseRecordVO();
-        vo.setName("夏慧");
-        vo.setCtime(po.getCreateTime());
-        vo.setType(po.getType());
+        vo.setName(bo.getName());
+        vo.setCtime(bo.getCreateTime());
+        vo.setType(bo.getType());
         return vo;
     }
 }

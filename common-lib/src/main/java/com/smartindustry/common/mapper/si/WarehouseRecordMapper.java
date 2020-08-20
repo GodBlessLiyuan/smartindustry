@@ -1,5 +1,6 @@
 package com.smartindustry.common.mapper.si;
 
+import com.smartindustry.common.bo.si.WarehouseRecordBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.si.WarehouseRecordPO;
 import org.apache.ibatis.annotations.Mapper;
@@ -17,5 +18,5 @@ public interface WarehouseRecordMapper extends BaseMapper<WarehouseRecordPO, Lon
      * @param wid
      * @return
      */
-    List<WarehouseRecordPO> queryByWid(Long wid);
+    List<WarehouseRecordBO> queryByWid(Long wid);
 }

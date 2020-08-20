@@ -9,6 +9,7 @@ import com.smartindustry.basic.vo.WarehouseRecordVO;
 import com.smartindustry.basic.vo.WarehouseVO;
 import com.smartindustry.common.bo.si.LocationBO;
 import com.smartindustry.common.bo.si.WarehouseBO;
+import com.smartindustry.common.bo.si.WarehouseRecordBO;
 import com.smartindustry.common.constant.ResultConstant;
 import com.smartindustry.common.mapper.si.LocationMapper;
 import com.smartindustry.common.mapper.si.WarehouseMapper;
@@ -106,8 +107,8 @@ public class WarehouseServiceImpl implements IWarehouseService {
     @Override
     public ResultVO record(OperateDTO dto) {
         Map<String, Object> res = new HashMap<>(1);
-        List<WarehouseRecordPO> warehouseRecordPOs = warehouseRecordMapper.queryByWid(dto.getWid());
-        res.put(ResultConstant.OPERATE_RECORD, WarehouseRecordVO.convert(warehouseRecordPOs));
+        List<WarehouseRecordBO> warehouseRecordBOs = warehouseRecordMapper.queryByWid(dto.getWid());
+        res.put(ResultConstant.OPERATE_RECORD, WarehouseRecordVO.convert(warehouseRecordBOs));
         return ResultVO.ok().setData(res);
     }
 
