@@ -77,7 +77,6 @@ public class MaterialOutboundController {
      * @return
      */
     @PostMapping("upload")
-    @PreAuthorize("@ss.hasAnyPermi('om:mo:woout:queryinfo,om:mo:fpout:queryinfo,om:mo:woout:out,om:mo:fpout:out')")
     public ResultVO upload(@Param("file") MultipartFile file) {
         return materialOutboundService.upload(file);
     }
