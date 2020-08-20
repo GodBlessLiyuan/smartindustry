@@ -202,14 +202,8 @@ public class BomServiceImpl implements IBomService {
     @Override
     public ResultVO queryBomRecord(OperateDTO dto){
         List<BomRecordBO> bos = bomRecordMapper.queryByBhid(dto.getBhid());
-        Map<String,Object> map = new HashMap<String,Object>(){
-            {
-                put("record",null);
-            }
-        };
-        if(!bos.isEmpty()){
-            map.put("record",BomRecordVO.convert(bos));
-        }
+        Map<String,Object> map = new HashMap<>();
+        map.put("record",!bos.isEmpty() ? BomRecordVO.convert(bos):null);
         return ResultVO.ok().setData(map);
     }
 }
