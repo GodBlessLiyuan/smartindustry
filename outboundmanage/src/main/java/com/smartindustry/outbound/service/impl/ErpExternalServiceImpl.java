@@ -1,22 +1,17 @@
 package com.smartindustry.outbound.service.impl;
 
-import com.netflix.loadbalancer.InterruptTask;
-import com.smartindustry.common.bo.im.MaterialInventoryBO;
 import com.smartindustry.common.bo.si.StorageLabelBO;
-import com.smartindustry.common.mapper.im.MaterialInventoryMapper;
 import com.smartindustry.common.mapper.om.LabelRecommendMapper;
 import com.smartindustry.common.mapper.om.OutboundRecordMapper;
 import com.smartindustry.common.mapper.om.PickBodyMapper;
 import com.smartindustry.common.mapper.om.PickHeadMapper;
 import com.smartindustry.common.mapper.si.StorageLabelMapper;
 import com.smartindustry.common.pojo.am.UserPO;
-import com.smartindustry.common.pojo.im.MaterialInventoryPO;
 import com.smartindustry.common.pojo.om.LabelRecommendPO;
 import com.smartindustry.common.pojo.om.OutboundRecordPO;
 import com.smartindustry.common.pojo.om.PickBodyPO;
 import com.smartindustry.common.pojo.om.PickHeadPO;
 import com.smartindustry.common.security.service.TokenService;
-import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.constant.OutboundConstant;
 import com.smartindustry.outbound.dto.PickDTO;

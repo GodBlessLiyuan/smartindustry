@@ -54,6 +54,8 @@ public class PickHeadPO implements Serializable {
 
     private Date createTime;
 
+    private Date updateTime;
+
     /**
      * 1：未删除
 2：已删除

@@ -83,7 +83,7 @@ public class LocationServiceImpl implements ILocationService {
         locationPO.setUpdateTime(new Date());
         locationMapper.updateByPrimaryKey(locationPO);
 
-        locationRecordMapper.insert(new LocationRecordPO(locationPO.getLocationId(), 1L, BasicConstant.RECORD_MODIFY));
+        locationRecordMapper.insert(new LocationRecordPO(locationPO.getLocationId(), user.getUserId(), BasicConstant.RECORD_MODIFY));
 
         return ResultVO.ok();
     }
