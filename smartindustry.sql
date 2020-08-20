@@ -13,6 +13,7 @@ DROP TABLE IF EXISTS im_material_inventory;
 DROP TABLE IF EXISTS om_label_recommend;
 DROP TABLE IF EXISTS om_pick_body;
 DROP TABLE IF EXISTS si_bom_body;
+DROP TABLE IF EXISTS si_bom_record;
 DROP TABLE IF EXISTS si_bom_head;
 DROP TABLE IF EXISTS si_material_record;
 DROP TABLE IF EXISTS si_material_specification;
@@ -597,6 +598,7 @@ CREATE TABLE om_pick_head
 2£ºÇ·ÁÏ³ö¿â
 3£ºÎ´³ö¿â',
     create_time datetime,
+    update_time datetime,
     -- 1£ºÎ´É¾³ý
     -- 2£ºÒÑÉ¾³ý
     dr tinyint COMMENT '1£ºÎ´É¾³ý
@@ -665,6 +667,19 @@ CREATE TABLE si_bom_head
     dr tinyint COMMENT '1£ºÎ´É¾³ý
 2£ºÒÑÉ¾³ý',
     PRIMARY KEY (bom_head_id),
+    UNIQUE (bom_head_id)
+);
+
+
+CREATE TABLE si_bom_record
+(
+    bom_record_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    bom_head_id bigint unsigned NOT NULL,
+    user_id bigint unsigned NOT NULL,
+    create_time datetime,
+    type char(255),
+    PRIMARY KEY (bom_record_id),
+    UNIQUE (bom_record_id),
     UNIQUE (bom_head_id)
 );
 
@@ -1261,7 +1276,7 @@ ALTER TABLE am_role_record
 
 
 ALTER TABLE am_user_record
-    ADD FOREIGN KEY (user_id)
+    ADD FOREIGN KEY (operate_id)
         REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
@@ -1269,7 +1284,7 @@ ALTER TABLE am_user_record
 
 
 ALTER TABLE am_user_record
-    ADD FOREIGN KEY (operate_id)
+    ADD FOREIGN KEY (user_id)
         REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
@@ -1437,6 +1452,14 @@ ALTER TABLE si_bom_body
 
 
 ALTER TABLE si_bom_head
+    ADD FOREIGN KEY (user_id)
+        REFERENCES am_user (user_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_bom_record
     ADD FOREIGN KEY (user_id)
         REFERENCES am_user (user_id)
         ON UPDATE RESTRICT
@@ -1749,6 +1772,14 @@ ALTER TABLE si_bom_body
 
 
 ALTER TABLE si_bom_body
+    ADD FOREIGN KEY (bom_head_id)
+        REFERENCES si_bom_head (bom_head_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_bom_record
     ADD FOREIGN KEY (bom_head_id)
         REFERENCES si_bom_head (bom_head_id)
         ON UPDATE RESTRICT
