@@ -151,9 +151,16 @@
   </select>
 
 <!--  根据bhid删除主物料，假删-->
-  <update id="deleteBom" parameterType="java.lang.Long">
-    update si_bom_head
-    set dr = 2
-    where bom_head_id = #{bomHeadId,jdbcType=BIGINT}
+  <!--  批量删除-->
+  <update id="deleteBatch" parameterType="java.util.List">
+    <foreach collection="list" item="bhid" index="index" open="" close="" separator=";">
+      update si_bom_head
+      <set>
+        dr = 2
+      </set>
+      <if test="bhid != null">
+        where bom_head_id = #{bhid,jdbcType=BIGINT}
+      </if>
+    </foreach>
   </update>
 </mapper>

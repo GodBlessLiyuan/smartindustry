@@ -30,10 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author: jiangzhaojie
@@ -117,13 +114,17 @@ public class BomServiceImpl implements IBomService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO delete(List<Long> bhids) {
+        List<Long> bbids = new ArrayList<>();
         for (Long bhid : bhids) {
-            List<BomBodyPO> pos = bomBodyMapper.queryByBhid(bhid);
-            if (!pos.isEmpty()) {
-                bomBodyMapper.deleteBatch(pos);
+            List<Long> ids = bomBodyMapper.queryByBhid(bhid);
+            if (!ids.isEmpty()) {
+                bbids.addAll(ids);
             }
-            bomHeadMapper.deleteBom(bhid);
         }
+        if(!bbids.isEmpty()){
+            bomBodyMapper.deleteBatch(bbids);
+        }
+        bomHeadMapper.deleteBatch(bhids);
         return ResultVO.ok();
     }
 

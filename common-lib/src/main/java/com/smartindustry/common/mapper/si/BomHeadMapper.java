@@ -38,8 +38,8 @@ public interface BomHeadMapper extends BaseMapper<BomHeadPO, Long> {
 
     /**
      * 删除主物料，假删
-     * @param bomHeadId
+     * @param bhids
      * @return
      */
-    Integer deleteBom(@Param("bomHeadId") Long bomHeadId);
+    Integer deleteBatch(List<Long> bhids);
 }
