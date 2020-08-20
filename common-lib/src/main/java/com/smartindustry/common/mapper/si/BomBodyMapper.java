@@ -20,14 +20,14 @@ public interface BomBodyMapper extends BaseMapper<BomBodyPO, Long> {
      * @param bomHeadId
      * @return
      */
-    List<BomBodyPO> queryByBhid(@Param("bomHeadId") Long bomHeadId);
+    List<Long> queryByBhid(@Param("bomHeadId") Long bomHeadId);
 
     /**
      * 批量删除物料明细
      * @param pos
      * @return
      */
-    Integer deleteBatch(List<BomBodyPO> pos);
+    Integer deleteBatch(List<Long> pos);
 
 
     /**

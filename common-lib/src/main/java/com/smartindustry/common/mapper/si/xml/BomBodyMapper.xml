@@ -199,22 +199,21 @@
   </update>
 
   <!--  根据主BOM清单ID查询到所有的物料明细-->
-  <select id="queryByBhid" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
+  <select id="queryByBhid" parameterType="java.lang.Long" resultType="java.lang.Long">
+    select bom_body_id
     from si_bom_body
     where bom_head_id = #{bomHeadId,jdbcType=BIGINT} and dr = 1
   </select>
 
   <!--  批量删除-->
   <update id="deleteBatch" parameterType="java.util.List">
-    <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+    <foreach collection="list" item="bbid" index="index" open="" close="" separator=";">
       update si_bom_body
       <set>
         dr = 2
       </set>
-      <if test="item.bomBodyId != null">
-        where bom_body_id = #{item.bomBodyId,jdbcType=BIGINT}
+      <if test="bbid != null">
+        where bom_body_id = #{bbid,jdbcType=BIGINT}
       </if>
     </foreach>
   </update>
