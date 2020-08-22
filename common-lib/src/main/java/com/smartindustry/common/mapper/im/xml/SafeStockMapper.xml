@@ -105,9 +105,13 @@
 
     <insert id="batchInsert" parameterType="com.smartindustry.common.pojo.im.SafeStockPO">
         insert into im_safe_stock (safe_stock_id, material_inventory_id, lower_limit,
-                                   way, user_id, create_time)
-        values (#{safeStockId,jdbcType=BIGINT}, #{materialInventoryId,jdbcType=BIGINT}, #{lowerLimit,jdbcType=INTEGER},
-                #{way,jdbcType=TINYINT}, #{userId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP})
+        way, user_id, create_time)
+        values
+        <foreach collection="list" item="po" separator=",">
+            (#{po.safeStockId,jdbcType=BIGINT}, #{po.materialInventoryId,jdbcType=BIGINT},
+            #{po.lowerLimit,jdbcType=INTEGER},
+            #{po.way,jdbcType=TINYINT}, #{po.userId,jdbcType=BIGINT}, #{po.createTime,jdbcType=TIMESTAMP})
+        </foreach>
     </insert>
     <update id="batchUpdate" parameterType="java.util.List">
         update im_safe_stock
