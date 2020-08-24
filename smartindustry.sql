@@ -26,9 +26,7 @@ DROP TABLE IF EXISTS si_print_label;
 DROP TABLE IF EXISTS sm_iqc_detect;
 DROP TABLE IF EXISTS sm_qe_confirm;
 DROP TABLE IF EXISTS sm_qe_detect;
-DROP TABLE IF EXISTS sm_storage_group;
 DROP TABLE IF EXISTS sm_storage_record;
-DROP TABLE IF EXISTS sm_storage;
 DROP TABLE IF EXISTS sm_receipt_body;
 DROP TABLE IF EXISTS si_material;
 DROP TABLE IF EXISTS si_supplier_record;
@@ -38,6 +36,7 @@ DROP TABLE IF EXISTS dd_currency;
 DROP TABLE IF EXISTS dd_humidity_level;
 DROP TABLE IF EXISTS dd_life_cycle_state;
 DROP TABLE IF EXISTS si_location_record;
+DROP TABLE IF EXISTS sm_storage_group;
 DROP TABLE IF EXISTS si_location;
 DROP TABLE IF EXISTS dd_location_type;
 DROP TABLE IF EXISTS dd_material_level;
@@ -65,6 +64,7 @@ DROP TABLE IF EXISTS om_pick_check;
 DROP TABLE IF EXISTS om_pick_head;
 DROP TABLE IF EXISTS si_config;
 DROP TABLE IF EXISTS sm_receipt_head;
+DROP TABLE IF EXISTS sm_storage;
 
 
 
@@ -563,11 +563,13 @@ CREATE TABLE om_pick_head
 (
     pick_head_id bigint unsigned NOT NULL AUTO_INCREMENT,
     pick_no char(64) NOT NULL,
-    order_no char(32) NOT NULL,
+    source_no char(32) NOT NULL,
     -- 1：工单
-    -- 2：销售订单
-    order_type tinyint NOT NULL COMMENT '1：工单
-2：销售订单',
+    -- 2：销售
+    -- 3：调拨
+    source_type tinyint NOT NULL COMMENT '1：工单
+2：销售
+3：调拨',
     -- 1：待推荐
     -- 5：未处理
     -- 10：物料拣货
@@ -853,11 +855,11 @@ CREATE TABLE si_storage_label
     material_id bigint unsigned NOT NULL,
     location_id bigint unsigned NOT NULL,
     package_id char(32),
-    order_no char(32),
+    source_no char(32),
     -- 1：PO单收料
     -- 2：样品采购
     -- 3：生产退料
-    order_type tinyint COMMENT '1：PO单收料
+    source_type tinyint COMMENT '1：PO单收料
 2：样品采购
 3：生产退料',
     -- 1：良品
@@ -1016,11 +1018,11 @@ CREATE TABLE sm_receipt_body
     receipt_body_id bigint unsigned NOT NULL AUTO_INCREMENT,
     receipt_head_id bigint unsigned NOT NULL,
     material_id bigint unsigned NOT NULL,
-    order_no char(32),
+    source_no char(32),
     -- 1：PO单收料
     -- 2：样品采购
     -- 3：生产退料
-    order_type tinyint COMMENT '1：PO单收料
+    source_type tinyint COMMENT '1：PO单收料
 2：样品采购
 3：生产退料',
     receipt_no char(32) NOT NULL,
@@ -1056,11 +1058,11 @@ CREATE TABLE sm_receipt_body
 CREATE TABLE sm_receipt_head
 (
     receipt_head_id bigint unsigned NOT NULL AUTO_INCREMENT,
-    order_no char(32) NOT NULL,
+    source_no char(32) NOT NULL,
     -- 1：PO单收料
     -- 2：样品采购
     -- 3：生产退料
-    order_type tinyint NOT NULL COMMENT '1：PO单收料
+    source_type tinyint NOT NULL COMMENT '1：PO单收料
 2：样品采购
 3：生产退料',
     order_date date,
@@ -1099,8 +1101,12 @@ CREATE TABLE sm_receipt_label
 CREATE TABLE sm_storage
 (
     storage_id bigint unsigned NOT NULL AUTO_INCREMENT,
-    receipt_body_id bigint unsigned NOT NULL,
     storage_no char(32) NOT NULL,
+    source_no char(32) NOT NULL,
+    -- 1：收料单
+    -- 2：其他入库单
+    source_type tinyint NOT NULL COMMENT '1：收料单
+2：其他入库单',
     pending_num int,
     stored_num int,
     storage_time datetime,
@@ -2004,14 +2010,6 @@ ALTER TABLE sm_qe_detect
 
 
 ALTER TABLE sm_receipt_label
-    ADD FOREIGN KEY (receipt_body_id)
-        REFERENCES sm_receipt_body (receipt_body_id)
-        ON UPDATE RESTRICT
-        ON DELETE RESTRICT
-;
-
-
-ALTER TABLE sm_storage
     ADD FOREIGN KEY (receipt_body_id)
         REFERENCES sm_receipt_body (receipt_body_id)
         ON UPDATE RESTRICT
