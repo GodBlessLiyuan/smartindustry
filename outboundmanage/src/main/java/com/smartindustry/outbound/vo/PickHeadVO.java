@@ -61,7 +61,7 @@ public class PickHeadVO implements Serializable {
         vo.setPhid(po.getPickHeadId());
         vo.setCproject(po.getCorrespondProject());
         vo.setMstatus(po.getMaterialStatus());
-        vo.setOno(po.getOrderNo());
+        vo.setOno(po.getSourceNo());
         vo.setOstatus(po.getOutboundStatus());
         vo.setPtime(DateUtil.date2Str(po.getPlanTime(),DateUtil.Y_M_D));
         vo.setPno(po.getPickNo());

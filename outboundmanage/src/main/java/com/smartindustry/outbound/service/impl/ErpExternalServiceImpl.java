@@ -65,7 +65,7 @@ public class ErpExternalServiceImpl implements IErpExternalService {
             Map<Long, LabelRecommendPO> labelRecommendPOs = new HashMap<>();
 //            Map<Long, Integer> materialInventoryMap = new HashMap<>();
             for (PickBodyPO bodyPO : bodyPOs) {
-                List<StorageLabelBO> storageLabelBOS = storageLabelMapper.queryNotRecommend(headPO.getOrderNo(), bodyPO.getMaterialId());
+                List<StorageLabelBO> storageLabelBOS = storageLabelMapper.queryNotRecommend(headPO.getSourceNo(), bodyPO.getMaterialId());
                 int num = 0;
                 for (StorageLabelBO storageLabelBO : storageLabelBOS) {
                     if (labelRecommendPOs.containsKey(storageLabelBO.getStorageLabelId())) {

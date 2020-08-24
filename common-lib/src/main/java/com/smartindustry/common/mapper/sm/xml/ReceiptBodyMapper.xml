@@ -5,8 +5,8 @@
         <id column="receipt_body_id" jdbcType="BIGINT" property="receiptBodyId"/>
         <result column="receipt_head_id" jdbcType="BIGINT" property="receiptHeadId"/>
         <result column="material_id" jdbcType="BIGINT" property="materialId"/>
-        <result column="order_no" jdbcType="CHAR" property="orderNo"/>
-        <result column="order_type" jdbcType="TINYINT" property="orderType"/>
+        <result column="source_no" jdbcType="CHAR" property="sourceNo"/>
+        <result column="source_type" jdbcType="TINYINT" property="sourceType"/>
         <result column="receipt_no" jdbcType="CHAR" property="receiptNo"/>
         <result column="order_total" jdbcType="INTEGER" property="orderTotal"/>
         <result column="accept_num" jdbcType="INTEGER" property="acceptNum"/>
@@ -19,7 +19,7 @@
         <result column="dr" jdbcType="TINYINT" property="dr"/>
     </resultMap>
     <sql id="Base_Column_List">
-        receipt_body_id, receipt_head_id, material_id, order_no, order_type, receipt_no,
+        receipt_body_id, receipt_head_id, material_id, source_no, source_type, receipt_no,
     order_total, accept_num, accept_date, good_num, bad_num, stock_num, `status`, create_time, 
     dr
     </sql>
@@ -36,12 +36,12 @@
     </delete>
     <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.ReceiptBodyPO">
         insert into sm_receipt_body (receipt_body_id, receipt_head_id, material_id,
-                                     order_no, order_type, receipt_no,
+                                     source_no, source_type, receipt_no,
                                      order_total, accept_num, accept_date,
                                      good_num, bad_num, stock_num,
                                      `status`, create_time, dr)
         values (#{receiptBodyId,jdbcType=BIGINT}, #{receiptHeadId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT},
-                #{orderNo,jdbcType=CHAR}, #{orderType,jdbcType=TINYINT}, #{receiptNo,jdbcType=CHAR},
+                #{sourceNo,jdbcType=CHAR}, #{sourceType,jdbcType=TINYINT}, #{receiptNo,jdbcType=CHAR},
                 #{orderTotal,jdbcType=INTEGER}, #{acceptNum,jdbcType=INTEGER}, #{acceptDate,jdbcType=TIMESTAMP},
                 #{goodNum,jdbcType=INTEGER}, #{badNum,jdbcType=INTEGER}, #{stockNum,jdbcType=INTEGER},
                 #{status,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
@@ -58,11 +58,11 @@
             <if test="materialId != null">
                 material_id,
             </if>
-            <if test="orderNo != null">
-                order_no,
+            <if test="sourceNo != null">
+                source_no,
             </if>
-            <if test="orderType != null">
-                order_type,
+            <if test="sourceType != null">
+                source_type,
             </if>
             <if test="receiptNo != null">
                 receipt_no,
@@ -105,11 +105,11 @@
             <if test="materialId != null">
                 #{materialId,jdbcType=BIGINT},
             </if>
-            <if test="orderNo != null">
-                #{orderNo,jdbcType=CHAR},
+            <if test="sourceNo != null">
+                #{sourceNo,jdbcType=CHAR},
             </if>
-            <if test="orderType != null">
-                #{orderType,jdbcType=TINYINT},
+            <if test="sourceType != null">
+                #{sourceType,jdbcType=TINYINT},
             </if>
             <if test="receiptNo != null">
                 #{receiptNo,jdbcType=CHAR},
@@ -152,11 +152,11 @@
             <if test="materialId != null">
                 material_id = #{materialId,jdbcType=BIGINT},
             </if>
-            <if test="orderNo != null">
-                order_no = #{orderNo,jdbcType=CHAR},
+            <if test="sourceNo != null">
+                source_no = #{sourceNo,jdbcType=CHAR},
             </if>
-            <if test="orderType != null">
-                order_type = #{orderType,jdbcType=TINYINT},
+            <if test="sourceType != null">
+                source_type = #{sourceType,jdbcType=TINYINT},
             </if>
             <if test="receiptNo != null">
                 receipt_no = #{receiptNo,jdbcType=CHAR},
@@ -195,8 +195,8 @@
         update sm_receipt_body
         set receipt_head_id = #{receiptHeadId,jdbcType=BIGINT},
             material_id     = #{materialId,jdbcType=BIGINT},
-            order_no        = #{orderNo,jdbcType=CHAR},
-            order_type      = #{orderType,jdbcType=TINYINT},
+            source_no       = #{sourceNo,jdbcType=CHAR},
+            source_type     = #{sourceType,jdbcType=TINYINT},
             receipt_no      = #{receiptNo,jdbcType=CHAR},
             order_total     = #{orderTotal,jdbcType=INTEGER},
             accept_num      = #{acceptNum,jdbcType=INTEGER},
@@ -211,12 +211,12 @@
     </update>
 
     <sql id="ReceiptBodyBO_Column_List">
-        rb.receipt_body_id, rb.receipt_head_id, rb.material_id, rb.order_no, rb.order_type, rb.receipt_no,
+        rb.receipt_body_id, rb.receipt_head_id, rb.material_id, rb.source_no, rb.source_type, rb.receipt_no,
     rb.order_total, rb.accept_num, rb.accept_date, rb.good_num, rb.bad_num, rb.stock_num, rb.`status`, rb.create_time, rb.dr,
     m.material_id, m.material_no, m.material_type, m.material_name, m.material_model, m.material_desc, m.test_type
     </sql>
     <sql id="ReceiptBO_Column_List">
-        rb.receipt_body_id, rb.receipt_head_id, rb.material_id, rb.order_no, rb.order_type, rb.receipt_no,
+        rb.receipt_body_id, rb.receipt_head_id, rb.material_id, rb.source_no, rb.source_type, rb.receipt_no,
     rb.order_total, rb.accept_num, rb.accept_date, rb.good_num, rb.bad_num, rb.stock_num, rb.`status`, rb.create_time, rb.dr,
     m.material_no, m.material_type, m.material_name, m.material_model, m.material_desc, m.test_type,
     rh.order_date, rh.supplier, rh.buyer, rh.plan_date, rh.logistics_company, rh.logistics_no,  rh.receipt_way, rh.remark
@@ -268,9 +268,9 @@
             m.material_desc like '%' #{keyword,jdbcType=CHAR} '%')
         </if>
         <if test="supplier != null and supplier != ''">and rh.supplier like '%' #{supplier,jdbcType=CHAR} '%'</if>
-        <if test="ono != null and ono != ''">and rh.order_no like '%' #{ono,jdbcType=CHAR} '%'</if>
+        <if test="ono != null and ono != ''">and rh.source_no like '%' #{ono,jdbcType=CHAR} '%'</if>
         <if test="status != null and status != 0">and rb.`status` = #{status,jdbcType=TINYINT}</if>
-        <if test="type != null and type != 0">and rh.order_type = #{type,jdbcType=TINYINT}</if>
+        <if test="type != null and type != 0">and rh.source_type = #{type,jdbcType=TINYINT}</if>
         <if test="rno != null and rno != ''">and rb.receipt_no like '%' #{rno,jdbcType=CHAR} '%'</if>
         <if test="qa and qaStatus != null and qaStatus != 0">and q.status = #{qaStatus,jdbcType=TINYINT}</if>
         <if test="qa">
@@ -282,7 +282,7 @@
     </select>
     <insert id="batchInsertBO" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="receiptBodyId">
         insert into sm_receipt_body (receipt_body_id, receipt_head_id, material_id,
-        order_no, order_type, receipt_no,
+        source_no, source_type, receipt_no,
         order_total, accept_num, accept_date,
         good_num, bad_num, stock_num,
         `status`, create_time, dr)

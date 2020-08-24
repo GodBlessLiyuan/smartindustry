@@ -1,9 +1,9 @@
 package com.smartindustry.storage.vo;
 
 import com.smartindustry.common.bo.sm.ReceiptBodyBO;
+import com.smartindustry.common.bo.sm.StorageBO;
 import com.smartindustry.common.bo.sm.StorageDetailBO;
 import com.smartindustry.common.bo.sm.StorageGroupBO;
-import com.smartindustry.common.pojo.sm.StoragePO;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -57,7 +57,7 @@ public class StorageDetailVO implements Serializable {
      * @param sgBOs
      * @return
      */
-    public static StorageDetailVO convert(StoragePO msPO, ReceiptBodyBO rbBO, List<StorageGroupBO> sgBOs) {
+    public static StorageDetailVO convert(StorageBO msPO, ReceiptBodyBO rbBO, List<StorageGroupBO> sgBOs) {
         StorageDetailVO vo = new StorageDetailVO();
         vo.setSid(msPO.getStorageId());
         vo.setRbid(msPO.getReceiptBodyId());

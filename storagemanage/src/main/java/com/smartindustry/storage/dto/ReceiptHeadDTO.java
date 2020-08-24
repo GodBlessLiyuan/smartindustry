@@ -68,11 +68,11 @@ public class ReceiptHeadDTO implements Serializable {
      */
     public static ReceiptHeadPO createPO(ReceiptHeadMapper mapper, ReceiptHeadPO po, ReceiptHeadDTO dto) {
         if (StringUtils.isEmpty(dto.getOno())) {
-            po.setOrderNo(ReceiptNoUtil.genReceiptHeadNo(mapper, ReceiptNoUtil.RECEIPT_HEAD_YP, new Date()));
+            po.setSourceNo(ReceiptNoUtil.genReceiptHeadNo(mapper, ReceiptNoUtil.RECEIPT_HEAD_YP, new Date()));
         } else {
-            po.setOrderNo(dto.getOno());
+            po.setSourceNo(dto.getOno());
         }
-        po.setOrderType(dto.getOtype());
+        po.setSourceType(dto.getOtype());
         po.setOrderDate(dto.getOdate());
         po.setSupplier(dto.getSupplier());
         po.setBuyer(dto.getBuyer());

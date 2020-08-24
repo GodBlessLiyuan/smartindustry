@@ -2,26 +2,24 @@ package com.smartindustry.common.pojo.sm;
 
 import java.io.Serializable;
 import java.util.Date;
-
 import lombok.Data;
 
 /**
  * sm_receipt_head
- *
- * @author
+ * @author 
  */
 @Data
 public class ReceiptHeadPO implements Serializable {
     private Long receiptHeadId;
 
-    private String orderNo;
+    private String sourceNo;
 
     /**
      * 1：PO单收料
-     * 2：样品采购
-     * 3：生产退料
+2：样品采购
+3：生产退料
      */
-    private Byte orderType;
+    private Byte sourceType;
 
     private Date orderDate;
 
@@ -37,7 +35,7 @@ public class ReceiptHeadPO implements Serializable {
 
     /**
      * 1：到付
-     * 2：寄付
+2：寄付
      */
     private Byte receiptWay;
 
@@ -49,7 +47,7 @@ public class ReceiptHeadPO implements Serializable {
 
     /**
      * 1：未删除
-     * 2：已删除
+2：已删除
      */
     private Byte dr;
 

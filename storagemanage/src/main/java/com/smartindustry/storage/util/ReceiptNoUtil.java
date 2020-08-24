@@ -43,7 +43,7 @@ public class ReceiptNoUtil {
      */
     public static String genReceiptHeadNo(ReceiptHeadMapper mapper, String head, Date date) {
         ReceiptHeadPO po = headUtil.getPO(mapper, head, date);
-        return headUtil.genNum(head, date, null == po ? 1 : headUtil.getNum(po.getOrderNo(), NUM_LEN) + 1, NUM_LEN);
+        return headUtil.genNum(head, date, null == po ? 1 : headUtil.getNum(po.getSourceNo(), NUM_LEN) + 1, NUM_LEN);
     }
 
     /**

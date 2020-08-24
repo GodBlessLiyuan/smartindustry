@@ -93,12 +93,12 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO label(StorageGroupDTO dto) {
-        StoragePO storagePO = storageMapper.selectByPrimaryKey(dto.getSid());
-        if (null == storagePO) {
+        StorageBO storageBO = storageMapper.queryReceiptBySid(dto.getSid());
+        if (null == storageBO) {
             return new ResultVO(1002);
         }
 
-        PrintLabelBO bo = printLabelMapper.queryByRbidAndPid(storagePO.getReceiptBodyId(), dto.getPid());
+        PrintLabelBO bo = printLabelMapper.queryByRbidAndPid(storageBO.getReceiptBodyId(), dto.getPid());
         if (null == bo) {
             return new ResultVO(1002);
         }
@@ -136,8 +136,8 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
                 printLabelMapper.updateLidByIds(storageGroupPO.getLocationId(), plids);
                 receiptLabelMapper.updateSidByPlids(dto.getSid(), plids);
                 // 入库单
-                storagePO.setStoredNum(storagePO.getStoredNum() + printLabelPO.getNum());
-                storageMapper.updateByPrimaryKey(storagePO);
+                storageBO.setStoredNum(storageBO.getStoredNum() + printLabelPO.getNum());
+                storageMapper.updateByPrimaryKey(storageBO);
                 // 收料单
                 ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(dto.getRbid());
                 receiptBodyPO.setStockNum(receiptBodyPO.getStockNum() + printLabelPO.getNum());
@@ -160,15 +160,15 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         }
         if (!StringUtils.isEmpty(storageGroupPO.getLocationId())) {
             // 修改入库单及打印标签
-            StoragePO storagePO = storageMapper.selectByPrimaryKey(dto.getSid());
-            if (null == storagePO) {
+            StorageBO storageBO = storageMapper.queryReceiptBySid(dto.getSid());
+            if (null == storageBO) {
                 return new ResultVO(1002);
             }
             PrintLabelPO oldLabelPO = printLabelMapper.selectByPrimaryKey(storageDetailPO.getPrintLabelId());
             if (null == oldLabelPO) {
                 return new ResultVO(1002);
             }
-            ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(storagePO.getReceiptBodyId());
+            ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(storageBO.getReceiptBodyId());
             if (null == receiptBodyPO) {
                 return new ResultVO(1002);
             }
@@ -178,8 +178,8 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
             if (null == newLabelPO) {
                 return new ResultVO(1002);
             }
-            storagePO.setStoredNum(storagePO.getStoredNum() + newLabelPO.getNum() - oldLabelPO.getNum());
-            storageMapper.updateByPrimaryKey(storagePO);
+            storageBO.setStoredNum(storageBO.getStoredNum() + newLabelPO.getNum() - oldLabelPO.getNum());
+            storageMapper.updateByPrimaryKey(storageBO);
 
             // 收料单
             receiptBodyPO.setStockNum(receiptBodyPO.getStockNum() + newLabelPO.getNum() - oldLabelPO.getNum());
@@ -224,11 +224,11 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
 
         if (null != storageGroupPO.getLocationId()) {
             // 修改入库单及打印标签
-            StoragePO storagePO = storageMapper.selectByPrimaryKey(dto.getSid());
-            if (null == storagePO) {
+            StorageBO storageBO = storageMapper.queryReceiptBySid(dto.getSid());
+            if (null == storageBO) {
                 return new ResultVO(1002);
             }
-            ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(storagePO.getReceiptBodyId());
+            ReceiptBodyPO receiptBodyPO = receiptBodyMapper.selectByPrimaryKey(storageBO.getReceiptBodyId());
             if (null == receiptBodyPO) {
                 return new ResultVO(1002);
             }
@@ -238,12 +238,12 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
             }
 
             // 入库单
-            int storedNum = storagePO.getStoredNum() - oldLabelPO.getNum();
-            storagePO.setStoredNum(storedNum);
+            int storedNum = storageBO.getStoredNum() - oldLabelPO.getNum();
+            storageBO.setStoredNum(storedNum);
             if (storedNum == 0) {
-                storagePO.setStatus(ReceiptConstant.MATERIAL_STORAGE_PENDING);
+                storageBO.setStatus(ReceiptConstant.MATERIAL_STORAGE_PENDING);
             }
-            storageMapper.updateByPrimaryKey(storagePO);
+            storageMapper.updateByPrimaryKey(storageBO);
 
             // 收料单
             receiptBodyPO.setStockNum(receiptBodyPO.getStockNum() - oldLabelPO.getNum());
@@ -321,32 +321,32 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
     @Override
     public ResultVO storage(@RequestBody OperateDTO dto) {
         UserPO user = tokenService.getLoginUser();
-        StoragePO storagePO = storageMapper.selectByPrimaryKey(dto.getSid());
-        if (null == storagePO) {
+        StorageBO storageBO = storageMapper.queryReceiptBySid(dto.getSid());
+        if (null == storageBO) {
             return new ResultVO(1002);
         }
-        if (storagePO.getPendingNum() > storagePO.getStoredNum()) {
+        if (storageBO.getPendingNum() > storageBO.getStoredNum()) {
             return new ResultVO(1005);
         }
-        if (!ReceiptConstant.MATERIAL_STORAGE_BEING.equals(storagePO.getStatus())) {
+        if (!ReceiptConstant.MATERIAL_STORAGE_BEING.equals(storageBO.getStatus())) {
             return new ResultVO(1003);
         }
-        ReceiptBodyPO receiptBodyPO = receiptBodyMapper.queryByBodyId(storagePO.getReceiptBodyId());
+        ReceiptBodyPO receiptBodyPO = receiptBodyMapper.queryByBodyId(storageBO.getReceiptBodyId());
         if (null == receiptBodyPO) {
             return new ResultVO(1002);
         }
 
         // 入库单
-        storagePO.setStorageTime(new Date());
-        storagePO.setStatus(ReceiptConstant.MATERIAL_STORAGE_FINISH);
-        storageMapper.updateByPrimaryKey(storagePO);
+        storageBO.setStorageTime(new Date());
+        storageBO.setStatus(ReceiptConstant.MATERIAL_STORAGE_FINISH);
+        storageMapper.updateByPrimaryKey(storageBO);
 
         // 收料单
         receiptBodyPO.setStatus(ReceiptConstant.RECEIPT_STORAGE_FINISH);
         receiptBodyMapper.updateByPrimaryKey(receiptBodyPO);
 
         // 入库标签（出库管理、库内信息使用）
-        List<StorageGroupBO> storageGroupBOs = storageGroupMapper.queryBySid(storagePO.getStorageId());
+        List<StorageGroupBO> storageGroupBOs = storageGroupMapper.queryBySid(storageBO.getStorageId());
         List<StorageLabelPO> storageLabelPOs = new ArrayList<>();
         for (StorageGroupBO groupBO : storageGroupBOs) {
             for (StorageDetailBO detailBO : groupBO.getDetail()) {
@@ -355,13 +355,13 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
                 po.setPrintLabelId(detailBO.getPrintLabelId());
                 po.setMaterialId(detailBO.getMaterialId());
                 po.setPackageId(detailBO.getPackageId());
-                po.setOrderNo(receiptBodyPO.getOrderNo());
-                po.setOrderType(receiptBodyPO.getOrderType());
-                po.setType(storagePO.getType());
+                po.setSourceNo(receiptBodyPO.getSourceNo());
+                po.setSourceType(receiptBodyPO.getSourceType());
+                po.setType(storageBO.getType());
                 po.setStorageNum(detailBO.getNum());
-                po.setStorageTime(storagePO.getStorageTime());
+                po.setStorageTime(storageBO.getStorageTime());
                 po.setStatus((byte) 1);
-                if (!ReceiptConstant.STORAGE_TYPE_GOOD.equals(storagePO.getType())) {
+                if (!ReceiptConstant.STORAGE_TYPE_GOOD.equals(storageBO.getType())) {
                     // 不良锁定
                     po.setMaterialLockId(1L);
                 }
@@ -374,39 +374,39 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         MaterialInventoryBO materialInventoryBO = materialInventoryMapper.queryByMid(receiptBodyPO.getMaterialId());
         if (null != materialInventoryBO) {
             MaterialInventoryPO updateInventoryPO = new MaterialInventoryPO();
-            updateInventoryPO.setStorageNum(storagePO.getStoredNum());
-            if (ReceiptConstant.STORAGE_TYPE_GOOD.equals(storagePO.getType())) {
+            updateInventoryPO.setStorageNum(storageBO.getStoredNum());
+            if (ReceiptConstant.STORAGE_TYPE_GOOD.equals(storageBO.getType())) {
                 // 良品
-                if (null != receiptBodyPO.getOrderTotal() && receiptBodyPO.getOrderTotal() - storagePO.getStoredNum() > 0) {
-                    updateInventoryPO.setWayNum(receiptBodyPO.getOrderTotal() - storagePO.getStoredNum());
+                if (null != receiptBodyPO.getOrderTotal() && receiptBodyPO.getOrderTotal() - storageBO.getStoredNum() > 0) {
+                    updateInventoryPO.setWayNum(receiptBodyPO.getOrderTotal() - storageBO.getStoredNum());
                 }
             } else {
                 // 不良
-                updateInventoryPO.setLockNum(storagePO.getStoredNum());
+                updateInventoryPO.setLockNum(storageBO.getStoredNum());
             }
             materialInventoryMapper.updateByPrimaryKey(materialInventoryBO.updatePO(updateInventoryPO));
         }
 
         // 操作记录
-        recordMapper.insert(new StorageRecordPO(dto.getSid(), storagePO.getStorageId(), user.getUserId(), user.getName(), ReceiptConstant.RECORD_TYPE_STORAGE_CONFIRM, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
+        recordMapper.insert(new StorageRecordPO(dto.getSid(), storageBO.getStorageId(), user.getUserId(), user.getName(), ReceiptConstant.RECORD_TYPE_STORAGE_CONFIRM, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
 
         return ResultVO.ok();
     }
 
     @Override
     public ResultVO detail(@RequestBody OperateDTO dto) {
-        StoragePO storagePO = storageMapper.selectByPrimaryKey(dto.getSid());
-        if (null == storagePO) {
+        StorageBO storageBO = storageMapper.queryReceiptBySid(dto.getSid());
+        if (null == storageBO) {
             return new ResultVO(1002);
         }
-        ReceiptBodyBO receiptBodyBO = receiptBodyMapper.queryByBodyId(storagePO.getReceiptBodyId());
+        ReceiptBodyBO receiptBodyBO = receiptBodyMapper.queryByBodyId(storageBO.getReceiptBodyId());
         if (null == receiptBodyBO) {
             return new ResultVO(1002);
         }
 
-        List<StorageGroupBO> storageGroupBOs = storageGroupMapper.queryBySid(storagePO.getStorageId());
+        List<StorageGroupBO> storageGroupBOs = storageGroupMapper.queryBySid(storageBO.getStorageId());
 
-        return ResultVO.ok().setData(StorageDetailVO.convert(storagePO, receiptBodyBO, storageGroupBOs));
+        return ResultVO.ok().setData(StorageDetailVO.convert(storageBO, receiptBodyBO, storageGroupBOs));
     }
 
     @Override

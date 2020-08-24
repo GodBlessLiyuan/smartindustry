@@ -45,7 +45,7 @@ public class ReceiptVO implements Serializable {
     public static ReceiptHeadVO convert(ReceiptHeadPO po) {
         ReceiptHeadVO vo = new ReceiptHeadVO();
         vo.setRhid(po.getReceiptHeadId());
-        vo.setOno(po.getOrderNo());
+        vo.setOno(po.getSourceNo());
         vo.setOdate(po.getOrderDate());
         vo.setSupplier(po.getSupplier());
         vo.setBuyer(po.getBuyer());

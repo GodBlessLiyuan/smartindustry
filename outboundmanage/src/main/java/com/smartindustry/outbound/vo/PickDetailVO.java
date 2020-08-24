@@ -51,7 +51,7 @@ public class PickDetailVO implements Serializable {
     public void setPickHeadVO(PickHeadPO po) {
         this.phid = po.getPickHeadId();
         this.pno = po.getPickNo();
-        this.ono = po.getOrderNo();
+        this.ono = po.getSourceNo();
         this.cproject = po.getCorrespondProject();
         if (!StringUtils.isEmpty(po.getPlanTime())) {
             this.ptime = DateUtil.date2Str(po.getPlanTime(), DateUtil.Y_M_D);

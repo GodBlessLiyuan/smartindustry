@@ -2,11 +2,13 @@ package com.smartindustry.common.pojo.om;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import lombok.Data;
 
 /**
  * om_pick_head
- * @author 
+ *
+ * @author
  */
 @Data
 public class PickHeadPO implements Serializable {
@@ -14,24 +16,25 @@ public class PickHeadPO implements Serializable {
 
     private String pickNo;
 
-    private String orderNo;
+    private String sourceNo;
 
     /**
      * 1：工单
-2：销售订单
+     * 2：销售
+     * 3：调拨
      */
-    private Byte orderType;
+    private Byte sourceType;
 
     /**
      * 1：待推荐
-5：未处理
-10：物料拣货
-15：工单审核|OQC检验
-20：等齐套发货
-25：取消发货，退货仓库
-30：物料出库
-35：完成出库
-40：确认出库
+     * 5：未处理
+     * 10：物料拣货
+     * 15：工单审核|OQC检验
+     * 20：等齐套发货
+     * 25：取消发货，退货仓库
+     * 30：物料出库
+     * 35：完成出库
+     * 40：确认出库
      */
     private Byte materialStatus;
 
@@ -47,8 +50,8 @@ public class PickHeadPO implements Serializable {
 
     /**
      * 1：全部出库
-2：欠料出库
-3：未出库
+     * 2：欠料出库
+     * 3：未出库
      */
     private Byte outboundStatus;
 
@@ -58,7 +61,7 @@ public class PickHeadPO implements Serializable {
 
     /**
      * 1：未删除
-2：已删除
+     * 2：已删除
      */
     private Byte dr;
 

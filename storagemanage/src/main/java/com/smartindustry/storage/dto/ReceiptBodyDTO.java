@@ -81,7 +81,7 @@ public class ReceiptBodyDTO implements Serializable {
     public static List<ReceiptBodyBO> createPOs(ReceiptHeadPO headPO, List<ReceiptBodyDTO> dtos, ReceiptBodyMapper mapper) {
         List<ReceiptBodyBO> bos = new ArrayList<>(dtos.size());
 
-        String head = headPO.getOrderType() == 1 ? ReceiptNoUtil.RECEIPT_BODY_PO : headPO.getOrderType() == 2 ? ReceiptNoUtil.RECEIPT_BODY_YP : ReceiptNoUtil.RECEIPT_BODY_RP;
+        String head = headPO.getSourceType() == 1 ? ReceiptNoUtil.RECEIPT_BODY_PO : headPO.getSourceType() == 2 ? ReceiptNoUtil.RECEIPT_BODY_YP : ReceiptNoUtil.RECEIPT_BODY_RP;
         int curNum = ReceiptNoUtil.getReceiptBodyNum(mapper, head, new Date());
         for (ReceiptBodyDTO dto : dtos) {
             // 过滤接受数量为空的数据
@@ -104,8 +104,8 @@ public class ReceiptBodyDTO implements Serializable {
     private static ReceiptBodyBO createPO(ReceiptHeadPO headPO, ReceiptBodyDTO dto, String no) {
         ReceiptBodyBO bo = new ReceiptBodyBO();
         bo.setReceiptHeadId(headPO.getReceiptHeadId());
-        bo.setOrderNo(headPO.getOrderNo());
-        bo.setOrderType(headPO.getOrderType());
+        bo.setSourceNo(headPO.getSourceNo());
+        bo.setSourceType(headPO.getSourceType());
         bo.setReceiptNo(no);
         bo.setMaterialId(dto.getMid());
         bo.setMaterialNo(dto.getMno());

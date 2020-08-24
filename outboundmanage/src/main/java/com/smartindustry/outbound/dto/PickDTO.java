@@ -34,8 +34,8 @@ public class PickDTO implements Serializable {
     public static PickHeadPO convert(PickHeadDTO dto) {
         PickHeadPO headPO = new PickHeadPO();
         headPO.setPickNo(dto.getPno());
-        headPO.setOrderNo(dto.getOno());
-        headPO.setOrderType(dto.getOtype());
+        headPO.setSourceNo(dto.getOno());
+        headPO.setSourceType(dto.getOtype());
         headPO.setMaterialStatus(OutboundConstant.MATERIAL_STATUS_NOT_RECOMMEND);
         headPO.setCorrespondProject(dto.getCproject());
         headPO.setAcceptCustomer(dto.getAcustomer());

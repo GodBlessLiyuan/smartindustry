@@ -3,8 +3,8 @@
 <mapper namespace="com.smartindustry.common.mapper.sm.ReceiptHeadMapper">
     <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.sm.ReceiptHeadPO">
         <id column="receipt_head_id" jdbcType="BIGINT" property="receiptHeadId"/>
-        <result column="order_no" jdbcType="CHAR" property="orderNo"/>
-        <result column="order_type" jdbcType="TINYINT" property="orderType"/>
+        <result column="source_no" jdbcType="CHAR" property="sourceNo"/>
+        <result column="source_type" jdbcType="TINYINT" property="sourceType"/>
         <result column="order_date" jdbcType="DATE" property="orderDate"/>
         <result column="supplier" jdbcType="CHAR" property="supplier"/>
         <result column="buyer" jdbcType="CHAR" property="buyer"/>
@@ -18,8 +18,8 @@
         <result column="dr" jdbcType="TINYINT" property="dr"/>
     </resultMap>
     <sql id="Base_Column_List">
-        receipt_head_id, order_no, order_type, order_date, supplier, buyer, plan_date, logistics_company,
-    logistics_no, receipt_way, remark, create_time, update_time, dr
+        receipt_head_id, source_no, source_type, order_date, supplier, buyer, plan_date,
+    logistics_company, logistics_no, receipt_way, remark, create_time, update_time, dr
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
@@ -27,19 +27,19 @@
         from sm_receipt_head
         where receipt_head_id = #{receiptHeadId,jdbcType=BIGINT}
     </select>
-    <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
-        update sm_receipt_head
-        set dr = 2
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from sm_receipt_head
         where receipt_head_id = #{receiptHeadId,jdbcType=BIGINT}
-    </update>
+    </delete>
     <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.ReceiptHeadPO" useGeneratedKeys="true"
             keyProperty="receiptHeadId">
-        insert into sm_receipt_head (receipt_head_id, order_no, order_type,
+        insert into sm_receipt_head (receipt_head_id, source_no, source_type,
                                      order_date, supplier, buyer,
                                      plan_date, logistics_company, logistics_no,
                                      receipt_way, remark, create_time,
                                      update_time, dr)
-        values (#{receiptHeadId,jdbcType=BIGINT}, #{orderNo,jdbcType=CHAR}, #{orderType,jdbcType=TINYINT},
+        values (#{receiptHeadId,jdbcType=BIGINT}, #{sourceNo,jdbcType=CHAR}, #{sourceType,jdbcType=TINYINT},
                 #{orderDate,jdbcType=DATE}, #{supplier,jdbcType=CHAR}, #{buyer,jdbcType=CHAR},
                 #{planDate,jdbcType=DATE}, #{logisticsCompany,jdbcType=CHAR}, #{logisticsNo,jdbcType=CHAR},
                 #{receiptWay,jdbcType=TINYINT}, #{remark,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP},
@@ -51,11 +51,11 @@
             <if test="receiptHeadId != null">
                 receipt_head_id,
             </if>
-            <if test="orderNo != null">
-                order_no,
+            <if test="sourceNo != null">
+                source_no,
             </if>
-            <if test="orderType != null">
-                order_type,
+            <if test="sourceType != null">
+                source_type,
             </if>
             <if test="orderDate != null">
                 order_date,
@@ -95,11 +95,11 @@
             <if test="receiptHeadId != null">
                 #{receiptHeadId,jdbcType=BIGINT},
             </if>
-            <if test="orderNo != null">
-                #{orderNo,jdbcType=CHAR},
+            <if test="sourceNo != null">
+                #{sourceNo,jdbcType=CHAR},
             </if>
-            <if test="orderType != null">
-                #{orderType,jdbcType=TINYINT},
+            <if test="sourceType != null">
+                #{sourceType,jdbcType=TINYINT},
             </if>
             <if test="orderDate != null">
                 #{orderDate,jdbcType=DATE},
@@ -139,11 +139,11 @@
     <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.sm.ReceiptHeadPO">
         update sm_receipt_head
         <set>
-            <if test="orderNo != null">
-                order_no = #{orderNo,jdbcType=CHAR},
+            <if test="sourceNo != null">
+                source_no = #{sourceNo,jdbcType=CHAR},
             </if>
-            <if test="orderType != null">
-                order_type = #{orderType,jdbcType=TINYINT},
+            <if test="sourceType != null">
+                source_type = #{sourceType,jdbcType=TINYINT},
             </if>
             <if test="orderDate != null">
                 order_date = #{orderDate,jdbcType=DATE},
@@ -183,8 +183,8 @@
     </update>
     <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.sm.ReceiptHeadPO">
         update sm_receipt_head
-        set order_no          = #{orderNo,jdbcType=CHAR},
-            order_type        = #{orderType,jdbcType=TINYINT},
+        set source_no         = #{sourceNo,jdbcType=CHAR},
+            source_type       = #{sourceType,jdbcType=TINYINT},
             order_date        = #{orderDate,jdbcType=DATE},
             supplier          = #{supplier,jdbcType=CHAR},
             buyer             = #{buyer,jdbcType=CHAR},
@@ -203,7 +203,7 @@
         select
         <include refid="Base_Column_List"/>
         from sm_receipt_head
-        where order_no like #{no,jdbcType=CHAR} '%'
+        where source_no like #{no,jdbcType=CHAR} '%'
         order by receipt_head_id desc limit 1
     </select>
 </mapper>

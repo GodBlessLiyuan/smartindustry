@@ -13,6 +13,11 @@ import lombok.Data;
 public class StorageBO extends StoragePO {
 
     /**
+     * 收料单表体ID
+     */
+    private Long receiptBodyId;
+
+    /**
      * 收料单号
      */
     private String receiptNo;

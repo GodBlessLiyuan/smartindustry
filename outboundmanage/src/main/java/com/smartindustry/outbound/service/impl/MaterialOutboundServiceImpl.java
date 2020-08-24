@@ -152,12 +152,12 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
 
         // 重新推荐货位
         new Thread(() -> {
-            List<PickHeadPO> notRecommendHeadPOs = pickHeadMapper.queryNotRecommodByOno(headPO.getOrderNo());
+            List<PickHeadPO> notRecommendHeadPOs = pickHeadMapper.queryNotRecommodByOno(headPO.getSourceNo());
             for (PickHeadPO notRecommendHeadPO : notRecommendHeadPOs) {
                 List<PickBodyBO> bodyBOs = pickBodyMapper.queryByHeadId(notRecommendHeadPO.getPickHeadId());
                 Map<Long, LabelRecommendPO> labelRecommendPOs = new HashMap<>();
                 for (PickBodyBO bodyBO : bodyBOs) {
-                    List<StorageLabelBO> storageLabelBOS = storageLabelMapper.queryNotRecommend(notRecommendHeadPO.getOrderNo(), bodyBO.getMaterialId());
+                    List<StorageLabelBO> storageLabelBOS = storageLabelMapper.queryNotRecommend(notRecommendHeadPO.getSourceNo(), bodyBO.getMaterialId());
                     int num = 0;
                     for (StorageLabelBO storageLabelBO : storageLabelBOS) {
                         if (labelRecommendPOs.containsKey(storageLabelBO.getStorageLabelId())) {

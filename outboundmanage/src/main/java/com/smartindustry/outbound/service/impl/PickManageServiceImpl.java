@@ -181,7 +181,7 @@ public class PickManageServiceImpl implements IPickManageService {
             }
             itemVO.setRecommend(recommendVOs);
             // 其他库位
-            List<StorageLabelBO> notRecommendBOs = storageLabelMapper.queryNotRecommend(headPO.getOrderNo(), bo.getMaterialId());
+            List<StorageLabelBO> notRecommendBOs = storageLabelMapper.queryNotRecommend(headPO.getSourceNo(), bo.getMaterialId());
             Set<String> notRecommendVO = new HashSet<>();
             for (StorageLabelBO notRecommendBO : notRecommendBOs) {
                 notRecommendVO.add(notRecommendBO.getLocationNo());
@@ -206,7 +206,7 @@ public class PickManageServiceImpl implements IPickManageService {
         }
         //若输入的PID并不属于该工单对应采购单的物料范围，则提示该物料并不属于该工单
         String ono = pickHeadMapper.queryOnoByPid(bo.getPrintLabelId());
-        if (!ono.equals(po.getOrderNo())) {
+        if (!ono.equals(po.getSourceNo())) {
             return new ResultVO(1016);
         }
         // 判断当前物料不在拣货清单中，则提示 该物料并不在出库清单中

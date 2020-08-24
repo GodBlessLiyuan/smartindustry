@@ -4,8 +4,8 @@
     <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.om.PickHeadPO">
         <id column="pick_head_id" jdbcType="BIGINT" property="pickHeadId"/>
         <result column="pick_no" jdbcType="CHAR" property="pickNo"/>
-        <result column="order_no" jdbcType="CHAR" property="orderNo"/>
-        <result column="order_type" jdbcType="TINYINT" property="orderType"/>
+        <result column="source_no" jdbcType="CHAR" property="sourceNo"/>
+        <result column="source_type" jdbcType="TINYINT" property="sourceType"/>
         <result column="material_status" jdbcType="TINYINT" property="materialStatus"/>
         <result column="correspond_project" jdbcType="CHAR" property="correspondProject"/>
         <result column="accept_customer" jdbcType="CHAR" property="acceptCustomer"/>
@@ -18,7 +18,7 @@
         <result column="dr" jdbcType="TINYINT" property="dr"/>
     </resultMap>
     <sql id="Base_Column_List">
-        pick_head_id, pick_no, order_no, order_type, material_status, correspond_project,
+        pick_head_id, pick_no, source_no, source_type, material_status, correspond_project,
     accept_customer, accept_address, plan_time, outbound_time, outbound_status, create_time, 
     update_time, dr
     </sql>
@@ -35,13 +35,13 @@
     </delete>
     <insert id="insert" parameterType="com.smartindustry.common.pojo.om.PickHeadPO" useGeneratedKeys="true"
             keyProperty="pickHeadId">
-        insert into om_pick_head (pick_head_id, pick_no, order_no,
-                                  order_type, material_status, correspond_project,
+        insert into om_pick_head (pick_head_id, pick_no, source_no,
+                                  source_type, material_status, correspond_project,
                                   accept_customer, accept_address, plan_time,
                                   outbound_time, outbound_status, create_time,
                                   update_time, dr)
-        values (#{pickHeadId,jdbcType=BIGINT}, #{pickNo,jdbcType=CHAR}, #{orderNo,jdbcType=CHAR},
-                #{orderType,jdbcType=TINYINT}, #{materialStatus,jdbcType=TINYINT}, #{correspondProject,jdbcType=CHAR},
+        values (#{pickHeadId,jdbcType=BIGINT}, #{pickNo,jdbcType=CHAR}, #{sourceNo,jdbcType=CHAR},
+                #{sourceType,jdbcType=TINYINT}, #{materialStatus,jdbcType=TINYINT}, #{correspondProject,jdbcType=CHAR},
                 #{acceptCustomer,jdbcType=CHAR}, #{acceptAddress,jdbcType=CHAR}, #{planTime,jdbcType=TIMESTAMP},
                 #{outboundTime,jdbcType=TIMESTAMP}, #{outboundStatus,jdbcType=TINYINT},
                 #{createTime,jdbcType=TIMESTAMP},
@@ -56,11 +56,11 @@
             <if test="pickNo != null">
                 pick_no,
             </if>
-            <if test="orderNo != null">
-                order_no,
+            <if test="sourceNo != null">
+                source_no,
             </if>
-            <if test="orderType != null">
-                order_type,
+            <if test="sourceType != null">
+                source_type,
             </if>
             <if test="materialStatus != null">
                 material_status,
@@ -100,11 +100,11 @@
             <if test="pickNo != null">
                 #{pickNo,jdbcType=CHAR},
             </if>
-            <if test="orderNo != null">
-                #{orderNo,jdbcType=CHAR},
+            <if test="sourceNo != null">
+                #{sourceNo,jdbcType=CHAR},
             </if>
-            <if test="orderType != null">
-                #{orderType,jdbcType=TINYINT},
+            <if test="sourceType != null">
+                #{sourceType,jdbcType=TINYINT},
             </if>
             <if test="materialStatus != null">
                 #{materialStatus,jdbcType=TINYINT},
@@ -144,11 +144,11 @@
             <if test="pickNo != null">
                 pick_no = #{pickNo,jdbcType=CHAR},
             </if>
-            <if test="orderNo != null">
-                order_no = #{orderNo,jdbcType=CHAR},
+            <if test="sourceNo != null">
+                source_no = #{sourceNo,jdbcType=CHAR},
             </if>
-            <if test="orderType != null">
-                order_type = #{orderType,jdbcType=TINYINT},
+            <if test="sourceType != null">
+                source_type = #{sourceType,jdbcType=TINYINT},
             </if>
             <if test="materialStatus != null">
                 material_status = #{materialStatus,jdbcType=TINYINT},
@@ -186,8 +186,8 @@
     <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.om.PickHeadPO">
         update om_pick_head
         set pick_no            = #{pickNo,jdbcType=CHAR},
-            order_no           = #{orderNo,jdbcType=CHAR},
-            order_type         = #{orderType,jdbcType=TINYINT},
+            source_no          = #{sourceNo,jdbcType=CHAR},
+            source_type        = #{sourceType,jdbcType=TINYINT},
             material_status    = #{materialStatus,jdbcType=TINYINT},
             correspond_project = #{correspondProject,jdbcType=CHAR},
             accept_customer    = #{acceptCustomer,jdbcType=CHAR},
@@ -206,7 +206,7 @@
         select
         <include refid="Base_Column_List"/>
         from om_pick_head ph
-        where ph.dr = 1 and ph.order_type = 1
+        where ph.dr = 1 and ph.source_type = 1
         <if test="materialStatus != null and materialStatus != 0">
             and ph.material_status = #{materialStatus}
         </if>
@@ -214,7 +214,7 @@
             and ph.pick_no like concat('%',#{pickNo,jdbcType=VARCHAR},'%')
         </if>
         <if test="orderNo != null and orderNo != ''">
-            and ph.order_no like concat('%',#{orderNo,jdbcType=VARCHAR},'%')
+            and ph.source_no like concat('%',#{orderNo,jdbcType=VARCHAR},'%')
         </if>
         <if test="correspondProject != null and correspondProject != ''">
             and ph.correspond_project like concat('%',#{correspondProject,jdbcType=VARCHAR},'%')
@@ -227,7 +227,7 @@
         select
         <include refid="Base_Column_List"/>
         from om_pick_head ph
-        where ph.dr = 1 and ph.order_type = 2
+        where ph.dr = 1 and ph.source_type = 2
         <if test="materialStatus != null and materialStatus != 0">
             and ph.material_status = #{materialStatus}
         </if>
@@ -235,7 +235,7 @@
             and ph.pick_no like concat('%',#{pickNo,jdbcType=VARCHAR},'%')
         </if>
         <if test="orderNo != null and orderNo != ''">
-            and ph.order_no like concat('%',#{orderNo,jdbcType=VARCHAR},'%')
+            and ph.source_no like concat('%',#{orderNo,jdbcType=VARCHAR},'%')
         </if>
         <if test="correspondProject != null and correspondProject != ''">
             and ph.correspond_project like concat('%',#{correspondProject,jdbcType=VARCHAR},'%')
@@ -248,7 +248,7 @@
         select
         <include refid="Base_Column_List"/>
         from om_pick_head ph
-        where ph.dr = 1 and ph.order_type = 1 and ph.material_status = 15
+        where ph.dr = 1 and ph.source_type = 1 and ph.material_status = 15
         <if test="pickNo != null and pickNo != ''">
             and ph.pick_no like concat('%',#{pickNo,jdbcType=VARCHAR},'%')
         </if>
@@ -527,12 +527,12 @@
         select
         <include refid="Base_Column_List"/>
         from om_pick_head ph
-        where ph.dr = 1 and ph.order_type = 2 and ph.material_status = 15
+        where ph.dr = 1 and ph.source_type = 2 and ph.material_status = 15
         <if test="pickNo != null and pickNo != ''">
             and ph.pick_no like concat('%',#{pickNo,jdbcType=VARCHAR},'%')
         </if>
         <if test="orderNo != null and orderNo != ''">
-            and ph.order_no like concat('%',#{orderNo,jdbcType=VARCHAR},'%')
+            and ph.source_no like concat('%',#{orderNo,jdbcType=VARCHAR},'%')
         </if>
         order by ph.update_time desc
     </select>
@@ -571,7 +571,7 @@
     </select>
 
     <select id="queryOnoByPid" parameterType="java.lang.Long" resultType="java.lang.String">
-        select distinct order_no
+        select distinct source_no
         from si_storage_label
         where print_label_id = #{printLabelId}
     </select>
@@ -580,6 +580,6 @@
         select
         <include refid="Base_Column_List"/>
         from om_pick_head ph
-        where ph.dr = 1 and ph.material_status = 1 and ph.order_no = #{orderNo,jdbcType=CHAR}
+        where ph.dr = 1 and ph.material_status = 1 and ph.source_no = #{orderNo,jdbcType=CHAR}
     </select>
 </mapper>

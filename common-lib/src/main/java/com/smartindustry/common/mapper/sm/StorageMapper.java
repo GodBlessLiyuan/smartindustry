@@ -20,4 +20,12 @@ public interface StorageMapper extends BaseMapper<StoragePO, Long> {
      * @return
      */
     List<StorageBO> pageQuery(Map<String, Object> reqData);
+
+    /**
+     * 查询收料单
+     *
+     * @param sid
+     * @return
+     */
+    StorageBO queryReceiptBySid(Long sid);
 }
