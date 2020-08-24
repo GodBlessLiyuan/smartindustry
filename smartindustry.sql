@@ -78,7 +78,7 @@ CREATE TABLE am_authority
     authority_path char(255) NOT NULL,
     -- 1：菜单   2：按钮
     type tinyint COMMENT '1：菜单   2：按钮',
-    parent_id bigint unsigned NOT NULL,
+    parent_id bigint unsigned,
     PRIMARY KEY (authority_id),
     UNIQUE (authority_id),
     UNIQUE (authority_path)
@@ -180,7 +180,7 @@ CREATE TABLE am_user
 2 女',
     dept_id bigint unsigned NOT NULL,
     username char(32) NOT NULL,
-    password char(32) NOT NULL,
+    password char(128) NOT NULL,
     role_id bigint unsigned NOT NULL,
     job char(16),
     phone char(16),
