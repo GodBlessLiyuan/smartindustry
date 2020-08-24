@@ -4,12 +4,11 @@ import com.smartindustry.basic.dto.*;
 import com.smartindustry.basic.service.IDataDictionaryService;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * @author: xiahui
@@ -257,6 +256,7 @@ public class DataDictionaryController {
      * @return
      */
     @PostMapping("mtEdit")
+    @PreAuthorize("@ss.hasPermi('am:sys:insert')")
     public ResultVO mtEdit(@RequestBody MaterialTypeDTO dto) {
         return dataDictionaryService.mtEdit(dto);
     }
@@ -495,6 +495,7 @@ public class DataDictionaryController {
      * @return
      */
     @PostMapping("configEdit")
+    @PreAuthorize("@ss.hasPermi('am:sys:set')")
     public ResultVO configSet(@RequestBody ConfigDTO dto) {
         return dataDictionaryService.configSet(dto);
     }
