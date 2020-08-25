@@ -1,7 +1,6 @@
 package com.smartindustry.storage.service.impl;
 
 import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import com.smartindustry.common.bo.si.LabelRecordBO;
 import com.smartindustry.common.bo.sm.ReceiptBO;
 import com.smartindustry.common.constant.ModuleConstant;
@@ -12,7 +11,6 @@ import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.sm.*;
 import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.PageQueryUtil;
-import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.ReceiptConstant;
@@ -31,7 +29,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author: xiahui
@@ -177,8 +178,10 @@ public class QualityManageServiceImpl implements IQualityManageService {
         } else if (ReceiptConstant.QE_RETURN.equals(dto.getStatus())) {
             // 退供应商
             type = ReceiptConstant.RECORD_TYPE_QE_DETECT_RETURN;
-            qeDetectPO.setStatus(ReceiptConstant.QE_RETURN);
+//            qeDetectPO.setStatus(ReceiptConstant.QE_RETURN);
+            qeDetectMapper.deleteByPrimaryKey(receiptBodyPO.getReceiptBodyId());
 
+            receiptBodyPO.setStatus(ReceiptConstant.RECEIPT_RETURN_SUPPLIER);
             receiptBodyPO.setGoodNum(0);
             receiptBodyPO.setBadNum(receiptBodyPO.getAcceptNum());
         } else {
@@ -249,10 +252,12 @@ public class QualityManageServiceImpl implements IQualityManageService {
             // 退供应商
             type = ReceiptConstant.RECORD_TYPE_QE_CONFIRM_RETURN;
 
-            qeConfirmPO.setRemark(dto.getRemark());
-            qeConfirmPO.setStatus(ReceiptConstant.QE_RETURN);
-            qeConfirmMapper.updateByPrimaryKey(qeConfirmPO);
+//            qeConfirmPO.setRemark(dto.getRemark());
+//            qeConfirmPO.setStatus(ReceiptConstant.QE_RETURN);
+//            qeConfirmMapper.updateByPrimaryKey(qeConfirmPO);
+            qeConfirmMapper.deleteByPrimaryKey(qeConfirmPO.getReceiptBodyId());
 
+            receiptBodyPO.setStatus(ReceiptConstant.RECEIPT_RETURN_SUPPLIER);
             receiptBodyPO.setGoodNum(0);
             receiptBodyPO.setBadNum(receiptBodyPO.getAcceptNum());
         } else {
@@ -285,7 +290,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
             // QE确认
             QeConfirmPO qeConfirmPO = qeConfirmMapper.selectByPrimaryKey(dto.getRbid());
             if (null != qeConfirmPO) {
-                if (!ReceiptConstant.QE_FRANCHISE.equals(qeConfirmPO.getStatus()) && !ReceiptConstant.QE_RETURN.equals(qeConfirmPO.getStatus())) {
+                if (!ReceiptConstant.QE_FRANCHISE.equals(qeConfirmPO.getStatus())) {
                     return new ResultVO(1003);
                 }
                 qeConfirmMapper.deleteByPrimaryKey(dto.getRbid());
@@ -296,6 +301,10 @@ public class QualityManageServiceImpl implements IQualityManageService {
                 QeDetectPO qeDetectPO = qeDetectMapper.selectByPrimaryKey(dto.getRbid());
                 if (null == qeDetectPO) {
                     return new ResultVO(1002);
+                }
+
+                if (!ReceiptConstant.QE_ALLOW.equals(qeDetectPO.getStatus()) && !ReceiptConstant.QE_FRANCHISE.equals(qeDetectPO.getStatus())) {
+                    return new ResultVO(1003);
                 }
                 qeDetectMapper.deleteByPrimaryKey(dto.getRbid());
 
@@ -314,7 +323,8 @@ public class QualityManageServiceImpl implements IQualityManageService {
             StoragePO storagePO = new StoragePO();
             storagePO.setSourceNo(receiptBodyPO.getReceiptNo());
             storagePO.setSourceType((byte) 1);
-            storagePO.setStorageNo(ReceiptNoUtil.genStorageNo(storageMapper, ReceiptNoUtil.MATERIAL_STORAGE_LPPK, new Date()));
+            String head = receiptBodyPO.getSourceType() == 3 ? ReceiptNoUtil.MATERIAL_STORAGE_TLRK : ReceiptNoUtil.MATERIAL_STORAGE_CGRK;
+            storagePO.setStorageNo(ReceiptNoUtil.genStorageNo(storageMapper, head, new Date()));
             storagePO.setPendingNum(receiptBodyPO.getGoodNum());
             storagePO.setStoredNum(0);
             storagePO.setStatus(ReceiptConstant.MATERIAL_STORAGE_PENDING);

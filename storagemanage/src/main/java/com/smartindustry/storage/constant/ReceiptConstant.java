@@ -23,6 +23,8 @@ public class ReceiptConstant {
     public static final Byte RECEIPT_MATERIAL_STORAGE = 20;
     //  入库完成
     public static final Byte RECEIPT_STORAGE_FINISH = 25;
+    //  退供应商
+    public static final Byte RECEIPT_RETURN_SUPPLIER = 30;
 
     /**
      * IQC检验 状态

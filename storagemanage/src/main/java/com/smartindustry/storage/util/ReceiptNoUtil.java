@@ -24,6 +24,8 @@ public class ReceiptNoUtil {
     public static final String RECEIPT_BODY_PO = "CG";
     public static final String RECEIPT_BODY_YP = "YP";
     public static final String RECEIPT_BODY_RP = "RP";
+    public static final String MATERIAL_STORAGE_CGRK = "CGRK";
+    public static final String MATERIAL_STORAGE_TLRK = "TLRK";
     public static final String MATERIAL_STORAGE_LPPK = "LPRK";
     public static final String MATERIAL_STORAGE_BLPK = "BLRK";
     private static final int NUM_LEN = 5;
