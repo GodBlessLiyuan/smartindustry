@@ -51,17 +51,17 @@ public class BomBodyDTO implements Serializable {
      */
     private Long pid;
 
-    public static BomBodyPO createPO(BomBodyDTO dto) {
+    public static BomBodyPO createPO(BomBodyDTO dto,Integer curDeep) {
         BomBodyPO po = new BomBodyPO();
         po.setBomHeadId(dto.getBhid());
         po.setUserId(1L);
         po.setCreateTime(new Date());
         po.setDr((byte)1);
         po.setUpdateTime(null);
-        return buildPO(po,dto);
+        return buildPO(po,dto,curDeep);
     }
 
-    public static BomBodyPO buildPO(BomBodyPO po,BomBodyDTO dto) {
+    public static BomBodyPO buildPO(BomBodyPO po,BomBodyDTO dto,Integer curDeep) {
         po.setMaterialId(dto.getMid());
         po.setMaterialPropertyId(dto.getMpid());
         po.setMaterialDemand(dto.getMdemand());
@@ -71,6 +71,7 @@ public class BomBodyDTO implements Serializable {
         po.setDemandType(dto.getMdtype());
         po.setLossType(dto.getMltype());
         po.setUpdateTime(new Date());
+        po.setLevel(curDeep);
         return po;
     }
 }

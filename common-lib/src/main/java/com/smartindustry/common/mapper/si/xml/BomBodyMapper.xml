@@ -13,13 +13,14 @@
     <result column="process_id" jdbcType="BIGINT" property="processId" />
     <result column="parent_id" jdbcType="BIGINT" property="parentId" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="level" jdbcType="INTEGER" property="level" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="dr" jdbcType="TINYINT" property="dr" />
   </resultMap>
   <sql id="Base_Column_List">
     bom_body_id, bom_head_id, material_id, material_property_id, material_demand, demand_type, 
-    material_loss, loss_type, process_id, parent_id, user_id, create_time, update_time, 
+    material_loss, loss_type, process_id, parent_id, user_id, `level`, create_time, update_time, 
     dr
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -36,13 +37,15 @@
     insert into si_bom_body (bom_body_id, bom_head_id, material_id, 
       material_property_id, material_demand, demand_type, 
       material_loss, loss_type, process_id, 
-      parent_id, user_id, create_time, 
-      update_time, dr)
+      parent_id, user_id, `level`, 
+      create_time, update_time, dr
+      )
     values (#{bomBodyId,jdbcType=BIGINT}, #{bomHeadId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT}, 
       #{materialPropertyId,jdbcType=BIGINT}, #{materialDemand,jdbcType=REAL}, #{demandType,jdbcType=TINYINT}, 
       #{materialLoss,jdbcType=REAL}, #{lossType,jdbcType=TINYINT}, #{processId,jdbcType=BIGINT}, 
-      #{parentId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
+      #{parentId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{level,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.BomBodyPO">
     insert into si_bom_body
@@ -79,6 +82,9 @@
       </if>
       <if test="userId != null">
         user_id,
+      </if>
+      <if test="level != null">
+        `level`,
       </if>
       <if test="createTime != null">
         create_time,
@@ -124,6 +130,9 @@
       <if test="userId != null">
         #{userId,jdbcType=BIGINT},
       </if>
+      <if test="level != null">
+        #{level,jdbcType=INTEGER},
+      </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -168,6 +177,9 @@
       <if test="userId != null">
         user_id = #{userId,jdbcType=BIGINT},
       </if>
+      <if test="level != null">
+        `level` = #{level,jdbcType=INTEGER},
+      </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -192,15 +204,25 @@
       process_id = #{processId,jdbcType=BIGINT},
       parent_id = #{parentId,jdbcType=BIGINT},
       user_id = #{userId,jdbcType=BIGINT},
+      `level` = #{level,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       dr = #{dr,jdbcType=TINYINT}
     where bom_body_id = #{bomBodyId,jdbcType=BIGINT}
   </update>
 
+
   <!--  根据主BOM清单ID查询到所有的物料明细-->
   <select id="queryByBhid" parameterType="java.lang.Long" resultType="java.lang.Long">
     select bom_body_id
+    from si_bom_body
+    where bom_head_id = #{bomHeadId,jdbcType=BIGINT} and dr = 1
+  </select>
+
+  <!--  根据主BOM清单ID查询到所有的物料明细-->
+  <select id="queryBomBody" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
     from si_bom_body
     where bom_head_id = #{bomHeadId,jdbcType=BIGINT} and dr = 1
   </select>
@@ -229,11 +251,19 @@
   </update>
 
   <select id="queryChildren" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.si.BomHeadBO">
-    select bb.bom_head_id as bomHeadId,ma.material_id as materialId,ma.material_no as materialNo,ma.material_name as materialName,ma.material_model as materialModel,mp.material_property_name as materialPropertyName
+    select bb.bom_body_id as bomBodyId,bb.bom_head_id as bomHeadId,ma.material_id as materialId,ma.material_no as materialNo,ma.material_name as materialName,ma.material_model as materialModel,mp.material_property_name as materialPropertyName
     from si_bom_body bb
     left join si_material ma on bb.material_id = ma.material_id
     left join dd_material_property mp on bb.material_property_id = mp.material_property_id
-    where bb.dr = 1 and bb.parent_id = #{parentId,jdbcType=BIGINT} and bb.bom_head_id = #{bomHeadId,jdbcType=BIGINT}
+    where bb.dr = 1 and bb.bom_head_id = #{bomHeadId,jdbcType=BIGINT}
+    <choose>
+      <when test="parentId != null and parentId !=''">
+        and bb.parent_id = #{parentId,jdbcType=BIGINT}
+      </when>
+      <otherwise>
+        and bb.parent_id is null
+      </otherwise>
+    </choose>
   </select>
 
   <!--  查看当前主BOM下是否已经存在当前物料的明细-->
@@ -258,4 +288,21 @@
     where bb.dr = 1 and bb.bom_head_id = #{bhid,jdbcType=BIGINT}
     order by bb.create_time desc
  </select>
+
+  <!--  根据上级物料id查询bbid-->
+  <select id="queryParentId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from si_bom_body
+    where dr = 1
+    <choose>
+      <when test="parentId != null and parentId !=''">
+        and bom_body_id = #{parentId,jdbcType=BIGINT}
+      </when>
+      <otherwise>
+        and parent_id is null
+      </otherwise>
+    </choose>
+
+  </select>
 </mapper>

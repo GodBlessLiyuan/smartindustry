@@ -165,7 +165,7 @@
                 where au.parent_id = #{parentId,jdbcType=BIGINT} and au.type = #{type,jdbcType=TINYINT}
             </when>
             <otherwise>
-                where au.parent_id = 0 and au.type = #{type,jdbcType=TINYINT}
+                where au.parent_id is null and au.type = #{type,jdbcType=TINYINT}
             </otherwise>
         </choose>
     </select>

@@ -23,6 +23,12 @@ public interface BomBodyMapper extends BaseMapper<BomBodyPO, Long> {
     List<Long> queryByBhid(@Param("bomHeadId") Long bomHeadId);
 
     /**
+     * 根据主BOM清单ID查询到所有的物料明细
+     * @param bomHeadId
+     * @return
+     */
+    List<BomBodyPO> queryBomBody(@Param("bomHeadId") Long bomHeadId);
+    /**
      * 批量删除物料明细
      * @param pos
      * @return
@@ -40,7 +46,7 @@ public interface BomBodyMapper extends BaseMapper<BomBodyPO, Long> {
     /**
      * 查询当前物料的子物料列表
      */
-    List<BomHeadBO> queryChildren(@Param("parentId") Long parentId,@Param("bomHeadId") Long bomHeadId);
+    List<BomHeadBO> queryChildren(@Param("parentId") Long parentId, @Param("bomHeadId") Long bomHeadId);
 
     /**
      *查看当前主BOM下是否已经存在当前物料的明细
@@ -55,4 +61,11 @@ public interface BomBodyMapper extends BaseMapper<BomBodyPO, Long> {
      * @return
      */
     List<BomBodyBO> pageQuery(Map<String, Object> reqData);
+
+    /**
+     * 根据物料id查询当前bom_body中的物料明细id
+     * @param parentId
+     * @return
+     */
+    BomBodyPO queryParentId(@Param("parentId") Long parentId);
 }
