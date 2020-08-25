@@ -3,16 +3,19 @@ package com.smartindustry.common.mapper.om;
 import com.smartindustry.common.bo.om.PickBodyBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.om.PickBodyPO;
+import com.smartindustry.common.pojo.om.PickHeadPO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * PickBodyMapper继承基类
  */
 @Mapper
 public interface PickBodyMapper extends BaseMapper<PickBodyPO, Long> {
+
     /**
      * 根据表头ID查询
      *

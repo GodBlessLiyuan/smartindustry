@@ -19,6 +19,13 @@ import java.util.Map;
  */
 @Mapper
 public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
+
+    /**
+     * 工单/销售/调拨 拣货单的pagequery
+     * @param reqData
+     * @return
+     */
+    List<PickHeadPO> pageQuery(Map<String, Object> reqData);
     /**
      * 查询拣货单表头的某些数据项
      *

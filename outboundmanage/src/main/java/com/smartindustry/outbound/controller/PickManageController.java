@@ -23,6 +23,11 @@ public class PickManageController {
     @Autowired
     private IPickManageService pickManageService;
 
+    @PostMapping("pageQuery")
+    public ResultVO pageQuery(@RequestBody Map<String, Object> reqData) {
+        return pickManageService.pageQuery(reqData);
+    }
+
     /**
      * 工单拣货单状态查询
      *
