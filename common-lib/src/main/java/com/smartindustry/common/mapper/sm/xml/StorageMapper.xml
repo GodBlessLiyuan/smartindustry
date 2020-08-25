@@ -182,16 +182,15 @@
         select
         <include refid="StorageBO_Column_List"/>
         from sm_storage s
-        left join sm_receipt_body rb on s.receipt_body_id = rb.receipt_body_id
+        left join sm_receipt_body rb on s.source_no = rb.receipt_no
         left join si_material m on rb.material_id = m.material_id
         left join dd_material_type mt on m.material_type_id = mt.material_type_id
-        <where>
-            <if test="rno != null and rno != ''">and rb.receipt_no like '%' #{rno,jdbcType=CHAR} '%'</if>
-            <if test="rtype != null and rtype != 0">and rb.source_type = #{rtype,jdbcType=TINYINT}</if>
-            <if test="mtype != null and mtype != 0">and m.material_type = #{mtype,jdbcType=TINYINT}</if>
-            <if test="status != null and status != 0">and s.`status` = #{status,jdbcType=TINYINT}</if>
-            <if test="type != null and type != 0">and s.`type` = #{type,jdbcType=TINYINT}</if>
-        </where>
+        where rb.dr = 1 and s.source_type = 1
+        <if test="rno != null and rno != ''">and rb.receipt_no like '%' #{rno,jdbcType=CHAR} '%'</if>
+        <if test="rtype != null and rtype != 0">and rb.source_type = #{rtype,jdbcType=TINYINT}</if>
+        <if test="mtype != null and mtype != 0">and m.material_type = #{mtype,jdbcType=TINYINT}</if>
+        <if test="status != null and status != 0">and s.`status` = #{status,jdbcType=TINYINT}</if>
+        <if test="type != null and type != 0">and s.`type` = #{type,jdbcType=TINYINT}</if>
         order by s.create_time desc
     </select>
     <select id="queryNo" parameterType="java.lang.String" resultMap="BaseResultMap">

@@ -643,7 +643,7 @@ CREATE TABLE si_bom_body
     loss_type tinyint COMMENT '1：配比/比例
 2：计数',
     process_id bigint unsigned,
-    parent_id bigint unsigned NOT NULL,
+    parent_id bigint unsigned,
     user_id bigint unsigned,
     create_time datetime,
     update_time datetime,
@@ -714,12 +714,14 @@ CREATE TABLE si_label_record
     -- 15：QE确认
     -- 20：物料入库
     -- 25：入库完成
+    -- 30：退供应商
     status tinyint COMMENT '1：录入标签
 5：IQC检测
 10：QE检测
 15：QE确认
 20：物料入库
-25：入库完成',
+25：入库完成
+30：退供应商',
     PRIMARY KEY (label_record_id),
     UNIQUE (label_record_id)
 );
@@ -1018,6 +1020,7 @@ CREATE TABLE sm_receipt_body
     receipt_body_id bigint unsigned NOT NULL AUTO_INCREMENT,
     receipt_head_id bigint unsigned NOT NULL,
     material_id bigint unsigned NOT NULL,
+    receipt_no char(32) NOT NULL,
     source_no char(32),
     -- 1：PO单收料
     -- 2：样品采购
@@ -1025,7 +1028,6 @@ CREATE TABLE sm_receipt_body
     source_type tinyint COMMENT '1：PO单收料
 2：样品采购
 3：生产退料',
-    receipt_no char(32) NOT NULL,
     order_total int,
     accept_num int,
     accept_date datetime,
@@ -1038,12 +1040,14 @@ CREATE TABLE sm_receipt_body
     -- 15：QE确认
     -- 20：物料入库
     -- 25：入库完成
+    -- 30：退供应商
     status tinyint COMMENT '1：录入标签
 5：IQC检测
 10：QE检测
 15：QE确认
 20：物料入库
-25：入库完成',
+25：入库完成
+30：退供应商',
     create_time datetime,
     -- 1：未删除
     -- 2：已删除
@@ -1171,12 +1175,14 @@ CREATE TABLE sm_storage_record
     -- 15：QE确认
     -- 20：物料入库
     -- 25：入库完成
+    -- 30：退供应商
     status tinyint COMMENT '1：录入标签
 5：IQC检测
 10：QE检测
 15：QE确认
 20：物料入库
-25：入库完成',
+25：入库完成
+30：退供应商',
     PRIMARY KEY (record_id),
     UNIQUE (record_id)
 );
