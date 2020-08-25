@@ -288,11 +288,12 @@
         `status`, create_time, dr)
         values
         <foreach collection="list" item="bo" separator=",">
-               (#{bo.receiptBodyId,jdbcType=BIGINT}, #{bo.receiptHeadId,jdbcType=BIGINT}, #{bo.materialId,jdbcType=BIGINT},
-        #{bo.sourceNo,jdbcType=CHAR}, #{bo.sourceType,jdbcType=TINYINT}, #{bo.receiptNo,jdbcType=CHAR},
-        #{bo.orderTotal,jdbcType=INTEGER}, #{bo.acceptNum,jdbcType=INTEGER}, #{bo.acceptDate,jdbcType=TIMESTAMP},
-        #{bo.goodNum,jdbcType=INTEGER}, #{bo.badNum,jdbcType=INTEGER}, #{bo.stockNum,jdbcType=INTEGER},
-        #{bo.status,jdbcType=TINYINT}, #{bo.createTime,jdbcType=TIMESTAMP}, #{bo.dr,jdbcType=TINYINT})
+            (#{bo.receiptBodyId,jdbcType=BIGINT}, #{bo.receiptHeadId,jdbcType=BIGINT}, #{bo.materialId,jdbcType=BIGINT},
+            #{bo.sourceNo,jdbcType=CHAR}, #{bo.sourceType,jdbcType=TINYINT}, #{bo.receiptNo,jdbcType=CHAR},
+            #{bo.orderTotal,jdbcType=INTEGER}, #{bo.acceptNum,jdbcType=INTEGER}, #{bo.acceptDate,jdbcType=TIMESTAMP},
+            #{bo.goodNum,jdbcType=INTEGER}, #{bo.badNum,jdbcType=INTEGER}, #{bo.stockNum,jdbcType=INTEGER},
+            #{bo.status,jdbcType=TINYINT}, #{bo.createTime,jdbcType=TIMESTAMP}, #{bo.dr,jdbcType=TINYINT})
+        </foreach>
     </insert>
     <select id="queryNo" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
