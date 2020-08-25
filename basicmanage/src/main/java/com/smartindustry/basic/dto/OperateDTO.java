@@ -20,6 +20,6 @@ public class OperateDTO implements Serializable {
     private Long sid;
     private Long mid;
     private Long bhid;
-
+    private List<Long> bbids;
 
 }

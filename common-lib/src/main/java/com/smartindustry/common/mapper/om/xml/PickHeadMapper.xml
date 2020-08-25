@@ -216,9 +216,6 @@
         <if test="orderNo != null and orderNo != ''">
             and ph.order_no like concat('%',#{orderNo,jdbcType=VARCHAR},'%')
         </if>
-        <if test="correspondProject != null and correspondProject != ''">
-            and ph.correspond_project like concat('%',#{correspondProject,jdbcType=VARCHAR},'%')
-        </if>
         order by ph.create_time desc
     </select>
 

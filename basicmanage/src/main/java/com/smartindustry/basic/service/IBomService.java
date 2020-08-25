@@ -47,10 +47,10 @@ public interface IBomService {
 
     /**
      * 批量删除物料明细
-     * @param bbids
+     * @param dto
      * @return
      */
-    ResultVO deleteBody(List<Long> bbids);
+    ResultVO deleteBody(OperateDTO dto);
 
     /**
      * 展示主bom的层级结构

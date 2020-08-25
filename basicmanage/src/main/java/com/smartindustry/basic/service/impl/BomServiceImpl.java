@@ -22,7 +22,6 @@ import com.smartindustry.common.pojo.si.BomHeadPO;
 import com.smartindustry.common.pojo.si.BomRecordPO;
 import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.PageQueryUtil;
-import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,30 +130,41 @@ public class BomServiceImpl implements IBomService {
     /**
      * 批量删除物料明细
      *
-     * @param bbids
+     * @param dto
      * @return
      */
     @Override
-    public ResultVO deleteBody(List<Long> bbids) {
-        bomBodyMapper.deleteBodyBatch(bbids);
+    @Transactional(rollbackFor = Exception.class)
+    public ResultVO deleteBody(OperateDTO dto) {
+        bomBodyMapper.deleteBodyBatch(dto.getBbids());
+        //根据bhid查询当前物料明细的所有相关物料，若批量删除，则更新相关物料数目
+        BomHeadPO bhpo = bomHeadMapper.selectByPrimaryKey(dto.getBhid());
+        bhpo.setRelateNum(bhpo.getRelateNum() - dto.getBbids().size());
+        bomHeadMapper.updateByPrimaryKey(bhpo);
         return ResultVO.ok();
     }
 
     /**
      * 根据主bom的ID查询得到所有层级物料明细
-     *
+     *传入"bhid"
      * @param dto
      * @return
      */
     @Override
     public ResultVO queryTreeBom(OperateDTO dto) {
+        MaterialItemsVO vo = queryTree(dto.getBhid());
+        return ResultVO.ok().setData(vo);
+    }
+
+    private MaterialItemsVO queryTree(Long bomHeadId){
         //从主BOM清单查询根节点
-        BomHeadBO bo = bomHeadMapper.queryMainMaterial(dto.getBhid());
+        BomHeadBO bo = bomHeadMapper.queryMainMaterial(bomHeadId);
         MaterialItemsVO vo = MaterialItemsVO.convert(bo);
-        List<BomHeadBO> bos = bomBodyMapper.queryChildren(vo.getMid(), vo.getBhid());
+        //根据物料明细id查询出其子物料明细
+        List<BomHeadBO> bos = bomBodyMapper.queryChildren(null, vo.getBhid());
         List<MaterialItemsVO> children = getBomTreeList(MaterialItemsVO.convert(bos));
         vo.setChildren(children);
-        return ResultVO.ok().setData(vo);
+        return vo;
     }
 
     /**
@@ -162,7 +172,7 @@ public class BomServiceImpl implements IBomService {
      */
     private List<MaterialItemsVO> getBomTreeList(List<MaterialItemsVO> vos) {
         for (MaterialItemsVO vo : vos) {
-            List<BomHeadBO> bos = bomBodyMapper.queryChildren(vo.getMid(), vo.getBhid());
+            List<BomHeadBO> bos = bomBodyMapper.queryChildren(vo.getBbid(), vo.getBhid());
             if (bos != null && bos.size() != 0) {
                 List<MaterialItemsVO> vosTemp = getBomTreeList(MaterialItemsVO.convert(bos));
                 vo.setChildren(vosTemp);
@@ -171,17 +181,24 @@ public class BomServiceImpl implements IBomService {
         return vos;
     }
 
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO editDetail(BomBodyDTO dto) {
         UserPO user = tokenService.getLoginUser();
+        BomBodyPO po1 = bomBodyMapper.queryParentId(dto.getPid());
+        int curDeep = (dto.getPid() == null)? 2:po1.getLevel()+1;
+
+        if(curDeep > BasicConstant.LEVEL_LIMIT){
+            return new ResultVO(1024);
+        }
         if (dto.getBbid() == null) {
             List<BomBodyPO> pos1 = bomBodyMapper.judgeHaveBody(dto.getMid(), dto.getBhid());
             if (!pos1.isEmpty()) {
                 //已经有当前物料的主BOM清单
                 return new ResultVO(1004);
             } else {
-                BomBodyPO po = BomBodyDTO.createPO(dto);
+                BomBodyPO po = BomBodyDTO.createPO(dto,curDeep);
                 bomBodyMapper.insert(po);
                 // 将主BOM清单中的关联物料+1
                 BomHeadPO bhpo = bomHeadMapper.selectByPrimaryKey(dto.getBhid());
@@ -190,8 +207,8 @@ public class BomServiceImpl implements IBomService {
             }
         } else {
             BomBodyPO po = bomBodyMapper.selectByPrimaryKey(dto.getBbid());
-            BomBodyPO po1 = BomBodyDTO.buildPO(po, dto);
-            bomBodyMapper.updateByPrimaryKey(po1);
+            BomBodyPO po2 = BomBodyDTO.buildPO(po, dto,curDeep);
+            bomBodyMapper.updateByPrimaryKey(po2);
         }
         bomRecordMapper.insert(new BomRecordPO(dto.getBhid(), user.getUserId(), new Date(), BasicConstant.RECORD_MODIFY));
         return ResultVO.ok();

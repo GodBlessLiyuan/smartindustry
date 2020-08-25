@@ -11,6 +11,14 @@ import lombok.Data;
  */
 @Data
 public class BomHeadBO extends BomHeadPO {
+    /**
+     * 主物料bom的物料明细id
+     */
+    private Long bomBodyId;
+
+    /**
+     * 物料id
+     */
     private Long materialId;
     /**
      * 物料编码
