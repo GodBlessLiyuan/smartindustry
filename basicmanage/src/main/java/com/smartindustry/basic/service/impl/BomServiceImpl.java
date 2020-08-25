@@ -187,8 +187,7 @@ public class BomServiceImpl implements IBomService {
     public ResultVO editDetail(BomBodyDTO dto) {
         UserPO user = tokenService.getLoginUser();
         BomBodyPO po1 = bomBodyMapper.queryParentId(dto.getPid());
-        int curDeep = (dto.getPid() == null)? 2:po1.getLevel()+1;
-
+        int curDeep = (dto.getPid() == 0)? 2:po1.getLevel()+1;
         if(curDeep > BasicConstant.LEVEL_LIMIT){
             return new ResultVO(1024);
         }

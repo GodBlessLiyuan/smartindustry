@@ -295,14 +295,8 @@
     <include refid="Base_Column_List" />
     from si_bom_body
     where dr = 1
-    <choose>
-      <when test="parentId != null and parentId !=''">
-        and bom_body_id = #{parentId,jdbcType=BIGINT}
-      </when>
-      <otherwise>
-        and parent_id is null
-      </otherwise>
-    </choose>
-
+    <if test="parentId != null and parentId !=''">
+      and bom_body_id = #{parentId,jdbcType=BIGINT}
+    </if>
   </select>
 </mapper>
