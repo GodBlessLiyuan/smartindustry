@@ -68,6 +68,7 @@ public class BomBodyDTO implements Serializable {
         po.setMaterialLoss(dto.getMloss());
         po.setProcessId(dto.getPrid());
         po.setParentId(dto.getPid());
+        po.setParentId(dto.getPid());
         po.setDemandType(dto.getMdtype());
         po.setLossType(dto.getMltype());
         po.setUpdateTime(new Date());

@@ -63,7 +63,11 @@ public class MaterialItemsVO implements Serializable {
     public static MaterialItemsVO convert(BomHeadBO bo) {
         MaterialItemsVO vo = new MaterialItemsVO();
         vo.setBhid(bo.getBomHeadId());
-        vo.setBbid(bo.getBomBodyId());
+        if(bo.getBomBodyId() == null){
+            vo.setBbid(0L);
+        }else {
+            vo.setBbid(bo.getBomBodyId());
+        }
         vo.setMmodel(bo.getMaterialModel());
         vo.setMno(bo.getMaterialNo());
         vo.setMname(bo.getMaterialName());

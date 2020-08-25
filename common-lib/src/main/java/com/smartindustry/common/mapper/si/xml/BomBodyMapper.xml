@@ -256,14 +256,9 @@
     left join si_material ma on bb.material_id = ma.material_id
     left join dd_material_property mp on bb.material_property_id = mp.material_property_id
     where bb.dr = 1 and bb.bom_head_id = #{bomHeadId,jdbcType=BIGINT}
-    <choose>
-      <when test="parentId != null and parentId !=''">
-        and bb.parent_id = #{parentId,jdbcType=BIGINT}
-      </when>
-      <otherwise>
-        and bb.parent_id is null
-      </otherwise>
-    </choose>
+    <if test="parentId != null and parentId !=''">
+      and bb.parent_id = #{parentId,jdbcType=BIGINT}
+    </if>
   </select>
 
   <!--  查看当前主BOM下是否已经存在当前物料的明细-->
@@ -295,8 +290,9 @@
     <include refid="Base_Column_List" />
     from si_bom_body
     where dr = 1
-    <if test="parentId != null and parentId !=''">
+    <if test="parentId != null and parentId !='' and parentId!=0">
       and bom_body_id = #{parentId,jdbcType=BIGINT}
     </if>
+    limit 1
   </select>
 </mapper>

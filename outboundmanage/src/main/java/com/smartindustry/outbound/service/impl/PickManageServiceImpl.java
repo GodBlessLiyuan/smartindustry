@@ -18,6 +18,7 @@ import com.smartindustry.common.pojo.om.*;
 import com.smartindustry.common.pojo.si.ConfigPO;
 import com.smartindustry.common.pojo.si.PrintLabelPO;
 import com.smartindustry.common.security.service.TokenService;
+import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
@@ -65,6 +66,13 @@ public class PickManageServiceImpl implements IPickManageService {
     TokenService tokenService;
     @Autowired
     ConfigMapper configMapper;
+
+    @Override
+    public ResultVO pageQuery(Map<String, Object> reqData){
+        Page<PickHeadPO> page = PageQueryUtil.startPage(reqData);
+        List<PickHeadPO> pos = pickHeadMapper.pageQuery(reqData);
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), PickHeadVO.convert(pos)));
+    }
 
     @Override
     public ResultVO pageQueryPickHead(int pageNum, int pageSize, Map<String, Object> reqMap) {
