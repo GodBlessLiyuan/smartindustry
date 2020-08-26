@@ -167,7 +167,7 @@
     <sql id="StorageBO_Column_List">
         s.storage_id, s.storage_no, s.source_no, s.source_type, s.pending_num, s.stored_num, s.storage_time, s.`status`,
     s.`type`, s.create_time, s.dr,
-    rb.receipt_no, rb.order_type,
+    rb.receipt_no, rb.source_type,
     m.material_no, m.material_type, m.material_desc
     </sql>
     <resultMap id="BOResultMap" type="com.smartindustry.common.bo.sm.StorageBO" extends="BaseResultMap">
