@@ -4,6 +4,7 @@ import com.smartindustry.common.bo.om.OutboundBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.om.OutboundPO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,7 @@ public interface OutboundMapper extends BaseMapper<OutboundPO, Long> {
      * @param oId
      * @return
      */
-    OutboundBO queryByOid(Long oId);
+    OutboundBO queryByOid(@Param("oId") Long oId, @Param("stype") Byte stype);
 
 
 }

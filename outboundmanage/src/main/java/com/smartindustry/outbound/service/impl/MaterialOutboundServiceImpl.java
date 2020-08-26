@@ -82,7 +82,7 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
 
     @Override
     public ResultVO detail(OperateDTO dto) {
-        OutboundBO outboundBO = outboundMapper.queryByOid(dto.getOid());
+        OutboundBO outboundBO = outboundMapper.queryByOid(dto.getOid(),null);
         if (null == outboundBO) {
             return new ResultVO(1002);
         }
@@ -190,7 +190,7 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
         }).start();
 
         //当出库是调拨出库时
-        OutboundBO po = outboundMapper.queryByOid(dto.getOid());
+        OutboundBO po = outboundMapper.queryByOid(dto.getOid(),OutboundConstant.TYPE_TRANSFER);
         if(po.getSourceType().equals(OutboundConstant.TYPE_TRANSFER)){
 
         }
