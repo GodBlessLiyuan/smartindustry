@@ -685,6 +685,7 @@ CREATE TABLE si_bom_body
     process_id bigint unsigned,
     parent_id bigint unsigned,
     user_id bigint unsigned,
+    level int NOT NULL,
     create_time datetime,
     update_time datetime,
     -- 1£ºÎ´É¾³ý
