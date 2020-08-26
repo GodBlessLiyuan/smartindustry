@@ -50,6 +50,7 @@ DROP TABLE IF EXISTS dd_produce_loss_level;
 DROP TABLE IF EXISTS dd_settle_period;
 DROP TABLE IF EXISTS dd_supplier_group;
 DROP TABLE IF EXISTS dd_supplier_type;
+DROP TABLE IF EXISTS em_transfer_head;
 DROP TABLE IF EXISTS si_warehouse_record;
 DROP TABLE IF EXISTS si_warehouse;
 DROP TABLE IF EXISTS dd_warehouse_type;
@@ -397,6 +398,45 @@ CREATE TABLE dd_warehouse_type
     create_time datetime,
     PRIMARY KEY (warehouse_type_id),
     UNIQUE (warehouse_type_id)
+);
+
+
+CREATE TABLE em_transfer_head
+(
+    transfer_head_id bigint unsigned NOT NULL AUTO_INCREMENT,
+    transfer_no char(32),
+    -- 1：工单调拨
+    -- 2：不良调拨
+    transfer_type tinyint COMMENT '1：工单调拨
+2：不良调拨',
+    outbound_wid bigint unsigned NOT NULL,
+    storage_wid bigint unsigned NOT NULL,
+    plan_time datetime,
+    -- 1：已入库
+    -- 2：入库中
+    -- 3：待入库
+    outbound_status tinyint COMMENT '1：已入库
+2：入库中
+3：待入库',
+    -- 1：已入库
+    -- 2：入库中
+    -- 3：待入库
+    storage_status tinyint COMMENT '1：已入库
+2：入库中
+3：待入库',
+    -- 1：已审核
+    -- 2：驳回
+    -- 3：待审核
+    status tinyint COMMENT '1：已审核
+2：驳回
+3：待审核',
+    create_time datetime,
+    -- 1：未删除
+    -- 2：已删除
+    dr tinyint COMMENT '1：未删除
+2：已删除',
+    PRIMARY KEY (transfer_head_id),
+    UNIQUE (transfer_head_id)
 );
 
 
@@ -1970,6 +2010,22 @@ ALTER TABLE si_material
 ALTER TABLE si_supplier_record
     ADD FOREIGN KEY (supplier_id)
         REFERENCES si_supplier (supplier_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE em_transfer_head
+    ADD FOREIGN KEY (outbound_wid)
+        REFERENCES si_warehouse (warehouse_id)
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT
+;
+
+
+ALTER TABLE em_transfer_head
+    ADD FOREIGN KEY (storage_wid)
+        REFERENCES si_warehouse (warehouse_id)
         ON UPDATE RESTRICT
         ON DELETE RESTRICT
 ;
