@@ -59,6 +59,21 @@ public class OutboundVO implements Serializable {
     private Byte status;
 
     /**
+     * 订单调拨类型
+     */
+    private Byte ttype;
+
+    /**
+     * 计划调拨时间
+     */
+    private Date tptime;
+
+    /**
+     * 调拨出库状态
+     */
+    private Byte tostatus;
+
+    /**
      * bos 转 vos
      *
      * @param bos
@@ -90,6 +105,9 @@ public class OutboundVO implements Serializable {
         vo.setPtime(DateUtil.date2Str(bo.getPlanTime(), DateUtil.Y_M_D));
         vo.setOtime(bo.getOutboundTime());
         vo.setStatus(bo.getStatus());
+        vo.setTostatus(bo.getTOutboundStatus());
+        vo.setTptime(bo.getTPlanTime());
+        vo.setTtype(bo.getSourceType());
         return vo;
     }
 }

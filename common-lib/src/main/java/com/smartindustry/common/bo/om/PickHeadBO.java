@@ -42,6 +42,10 @@ public class PickHeadBO extends PickHeadPO {
     private String aberrantDesc;
 
     /**
+     * 调拨订单id
+     */
+    private Long transferId;
+    /**
      * 调拨订单编号
      */
     private String transferNo;

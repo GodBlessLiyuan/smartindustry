@@ -54,6 +54,10 @@ public class PickHeadVO implements Serializable {
     private Byte ostatus;
 
     /**
+     * 调拨订单id
+     */
+    private Long tid;
+    /**
      * 调拨订单编号
      */
     private String tno;
@@ -120,6 +124,7 @@ public class PickHeadVO implements Serializable {
         vo.setTostatus(bo.getThOutboundStatus());
         vo.setTptime(DateUtil.date2Str(bo.getThPlanTime(),DateUtil.Y_M_D));
         vo.setTtype(bo.getTransferType());
+        vo.setTid(bo.getTransferId());
         return vo;
     }
 }
