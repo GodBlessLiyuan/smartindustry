@@ -1,6 +1,6 @@
 package com.smartindustry.outbound.vo;
 
-import com.smartindustry.common.bo.om.PickInfoBO;
+import com.smartindustry.common.bo.om.PickHeadBO;
 import com.smartindustry.common.pojo.om.PickHeadPO;
 import com.smartindustry.common.util.DateUtil;
 import lombok.Data;
@@ -88,10 +88,10 @@ public class PickHeadVO implements Serializable {
         return vo;
     }
 
-    public static List<PickHeadVO> convertBo(List<PickInfoBO> bos) {
+    public static List<PickHeadVO> convertBO(List<PickHeadBO> bos) {
         List<PickHeadVO> vos = new ArrayList<>(bos.size());
-        for (PickInfoBO bo : bos) {
-            vos.add(convertBo(bo));
+        for (PickHeadBO bo : bos) {
+            vos.add(convertBO(bo));
         }
         return vos;
     }
@@ -105,7 +105,7 @@ public class PickHeadVO implements Serializable {
         return vos;
     }
 
-    public static PickHeadVO convertBo(PickInfoBO bo) {
+    public static PickHeadVO convertBO(PickHeadBO bo) {
         PickHeadVO vo = new PickHeadVO();
         vo.setPhid(bo.getPickHeadId());
         vo.setCproject(bo.getCorrespondProject());

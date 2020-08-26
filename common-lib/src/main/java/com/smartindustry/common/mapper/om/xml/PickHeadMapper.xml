@@ -202,7 +202,7 @@
     </update>
 
 <!--    工单/销售拣货单的分页查询-->
-    <select id="pageQuery" parameterType="java.util.Map" resultType="com.smartindustry.common.bo.om.PickInfoBO">
+    <select id="pageQuery" parameterType="java.util.Map" resultType="com.smartindustry.common.bo.om.PickHeadBO">
         select ph.pick_head_id as pickHeadId,ph.pick_no as pickNo,ph.source_no as sourceNo,ph.source_type as sourceType,ph.material_status as materialStatus,
         ph.correspond_project as correspondProject,ph.plan_time as planTime,ph.outbound_time as outboundTime,ph.outbound_status as outboundStatus,th.transfer_no as transferNo,
         th.transfer_type as transferType,th.plan_time as thPlanTime,th.outbound_status as thOutboundStatus

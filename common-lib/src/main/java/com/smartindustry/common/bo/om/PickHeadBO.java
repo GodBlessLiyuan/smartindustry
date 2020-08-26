@@ -3,6 +3,8 @@ package com.smartindustry.common.bo.om;
 import com.smartindustry.common.pojo.om.PickHeadPO;
 import lombok.Data;
 
+import java.util.Date;
+
 
 /**
  * @author: jiangzhaojie
@@ -38,4 +40,23 @@ public class PickHeadBO extends PickHeadPO {
      * 异常说明情况
      */
     private String aberrantDesc;
+
+    /**
+     * 调拨订单编号
+     */
+    private String transferNo;
+    /**
+     * 调拨订单类型
+     */
+    private Byte transferType;
+
+    /**
+     * 计划调拨时间
+     */
+    private Date thPlanTime;
+
+    /**
+     * 调拨出库状态
+     */
+    private Byte thOutboundStatus;
 }
