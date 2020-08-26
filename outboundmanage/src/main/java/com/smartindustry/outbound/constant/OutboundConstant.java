@@ -101,4 +101,15 @@ public class OutboundConstant {
 
     public static final Byte WORK_ORDER_OUTBOUND = 20;
 
+    /**
+     * 来源订单类型
+     * 1：工单
+     * 2：销售
+     * 3：调拨
+     */
+    public static final Byte TYPE_PICK = 1;
+    public static final Byte TYPE_SALE = 2;
+    public static final Byte TYPE_TRANSFER = 3;
+
+
 }

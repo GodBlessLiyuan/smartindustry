@@ -44,7 +44,7 @@ public class OutboundVO implements Serializable {
     /**
      * 接受数量
      */
-    private String aaddress;
+    private String address;
     /**
      * 计划发货时间
      */
@@ -74,6 +74,16 @@ public class OutboundVO implements Serializable {
     private Byte tostatus;
 
     /**
+     * 来源订单编号
+     */
+    private String sno;
+
+    /**
+     * 来源订单类型
+     */
+    private Byte stype;
+
+    /**
      * bos 转 vos
      *
      * @param bos
@@ -101,13 +111,15 @@ public class OutboundVO implements Serializable {
         vo.setPhid(bo.getPickHeadId());
         vo.setCproject(bo.getCorrespondProject());
         vo.setAcustomer(bo.getAcceptCustomer());
-        vo.setAaddress(bo.getAcceptAddress());
+        vo.setAddress(bo.getAcceptAddress());
         vo.setPtime(DateUtil.date2Str(bo.getPlanTime(), DateUtil.Y_M_D));
         vo.setOtime(bo.getOutboundTime());
         vo.setStatus(bo.getStatus());
         vo.setTostatus(bo.getTOutboundStatus());
         vo.setTptime(bo.getTPlanTime());
         vo.setTtype(bo.getSourceType());
+        vo.setSno(bo.getSourceNo());
+        vo.setStype(bo.getSourceType());
         return vo;
     }
 }
