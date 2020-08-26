@@ -65,8 +65,8 @@ public class BomController {
 
     @PostMapping("deleteBody")
     @PreAuthorize("@ss.hasPermi('im:ml:mm:edit')")
-    public ResultVO deleteBody(@RequestBody List<Long> bbids) {
-        return itemsService.deleteBody(bbids);
+    public ResultVO deleteBody(@RequestBody OperateDTO dto) {
+        return itemsService.deleteBody(dto);
     }
 
     @PostMapping("queryTreeBom")

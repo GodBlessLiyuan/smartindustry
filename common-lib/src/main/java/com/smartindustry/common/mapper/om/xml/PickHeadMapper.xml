@@ -201,6 +201,21 @@
         where pick_head_id = #{pickHeadId,jdbcType=BIGINT}
     </update>
 
+    <select id="pageQuery" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from om_pick_head ph
+        where ph.dr = 1
+        <if test="materialStatus != null and materialStatus != 0">
+            and ph.material_status = #{materialStatus}
+        </if>
+        <if test="no != null and no != ''">
+        and (ph.pick_no like concat('%',#{no,jdbcType=VARCHAR},'%') or ph.source_no like concat('%',#{no,jdbcType=VARCHAR},'%'))
+        </if>
+        and ph.source_type = #{sourceType,jdbcType=TINYINT}
+        order by ph.create_time desc
+    </select>
+
     <!--    查看所有工单拣货单的情况-->
     <select id="pageQueryPickHeadMsg" parameterType="java.util.Map" resultMap="BaseResultMap">
         select
@@ -210,19 +225,13 @@
         <if test="materialStatus != null and materialStatus != 0">
             and ph.material_status = #{materialStatus}
         </if>
-        <if test="pickNo != null and pickNo != ''">
-            and ph.pick_no like concat('%',#{pickNo,jdbcType=VARCHAR},'%')
-        </if>
-        <if test="orderNo != null and orderNo != ''">
-            and ph.source_no like concat('%',#{orderNo,jdbcType=VARCHAR},'%')
-        </if>
-        <if test="correspondProject != null and correspondProject != ''">
-            and ph.correspond_project like concat('%',#{correspondProject,jdbcType=VARCHAR},'%')
+        <if test="no != null and no != ''">
+            and (ph.pick_no like concat('%',#{no,jdbcType=VARCHAR},'%') or ph.source_no like concat('%',#{no,jdbcType=VARCHAR},'%'))
         </if>
         order by ph.create_time desc
     </select>
 
-    <!--    查看成品拣货单-->
+    <!--    查看销售拣货单-->
     <select id="queryPickGoods" parameterType="java.util.Map" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>

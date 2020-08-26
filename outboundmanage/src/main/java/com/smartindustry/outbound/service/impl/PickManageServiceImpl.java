@@ -8,13 +8,17 @@ import com.smartindustry.common.bo.om.PickBodyBO;
 import com.smartindustry.common.bo.om.PickHeadBO;
 import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.bo.si.StorageLabelBO;
+import com.smartindustry.common.constant.ConfigConstant;
 import com.smartindustry.common.mapper.om.*;
+import com.smartindustry.common.mapper.si.ConfigMapper;
 import com.smartindustry.common.mapper.si.PrintLabelMapper;
 import com.smartindustry.common.mapper.si.StorageLabelMapper;
 import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.om.*;
+import com.smartindustry.common.pojo.si.ConfigPO;
 import com.smartindustry.common.pojo.si.PrintLabelPO;
 import com.smartindustry.common.security.service.TokenService;
+import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
@@ -60,6 +64,15 @@ public class PickManageServiceImpl implements IPickManageService {
     private OutboundRecordMapper outboundRecordMapper;
     @Autowired
     TokenService tokenService;
+    @Autowired
+    ConfigMapper configMapper;
+
+    @Override
+    public ResultVO pageQuery(Map<String, Object> reqData){
+        Page<PickHeadPO> page = PageQueryUtil.startPage(reqData);
+        List<PickHeadPO> pos = pickHeadMapper.pageQuery(reqData);
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), PickHeadVO.convert(pos)));
+    }
 
     @Override
     public ResultVO pageQueryPickHead(int pageNum, int pageSize, Map<String, Object> reqMap) {
@@ -343,17 +356,9 @@ public class PickManageServiceImpl implements IPickManageService {
         int statusCode = 0;
         Integer resultEx = pickHeadMapper.judgeIsEx(pickHeadId);
         Integer resultLack = pickHeadMapper.judgeIsLack(pickHeadId);
-        if (resultEx != null || resultLack != null) {
-            pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_CHECK,new Date());
-            PickCheckPO po = new PickCheckPO();
-            po.setPickHeadId(pickHeadId);
-            po.setStatus(OutboundConstant.OUTBOUND_STATUS_WAIT);
-            pickCheckMapper.insert(po);
-            statusCode = 1;
-            // 当欠料异常形成出库单，将新增审核操作记录到操作记录表中
-            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, user.getUserId(), user.getName(), OutboundConstant.RECORD_SUBMIT, OutboundConstant.MATERIAL_STATUS_PICK));
-            outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, user.getUserId(), user.getName(), OutboundConstant.RECORD_ADD, OutboundConstant.MATERIAL_STATUS_CHECK));
-        } else {
+        // 2判断出库审核是否被关闭
+        ConfigPO configPo = configMapper.queryByKey(ConfigConstant.K_OUTBOUND_QUALITY_KEY);
+        if (null != configPo && ConfigConstant.V_NO.equals(configPo.getConfigValue())) {
             pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_STORAGE,new Date());
             OutboundPO po = new OutboundPO();
             po.setPickHeadId(pickHeadId);
@@ -365,7 +370,30 @@ public class PickManageServiceImpl implements IPickManageService {
             outboundMapper.insert(po);
             outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, user.getUserId(), user.getName(), OutboundConstant.RECORD_SUBMIT, OutboundConstant.MATERIAL_STATUS_PICK));
             outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, po.getOutboundId(), user.getUserId(), user.getName(), OutboundConstant.RECORD_ADD, OutboundConstant.MATERIAL_STATUS_STORAGE));
-
+        }else{
+            if (resultEx != null || resultLack != null) {
+                pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_CHECK,new Date());
+                PickCheckPO po = new PickCheckPO();
+                po.setPickHeadId(pickHeadId);
+                po.setStatus(OutboundConstant.OUTBOUND_STATUS_WAIT);
+                pickCheckMapper.insert(po);
+                statusCode = 1;
+                // 当欠料异常形成出库单，将新增审核操作记录到操作记录表中
+                outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, user.getUserId(), user.getName(), OutboundConstant.RECORD_SUBMIT, OutboundConstant.MATERIAL_STATUS_PICK));
+                outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, user.getUserId(), user.getName(), OutboundConstant.RECORD_ADD, OutboundConstant.MATERIAL_STATUS_CHECK));
+            } else {
+                pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_STORAGE,new Date());
+                OutboundPO po = new OutboundPO();
+                po.setPickHeadId(pickHeadId);
+                Date date = new Date();
+                po.setOutboundNo(OmNoUtil.getOutboundNo(outboundMapper, OmNoUtil.OUTBOUND, date));
+                po.setStatus(OutboundConstant.OUTBOUND_STATUS_WAIT);
+                po.setCreateTime(date);
+                po.setDr((byte) 1);
+                outboundMapper.insert(po);
+                outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, user.getUserId(), user.getName(), OutboundConstant.RECORD_SUBMIT, OutboundConstant.MATERIAL_STATUS_PICK));
+                outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, po.getOutboundId(), user.getUserId(), user.getName(), OutboundConstant.RECORD_ADD, OutboundConstant.MATERIAL_STATUS_STORAGE));
+            }
         }
         //2 当形成出库单，在不欠料的情况下，则由物料拣货10变成物料出库30
         return ResultVO.ok().setData(statusCode);

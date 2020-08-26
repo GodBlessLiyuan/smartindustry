@@ -28,9 +28,13 @@ public class PickHeadVO implements Serializable {
      */
     private Byte mstatus;
     /**
-     * 工单号
+     * 来源订单编号
      */
-    private String ono;
+    private String sno;
+    /**
+     * 来源订单类型
+     */
+    private Byte stype;
     /**
      * 对应项目
      */
@@ -61,7 +65,8 @@ public class PickHeadVO implements Serializable {
         vo.setPhid(po.getPickHeadId());
         vo.setCproject(po.getCorrespondProject());
         vo.setMstatus(po.getMaterialStatus());
-        vo.setOno(po.getSourceNo());
+        vo.setSno(po.getSourceNo());
+        vo.setStype(po.getSourceType());
         vo.setOstatus(po.getOutboundStatus());
         vo.setPtime(DateUtil.date2Str(po.getPlanTime(),DateUtil.Y_M_D));
         vo.setPno(po.getPickNo());

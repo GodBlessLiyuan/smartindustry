@@ -16,4 +16,9 @@ public class BasicConstant {
      * 主物料初始的相关物料数目
      */
     public static final Integer NUM_RELATE_START = 0;
+
+    /**
+     * bom层级限定高度
+     */
+    public static final Integer LEVEL_LIMIT = 10;
 }

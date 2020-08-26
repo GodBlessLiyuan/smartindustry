@@ -20,6 +20,12 @@ public class MaterialItemsVO implements Serializable {
      * 主物料id
      */
     private Long bhid;
+
+    /**
+     * 物料明细id
+     */
+    private Long bbid;
+
     /**
      * 物料ID
      */
@@ -57,6 +63,7 @@ public class MaterialItemsVO implements Serializable {
     public static MaterialItemsVO convert(BomHeadBO bo) {
         MaterialItemsVO vo = new MaterialItemsVO();
         vo.setBhid(bo.getBomHeadId());
+        vo.setBbid(bo.getBomBodyId());
         vo.setMmodel(bo.getMaterialModel());
         vo.setMno(bo.getMaterialNo());
         vo.setMname(bo.getMaterialName());

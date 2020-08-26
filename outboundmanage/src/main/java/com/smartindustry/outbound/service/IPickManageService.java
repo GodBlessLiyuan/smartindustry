@@ -14,6 +14,14 @@ import java.util.Map;
  * @version: 1.0
  */
 public interface IPickManageService {
+
+    /**
+     * 根据单号(拣货单和来源单号)+物料状态+调拨类型
+     * @param reqData
+     * @return
+     */
+    ResultVO pageQuery(Map<String, Object> reqData);
+
     /**
      * 根据拣货单号，工单号，对应项目，物料状态检索部分拣货单表头信息
      *

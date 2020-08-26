@@ -40,6 +40,8 @@ public class BomBodyPO implements Serializable {
 
     private Long userId;
 
+    private Integer level;
+
     private Date createTime;
 
     private Date updateTime;
