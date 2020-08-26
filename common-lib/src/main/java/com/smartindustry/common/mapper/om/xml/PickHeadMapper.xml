@@ -205,7 +205,7 @@
     <select id="pageQuery" parameterType="java.util.Map" resultType="com.smartindustry.common.bo.om.PickHeadBO">
         select ph.pick_head_id as pickHeadId,ph.pick_no as pickNo,ph.source_no as sourceNo,ph.source_type as sourceType,ph.material_status as materialStatus,
         ph.correspond_project as correspondProject,ph.plan_time as planTime,ph.outbound_time as outboundTime,ph.outbound_status as outboundStatus,th.transfer_no as transferNo,
-        th.transfer_type as transferType,th.plan_time as thPlanTime,th.outbound_status as thOutboundStatus
+        th.transfer_head_id as transferId,th.transfer_type as transferType,th.plan_time as thPlanTime,th.outbound_status as thOutboundStatus
         from om_pick_head ph
         left join em_transfer_head th on ph.source_no = th.transfer_no
         where ph.dr = 1 and ph.source_type = #{stype,jdbcType=TINYINT}

@@ -131,37 +131,40 @@
 
     <resultMap id="BOResultMap" type="com.smartindustry.common.bo.om.OutboundBO" extends="BaseResultMap">
         <result column="pick_no" jdbcType="CHAR" property="pickNo"/>
-        <result column="order_no" jdbcType="CHAR" property="orderNo"/>
-        <result column="order_type" jdbcType="TINYINT" property="orderType"/>
+        <result column="source_no" jdbcType="CHAR" property="sourceNo"/>
+        <result column="source_type" jdbcType="TINYINT" property="sourceType"/>
         <result column="correspond_project" jdbcType="CHAR" property="correspondProject"/>
         <result column="accept_customer" jdbcType="CHAR" property="acceptCustomer"/>
         <result column="accept_address" jdbcType="CHAR" property="acceptAddress"/>
         <result column="plan_time" jdbcType="TIMESTAMP" property="planTime"/>
+        <result column="transfer_type" jdbcType="TINYINT" property="transferType"/>
+        <result column="plan_time" jdbcType="TIMESTAMP" property="tPlanTime"/>
+        <result column="outbound_status" jdbcType="TINYINT" property="tOutboundStatus"/>
     </resultMap>
     <sql id="BO_Column_List">
         o.outbound_id, o.pick_head_id, o.outbound_no, o.outbound_time, o.ship_time, o.`status`, o.create_time, o.dr,
-        ph.pick_no, ph.order_no, ph.order_type, ph.correspond_project, ph.accept_customer, ph.accept_address, ph.plan_time
+        ph.pick_no, ph.source_no, ph.source_type, ph.correspond_project, ph.accept_customer, ph.accept_address, ph.plan_time,
+        th.transfer_type,th.plan_time,th.outbound_status
     </sql>
     <select id="pageQuery" parameterType="java.util.Map" resultMap="BOResultMap">
         select
         <include refid="BO_Column_List"/>
         from om_outbound o
         left join om_pick_head ph on o.pick_head_id = ph.pick_head_id
-        where o.dr = 1 and ph.dr = 1 and ph.order_type = #{otype,jdbcType=TINYINT}
-        <if test="ono != null and ono != ''">
-            and o.outbound_no like '%' #{ono,jdbcType=CHAR} '%'
-        </if>
-        <if test="pno != null and pno != ''">
-            and ph.pick_no like '%' #{pno,jdbcType=CHAR} '%'
-        </if>
-        <if test="cproject != null and cproject != ''">
-            and ph.correspond_project like '%' #{cproject,jdbcType=CHAR} '%'
+        left join em_transfer_head th on ph.source_no = th.transfer_no
+        where o.dr = 1 and ph.dr = 1 and ph.source_type = #{stype,jdbcType=TINYINT}
+        <if test="no != null and no != ''">
+            and (o.outbound_no like '%' #{no,jdbcType=CHAR} '%' or ph.pick_no like '%' #{no,jdbcType=CHAR} '%' or ph.source_no like '%' #{no,jdbcType=CHAR} '%')
         </if>
         <if test="status != null and status != 0">
             and o.`status` = #{status,jdbcType=TINYINT}
         </if>
+        <if test="ttype != null and ttype != 0">
+            and th.transfer_type = #{ttype,jdbcType=TINYINT}
+        </if>
         order by o.create_time desc
     </select>
+
     <select id="queryByOid" parameterType="java.lang.Long" resultMap="BOResultMap">
         select
         <include refid="BO_Column_List"/>
