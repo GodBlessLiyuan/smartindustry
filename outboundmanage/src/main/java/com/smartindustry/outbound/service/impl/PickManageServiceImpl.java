@@ -6,6 +6,7 @@ import com.smartindustry.common.bo.am.LoginUserBO;
 import com.smartindustry.common.bo.om.LabelRecommendBO;
 import com.smartindustry.common.bo.om.PickBodyBO;
 import com.smartindustry.common.bo.om.PickHeadBO;
+import com.smartindustry.common.bo.om.PickInfoBO;
 import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.bo.si.StorageLabelBO;
 import com.smartindustry.common.constant.ConfigConstant;
@@ -69,9 +70,9 @@ public class PickManageServiceImpl implements IPickManageService {
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData){
-        Page<PickHeadPO> page = PageQueryUtil.startPage(reqData);
-        List<PickHeadPO> pos = pickHeadMapper.pageQuery(reqData);
-        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), PickHeadVO.convert(pos)));
+        Page<PickInfoBO> page = PageQueryUtil.startPage(reqData);
+        List<PickInfoBO> bos = pickHeadMapper.pageQuery(reqData);
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), PickHeadVO.convertBo(bos)));
     }
 
     @Override
