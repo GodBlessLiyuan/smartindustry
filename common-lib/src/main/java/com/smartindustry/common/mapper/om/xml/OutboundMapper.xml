@@ -172,9 +172,6 @@
         left join om_pick_head ph on o.pick_head_id = ph.pick_head_id
         left join em_transfer_head th on ph.source_no = th.transfer_no
         where o.dr = 1 and ph.dr = 1 and o.outbound_id = #{oId,jdbcType=BIGINT}
-        <if test="stype != null and stype != 0">
-            and ph.source_type = #{stype,jdbcType=TINYINT}
-        </if>
     </select>
 
     <select id="queryNo" parameterType="java.lang.String" resultMap="BaseResultMap">

@@ -28,7 +28,7 @@ public interface OutboundMapper extends BaseMapper<OutboundPO, Long> {
      * @param oId
      * @return
      */
-    OutboundBO queryByOid(@Param("oId") Long oId, @Param("stype") Byte stype);
+    OutboundBO queryByOid(@Param("oId") Long oId);
 
 
 }
