@@ -2,6 +2,7 @@ package com.smartindustry.common.mapper.om;
 
 import com.smartindustry.common.bo.om.PickBodyBO;
 import com.smartindustry.common.bo.om.PickHeadBO;
+import com.smartindustry.common.bo.om.PickInfoBO;
 import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.om.PickHeadPO;
@@ -25,7 +26,7 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
      * @param reqData
      * @return
      */
-    List<PickHeadPO> pageQuery(Map<String, Object> reqData);
+    List<PickInfoBO> pageQuery(Map<String, Object> reqData);
     /**
      * 查询拣货单表头的某些数据项
      *

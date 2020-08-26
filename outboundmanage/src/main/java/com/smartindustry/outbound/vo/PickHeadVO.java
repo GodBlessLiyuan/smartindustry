@@ -1,5 +1,6 @@
 package com.smartindustry.outbound.vo;
 
+import com.smartindustry.common.bo.om.PickInfoBO;
 import com.smartindustry.common.pojo.om.PickHeadPO;
 import com.smartindustry.common.util.DateUtil;
 import lombok.Data;
@@ -52,13 +53,26 @@ public class PickHeadVO implements Serializable {
      */
     private Byte ostatus;
 
-    public static List<PickHeadVO> convert(List<PickHeadPO> pos) {
-        List<PickHeadVO> vos = new ArrayList<>(pos.size());
-        for (PickHeadPO po : pos) {
-            vos.add(convert(po));
-        }
-        return vos;
-    }
+    /**
+     * 调拨订单编号
+     */
+    private String tno;
+    /**
+     * 调拨订单类型
+     */
+    private Byte ttype;
+
+    /**
+     * 计划调拨时间
+     */
+    private String tptime;
+
+    /**
+     * 调拨出库状态
+     */
+    private Byte tostatus;
+
+
 
     public static PickHeadVO convert(PickHeadPO po) {
         PickHeadVO vo = new PickHeadVO();
@@ -71,6 +85,41 @@ public class PickHeadVO implements Serializable {
         vo.setPtime(DateUtil.date2Str(po.getPlanTime(),DateUtil.Y_M_D));
         vo.setPno(po.getPickNo());
         vo.setOtime(po.getOutboundTime());
+        return vo;
+    }
+
+    public static List<PickHeadVO> convertBo(List<PickInfoBO> bos) {
+        List<PickHeadVO> vos = new ArrayList<>(bos.size());
+        for (PickInfoBO bo : bos) {
+            vos.add(convertBo(bo));
+        }
+        return vos;
+    }
+
+
+    public static List<PickHeadVO> convert(List<PickHeadPO> pos) {
+        List<PickHeadVO> vos = new ArrayList<>(pos.size());
+        for (PickHeadPO po : pos) {
+            vos.add(convert(po));
+        }
+        return vos;
+    }
+
+    public static PickHeadVO convertBo(PickInfoBO bo) {
+        PickHeadVO vo = new PickHeadVO();
+        vo.setPhid(bo.getPickHeadId());
+        vo.setCproject(bo.getCorrespondProject());
+        vo.setMstatus(bo.getMaterialStatus());
+        vo.setSno(bo.getSourceNo());
+        vo.setStype(bo.getSourceType());
+        vo.setOstatus(bo.getOutboundStatus());
+        vo.setPtime(DateUtil.date2Str(bo.getPlanTime(),DateUtil.Y_M_D));
+        vo.setPno(bo.getPickNo());
+        vo.setOtime(bo.getOutboundTime());
+        vo.setTno(bo.getTransferNo());
+        vo.setTostatus(bo.getThOutboundStatus());
+        vo.setTptime(DateUtil.date2Str(bo.getThPlanTime(),DateUtil.Y_M_D));
+        vo.setTtype(bo.getTransferType());
         return vo;
     }
 }
