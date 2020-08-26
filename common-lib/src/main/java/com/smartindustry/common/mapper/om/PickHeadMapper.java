@@ -25,7 +25,7 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
      * @param reqData
      * @return
      */
-    List<PickHeadPO> pageQuery(Map<String, Object> reqData);
+    List<PickHeadBO> pageQuery(Map<String, Object> reqData);
     /**
      * 查询拣货单表头的某些数据项
      *

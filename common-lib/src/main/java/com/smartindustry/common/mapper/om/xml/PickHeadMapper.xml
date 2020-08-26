@@ -201,20 +201,26 @@
         where pick_head_id = #{pickHeadId,jdbcType=BIGINT}
     </update>
 
-    <select id="pageQuery" parameterType="java.util.Map" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
+<!--    工单/销售拣货单的分页查询-->
+    <select id="pageQuery" parameterType="java.util.Map" resultType="com.smartindustry.common.bo.om.PickHeadBO">
+        select ph.pick_head_id as pickHeadId,ph.pick_no as pickNo,ph.source_no as sourceNo,ph.source_type as sourceType,ph.material_status as materialStatus,
+        ph.correspond_project as correspondProject,ph.plan_time as planTime,ph.outbound_time as outboundTime,ph.outbound_status as outboundStatus,th.transfer_no as transferNo,
+        th.transfer_head_id as transferId,th.transfer_type as transferType,th.plan_time as thPlanTime,th.outbound_status as thOutboundStatus
         from om_pick_head ph
-        where ph.dr = 1
-        <if test="materialStatus != null and materialStatus != 0">
-            and ph.material_status = #{materialStatus}
+        left join em_transfer_head th on ph.source_no = th.transfer_no
+        where ph.dr = 1 and ph.source_type = #{stype,jdbcType=TINYINT}
+        <if test="mstatus != null and mstatus != 0">
+            and ph.material_status = #{mstatus,jdbcType=TINYINT}
         </if>
         <if test="no != null and no != ''">
-        and (ph.pick_no like concat('%',#{no,jdbcType=VARCHAR},'%') or ph.source_no like concat('%',#{no,jdbcType=VARCHAR},'%'))
+            and (ph.pick_no like concat('%',#{no,jdbcType=VARCHAR},'%') or ph.source_no like concat('%',#{no,jdbcType=VARCHAR},'%'))
         </if>
-        and ph.source_type = #{sourceType,jdbcType=TINYINT}
+        <if test="ttype != null and ttype != 0">
+            and th.transfer_type = #{ttype,jdbcType=TINYINT}
+        </if>
         order by ph.create_time desc
     </select>
+
 
     <!--    查看所有工单拣货单的情况-->
     <select id="pageQueryPickHeadMsg" parameterType="java.util.Map" resultMap="BaseResultMap">

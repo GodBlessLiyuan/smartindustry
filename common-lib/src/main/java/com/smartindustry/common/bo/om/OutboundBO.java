@@ -20,13 +20,13 @@ public class OutboundBO extends OutboundPO {
     /**
      * 来源单号
      */
-    private String orderNo;
+    private String sourceNo;
     /**
      * 来源类型
      * 1：工单
      * 2：销售订单
      */
-    private Byte orderType;
+    private Byte sourceType;
 
     /**
      * 对应项目
@@ -44,4 +44,20 @@ public class OutboundBO extends OutboundPO {
      * 计划发货时间
      */
     private Date planTime;
+
+    /**
+     * 订单调拨类型
+     */
+    private Byte transferType;
+
+    /**
+     * 计划调拨时间
+     */
+    private Date tPlanTime;
+
+    /**
+     * 调拨出库状态
+     */
+    private Byte tOutboundStatus;
+
 }

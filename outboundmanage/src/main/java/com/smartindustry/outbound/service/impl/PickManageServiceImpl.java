@@ -2,7 +2,6 @@ package com.smartindustry.outbound.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.smartindustry.common.bo.am.LoginUserBO;
 import com.smartindustry.common.bo.om.LabelRecommendBO;
 import com.smartindustry.common.bo.om.PickBodyBO;
 import com.smartindustry.common.bo.om.PickHeadBO;
@@ -19,7 +18,6 @@ import com.smartindustry.common.pojo.si.ConfigPO;
 import com.smartindustry.common.pojo.si.PrintLabelPO;
 import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.PageQueryUtil;
-import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.constant.OutboundConstant;
@@ -69,9 +67,9 @@ public class PickManageServiceImpl implements IPickManageService {
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData){
-        Page<PickHeadPO> page = PageQueryUtil.startPage(reqData);
-        List<PickHeadPO> pos = pickHeadMapper.pageQuery(reqData);
-        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), PickHeadVO.convert(pos)));
+        Page<PickHeadBO> page = PageQueryUtil.startPage(reqData);
+        List<PickHeadBO> bos = pickHeadMapper.pageQuery(reqData);
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), PickHeadVO.convertBO(bos)));
     }
 
     @Override
