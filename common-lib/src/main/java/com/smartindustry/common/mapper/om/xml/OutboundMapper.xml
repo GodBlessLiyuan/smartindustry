@@ -181,5 +181,4 @@
         where outbound_no like #{no,jdbcType=CHAR} '%'
         order by outbound_id desc limit 1
     </select>
-
 </mapper>
