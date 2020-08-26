@@ -220,7 +220,6 @@
         from sm_storage s
                  left join sm_receipt_body rb on s.source_no = rb.receipt_no
         where rb.dr = 1
-          and s.storage_type = 1
           and s.storage_id = #{storageId,jdbcType=BIGINT}
     </select>
 </mapper>
