@@ -212,6 +212,7 @@
         <if test="no != null and no != ''">
         and (ph.pick_no like concat('%',#{no,jdbcType=VARCHAR},'%') or ph.source_no like concat('%',#{no,jdbcType=VARCHAR},'%'))
         </if>
+        and ph.source_type = #{sourceType,jdbcType=TINYINT}
         order by ph.create_time desc
     </select>
 
