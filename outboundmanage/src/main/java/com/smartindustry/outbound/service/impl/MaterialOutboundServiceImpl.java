@@ -13,6 +13,7 @@ import com.smartindustry.common.mapper.im.MaterialInventoryMapper;
 import com.smartindustry.common.mapper.om.*;
 import com.smartindustry.common.mapper.si.StorageLabelMapper;
 import com.smartindustry.common.pojo.am.UserPO;
+import com.smartindustry.common.pojo.em.TransferHeadPO;
 import com.smartindustry.common.pojo.im.MaterialInventoryPO;
 import com.smartindustry.common.pojo.om.*;
 import com.smartindustry.common.security.service.TokenService;
@@ -188,6 +189,11 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
             }
         }).start();
 
+        //当出库是调拨出库时
+        OutboundBO po = outboundMapper.queryByOid(dto.getOid());
+        if(po.getSourceType().equals(OutboundConstant.TYPE_TRANSFER)){
+
+        }
         return ResultVO.ok();
     }
 
