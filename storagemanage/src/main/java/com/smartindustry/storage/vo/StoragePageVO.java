@@ -1,5 +1,6 @@
 package com.smartindustry.storage.vo;
 
+import com.smartindustry.common.bo.si.LocationBO;
 import com.smartindustry.common.bo.sm.StorageBO;
 import lombok.Data;
 
@@ -35,37 +36,17 @@ public class StoragePageVO implements Serializable {
      */
     private String rno;
     /**
-     * 收料类型
+     * 来源单号
      */
-    private Byte rtype;
+    private String sono;
     /**
-     * 物料编码
+     * 仓库名称
      */
-    private String mno;
-    /**
-     * 物料类型
-     */
-    private Byte mtype;
-    /**
-     * 物料描述
-     */
-    private String mdesc;
-    /**
-     * 创建时间
-     */
-    private Date ctime;
+    private String wname;
     /**
      * 入库状态
      */
     private Byte status;
-    /**
-     * 待入库数
-     */
-    private Integer pnum;
-    /**
-     * 已入库数
-     */
-    private Integer snum;
     /**
      * 入库时间
      */
@@ -97,14 +78,15 @@ public class StoragePageVO implements Serializable {
         vo.setRbid(bo.getReceiptBodyId());
         vo.setSno(bo.getStorageNo());
         vo.setRno(bo.getReceiptNo());
-        vo.setRtype(bo.getOrderType());
-        vo.setMno(bo.getMaterialNo());
-        vo.setMtype(bo.getMaterialType());
-        vo.setMdesc(bo.getMaterialDesc());
-        vo.setCtime(bo.getCreateTime());
+        vo.setSono(bo.getSourceNo());
+        if (null != bo.getLocations() && bo.getLocations().size() > 0) {
+            StringBuilder sb = new StringBuilder();
+            for (LocationBO lbo : bo.getLocations()) {
+                sb.append(lbo.getWarehouseName()).append(",");
+            }
+            vo.setWname(sb.deleteCharAt(sb.length() - 1).toString());
+        }
         vo.setStatus(bo.getStatus());
-        vo.setPnum(bo.getPendingNum());
-        vo.setSnum(bo.getStoredNum());
         vo.setStime(bo.getStorageTime());
         return vo;
     }

@@ -167,30 +167,34 @@
     <sql id="StorageBO_Column_List">
         s.storage_id, s.storage_no, s.source_no, s.source_type, s.pending_num, s.stored_num, s.storage_time, s.`status`,
     s.`type`, s.create_time, s.dr,
-    rb.receipt_no, rb.source_type,
-    m.material_no, m.material_type, m.material_desc
+    rb.receipt_body_id, rb.receipt_no, rb.source_no, rb.source_type,
+    w.warehouse_name
     </sql>
     <resultMap id="BOResultMap" type="com.smartindustry.common.bo.sm.StorageBO" extends="BaseResultMap">
         <result column="receipt_body_id" jdbcType="BIGINT" property="receiptBodyId"/>
         <result column="receipt_no" jdbcType="CHAR" property="receiptNo"/>
-        <result column="order_type" jdbcType="TINYINT" property="orderType"/>
-        <result column="material_no" jdbcType="CHAR" property="materialNo"/>
-        <result column="material_type" jdbcType="TINYINT" property="materialType"/>
-        <result column="material_desc" jdbcType="CHAR" property="materialDesc"/>
+        <result column="source_no" jdbcType="CHAR" property="sourceNo"/>
+        <result column="source_type" jdbcType="TINYINT" property="sourceType"/>
+        <collection property="locations" ofType="com.smartindustry.common.bo.si.LocationBO">
+            <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
+        </collection>
     </resultMap>
     <select id="pageQuery" resultMap="BOResultMap">
         select
         <include refid="StorageBO_Column_List"/>
         from sm_storage s
         left join sm_receipt_body rb on s.source_no = rb.receipt_no
-        left join si_material m on rb.material_id = m.material_id
-        left join dd_material_type mt on m.material_type_id = mt.material_type_id
+        left join sm_storage_group sg on s.storage_id = sg.storage_id
+        left join si_location l on sg.location_id = l.location_id
+        left join si_warehouse w on l.warehouse_id = w.warehouse_id
         where rb.dr = 1 and s.source_type = 1
-        <if test="rno != null and rno != ''">and rb.receipt_no like '%' #{rno,jdbcType=CHAR} '%'</if>
-        <if test="rtype != null and rtype != 0">and rb.source_type = #{rtype,jdbcType=TINYINT}</if>
-        <if test="mtype != null and mtype != 0">and m.material_type = #{mtype,jdbcType=TINYINT}</if>
+        <if test="no != null and no != ''">and (s.storage_no like '%' #{no,jdbcType=CHAR} '%' or rb.receipt_no like '%'
+            #{no,jdbcType=CHAR} '%' or rb.source_no like '%' #{no,jdbcType=CHAR} )
+        </if>
         <if test="status != null and status != 0">and s.`status` = #{status,jdbcType=TINYINT}</if>
-        <if test="type != null and type != 0">and s.`type` = #{type,jdbcType=TINYINT}</if>
+        <if test="wid != null and wid != 0">and w.warehouse_id = #{wid,jdbcType=TINYINT}</if>
+        <if test="type == 1">and rb.source_type in (1, 2)</if>
+        <if test="type == 3">and rb.source_type = 3</if>
         order by s.create_time desc
     </select>
     <select id="queryNo" parameterType="java.lang.String" resultMap="BaseResultMap">

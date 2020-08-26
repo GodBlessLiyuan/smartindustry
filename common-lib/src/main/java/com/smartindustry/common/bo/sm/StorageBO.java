@@ -1,7 +1,10 @@
 package com.smartindustry.common.bo.sm;
 
+import com.smartindustry.common.bo.si.LocationBO;
 import com.smartindustry.common.pojo.sm.StoragePO;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * @author: xiahui
@@ -22,19 +25,15 @@ public class StorageBO extends StoragePO {
      */
     private String receiptNo;
     /**
-     * 收料类型
+     * 来源单号
      */
-    private Byte orderType;
+    private String sourceNo;
     /**
-     * 物料编码
+     * 来源类型
      */
-    private String materialNo;
+    private Byte sourceType;
     /**
-     * 物料类型
+     * 仓库名称
      */
-    private Byte materialType;
-    /**
-     * 物料描述
-     */
-    private String materialDesc;
+    private List<LocationBO> locations;
 }
