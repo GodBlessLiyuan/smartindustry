@@ -35,6 +35,17 @@ public class MaterialStorageController {
         return materialStorageService.pageQuery(reqData);
     }
 
+    /**
+     * 其他入库单 分页查询
+     *
+     * @return
+     */
+    @PostMapping("pageQueryOther")
+    @PreAuthorize("@ss.hasAnyPermi('sm:ms:gpwl:query,sm:ms:ndgr:query')")
+    public ResultVO pageQueryOther(@RequestBody Map<String, Object> reqData) {
+        return materialStorageService.pageQueryOther(reqData);
+    }
+
     @PostMapping("location")
     public ResultVO location(@RequestBody OperateDTO dto) {
         return materialStorageService.location(dto);

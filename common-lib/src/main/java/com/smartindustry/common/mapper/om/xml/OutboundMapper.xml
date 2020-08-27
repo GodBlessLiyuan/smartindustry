@@ -154,7 +154,7 @@
         left join em_transfer_head th on ph.source_no = th.transfer_no
         where o.dr = 1 and ph.dr = 1 and ph.source_type = #{stype,jdbcType=TINYINT}
         <if test="no != null and no != ''">
-            and (o.outbound_no like '%' #{no,jdbcType=CHAR} '%' or ph.pick_no like '%' #{no,jdbcType=CHAR} '%' or ph.source_no like '%' #{no,jdbcType=CHAR} '%')
+            and (o.outbound_no like concat('%',#{no,jdbcType=CHAR},'%') or ph.pick_no like concat('%',#{no,jdbcType=CHAR},'%') or ph.source_no like concat('%',#{no,jdbcType=CHAR},'%'))
         </if>
         <if test="status != null and status != 0">
             and o.`status` = #{status,jdbcType=TINYINT}

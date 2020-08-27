@@ -53,6 +53,16 @@ public class StoragePageVO implements Serializable {
     private Date stime;
 
     /**
+     * 对应单号
+     */
+    private String cono;
+
+    /**
+     * 入库类型（调拨订单类型）
+     */
+    private Byte ttype;
+
+    /**
      * bos 转 vos
      *
      * @param bos
@@ -88,6 +98,8 @@ public class StoragePageVO implements Serializable {
         }
         vo.setStatus(bo.getStatus());
         vo.setStime(bo.getStorageTime());
+        vo.setCono(bo.getCorrespondNo());
+        vo.setTtype(bo.getTransferType());
         return vo;
     }
 }
