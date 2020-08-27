@@ -17,10 +17,13 @@ import java.util.Date;
  * @description:
  */
 public class OmNoUtil {
+
+    public static final String MATERIAL_STORAGE_QTCK = "QTCK";
     public static final String OUTBOUND = "GDCH";
     private static final int NUM_LEN = 5;
     private static NoUtil<OutboundPO, Long> outboundUtil = new NoUtil<>();
     private static NoUtil<PrintLabelPO, Long> labelUtil = new NoUtil<>();
+    private static NoUtil<StoragePO, Long> storageUtil = new NoUtil<>();
     public static int getLabelNum(PrintLabelMapper mapper, String head, Date date) {
         PrintLabelPO po = labelUtil.getPO(mapper, head, date);
         if (null == po) {
@@ -44,5 +47,17 @@ public class OmNoUtil {
     public static String getOutboundNo(OutboundMapper mapper, String head, Date date) {
         OutboundPO po = outboundUtil.getPO(mapper, head, date);
         return outboundUtil.genNum(head, date, null == po ? 1 : outboundUtil.getNum(po.getOutboundNo(), NUM_LEN) + 1, NUM_LEN);
+    }
+
+    /**
+     * 生成入库单编号
+     *
+     * @param head
+     * @param date
+     * @return
+     */
+    public static String genStorageNo(StorageMapper mapper, String head, Date date) {
+        StoragePO po = storageUtil.getPO(mapper, head, date);
+        return storageUtil.genNum(head, date, null == po ? 1 : storageUtil.getNum(po.getStorageNo(), NUM_LEN) + 1, NUM_LEN);
     }
 }

@@ -24,6 +24,13 @@ public interface IMaterialStorageService {
     ResultVO pageQuery(Map<String, Object> reqData);
 
     /**
+     * 其他入库单的分页查询
+     * @param reqData
+     * @return
+     */
+    ResultVO pageQueryOther(Map<String, Object> reqData);
+
+    /**
      * 库位查询
      *
      * @param dto

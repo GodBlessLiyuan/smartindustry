@@ -28,6 +28,7 @@ public class ReceiptNoUtil {
     public static final String MATERIAL_STORAGE_TLRK = "TLRK";
     public static final String MATERIAL_STORAGE_LPPK = "LPRK";
     public static final String MATERIAL_STORAGE_BLPK = "BLRK";
+    public static final String MATERIAL_STORAGE_QTCK = "QTCK";
     private static final int NUM_LEN = 5;
 
     private static NoUtil<ReceiptHeadPO, Long> headUtil = new NoUtil<>();

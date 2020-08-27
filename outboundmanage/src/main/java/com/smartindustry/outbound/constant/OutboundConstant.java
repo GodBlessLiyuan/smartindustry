@@ -111,5 +111,15 @@ public class OutboundConstant {
     public static final Byte TYPE_SALE = 2;
     public static final Byte TYPE_TRANSFER = 3;
 
+    /**
+     * 物料入库
+     */
+    //  已入库
+    public static final Byte MATERIAL_STORAGE_FINISH = 1;
+    //  入库中
+    public static final Byte MATERIAL_STORAGE_BEING = 2;
+    //  待入库
+    public static final Byte MATERIAL_STORAGE_PENDING = 3;
+
 
 }
