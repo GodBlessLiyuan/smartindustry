@@ -1,7 +1,10 @@
 package com.smartindustry.common.bo.om;
 
+import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.pojo.om.PickBodyPO;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * @author: xiahui
@@ -35,4 +38,9 @@ public class PickBodyBO extends PickBodyPO {
      * 物料状态, 1 标识欠料 2 标识不欠料
      */
     private Byte flag;
+
+    /**
+     * 拣货单下每种物料当前的标签列表
+     */
+    private List<PrintLabelBO> pls;
 }

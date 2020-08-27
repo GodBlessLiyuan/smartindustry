@@ -299,4 +299,12 @@
         from si_print_label
         where relate_label_id = #{relateLabelId,jdbcType=BIGINT}
     </delete>
+
+<!--    根据pid查询打印标签表-->
+    <select id="queryByPid" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_print_label
+        where dr = 1 and package_id = #{pid,jdbcType=CHAR}
+    </select>
 </mapper>

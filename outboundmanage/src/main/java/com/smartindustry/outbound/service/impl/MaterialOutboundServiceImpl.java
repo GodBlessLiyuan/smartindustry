@@ -11,12 +11,14 @@ import com.smartindustry.common.config.FilePathConfig;
 import com.smartindustry.common.constant.ResultConstant;
 import com.smartindustry.common.mapper.im.MaterialInventoryMapper;
 import com.smartindustry.common.mapper.om.*;
+import com.smartindustry.common.mapper.si.LocationMapper;
 import com.smartindustry.common.mapper.si.StorageLabelMapper;
 import com.smartindustry.common.mapper.sm.StorageMapper;
 import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.em.TransferHeadPO;
 import com.smartindustry.common.pojo.im.MaterialInventoryPO;
 import com.smartindustry.common.pojo.om.*;
+import com.smartindustry.common.pojo.si.LocationPO;
 import com.smartindustry.common.pojo.sm.StoragePO;
 import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.FileUtil;
@@ -76,6 +78,8 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
     TokenService tokenService;
     @Autowired
     StorageMapper storageMapper;
+    @Autowired
+    LocationMapper locationMapper;
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData) {
@@ -203,9 +207,15 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
             po1.setSourceNo(po.getSourceNo());
             po1.setSourceType(po.getSourceType());
             Integer sum = pickBodyMapper.queryPickNum(po.getPickHeadId());
+            List<LocationPO> pos = locationMapper.queryLocation(po.getStorageWid());
+            if(pos.isEmpty()){
+                po1.setStoredNum(sum);
+                po1.setStatus(OutboundConstant.MATERIAL_STORAGE_FINISH);
+            }else{
+                po1.setStoredNum(0);
+                po1.setStatus(OutboundConstant.MATERIAL_STORAGE_PENDING);
+            }
             po1.setPendingNum(sum);
-            po1.setStoredNum(0);
-            po1.setStatus(OutboundConstant.MATERIAL_STORAGE_PENDING);
             po1.setCreateTime(new Date());
             po1.setDr((byte)1);
             storageMapper.insert(po1);

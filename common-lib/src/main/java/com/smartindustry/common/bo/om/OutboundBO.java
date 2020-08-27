@@ -60,4 +60,9 @@ public class OutboundBO extends OutboundPO {
      */
     private Byte tOutboundStatus;
 
+    /**
+     * 调入仓库
+     */
+    private Long storageWid;
+
 }

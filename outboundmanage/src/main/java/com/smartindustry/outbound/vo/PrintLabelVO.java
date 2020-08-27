@@ -22,6 +22,7 @@ public class PrintLabelVO {
     private String rpid;
     private Date ctime;
 
+
     public static List<PrintLabelVO> convert(List<PrintLabelPO> pos) {
         List<PrintLabelVO> vos = new ArrayList<>(pos.size());
         for (PrintLabelPO po : pos) {
