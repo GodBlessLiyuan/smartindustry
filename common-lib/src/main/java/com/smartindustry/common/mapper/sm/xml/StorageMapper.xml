@@ -197,6 +197,37 @@
         <if test="type == 3">and rb.source_type = 3</if>
         order by s.create_time desc
     </select>
+
+
+    <sql id="StorageBO_Column_List_Other">
+        s.storage_id, s.storage_no, s.source_no, s.source_type, s.pending_num, s.stored_num, s.storage_time, s.`status`,
+    s.`type`, s.create_time, s.dr,o.outbound_no,th.transfer_type,w.warehouse_name
+    </sql>
+    <resultMap id="OtherBOResultMap" type="com.smartindustry.common.bo.sm.StorageBO" extends="BaseResultMap">
+        <result column="outbound_no" jdbcType="CHAR" property="correspondNo"/>
+        <result column="transfer_type" jdbcType="TINYINT" property="transferType"/>
+        <collection property="locations" ofType="com.smartindustry.common.bo.si.LocationBO">
+            <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
+        </collection>
+    </resultMap>
+    <select id="pageQueryOther" resultMap="OtherBOResultMap">
+        select
+        <include refid="StorageBO_Column_List_Other"/>
+        from sm_storage s
+        left join sm_storage_group sg on s.storage_id = sg.storage_id
+        left join si_location l on sg.location_id = l.location_id
+        left join si_warehouse w on l.warehouse_id = w.warehouse_id
+        left join em_transfer_head th on s.source_no = th.transfer_no
+        left join om_pick_head ph on s.source_no = ph.source_no
+        left join om_outbound o on ph.pick_head_id = o.pick_head_id
+        where s.dr = 1 and s.source_type = 2
+        <if test="no != null and no != ''">and s.storage_no like '%' #{no,jdbcType=CHAR} '%'</if>
+        <if test="ttype != null and ttype != 0">and th.transfer_type = #{ttype,jdbcType=TINYINT}</if>
+        <if test="wid != null and wid != 0">and w.warehouse_id = #{wid,jdbcType=TINYINT}</if>
+        <if test="status != null and status != 0">and s.`status` = #{status,jdbcType=TINYINT}</if>
+        order by s.create_time desc
+    </select>
+    
     <select id="queryNo" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>

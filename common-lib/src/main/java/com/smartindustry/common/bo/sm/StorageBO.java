@@ -36,4 +36,14 @@ public class StorageBO extends StoragePO {
      * 仓库名称
      */
     private List<LocationBO> locations;
+
+    /**
+     * 对应单号
+     */
+    private String correspondNo;
+
+    /**
+     * 入库类型（调拨订单类型）
+     */
+    private Byte transferType;
 }

@@ -52,4 +52,11 @@ public interface PickBodyMapper extends BaseMapper<PickBodyPO, Long> {
      * @return
      */
     List<PickBodyPO> queryByMids(List<Long> mids);
+
+    /**
+     * 根据拣货单id查询所有已拣货量得总和
+     * @param pickHeadId
+     * @return
+     */
+    Integer queryPickNum(@Param("pickHeadId") Long pickHeadId);
 }

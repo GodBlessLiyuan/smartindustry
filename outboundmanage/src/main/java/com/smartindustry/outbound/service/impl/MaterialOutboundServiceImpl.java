@@ -12,10 +12,12 @@ import com.smartindustry.common.constant.ResultConstant;
 import com.smartindustry.common.mapper.im.MaterialInventoryMapper;
 import com.smartindustry.common.mapper.om.*;
 import com.smartindustry.common.mapper.si.StorageLabelMapper;
+import com.smartindustry.common.mapper.sm.StorageMapper;
 import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.em.TransferHeadPO;
 import com.smartindustry.common.pojo.im.MaterialInventoryPO;
 import com.smartindustry.common.pojo.om.*;
+import com.smartindustry.common.pojo.sm.StoragePO;
 import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.FileUtil;
 import com.smartindustry.common.util.PageQueryUtil;
@@ -26,6 +28,7 @@ import com.smartindustry.outbound.constant.OutboundConstant;
 import com.smartindustry.outbound.dto.LogisticsRecordDTO;
 import com.smartindustry.outbound.dto.OperateDTO;
 import com.smartindustry.outbound.service.IMaterialOutboundService;
+import com.smartindustry.outbound.util.OmNoUtil;
 import com.smartindustry.outbound.vo.LogisticsRecordVO;
 import com.smartindustry.outbound.vo.OutboundDetailVO;
 import com.smartindustry.outbound.vo.OutboundRecordVO;
@@ -71,6 +74,8 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
     private FilePathConfig filePathConfig;
     @Autowired
     TokenService tokenService;
+    @Autowired
+    StorageMapper storageMapper;
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData) {
@@ -189,10 +194,21 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
             }
         }).start();
 
-        //当出库是调拨出库时
+        //当出库是调拨出库时,会生成新得入库单
         OutboundBO po = outboundMapper.queryByOid(dto.getOid());
         if(po.getSourceType().equals(OutboundConstant.TYPE_TRANSFER)){
-
+            StoragePO po1 = new StoragePO();
+            String head = OmNoUtil.MATERIAL_STORAGE_QTCK;
+            po1.setStorageNo(OmNoUtil.genStorageNo(storageMapper, head, new Date()));
+            po1.setSourceNo(po.getSourceNo());
+            po1.setSourceType(po.getSourceType());
+            Integer sum = pickBodyMapper.queryPickNum(po.getPickHeadId());
+            po1.setPendingNum(sum);
+            po1.setStoredNum(0);
+            po1.setStatus(OutboundConstant.MATERIAL_STORAGE_PENDING);
+            po1.setCreateTime(new Date());
+            po1.setDr((byte)1);
+            storageMapper.insert(po1);
         }
         return ResultVO.ok();
     }
