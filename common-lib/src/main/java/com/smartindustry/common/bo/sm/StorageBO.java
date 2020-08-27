@@ -27,11 +27,11 @@ public class StorageBO extends StoragePO {
     /**
      * 来源单号
      */
-    private String sourceNo;
+    private String receiptSourceNo;
     /**
      * 来源类型
      */
-    private Byte sourceType;
+    private Byte receiptSourceType;
     /**
      * 仓库名称
      */

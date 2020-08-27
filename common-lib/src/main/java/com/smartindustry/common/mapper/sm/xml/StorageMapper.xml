@@ -167,14 +167,14 @@
     <sql id="StorageBO_Column_List">
         s.storage_id, s.storage_no, s.source_no, s.source_type, s.pending_num, s.stored_num, s.storage_time, s.`status`,
     s.`type`, s.create_time, s.dr,
-    rb.receipt_body_id, rb.receipt_no, rb.source_no, rb.source_type,
+    rb.receipt_body_id, rb.receipt_no, rb.source_no as receipt_source_no, rb.receipt_source_type,
     w.warehouse_name
     </sql>
     <resultMap id="BOResultMap" type="com.smartindustry.common.bo.sm.StorageBO" extends="BaseResultMap">
         <result column="receipt_body_id" jdbcType="BIGINT" property="receiptBodyId"/>
         <result column="receipt_no" jdbcType="CHAR" property="receiptNo"/>
-        <result column="source_no" jdbcType="CHAR" property="sourceNo"/>
-        <result column="source_type" jdbcType="TINYINT" property="sourceType"/>
+        <result column="receipt_source_no" jdbcType="CHAR" property="receiptSourceNo"/>
+        <result column="receipt_source_type" jdbcType="TINYINT" property="receiptSourceType"/>
         <collection property="locations" ofType="com.smartindustry.common.bo.si.LocationBO">
             <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
         </collection>

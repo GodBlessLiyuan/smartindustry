@@ -78,7 +78,7 @@ public class StoragePageVO implements Serializable {
         vo.setRbid(bo.getReceiptBodyId());
         vo.setSno(bo.getStorageNo());
         vo.setRno(bo.getReceiptNo());
-        vo.setSono(bo.getSourceNo());
+        vo.setSono(bo.getReceiptSourceNo());
         if (null != bo.getLocations() && bo.getLocations().size() > 0) {
             StringBuilder sb = new StringBuilder();
             for (LocationBO lbo : bo.getLocations()) {
