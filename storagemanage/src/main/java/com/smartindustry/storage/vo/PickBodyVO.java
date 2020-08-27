@@ -1,4 +1,4 @@
-package com.smartindustry.outbound.vo;
+package com.smartindustry.storage.vo;
 
 import com.smartindustry.common.bo.om.PickBodyBO;
 import com.smartindustry.common.bo.si.PrintLabelBO;
@@ -43,6 +43,12 @@ public class PickBodyVO implements Serializable {
      */
     private Integer num;
 
+    private Integer pnum;
+    /**
+     * 拣货单下每种物料当前的标签列表
+     */
+    private List<PrintLabelVO> pls;
+
     /**
      * bo 转 vo
      *
@@ -55,6 +61,26 @@ public class PickBodyVO implements Serializable {
         vo.setMno(bo.getMaterialNo());
         vo.setMdesc(bo.getMaterialDesc());
         vo.setNum(bo.getDemandNum());
+        vo.setPnum(bo.getPickNum());
+        List<PrintLabelVO> pls = new ArrayList<>();
+        for(PrintLabelBO bo1:bo.getPls()){
+            PrintLabelVO vo1 = new PrintLabelVO();
+            vo1.setPid(bo1.getPackageId());
+            vo1.setMno(bo1.getMaterialNo());
+            vo1.setMname(bo1.getMaterialName());
+            vo1.setMdesc(bo1.getMaterialDesc());
+            vo1.setNum(bo1.getNum());
+            pls.add(vo1);
+        }
+        vo.setPls(pls);
         return vo;
+    }
+
+    public static List<PickBodyVO> convert(List<PickBodyBO> bos) {
+        List<PickBodyVO> vos = new ArrayList<>(bos.size());
+        for (PickBodyBO bo : bos) {
+            vos.add(convert(bo));
+        }
+        return vos;
     }
 }

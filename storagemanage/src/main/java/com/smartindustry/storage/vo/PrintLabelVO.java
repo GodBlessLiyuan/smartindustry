@@ -47,6 +47,10 @@ public class PrintLabelVO implements Serializable {
      */
     private Date ctime;
 
+    private String mno;
+    private String mname;
+    private String mdesc;
+
     /**
      * pos 转 vos
      *

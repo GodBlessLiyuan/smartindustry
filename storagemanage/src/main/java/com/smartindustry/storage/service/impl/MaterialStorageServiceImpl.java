@@ -3,6 +3,7 @@ package com.smartindustry.storage.service.impl;
 import com.github.pagehelper.Page;
 import com.google.gson.internal.$Gson$Types;
 import com.smartindustry.common.bo.im.MaterialInventoryBO;
+import com.smartindustry.common.bo.om.PickBodyBO;
 import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.bo.sm.*;
 import com.smartindustry.common.constant.ResultConstant;
@@ -27,10 +28,7 @@ import com.smartindustry.storage.dto.OperateDTO;
 import com.smartindustry.storage.dto.StorageDetailDTO;
 import com.smartindustry.storage.dto.StorageGroupDTO;
 import com.smartindustry.storage.service.IMaterialStorageService;
-import com.smartindustry.storage.vo.RecordVO;
-import com.smartindustry.storage.vo.StorageDetailVO;
-import com.smartindustry.storage.vo.StorageLabelVO;
-import com.smartindustry.storage.vo.StoragePageVO;
+import com.smartindustry.storage.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -89,12 +87,57 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
     }
 
     @Override
+    public ResultVO queryInfo(OperateDTO dto){
+        List<PickBodyBO> bos = storageMapper.queryInfo(dto.getSid());
+        return ResultVO.ok().setData(PickBodyVO.convert(bos));
+    }
+
+    @Override
+    public ResultVO storageScan(OperateDTO dto){
+        //其它入库单的扫码入库,首先找到所有拣货时的pid列表
+        List<String> pids = storageMapper.queryRelatePid(dto.getSid());
+        //判断当前扫码pid号是否在列表中，若是则扫码成功，若不是提示不属于相关pid
+        if(pids.contains(dto.getPid())){
+            StoragePO po = storageMapper.selectByPrimaryKey(dto.getSid());
+            PrintLabelPO po1 = printLabelMapper.queryByPid(dto.getPid());
+            po.setStoredNum(po.getStoredNum()+po1.getNum());
+            po.setStatus(ReceiptConstant.MATERIAL_STORAGE_BEING);
+            storageMapper.updateByPrimaryKey(po);
+            // 新增入库详情组表
+            StorageGroupPO groupPO = new StorageGroupPO();
+            groupPO.setStorageId(dto.getSid());
+            storageGroupMapper.insert(groupPO);
+            // 新增入库详情表
+            StorageDetailPO detailPO = new StorageDetailPO();
+            detailPO.setStorageGroupId(groupPO.getStorageGroupId());
+            detailPO.setPrintLabelId(po1.getPrintLabelId());
+            storageDetailMapper.insert(detailPO);
+            //新增库位标签表 待续...
+
+        }else{
+            //当前pid不符合条件
+            return new ResultVO(1005);
+        }
+        //扫码成功之后，更新入库表已入库数和状态,更新库位标签表，入库详情组表等
+
+        return ResultVO.ok() ;
+    }
+
+    @Override
+    public ResultVO agreeStorage(OperateDTO dto){
+        StoragePO po = new StoragePO();
+        po.setStorageId(dto.getSid());
+        po.setStatus(ReceiptConstant.MATERIAL_STORAGE_FINISH);
+        storageMapper.updateByPrimaryKey(po);
+        return ResultVO.ok();
+    }
+
+    @Override
     public ResultVO location(@RequestBody OperateDTO dto) {
         LocationPO locationPO = locationMapper.queryByLno(dto.getLno());
         if (null == locationPO) {
             return new ResultVO(1002);
         }
-
         return ResultVO.ok();
     }
 

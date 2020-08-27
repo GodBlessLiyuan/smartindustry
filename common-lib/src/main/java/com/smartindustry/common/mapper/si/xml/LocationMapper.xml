@@ -223,4 +223,13 @@
         from si_location
         where dr = 1
     </select>
+
+    <!--    查看当前的入库调拨单的调入仓库是否有库位存在-->
+    <select id="queryLocation" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        left join si_warehouse wh
+        left join si_location l on wh.warehouse_id = l.warehouse_id
+        where wh.dr = 1 and wh.warehouse_id = #{wid,jdbcType=BIGINT}
+    </select>
 </mapper>

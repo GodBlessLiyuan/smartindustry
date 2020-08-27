@@ -35,6 +35,16 @@ public class MaterialStorageController {
         return materialStorageService.pageQuery(reqData);
     }
 
+    @PostMapping("queryInfo")
+    public ResultVO queryInfo(@RequestBody OperateDTO dto) {
+        return materialStorageService.queryInfo(dto);
+    }
+
+    @PostMapping("agreeStorage")
+    public ResultVO agreeStorage(OperateDTO dto){
+        return materialStorageService.agreeStorage(dto);
+    }
+
     /**
      * 其他入库单 分页查询
      *
@@ -87,5 +97,10 @@ public class MaterialStorageController {
     @PostMapping("record")
     public ResultVO record(@RequestBody OperateDTO dto) {
         return materialStorageService.record(dto);
+    }
+
+    @PostMapping("storageScan")
+    ResultVO storageScan(@RequestBody OperateDTO dto){
+        return materialStorageService.storageScan(dto);
     }
 }

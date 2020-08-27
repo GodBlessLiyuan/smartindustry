@@ -140,11 +140,12 @@
         <result column="transfer_type" jdbcType="TINYINT" property="transferType"/>
         <result column="plan_time" jdbcType="TIMESTAMP" property="tPlanTime"/>
         <result column="outbound_status" jdbcType="TINYINT" property="tOutboundStatus"/>
+        <result column="storage_wid" jdbcType="BIGINT" property="storageWid"/>
     </resultMap>
     <sql id="BO_Column_List">
         o.outbound_id, o.pick_head_id, o.outbound_no, o.outbound_time, o.ship_time, o.`status`, o.create_time, o.dr,
         ph.pick_no, ph.source_no, ph.source_type, ph.correspond_project, ph.accept_customer, ph.accept_address, ph.plan_time,
-        th.transfer_type,th.plan_time,th.outbound_status
+        th.transfer_type,th.plan_time,th.outbound_status,th.storage_wid
     </sql>
     <select id="pageQuery" parameterType="java.util.Map" resultMap="BOResultMap">
         select

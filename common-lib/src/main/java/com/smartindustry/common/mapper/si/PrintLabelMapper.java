@@ -69,5 +69,10 @@ public interface PrintLabelMapper extends BaseMapper<PrintLabelPO, Long> {
      */
     void deleteByRelateId(Long relateLabelId);
 
-
+    /**
+     * 根据pid查询相关标签信息
+     * @param pid
+     * @return
+     */
+    PrintLabelPO queryByPid(String pid);
 }

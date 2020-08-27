@@ -66,4 +66,11 @@ public interface LocationMapper extends BaseMapper<LocationPO, Long> {
      * @return
      */
     List<Map<String, Object>> queryAll();
+
+    /**
+     * 查看当前的入库调拨单的调入仓库是否有库位存在
+     * @param wid
+     * @return
+     */
+    List<LocationPO> queryLocation(Long wid);
 }
