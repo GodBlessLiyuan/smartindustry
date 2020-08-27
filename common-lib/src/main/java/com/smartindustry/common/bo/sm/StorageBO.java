@@ -46,4 +46,9 @@ public class StorageBO extends StoragePO {
      * 入库类型（调拨订单类型）
      */
     private Byte transferType;
+
+    /**
+     * 当前入库单是否存在库位
+     */
+    private Boolean flag;
 }

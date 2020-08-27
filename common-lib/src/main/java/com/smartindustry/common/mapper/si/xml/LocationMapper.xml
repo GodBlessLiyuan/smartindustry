@@ -232,4 +232,14 @@
         left join si_location l on wh.warehouse_id = l.warehouse_id
         where wh.dr = 1 and wh.warehouse_id = #{wid,jdbcType=BIGINT}
     </select>
+
+    <select id="queryLocBySid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        left join sm_storage s
+        left join em_transfer_head th on s.source_no = th.transfer_no
+        left join si_warehouse wh on th.storage_wid = wh.warehouse_id
+        left join si_location l on wh.warehouse_id = l.warehouse_id
+        where wh.dr = 1 and s.storage_id = #{sid,jdbcType=BIGINT}
+    </select>
 </mapper>

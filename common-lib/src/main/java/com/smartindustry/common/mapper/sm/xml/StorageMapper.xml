@@ -255,32 +255,34 @@
           and s.storage_id = #{storageId,jdbcType=BIGINT}
     </select>
 
-    <resultMap type="com.smartindustry.common.bo.om.PickBodyBO" id="SBOResultMap">
-        <id column="pick_body_id" property="pickBodyId" />
+
+    <resultMap type="com.smartindustry.common.bo.si.PrintLabelBO" id="PBOResultMap">
+        <id column="print_label_id" property="printLabelId" />
+        <result column="package_id" property="packageId"/>
         <result column="material_no" property="materialNo"/>
         <result column="material_name" property="materialName"/>
-        <result column="pick_num" property="pickNum"/>
-        <collection property="pls" ofType="com.smartindustry.common.bo.si.PrintLabelBO">
-            <id column="print_label_id" property="printLabelId" />
-            <result column="package_id" property="packageId"/>
-            <result column="material_no" property="materialNo"/>
-            <result column="material_name" property="materialName"/>
-            <result column="material_desc" property="materialDesc"/>
-            <result column="num" property="num"/>
-        </collection>
+        <result column="material_desc" property="materialDesc"/>
+        <result column="num" property="num"/>
     </resultMap>
 
-<!--    查看入库的详情页-->
-    <select id="queryInfo" resultMap="SBOResultMap">
-        select pb.pick_body_id,m.material_no,m.material_name,pb.pick_num,prl.package_id,m1.material_no,m1.material_name,m1.material_desc,prl.num
+<!--    查看入库pid的详情页-->
+    <select id="queryPidInfo" parameterType="java.util.Map" resultMap="PBOResultMap">
+        select prl.print_label_id as printLabelId,prl.package_id,m1.material_no,m1.material_name,m1.material_desc,prl.num
+        from sm_storage s
+        left join om_pick_head ph on s.source_no = ph.source_no
+        left join om_pick_label pl on ph.pick_head_id = pl.pick_head_id
+        left join si_print_label prl on pl.print_label_id = prl.print_label_id
+        left join si_material m1 on prl.material_id = m1.material_id
+        where s.dr = 1 and s.storage_id = #{sid,jdbcType=BIGINT}
+    </select>
+
+    <select id="queryInfo" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.om.PickBodyBO">
+        select m.material_id as materialId,m.material_no as materialNo,m.material_name as materialName,m.material_desc as materialDesc,pb.pick_num as pickNum
         from sm_storage s
         left join om_pick_head ph on s.source_no = ph.source_no
         left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
         left join si_material m on pb.material_id = m.material_id
-        left join om_pick_label pl on pb.pick_head_id = pl.pick_head_id
-        left join si_print_label prl on pl.print_label_id = prl.print_label_id
-        left join si_material m1 on prl.material_id = m1.material_id
-        where s.dr = 1 and s.storage_id = #{storageId,jdbcType=BIGINT} and pb.material_id = prl.material_id
+        where s.dr = 1 and s.storage_id = #{storageId,jdbcType=BIGINT}
     </select>
 
 <!--    查看当前入库的待入库的标签pid-->

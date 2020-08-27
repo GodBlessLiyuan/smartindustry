@@ -40,8 +40,13 @@ public class MaterialStorageController {
         return materialStorageService.queryInfo(dto);
     }
 
+    @PostMapping("queryPidInfo")
+    public ResultVO queryPidInfo(@RequestBody Map<String, Object> reqData){
+        return materialStorageService.queryPidInfo(reqData);
+    }
+
     @PostMapping("agreeStorage")
-    public ResultVO agreeStorage(OperateDTO dto){
+    public ResultVO agreeStorage(@RequestBody OperateDTO dto){
         return materialStorageService.agreeStorage(dto);
     }
 

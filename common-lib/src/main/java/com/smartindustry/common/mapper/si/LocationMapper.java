@@ -73,4 +73,11 @@ public interface LocationMapper extends BaseMapper<LocationPO, Long> {
      * @return
      */
     List<LocationPO> queryLocation(Long wid);
+
+    /**
+     * 根据sid入库单查看是否存在库位
+     * @param sid
+     * @return
+     */
+    List<LocationPO> queryLocBySid(Long sid);
 }

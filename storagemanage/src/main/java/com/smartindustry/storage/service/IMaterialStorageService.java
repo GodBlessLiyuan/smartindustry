@@ -113,4 +113,11 @@ public interface IMaterialStorageService {
      * @return
      */
     ResultVO agreeStorage(OperateDTO dto);
+
+    /**
+     * 根据入库id查询相关pid
+     * @param reqData
+     * @return
+     */
+    ResultVO queryPidInfo(Map<String, Object> reqData);
 }

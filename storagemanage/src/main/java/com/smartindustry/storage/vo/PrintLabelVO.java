@@ -1,5 +1,6 @@
 package com.smartindustry.storage.vo;
 
+import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.pojo.si.PrintLabelPO;
 import lombok.Data;
 
@@ -80,6 +81,31 @@ public class PrintLabelVO implements Serializable {
         vo.setNum(po.getNum());
         vo.setRpid(po.getRelatePackageId());
         vo.setCtime(po.getCreateTime());
+        return vo;
+    }
+
+
+    public static List<PrintLabelVO> convertBO(List<PrintLabelBO> bos) {
+        List<PrintLabelVO> vos = new ArrayList<>(bos.size());
+        for (PrintLabelBO bo : bos) {
+            vos.add(convertBO(bo));
+        }
+        return vos;
+    }
+
+    /**
+     * bo 转 vo
+     *
+     * @param bo
+     * @return
+     */
+    public static PrintLabelVO convertBO(PrintLabelBO bo) {
+        PrintLabelVO vo = new PrintLabelVO();
+        vo.setPid(bo.getPackageId());
+        vo.setMno(bo.getMaterialNo());
+        vo.setMname(bo.getMaterialName());
+        vo.setMdesc(bo.getMaterialDesc());
+        vo.setNum(bo.getNum());
         return vo;
     }
 }
