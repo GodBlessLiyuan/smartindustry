@@ -82,7 +82,14 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
     public ResultVO pageQueryOther(Map<String, Object> reqData){
         Page<StorageBO> page = PageQueryUtil.startPage(reqData);
         List<StorageBO> bos = storageMapper.pageQueryOther(reqData);
-
+        for(StorageBO bo:bos){
+            List<LocationPO> pos = locationMapper.queryLocBySid(bo.getStorageId());
+            if(pos.isEmpty()){
+                bo.setFlag(false);
+            }else{
+                bo.setFlag(true);
+            }
+        }
         return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), StoragePageVO.convert(bos)));
     }
 
@@ -90,6 +97,13 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
     public ResultVO queryInfo(OperateDTO dto){
         List<PickBodyBO> bos = storageMapper.queryInfo(dto.getSid());
         return ResultVO.ok().setData(PickBodyVO.convert(bos));
+    }
+
+    @Override
+    public ResultVO queryPidInfo(Map<String, Object> reqData){
+        Page<PrintLabelBO> page = PageQueryUtil.startPage(reqData);
+        List<PrintLabelBO> bos = storageMapper.queryPidInfo(reqData);
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), PrintLabelVO.convertBO(bos)));
     }
 
     @Override

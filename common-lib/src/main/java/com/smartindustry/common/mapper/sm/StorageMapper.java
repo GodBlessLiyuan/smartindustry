@@ -1,6 +1,7 @@
 package com.smartindustry.common.mapper.sm;
 
 import com.smartindustry.common.bo.om.PickBodyBO;
+import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.bo.sm.StorageBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.sm.StoragePO;
@@ -43,6 +44,13 @@ public interface StorageMapper extends BaseMapper<StoragePO, Long> {
      * @return
      */
     List<PickBodyBO> queryInfo(Long storageId);
+
+    /**
+     * 根据入库id查询所有待入库pid
+     * @param reqData
+     * @return
+     */
+    List<PrintLabelBO> queryPidInfo(Map<String, Object> reqData);
 
     /**
      * 查看所有入库前拣货单相关标签
