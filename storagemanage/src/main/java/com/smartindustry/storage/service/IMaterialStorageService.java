@@ -31,6 +31,13 @@ public interface IMaterialStorageService {
     ResultVO pageQueryOther(Map<String, Object> reqData);
 
     /**
+     * 根据入库id查看详细信息
+     * @param dto
+     * @return
+     */
+    ResultVO queryBySid(OperateDTO dto);
+
+    /**
      * 根据入库id查询所有物料详情（待入库数量和已入库数量）
      * @param dto
      * @return

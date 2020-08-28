@@ -6,6 +6,7 @@ import com.smartindustry.common.bo.sm.StorageBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.sm.StoragePO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,13 @@ public interface StorageMapper extends BaseMapper<StoragePO, Long> {
      * @return
      */
     List<StorageBO> pageQueryOther(Map<String, Object> reqData);
+
+    /**
+     * 根据入库id查询入库相关信息
+     * @param sid
+     * @return
+     */
+    StorageBO queryBySid(Long sid);
 
     /**
      * 查询收料单
@@ -58,4 +66,12 @@ public interface StorageMapper extends BaseMapper<StoragePO, Long> {
      * @return
      */
     List<String> queryRelatePid(Long storageId);
+
+    /**
+     * 根据入库id和PID查询标签的详细信息
+     * @param storageId
+     * @param packageId
+     * @return
+     */
+    PrintLabelBO queryPrint(@Param("sid") Long storageId, @Param("pid") String packageId);
 }

@@ -86,6 +86,12 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
     }
 
     @Override
+    public ResultVO queryBySid(OperateDTO dto){
+        StorageBO bo = storageMapper.queryBySid(dto.getSid());
+        return ResultVO.ok().setData(StoragePageVO.convert(bo));
+    }
+
+    @Override
     public ResultVO queryInfo(OperateDTO dto){
         List<PickBodyBO> bos = storageMapper.queryInfo(dto.getSid());
         return ResultVO.ok().setData(PickBodyVO.convert(bos));
@@ -99,10 +105,12 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ResultVO storageScan(OperateDTO dto){
         //其它入库单的扫码入库,首先找到所有拣货时的pid列表
         List<String> pids = storageMapper.queryRelatePid(dto.getSid());
         //判断当前扫码pid号是否在列表中，若是则扫码成功，若不是提示不属于相关pid
+        //更新入库表已入库数和状态,更新库位标签表，入库详情组表等
         if(pids.contains(dto.getPid())){
             StoragePO po = storageMapper.selectByPrimaryKey(dto.getSid());
             PrintLabelPO po1 = printLabelMapper.queryByPid(dto.getPid());
@@ -124,9 +132,10 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
             //当前pid不符合条件
             return new ResultVO(1005);
         }
-        //扫码成功之后，更新入库表已入库数和状态,更新库位标签表，入库详情组表等
-
-        return ResultVO.ok() ;
+        //扫码成功之后,查询所有目前的扫码进库状态值
+        PrintLabelBO bo = storageMapper.queryPrint(dto.getSid(),dto.getPid());
+        Long id = storageGroupMapper.queryGroup(dto.getSid());
+        return ResultVO.ok().setData(StorageLabelVO.convert(bo, id)) ;
     }
 
     @Override
