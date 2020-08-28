@@ -21,4 +21,5 @@ public class OperateDTO implements Serializable {
     private String lno;
     private Integer num;
     private Byte status;
+    private Long sgid;
 }

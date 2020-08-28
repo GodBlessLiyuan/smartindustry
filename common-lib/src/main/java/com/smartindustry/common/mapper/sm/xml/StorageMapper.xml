@@ -229,7 +229,7 @@
         order by s.create_time desc
     </select>
 
-<!--    根据入库id查询入库相关信息-->
+    <!--    根据入库id查询入库相关信息-->
     <select id="queryBySid" resultMap="OtherBOResultMap">
         select
         <include refid="StorageBO_Column_List_Other"/>
@@ -269,25 +269,15 @@
           and s.storage_id = #{storageId,jdbcType=BIGINT}
     </select>
 
-
-    <resultMap type="com.smartindustry.common.bo.si.PrintLabelBO" id="PBOResultMap">
-        <id column="print_label_id" property="printLabelId" />
-        <result column="package_id" property="packageId"/>
-        <result column="material_no" property="materialNo"/>
-        <result column="material_name" property="materialName"/>
-        <result column="material_desc" property="materialDesc"/>
-        <result column="num" property="num"/>
-    </resultMap>
-
-<!--    查看入库pid的详情页-->
-    <select id="queryPidInfo" parameterType="java.util.Map" resultMap="PBOResultMap">
-        select prl.print_label_id as printLabelId,prl.package_id,m1.material_no,m1.material_name,m1.material_desc,prl.num
+    <!--    查看入库pid的详情页-->
+    <select id="queryPidInfo" parameterType="java.util.Map" resultType="com.smartindustry.common.bo.si.PrintLabelBO">
+        select prl.print_label_id as printLabelId,prl.package_id as packageId,m1.material_no as materialNo,m1.material_name as materialName,m1.material_desc as materialDesc,prl.num as num
         from sm_storage s
         left join om_pick_head ph on s.source_no = ph.source_no
         left join om_pick_label pl on ph.pick_head_id = pl.pick_head_id
         left join si_print_label prl on pl.print_label_id = prl.print_label_id
         left join si_material m1 on prl.material_id = m1.material_id
-        where s.dr = 1 and s.storage_id = #{sid,jdbcType=BIGINT}
+        where s.dr = 1 and s.storage_id = #{sid,jdbcType=BIGINT} and prl.print_label_id is not null
     </select>
 
     <select id="queryInfo" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.om.PickBodyBO">
@@ -299,7 +289,7 @@
         where s.dr = 1 and s.storage_id = #{storageId,jdbcType=BIGINT}
     </select>
 
-<!--    查看当前入库的待入库的标签pid-->
+    <!--    查看当前入库的待入库的标签pid-->
     <select id="queryRelatePid" parameterType="java.lang.Long" resultType="java.lang.String">
         select prl.package_id
         from sm_storage s
