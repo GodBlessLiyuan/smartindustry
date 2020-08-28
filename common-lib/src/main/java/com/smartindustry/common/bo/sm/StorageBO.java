@@ -48,7 +48,7 @@ public class StorageBO extends StoragePO {
     private Byte transferType;
 
     /**
-     * 当前入库单是否存在库位
+     * 当前入库单是否存在库位id
      */
-    private Boolean flag;
+    private Long locationId;
 }
