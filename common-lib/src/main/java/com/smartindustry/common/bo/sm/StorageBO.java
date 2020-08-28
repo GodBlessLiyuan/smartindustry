@@ -50,5 +50,5 @@ public class StorageBO extends StoragePO {
     /**
      * 当前入库单是否存在库位
      */
-    private Boolean flag;
+    private String flag;
 }

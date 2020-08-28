@@ -79,7 +79,7 @@ public interface IMaterialStorageService {
     /**
      * 入库
      *
-     * @param sid
+     * @param dto
      * @return
      */
     ResultVO storage(@RequestBody OperateDTO dto);
@@ -87,7 +87,7 @@ public interface IMaterialStorageService {
     /**
      * 详情
      *
-     * @param sid
+     * @param dto
      * @return
      */
     ResultVO detail(@RequestBody OperateDTO dto);

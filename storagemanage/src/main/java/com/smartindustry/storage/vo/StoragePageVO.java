@@ -62,7 +62,7 @@ public class StoragePageVO implements Serializable {
      */
     private Byte ttype;
 
-    private Boolean flag;
+    private String flag;
 
     /**
      * bos 转 vos
