@@ -101,4 +101,11 @@
         where sg.storage_id = #{storageId,jdbcType=BIGINT}
         order by sg.storage_group_id desc, sd.storage_detail_id desc
     </select>
+
+<!--    根据入库单id查询入库单详情表-->
+    <select id="queryGroup" parameterType="java.lang.Long" resultType="java.lang.Long">
+        select storage_group_id
+        from sm_storage_group
+        where storage_id = #{storageId,jdbcType=BIGINT}
+    </select>
 </mapper>

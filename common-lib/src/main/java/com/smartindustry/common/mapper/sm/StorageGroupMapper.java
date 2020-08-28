@@ -19,4 +19,11 @@ public interface StorageGroupMapper extends BaseMapper<StorageGroupPO, Long> {
      * @return
      */
     List<StorageGroupBO> queryBySid(Long storageId);
+
+    /**
+     * 根据sid查询入库详情组表id
+     * @param storageId
+     * @return
+     */
+    Long queryGroup(Long storageId);
 }

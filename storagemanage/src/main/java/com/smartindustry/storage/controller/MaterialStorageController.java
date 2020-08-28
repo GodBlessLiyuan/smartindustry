@@ -61,6 +61,11 @@ public class MaterialStorageController {
         return materialStorageService.pageQueryOther(reqData);
     }
 
+    @PostMapping("queryBySid")
+    public ResultVO queryBySid(@RequestBody OperateDTO dto){
+        return materialStorageService.queryBySid(dto);
+    }
+
     @PostMapping("location")
     public ResultVO location(@RequestBody OperateDTO dto) {
         return materialStorageService.location(dto);
