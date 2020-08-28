@@ -118,12 +118,17 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
             po.setStatus(ReceiptConstant.MATERIAL_STORAGE_BEING);
             storageMapper.updateByPrimaryKey(po);
             // 新增入库详情组表
-            StorageGroupPO groupPO = new StorageGroupPO();
-            groupPO.setStorageId(dto.getSid());
-            storageGroupMapper.insert(groupPO);
+            if (null == dto.getSgid()) {
+                // 新增物料入库组
+                StorageGroupPO groupPO = new StorageGroupPO();
+                groupPO.setStorageId(dto.getSid());
+                storageGroupMapper.insert(groupPO);
+                dto.setSgid(groupPO.getStorageGroupId());
+            }
+
             // 新增入库详情表
             StorageDetailPO detailPO = new StorageDetailPO();
-            detailPO.setStorageGroupId(groupPO.getStorageGroupId());
+            detailPO.setStorageGroupId(dto.getSgid());
             detailPO.setPrintLabelId(po1.getPrintLabelId());
             storageDetailMapper.insert(detailPO);
             //新增库位标签表 待续...
