@@ -286,7 +286,7 @@
         left join om_pick_head ph on s.source_no = ph.source_no
         left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
         left join si_material m on pb.material_id = m.material_id
-        where s.dr = 1 and s.storage_id = #{storageId,jdbcType=BIGINT}
+        where s.dr = 1 and s.storage_id = #{storageId,jdbcType=BIGINT} and m.material_id is not null
     </select>
 
     <!--    查看当前入库的待入库的标签pid-->
