@@ -62,7 +62,7 @@ public class StoragePageVO implements Serializable {
      */
     private Byte ttype;
 
-    private String flag;
+    private Boolean flag;
 
     /**
      * bos 转 vos
@@ -102,7 +102,7 @@ public class StoragePageVO implements Serializable {
         vo.setStime(bo.getStorageTime());
         vo.setCono(bo.getCorrespondNo());
         vo.setTtype(bo.getTransferType());
-        vo.setFlag(bo.getFlag());
+        vo.setFlag(bo.getLocationId() == null?false:true);
         return vo;
     }
 }
