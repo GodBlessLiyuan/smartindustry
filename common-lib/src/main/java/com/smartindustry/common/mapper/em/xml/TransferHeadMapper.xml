@@ -161,4 +161,12 @@
       dr = #{dr,jdbcType=TINYINT}
     where transfer_head_id = #{transferHeadId,jdbcType=BIGINT}
   </update>
+
+<!--  查看调拨信息-->
+  <select id="queryBySid" parameterType="java.lang.Long" resultType="com.smartindustry.common.pojo.em.TransferHeadPO">
+    select th.transfer_head_id as transferHeadId,th.transfer_no as transferNo,th.transfer_type as transferType
+    from sm_storage s
+    left join em_transfer_head th on s.source_no = th.transfer_no
+    where s.dr = 1 and s.storage_id = #{storageId,jdbcType=BIGINT}
+  </select>
 </mapper>

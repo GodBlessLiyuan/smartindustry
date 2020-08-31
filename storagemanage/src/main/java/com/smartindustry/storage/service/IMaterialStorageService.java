@@ -122,6 +122,34 @@ public interface IMaterialStorageService {
     ResultVO agreeStorage(OperateDTO dto);
 
     /**
+     * 其他入库单的扫码删除
+     * @param dto
+     * @return
+     */
+    ResultVO storageDelete(StorageDetailDTO dto);
+
+    /**
+     * 其他入库单的保存
+     * @param dto
+     * @return
+     */
+    ResultVO storageSave(StorageGroupDTO dto);
+
+    /**
+     * 其他入库单的同意出库
+     * @param dto
+     * @return
+     */
+    ResultVO storageAgree(OperateDTO dto);
+
+    /**
+     * 其他入库单的详细信息查询
+     * @param dto
+     * @return
+     */
+    ResultVO storageDetail(OperateDTO dto);
+
+    /**
      * 根据入库id查询相关pid
      * @param reqData
      * @return

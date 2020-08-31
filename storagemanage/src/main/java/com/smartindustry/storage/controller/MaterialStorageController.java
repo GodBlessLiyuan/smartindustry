@@ -113,4 +113,25 @@ public class MaterialStorageController {
     ResultVO storageScan(@RequestBody OperateDTO dto){
         return materialStorageService.storageScan(dto);
     }
+
+    @PostMapping("storageDelete")
+    ResultVO storageDelete(@RequestBody StorageDetailDTO dto){
+        return materialStorageService.storageDelete(dto);
+    }
+
+    @PostMapping("storageSave")
+    ResultVO storageSave(@RequestBody StorageGroupDTO dto){
+        return materialStorageService.storageSave(dto);
+    }
+
+    @PostMapping("storageAgree")
+    ResultVO storageAgree(@RequestBody OperateDTO dto){
+        return materialStorageService.storageAgree(dto);
+    }
+
+    @PostMapping("storageDetail")
+    ResultVO storageDetail(@RequestBody OperateDTO dto){
+        return materialStorageService.storageDetail(dto);
+    }
+
 }
