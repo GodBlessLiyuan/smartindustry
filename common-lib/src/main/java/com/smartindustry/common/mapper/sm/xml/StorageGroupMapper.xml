@@ -106,6 +106,6 @@
     <select id="queryGroup" parameterType="java.lang.Long" resultType="java.lang.Long">
         select storage_group_id
         from sm_storage_group
-        where storage_id = #{storageId,jdbcType=BIGINT}
+        where storage_id = #{storageId,jdbcType=BIGINT} limit 1
     </select>
 </mapper>
