@@ -347,10 +347,13 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
 
     @Override
     public ResultVO agreeStorage(OperateDTO dto){
+        UserPO user = tokenService.getLoginUser();
         StoragePO po = storageMapper.selectByPrimaryKey(dto.getSid());
         po.setStatus(ReceiptConstant.MATERIAL_STORAGE_FINISH);
         po.setStoredNum(po.getPendingNum());
         storageMapper.updateByPrimaryKey(po);
+        // 操作记录
+        recordMapper.insert(new StorageRecordPO(dto.getSid(), po.getStorageId(), user.getUserId(), user.getName(), ReceiptConstant.RECORD_TYPE_STORAGE_CONFIRM, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
         return ResultVO.ok();
     }
 

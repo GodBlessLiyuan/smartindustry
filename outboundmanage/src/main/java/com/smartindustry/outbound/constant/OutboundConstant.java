@@ -121,5 +121,12 @@ public class OutboundConstant {
     //  待入库
     public static final Byte MATERIAL_STORAGE_PENDING = 3;
 
+    /**
+     * 生成入库单的操作记录
+     */
+    public static final String RECORD_TYPE_STORAGE_INVOICE = "生成入库单";
+    public static final String RECORD_TYPE_STORAGE_CONFIRM = "确认入库";
 
+    //  物料入库
+    public static final Byte RECEIPT_MATERIAL_STORAGE = 20;
 }

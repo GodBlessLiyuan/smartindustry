@@ -117,7 +117,7 @@ public class OutboundVO implements Serializable {
         vo.setStatus(bo.getStatus());
         vo.setTostatus(bo.getTOutboundStatus());
         vo.setTptime(bo.getTPlanTime());
-        vo.setTtype(bo.getSourceType());
+        vo.setTtype(bo.getTransferType());
         vo.setSno(bo.getSourceNo());
         vo.setStype(bo.getSourceType());
         return vo;

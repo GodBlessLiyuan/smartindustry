@@ -182,7 +182,7 @@
 
 <!--    根据拣货单id得到所有物料已拣货量得累和-->
     <select id="queryPickNum" parameterType="java.lang.Long" resultType="java.lang.Integer">
-        select sum(ph.pick_num)
+        select sum(pb.pick_num)
         from om_pick_head ph
         left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
         where ph.dr = 1 and pb.dr = 1 and ph.pick_head_id = #{pickHeadId,jdbcType=BIGINT}
