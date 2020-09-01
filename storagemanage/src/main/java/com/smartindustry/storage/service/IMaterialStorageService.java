@@ -31,6 +31,13 @@ public interface IMaterialStorageService {
     ResultVO pageQueryOther(Map<String, Object> reqData);
 
     /**
+     * 根据入库id查看详细信息
+     * @param dto
+     * @return
+     */
+    ResultVO queryBySid(OperateDTO dto);
+
+    /**
      * 根据入库id查询所有物料详情（待入库数量和已入库数量）
      * @param dto
      * @return
@@ -113,6 +120,34 @@ public interface IMaterialStorageService {
      * @return
      */
     ResultVO agreeStorage(OperateDTO dto);
+
+    /**
+     * 其他入库单的扫码删除
+     * @param dto
+     * @return
+     */
+    ResultVO storageDelete(StorageDetailDTO dto);
+
+    /**
+     * 其他入库单的保存
+     * @param dto
+     * @return
+     */
+    ResultVO storageSave(StorageGroupDTO dto);
+
+    /**
+     * 其他入库单的同意出库
+     * @param dto
+     * @return
+     */
+    ResultVO storageAgree(OperateDTO dto);
+
+    /**
+     * 其他入库单的详细信息查询
+     * @param dto
+     * @return
+     */
+    ResultVO storageDetail(OperateDTO dto);
 
     /**
      * 根据入库id查询相关pid

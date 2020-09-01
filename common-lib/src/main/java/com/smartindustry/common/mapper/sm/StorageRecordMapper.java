@@ -10,9 +10,9 @@ import java.util.List;
 /**
  * StorageRecordMapper继承基类
  */
+
 @Mapper
 public interface StorageRecordMapper extends BaseMapper<StorageRecordPO, Long> {
-
     /**
      * 根据 receipt body id 查询
      *

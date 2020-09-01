@@ -52,4 +52,5 @@ public class StorageRecordPO implements Serializable {
         this.createTime = new Date();
         this.status = status;
     }
+
 }

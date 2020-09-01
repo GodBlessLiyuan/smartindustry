@@ -14,16 +14,16 @@ import com.smartindustry.common.mapper.om.*;
 import com.smartindustry.common.mapper.si.LocationMapper;
 import com.smartindustry.common.mapper.si.StorageLabelMapper;
 import com.smartindustry.common.mapper.sm.StorageMapper;
+import com.smartindustry.common.mapper.sm.StorageRecordMapper;
 import com.smartindustry.common.pojo.am.UserPO;
-import com.smartindustry.common.pojo.em.TransferHeadPO;
 import com.smartindustry.common.pojo.im.MaterialInventoryPO;
 import com.smartindustry.common.pojo.om.*;
 import com.smartindustry.common.pojo.si.LocationPO;
 import com.smartindustry.common.pojo.sm.StoragePO;
+import com.smartindustry.common.pojo.sm.StorageRecordPO;
 import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.FileUtil;
 import com.smartindustry.common.util.PageQueryUtil;
-import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.constant.OutboundConstant;
@@ -70,6 +70,8 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
     private LabelRecommendMapper labelRecommendMapper;
     @Autowired
     private StorageLabelMapper storageLabelMapper;
+    @Autowired
+    private StorageRecordMapper storageRecordMapper;
     @Autowired
     private MaterialInventoryMapper materialInventoryMapper;
     @Autowired
@@ -219,6 +221,7 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
             po1.setCreateTime(new Date());
             po1.setDr((byte)1);
             storageMapper.insert(po1);
+            storageRecordMapper.insert(new StorageRecordPO(dto.getSid(), po1.getStorageId(), user.getUserId(), user.getName(), OutboundConstant.RECORD_TYPE_STORAGE_INVOICE, OutboundConstant.RECEIPT_MATERIAL_STORAGE));
         }
         return ResultVO.ok();
     }

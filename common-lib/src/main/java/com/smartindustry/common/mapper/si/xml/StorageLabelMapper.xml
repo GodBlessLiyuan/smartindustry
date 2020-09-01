@@ -276,8 +276,8 @@
         values
         <foreach collection="list" separator="," item="po">
             (#{po.storageLabelId,jdbcType=BIGINT}, #{po.printLabelId,jdbcType=BIGINT}, #{po.materialId,jdbcType=BIGINT},
-            #{po.locationId,jdbcType=BIGINT}, #{po.packageId,jdbcType=CHAR}, #{po.orderNo,jdbcType=CHAR},
-            #{po.orderType,jdbcType=TINYINT}, #{po.type,jdbcType=TINYINT}, #{po.storageNum,jdbcType=INTEGER},
+            #{po.locationId,jdbcType=BIGINT}, #{po.packageId,jdbcType=CHAR}, #{po.sourceNo,jdbcType=CHAR},
+            #{po.sourceType,jdbcType=TINYINT}, #{po.type,jdbcType=TINYINT}, #{po.storageNum,jdbcType=INTEGER},
             #{po.storageTime,jdbcType=TIMESTAMP}, #{po.materialLockId,jdbcType=BIGINT}, #{po.status,jdbcType=TINYINT})
         </foreach>
     </insert>

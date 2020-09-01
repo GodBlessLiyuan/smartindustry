@@ -65,6 +65,11 @@ public class StoragePageVO implements Serializable {
     private Boolean flag;
 
     /**
+     * 工单号
+     */
+    private String pno;
+
+    /**
      * bos 转 vos
      *
      * @param bos
@@ -90,7 +95,7 @@ public class StoragePageVO implements Serializable {
         vo.setRbid(bo.getReceiptBodyId());
         vo.setSno(bo.getStorageNo());
         vo.setRno(bo.getReceiptNo());
-        vo.setSono(bo.getReceiptSourceNo());
+        vo.setSono(bo.getSourceNo());
         if (null != bo.getLocations() && bo.getLocations().size() > 0) {
             StringBuilder sb = new StringBuilder();
             for (LocationBO lbo : bo.getLocations()) {
@@ -103,6 +108,7 @@ public class StoragePageVO implements Serializable {
         vo.setCono(bo.getCorrespondNo());
         vo.setTtype(bo.getTransferType());
         vo.setFlag(bo.getLocationId() != null);
+        vo.setPno(bo.getPickNo());
         return vo;
     }
 }

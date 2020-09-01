@@ -9,4 +9,11 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface TransferHeadMapper extends BaseMapper<TransferHeadPO, Long> {
+
+    /**
+     * 根据入库id 查看调拨信息
+     * @param storageId
+     * @return
+     */
+    TransferHeadPO queryBySid(Long storageId);
 }

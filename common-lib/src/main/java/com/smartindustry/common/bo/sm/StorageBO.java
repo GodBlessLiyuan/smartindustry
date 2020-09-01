@@ -51,4 +51,9 @@ public class StorageBO extends StoragePO {
      * 当前入库单是否存在库位id
      */
     private Long locationId;
+
+    /**
+     * 拣货工单号
+     */
+    private String pickNo;
 }
