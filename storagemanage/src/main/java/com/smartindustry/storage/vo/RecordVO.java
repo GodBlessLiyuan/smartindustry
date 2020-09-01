@@ -1,6 +1,5 @@
 package com.smartindustry.storage.vo;
 
-import com.smartindustry.common.pojo.sm.StorageRecordPO;
 import lombok.Data;
 
 import java.io.Serializable;
