@@ -186,8 +186,9 @@ public class BomServiceImpl implements IBomService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO editDetail(BomBodyDTO dto) {
+
         //在编辑时不能让上级物料明细id和本身的物料明细id相同
-        if(dto.getPid().equals(dto.getBbid())){
+        if (dto.getPid() != null && dto.getBbid().equals(dto.getPid())){
             return new ResultVO(1025);
         }
         UserPO user = tokenService.getLoginUser();
