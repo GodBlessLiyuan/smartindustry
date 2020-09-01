@@ -1204,7 +1204,7 @@ CREATE TABLE sm_storage_group
 CREATE TABLE sm_storage_record
 (
     record_id bigint unsigned NOT NULL AUTO_INCREMENT,
-    receipt_body_id bigint unsigned NOT NULL,
+    receipt_body_id bigint unsigned,
     storage_id bigint unsigned,
     user_id bigint unsigned,
     name char(255),
