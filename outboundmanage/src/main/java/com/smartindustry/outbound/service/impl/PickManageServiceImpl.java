@@ -87,10 +87,10 @@ public class PickManageServiceImpl implements IPickManageService {
     }
 
     @Override
-    public ResultVO outOrderCheck(int pageNum, int pageSize, Map<String, Object> reqMap) {
-        Page<PickHeadPO> page = PageHelper.startPage(pageNum, pageSize);
-        List<PickHeadPO> pos = pickHeadMapper.outOrderCheck(reqMap);
-        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), PickHeadVO.convert(pos)));
+    public ResultVO outOrderCheck(Map<String, Object> reqData) {
+        Page<PickHeadPO> page = PageQueryUtil.startPage(reqData);
+        List<PickHeadPO> bos = pickHeadMapper.outOrderCheck(reqData);
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), PickHeadVO.convert(bos)));
     }
 
     @Override
