@@ -74,14 +74,8 @@ public class PickManageController {
 
     @RequestMapping("outOrderCheck")
     @PreAuthorize("@ss.hasPermi('om:pm:check:query')")
-    public ResultVO outOrderCheck(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                                  @RequestParam(value = "pageSize", defaultValue = "100000000") int pageSize,
-                                  @RequestParam(value = "pno", required = false) String pickNo,
-                                  @RequestParam(value = "cproject", required = false) String correspondProject) {
-        Map<String, Object> reqData = new HashMap<>(2);
-        reqData.put("pickNo", pickNo);
-        reqData.put("correspondProject", correspondProject);
-        return pickManageService.outOrderCheck(pageNum, pageSize, reqData);
+    public ResultVO outOrderCheck(@RequestBody Map<String, Object> reqData) {
+        return pickManageService.outOrderCheck(reqData);
     }
 
     /**

@@ -264,11 +264,8 @@
         <include refid="Base_Column_List"/>
         from om_pick_head ph
         where ph.dr = 1 and ph.source_type = 1 and ph.material_status = 15
-        <if test="pickNo != null and pickNo != ''">
-            and ph.pick_no like concat('%',#{pickNo,jdbcType=VARCHAR},'%')
-        </if>
-        <if test="correspondProject != null and correspondProject != ''">
-            and ph.correspond_project like concat('%',#{correspondProject,jdbcType=VARCHAR},'%')
+        <if test="no != null and no != ''">
+            and (ph.pick_no like concat('%',#{no,jdbcType=VARCHAR},'%') or ph.source_no like concat('%',#{no,jdbcType=VARCHAR},'%'))
         </if>
         order by ph.update_time desc
     </select>
