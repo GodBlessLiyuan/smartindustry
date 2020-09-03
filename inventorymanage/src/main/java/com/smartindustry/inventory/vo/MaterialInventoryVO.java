@@ -57,7 +57,7 @@ public class MaterialInventoryVO implements Serializable {
         vo.setSupplier(bo.getSupplierName());
         StringBuilder sb = new StringBuilder();
         for (LocationBO lbo : bo.getLocations()) {
-            sb.append(lbo.getWarehouseName()).append(" ");
+            sb.append(lbo.getWarehouseName()).append(",");
         }
         vo.setWarehouse(sb.toString());
         vo.setWnum(bo.getWayNum());

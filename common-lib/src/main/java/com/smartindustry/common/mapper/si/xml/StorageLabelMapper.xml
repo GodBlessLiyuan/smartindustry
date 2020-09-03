@@ -241,13 +241,13 @@
             <if test="sname != null and sname != ''">
                 and s.supplier_name like '%' #{sname,jdbcType=CHAR} '%'
             </if>
-            <if test="mstatus != null and mstatus == 1">
+            <if test="mstatus != null and mstatus == 2">
                 and sl.material_lock_id is not null
             </if>
-            <if test="mstatus != null and mstatus == 2">
+            <if test="mstatus != null and mstatus == 1">
                 and sl.material_lock_id is null
             </if>
-            <if test="mtype != null and mtype == 0">
+            <if test="mtype == null or mtype == '' or mtype == 0">
                 and m.material_type != 3
             </if>
             <if test="mtype != null and mtype != 0">
