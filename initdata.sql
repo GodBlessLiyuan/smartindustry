@@ -8,7 +8,6 @@ insert into si_location(location_id, location_no, location_name, location_type_i
 
 
 
--------------------------------------------- 第一期开始-----------------------------------------------------------
 INSERT INTO `am_authority` VALUES (1, '入库管理', 'sm', 1, 0);
 
 INSERT INTO `am_authority` VALUES (10, '收料管理', 'sm:rm', 1, 1);
@@ -23,8 +22,10 @@ INSERT INTO `am_authority` VALUES (20, 'IQC检测', 'sm:qm:iqctest', 1, 11);
 INSERT INTO `am_authority` VALUES (21, 'IQC异常QE确认', 'sm:qm:iqcqe', 1, 11);
 INSERT INTO `am_authority` VALUES (22, 'QE检验', 'sm:qm:qetest', 1, 11);
 
-INSERT INTO `am_authority` VALUES (25, '良品入库单', 'sm:ms:gpwl', 1, 12);
-INSERT INTO `am_authority` VALUES (26, '非良品入库单', 'sm:ms:ndgr', 1, 12);
+INSERT INTO `am_authority` VALUES (25, '采购入库单', 'sm:ms:gpwl', 1, 12);
+INSERT INTO `am_authority` VALUES (26, '生产入库单', 'sm:ms:ndgr', 1, 12);
+INSERT INTO `am_authority` VALUES (27, '生产退料入库单', 'sm:ms:prr', 1, 12);
+INSERT INTO `am_authority` VALUES (28, '其他入库单', 'sm:ms:owr', 1, 12);
 
 INSERT INTO `am_authority` VALUES (30, 'PO收料-查询', 'sm:rm:porc:query', 2, 15);
 INSERT INTO `am_authority` VALUES (31, 'PO收料-新增', 'sm:rm:porc:insert', 2, 15);
@@ -60,29 +61,38 @@ INSERT INTO `am_authority` VALUES (81, 'QE检验-QE检测', 'sm:qm:qetest:qetest
 INSERT INTO `am_authority` VALUES (82, 'QE检验-生成入库单', 'sm:qm:qetest:storage', 2, 22);
 INSERT INTO `am_authority` VALUES (83, 'QE检验-打印标签', 'sm:qm:qetest:printlabel', 2, 22);
 
-INSERT INTO `am_authority` VALUES (90, '良品入库单-查询', 'sm:ms:gpwl:query', 2, 25);
-INSERT INTO `am_authority` VALUES (91, '良品入库单-扫码入库', 'sm:ms:gpwl:scan', 2, 25);
-INSERT INTO `am_authority` VALUES (92, '良品入库单-查看', 'sm:ms:gpwl:queryinfo', 2, 25);
+INSERT INTO `am_authority` VALUES (90, '采购入库单-查询', 'sm:ms:gpwl:query', 2, 25);
+INSERT INTO `am_authority` VALUES (91, '采购入库单-扫码入库', 'sm:ms:gpwl:scan', 2, 25);
+INSERT INTO `am_authority` VALUES (92, '采购入库单-查看', 'sm:ms:gpwl:queryinfo', 2, 25);
 
-INSERT INTO `am_authority` VALUES (100, '非良品入库单-查询', 'sm:ms:ndgr:query', 2, 26);
-INSERT INTO `am_authority` VALUES (101, '非良品入库单-扫码入库', 'sm:ms:ndgr:scan', 2, 26);
-INSERT INTO `am_authority` VALUES (102, '非良品入库单-查看', 'sm:ms:ndgr:queryinfo', 2, 26);
--------------------------------------------- 第一期结束-----------------------------------------------------------
+INSERT INTO `am_authority` VALUES (100, '生产入库单-查询', 'sm:ms:ndgr:query', 2, 26);
+INSERT INTO `am_authority` VALUES (101, '生产入库单-扫码入库', 'sm:ms:ndgr:scan', 2, 26);
+INSERT INTO `am_authority` VALUES (102, '生产入库单-查看', 'sm:ms:ndgr:queryinfo', 2, 26);
 
--------------------------------------------- 第三期开始-----------------------------------------------------------
+INSERT INTO `am_authority` VALUES (104, '生产退料入库单-查询', 'sm:ms:prr:query', 2, 27);
+INSERT INTO `am_authority` VALUES (105, '生产退料入库单-扫码入库', 'sm:ms:prr:scan', 2, 27);
+INSERT INTO `am_authority` VALUES (106, '生产退料入库单-查看', 'sm:ms:prr:queryinfo', 2, 27);
+
+INSERT INTO `am_authority` VALUES (107, '其他入库单-查询', 'sm:ms:prr:query', 2, 28);
+INSERT INTO `am_authority` VALUES (108, '其他入库单-扫码入库', 'sm:ms:prr:scan', 2, 28);
+INSERT INTO `am_authority` VALUES (109, '其他入库单-查看', 'sm:ms:prr:queryinfo', 2, 28);
+
+
 INSERT INTO `am_authority` VALUES (2, '出库管理', 'om', 1, 0);
 INSERT INTO `am_authority` VALUES (110, '拣货单管理', 'om:pm', 1, 2);
 INSERT INTO `am_authority` VALUES (111, '质量管理', 'om:qm', 1, 2);
 INSERT INTO `am_authority` VALUES (112, '物料出库', 'om:mo', 1, 2);
 
 INSERT INTO `am_authority` VALUES (115, '工单拣货单', 'om:pm:wopick', 1, 110);
-INSERT INTO `am_authority` VALUES (116, '成品拣货单', 'om:pm:fppick', 1, 110);
+INSERT INTO `am_authority` VALUES (116, '销售拣货单', 'om:pm:fppick', 1, 110);
 INSERT INTO `am_authority` VALUES (117, '工单拣货单审核', 'om:pm:check', 1, 110);
+INSERT INTO `am_authority` VALUES (118, '调拨拣货单', 'om:pm:transfer', 1, 110);
 
 INSERT INTO `am_authority` VALUES (120, 'OQC检验', 'om:qm:oqctest', 1, 111);
 
 INSERT INTO `am_authority` VALUES (125, '工单出库单', 'om:mo:woout', 1, 112);
-INSERT INTO `am_authority` VALUES (126, '成品出库单', 'om:mo:fpout', 1, 112);
+INSERT INTO `am_authority` VALUES (126, '销售出库单', 'om:mo:fpout', 1, 112);
+INSERT INTO `am_authority` VALUES (127, '其他出库单', 'om:mo:otherout', 1, 112);
 
 INSERT INTO `am_authority` VALUES (130, '工单拣货单-查询', 'om:pm:wopick:query', 2, 115);
 INSERT INTO `am_authority` VALUES (131, '工单拣货单-打印拣货单', 'om:pm:wopick:print', 2, 115);
@@ -90,13 +100,18 @@ INSERT INTO `am_authority` VALUES (132, '工单拣货单-扫码拣货', 'om:pm:w
 INSERT INTO `am_authority` VALUES (133, '工单拣货单-查看详情', 'om:pm:wopick:queryinfo', 2, 115);
 
 
-INSERT INTO `am_authority` VALUES (140, '成品拣货单-查询', 'om:pm:fppick:query', 2, 116);
-INSERT INTO `am_authority` VALUES (141, '成品拣货单-打印拣货单', 'om:pm:fppick:print', 2, 116);
-INSERT INTO `am_authority` VALUES (142, '成品拣货单-扫码拣货', 'om:pm:fppick:scan', 2, 116);
-INSERT INTO `am_authority` VALUES (143, '成品拣货单-查看详情', 'om:pm:fppick:queryinfo', 2, 116);
+INSERT INTO `am_authority` VALUES (140, '销售拣货单-查询', 'om:pm:fppick:query', 2, 116);
+INSERT INTO `am_authority` VALUES (141, '销售拣货单-打印拣货单', 'om:pm:fppick:print', 2, 116);
+INSERT INTO `am_authority` VALUES (142, '销售拣货单-扫码拣货', 'om:pm:fppick:scan', 2, 116);
+INSERT INTO `am_authority` VALUES (143, '销售拣货单-查看详情', 'om:pm:fppick:queryinfo', 2, 116);
 
 INSERT INTO `am_authority` VALUES (150, '工单拣货单审核-查询', 'om:pm:check:query', 2, 117);
 INSERT INTO `am_authority` VALUES (151, '工单拣货单审核-审核', 'om:pm:check:check', 2, 117);
+
+INSERT INTO `am_authority` VALUES (153, '调拨拣货单-查询', 'om:pm:transfer:query', 2, 118);
+INSERT INTO `am_authority` VALUES (154, '调拨拣货单-打印拣货单', 'om:pm:transfer:print', 2, 118);
+INSERT INTO `am_authority` VALUES (155, '调拨拣货单-扫码拣货', 'om:pm:transfer:scan', 2, 118);
+INSERT INTO `am_authority` VALUES (156, '调拨拣货单-查看详情', 'om:pm:transfer:queryinfo', 2, 118);
 
 INSERT INTO `am_authority` VALUES (160, 'OQC检验-查询', 'om:qm:oqctest:query', 2, 120);
 INSERT INTO `am_authority` VALUES (161, 'OQC检验-审核', 'om:qm:oqctest:check', 2, 120);
@@ -105,13 +120,15 @@ INSERT INTO `am_authority` VALUES (170, '工单出库单-查询', 'om:mo:woout:q
 INSERT INTO `am_authority` VALUES (171, '工单出库单-出库', 'om:mo:woout:out', 2, 125);
 INSERT INTO `am_authority` VALUES (172, '工单出库单-查看详情', 'om:mo:woout:queryinfo', 2, 125);
 
-INSERT INTO `am_authority` VALUES (180, '成品出库单-查询', 'om:mo:fpout:query', 2, 126);
-INSERT INTO `am_authority` VALUES (181, '成品出库单-出库', 'om:mo:fpout:out', 2, 126);
-INSERT INTO `am_authority` VALUES (182, '成品出库单-查看详情', 'om:mo:fpout:queryinfo', 2, 126);
--------------------------------------------- 第四期结束-----------------------------------------------------------
+INSERT INTO `am_authority` VALUES (180, '销售出库单-查询', 'om:mo:fpout:query', 2, 126);
+INSERT INTO `am_authority` VALUES (181, '销售出库单-出库', 'om:mo:fpout:out', 2, 126);
+INSERT INTO `am_authority` VALUES (182, '销售出库单-查看详情', 'om:mo:fpout:queryinfo', 2, 126);
+
+INSERT INTO `am_authority` VALUES (185, '其他出库单-查询', 'om:mo:otherout:query', 2, 127);
+INSERT INTO `am_authority` VALUES (186, '其他出库单-出库', 'om:mo:otherout:out', 2, 127);
+INSERT INTO `am_authority` VALUES (187, '其他出库单-查看详情', 'om:mo:otherout:queryinfo', 2, 127);
 
 
--------------------------------------------- 第四期开始-----------------------------------------------------------
 INSERT INTO `am_authority` VALUES (3, '库内管理', 'im', 1, 0);
 INSERT INTO `am_authority` VALUES (190, '库存信息', 'im:info', 1, 3);
 INSERT INTO `am_authority` VALUES (191, '物料清单', 'im:ml', 1, 3);
@@ -133,9 +150,6 @@ INSERT INTO `am_authority` VALUES (212, '成品库存明细查询-物料解锁',
 INSERT INTO `am_authority` VALUES (215, '物料库存明细查询-查询', 'im:info:mquery:query', 2, 197);
 INSERT INTO `am_authority` VALUES (216, '物料库存明细查询-物料锁定', 'im:info:mquery:lock', 2, 197);
 INSERT INTO `am_authority` VALUES (217, '物料库存明细查询-物料解锁', 'im:info:mquery:unlock', 2, 197);
-
--------------------------------------------- 第四期结束-----------------------------------------------------------
-
 
 
 
@@ -177,43 +191,11 @@ INSERT INTO `am_authority` VALUES (323, '货位档案-修改', 'bm:wm:loc:update
 INSERT INTO `am_authority` VALUES (324, '货位档案-删除', 'bm:wm:loc:delete', 2, 236);
 
 
--- INSERT INTO `am_authority` VALUES (5, '权限管理', 'am', 1, 0);
-
-
 INSERT INTO `am_authority` VALUES (240, '部门管理', 'bm:am:dept', 1, 223);
 INSERT INTO `am_authority` VALUES (241, '角色管理', 'bm:am:role', 1, 223);
 INSERT INTO `am_authority` VALUES (242, '用户管理', 'bm:am:user', 1, 223);
 INSERT INTO `am_authority` VALUES (243, '个人中心', 'bm:am:userinfo', 1, 223);
 INSERT INTO `am_authority` VALUES (244, '系统配置', 'bm:am:sys', 1, 223);
-
-INSERT INTO `am_authority` VALUES (250, '部门查询', 'am:dept:query', 2, 240);
-INSERT INTO `am_authority` VALUES (251, '部门禁用', 'am:dept:disable', 2, 240);
-INSERT INTO `am_authority` VALUES (252, '部门启用', 'am:dept:enable', 2, 240);
-INSERT INTO `am_authority` VALUES (253, '部门新增', 'am:dept:insert', 2, 240);
-INSERT INTO `am_authority` VALUES (254, '部门修改', 'am:dept:update', 2, 240);
-INSERT INTO `am_authority` VALUES (255, '部门删除', 'am:dept:delete', 2, 240);
-
-INSERT INTO `am_authority` VALUES (260, '角色查询', 'am:role:query', 2, 241);
-INSERT INTO `am_authority` VALUES (261, '角色禁用', 'am:role:disable', 2, 241);
-INSERT INTO `am_authority` VALUES (262, '角色启用', 'am:role:enable', 2, 241);
-INSERT INTO `am_authority` VALUES (263, '角色新增', 'am:role:insert', 2, 241);
-INSERT INTO `am_authority` VALUES (264, '角色修改', 'am:role:update', 2, 241);
-INSERT INTO `am_authority` VALUES (265, '角色删除', 'am:role:delete', 2, 241);
-INSERT INTO `am_authority` VALUES (266, '角色权限设置', 'am:role:site', 2, 241);
-
-INSERT INTO `am_authority` VALUES (270, '用户查询', 'am:user:query', 2, 242);
-INSERT INTO `am_authority` VALUES (271, '用户禁用', 'am:user:disable', 2, 242);
-INSERT INTO `am_authority` VALUES (272, '用户启用', 'am:user:enable', 2, 242);
-INSERT INTO `am_authority` VALUES (273, '用户新增', 'am:user:insert', 2, 242);
-INSERT INTO `am_authority` VALUES (274, '用户修改', 'am:user:update', 2, 242);
-INSERT INTO `am_authority` VALUES (275, '用户删除', 'am:user:delete', 2, 242);
-INSERT INTO `am_authority` VALUES (276, '用户密码更新', 'am:user:password', 2, 242);
-
-INSERT INTO `am_authority` VALUES (280, '基本资料修改', 'am:userinfo:update', 2, 243);
-INSERT INTO `am_authority` VALUES (281, '登入密码修改', 'am:userinfo:password', 2, 243);
-
-INSERT INTO `am_authority` VALUES (285, '系统配置-新增', 'am:sys:insert', 2, 244);
-INSERT INTO `am_authority` VALUES (286, '系统配置-流程配置', 'am:sys:set', 2, 244);
 
 
 INSERT INTO `am_user`(`user_id`, `name`, `sex`, `dept_id`, `username`, `password`, `role_id`, `job`, `phone`, `email`, `status`, `remark`, `create_time`, `update_time`, `dr`) VALUES (1, 'admin', 1, 1, 'admin', '$2a$10$2TDU3UozsFbb2TLgGSxc5ej10Ja42yBjYoJkdiuaH/zs24Md9nZY2', 1, '1', '18167772222', '601064569@qq.com', 1, '1', '2020-08-10 16:11:03', '2020-08-10 16:12:26', 1);

@@ -112,6 +112,10 @@ public class OutboundConstant {
     public static final Byte TYPE_TRANSFER = 3;
 
     /**
+     * 插入到入库单的来源订单类型
+     */
+    public static final Byte TYPE_TRANSFER_INSERT = 2;
+    /**
      * 物料入库
      */
     //  已入库
@@ -124,7 +128,7 @@ public class OutboundConstant {
     /**
      * 生成入库单的操作记录
      */
-    public static final String RECORD_TYPE_STORAGE_INVOICE = "生成入库单";
+    public static final String RECORD_TYPE_STORAGE_INVOICE = "形成入库单";
     public static final String RECORD_TYPE_STORAGE_CONFIRM = "确认入库";
 
     //  物料入库
