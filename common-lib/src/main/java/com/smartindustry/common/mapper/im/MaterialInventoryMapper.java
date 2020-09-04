@@ -20,7 +20,7 @@ public interface MaterialInventoryMapper extends BaseMapper<MaterialInventoryPO,
      * @param reqData
      * @return
      */
-    List<MaterialInventoryBO> pageQuery(Map<String, Object> reqData);
+    List<Long> pageQuery(Map<String, Object> reqData);
 
     /**
      * 根据Mid查询
@@ -37,4 +37,12 @@ public interface MaterialInventoryMapper extends BaseMapper<MaterialInventoryPO,
      * @return
      */
     List<MaterialInventoryBO> queryByMids(List<Long> mids);
+
+    /**
+     * 根据Miid查询
+     *
+     * @param miids
+     * @return
+     */
+    List<MaterialInventoryBO> queryByMiids(List<Long> miids);
 }

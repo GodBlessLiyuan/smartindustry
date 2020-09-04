@@ -150,16 +150,12 @@
         ss.safe_stock_id, ss.lower_limit,
         w.warehouse_name
     </sql>
-    <select id="pageQuery" parameterType="java.util.Map" resultMap="BOResultMap">
-        select
-        <include refid="BO_Column_List"/>
+    <select id="pageQuery" parameterType="java.util.Map" resultType="java.lang.Long">
+        select mi.material_inventory_id as materialInventoryId
         from im_material_inventory mi
-        left join si_material m on mi.material_id = m.material_id
-        left join si_supplier s on m.supplier_id = s.supplier_id
-        left join im_safe_stock ss on mi.material_inventory_id = ss.material_inventory_id
-        left join si_storage_label sl on mi.material_id = sl.material_id
-        left join si_location l on sl.location_id = l.location_id
-        left join si_warehouse w on l.warehouse_id = w.warehouse_id
+        <if test="keyword != null and keyword != '' or mtype != null and mtype != 0">
+            left join si_material m on mi.material_id = m.material_id
+        </if>
         <where>
             <if test="keyword != null and keyword != ''">
                 and (m.material_no like '%' #{keyword,jdbcType=CHAR} '%'
@@ -170,10 +166,30 @@
                 and m.material_type = #{mtype,jdbcType=TINYINT}
             </if>
             <if test="wid != null and wid != 0">
-                and w.warehouse_id = #{wid,jdbcType=BIGINT}
+                and mi.material_id in (
+                select sl.material_id from si_storage_label sl
+                left join si_location l on sl.location_id = l.location_id
+                left join si_warehouse w on l.warehouse_id = w.warehouse_id
+                where w.warehouse_id = #{wid,jdbcType=BIGINT}
+                )
             </if>
         </where>
-        order by mi.`status` desc, m.create_time desc
+        order by mi.`status` desc, mi.material_id desc
+    </select>
+    <select id="queryByMiids" parameterType="java.util.Map" resultMap="BOResultMap">
+        select
+        <include refid="BO_Column_List"/>
+        from im_material_inventory mi
+        left join si_material m on mi.material_id = m.material_id
+        left join si_supplier s on m.supplier_id = s.supplier_id
+        left join im_safe_stock ss on mi.material_inventory_id = ss.material_inventory_id
+        left join si_storage_label sl on mi.material_id = sl.material_id
+        left join si_location l on sl.location_id = l.location_id
+        left join si_warehouse w on l.warehouse_id = w.warehouse_id
+        where mi.material_inventory_id in
+        <foreach collection="list" item="miid" separator="," open="(" close=")">
+            #{miid,jdbcType=BIGINT}
+        </foreach>
     </select>
 
     <sql id="MIBO_Column_List">

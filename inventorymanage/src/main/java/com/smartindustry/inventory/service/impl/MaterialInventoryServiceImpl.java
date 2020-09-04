@@ -39,8 +39,11 @@ public class MaterialInventoryServiceImpl implements IMaterialInventoryService {
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData) {
         Page<MaterialInventoryBO> page = PageQueryUtil.startPage(reqData);
-        List<MaterialInventoryBO> bos = materialInventoryMapper.pageQuery(reqData);
-
+        List<Long> miids = materialInventoryMapper.pageQuery(reqData);
+        List<MaterialInventoryBO> bos = new ArrayList<>();
+        if (null != miids && miids.size() > 0) {
+            bos = materialInventoryMapper.queryByMiids(miids);
+        }
         return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), MaterialInventoryVO.convert(bos)));
     }
 
