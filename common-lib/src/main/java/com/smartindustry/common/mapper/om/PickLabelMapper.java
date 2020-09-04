@@ -19,4 +19,12 @@ public interface PickLabelMapper extends BaseMapper<PickLabelPO, Long> {
      * @return
      */
     List<PrintLabelBO> queryByPhid(Long pickHeadId);
+
+    /**
+     * 查询已被锁定的数据
+     *
+     * @param pickHeadId
+     * @return
+     */
+    List<PrintLabelBO> queryLockByPhid(Long pickHeadId);
 }

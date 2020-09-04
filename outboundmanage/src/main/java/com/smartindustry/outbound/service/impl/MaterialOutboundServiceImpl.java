@@ -116,6 +116,12 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
             return new ResultVO(1002);
         }
 
+        // 对应PID的物料是否被锁定
+        List<PrintLabelBO> lockBOs = pickLabelMapper.queryLockByPhid(headPO.getPickHeadId());
+        if(null != lockBOs && lockBOs.size() > 0) {
+            return new ResultVO(1004);
+        }
+
         Byte ostatus = OutboundConstant.PICK_OUTBOUND_ALL;
         List<PickBodyBO> bos = pickBodyMapper.queryByHeadId(headPO.getPickHeadId());
         Map<Long, Integer> materialInventoryMap = new HashMap<>();
@@ -202,7 +208,7 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
 
         //当出库是调拨出库时,会生成新得入库单
         OutboundBO po = outboundMapper.queryByOid(dto.getOid());
-        if(po.getSourceType().equals(OutboundConstant.TYPE_TRANSFER)){
+        if (po.getSourceType().equals(OutboundConstant.TYPE_TRANSFER)) {
             StoragePO po1 = new StoragePO();
             String head = OmNoUtil.MATERIAL_STORAGE_QTCK;
             po1.setStorageNo(OmNoUtil.genStorageNo(storageMapper, head, new Date()));
@@ -210,16 +216,16 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
             po1.setSourceType(po.getSourceType());
             Integer sum = pickBodyMapper.queryPickNum(po.getPickHeadId());
             List<LocationPO> pos = locationMapper.queryLocation(po.getStorageWid());
-            if(pos.isEmpty()){
+            if (pos.isEmpty()) {
                 po1.setStoredNum(sum);
                 po1.setStatus(OutboundConstant.MATERIAL_STORAGE_FINISH);
-            }else{
+            } else {
                 po1.setStoredNum(0);
                 po1.setStatus(OutboundConstant.MATERIAL_STORAGE_PENDING);
             }
             po1.setPendingNum(sum);
             po1.setCreateTime(new Date());
-            po1.setDr((byte)1);
+            po1.setDr((byte) 1);
             storageMapper.insert(po1);
             storageRecordMapper.insert(new StorageRecordPO(dto.getSid(), po1.getStorageId(), user.getUserId(), user.getName(), OutboundConstant.RECORD_TYPE_STORAGE_INVOICE, OutboundConstant.RECEIPT_MATERIAL_STORAGE));
         }

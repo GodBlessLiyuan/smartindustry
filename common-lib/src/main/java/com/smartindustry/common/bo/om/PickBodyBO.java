@@ -1,10 +1,7 @@
 package com.smartindustry.common.bo.om;
 
-import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.pojo.om.PickBodyPO;
 import lombok.Data;
-
-import java.util.List;
 
 /**
  * @author: xiahui
