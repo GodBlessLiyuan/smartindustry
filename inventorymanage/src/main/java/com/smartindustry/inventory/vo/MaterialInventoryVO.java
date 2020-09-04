@@ -59,6 +59,7 @@ public class MaterialInventoryVO implements Serializable {
         for (LocationBO lbo : bo.getLocations()) {
             sb.append(lbo.getWarehouseName()).append(",");
         }
+        sb.deleteCharAt(sb.length() - 1);
         vo.setWarehouse(sb.toString());
         vo.setWnum(bo.getWayNum());
         vo.setLlimit(bo.getLowerLimit());
