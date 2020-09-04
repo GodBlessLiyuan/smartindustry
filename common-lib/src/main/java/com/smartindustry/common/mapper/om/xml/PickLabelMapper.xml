@@ -105,8 +105,8 @@
     </select>
     <select id="queryLockByPhid" parameterType="java.lang.Long"
             resultType="com.smartindustry.common.bo.si.PrintLabelBO">
-        select spl.package_id as packageId,
-               spl.num
+        select pl.package_id as packageId,
+               pl.num
         from om_pick_label pl
                  left join si_storage_label sl on pl.print_label_id = sl.print_label_id
         where pl.pick_head_id = #{pickHeadId,jdbcType=BIGINT}
