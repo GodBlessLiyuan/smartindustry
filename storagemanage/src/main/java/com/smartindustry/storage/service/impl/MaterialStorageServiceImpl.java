@@ -80,7 +80,11 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
     public ResultVO pageQuery(Map<String, Object> reqData) {
         Page<Long> page = PageQueryUtil.startPage(reqData);
         List<Long> sids = storageMapper.pageQuery(reqData);
-        List<StorageBO> bos = storageMapper.queryBySids(sids);
+
+        List<StorageBO> bos = new ArrayList<>();
+        if (null != sids && sids.size() > 0) {
+            bos = storageMapper.queryBySids(sids);
+        }
 
         return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), StoragePageVO.convert(bos)));
     }
