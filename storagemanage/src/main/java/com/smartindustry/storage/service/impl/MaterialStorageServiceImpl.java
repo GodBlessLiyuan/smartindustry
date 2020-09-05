@@ -1,16 +1,18 @@
 package com.smartindustry.storage.service.impl;
 
 import com.github.pagehelper.Page;
-import com.google.gson.internal.$Gson$Types;
 import com.smartindustry.common.bo.im.MaterialInventoryBO;
 import com.smartindustry.common.bo.om.PickBodyBO;
 import com.smartindustry.common.bo.si.PrintLabelBO;
-import com.smartindustry.common.bo.sm.*;
+import com.smartindustry.common.bo.sm.ReceiptBodyBO;
+import com.smartindustry.common.bo.sm.StorageBO;
+import com.smartindustry.common.bo.sm.StorageDetailBO;
+import com.smartindustry.common.bo.sm.StorageGroupBO;
 import com.smartindustry.common.constant.ResultConstant;
 import com.smartindustry.common.mapper.em.TransferHeadMapper;
 import com.smartindustry.common.mapper.im.MaterialInventoryMapper;
-import com.smartindustry.common.mapper.si.PrintLabelMapper;
 import com.smartindustry.common.mapper.si.LocationMapper;
+import com.smartindustry.common.mapper.si.PrintLabelMapper;
 import com.smartindustry.common.mapper.si.StorageLabelMapper;
 import com.smartindustry.common.mapper.sm.*;
 import com.smartindustry.common.pojo.am.UserPO;
@@ -22,7 +24,6 @@ import com.smartindustry.common.pojo.si.StorageLabelPO;
 import com.smartindustry.common.pojo.sm.*;
 import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.PageQueryUtil;
-import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.ReceiptConstant;
@@ -77,33 +78,34 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData) {
-        Page<StorageBO> page = PageQueryUtil.startPage(reqData);
-        List<StorageBO> bos = storageMapper.pageQuery(reqData);
+        Page<Long> page = PageQueryUtil.startPage(reqData);
+        List<Long> sids = storageMapper.pageQuery(reqData);
+        List<StorageBO> bos = storageMapper.queryBySids(sids);
 
         return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), StoragePageVO.convert(bos)));
     }
 
     @Override
-    public ResultVO pageQueryOther(Map<String, Object> reqData){
+    public ResultVO pageQueryOther(Map<String, Object> reqData) {
         Page<StorageBO> page = PageQueryUtil.startPage(reqData);
         List<StorageBO> bos = storageMapper.pageQueryOther(reqData);
         return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), StoragePageVO.convert(bos)));
     }
 
     @Override
-    public ResultVO queryBySid(OperateDTO dto){
+    public ResultVO queryBySid(OperateDTO dto) {
         StorageBO bo = storageMapper.queryBySid(dto.getSid());
         return ResultVO.ok().setData(StoragePageVO.convert(bo));
     }
 
     @Override
-    public ResultVO queryInfo(OperateDTO dto){
+    public ResultVO queryInfo(OperateDTO dto) {
         List<PickBodyBO> bos = storageMapper.queryInfo(dto.getSid());
         return ResultVO.ok().setData(PickBodyVO.convert(bos));
     }
 
     @Override
-    public ResultVO queryPidInfo(Map<String, Object> reqData){
+    public ResultVO queryPidInfo(Map<String, Object> reqData) {
         Page<PrintLabelBO> page = PageQueryUtil.startPage(reqData);
         List<PrintLabelBO> bos = storageMapper.queryPidInfo(reqData);
         return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), PrintLabelVO.convertBO(bos)));
@@ -111,15 +113,16 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
 
     /**
      * 其他入库单的扫码入库
+     *
      * @param dto
      * @return
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ResultVO storageScan(OperateDTO dto){
+    public ResultVO storageScan(OperateDTO dto) {
         //判断当前扫码入库pid是否存在
         PrintLabelPO po1 = printLabelMapper.queryByPid(dto.getPid());
-        if(po1 == null){
+        if (po1 == null) {
             return new ResultVO(1002);
         }
         //判断当前的扫码pid是否已经被使用
@@ -130,7 +133,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         }
         //其它入库单的扫码入库,首先找到所有拣货时的pid列表
         List<String> pids = storageMapper.queryRelatePid(dto.getSid());
-        if(!pids.contains(dto.getPid())) {
+        if (!pids.contains(dto.getPid())) {
             //当前pid不符合条件
             return new ResultVO(1005);
         }
@@ -153,7 +156,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
             StorageGroupPO storageGroupPO = storageGroupMapper.selectByPrimaryKey(dto.getSgid());
             if (null != storageGroupPO.getLocationId()) {
                 StoragePO po = storageMapper.selectByPrimaryKey(dto.getSid());
-                po.setStoredNum(po.getStoredNum()+po1.getNum());
+                po.setStoredNum(po.getStoredNum() + po1.getNum());
                 po.setStatus(ReceiptConstant.MATERIAL_STORAGE_BEING);
                 storageMapper.updateByPrimaryKey(po);
 
@@ -166,19 +169,20 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         }
 
         //扫码成功之后,查询所有目前的扫码进库状态值
-        PrintLabelBO bo = storageMapper.queryPrint(dto.getSid(),dto.getPid());
+        PrintLabelBO bo = storageMapper.queryPrint(dto.getSid(), dto.getPid());
         Long id = storageGroupMapper.queryGroup(dto.getSid());
-        return ResultVO.ok().setData(StorageLabelVO.convert(bo, id)) ;
+        return ResultVO.ok().setData(StorageLabelVO.convert(bo, id));
     }
 
     /**
      * 其他入库单的删除
+     *
      * @param dto
      * @return
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ResultVO storageDelete(StorageDetailDTO dto){
+    public ResultVO storageDelete(StorageDetailDTO dto) {
         //查看入库详情表是否存在
         StorageGroupPO storageGroupPO = storageGroupMapper.selectByPrimaryKey(dto.getSgid());
         if (null == storageGroupPO) {
@@ -221,6 +225,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
 
     /**
      * 其他入库单的保存
+     *
      * @param dto
      * @return
      */
@@ -270,6 +275,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
 
     /**
      * 其他入库单的扫码同意入库
+     *
      * @param dto
      * @return
      */
@@ -328,6 +334,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
 
     /**
      * 其他入库单的详细信息查询
+     *
      * @param dto
      * @return
      */
@@ -346,7 +353,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
 
 
     @Override
-    public ResultVO agreeStorage(OperateDTO dto){
+    public ResultVO agreeStorage(OperateDTO dto) {
         UserPO user = tokenService.getLoginUser();
         StoragePO po = storageMapper.selectByPrimaryKey(dto.getSid());
         po.setStatus(ReceiptConstant.MATERIAL_STORAGE_FINISH);

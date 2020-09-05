@@ -22,10 +22,11 @@ public interface StorageMapper extends BaseMapper<StoragePO, Long> {
      * @param reqData
      * @return
      */
-    List<StorageBO> pageQuery(Map<String, Object> reqData);
+    List<Long> pageQuery(Map<String, Object> reqData);
 
     /**
      * 其他入库单的分页查询
+     *
      * @param reqData
      * @return
      */
@@ -33,6 +34,7 @@ public interface StorageMapper extends BaseMapper<StoragePO, Long> {
 
     /**
      * 根据入库id查询入库相关信息
+     *
      * @param sid
      * @return
      */
@@ -48,6 +50,7 @@ public interface StorageMapper extends BaseMapper<StoragePO, Long> {
 
     /**
      * 查询入库单的所有入库物料详情
+     *
      * @param storageId
      * @return
      */
@@ -55,6 +58,7 @@ public interface StorageMapper extends BaseMapper<StoragePO, Long> {
 
     /**
      * 根据入库id查询所有待入库pid
+     *
      * @param reqData
      * @return
      */
@@ -62,6 +66,7 @@ public interface StorageMapper extends BaseMapper<StoragePO, Long> {
 
     /**
      * 查看所有入库前拣货单相关标签
+     *
      * @param storageId
      * @return
      */
@@ -69,9 +74,18 @@ public interface StorageMapper extends BaseMapper<StoragePO, Long> {
 
     /**
      * 根据入库id和PID查询标签的详细信息
+     *
      * @param storageId
      * @param packageId
      * @return
      */
     PrintLabelBO queryPrint(@Param("sid") Long storageId, @Param("pid") String packageId);
+
+    /**
+     * 根据 sids 查询
+     *
+     * @param sids
+     * @return
+     */
+    List<StorageBO> queryBySids(List<Long> sids);
 }

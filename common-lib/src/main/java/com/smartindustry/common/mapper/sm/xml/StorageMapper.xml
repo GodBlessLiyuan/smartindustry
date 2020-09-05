@@ -179,9 +179,8 @@
             <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
         </collection>
     </resultMap>
-    <select id="pageQuery" resultMap="BOResultMap">
-        select
-        <include refid="StorageBO_Column_List"/>
+    <select id="pageQuery" resultType="java.lang.Long">
+        select distinct s.storage_id
         from sm_storage s
         left join sm_receipt_body rb on s.source_no = rb.receipt_no
         left join sm_storage_group sg on s.storage_id = sg.storage_id
@@ -195,7 +194,20 @@
         <if test="wid != null and wid != 0">and w.warehouse_id = #{wid,jdbcType=TINYINT}</if>
         <if test="type == 1">and rb.source_type in (1, 2)</if>
         <if test="type == 3">and rb.source_type = 3</if>
-        order by s.create_time desc
+        order by s.storage_id desc
+    </select>
+    <select id="queryBySids" resultMap="BOResultMap">
+        select
+        <include refid="StorageBO_Column_List"/>
+        from sm_storage s
+        left join sm_receipt_body rb on s.source_no = rb.receipt_no
+        left join sm_storage_group sg on s.storage_id = sg.storage_id
+        left join si_location l on sg.location_id = l.location_id
+        left join si_warehouse w on l.warehouse_id = w.warehouse_id
+        where rb.dr = 1 and s.source_type = 1 and s.storage_id in
+        <foreach collection="list" item="sid" separator="," open="(" close=")">
+            #{sid,jdbcType=BIGINT}
+        </foreach>
     </select>
 
 
@@ -270,44 +282,64 @@
 
     <!--    查看入库pid的详情页-->
     <select id="queryPidInfo" parameterType="java.util.Map" resultType="com.smartindustry.common.bo.si.PrintLabelBO">
-        select prl.print_label_id as printLabelId,prl.package_id as packageId,m1.material_no as materialNo,m1.material_name as materialName,m1.material_desc as materialDesc,prl.num as num
+        select prl.print_label_id as printLabelId,
+               prl.package_id     as packageId,
+               m1.material_no     as materialNo,
+               m1.material_name   as materialName,
+               m1.material_desc   as materialDesc,
+               prl.num            as num
         from sm_storage s
-        left join om_pick_head ph on s.source_no = ph.source_no
-        left join om_pick_label pl on ph.pick_head_id = pl.pick_head_id
-        left join si_print_label prl on pl.print_label_id = prl.print_label_id
-        left join si_material m1 on prl.material_id = m1.material_id
-        where s.dr = 1 and s.storage_id = #{sid,jdbcType=BIGINT} and prl.print_label_id is not null
+                 left join om_pick_head ph on s.source_no = ph.source_no
+                 left join om_pick_label pl on ph.pick_head_id = pl.pick_head_id
+                 left join si_print_label prl on pl.print_label_id = prl.print_label_id
+                 left join si_material m1 on prl.material_id = m1.material_id
+        where s.dr = 1
+          and s.storage_id = #{sid,jdbcType=BIGINT}
+          and prl.print_label_id is not null
     </select>
 
     <select id="queryInfo" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.om.PickBodyBO">
-        select m.material_id as materialId,m.material_no as materialNo,m.material_name as materialName,m.material_desc as materialDesc,pb.pick_num as pickNum
+        select m.material_id   as materialId,
+               m.material_no   as materialNo,
+               m.material_name as materialName,
+               m.material_desc as materialDesc,
+               pb.pick_num     as pickNum
         from sm_storage s
-        left join om_pick_head ph on s.source_no = ph.source_no
-        left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
-        left join si_material m on pb.material_id = m.material_id
-        where s.dr = 1 and s.storage_id = #{storageId,jdbcType=BIGINT} and m.material_id is not null
+                 left join om_pick_head ph on s.source_no = ph.source_no
+                 left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
+                 left join si_material m on pb.material_id = m.material_id
+        where s.dr = 1
+          and s.storage_id = #{storageId,jdbcType=BIGINT}
+          and m.material_id is not null
     </select>
 
     <!--    查看当前入库的待入库的标签pid-->
     <select id="queryRelatePid" parameterType="java.lang.Long" resultType="java.lang.String">
         select prl.package_id
         from sm_storage s
-        left join om_pick_head ph on s.source_no = ph.source_no
-        left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
-        left join si_material m on pb.material_id = m.material_id
-        left join om_pick_label pl on pb.pick_head_id = pl.pick_head_id
-        left join si_print_label prl on pl.print_label_id = prl.print_label_id
-        where s.dr = 1 and s.storage_id = #{storageId,jdbcType=BIGINT} and pb.material_id = prl.material_id
+                 left join om_pick_head ph on s.source_no = ph.source_no
+                 left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
+                 left join si_material m on pb.material_id = m.material_id
+                 left join om_pick_label pl on pb.pick_head_id = pl.pick_head_id
+                 left join si_print_label prl on pl.print_label_id = prl.print_label_id
+        where s.dr = 1
+          and s.storage_id = #{storageId,jdbcType=BIGINT}
+          and pb.material_id = prl.material_id
     </select>
 
     <!--    查询当前扫码入库的标签信息-->
     <select id="queryPrint" resultType="com.smartindustry.common.bo.si.PrintLabelBO">
-        select  pl.print_label_id as printLabelId,pl.package_id as packageId,m.material_no as materialNo,m.material_desc as materialDesc,pl.num as num
+        select pl.print_label_id as printLabelId,
+               pl.package_id     as packageId,
+               m.material_no     as materialNo,
+               m.material_desc   as materialDesc,
+               pl.num            as num
         from sm_storage s
-        left join sm_storage_group sg on s.storage_id = sg.storage_id
-        left join sm_storage_detail sd on sg.storage_group_id = sd.storage_group_id
-        left join si_print_label pl on sd.print_label_id = pl.print_label_id
-        left join si_material m on pl.material_id = m.material_id
-        where s.storage_id = #{sid,jdbcType=BIGINT} and pl.package_id =  #{pid,jdbcType=CHAR}
+                 left join sm_storage_group sg on s.storage_id = sg.storage_id
+                 left join sm_storage_detail sd on sg.storage_group_id = sd.storage_group_id
+                 left join si_print_label pl on sd.print_label_id = pl.print_label_id
+                 left join si_material m on pl.material_id = m.material_id
+        where s.storage_id = #{sid,jdbcType=BIGINT}
+          and pl.package_id = #{pid,jdbcType=CHAR}
     </select>
 </mapper>
