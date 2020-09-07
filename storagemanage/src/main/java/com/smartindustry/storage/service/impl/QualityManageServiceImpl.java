@@ -322,7 +322,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
             // 良品入库单
             StoragePO storagePO = new StoragePO();
             storagePO.setSourceNo(receiptBodyPO.getReceiptNo());
-            storagePO.setSourceType(receiptBodyPO.getSourceType());
+            storagePO.setSourceType((byte) 1);
             String head = receiptBodyPO.getSourceType() == 3 ? ReceiptNoUtil.MATERIAL_STORAGE_TLRK : ReceiptNoUtil.MATERIAL_STORAGE_CGRK;
             storagePO.setStorageNo(ReceiptNoUtil.genStorageNo(storageMapper, head, new Date()));
             storagePO.setPendingNum(receiptBodyPO.getGoodNum());
