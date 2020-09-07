@@ -106,6 +106,6 @@ public class ReceiptConstant {
     public static final String RECORD_TYPE_QE_CONFIRM_FRANCHISE = "QE确认-特采";
     public static final String RECORD_TYPE_QE_CONFIRM_REJECT = "QE确认-驳回";
     public static final String RECORD_TYPE_QE_CONFIRM_RETURN = "QE确认-退供应商";
-    public static final String RECORD_TYPE_STORAGE_INVOICE = "生成入库单";
+    public static final String RECORD_TYPE_STORAGE_INVOICE = "形成入库单";
     public static final String RECORD_TYPE_STORAGE_CONFIRM = "确认入库";
 }

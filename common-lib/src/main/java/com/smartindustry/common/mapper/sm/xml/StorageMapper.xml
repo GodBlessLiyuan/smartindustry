@@ -235,7 +235,9 @@
         left join om_pick_head ph on s.source_no = ph.source_no
         left join om_outbound o on ph.pick_head_id = o.pick_head_id
         where s.dr = 1 and s.source_type = 2
-        <if test="no != null and no != ''">and s.storage_no like '%' #{no,jdbcType=CHAR} '%'</if>
+        <if test="no != null and no != ''">
+           and (s.storage_no like concat('%',#{no,jdbcType=VARCHAR},'%') or s.source_no like concat('%',#{no,jdbcType=VARCHAR},'%') or o.outbound_no like concat('%',#{no,jdbcType=VARCHAR},'%'))
+        </if>
         <if test="ttype != null and ttype != 0">and th.transfer_type = #{ttype,jdbcType=TINYINT}</if>
         <if test="wid != null and wid != 0">and w.warehouse_id = #{wid,jdbcType=TINYINT}</if>
         <if test="status != null and status != 0">and s.`status` = #{status,jdbcType=TINYINT}</if>
