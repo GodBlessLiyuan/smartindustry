@@ -208,6 +208,7 @@
         <foreach collection="list" item="sid" separator="," open="(" close=")">
             #{sid,jdbcType=BIGINT}
         </foreach>
+        order by s.create_time desc
     </select>
 
 
