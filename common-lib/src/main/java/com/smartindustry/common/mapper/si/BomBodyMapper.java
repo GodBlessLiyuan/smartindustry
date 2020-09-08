@@ -68,4 +68,11 @@ public interface BomBodyMapper extends BaseMapper<BomBodyPO, Long> {
      * @return
      */
     BomBodyPO queryParentId(@Param("parentId") Long parentId);
+
+    /**
+     * 根据上级物料明细id查询当前节点是否有关联的节点
+     * @param parentId
+     * @return
+     */
+    BomBodyPO queryByPid(@Param("parentId") Long parentId);
 }

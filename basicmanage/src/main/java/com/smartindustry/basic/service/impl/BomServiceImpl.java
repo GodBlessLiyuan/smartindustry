@@ -136,7 +136,13 @@ public class BomServiceImpl implements IBomService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO deleteBody(OperateDTO dto) {
-
+        for(Long bbid:dto.getBbids()){
+            BomBodyPO po = bomBodyMapper.queryByPid(bbid);
+            if(po != null){
+                //当前物料明细存在关联,不可删除
+                return new ResultVO(1007);
+            }
+        }
         bomBodyMapper.deleteBodyBatch(dto.getBbids());
         //根据bhid查询当前物料明细的所有相关物料，若批量删除，则更新相关物料数目
         BomHeadPO bhpo = bomHeadMapper.selectByPrimaryKey(dto.getBhid());
@@ -188,7 +194,7 @@ public class BomServiceImpl implements IBomService {
     public ResultVO editDetail(BomBodyDTO dto) {
 
         //在编辑时不能让上级物料明细id和本身的物料明细id相同
-        if (dto.getPid() != null && dto.getBbid().equals(dto.getPid())){
+        if (dto.getBbid()!= null && dto.getPid() != null && dto.getBbid().equals(dto.getPid())){
             return new ResultVO(1025);
         }
         UserPO user = tokenService.getLoginUser();
