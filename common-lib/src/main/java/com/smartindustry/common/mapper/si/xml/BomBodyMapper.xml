@@ -301,4 +301,16 @@
     </if>
     limit 1
   </select>
+
+  <!--  根据上级物料id查询bbid-->
+  <select id="queryByPid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from si_bom_body
+    where dr = 1
+    <if test="parentId != null and parentId !=''">
+      and parent_id = #{parentId,jdbcType=BIGINT}
+    </if>
+    limit 1
+  </select>
 </mapper>
