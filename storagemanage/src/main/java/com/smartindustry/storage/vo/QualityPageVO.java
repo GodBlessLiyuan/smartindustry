@@ -95,7 +95,7 @@ public class QualityPageVO implements Serializable {
         vo.setMno(bo.getMaterialNo());
         vo.setMdesc(bo.getMaterialDesc());
         vo.setTtype(bo.getTestType());
-        vo.setOtype(bo.getOrderType());
+        vo.setOtype(bo.getSourceType());
         vo.setAnum(bo.getAcceptNum());
         vo.setGnum(bo.getGoodNum());
         vo.setBnum(bo.getBadNum());
