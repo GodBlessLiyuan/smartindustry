@@ -80,7 +80,7 @@ public class OutboundConstant {
     public static final String RECORD_DISAGREE = "审核-驳回";
     public static final String RECORD_OUTBOUND_ORDER = "形成审核单";
     public static final String RECORD_AGREE_OUT = "同意出库";
-    public static final String RECORD_OQC = "OQC检测";
+    public static final String RECORD_OQC = "OQC报检";
 
     /**
      * OQC审核的同意
