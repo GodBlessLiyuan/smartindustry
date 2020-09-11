@@ -92,7 +92,7 @@
         where supplier_record_id = #{supplierRecordId,jdbcType=BIGINT}
     </update>
 
-    <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.SupplierRecordBO">
+    <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.SupplierRecordBO" extends="BaseResultMap">
         <result column="name" jdbcType="CHAR" property="name"/>
     </resultMap>
     <select id="queryBySid" parameterType="java.lang.Long" resultMap="BOResultMap">

@@ -92,7 +92,7 @@
         where location_record_id = #{locationRecordId,jdbcType=BIGINT}
     </update>
 
-    <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.LocationRecordBO">
+    <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.LocationRecordBO" extends="BaseResultMap">
         <result column="name" jdbcType="CHAR" property="name"/>
     </resultMap>
     <select id="queryByLid" parameterType="java.lang.Long" resultMap="BOResultMap">

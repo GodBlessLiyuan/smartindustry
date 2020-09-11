@@ -92,7 +92,7 @@
         where material_record_id = #{materialRecordId,jdbcType=BIGINT}
     </update>
 
-    <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.MaterialRecordBO">
+    <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.MaterialRecordBO" extends="BaseResultMap">
         <result column="name" jdbcType="CHAR" property="name"/>
     </resultMap>
     <select id="queryByMid" parameterType="java.lang.Long" resultMap="BOResultMap">
