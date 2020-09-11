@@ -307,10 +307,7 @@
     select
     <include refid="Base_Column_List" />
     from si_bom_body
-    where dr = 1
-    <if test="parentId != null and parentId !=''">
-      and parent_id = #{parentId,jdbcType=BIGINT}
-    </if>
+    where dr = 1 and parent_id = #{parentId,jdbcType=BIGINT}
     limit 1
   </select>
 </mapper>
