@@ -120,7 +120,7 @@ public class RoleServiceImpl implements IRoleService {
         }
         for(Long rid:rids){
             List<UserPO> pos = userMapper.queryUserRole(rid);
-            if(pos.isEmpty()){
+            if(!pos.isEmpty()){
                 return new ResultVO(1007);
             }
             deleteRole(rid);
