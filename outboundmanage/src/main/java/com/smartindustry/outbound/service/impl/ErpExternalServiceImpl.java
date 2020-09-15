@@ -14,11 +14,11 @@ import com.smartindustry.common.pojo.om.PickBodyPO;
 import com.smartindustry.common.pojo.om.PickHeadPO;
 import com.smartindustry.common.pojo.si.ConfigPO;
 import com.smartindustry.common.security.service.TokenService;
+import com.smartindustry.common.util.DateUtil;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.constant.OutboundConstant;
 import com.smartindustry.outbound.dto.PickDTO;
 import com.smartindustry.outbound.service.IErpExternalService;
-import com.smartindustry.outbound.util.DateSortUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -64,7 +64,7 @@ public class ErpExternalServiceImpl implements IErpExternalService {
         List<PickBodyPO> bodyPOs = PickDTO.convert(headPO, dto.getBody());
         pickBodyMapper.batchInsert(bodyPOs);
         outboundRecordMapper.insert(new OutboundRecordPO(headPO.getPickHeadId(), null, user.getUserId(), user.getName(), OutboundConstant.RECORD_ADD, OutboundConstant.MATERIAL_STATUS_PICK));
-        DateSortUtil sort = new DateSortUtil();
+        DateUtil sort = new DateUtil();
         // 推荐货位
         new Thread(() -> {
             Map<Long, LabelRecommendPO> labelRecommendPOs = new HashMap<>();
