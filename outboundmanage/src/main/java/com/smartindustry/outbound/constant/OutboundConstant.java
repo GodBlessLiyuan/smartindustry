@@ -133,4 +133,17 @@ public class OutboundConstant {
 
     //  物料入库
     public static final Byte RECEIPT_MATERIAL_STORAGE = 20;
+
+    /**
+     * 销售、采购、生产PID强关联 - KEY
+     */
+    public static final String K_PID_RELATE = "pid_relate";
+    /**
+     * 是
+     */
+    public static final String V_YES = "Y";
+    /**
+     * 否
+     */
+    public static final String V_NO = "N";
 }

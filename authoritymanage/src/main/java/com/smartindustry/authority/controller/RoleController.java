@@ -86,4 +86,20 @@ public class RoleController {
         return roleService.queryRoleRecord(reqData);
     }
 
+
+    @Autowired
+    AuthorityMapper authorityMapper;
+    @Autowired
+    MUserAuthorityMapper mUserAuthorityMapper;
+    /**
+     * 工具接口
+     */
+    @PostMapping("insertAdmin")
+    public ResultVO insertAdmin() {
+
+        List<Long> pos = authorityMapper.selectAllId();
+        mUserAuthorityMapper.insertBatch(1L,pos);
+        return ResultVO.ok();
+    }
+
 }

@@ -208,6 +208,7 @@ public class PickManageServiceImpl implements IPickManageService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO pickPidOut(Long pickHeadId, String packageId) {
+
         //1.首先根据输入的PID,得到相应PID的信息，进行展示
         PrintLabelBO bo = pickHeadMapper.pickPid(packageId);
         PickHeadPO po = pickHeadMapper.selectByPrimaryKey(pickHeadId);
@@ -215,11 +216,16 @@ public class PickManageServiceImpl implements IPickManageService {
             // 提示没有这个PID号
             return new ResultVO(1015);
         }
-        //若输入的PID并不属于该工单对应采购单的物料范围，则提示该物料并不属于该工单
-        String ono = pickHeadMapper.queryOnoByPid(bo.getPrintLabelId());
-        if (!ono.equals(po.getSourceNo())) {
-            return new ResultVO(1016);
+        //当销售，生产，采购强关联时，工单所扫码的PID来源必须是销售采购来源
+        ConfigPO configPO = configMapper.queryByKey(OutboundConstant.K_PID_RELATE);
+        if (null != configPO && OutboundConstant.V_YES.equals(configPO.getConfigValue())) {
+            //若输入的PID并不属于该工单对应采购单的物料范围，则提示该物料并不属于该工单
+            String ono = pickHeadMapper.queryOnoByPid(bo.getPrintLabelId());
+            if (!ono.equals(po.getSourceNo())) {
+                return new ResultVO(1016);
+            }
         }
+
         // 判断当前物料不在拣货清单中，则提示 该物料并不在出库清单中
         List<String> maList = pickHeadMapper.judgeMaterial(pickHeadId);
         boolean flag = maList.contains(bo.getMaterialNo());
