@@ -73,9 +73,9 @@ INSERT INTO `am_authority` VALUES (104, '生产退料入库单-查询', 'sm:ms:p
 INSERT INTO `am_authority` VALUES (105, '生产退料入库单-扫码入库', 'sm:ms:prr:scan', 2, 27);
 INSERT INTO `am_authority` VALUES (106, '生产退料入库单-查看', 'sm:ms:prr:queryinfo', 2, 27);
 
-INSERT INTO `am_authority` VALUES (107, '其他入库单-查询', 'sm:ms:prr:query', 2, 28);
-INSERT INTO `am_authority` VALUES (108, '其他入库单-扫码入库', 'sm:ms:prr:scan', 2, 28);
-INSERT INTO `am_authority` VALUES (109, '其他入库单-查看', 'sm:ms:prr:queryinfo', 2, 28);
+INSERT INTO `am_authority` VALUES (107, '其他入库单-查询', 'sm:ms:owr:query', 2, 28);
+INSERT INTO `am_authority` VALUES (108, '其他入库单-扫码入库', 'sm:ms:owr:scan', 2, 28);
+INSERT INTO `am_authority` VALUES (109, '其他入库单-查看', 'sm:ms:owr:queryinfo', 2, 28);
 
 
 INSERT INTO `am_authority` VALUES (2, '出库管理', 'om', 1, 0);
@@ -201,3 +201,6 @@ INSERT INTO `am_authority` VALUES (244, '系统配置', 'bm:am:sys', 1, 223);
 INSERT INTO `am_user`(`user_id`, `name`, `sex`, `dept_id`, `username`, `password`, `role_id`, `job`, `phone`, `email`, `status`, `remark`, `create_time`, `update_time`, `dr`) VALUES (1, 'admin', 1, 1, 'admin', '$2a$10$2TDU3UozsFbb2TLgGSxc5ej10Ja42yBjYoJkdiuaH/zs24Md9nZY2', 1, '1', '18167772222', '601064569@qq.com', 1, '1', '2020-08-10 16:11:03', '2020-08-10 16:12:26', 1);
 INSERT INTO `am_dept`(`dept_id`, `parent_id`, `dept_name`, `user_id`, `dept_desc`, `status`, `create_time`, `update_time`, `dr`) VALUES (1, NULL, '东南院', 1, '事业单位', 1, '2020-07-30 10:52:57', '2020-07-30 10:52:59', 1);
 
+INSERT INTO `si_config` VALUES (1, 'pid_relate', 'Y');
+INSERT INTO `si_config` VALUES (2, 'storage_quality', 'Y');
+INSERT INTO `si_config` VALUES (3, 'outbound_quality', 'Y');
