@@ -120,7 +120,7 @@ public class RoleServiceImpl implements IRoleService {
         }
         for(Long rid:rids){
             List<UserPO> pos = userMapper.queryUserRole(rid);
-            if(pos.isEmpty()){
+            if(!pos.isEmpty()){
                 return new ResultVO(1007);
             }
             deleteRole(rid);
@@ -193,7 +193,7 @@ public class RoleServiceImpl implements IRoleService {
         // 先删除角色权限表关于当前角色的所有权限
         roleAuthorityMapper.deleteByRoleId(dto.getRid());
         // 再根据权限id列表更新角色权限表
-        if(dto.getPerms().size()!=0){
+        if(dto.getPerms() != null && dto.getPerms().size()!=0){
             roleAuthorityMapper.insertBatch(dto.getRid(),dto.getPerms());
             // 先根据角色id找出所有符合用户角色的用户id
             List<Long> uids = userMapper.queryUser(dto.getRid());
