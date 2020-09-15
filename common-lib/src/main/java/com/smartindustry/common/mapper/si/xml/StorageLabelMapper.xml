@@ -267,6 +267,7 @@
         <if test="orderNo != null and orderNo != ''">
             and sl.source_no = #{orderNo,jdbcType=CHAR}
         </if>
+        order by sl.storage_time desc
     </select>
     <insert id="batchInsert" parameterType="java.util.List">
         insert into si_storage_label (storage_label_id, print_label_id, material_id,
