@@ -27,6 +27,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -226,5 +227,6 @@ public class RoleServiceImpl implements IRoleService {
         List<RoleRecordBO> bos = roleRecordMapper.queryRoleRecord(reqData);
         return ResultVO.ok().setData(RoleRecordVO.convert(bos));
     }
+
 
 }
