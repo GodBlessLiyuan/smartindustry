@@ -194,7 +194,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
 
             // 生产出库单
             StoragePO storagePO = new StoragePO();
-            storagePO.setSourceNo(bodyPO.getSourceNo());
+            storagePO.setSourceNo(bodyPO.getReceiptNo());
             storagePO.setSourceType((byte) 1);
             storagePO.setStorageNo(ReceiptNoUtil.genStorageNo(storageMapper, ReceiptNoUtil.MATERIAL_STORAGE_LPPK, new Date()));
             storagePO.setPendingNum(bodyPO.getGoodNum());
