@@ -190,6 +190,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
             bodyPO.setStatus(ReceiptConstant.RECEIPT_MATERIAL_STORAGE);
             bodyPO.setGoodNum(labelNum);
             bodyPO.setBadNum(0);
+            bodyPO.setStockNum(0);
             receiptBodyMapper.updateByPrimaryKey(bodyPO);
 
             // 生产出库单
