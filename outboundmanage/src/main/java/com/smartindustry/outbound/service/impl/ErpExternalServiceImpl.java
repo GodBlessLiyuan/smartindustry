@@ -18,15 +18,13 @@ import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.constant.OutboundConstant;
 import com.smartindustry.outbound.dto.PickDTO;
 import com.smartindustry.outbound.service.IErpExternalService;
+import com.smartindustry.outbound.util.DateSortUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author: xiahui
@@ -66,7 +64,7 @@ public class ErpExternalServiceImpl implements IErpExternalService {
         List<PickBodyPO> bodyPOs = PickDTO.convert(headPO, dto.getBody());
         pickBodyMapper.batchInsert(bodyPOs);
         outboundRecordMapper.insert(new OutboundRecordPO(headPO.getPickHeadId(), null, user.getUserId(), user.getName(), OutboundConstant.RECORD_ADD, OutboundConstant.MATERIAL_STATUS_PICK));
-
+        DateSortUtil sort = new DateSortUtil();
         // 推荐货位
         new Thread(() -> {
             Map<Long, LabelRecommendPO> labelRecommendPOs = new HashMap<>();
@@ -75,8 +73,10 @@ public class ErpExternalServiceImpl implements IErpExternalService {
                 List<StorageLabelBO> storageLabelBOS = new ArrayList<>();
                 if (null != configPO && OutboundConstant.V_YES.equals(configPO.getConfigValue())) {
                     storageLabelBOS = storageLabelMapper.queryNotRecommend(headPO.getSourceNo(), bodyPO.getMaterialId());
+                    Collections.sort(storageLabelBOS,sort);
                 }else{
                     storageLabelBOS = storageLabelMapper.queryNotRecommend(null,bodyPO.getMaterialId());
+                    Collections.sort(storageLabelBOS,sort);
                 }
                 int num = 0;
                 for (StorageLabelBO storageLabelBO : storageLabelBOS) {

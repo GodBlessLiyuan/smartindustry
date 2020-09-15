@@ -21,4 +21,6 @@ public class StorageLabelBO extends StorageLabelPO {
     private String materialLockName;
     private String supplierName;
     private String produceBatch;
+
+    private String produceDate;
 }
