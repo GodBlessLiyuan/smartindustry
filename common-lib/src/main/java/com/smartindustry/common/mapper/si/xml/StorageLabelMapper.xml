@@ -261,13 +261,14 @@
         select
         <include refid="BO_Column_List"/>
         from si_storage_label sl
+        left join si_print_label pl on sl.print_label_id = pl.print_label_id
         left join si_location l on sl.location_id = l.location_id
         where sl.material_id = #{materialId,jdbcType=BIGINT} and sl.type = 1 and sl.material_lock_id is null
-        and sl.`status` = 1
+        and sl.`status` = 1 and pl.dr = 1
         <if test="orderNo != null and orderNo != ''">
             and sl.source_no = #{orderNo,jdbcType=CHAR}
         </if>
-        order by sl.storage_time asc
+        order by pl.create_time asc
     </select>
     <insert id="batchInsert" parameterType="java.util.List">
         insert into si_storage_label (storage_label_id, print_label_id, material_id,
