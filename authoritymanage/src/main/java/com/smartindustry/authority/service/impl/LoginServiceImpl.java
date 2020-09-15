@@ -18,6 +18,7 @@ import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.smartindustry.common.security.service.TokenService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.security.authentication.AuthenticationManager;
 
@@ -56,7 +57,7 @@ public class LoginServiceImpl implements ILoginService {
         }
         // 用户验证
         Authentication authentication = null;
-        // 生成token  该方法会去调用UserDetailsServiceImpl.loadUserByUsername
+        // 生成token  该方法会去调用UserDetailsService.loadUserByUsername
         try {
             authentication = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()));
