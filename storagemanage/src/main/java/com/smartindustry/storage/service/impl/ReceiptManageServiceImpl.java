@@ -43,7 +43,7 @@ import java.util.Map;
  * @version: 1.0
  */
 @EnableTransactionManagement
-@Servicedelete
+@Service
 public class ReceiptManageServiceImpl implements IReceiptManageService {
     @Autowired
     private ReceiptHeadMapper receiptHeadMapper;

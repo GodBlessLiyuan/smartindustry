@@ -127,21 +127,4 @@ public class DateUtil{
             }
         });
     }
-
-    public static void main(String[] args) {
-        StorageLabelBO bo1 = new StorageLabelBO();
-        bo1.setProduceDate("2021-05-21");
-        StorageLabelBO bo2 = new StorageLabelBO();
-        bo2.setProduceDate("2022-04-23");
-        StorageLabelBO bo3 = new StorageLabelBO();
-        bo3.setProduceDate("2021-05-22");
-
-        List<StorageLabelBO> bos = new ArrayList<StorageLabelBO>();
-        bos.add(bo1);
-        bos.add(bo2);
-        bos.add(bo3);
-        DateUtil.sort(bos,"produceDate", true,false,null);
-        System.out.println(bos);
-    }
-
 }
