@@ -177,4 +177,23 @@
             pick_split            = #{pickSplit,jdbcType=TINYINT}
         where material_attribute_id = #{materialAttributeId,jdbcType=BIGINT}
     </update>
+
+    <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.MaterialAttributeBO" extends="BaseResultMap">
+        <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
+        <result column="location_name" jdbcType="CHAR" property="locationName"/>
+    </resultMap>
+    <sql id="BO_Column_List">
+        ma.material_attribute_id, ma.lower_limit, ma.upper_limit, ma.default_purchase, ma.way, ma.warehouse_id,
+    ma.location_id, ma.storage_inspect, ma.storage_inspect_type, ma.storage_sampling_plan, ma.outbound_inspect,
+    ma.pick_split,
+    w.warehouse_name, l.location_name
+    </sql>
+    <select id="queryById" parameterType="java.lang.Long" resultMap="BOResultMap">
+        select
+        <include refid="BO_Column_List"/>
+        from si_material_attribute ma
+        left join si_warehouse w on ma.warehouse_id = w.warehouse_id
+        left join si_location l on ma.location_id = l.location_id
+        where material_attribute_id = #{maid,jdbcType=BIGINT}
+    </select>
 </mapper>

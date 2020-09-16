@@ -1,5 +1,6 @@
 package com.smartindustry.common.mapper.si;
 
+import com.smartindustry.common.bo.si.MaterialAttributeBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.si.MaterialAttributePO;
 import org.apache.ibatis.annotations.Mapper;
@@ -9,4 +10,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface MaterialAttributeMapper extends BaseMapper<MaterialAttributePO, Long> {
+    MaterialAttributeBO queryById(Long maid);
 }

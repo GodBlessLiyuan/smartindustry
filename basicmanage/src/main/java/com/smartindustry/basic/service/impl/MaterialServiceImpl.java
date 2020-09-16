@@ -6,8 +6,10 @@ import com.smartindustry.basic.dto.MaterialAttributeDTO;
 import com.smartindustry.basic.dto.MaterialDTO;
 import com.smartindustry.basic.dto.OperateDTO;
 import com.smartindustry.basic.service.IMaterialService;
+import com.smartindustry.basic.vo.MaterialAttributeVO;
 import com.smartindustry.basic.vo.MaterialRecordVO;
 import com.smartindustry.basic.vo.MaterialVO;
+import com.smartindustry.common.bo.si.MaterialAttributeBO;
 import com.smartindustry.common.bo.si.MaterialBO;
 import com.smartindustry.common.bo.si.MaterialRecordBO;
 import com.smartindustry.common.config.FilePathConfig;
@@ -169,7 +171,13 @@ public class MaterialServiceImpl implements IMaterialService {
             return new ResultVO(1002);
         }
 
-        return ResultVO.ok().setData(MaterialVO.convert(materialBO, filePathConfig));
+        MaterialVO vo = MaterialVO.convert(materialBO, filePathConfig);
+        if (null != materialBO.getMaterialAttributeId()) {
+            MaterialAttributeBO attributeBO = materialAttributeMapper.queryById(materialBO.getMaterialAttributeId());
+            vo.setMattribute(MaterialAttributeVO.convert(attributeBO));
+        }
+
+        return ResultVO.ok().setData(vo);
     }
 
     @Override

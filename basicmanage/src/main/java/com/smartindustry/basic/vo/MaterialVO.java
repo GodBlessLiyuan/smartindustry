@@ -46,6 +46,7 @@ public class MaterialVO implements Serializable {
     private String sname;
     private String mdesc;
     private List<FileVO> files;
+    private MaterialAttributeVO mattribute;
 
     public static List<MaterialVO> convert(List<MaterialBO> bos, FilePathConfig config) {
         List<MaterialVO> vos = new ArrayList<>(bos.size());
