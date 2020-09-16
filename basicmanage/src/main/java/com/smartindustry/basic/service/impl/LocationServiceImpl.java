@@ -123,4 +123,10 @@ public class LocationServiceImpl implements ILocationService {
         List<Map<String, Object>> res = locationMapper.queryAll();
         return ResultVO.ok().setData(res);
     }
+
+    @Override
+    public ResultVO queryByWid(OperateDTO dto) {
+        List<Map<String, Object>> res = locationMapper.queryKvByWid(dto.getWid());
+        return ResultVO.ok().setData(res);
+    }
 }

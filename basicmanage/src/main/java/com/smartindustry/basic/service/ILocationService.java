@@ -25,4 +25,6 @@ public interface ILocationService {
     ResultVO record(OperateDTO dto);
 
     ResultVO queryAll();
+
+    ResultVO queryByWid(OperateDTO dto);
 }

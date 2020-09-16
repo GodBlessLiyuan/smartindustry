@@ -85,12 +85,22 @@ public class LocationController {
     }
 
     /**
-     * 仓库 查询
+     * 货位 查询
      *
      * @return
      */
     @PostMapping("queryAll")
     public ResultVO queryAll() {
         return locationService.queryAll();
+    }
+
+    /**
+     * 根据 仓库ID 查询
+     *
+     * @return
+     */
+    @PostMapping("queryByWid")
+    public ResultVO queryByWid(@RequestBody OperateDTO dto) {
+        return locationService.queryByWid(dto);
     }
 }

@@ -69,6 +69,7 @@ public interface LocationMapper extends BaseMapper<LocationPO, Long> {
 
     /**
      * 查看当前的入库调拨单的调入仓库是否有库位存在
+     *
      * @param wid
      * @return
      */
@@ -76,8 +77,17 @@ public interface LocationMapper extends BaseMapper<LocationPO, Long> {
 
     /**
      * 根据sid入库单查看是否存在库位
+     *
      * @param sid
      * @return
      */
     List<LocationPO> queryLocBySid(Long sid);
+
+    /**
+     * 根据 wid 查询 KV 组合
+     *
+     * @param wid
+     * @return
+     */
+    List<Map<String, Object>> queryKvByWid(Long wid);
 }
