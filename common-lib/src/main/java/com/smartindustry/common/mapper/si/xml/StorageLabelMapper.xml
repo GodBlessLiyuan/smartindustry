@@ -186,11 +186,12 @@
 
     <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.StorageLabelBO" extends="BaseResultMap">
         <result column="location_no" jdbcType="CHAR" property="locationNo"/>
+        <result column="produce_date" jdbcType="CHAR" property="produceDate"/>
     </resultMap>
     <sql id="BO_Column_List">
         sl.storage_label_id, sl.print_label_id, sl.material_id, sl.location_id, sl.package_id, sl.source_no,
     sl.source_type, sl.`type`, sl.storage_num, sl.storage_time, sl.material_lock_id, sl.`status`,
-    l.location_no
+    l.location_no,pl.produce_date
     </sql>
 
     <resultMap id="IMBOResultMap" type="com.smartindustry.common.bo.si.StorageLabelBO" extends="BOResultMap">
@@ -261,9 +262,10 @@
         select
         <include refid="BO_Column_List"/>
         from si_storage_label sl
+        left join si_print_label pl on sl.print_label_id = pl.print_label_id
         left join si_location l on sl.location_id = l.location_id
         where sl.material_id = #{materialId,jdbcType=BIGINT} and sl.type = 1 and sl.material_lock_id is null
-        and sl.`status` = 1
+        and sl.`status` = 1 and pl.dr = 1
         <if test="orderNo != null and orderNo != ''">
             and sl.source_no = #{orderNo,jdbcType=CHAR}
         </if>
