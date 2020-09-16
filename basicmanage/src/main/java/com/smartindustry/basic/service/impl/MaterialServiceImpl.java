@@ -2,6 +2,7 @@ package com.smartindustry.basic.service.impl;
 
 import com.github.pagehelper.Page;
 import com.smartindustry.basic.constant.BasicConstant;
+import com.smartindustry.basic.dto.MaterialAttributeDTO;
 import com.smartindustry.basic.dto.MaterialDTO;
 import com.smartindustry.basic.dto.OperateDTO;
 import com.smartindustry.basic.service.IMaterialService;
@@ -13,6 +14,7 @@ import com.smartindustry.common.config.FilePathConfig;
 import com.smartindustry.common.constant.ResultConstant;
 import com.smartindustry.common.mapper.im.MaterialInventoryMapper;
 import com.smartindustry.common.mapper.om.PickBodyMapper;
+import com.smartindustry.common.mapper.si.MaterialAttributeMapper;
 import com.smartindustry.common.mapper.si.MaterialMapper;
 import com.smartindustry.common.mapper.si.MaterialRecordMapper;
 import com.smartindustry.common.mapper.si.MaterialSpecificationMapper;
@@ -20,6 +22,7 @@ import com.smartindustry.common.mapper.sm.ReceiptBodyMapper;
 import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.im.MaterialInventoryPO;
 import com.smartindustry.common.pojo.om.PickBodyPO;
+import com.smartindustry.common.pojo.si.MaterialAttributePO;
 import com.smartindustry.common.pojo.si.MaterialPO;
 import com.smartindustry.common.pojo.si.MaterialRecordPO;
 import com.smartindustry.common.pojo.sm.ReceiptBodyPO;
@@ -48,6 +51,8 @@ import java.util.*;
 public class MaterialServiceImpl implements IMaterialService {
     @Autowired
     private MaterialMapper materialMapper;
+    @Autowired
+    private MaterialAttributeMapper materialAttributeMapper;
     @Autowired
     private MaterialRecordMapper materialRecordMapper;
     @Autowired
@@ -83,6 +88,12 @@ public class MaterialServiceImpl implements IMaterialService {
         if (null == dto.getMid()) {
             // 新增
             MaterialPO materialPO = MaterialDTO.createPO(dto);
+            // 物料属性
+            if (null != dto.getMattribute()) {
+                MaterialAttributePO attributePO = MaterialAttributeDTO.createPO(dto.getMattribute());
+                materialAttributeMapper.insert(attributePO);
+                materialPO.setMaterialAttributeId(attributePO.getMaterialAttributeId());
+            }
             materialMapper.insert(materialPO);
             materialRecordMapper.insert(new MaterialRecordPO(materialPO.getMaterialId(), user.getUserId(), BasicConstant.RECORD_ADD));
 
@@ -102,6 +113,22 @@ public class MaterialServiceImpl implements IMaterialService {
         MaterialPO materialPO = materialMapper.selectByPrimaryKey(dto.getMid());
         if (null == materialPO) {
             return new ResultVO(1002);
+        }
+
+        // 物料属性
+        if (null == materialPO.getMaterialAttributeId()) {
+            if (null != dto.getMattribute()) {
+                MaterialAttributePO attributePO = MaterialAttributeDTO.createPO(dto.getMattribute());
+                materialAttributeMapper.insert(attributePO);
+                materialPO.setMaterialAttributeId(attributePO.getMaterialAttributeId());
+            }
+        } else {
+            MaterialAttributePO attributePO = materialAttributeMapper.selectByPrimaryKey(materialPO.getMaterialAttributeId());
+            if (null == attributePO) {
+                return new ResultVO(1002);
+            }
+            MaterialAttributeDTO.buildPO(attributePO, dto.getMattribute());
+            materialAttributeMapper.updateByPrimaryKey(attributePO);
         }
 
         MaterialDTO.buildPO(materialPO, dto);

@@ -92,6 +92,10 @@ public class MaterialDTO implements Serializable {
      * 物料规格书
      */
     private List<FileDTO> files;
+    /**
+     * 物料属性
+     */
+    private MaterialAttributeDTO mattribute;
 
     public static MaterialPO createPO(MaterialDTO dto) {
         MaterialPO po = new MaterialPO();
