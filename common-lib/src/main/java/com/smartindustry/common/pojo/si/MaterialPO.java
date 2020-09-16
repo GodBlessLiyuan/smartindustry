@@ -16,6 +16,8 @@ public class MaterialPO implements Serializable {
 
     private String materialNo;
 
+    private Long materialPropertyId;
+
     /**
      * 1：原材料
      * 2：半成品

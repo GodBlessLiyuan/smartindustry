@@ -4,6 +4,7 @@
     <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.MaterialPO">
         <id column="material_id" jdbcType="BIGINT" property="materialId"/>
         <result column="material_no" jdbcType="CHAR" property="materialNo"/>
+        <result column="material_property_id" jdbcType="BIGINT" property="materialPropertyId"/>
         <result column="material_type" jdbcType="TINYINT" property="materialType"/>
         <result column="material_type_id" jdbcType="BIGINT" property="materialTypeId"/>
         <result column="humidity_level_id" jdbcType="BIGINT" property="humidityLevelId"/>
@@ -26,10 +27,10 @@
         <result column="dr" jdbcType="TINYINT" property="dr"/>
     </resultMap>
     <sql id="Base_Column_List">
-        material_id, material_no, material_type, material_type_id, humidity_level_id, material_level_id,
-    measure_unit_id, material_version_id, produce_loss_level_id, life_cycle_state_id, 
-    material_name, delivery_days, moq, material_model, material_draw, supplier_id, material_desc, 
-    test_type, user_id, create_time, update_time, dr
+        material_id, material_no, material_property_id, material_type, material_type_id,
+    humidity_level_id, material_level_id, measure_unit_id, material_version_id, produce_loss_level_id, 
+    life_cycle_state_id, material_name, delivery_days, moq, material_model, material_draw, 
+    supplier_id, material_desc, test_type, user_id, create_time, update_time, dr
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
@@ -44,24 +45,24 @@
     </delete>
     <insert id="insert" parameterType="com.smartindustry.common.pojo.si.MaterialPO" useGeneratedKeys="true"
             keyProperty="materialId">
-        insert into si_material (material_id, material_no, material_type,
-                                 material_type_id, humidity_level_id, material_level_id,
-                                 measure_unit_id, material_version_id, produce_loss_level_id,
-                                 life_cycle_state_id, material_name, delivery_days,
-                                 moq, material_model, material_draw,
-                                 supplier_id, material_desc, test_type,
-                                 user_id, create_time, update_time,
-                                 dr)
-        values (#{materialId,jdbcType=BIGINT}, #{materialNo,jdbcType=CHAR}, #{materialType,jdbcType=TINYINT},
-                #{materialTypeId,jdbcType=BIGINT}, #{humidityLevelId,jdbcType=BIGINT},
-                #{materialLevelId,jdbcType=BIGINT},
-                #{measureUnitId,jdbcType=BIGINT}, #{materialVersionId,jdbcType=BIGINT},
-                #{produceLossLevelId,jdbcType=BIGINT},
-                #{lifeCycleStateId,jdbcType=BIGINT}, #{materialName,jdbcType=CHAR}, #{deliveryDays,jdbcType=INTEGER},
-                #{moq,jdbcType=CHAR}, #{materialModel,jdbcType=CHAR}, #{materialDraw,jdbcType=CHAR},
-                #{supplierId,jdbcType=BIGINT}, #{materialDesc,jdbcType=CHAR}, #{testType,jdbcType=TINYINT},
-                #{userId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
-                #{dr,jdbcType=TINYINT})
+        insert into si_material (material_id, material_no, material_property_id,
+                                 material_type, material_type_id, humidity_level_id,
+                                 material_level_id, measure_unit_id, material_version_id,
+                                 produce_loss_level_id, life_cycle_state_id, material_name,
+                                 delivery_days, moq, material_model,
+                                 material_draw, supplier_id, material_desc,
+                                 test_type, user_id, create_time,
+                                 update_time, dr)
+        values (#{materialId,jdbcType=BIGINT}, #{materialNo,jdbcType=CHAR}, #{materialPropertyId,jdbcType=BIGINT},
+                #{materialType,jdbcType=TINYINT}, #{materialTypeId,jdbcType=BIGINT}, #{humidityLevelId,jdbcType=BIGINT},
+                #{materialLevelId,jdbcType=BIGINT}, #{measureUnitId,jdbcType=BIGINT},
+                #{materialVersionId,jdbcType=BIGINT},
+                #{produceLossLevelId,jdbcType=BIGINT}, #{lifeCycleStateId,jdbcType=BIGINT},
+                #{materialName,jdbcType=CHAR},
+                #{deliveryDays,jdbcType=INTEGER}, #{moq,jdbcType=CHAR}, #{materialModel,jdbcType=CHAR},
+                #{materialDraw,jdbcType=CHAR}, #{supplierId,jdbcType=BIGINT}, #{materialDesc,jdbcType=CHAR},
+                #{testType,jdbcType=TINYINT}, #{userId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP},
+                #{updateTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
     </insert>
     <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.MaterialPO">
         insert into si_material
@@ -71,6 +72,9 @@
             </if>
             <if test="materialNo != null">
                 material_no,
+            </if>
+            <if test="materialPropertyId != null">
+                material_property_id,
             </if>
             <if test="materialType != null">
                 material_type,
@@ -140,6 +144,9 @@
             <if test="materialNo != null">
                 #{materialNo,jdbcType=CHAR},
             </if>
+            <if test="materialPropertyId != null">
+                #{materialPropertyId,jdbcType=BIGINT},
+            </if>
             <if test="materialType != null">
                 #{materialType,jdbcType=TINYINT},
             </if>
@@ -208,6 +215,9 @@
             <if test="materialNo != null">
                 material_no = #{materialNo,jdbcType=CHAR},
             </if>
+            <if test="materialPropertyId != null">
+                material_property_id = #{materialPropertyId,jdbcType=BIGINT},
+            </if>
             <if test="materialType != null">
                 material_type = #{materialType,jdbcType=TINYINT},
             </if>
@@ -274,6 +284,7 @@
     <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.MaterialPO">
         update si_material
         set material_no           = #{materialNo,jdbcType=CHAR},
+            material_property_id  = #{materialPropertyId,jdbcType=BIGINT},
             material_type         = #{materialType,jdbcType=TINYINT},
             material_type_id      = #{materialTypeId,jdbcType=BIGINT},
             humidity_level_id     = #{humidityLevelId,jdbcType=BIGINT},
