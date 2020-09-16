@@ -19,14 +19,14 @@ public class MaterialAttributeDTO implements Serializable {
     private BigDecimal llimit;
     private BigDecimal ulimit;
     private BigDecimal dpurchase;
-    private Byte way;
+    private Boolean way;
     private Long wid;
     private Long lid;
     private Byte sinspect;
     private Byte sitype;
     private Byte ssplan;
     private Byte oinspect;
-    private Byte psplit;
+    private Boolean psplit;
 
     public static MaterialAttributePO createPO(MaterialAttributeDTO dto) {
         return buildPO(new MaterialAttributePO(), dto);
@@ -36,14 +36,14 @@ public class MaterialAttributeDTO implements Serializable {
         po.setLowerLimit(dto.getLlimit());
         po.setUpperLimit(dto.getUlimit());
         po.setDefaultPurchase(dto.getDpurchase());
-        po.setWay(dto.getWay());
+        po.setWay((byte) (dto.getWay() ? 1 : 2));
         po.setWarehouseId(dto.getWid());
         po.setLocationId(dto.getLid());
         po.setStorageInspect(dto.getSinspect());
         po.setStorageInspectType(dto.getSitype());
         po.setStorageSamplingPlan(dto.getSsplan());
         po.setOutboundInspect(dto.getOinspect());
-        po.setPickSplit(dto.getPsplit());
+        po.setPickSplit((byte) (dto.getPsplit() ? 1 : 2));
         return po;
     }
 }
