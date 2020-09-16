@@ -2,9 +2,7 @@ package com.smartindustry.basic.service.impl;
 
 import com.smartindustry.basic.dto.*;
 import com.smartindustry.basic.service.IDataDictionaryService;
-import com.smartindustry.basic.vo.ConfigVO;
-import com.smartindustry.basic.vo.ProcessVO;
-import com.smartindustry.basic.vo.PropertyVO;
+import com.smartindustry.basic.vo.*;
 import com.smartindustry.common.mapper.dd.*;
 import com.smartindustry.common.mapper.si.*;
 import com.smartindustry.common.pojo.dd.*;
@@ -74,6 +72,10 @@ public class DataDictionaryServiceImpl implements IDataDictionaryService {
     private StorageLabelMapper storageLabelMapper;
     @Autowired
     private ConfigMapper configMapper;
+    @Autowired
+    private CreditLevelMapper creditLevelMapper;
+    @Autowired
+    private ClientTypeMapper clientTypeMapper;
 
 
     @Override
@@ -813,5 +815,53 @@ public class DataDictionaryServiceImpl implements IDataDictionaryService {
     public ResultVO configQuery(){
         List<ConfigPO> pos = configMapper.queryAll();
         return ResultVO.ok().setData(ConfigVO.convert(pos));
+    }
+
+    /**
+     *新增客户信用等级
+     */
+    @Override
+    public ResultVO clInsert(CreditLevelDTO dto) {
+        CreditLevelPO po = creditLevelMapper.queryByName(dto.getClname());
+        if (po != null) {
+            //客户信用等级名称已被使用
+            return new ResultVO(1004);
+        }
+        CreditLevelPO po1 = CreditLevelDTO.createPO(dto);
+        creditLevelMapper.insert(po1);
+        return ResultVO.ok();
+    }
+
+    /**
+     *查询信用等级列表
+     */
+    @Override
+    public ResultVO clQuery(){
+        List<CreditLevelPO> pos = creditLevelMapper.queryAll();
+        return ResultVO.ok().setData(CreditLevelVO.convert(pos));
+    }
+
+    /**
+     *新增客户类型
+     */
+    @Override
+    public ResultVO ctInsert(ClientTypeDTO dto) {
+        ClientTypePO po = clientTypeMapper.queryByName(dto.getCtname());
+        if (po != null) {
+            //客户类型名称已被使用
+            return new ResultVO(1004);
+        }
+        ClientTypePO po1 = ClientTypeDTO.createPO(dto);
+        clientTypeMapper.insert(po1);
+        return ResultVO.ok();
+    }
+
+    /**
+     *查询信用等级列表
+     */
+    @Override
+    public ResultVO ctQuery(){
+        List<ClientTypePO> pos = clientTypeMapper.queryAll();
+        return ResultVO.ok().setData(ClientTypeVO.convert(pos));
     }
 }

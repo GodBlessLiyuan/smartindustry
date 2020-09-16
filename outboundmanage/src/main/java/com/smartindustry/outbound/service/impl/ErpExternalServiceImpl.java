@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
 import java.util.*;
 
 /**
@@ -73,11 +74,21 @@ public class ErpExternalServiceImpl implements IErpExternalService {
                 List<StorageLabelBO> storageLabelBOS = new ArrayList<>();
                 if (null != configPO && OutboundConstant.V_YES.equals(configPO.getConfigValue())) {
                     storageLabelBOS = storageLabelMapper.queryNotRecommend(headPO.getSourceNo(), bodyPO.getMaterialId());
-                    Collections.sort(storageLabelBOS,sort);
                 }else{
                     storageLabelBOS = storageLabelMapper.queryNotRecommend(null,bodyPO.getMaterialId());
-                    Collections.sort(storageLabelBOS,sort);
                 }
+                Collections.sort(storageLabelBOS, new Comparator<StorageLabelBO>(){
+                    @Override
+                    public int compare(StorageLabelBO bo1, StorageLabelBO bo2) {
+                        int result = 0;
+                        try {
+                            result = DateUtil.YMD.parse(bo1.getProduceDate()).compareTo(DateUtil.YMD.parse(bo2.getProduceDate()));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        return result;
+                    }
+                });
                 int num = 0;
                 for (StorageLabelBO storageLabelBO : storageLabelBOS) {
                     if (labelRecommendPOs.containsKey(storageLabelBO.getStorageLabelId())) {
