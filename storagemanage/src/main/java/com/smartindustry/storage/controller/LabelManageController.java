@@ -31,6 +31,16 @@ public class LabelManageController {
         return labelManageService.queryPid(dto);
     }
 
+    /**
+     * 根据收料ID 获取物料标签列表 (未入库的)
+     * @param dto
+     * @return
+     */
+    @PostMapping("queryRbid")
+    public ResultVO queryRbid(@RequestBody OperateDTO dto) {
+        return labelManageService.queryRbid(dto);
+    }
+
     @PostMapping("print")
     public ResultVO print(@RequestBody OperateDTO dto) {
         return labelManageService.print(dto);

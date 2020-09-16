@@ -196,7 +196,7 @@
     <sql id="BO_Column_List">
         pl.print_label_id, pl.package_id, pl.produce_date, pl.produce_batch, pl.material_id, pl.num, pl.`type`,
     pl.origin, pl.location_id, pl.relate_label_id, pl.relate_package_id, pl.create_time, pl.dr,
-    m.material_no, m.material_desc
+    m.material_no, m.material_desc, m.material_name
     </sql>
     <select id="queryByReceiptBodyId" resultMap="BaseResultMap">
         select pl.print_label_id,
@@ -308,4 +308,13 @@
         where dr = 1 and package_id = #{pid,jdbcType=CHAR}
     </select>
 
+    <select id="queryByRbid" parameterType="java.lang.Long" resultMap="BOResultMap">
+        select
+        <include refid="BO_Column_List"/>
+        from si_print_label pl
+        left join sm_receipt_label rl on pl.print_label_id = rl.print_label_id
+        left join si_material m on pl.material_id = m.material_id
+        where rl.receipt_body_id = #{rbid,jdbcType=BIGINT}
+        and pl.location_id is null
+    </select>
 </mapper>

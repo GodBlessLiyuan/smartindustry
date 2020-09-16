@@ -76,4 +76,12 @@ public interface ILabelManageService {
      * @return
      */
     ResultVO split(LabelSplitDTO dto);
+
+    /**
+     * 根据物料单ID 获取待入库物料列表
+     *
+     * @param dto
+     * @return
+     */
+    ResultVO queryRbid(OperateDTO dto);
 }
