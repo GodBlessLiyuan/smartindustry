@@ -39,7 +39,7 @@ DROP TABLE IF EXISTS dd_currency;
 DROP TABLE IF EXISTS dd_humidity_level;
 DROP TABLE IF EXISTS dd_life_cycle_state;
 DROP TABLE IF EXISTS si_location_record;
-DROP TABLE IF EXISTS si_material_property;
+DROP TABLE IF EXISTS si_material_attribute;
 DROP TABLE IF EXISTS sm_storage_group;
 DROP TABLE IF EXISTS si_location;
 DROP TABLE IF EXISTS dd_location_type;
@@ -860,7 +860,7 @@ CREATE TABLE si_material
 (
 	material_id bigint unsigned NOT NULL AUTO_INCREMENT,
 	material_no char(128) NOT NULL,
-	material_property_id bigint unsigned,
+	material_attribute_id bigint unsigned,
 	-- 1：原材料
 	-- 2：半成品
 	-- 3：成品
@@ -894,9 +894,9 @@ CREATE TABLE si_material
 );
 
 
-CREATE TABLE si_material_property
+CREATE TABLE si_material_attribute
 (
-	material_property_id bigint unsigned NOT NULL AUTO_INCREMENT,
+	material_attribute_id bigint unsigned NOT NULL AUTO_INCREMENT,
 	lower_limit decimal(10,2),
 	upper_limit decimal(10,2),
 	default_purchase decimal(10,2),
@@ -920,8 +920,8 @@ CREATE TABLE si_material_property
 	-- 2：否
 	pick_split tinyint COMMENT '1：是
 2：否',
-	PRIMARY KEY (material_property_id),
-	UNIQUE (material_property_id)
+	PRIMARY KEY (material_attribute_id),
+	UNIQUE (material_attribute_id)
 );
 
 
@@ -1968,7 +1968,7 @@ ALTER TABLE si_location_record
 ;
 
 
-ALTER TABLE si_material_property
+ALTER TABLE si_material_attribute
 	ADD FOREIGN KEY (location_id)
 	REFERENCES si_location (location_id)
 	ON UPDATE RESTRICT
@@ -2073,8 +2073,8 @@ ALTER TABLE sm_receipt_body
 
 
 ALTER TABLE si_material
-	ADD FOREIGN KEY (material_property_id)
-	REFERENCES si_material_property (material_property_id)
+	ADD FOREIGN KEY (material_attribute_id)
+	REFERENCES si_material_attribute (material_attribute_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
 ;
@@ -2176,7 +2176,7 @@ ALTER TABLE si_location
 ;
 
 
-ALTER TABLE si_material_property
+ALTER TABLE si_material_attribute
 	ADD FOREIGN KEY (warehouse_id)
 	REFERENCES si_warehouse (warehouse_id)
 	ON UPDATE RESTRICT

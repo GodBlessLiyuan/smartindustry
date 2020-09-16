@@ -6,13 +6,13 @@ import java.math.BigDecimal;
 import lombok.Data;
 
 /**
- * si_material_property
+ * si_material_attribute
  *
  * @author
  */
 @Data
-public class MaterialPropertyPO implements Serializable {
-    private Long materialPropertyId;
+public class MaterialAttributePO implements Serializable {
+    private Long materialAttributeId;
 
     private BigDecimal lowerLimit;
 
