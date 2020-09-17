@@ -34,7 +34,7 @@
     delete from si_client
     where client_id = #{clientId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.smartindustry.common.pojo.si.ClientPO">
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.si.ClientPO" useGeneratedKeys="true" keyProperty="clientId">
     insert into si_client (client_id, client_no, client_type_id, 
       client_name, contact, sex, 
       phone, email, fax, url, 

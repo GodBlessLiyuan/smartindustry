@@ -3,6 +3,7 @@ package com.smartindustry.basic.controller;
 import com.smartindustry.basic.dto.ClientDTO;
 import com.smartindustry.basic.dto.ClientTypeDTO;
 import com.smartindustry.basic.dto.CreditLevelDTO;
+import com.smartindustry.basic.dto.OperateDTO;
 import com.smartindustry.basic.service.IClientService;
 import com.smartindustry.basic.service.IDataDictionaryService;
 import com.smartindustry.common.vo.ResultVO;
@@ -62,6 +63,11 @@ public class ClientController {
     @PostMapping("edit")
     public ResultVO edit(@RequestBody ClientDTO dto) {
         return clientService.edit(dto);
+    }
+
+    @PostMapping("queryRecord")
+    public ResultVO queryRecord(@RequestBody OperateDTO dto) {
+        return clientService.queryRecord(dto);
     }
 
 }
