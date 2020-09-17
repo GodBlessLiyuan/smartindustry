@@ -381,6 +381,18 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         return ResultVO.ok();
     }
 
+    @Override
+    public ResultVO locationWhid(OperateDTO dto) {
+        if (null == dto.getWhid() || StringUtils.isEmpty(dto.getLno())) {
+            return new ResultVO(1001);
+        }
+        LocationPO locationPO = locationMapper.queryByLnoAndWhid(dto.getLno(), dto.getWhid());
+        if (locationPO == null) {
+            return new ResultVO(1002);
+        }
+        return ResultVO.ok();
+    }
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO label(StorageGroupDTO dto) {

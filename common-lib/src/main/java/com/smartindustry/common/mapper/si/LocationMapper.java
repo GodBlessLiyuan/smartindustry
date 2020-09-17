@@ -4,6 +4,7 @@ import com.smartindustry.common.bo.si.LocationBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.si.LocationPO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,16 @@ public interface LocationMapper extends BaseMapper<LocationPO, Long> {
      * @return
      */
     LocationPO queryByLno(String locationNo);
+
+
+    /**
+     * 根据库位编号和仓库ID查询
+     *
+     * @param lno
+     * @param whid
+     * @return
+     */
+    LocationPO queryByLnoAndWhid(@Param("locationNo") String locationNo,@Param("warehouseId") Long warehouseId);
 
     /**
      * 根据仓库ID查询
@@ -90,4 +101,6 @@ public interface LocationMapper extends BaseMapper<LocationPO, Long> {
      * @return
      */
     List<Map<String, Object>> queryKvByWid(Long wid);
+
+
 }

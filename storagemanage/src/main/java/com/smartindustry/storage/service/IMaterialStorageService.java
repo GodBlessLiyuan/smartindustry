@@ -156,4 +156,10 @@ public interface IMaterialStorageService {
      */
     ResultVO queryPidInfo(Map<String, Object> reqData);
 
+    /**
+     * 根据仓库ID 查询库位ID
+     * @param dto
+     * @return
+     */
+    ResultVO locationWhid(OperateDTO dto);
 }
