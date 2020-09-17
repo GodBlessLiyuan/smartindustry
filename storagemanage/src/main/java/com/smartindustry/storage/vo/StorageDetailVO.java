@@ -5,7 +5,7 @@ import com.smartindustry.common.bo.sm.StorageBO;
 import com.smartindustry.common.bo.sm.StorageDetailBO;
 import com.smartindustry.common.bo.sm.StorageGroupBO;
 import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -103,7 +103,7 @@ public class StorageDetailVO implements Serializable {
         vo.setPnum(msBO.getPendingNum());
         vo.setSnum(msBO.getStoredNum());
         vo.setRno(rbBO.getReceiptNo());
-        if (StringUtils.isNotBlank(rbBO.getSourceNo())) {
+        if (StringUtils.isEmpty(rbBO.getSourceNo())) {
             vo.setSono(rbBO.getSourceNo());
         } else {
             //适应其他入库单查询
