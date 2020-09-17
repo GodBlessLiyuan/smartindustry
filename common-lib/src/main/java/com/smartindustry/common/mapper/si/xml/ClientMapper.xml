@@ -245,7 +245,7 @@
     select
     <include refid="BO_Column_List"/>
     from si_client c
-    left join dd_credit_level cl on c.credit_level_id = c.credit_level_id
+    left join dd_credit_level cl on c.credit_level_id = cl.credit_level_id
     left join dd_client_type ct on c.client_type_id = ct.client_type_id
     where c.dr = 1
     <if test="cno != null and cno != ''">
@@ -270,5 +270,14 @@
     <include refid="Base_Column_List" />
     from si_client
     where client_no = #{clientNo,jdbcType=CHAR} and dr = 1
+  </select>
+
+  <select id="queryByCid" parameterType="java.lang.Long" resultMap="BOBaseResult">
+    select
+    <include refid="BO_Column_List"/>
+    from si_client c
+    left join dd_credit_level cl on c.credit_level_id = cl.credit_level_id
+    left join dd_client_type ct on c.client_type_id = ct.client_type_id
+    where c.dr = 1 and c.client_id = #{clientId,jdbcType=BIGINT}
   </select>
 </mapper>

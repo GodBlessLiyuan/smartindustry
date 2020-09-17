@@ -77,7 +77,7 @@ public class ClientServiceImpl implements IClientService {
         UserPO user = tokenService.getLoginUser();
         // 客户代码唯一
         ClientPO existPO = clientMapper.queryNo(dto.getCno());
-        if (null != existPO && (!existPO.getClientId().equals(dto.getCid()))) {
+        if (null != existPO && !existPO.getClientId().equals(dto.getCid())) {
             return new ResultVO(1004);
         }
         if(null == dto.getCid()){
@@ -106,5 +106,11 @@ public class ClientServiceImpl implements IClientService {
         Map<String, Object> map = new HashMap<>();
         map.put("record", bos.isEmpty() ? null : ClientRecordVO.convert(bos));
         return ResultVO.ok().setData(map);
+    }
+
+    @Override
+    public ResultVO query(OperateDTO dto){
+        ClientBO bo = clientMapper.queryByCid(dto.getCid());
+        return ResultVO.ok().setData(ClientVO.convert(bo));
     }
 }
