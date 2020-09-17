@@ -14,6 +14,7 @@ import com.smartindustry.common.mapper.im.MaterialInventoryMapper;
 import com.smartindustry.common.mapper.si.LocationMapper;
 import com.smartindustry.common.mapper.si.PrintLabelMapper;
 import com.smartindustry.common.mapper.si.StorageLabelMapper;
+import com.smartindustry.common.mapper.si.WarehouseMapper;
 import com.smartindustry.common.mapper.sm.*;
 import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.em.TransferHeadPO;
@@ -75,6 +76,9 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
     TokenService tokenService;
     @Autowired
     TransferHeadMapper transferHeadMapper;
+
+    @Autowired
+    private WarehouseMapper warehouseMapper;
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData) {

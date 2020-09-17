@@ -5,9 +5,11 @@ import com.smartindustry.common.bo.sm.StorageBO;
 import com.smartindustry.common.bo.sm.StorageDetailBO;
 import com.smartindustry.common.bo.sm.StorageGroupBO;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,6 +34,41 @@ public class StorageDetailVO implements Serializable {
      * 入库单号
      */
     private String sno;
+
+    /**
+     * 收料单号
+     */
+    private String rno;
+
+    /**
+     * 来源单号
+     */
+    private String sono;
+    /**
+     * 仓库名称
+     */
+    private String wname;
+
+    /**
+     * 入库时间
+     */
+    private Date stime;
+
+    /**
+     * 对应单号  其他入库单
+     */
+    private String cono;
+
+    /**
+     * 入库类型（调拨订单类型）
+     */
+
+    private Byte ttype;
+
+    /**
+     * 工单号
+     */
+    private String pno;
     /**
      * 物料编码
      */
@@ -52,20 +89,29 @@ public class StorageDetailVO implements Serializable {
     /**
      * po bo 转 vo
      *
-     * @param msPO
+     * @param msBO
      * @param rbBO
      * @param sgBOs
      * @return
      */
-    public static StorageDetailVO convert(StorageBO msPO, ReceiptBodyBO rbBO, List<StorageGroupBO> sgBOs) {
+    public static StorageDetailVO convert(StorageBO msBO, ReceiptBodyBO rbBO, List<StorageGroupBO> sgBOs) {
         StorageDetailVO vo = new StorageDetailVO();
-        vo.setSid(msPO.getStorageId());
-        vo.setRbid(msPO.getReceiptBodyId());
-        vo.setSno(msPO.getStorageNo());
+        vo.setSid(msBO.getStorageId());
+        vo.setRbid(msBO.getReceiptBodyId());
+        vo.setSno(msBO.getStorageNo());
         vo.setMno(rbBO.getMaterialNo());
-        vo.setPnum(msPO.getPendingNum());
-        vo.setSnum(msPO.getStoredNum());
-
+        vo.setPnum(msBO.getPendingNum());
+        vo.setSnum(msBO.getStoredNum());
+        vo.setRno(rbBO.getReceiptNo());
+        if (StringUtils.isNotBlank(rbBO.getSourceNo())) {
+            vo.setSono(rbBO.getSourceNo());
+        } else {
+            //适应其他入库单查询
+            vo.setSono(msBO.getSourceNo());
+        }
+        vo.setTtype(msBO.getTransferType());
+        vo.setPno(msBO.getPickNo());
+        vo.setCono(msBO.getCorrespondNo());
         List<GroupVO> groupVOs = new ArrayList<>(sgBOs.size());
         for (StorageGroupBO sgBO : sgBOs) {
             groupVOs.add(convert(sgBO));

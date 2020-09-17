@@ -1,5 +1,6 @@
 package com.smartindustry.storage.service.impl;
 
+import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.bo.sm.ReceiptBodyBO;
 import com.smartindustry.common.constant.ConfigConstant;
 import com.smartindustry.common.constant.ModuleConstant;
@@ -73,14 +74,29 @@ public class LabelManageServiceImpl implements ILabelManageService {
 
     @Override
     public ResultVO queryPid(@RequestBody OperateDTO dto) {
-        PrintLabelPO po = printLabelMapper.queryByRbidAndPid(dto.getRbid(), dto.getPid());
-        if (null == po) {
+        PrintLabelBO bo = printLabelMapper.queryByRbidAndPid(dto.getRbid(), dto.getPid());
+        if (null == bo) {
             return new ResultVO(1002);
         }
-        if (po.getDr() == 2) {
+        if (bo.getDr() == 2) {
             return new ResultVO(1006);
         }
-        return ResultVO.ok().setData(PrintLabelVO.convert(po));
+        return ResultVO.ok().setData(PrintLabelVO.convert(bo));
+    }
+
+    /**
+     * 根据物料单ID 获取待入库物料列表
+     *
+     * @param dto
+     * @return
+     */
+    @Override
+    public ResultVO queryRbid(OperateDTO dto) {
+        if (dto.getRbid() == null) {
+            return new ResultVO(1001);
+        }
+        List<PrintLabelBO> bos = printLabelMapper.queryByRbid(dto.getRbid());
+        return ResultVO.ok().setData(PrintLabelVO.convertBO(bos));
     }
 
     @Override
@@ -339,6 +355,8 @@ public class LabelManageServiceImpl implements ILabelManageService {
 
         return ResultVO.ok();
     }
+
+
 
     /**
      * 打印操作

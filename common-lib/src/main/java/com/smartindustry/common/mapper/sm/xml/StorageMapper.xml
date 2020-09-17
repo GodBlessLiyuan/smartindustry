@@ -254,7 +254,8 @@
         left join si_location l on w.warehouse_id = l.warehouse_id
         left join om_pick_head ph on s.source_no = ph.source_no
         left join om_outbound o on ph.pick_head_id = o.pick_head_id
-        where s.dr = 1 and s.source_type = 2 and storage_id = #{sid,jdbcType=BIGINT}
+        where s.dr = 1 and s.source_type = 2
+         and storage_id = #{sid,jdbcType=BIGINT}
     </select>
 
     <select id="queryNo" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -264,6 +265,7 @@
         where storage_no like #{no,jdbcType=CHAR} '%'
         order by storage_id desc limit 1
     </select>
+
     <select id="queryReceiptBySid" parameterType="java.lang.Long" resultMap="BOResultMap">
         select s.storage_id,
                s.storage_no,
@@ -276,7 +278,7 @@
                s.`type`,
                s.create_time,
                s.dr,
-               rb.receipt_body_id
+               rb.receipt_body_id,
         from sm_storage s
                  left join sm_receipt_body rb on s.source_no = rb.receipt_no
         where rb.dr = 1
