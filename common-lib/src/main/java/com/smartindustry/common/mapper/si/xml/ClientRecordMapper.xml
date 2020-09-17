@@ -96,7 +96,7 @@
     select u.`name` as name, cr.create_time as createTime,cr.`type` as type
     from si_client_record cr
     left join am_user u on cr.user_id = u.user_id
-    where cr.client_record_id = #{clientId,jdbcType=BIGINT}
+    where cr.client_id = #{clientId,jdbcType=BIGINT}
     order by cr.create_time desc
   </select>
 </mapper>
