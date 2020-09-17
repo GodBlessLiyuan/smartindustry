@@ -62,7 +62,7 @@ public class SupplierServiceImpl implements ISupplierService {
     public ResultVO edit(SupplierDTO dto) {
         UserPO user = tokenService.getLoginUser();
         SupplierPO existPO = supplierMapper.queryBySno(dto.getSno());
-        if (null != existPO && (null == dto.getSid() || !dto.getSid().equals(existPO.getSupplierId()))) {
+        if (null != existPO && (!existPO.getSupplierId().equals(dto.getSid()))) {
             return new ResultVO(1004);
         }
 

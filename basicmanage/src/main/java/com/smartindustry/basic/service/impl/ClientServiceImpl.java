@@ -23,6 +23,7 @@ import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -55,6 +56,7 @@ public class ClientServiceImpl implements IClientService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ResultVO delete(List<Long> cids){
         for(Long cid:cids){
             //todo
@@ -70,11 +72,12 @@ public class ClientServiceImpl implements IClientService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ResultVO edit(ClientDTO dto){
         UserPO user = tokenService.getLoginUser();
         // 客户代码唯一
         ClientPO existPO = clientMapper.queryNo(dto.getCno());
-        if (null != existPO && (null == dto.getCid() || !dto.getCid().equals(existPO.getClientId()))) {
+        if (null != existPO && (!existPO.getClientId().equals(dto.getCid()))) {
             return new ResultVO(1004);
         }
         if(null == dto.getCid()){
