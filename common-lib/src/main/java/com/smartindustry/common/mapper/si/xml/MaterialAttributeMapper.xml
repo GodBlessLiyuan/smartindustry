@@ -196,4 +196,22 @@
         left join si_location l on ma.location_id = l.location_id
         where material_attribute_id = #{maid,jdbcType=BIGINT}
     </select>
+
+    <select id="queryByMid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select ma.material_attribute_id,
+               ma.lower_limit,
+               ma.upper_limit,
+               ma.default_purchase,
+               ma.way,
+               ma.warehouse_id,
+               ma.location_id,
+               ma.storage_inspect,
+               ma.storage_inspect_type,
+               ma.storage_sampling_plan,
+               ma.outbound_inspect,
+               ma.pick_split
+        from si_material m
+                 left join si_material_attribute ma on m.material_attribute_id = ma.material_attribute_id
+        where m.material_id = #{mid,jdbcType=BIGINT}
+    </select>
 </mapper>

@@ -11,4 +11,12 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface MaterialAttributeMapper extends BaseMapper<MaterialAttributePO, Long> {
     MaterialAttributeBO queryById(Long maid);
+
+    /**
+     * 根据 物料Id 查询
+     *
+     * @param materialId
+     * @return
+     */
+    MaterialAttributePO queryByMid(Long materialId);
 }

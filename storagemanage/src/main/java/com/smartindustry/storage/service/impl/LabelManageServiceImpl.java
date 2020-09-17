@@ -3,13 +3,12 @@ package com.smartindustry.storage.service.impl;
 import com.smartindustry.common.bo.sm.ReceiptBodyBO;
 import com.smartindustry.common.constant.ConfigConstant;
 import com.smartindustry.common.constant.ModuleConstant;
-import com.smartindustry.common.mapper.si.ConfigMapper;
-import com.smartindustry.common.mapper.si.LabelRecordMapper;
-import com.smartindustry.common.mapper.si.PrintLabelMapper;
+import com.smartindustry.common.mapper.si.*;
 import com.smartindustry.common.mapper.sm.*;
 import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.si.ConfigPO;
 import com.smartindustry.common.pojo.si.LabelRecordPO;
+import com.smartindustry.common.pojo.si.MaterialAttributePO;
 import com.smartindustry.common.pojo.si.PrintLabelPO;
 import com.smartindustry.common.pojo.sm.*;
 import com.smartindustry.common.security.service.TokenService;
@@ -62,6 +61,8 @@ public class LabelManageServiceImpl implements ILabelManageService {
     private ConfigMapper configMapper;
     @Autowired
     private StorageMapper storageMapper;
+    @Autowired
+    private MaterialAttributeMapper materialAttributeMapper;
     @Autowired
     TokenService tokenService;
 
@@ -184,62 +185,65 @@ public class LabelManageServiceImpl implements ILabelManageService {
         }
 
         ConfigPO configPO = configMapper.queryByKey(ConfigConstant.K_STORAGE_QUALITY);
-        if (null != configPO && ConfigConstant.V_NO.equals(configPO.getConfigValue())) {
-            // 不进行质量管理
-            // 更新收料单状态
-            bodyPO.setStatus(ReceiptConstant.RECEIPT_MATERIAL_STORAGE);
-            bodyPO.setGoodNum(labelNum);
-            bodyPO.setBadNum(0);
-            bodyPO.setStockNum(0);
-            receiptBodyMapper.updateByPrimaryKey(bodyPO);
+        if (null != configPO && ConfigConstant.V_YES.equals(configPO.getConfigValue())) {
+            MaterialAttributePO attributePO = materialAttributeMapper.queryByMid(bodyPO.getMaterialId());
+            if (null != attributePO && null != attributePO.getStorageInspect()) {
+                Byte status;    // 操作记录类型
+                if (ReceiptConstant.STORAGE_INSPECT_IQC.equals(attributePO.getStorageInspect())) {
+                    // IQC
+                    IqcDetectPO iqcPO = new IqcDetectPO();
+                    iqcPO.setReceiptBodyId(dto.getRbid());
+                    iqcPO.setStatus(ReceiptConstant.IQC_WAIT);
+                    iqcDetectMapper.insert(iqcPO);
 
-            // 生产出库单
-            StoragePO storagePO = new StoragePO();
-            storagePO.setSourceNo(bodyPO.getReceiptNo());
-            storagePO.setSourceType((byte) 1);
-            storagePO.setStorageNo(ReceiptNoUtil.genStorageNo(storageMapper, ReceiptNoUtil.MATERIAL_STORAGE_LPPK, new Date()));
-            storagePO.setPendingNum(bodyPO.getGoodNum());
-            storagePO.setStoredNum(0);
-            storagePO.setStatus(ReceiptConstant.MATERIAL_STORAGE_PENDING);
-            storagePO.setType(ReceiptConstant.MATERIAL_TYPE_GOOD);
-            storagePO.setCreateTime(new Date());
-            storagePO.setDr((byte) 1);
-            storageMapper.insert(storagePO);
+                    status = ReceiptConstant.RECEIPT_IQC_DETECT;
+                    bodyPO.setStatus(ReceiptConstant.RECEIPT_IQC_DETECT);
+                } else if (ReceiptConstant.STORAGE_INSPECT_QE.equals(attributePO.getStorageInspect())) {
+                    // QE
+                    QeDetectPO qePO = new QeDetectPO();
+                    qePO.setReceiptBodyId(dto.getRbid());
+                    qePO.setStatus(ReceiptConstant.QE_WAIT);
+                    qeDetectMapper.insert(qePO);
 
-            // 操作记录
-            recordMapper.insert(new StorageRecordPO(dto.getRbid(), storagePO.getStorageId(), user.getUserId(), user.getName(), ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
-            recordMapper.insert(new StorageRecordPO(dto.getRbid(), user.getUserId(), user.getName(), ReceiptConstant.RECORD_TYPE_FINISH, ReceiptConstant.RECEIPT_ENTRY_LABEL));
+                    status = ReceiptConstant.RECEIPT_QE_DETECT;
+                    bodyPO.setStatus(ReceiptConstant.RECEIPT_QE_DETECT);
+                } else {
+                    return new ResultVO(1002);
+                }
 
-            return ResultVO.ok();
+                // 更新收料单状态
+                receiptBodyMapper.updateByPrimaryKey(bodyPO);
+
+                recordMapper.insert(new StorageRecordPO(dto.getRbid(), user.getUserId(), user.getName(), ReceiptConstant.RECORD_TYPE_ADD, status));
+                recordMapper.insert(new StorageRecordPO(dto.getRbid(), user.getUserId(), user.getName(), ReceiptConstant.RECORD_TYPE_FINISH, ReceiptConstant.RECEIPT_ENTRY_LABEL));
+
+                return ResultVO.ok();
+            }
         }
 
-        Byte status;    // 操作记录类型
-        if (ReceiptConstant.MATERIAL_TYPE_RAW.equals(bodyPO.getMaterialType())) {
-            // 原材料
-            IqcDetectPO iqcPO = new IqcDetectPO();
-            iqcPO.setReceiptBodyId(dto.getRbid());
-            iqcPO.setStatus(ReceiptConstant.IQC_WAIT);
-            iqcDetectMapper.insert(iqcPO);
-
-            status = ReceiptConstant.RECEIPT_IQC_DETECT;
-            bodyPO.setStatus(ReceiptConstant.RECEIPT_IQC_DETECT);
-        } else if (ReceiptConstant.MATERIAL_TYPE_SEMI.equals(bodyPO.getMaterialType()) || ReceiptConstant.MATERIAL_TYPE_FINISH.equals(bodyPO.getMaterialType())) {
-            // 半成品/成品
-            QeDetectPO qePO = new QeDetectPO();
-            qePO.setReceiptBodyId(dto.getRbid());
-            qePO.setStatus(ReceiptConstant.QE_WAIT);
-            qeDetectMapper.insert(qePO);
-
-            status = ReceiptConstant.RECEIPT_QE_DETECT;
-            bodyPO.setStatus(ReceiptConstant.RECEIPT_QE_DETECT);
-        } else {
-            return new ResultVO(1002);
-        }
-
+        // 不进行质量管理
         // 更新收料单状态
+        bodyPO.setStatus(ReceiptConstant.RECEIPT_MATERIAL_STORAGE);
+        bodyPO.setGoodNum(labelNum);
+        bodyPO.setBadNum(0);
+        bodyPO.setStockNum(0);
         receiptBodyMapper.updateByPrimaryKey(bodyPO);
 
-        recordMapper.insert(new StorageRecordPO(dto.getRbid(), user.getUserId(), user.getName(), ReceiptConstant.RECORD_TYPE_ADD, status));
+        // 生产出库单
+        StoragePO storagePO = new StoragePO();
+        storagePO.setSourceNo(bodyPO.getReceiptNo());
+        storagePO.setSourceType((byte) 1);
+        storagePO.setStorageNo(ReceiptNoUtil.genStorageNo(storageMapper, ReceiptNoUtil.MATERIAL_STORAGE_LPPK, new Date()));
+        storagePO.setPendingNum(bodyPO.getGoodNum());
+        storagePO.setStoredNum(0);
+        storagePO.setStatus(ReceiptConstant.MATERIAL_STORAGE_PENDING);
+        storagePO.setType(ReceiptConstant.MATERIAL_TYPE_GOOD);
+        storagePO.setCreateTime(new Date());
+        storagePO.setDr((byte) 1);
+        storageMapper.insert(storagePO);
+
+        // 操作记录
+        recordMapper.insert(new StorageRecordPO(dto.getRbid(), storagePO.getStorageId(), user.getUserId(), user.getName(), ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
         recordMapper.insert(new StorageRecordPO(dto.getRbid(), user.getUserId(), user.getName(), ReceiptConstant.RECORD_TYPE_FINISH, ReceiptConstant.RECEIPT_ENTRY_LABEL));
 
         return ResultVO.ok();
