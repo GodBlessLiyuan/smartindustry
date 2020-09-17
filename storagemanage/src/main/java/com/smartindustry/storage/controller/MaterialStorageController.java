@@ -71,6 +71,11 @@ public class MaterialStorageController {
         return materialStorageService.location(dto);
     }
 
+    @PostMapping("locationWhid")
+    public ResultVO locationWhid(@RequestBody OperateDTO dto) {
+        return materialStorageService.locationWhid(dto);
+    }
+
     @PostMapping("label")
     public ResultVO label(@RequestBody StorageGroupDTO dto) {
         return materialStorageService.label(dto);

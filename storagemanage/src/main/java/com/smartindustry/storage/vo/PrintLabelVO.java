@@ -102,6 +102,10 @@ public class PrintLabelVO implements Serializable {
     public static PrintLabelVO convertBO(PrintLabelBO bo) {
         PrintLabelVO vo = new PrintLabelVO();
         vo.setPid(bo.getPackageId());
+        vo.setPlid(bo.getPrintLabelId());
+        vo.setPdate(bo.getProduceDate());
+        vo.setPbatch(bo.getProduceBatch());
+        vo.setCtime(bo.getCreateTime());
         vo.setMno(bo.getMaterialNo());
         vo.setMname(bo.getMaterialName());
         vo.setMdesc(bo.getMaterialDesc());

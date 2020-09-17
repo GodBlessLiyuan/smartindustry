@@ -248,4 +248,13 @@
         left join si_location l on wh.warehouse_id = l.warehouse_id
         where wh.dr = 1 and s.storage_id = #{sid,jdbcType=BIGINT}
     </select>
+
+
+    <select id="queryByLnoAndWhid" resultType="com.smartindustry.common.pojo.si.LocationPO">
+        select
+        <include refid="Base_Column_List"/>
+        from si_location
+        where location_no = #{locationNo,jdbcType=CHAR} and dr = 1
+        and warehouse_id = ${warehouseId, jdbcType=BIGINT}
+    </select>
 </mapper>

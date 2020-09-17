@@ -278,7 +278,7 @@
                s.`type`,
                s.create_time,
                s.dr,
-               rb.receipt_body_id,
+               rb.receipt_body_id
         from sm_storage s
                  left join sm_receipt_body rb on s.source_no = rb.receipt_no
         where rb.dr = 1
