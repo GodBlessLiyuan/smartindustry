@@ -133,4 +133,12 @@ public interface IDataDictionaryService {
 
     ResultVO configQuery();
 
+    ResultVO clInsert(CreditLevelDTO dto);
+
+    ResultVO clQuery();
+
+    ResultVO ctInsert(ClientTypeDTO dto);
+
+    ResultVO ctQuery();
+
 }

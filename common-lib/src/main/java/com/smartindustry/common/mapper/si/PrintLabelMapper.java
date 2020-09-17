@@ -75,4 +75,12 @@ public interface PrintLabelMapper extends BaseMapper<PrintLabelPO, Long> {
      * @return
      */
     PrintLabelPO queryByPid(String pid);
+
+    /**
+     * 根据收料单查询相关标签详细列表
+     *
+     * @param rbid
+     * @return
+     */
+    List<PrintLabelBO> queryByRbid(@Param("rbid") Long rbid);
 }
