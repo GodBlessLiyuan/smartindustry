@@ -268,4 +268,12 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
      * @return
      */
     List<PickHeadPO> queryNotRecommodByOno(String orderNo);
+
+
+    /**
+     * 根据客户名称查询拣货单
+     * @param clientName
+     * @return
+     */
+    List<PickHeadPO> queryByCname(String clientName);
 }

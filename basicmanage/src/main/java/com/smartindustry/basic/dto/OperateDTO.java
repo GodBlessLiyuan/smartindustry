@@ -21,5 +21,9 @@ public class OperateDTO implements Serializable {
     private Long mid;
     private Long bhid;
     private List<Long> bbids;
+    /**
+     * 客户id
+     */
+    private Long cid;
 
 }

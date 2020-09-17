@@ -1,6 +1,7 @@
 package com.smartindustry.basic.service;
 
 import com.smartindustry.basic.dto.ClientDTO;
+import com.smartindustry.basic.dto.OperateDTO;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -35,4 +36,11 @@ public interface IClientService {
      * @return
      */
     ResultVO edit(ClientDTO dto);
+
+    /**
+     * 查询操作记录
+     * @param dto
+     * @return
+     */
+    ResultVO queryRecord(OperateDTO dto);
 }
