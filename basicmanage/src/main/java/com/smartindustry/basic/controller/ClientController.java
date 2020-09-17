@@ -70,4 +70,9 @@ public class ClientController {
         return clientService.queryRecord(dto);
     }
 
+    @PostMapping("query")
+    public ResultVO query(@RequestBody OperateDTO dto) {
+        return clientService.query(dto);
+    }
+
 }

@@ -43,4 +43,11 @@ public interface IClientService {
      * @return
      */
     ResultVO queryRecord(OperateDTO dto);
+
+    /**
+     * 查询当前客户的详细信息
+     * @param dto
+     * @return
+     */
+    ResultVO query(OperateDTO dto);
 }

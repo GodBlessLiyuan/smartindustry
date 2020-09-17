@@ -63,7 +63,7 @@ public class LocationServiceImpl implements ILocationService {
     public ResultVO edit(LocationDTO dto) {
         UserPO user = tokenService.getLoginUser();
         LocationPO existPO = locationMapper.queryByLno(dto.getLno());
-        if (null != existPO && (!existPO.getLocationId().equals(dto.getLid()))) {
+        if (null != existPO && !existPO.getLocationId().equals(dto.getLid())) {
             return new ResultVO(1004);
         }
 

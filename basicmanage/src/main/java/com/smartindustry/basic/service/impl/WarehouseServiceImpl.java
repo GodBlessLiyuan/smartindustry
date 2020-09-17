@@ -57,7 +57,7 @@ public class WarehouseServiceImpl implements IWarehouseService {
     @Override
     public ResultVO edit(WarehouseDTO dto) {
         WarehousePO existPO = warehouseMapper.queryByNo(dto.getWno());
-        if (null != existPO && (!existPO.getWarehouseId().equals(dto.getWid()))) {
+        if (null != existPO && !existPO.getWarehouseId().equals(dto.getWid())) {
             return new ResultVO(1004);
         }
 
