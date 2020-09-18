@@ -404,35 +404,57 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
             return new ResultVO(1001);
         }
         List<StorageGroupDetailBO> storageGroupBOs = storageGroupMapper.queryStorageDetail(dto.getSid(), dto.getSgid());
-        if (!storageGroupBOs.isEmpty()) {
-            for (StorageGroupDetailBO bo : storageGroupBOs) {
-                bo.setNum(bo.getDetail().stream().collect(Collectors.summingInt(StorageDetailBO::getNum)));
-                Map<String, List<StorageDetailBO>> locationMap = bo.getDetail().stream().collect(Collectors.toMap(
-                        p -> p.getWarehouseName() +"_"+ p.getLocationNo(),
-                        p -> {
-                            List<StorageDetailBO> bs = new ArrayList<>();
-                            bs.add(p);
-                            return bs;
-                        },
-                        (List<StorageDetailBO> values1, List<StorageDetailBO> values2) -> {
-                            values1.addAll(values2);
-                            return values1;
-                        }
-                ));
-               List<StorageDetailBO> detail = new ArrayList<>();
-               for (String key: locationMap.keySet()) {
-                   String[] keys = key.split("_");
-                   StorageDetailBO dbo = new StorageDetailBO();
-                   dbo.setWarehouseName(keys[0]);
-                   dbo.setLocationNo(keys[1]);
-                   dbo.setLabels(locationMap.get(key));
-                   detail.add(dbo);
-               }
-               bo.setDetail(detail);
+        Map<String, List<StorageGroupDetailBO>> groupMap = storageGroupBOs.stream().collect(Collectors.toMap(
+                p -> p.getMaterialName() + "_" + p.getMaterialNo(),
+                p -> {
+                    List<StorageGroupDetailBO> bs = new ArrayList<>();
+                    bs.add(p);
+                    return bs;
+                },
+                (List<StorageGroupDetailBO> values1, List<StorageGroupDetailBO> values2) -> {
+                    values1.addAll(values2);
+                    return values1;
+                }
+        ));
+        List<StorageGroupDetailBO> bos = new ArrayList<>();
+        for (String key : groupMap.keySet()) {
+            String[] keys = key.split("_");
+            StorageGroupDetailBO dbo = new StorageGroupDetailBO();
+            dbo.setMaterialName(keys[0]);
+            dbo.setMaterialNo(keys[1]);
+            List<StorageDetailBO> details = new ArrayList<>();
+            Integer num = 0;
+            for (StorageGroupDetailBO bo : groupMap.get(key)) {
+                details.addAll(bo.getDetail());
+                num += bo.getDetail().stream().collect(Collectors.summingInt(StorageDetailBO::getNum));
             }
-            return ResultVO.ok().setData(StorageSimpleDetailVO.convert(storageGroupBOs));
+
+            Map<String, List<StorageDetailBO>> locationMap = details.stream().collect(Collectors.toMap(
+                    p -> p.getWarehouseName() +"_"+ p.getLocationNo(),
+                    p -> {
+                        List<StorageDetailBO> bs = new ArrayList<>();
+                        bs.add(p);
+                        return bs;
+                    },
+                    (List<StorageDetailBO> values1, List<StorageDetailBO> values2) -> {
+                        values1.addAll(values2);
+                        return values1;
+                    }
+            ));
+            List<StorageDetailBO> detail = new ArrayList<>();
+            for (String locationKey: locationMap.keySet()) {
+                String[] locationKeys = locationKey.split("_");
+                StorageDetailBO sdbo = new StorageDetailBO();
+                sdbo.setWarehouseName(locationKeys[0]);
+                sdbo.setLocationNo(locationKeys[1]);
+                sdbo.setLabels(locationMap.get(locationKey));
+                detail.add(sdbo);
+            }
+            dbo.setDetail(detail);
+            dbo.setNum(num);
+            bos.add(dbo);
         }
-        return ResultVO.ok();
+        return ResultVO.ok().setData(StorageSimpleDetailVO.convert(bos));
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -777,7 +799,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
             bo.setDetail(bos);
         }
 
-        return ResultVO.ok().setData(StorageDetailVO.convert(storageBO, receiptBodyBO, locatedBos, unlocateBos.isEmpty()?null: unlocateBos.get(0)));
+        return ResultVO.ok().setData(StorageDetailVO.convert(storageBO, receiptBodyBO, locatedBos, unlocateBos.isEmpty() ? null : unlocateBos.get(0)));
     }
 
     @Override
