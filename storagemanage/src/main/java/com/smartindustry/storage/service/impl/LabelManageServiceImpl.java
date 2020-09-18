@@ -22,6 +22,7 @@ import com.smartindustry.storage.dto.PrintLabelDTO;
 import com.smartindustry.storage.service.ILabelManageService;
 import com.smartindustry.storage.util.ReceiptNoUtil;
 import com.smartindustry.storage.vo.PrintLabelVO;
+import com.smartindustry.storage.vo.StorageSimpleDetailVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -97,7 +98,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
             return new ResultVO(1001);
         }
         List<PrintLabelBO> bos = printLabelMapper.queryByRbid(dto.getRbid());
-        return ResultVO.ok().setData(PrintLabelVO.convertBO4Tree(bos));
+        return ResultVO.ok().setData(StorageSimpleDetailVO.convertLabel(bos));
     }
 
     @Override

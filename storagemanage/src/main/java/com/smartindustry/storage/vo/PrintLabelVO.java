@@ -5,8 +5,9 @@ import com.smartindustry.common.pojo.si.PrintLabelPO;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author: xiahui
@@ -116,53 +117,6 @@ public class PrintLabelVO implements Serializable {
         return vo;
     }
 
-    public static PrintLabelVO simpleConvertBO(PrintLabelBO bo) {
-        PrintLabelVO vo = new PrintLabelVO();
-        vo.setMno(bo.getMaterialNo());
-        vo.setMname(bo.getMaterialName());
-        return vo;
-    }
 
-    public static PrintLabelVO convertBO4Lable(PrintLabelBO bo) {
-        PrintLabelVO vo = new PrintLabelVO();
-       vo.setPid(bo.getPackageId());
-       vo.setNum(bo.getNum());
-        return vo;
-    }
-
-    public static List<PrintLabelVO> convertBO4Lable(List<PrintLabelBO> bos) {
-        List<PrintLabelVO> vos = new ArrayList<>(bos.size());
-        for (PrintLabelBO bo: bos) {
-            vos.add(PrintLabelVO.convertBO4Lable(bo));
-        }
-        return vos;
-    }
-
-    /**
-     * 用于将物料按照物料编号分组 分别查询、
-     *
-     * @param bos
-     * @return
-     */
-    public static List<PrintLabelVO> convertBO4Tree(List<PrintLabelBO> bos) {
-       Map<String, List<PrintLabelBO>> map = bos.stream().collect(Collectors.toMap(
-               PrintLabelBO::getMaterialNo, p -> {
-                    List<PrintLabelBO> bs = new ArrayList<>();
-                    bs.add(p);
-                    return bs;
-               }, (List<PrintLabelBO> value1, List<PrintLabelBO> value2) -> {
-                   value1.addAll(value2);
-                   return value1;
-               }
-       ));
-       List<PrintLabelVO> vos = new ArrayList<>(map.size());
-       for (String key: map.keySet()) {
-           PrintLabelVO vo = PrintLabelVO.simpleConvertBO(map.get(key).get(0));
-           vo.setData(convertBO4Lable(map.get(key)));
-           vo.setNum(map.get(key).stream().collect(Collectors.summingInt(PrintLabelBO::getNum)));
-           vos.add(vo);
-       }
-        return vos;
-    }
 
 }
