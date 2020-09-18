@@ -14,13 +14,36 @@ import java.io.Serializable;
 public class OperateDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    //
+    /**
+     * 收料单ID
+     */
     private Long rbid;
+    /**
+     * 标签ID
+     */
     private Long plid;
+    /**
+     * 入库单ID
+     */
     private Long sid;
+    /**
+     *
+     */
     private String pid;
+    /**
+     * 库位编号
+     */
     private String lno;
     private Integer num;
     private Byte status;
+    /**
+        入库详情组ID
+     */
     private Long sgid;
+
+    /**
+     * 库房ID
+     */
+    private Long whid;
+
 }

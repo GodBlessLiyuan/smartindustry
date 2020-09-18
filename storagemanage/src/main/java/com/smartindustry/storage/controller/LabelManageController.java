@@ -37,6 +37,7 @@ public class LabelManageController {
      * @return
      */
     @PostMapping("queryRbid")
+    @PreAuthorize("@ss.hasAnyPermi('sm:ms:gpwl:queryinfo,sm:ms:ndgr:queryinfo')")
     public ResultVO queryRbid(@RequestBody OperateDTO dto) {
         return labelManageService.queryRbid(dto);
     }

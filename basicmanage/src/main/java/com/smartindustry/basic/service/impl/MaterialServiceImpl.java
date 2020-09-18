@@ -83,7 +83,7 @@ public class MaterialServiceImpl implements IMaterialService {
     public ResultVO edit(MaterialDTO dto) {
         UserPO user = tokenService.getLoginUser();
         MaterialPO existPO = materialMapper.queryByMno(dto.getMno());
-        if (null != existPO && (null == dto.getMid() || !dto.getMid().equals(existPO.getMaterialId()))) {
+        if (null != existPO && !existPO.getMaterialId().equals(dto.getMid())) {
             return new ResultVO(1004);
         }
 

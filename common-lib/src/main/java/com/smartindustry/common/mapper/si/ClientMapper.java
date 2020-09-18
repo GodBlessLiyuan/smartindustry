@@ -28,4 +28,14 @@ public interface ClientMapper extends BaseMapper<ClientPO, Long> {
      * @param cids
      */
     void batchDelete(List<Long> cids);
+
+
+    /**
+     * 根据cid进行客户详细信息查询
+     *
+     * @param clientId
+     * @return
+     */
+    ClientBO queryByCid(Long clientId);
+
 }

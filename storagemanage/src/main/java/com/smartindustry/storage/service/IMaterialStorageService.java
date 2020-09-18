@@ -156,4 +156,19 @@ public interface IMaterialStorageService {
      */
     ResultVO queryPidInfo(Map<String, Object> reqData);
 
+    /**
+     * 根据仓库ID 查询库位ID
+     * @param dto
+     * @return
+     */
+    ResultVO locationWhid(OperateDTO dto);
+
+
+    /**
+     * 查询入库单的已入库情况查询
+     *
+     * @param dto
+     * @return
+     */
+    ResultVO storageDetail4Sid(OperateDTO dto);
 }

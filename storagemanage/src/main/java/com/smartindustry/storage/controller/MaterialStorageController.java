@@ -45,6 +45,17 @@ public class MaterialStorageController {
         return materialStorageService.queryPidInfo(reqData);
     }
 
+    /**
+     * 查询入库单的已入库情况查询
+     * @param dto
+     * @return
+     */
+    @PostMapping("storageDetail4Sid")
+    @PreAuthorize("@ss.hasAnyPermi('sm:ms:gpwl:queryinfo,sm:ms:ndgr:queryinfo')")
+    public ResultVO storageDetail4Sid(@RequestBody OperateDTO dto) {
+        return materialStorageService.storageDetail4Sid(dto);
+    }
+
     @PostMapping("agreeStorage")
     public ResultVO agreeStorage(@RequestBody OperateDTO dto){
         return materialStorageService.agreeStorage(dto);
@@ -69,6 +80,17 @@ public class MaterialStorageController {
     @PostMapping("location")
     public ResultVO location(@RequestBody OperateDTO dto) {
         return materialStorageService.location(dto);
+    }
+
+    /**
+     * 根据仓库ID和库位编号 查询库位
+     *
+     * @param dto
+     * @return
+     */
+    @PostMapping("locationByWhidAndLno")
+    public ResultVO locationWhid(@RequestBody OperateDTO dto) {
+        return materialStorageService.locationWhid(dto);
     }
 
     @PostMapping("label")

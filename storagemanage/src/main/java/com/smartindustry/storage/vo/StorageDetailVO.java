@@ -1,11 +1,8 @@
 package com.smartindustry.storage.vo;
 
-import com.smartindustry.common.bo.sm.ReceiptBodyBO;
-import com.smartindustry.common.bo.sm.StorageBO;
-import com.smartindustry.common.bo.sm.StorageDetailBO;
-import com.smartindustry.common.bo.sm.StorageGroupBO;
+import com.smartindustry.common.bo.sm.*;
 import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -73,6 +70,11 @@ public class StorageDetailVO implements Serializable {
      * 物料编码
      */
     private String mno;
+
+    /**
+     * 物料名称
+     */
+    private String mname;
     /**
      * 待入库数
      */
@@ -81,6 +83,16 @@ public class StorageDetailVO implements Serializable {
      * 已入库数
      */
     private Integer snum;
+
+    /**
+     * 状态
+     */
+    private Byte status;
+
+    /**
+     * 新增库位的物料信息
+     */
+    private GroupVO label;
     /**
      * 分组数据
      */
@@ -102,8 +114,9 @@ public class StorageDetailVO implements Serializable {
         vo.setMno(rbBO.getMaterialNo());
         vo.setPnum(msBO.getPendingNum());
         vo.setSnum(msBO.getStoredNum());
+        vo.setStatus(msBO.getStatus());
         vo.setRno(rbBO.getReceiptNo());
-        if (StringUtils.isNotBlank(rbBO.getSourceNo())) {
+        if (StringUtils.isEmpty(rbBO.getSourceNo())) {
             vo.setSono(rbBO.getSourceNo());
         } else {
             //适应其他入库单查询
@@ -118,6 +131,20 @@ public class StorageDetailVO implements Serializable {
         }
         vo.setGroup(groupVOs);
 
+        return vo;
+    }
+
+    /**
+     * po bo 转 vo
+     *
+     * @param msBO
+     * @param rbBO
+     * @param sgBOs
+     * @return
+     */
+    public static StorageDetailVO convert(StorageBO msBO, ReceiptBodyBO rbBO, List<StorageGroupBO> sgBOs, StorageGroupBO bo) {
+        StorageDetailVO vo = convert(msBO, rbBO, sgBOs);
+        vo.setLabel(convert(bo));
         return vo;
     }
 
@@ -145,8 +172,42 @@ public class StorageDetailVO implements Serializable {
         vo.setPlid(bo.getPrintLabelId());
         vo.setPid(bo.getPackageId());
         vo.setMno(bo.getMaterialNo());
+        vo.setMno(bo.getMaterialName());
         vo.setMdesc(bo.getMaterialDesc());
         vo.setNum(bo.getNum());
+        return vo;
+    }
+
+    public static List<StorageDetailVO> convert4Detail(List<StorageGroupDetailBO> sgBos) {
+        List<StorageDetailVO> vos = new ArrayList<>(sgBos.size());
+        for (StorageGroupDetailBO bo : sgBos) {
+            vos.add(convert(bo));
+        }
+        return vos;
+    }
+
+    public static StorageDetailVO convert(StorageGroupDetailBO bo) {
+        StorageDetailVO vo = new StorageDetailVO();
+        vo.setMno(bo.getMaterialNo());
+        vo.setMname(bo.getMaterialName());
+        vo.setPnum(bo.getNum());
+        List<GroupVO> groupVOS = new ArrayList<>(bo.getDetail().size());
+        for (StorageDetailBO dbo: bo.getDetail()) {
+            groupVOS.add(convertGroup(dbo));
+        }
+        vo.setGroup(groupVOS);
+        return vo;
+    }
+
+    public static GroupVO convertGroup(StorageDetailBO bo) {
+        GroupVO vo = new GroupVO();
+        vo.setLno(bo.getLocationNo());
+        vo.setWhname(bo.getWarehouseName());
+        List<DetailVO> vos = new ArrayList<>(bo.getLabels().size());
+        for (StorageDetailBO dbo: bo.getLabels()) {
+            vos.add(convert(dbo));
+        }
+        vo.setDetail(vos);
         return vo;
     }
 
@@ -160,6 +221,11 @@ public class StorageDetailVO implements Serializable {
          * 库位
          */
         private String lno;
+
+        /**
+         * 仓库
+         */
+        private String whname;
         /**
          * 详情数据
          */
@@ -184,6 +250,11 @@ public class StorageDetailVO implements Serializable {
          * 物料编码
          */
         private String mno;
+
+        /**
+         * 物料名称
+         */
+        private String mname;
         /**
          * 物料描述
          */
