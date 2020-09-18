@@ -144,7 +144,9 @@ public class StorageDetailVO implements Serializable {
      */
     public static StorageDetailVO convert(StorageBO msBO, ReceiptBodyBO rbBO, List<StorageGroupBO> sgBOs, StorageGroupBO bo) {
         StorageDetailVO vo = convert(msBO, rbBO, sgBOs);
-        vo.setLabels(convert(bo.getDetail()));
+        if (bo != null) {
+            vo.setLabels(convert(bo.getDetail()));
+        }
         return vo;
     }
 
