@@ -162,4 +162,13 @@ public interface IMaterialStorageService {
      * @return
      */
     ResultVO locationWhid(OperateDTO dto);
+
+
+    /**
+     * 查询入库单的已入库情况查询
+     *
+     * @param dto
+     * @return
+     */
+    ResultVO storageDetail4Sid(OperateDTO dto);
 }

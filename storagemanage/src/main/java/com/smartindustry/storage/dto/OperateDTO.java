@@ -45,4 +45,5 @@ public class OperateDTO implements Serializable {
      * 库房ID
      */
     private Long whid;
+
 }

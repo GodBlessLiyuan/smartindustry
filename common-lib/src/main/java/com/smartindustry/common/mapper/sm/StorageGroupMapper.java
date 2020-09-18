@@ -1,9 +1,12 @@
 package com.smartindustry.common.mapper.sm;
 
 import com.smartindustry.common.bo.sm.StorageGroupBO;
+import com.smartindustry.common.bo.sm.StorageGroupDetailBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.sm.StorageGroupPO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.security.core.parameters.P;
 
 import java.util.List;
 
@@ -26,4 +29,8 @@ public interface StorageGroupMapper extends BaseMapper<StorageGroupPO, Long> {
      * @return
      */
     Long queryGroup(Long storageId);
+
+
+
+    List<StorageGroupDetailBO> queryStorageDetail(@Param("storageId") Long storageId, @Param("storageGroupId") Long storageGroupId);
 }

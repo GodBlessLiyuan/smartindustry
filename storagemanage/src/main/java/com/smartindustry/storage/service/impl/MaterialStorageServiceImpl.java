@@ -4,10 +4,7 @@ import com.github.pagehelper.Page;
 import com.smartindustry.common.bo.im.MaterialInventoryBO;
 import com.smartindustry.common.bo.om.PickBodyBO;
 import com.smartindustry.common.bo.si.PrintLabelBO;
-import com.smartindustry.common.bo.sm.ReceiptBodyBO;
-import com.smartindustry.common.bo.sm.StorageBO;
-import com.smartindustry.common.bo.sm.StorageDetailBO;
-import com.smartindustry.common.bo.sm.StorageGroupBO;
+import com.smartindustry.common.bo.sm.*;
 import com.smartindustry.common.constant.ResultConstant;
 import com.smartindustry.common.mapper.em.TransferHeadMapper;
 import com.smartindustry.common.mapper.im.MaterialInventoryMapper;
@@ -42,6 +39,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * @author: xiahui
@@ -393,6 +392,49 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         return ResultVO.ok();
     }
 
+    /**
+     * 查询入库单的已入库情况查询
+     *
+     * @param dto
+     * @return
+     */
+    @Override
+    public ResultVO storageDetail4Sid(OperateDTO dto) {
+        if (dto.getSid() == null) {
+            return new ResultVO(1001);
+        }
+        List<StorageGroupDetailBO> storageGroupBOs = storageGroupMapper.queryStorageDetail(dto.getSid(), dto.getSgid());
+        if (!storageGroupBOs.isEmpty()) {
+            for (StorageGroupDetailBO bo : storageGroupBOs) {
+                bo.setNum(bo.getDetail().stream().collect(Collectors.summingInt(StorageDetailBO::getNum)));
+                Map<String, List<StorageDetailBO>> locationMap = bo.getDetail().stream().collect(Collectors.toMap(
+                        p -> p.getWarehouseName() +"_"+ p.getLocationNo(),
+                        p -> {
+                            List<StorageDetailBO> bs = new ArrayList<>();
+                            bs.add(p);
+                            return bs;
+                        },
+                        (List<StorageDetailBO> values1, List<StorageDetailBO> values2) -> {
+                            values1.addAll(values2);
+                            return values1;
+                        }
+                ));
+               List<StorageDetailBO> detail = new ArrayList<>();
+               for (String key: locationMap.keySet()) {
+                   String[] keys = key.split("_");
+                   StorageDetailBO dbo = new StorageDetailBO();
+                   dbo.setWarehouseName(keys[0]);
+                   dbo.setLocationNo(keys[1]);
+                   dbo.setLabels(locationMap.get(key));
+                   detail.add(dbo);
+               }
+               bo.setDetail(detail);
+            }
+            return ResultVO.ok().setData(StorageSimpleDetailVO.convert(storageGroupBOs));
+        }
+        return ResultVO.ok();
+    }
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO label(StorageGroupDTO dto) {
@@ -709,7 +751,33 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
 
         List<StorageGroupBO> storageGroupBOs = storageGroupMapper.queryBySid(storageBO.getStorageId());
 
-        return ResultVO.ok().setData(StorageDetailVO.convert(storageBO, receiptBodyBO, storageGroupBOs));
+        List<StorageGroupBO> unlocateBos = storageGroupBOs.stream().filter(StorageGroupBO -> StorageGroupBO.getLocationNo() == null).collect(Collectors.toList());
+
+        List<StorageGroupBO> locatedBos = storageGroupBOs.stream().filter(StorageGroupBO -> StorageGroupBO.getLocationNo() != null).collect(Collectors.toList());
+
+        //综合入库详情组表
+        for (StorageGroupBO bo : locatedBos) {
+            //将所有的入库按照
+            Map<String, List<StorageDetailBO>> map = bo.getDetail().stream().collect(Collectors.toMap(StorageDetailBO::getMaterialNo, p -> {
+                        List<StorageDetailBO> bs = new ArrayList<>();
+                        bs.add(p);
+                        return bs;
+                    }, (List<StorageDetailBO> values1, List<StorageDetailBO> values2) -> {
+                        values1.addAll(values2);
+                        return values1;
+                    }
+            ));
+            List<StorageDetailBO> bos = new ArrayList<>(map.size());
+            for (String materialNo : map.keySet()) {
+                StorageDetailBO detailBO = map.get(materialNo).get(0);
+                detailBO.setPackageId(null);
+                detailBO.setNum(map.get(materialNo).stream().collect(Collectors.summingInt(StorageDetailBO::getNum)));
+                bos.add(detailBO);
+            }
+            bo.setDetail(bos);
+        }
+
+        return ResultVO.ok().setData(StorageDetailVO.convert(storageBO, receiptBodyBO, storageGroupBOs, unlocateBos.isEmpty()?null: unlocateBos.get(0)));
     }
 
     @Override
