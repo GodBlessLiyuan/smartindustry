@@ -777,7 +777,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
             bo.setDetail(bos);
         }
 
-        return ResultVO.ok().setData(StorageDetailVO.convert(storageBO, receiptBodyBO, storageGroupBOs, unlocateBos.isEmpty()?null: unlocateBos.get(0)));
+        return ResultVO.ok().setData(StorageDetailVO.convert(storageBO, receiptBodyBO, locatedBos, unlocateBos.isEmpty()?null: unlocateBos.get(0)));
     }
 
     @Override
