@@ -2,7 +2,6 @@ package com.smartindustry.storage.vo;
 
 import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.bo.sm.StorageDetailBO;
-import com.smartindustry.common.bo.sm.StorageGroupBO;
 import com.smartindustry.common.bo.sm.StorageGroupDetailBO;
 import lombok.Data;
 

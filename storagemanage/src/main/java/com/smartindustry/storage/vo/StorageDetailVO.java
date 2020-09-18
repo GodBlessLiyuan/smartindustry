@@ -92,7 +92,7 @@ public class StorageDetailVO implements Serializable {
     /**
      * 新增库位的物料信息
      */
-    private GroupVO label;
+    private List<DetailVO> labels;
     /**
      * 分组数据
      */
@@ -144,7 +144,7 @@ public class StorageDetailVO implements Serializable {
      */
     public static StorageDetailVO convert(StorageBO msBO, ReceiptBodyBO rbBO, List<StorageGroupBO> sgBOs, StorageGroupBO bo) {
         StorageDetailVO vo = convert(msBO, rbBO, sgBOs);
-        vo.setLabel(convert(bo));
+        vo.setLabels(convert(bo.getDetail()));
         return vo;
     }
 
@@ -158,12 +158,17 @@ public class StorageDetailVO implements Serializable {
         GroupVO vo = new GroupVO();
         vo.setSgid(bo.getStorageGroupId());
         vo.setLno(bo.getLocationNo());
-        List<DetailVO> detailVOs = new ArrayList<>(bo.getDetail().size());
-        for (StorageDetailBO sdBO : bo.getDetail()) {
+
+        vo.setDetail(convert(bo.getDetail()));
+        return vo;
+    }
+
+    public static List<DetailVO> convert(List<StorageDetailBO> bos) {
+        List<DetailVO> detailVOs = new ArrayList<>(bos.size());
+        for (StorageDetailBO sdBO : bos) {
             detailVOs.add(convert(sdBO));
         }
-        vo.setDetail(detailVOs);
-        return vo;
+        return detailVOs;
     }
 
     public static DetailVO convert(StorageDetailBO bo) {
