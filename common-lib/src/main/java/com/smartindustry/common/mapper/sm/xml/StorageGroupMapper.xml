@@ -78,6 +78,7 @@
             <result column="package_id" jdbcType="BIGINT" property="packageId"/>
             <result column="material_id" jdbcType="BIGINT" property="materialId"/>
             <result column="material_no" jdbcType="CHAR" property="materialNo"/>
+            <result column="material_name" jdbcType="CHAR" property="materialName"/>
             <result column="material_desc" jdbcType="CHAR" property="materialDesc"/>
             <result column="num" jdbcType="INTEGER" property="num"/>
         </collection>
@@ -92,7 +93,8 @@
                l.location_no,
                m.material_id,
                m.material_no,
-               m.material_desc
+               m.material_desc,
+               m.material_name
         from sm_storage_group sg
                  left join sm_storage_detail sd on sg.storage_group_id = sd.storage_group_id
                  left join si_print_label pl on sd.print_label_id = pl.print_label_id
@@ -107,5 +109,46 @@
         select storage_group_id
         from sm_storage_group
         where storage_id = #{storageId,jdbcType=BIGINT} limit 1
+    </select>
+
+    <resultMap id="GroupDetailBOResultMap" type="com.smartindustry.common.bo.sm.StorageGroupDetailBO" extends="BaseResultMap">
+        <result column="material_id" jdbcType="BIGINT" property="materialId"/>
+        <result column="material_no" jdbcType="CHAR" property="materialNo"/>
+        <result column="material_name" jdbcType="CHAR" property="materialName"/>
+        <collection property="detail" column="storage_detail_id"
+                    ofType="com.smartindustry.common.bo.sm.StorageDetailBO">
+            <id column="storage_detail_id" jdbcType="BIGINT" property="storageDetailId"/>
+            <result column="print_label_id" jdbcType="BIGINT" property="printLabelId"/>
+            <result column="package_id" jdbcType="BIGINT" property="packageId"/>
+            <result column="location_no" jdbcType="CHAR" property="locationNo"/>
+            <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
+            <result column="num" jdbcType="INTEGER" property="num"/>
+        </collection>
+    </resultMap>
+    <select id="queryStorageDetail" resultMap="GroupDetailBOResultMap">
+             select sg.storage_group_id,
+               sg.location_id,
+               sd.storage_detail_id,
+               pl.print_label_id,
+               pl.package_id,
+               pl.num,
+               l.location_no,
+               m.material_id,
+               m.material_no,
+               m.material_desc,
+               m.material_name,
+								w.warehouse_name
+        from sm_storage_group sg
+                 left join sm_storage_detail sd on sg.storage_group_id = sd.storage_group_id
+                 left join si_print_label pl on sd.print_label_id = pl.print_label_id
+                 left join si_material m on pl.material_id = m.material_id
+                 left join si_location l on sg.location_id = l.location_id
+									LEFT JOIN si_warehouse w ON w.warehouse_id = l.warehouse_id
+        where sg.storage_id = #{storageId, jdbcType=BIGINT}
+        and sg.location_id is not null
+        <if test="storageGroupId != null">
+            and sg.storage_group_id = #{storageGroupId, jdbcType=BIGINT}
+        </if>
+        order by sg.storage_group_id desc, sd.storage_detail_id desc
     </select>
 </mapper>

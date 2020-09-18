@@ -97,7 +97,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
             return new ResultVO(1001);
         }
         List<PrintLabelBO> bos = printLabelMapper.queryByRbid(dto.getRbid());
-        return ResultVO.ok().setData(PrintLabelVO.convertBO(bos));
+        return ResultVO.ok().setData(PrintLabelVO.convertBO4Tree(bos));
     }
 
     @Override
