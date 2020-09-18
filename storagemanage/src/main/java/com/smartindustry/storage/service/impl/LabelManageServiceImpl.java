@@ -4,7 +4,10 @@ import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.bo.sm.ReceiptBodyBO;
 import com.smartindustry.common.constant.ConfigConstant;
 import com.smartindustry.common.constant.ModuleConstant;
-import com.smartindustry.common.mapper.si.*;
+import com.smartindustry.common.mapper.si.ConfigMapper;
+import com.smartindustry.common.mapper.si.LabelRecordMapper;
+import com.smartindustry.common.mapper.si.MaterialAttributeMapper;
+import com.smartindustry.common.mapper.si.PrintLabelMapper;
 import com.smartindustry.common.mapper.sm.*;
 import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.si.ConfigPO;
@@ -13,7 +16,6 @@ import com.smartindustry.common.pojo.si.MaterialAttributePO;
 import com.smartindustry.common.pojo.si.PrintLabelPO;
 import com.smartindustry.common.pojo.sm.*;
 import com.smartindustry.common.security.service.TokenService;
-import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.ReceiptConstant;
 import com.smartindustry.storage.dto.LabelSplitDTO;
@@ -22,6 +24,7 @@ import com.smartindustry.storage.dto.PrintLabelDTO;
 import com.smartindustry.storage.service.ILabelManageService;
 import com.smartindustry.storage.util.ReceiptNoUtil;
 import com.smartindustry.storage.vo.PrintLabelVO;
+import com.smartindustry.storage.vo.StorageSimpleDetailVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -97,7 +100,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
             return new ResultVO(1001);
         }
         List<PrintLabelBO> bos = printLabelMapper.queryByRbid(dto.getRbid());
-        return ResultVO.ok().setData(PrintLabelVO.convertBO4Tree(bos));
+        return ResultVO.ok().setData(StorageSimpleDetailVO.convertLabel(bos));
     }
 
     @Override
