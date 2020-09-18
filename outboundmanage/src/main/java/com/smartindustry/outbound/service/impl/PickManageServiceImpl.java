@@ -10,11 +10,13 @@ import com.smartindustry.common.bo.si.StorageLabelBO;
 import com.smartindustry.common.constant.ConfigConstant;
 import com.smartindustry.common.mapper.om.*;
 import com.smartindustry.common.mapper.si.ConfigMapper;
+import com.smartindustry.common.mapper.si.MaterialAttributeMapper;
 import com.smartindustry.common.mapper.si.PrintLabelMapper;
 import com.smartindustry.common.mapper.si.StorageLabelMapper;
 import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.om.*;
 import com.smartindustry.common.pojo.si.ConfigPO;
+import com.smartindustry.common.pojo.si.MaterialAttributePO;
 import com.smartindustry.common.pojo.si.PrintLabelPO;
 import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.PageQueryUtil;
@@ -64,9 +66,11 @@ public class PickManageServiceImpl implements IPickManageService {
     TokenService tokenService;
     @Autowired
     ConfigMapper configMapper;
+    @Autowired
+    private MaterialAttributeMapper materialAttributeMapper;
 
     @Override
-    public ResultVO pageQuery(Map<String, Object> reqData){
+    public ResultVO pageQuery(Map<String, Object> reqData) {
         Page<PickHeadBO> page = PageQueryUtil.startPage(reqData);
         List<PickHeadBO> bos = pickHeadMapper.pageQuery(reqData);
         return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), PickHeadVO.convertBO(bos)));
@@ -250,7 +254,7 @@ public class PickManageServiceImpl implements IPickManageService {
         pickLabelPo.setCreateTime(new Date());
         pickHeadMapper.insertPickLabel(pickLabelPo);
         Integer flagTwo = pickHeadMapper.judgeIsPick(pickHeadId);
-        int result = (flagTwo != null) ? pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_PICK,new Date()) : 0;
+        int result = (flagTwo != null) ? pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_PICK, new Date()) : 0;
         return ResultVO.ok().setData(ScanOutVO.convert(bo));
     }
 
@@ -260,6 +264,10 @@ public class PickManageServiceImpl implements IPickManageService {
 
         //(2) 将扫描的pid的dr值设为2，并且按照分料数量分成两个pid
         PrintLabelPO po = printLabelMapper.selectByPrimaryKey(printLabelId);
+        MaterialAttributePO attributePO = materialAttributeMapper.queryByMid(po.getMaterialId());
+        if (null != attributePO && null != attributePO.getPickSplit() && attributePO.getPickSplit() == 1) {
+            return new ResultVO(1026);
+        }
         if (num >= po.getNum()) {
             //输入的拆分量大于原有量
             return new ResultVO(1019);
@@ -276,7 +284,7 @@ public class PickManageServiceImpl implements IPickManageService {
         poDivOne.setRelatePackageId(po.getPackageId());
         poDivOne.setNum(num);
         poDivOne.setDr((byte) 1);
-        int resultDivOne = printLabelMapper.insert(poDivOne);
+        printLabelMapper.insert(poDivOne);
 
         // 生成分料pid2
         Date divTwoTime = new Date();
@@ -324,7 +332,7 @@ public class PickManageServiceImpl implements IPickManageService {
         Integer flag = pickHeadMapper.judgeIsPick(pickHeadId);
 
         if (null == flag) {
-            pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_UNPROCESSED,new Date());
+            pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_UNPROCESSED, new Date());
         }
 
         return ResultVO.ok();
@@ -340,7 +348,7 @@ public class PickManageServiceImpl implements IPickManageService {
     public ResultVO judgeStatus(Long pickHeadId) {
         // 当前工单拣货单id所关联的拣货标签表拥有数据,那么正处于物料拣货状态
         Integer flag = pickHeadMapper.judgeIsPick(pickHeadId);
-        int result = (flag == 1) ? pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_PICK,new Date()) : 0;
+        int result = (flag == 1) ? pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_PICK, new Date()) : 0;
         return ResultVO.ok();
     }
 
@@ -363,7 +371,7 @@ public class PickManageServiceImpl implements IPickManageService {
         // 2判断出库审核是否被关闭
         ConfigPO configPo = configMapper.queryByKey(ConfigConstant.K_OUTBOUND_QUALITY_KEY);
         if (null != configPo && ConfigConstant.V_NO.equals(configPo.getConfigValue())) {
-            pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_STORAGE,new Date());
+            pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_STORAGE, new Date());
             OutboundPO po = new OutboundPO();
             po.setPickHeadId(pickHeadId);
             Date date = new Date();
@@ -374,9 +382,9 @@ public class PickManageServiceImpl implements IPickManageService {
             outboundMapper.insert(po);
             outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, user.getUserId(), user.getName(), OutboundConstant.RECORD_SUBMIT, OutboundConstant.MATERIAL_STATUS_PICK));
             outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, po.getOutboundId(), user.getUserId(), user.getName(), OutboundConstant.RECORD_ADD, OutboundConstant.MATERIAL_STATUS_STORAGE));
-        }else{
+        } else {
             if (resultEx != null || resultLack != null) {
-                pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_CHECK,new Date());
+                pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_CHECK, new Date());
                 PickCheckPO po = new PickCheckPO();
                 po.setPickHeadId(pickHeadId);
                 po.setStatus(OutboundConstant.OUTBOUND_STATUS_WAIT);
@@ -386,7 +394,7 @@ public class PickManageServiceImpl implements IPickManageService {
                 outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, user.getUserId(), user.getName(), OutboundConstant.RECORD_SUBMIT, OutboundConstant.MATERIAL_STATUS_PICK));
                 outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, user.getUserId(), user.getName(), OutboundConstant.RECORD_ADD, OutboundConstant.MATERIAL_STATUS_CHECK));
             } else {
-                pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_STORAGE,new Date());
+                pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_STORAGE, new Date());
                 OutboundPO po = new OutboundPO();
                 po.setPickHeadId(pickHeadId);
                 Date date = new Date();
@@ -430,18 +438,18 @@ public class PickManageServiceImpl implements IPickManageService {
         po.setRemark(message);
         if (status == null) {
             //OQC检测时的驳回
-            pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_RETURN,new Date());
+            pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_RETURN, new Date());
             po.setStatus(OutboundConstant.TURN_DOWN_CANCEL);
             pickCheckMapper.updateByPrimaryKey(po);
             outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, user.getUserId(), user.getName(), OutboundConstant.RECORD_DISAGREE, OutboundConstant.MATERIAL_STATUS_CHECK));
         } else if (status.equals(OutboundConstant.MATERIAL_STATUS_WAIT)) {
             //等齐套发货
-            pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_PICK,new Date());
+            pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_PICK, new Date());
             pickCheckMapper.deleteByPrimaryKey(pickHeadId);
             outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, user.getUserId(), user.getName(), OutboundConstant.RECORD_DISAGREE, OutboundConstant.MATERIAL_STATUS_CHECK));
         } else if (status.equals(OutboundConstant.MATERIAL_STATUS_RETURN)) {
             //取消发货，退货仓库
-            pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_RETURN,new Date());
+            pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_RETURN, new Date());
             po.setStatus(OutboundConstant.TURN_DOWN_CANCEL);
             pickCheckMapper.updateByPrimaryKey(po);
             outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, user.getUserId(), user.getName(), OutboundConstant.RECORD_DISAGREE, OutboundConstant.MATERIAL_STATUS_CHECK));
@@ -455,7 +463,7 @@ public class PickManageServiceImpl implements IPickManageService {
     public ResultVO agreeOutBound(Long pickHeadId) {
         UserPO user = tokenService.getLoginUser();
         // 欠料出库，将物料状态改成“物料出库”
-        pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_STORAGE,new Date());
+        pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_STORAGE, new Date());
         // 形成出库单
         OutboundPO po = new OutboundPO();
         po.setPickHeadId(pickHeadId);
