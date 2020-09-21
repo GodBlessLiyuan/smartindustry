@@ -47,6 +47,11 @@ public class StorageDetailVO implements Serializable {
     private String wname;
 
     /**
+     * 仓库ID
+     */
+    private Long wid;
+
+    /**
      * 入库时间
      */
     private Date stime;
@@ -125,6 +130,9 @@ public class StorageDetailVO implements Serializable {
         vo.setTtype(msBO.getTransferType());
         vo.setPno(msBO.getPickNo());
         vo.setCono(msBO.getCorrespondNo());
+        if(sgBOs != null && !sgBOs.isEmpty()) {
+            vo.setWid(sgBOs.get(0).getWarehouseId());
+        }
         List<GroupVO> groupVOs = new ArrayList<>(sgBOs.size());
         for (StorageGroupBO sgBO : sgBOs) {
             groupVOs.add(convert(sgBO));
@@ -160,7 +168,6 @@ public class StorageDetailVO implements Serializable {
         GroupVO vo = new GroupVO();
         vo.setSgid(bo.getStorageGroupId());
         vo.setLno(bo.getLocationNo());
-
         vo.setDetail(convert(bo.getDetail()));
         return vo;
     }
@@ -179,9 +186,11 @@ public class StorageDetailVO implements Serializable {
         vo.setPlid(bo.getPrintLabelId());
         vo.setPid(bo.getPackageId());
         vo.setMno(bo.getMaterialNo());
+        vo.setMname(bo.getMaterialName());
         vo.setMno(bo.getMaterialName());
         vo.setMdesc(bo.getMaterialDesc());
         vo.setNum(bo.getNum());
+        vo.setSgid(bo.getStorageGroupId());
         return vo;
     }
 
@@ -249,6 +258,12 @@ public class StorageDetailVO implements Serializable {
          * 标签ID
          */
         private Long plid;
+
+        /**
+         * 入库详情组ID
+         */
+        private Long sgid;
+
         /**
          * 标签PID
          */

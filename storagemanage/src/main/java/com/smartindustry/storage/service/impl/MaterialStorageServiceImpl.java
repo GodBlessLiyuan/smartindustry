@@ -39,7 +39,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.*;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -372,16 +371,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
     }
 
     @Override
-    public ResultVO location(@RequestBody OperateDTO dto) {
-        LocationPO locationPO = locationMapper.queryByLno(dto.getLno());
-        if (null == locationPO) {
-            return new ResultVO(1002);
-        }
-        return ResultVO.ok();
-    }
-
-    @Override
-    public ResultVO locationWhid(OperateDTO dto) {
+    public ResultVO location(OperateDTO dto) {
         if (null == dto.getWhid() || StringUtils.isEmpty(dto.getLno())) {
             return new ResultVO(1001);
         }
@@ -389,7 +379,8 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         if (locationPO == null) {
             return new ResultVO(1002);
         }
-        return ResultVO.ok();
+        return ResultVO.ok().setData(LocationVO.convert(locationPO));
+
     }
 
     /**
@@ -808,5 +799,76 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         List<StorageRecordPO> recordPOs = recordMapper.queryBySid(dto.getSid());
         res.put(ResultConstant.OPERATE_RECORD, RecordVO.convert(recordPOs));
         return ResultVO.ok().setData(res);
+    }
+
+    /**
+     * 当选择仓库发生变化时 清空所有已经入库的数据
+     *
+     * @param dto
+     * @return
+     */
+    @Override
+    public ResultVO changeWarehouse(OperateDTO dto) {
+        if (dto.getSid() == null) {
+            return new ResultVO(1001);
+        }
+        StorageBO storageBO = storageMapper.queryReceiptBySid(dto.getSid());
+        if (null == storageBO) {
+            return new ResultVO(1002);
+        }
+        /**
+         * step 1 查找标签列表  去除仓位
+         * step 2 查找收料单， 更新入库数量和状态,更新入库单的入库数量
+         * step 3 查找所有的入库详情、 都需要进行删除
+         * step 4 删除入库详情组
+         */
+        List<StorageGroupBO> storageGroupPOS = storageGroupMapper.queryBySid(dto.getSid());
+
+        //step 1 查找标签列表  去除仓位
+        ReceiptBodyPO rbPO = receiptBodyMapper.selectByPrimaryKey(storageBO.getReceiptBodyId());
+        rbPO.setStockNum(0);
+        rbPO.setStatus(ReceiptConstant.RECEIPT_MATERIAL_STORAGE);
+        receiptBodyMapper.updateByPrimaryKey(rbPO);
+
+        List<Long> sgIds = new ArrayList<>(storageGroupPOS.size());
+        for(StorageGroupBO sgBO: storageGroupPOS) {
+           sgIds.add(sgBO.getStorageGroupId());
+        }
+
+        List<StorageDetailBO> storageDetailBOS = storageDetailMapper.queryByGroupIds(sgIds);
+        List<Long> plIds  = new ArrayList<>();
+        for (StorageDetailBO sdBo: storageDetailBOS) {
+            plIds.add(sdBo.getPrintLabelId());
+        }
+        printLabelMapper.updateLidByIds(null, plIds);
+        //step2 查找收料单， 更新入库数量和状态, 更新收料单
+        storageBO.setStatus(ReceiptConstant.MATERIAL_STORAGE_PENDING);
+        storageBO.setStoredNum(0);
+        storageMapper.updateByPrimaryKey(storageBO);
+
+        rbPO.setStockNum(0);
+        receiptBodyMapper.updateByPrimaryKey(rbPO);
+
+        //step 3 查找所有的入库详情、 都需要进行删除
+        storageDetailMapper.deleteBySid(dto.getSid());
+
+        //step 4 删除入库详情组
+        storageGroupMapper.batchDeleteByIds(sgIds);
+        return ResultVO.ok();
+    }
+
+    /**
+     * 通过入库详情组ID查询标签列表
+     *
+     * @param dto
+     * @return
+     */
+    @Override
+    public ResultVO queryBySgid(OperateDTO dto) {
+        if (null == dto.getSgid()) {
+            return new ResultVO(1001);
+        }
+        List<StorageDetailBO> storageDetailBOS = storageDetailMapper.queryByGroupId(dto.getSgid());
+        return ResultVO.ok().setData(StorageDetailVO.convert(storageDetailBOS));
     }
 }

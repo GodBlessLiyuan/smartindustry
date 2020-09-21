@@ -84,16 +84,6 @@ public class MaterialStorageController {
         return materialStorageService.location(dto);
     }
 
-    /**
-     * 根据仓库ID和库位编号 查询库位
-     *
-     * @param dto
-     * @return
-     */
-    @PostMapping("locationByWhidAndLno")
-    public ResultVO locationWhid(@RequestBody OperateDTO dto) {
-        return materialStorageService.locationWhid(dto);
-    }
 
     @PostMapping("label")
     public ResultVO label(@RequestBody StorageGroupDTO dto) {
@@ -156,6 +146,27 @@ public class MaterialStorageController {
     @PostMapping("storageDetail")
     ResultVO storageDetail(@RequestBody OperateDTO dto){
         return materialStorageService.storageDetail(dto);
+    }
+
+    /**
+     * 当选择仓库发生变化时 清空所有已经入库的数据
+     *
+     * @param dto
+     * @return
+     */
+    @PostMapping("changeWarehouse")
+    public ResultVO changeWarehouse(@RequestBody OperateDTO dto) {
+        return materialStorageService.changeWarehouse(dto);
+    }
+
+    /**
+     * 通过入库详情组ID 查询标签列表
+     * @param dto
+     * @return
+     */
+    @PostMapping("queryBySgId")
+    public ResultVO queryBySgid(@RequestBody OperateDTO dto) {
+        return materialStorageService.queryBySgid(dto);
     }
 
 }

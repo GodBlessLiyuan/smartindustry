@@ -31,6 +31,18 @@ public interface StorageGroupMapper extends BaseMapper<StorageGroupPO, Long> {
     Long queryGroup(Long storageId);
 
 
+    /**
+     * 根据入库单和入库单详情组查询入库详情
+     * @param storageId
+     * @param storageGroupId
+     * @return
+     */
 
     List<StorageGroupDetailBO> queryStorageDetail(@Param("storageId") Long storageId, @Param("storageGroupId") Long storageGroupId);
+
+    /**
+     * 批量删除
+     * @param sgIds
+     */
+    void batchDeleteByIds(List<Long> sgIds);
 }

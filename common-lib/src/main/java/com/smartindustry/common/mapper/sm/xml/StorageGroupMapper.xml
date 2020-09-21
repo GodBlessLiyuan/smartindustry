@@ -20,6 +20,14 @@
         from sm_storage_group
         where storage_group_id = #{storageGroupId,jdbcType=BIGINT}
     </delete>
+
+    <delete id="batchDeleteByIds" parameterType="java.util.List">
+        delete from sm_storage_group where storage_group_id in
+        <foreach collection="list" item="sgid" separator="," open="(" close=")">
+            ${sgid, jdbcType=BIGINT}
+        </foreach>
+    </delete>
+
     <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.StorageGroupPO" useGeneratedKeys="true"
             keyProperty="storageGroupId">
         insert into sm_storage_group (storage_group_id, storage_id, location_id)
@@ -71,6 +79,7 @@
 
     <resultMap id="GroupBOResultMap" type="com.smartindustry.common.bo.sm.StorageGroupBO" extends="BaseResultMap">
         <result column="location_no" jdbcType="CHAR" property="locationNo"/>
+        <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId"/>
         <collection property="detail" column="storage_detail_id"
                     ofType="com.smartindustry.common.bo.sm.StorageDetailBO">
             <id column="storage_detail_id" jdbcType="BIGINT" property="storageDetailId"/>
@@ -91,6 +100,7 @@
                pl.package_id,
                pl.num,
                l.location_no,
+               l.warehouse_id,
                m.material_id,
                m.material_no,
                m.material_desc,

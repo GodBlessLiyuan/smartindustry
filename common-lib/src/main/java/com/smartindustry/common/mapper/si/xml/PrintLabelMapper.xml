@@ -192,11 +192,20 @@
         <result column="material_no" jdbcType="CHAR" property="materialNo"/>
         <result column="material_name" jdbcType="CHAR" property="materialName"/>
         <result column="material_desc" jdbcType="CHAR" property="materialDesc"/>
+        <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId"/>
+        <result column="location_id" jdbcType="BIGINT" property="locationId"/>
+        <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
+        <result column="location_no" jdbcType="CHAR" property="locationNo"/>
     </resultMap>
     <sql id="BO_Column_List">
         pl.print_label_id, pl.package_id, pl.produce_date, pl.produce_batch, pl.material_id, pl.num, pl.`type`,
     pl.origin, pl.location_id, pl.relate_label_id, pl.relate_package_id, pl.create_time, pl.dr,
     m.material_no, m.material_desc, m.material_name
+    </sql>
+    <sql id="BODetail_Column_List">
+        pl.print_label_id, pl.package_id, pl.produce_date, pl.produce_batch, pl.material_id, pl.num, pl.`type`,
+    pl.origin, pl.location_id, pl.relate_label_id, pl.relate_package_id, pl.create_time, pl.dr,
+    m.material_no, m.material_desc, m.material_name ,ma.warehouse_id, ma.location_id, w.warehouse_name, lo.location_no
     </sql>
     <select id="queryByReceiptBodyId" resultMap="BaseResultMap">
         select pl.print_label_id,
@@ -246,10 +255,13 @@
     </insert>
     <select id="queryByRbidAndPid" resultMap="BOResultMap">
         select
-        <include refid="BO_Column_List"/>
+        <include refid="BODetail_Column_List"/>
         from si_print_label pl
         left join sm_receipt_label rl on pl.print_label_id = rl.print_label_id
         left join si_material m on pl.material_id = m.material_id
+        left join si_material_attribute ma on ma.material_attribute_id = m.material_attribute_id
+        left join si_warehouse w on w.warehouse_id = ma.warehouse_id
+        left join si_location lo on lo.location_id = ma.location_id
         where rl.receipt_body_id = #{rbid,jdbcType=BIGINT}
         and pl.package_id = #{pid,jdbcType=CHAR}
         and rl.storage_id is null
@@ -314,7 +326,8 @@
         from si_print_label pl
         left join sm_receipt_label rl on pl.print_label_id = rl.print_label_id
         left join si_material m on pl.material_id = m.material_id
+        left join sm_storage_detail sd on sd.print_label_id = pl.print_label_id
         where rl.receipt_body_id = #{rbid,jdbcType=BIGINT}
-        and pl.location_id is null
+        and pl.location_id is null and sd.storage_detail_id is null
     </select>
 </mapper>

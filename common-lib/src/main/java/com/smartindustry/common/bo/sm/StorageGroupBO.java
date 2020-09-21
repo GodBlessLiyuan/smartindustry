@@ -14,5 +14,6 @@ import java.util.List;
 @Data
 public class StorageGroupBO extends StorageGroupPO {
     private String locationNo;
+    private Long warehouseId;
     List<StorageDetailBO> detail;
 }
