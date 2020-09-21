@@ -22,9 +22,14 @@ public class StorageDetailBO extends StorageDetailPO {
     private String locationNo;
     private String warehouseName;
     private Integer num;
+    private Long storageDetailId;
+
+    private Long storageGroupId;
+
+    private Long printLabelId;
 
     /**
-     * 表示同意库位下的标签列表
+     * 表示同一库位下的标签列表
      */
     private List<StorageDetailBO> labels;
 

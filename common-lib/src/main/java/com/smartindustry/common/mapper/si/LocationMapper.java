@@ -26,8 +26,8 @@ public interface LocationMapper extends BaseMapper<LocationPO, Long> {
     /**
      * 根据库位编号和仓库ID查询
      *
-     * @param lno
-     * @param whid
+     * @param locationNo
+     * @param warehouseId
      * @return
      */
     LocationPO queryByLnoAndWhid(@Param("locationNo") String locationNo,@Param("warehouseId") Long warehouseId);

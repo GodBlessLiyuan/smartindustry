@@ -23,4 +23,24 @@ public class PrintLabelBO extends PrintLabelPO {
      * 物料描述
      */
     private String materialDesc;
+
+    /**
+     * 默认仓库
+     */
+    private Long warehouseId;
+
+    /**
+     * 默认库位ID
+     */
+    private Long locationId;
+
+    /**
+     * 默认仓库名称
+     */
+    private String warehouseName;
+
+    /**
+     * 默认库位编码
+     */
+    private String locationNo;
 }

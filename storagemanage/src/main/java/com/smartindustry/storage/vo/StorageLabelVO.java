@@ -23,6 +23,7 @@ public class StorageLabelVO implements Serializable {
      * 打印标签ID
      */
     private Long plid;
+
     /**
      * PID
      */
@@ -39,6 +40,22 @@ public class StorageLabelVO implements Serializable {
      * 入库数量
      */
     private Integer num;
+    /**
+     * 仓库ID
+     */
+    private Long whid;
+    /**
+     * 库位ID
+     */
+    private Long lid;
+    /**
+     * 仓库名称
+     */
+    private String whname;
+    /**
+     * 库位编号
+     */
+    private String lno;
 
     public static StorageLabelVO convert(PrintLabelBO bo, Long sgid) {
         StorageLabelVO vo = new StorageLabelVO();
@@ -48,6 +65,10 @@ public class StorageLabelVO implements Serializable {
         vo.setMdesc(bo.getMaterialDesc());
         vo.setNum(bo.getNum());
         vo.setSgid(sgid);
+        vo.setWhid(bo.getWarehouseId());
+        vo.setWhname(bo.getWarehouseName());
+        vo.setLid(bo.getLocationId());
+        vo.setLno(bo.getLocationNo());
         return vo;
     }
 }

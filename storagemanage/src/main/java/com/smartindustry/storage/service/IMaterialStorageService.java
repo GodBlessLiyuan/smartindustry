@@ -156,13 +156,6 @@ public interface IMaterialStorageService {
      */
     ResultVO queryPidInfo(Map<String, Object> reqData);
 
-    /**
-     * 根据仓库ID 查询库位ID
-     * @param dto
-     * @return
-     */
-    ResultVO locationWhid(OperateDTO dto);
-
 
     /**
      * 查询入库单的已入库情况查询
@@ -171,4 +164,18 @@ public interface IMaterialStorageService {
      * @return
      */
     ResultVO storageDetail4Sid(OperateDTO dto);
+
+    /**
+     * 当选择仓库发生变化时 清空所有已经入库的数据
+     * @param dto
+     * @return
+     */
+    ResultVO changeWarehouse(OperateDTO dto);
+
+    /**
+     * 通过入库详情组ID查询标签列表
+     * @param dto
+     * @return
+     */
+    ResultVO queryBySgid(OperateDTO dto);
 }

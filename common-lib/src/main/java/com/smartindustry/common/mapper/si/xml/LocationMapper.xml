@@ -181,11 +181,11 @@
         order by l.create_time desc
     </select>
     <select id="queryByLno" parameterType="java.lang.String" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from si_location
-        where location_no = #{locationNo,jdbcType=CHAR} and dr = 1
-    </select>
+    select
+    <include refid="Base_Column_List"/>
+    from si_location
+    where location_no = #{locationNo,jdbcType=CHAR} and dr = 1
+</select>
     <select id="queryByWids" parameterType="java.util.List" resultMap="BOResultMap">
         select
         <include refid="BO_Column_List"/>
