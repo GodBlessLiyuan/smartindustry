@@ -87,11 +87,14 @@
   </delete>
 
   <!--  根据userId和权限id批量更新用户权限中间表-->
-  <insert id="insertBatch" parameterType="java.util.List">
-    insert into am_m_user_authority(user_id,authority_id) values
-    <foreach collection="uids" item="uid" open="(" separator="," close=")">
-       <foreach collection="perms" item="perm" open="(" separator="," close=")">
-         (#{uid,jdbcType=BIGINT}, #{perm,jdbcType=BIGINT})
+  <insert id="insertBatch">
+    insert into am_m_user_authority(user_id,authority_id)values
+    <foreach collection="uids" item="uid" separator=",">
+       <foreach collection="perms" item="perm" separator=",">
+         (
+           #{uid,jdbcType=BIGINT},
+           #{perm,jdbcType=BIGINT}
+         )
        </foreach>
     </foreach>
   </insert>
