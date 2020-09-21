@@ -59,7 +59,6 @@ public class ClientServiceImpl implements IClientService {
     @Transactional(rollbackFor = Exception.class)
     public ResultVO delete(List<Long> cids){
         for(Long cid:cids){
-            //todo
             ClientPO po = clientMapper.selectByPrimaryKey(cid);
             List<PickHeadPO> pos = pickHeadMapper.queryByCname(po.getClientName());
             if(!pos.isEmpty()){

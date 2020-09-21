@@ -77,11 +77,10 @@
 
 <!--  批量新增角色权限表的权限-->
   <insert id="insertBatch" parameterType="java.util.List">
-    <foreach collection="perms" item="perm" index="index" open="" close="" separator=";">
-      insert into am_role_authority(role_id,authority_id)
-      <if test="perm != null">
-        values(#{roleId,jdbcType=BIGINT}, #{perm,jdbcType=BIGINT})
-      </if>
+    insert into am_role_authority(role_id,authority_id)
+    values
+    <foreach collection="perms" item="perm" index="index" separator="," >
+      (#{roleId,jdbcType=BIGINT}, #{perm,jdbcType=BIGINT})
     </foreach>
   </insert>
 

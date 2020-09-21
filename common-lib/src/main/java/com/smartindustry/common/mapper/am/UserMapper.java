@@ -75,10 +75,10 @@ public interface UserMapper extends BaseMapper<UserPO, Long> {
 
     /**
      * 将用户列表的 部门置空
-     * @param deptId
+     * @param dids
      * @return
      */
-    Integer updateDeptId(@Param("deptId") Long deptId);
+    Integer updateDeptId(List<Long> dids);
 
     /**
      * 更新用户密码

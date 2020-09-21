@@ -23,16 +23,16 @@ public interface MUserAuthorityMapper extends BaseMapper<MUserAuthorityPO, Long>
 
     /**
      * 根据用户id删除角色权限表中的权限
-     * @param userId
+     * @param uids
      * @return
      */
-    Integer deleteByUserId(@Param("userId") Long userId);
+    Integer deleteByUserId(List<Long> uids);
 
     /**
      * 批量新增角色权限
-     * @param userId
+     * @param uids
      * @param perms
      * @return
      */
-    Integer insertBatch(@Param("userId") Long userId,@Param("perms") List<Long> perms);
+    Integer insertBatch(@Param("uids") List<Long> uids,@Param("perms") List<Long> perms);
 }

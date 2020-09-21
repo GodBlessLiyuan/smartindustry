@@ -1,32 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.smartindustry.common.mapper.am.DeptMapper">
-  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.am.DeptPO">
-    <id column="dept_id" jdbcType="BIGINT" property="deptId" />
-    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
-    <result column="dept_name" jdbcType="CHAR" property="deptName" />
-    <result column="user_id" jdbcType="BIGINT" property="userId" />
-    <result column="dept_desc" jdbcType="CHAR" property="deptDesc" />
-    <result column="status" jdbcType="TINYINT" property="status" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="dr" jdbcType="TINYINT" property="dr" />
-  </resultMap>
-  <sql id="Base_Column_List">
+    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.am.DeptPO">
+        <id column="dept_id" jdbcType="BIGINT" property="deptId"/>
+        <result column="parent_id" jdbcType="BIGINT" property="parentId"/>
+        <result column="dept_name" jdbcType="CHAR" property="deptName"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="dept_desc" jdbcType="CHAR" property="deptDesc"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="dr" jdbcType="TINYINT" property="dr"/>
+    </resultMap>
+    <sql id="Base_Column_List">
     dept_id, parent_id, dept_name, user_id, dept_desc, `status`, create_time, update_time, 
     dr
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from am_dept
-    where dept_id = #{deptId,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from am_dept
+        where dept_id = #{deptId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from am_dept
     where dept_id = #{deptId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.smartindustry.common.pojo.am.DeptPO" useGeneratedKeys="true" keyProperty="deptId">
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.am.DeptPO" useGeneratedKeys="true"
+            keyProperty="deptId">
     insert into am_dept (dept_id, parent_id, dept_name, 
       user_id, dept_desc, `status`, 
       create_time, update_time, dr
@@ -36,98 +37,98 @@
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.am.DeptPO">
-    insert into am_dept
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="deptId != null">
-        dept_id,
-      </if>
-      <if test="parentId != null">
-        parent_id,
-      </if>
-      <if test="deptName != null">
-        dept_name,
-      </if>
-      <if test="userId != null">
-        user_id,
-      </if>
-      <if test="deptDesc != null">
-        dept_desc,
-      </if>
-      <if test="status != null">
-        `status`,
-      </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
-      <if test="updateTime != null">
-        update_time,
-      </if>
-      <if test="dr != null">
-        dr,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="deptId != null">
-        #{deptId,jdbcType=BIGINT},
-      </if>
-      <if test="parentId != null">
-        #{parentId,jdbcType=BIGINT},
-      </if>
-      <if test="deptName != null">
-        #{deptName,jdbcType=CHAR},
-      </if>
-      <if test="userId != null">
-        #{userId,jdbcType=BIGINT},
-      </if>
-      <if test="deptDesc != null">
-        #{deptDesc,jdbcType=CHAR},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=TINYINT},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="dr != null">
-        #{dr,jdbcType=TINYINT},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.am.DeptPO">
-    update am_dept
-    <set>
-      <if test="parentId != null">
-        parent_id = #{parentId,jdbcType=BIGINT},
-      </if>
-      <if test="deptName != null">
-        dept_name = #{deptName,jdbcType=CHAR},
-      </if>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=BIGINT},
-      </if>
-      <if test="deptDesc != null">
-        dept_desc = #{deptDesc,jdbcType=CHAR},
-      </if>
-      <if test="status != null">
-        `status` = #{status,jdbcType=TINYINT},
-      </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="dr != null">
-        dr = #{dr,jdbcType=TINYINT},
-      </if>
-    </set>
-    where dept_id = #{deptId,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.am.DeptPO">
+    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.am.DeptPO">
+        insert into am_dept
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="deptId != null">
+                dept_id,
+            </if>
+            <if test="parentId != null">
+                parent_id,
+            </if>
+            <if test="deptName != null">
+                dept_name,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="deptDesc != null">
+                dept_desc,
+            </if>
+            <if test="status != null">
+                `status`,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="dr != null">
+                dr,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="deptId != null">
+                #{deptId,jdbcType=BIGINT},
+            </if>
+            <if test="parentId != null">
+                #{parentId,jdbcType=BIGINT},
+            </if>
+            <if test="deptName != null">
+                #{deptName,jdbcType=CHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="deptDesc != null">
+                #{deptDesc,jdbcType=CHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dr != null">
+                #{dr,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.am.DeptPO">
+        update am_dept
+        <set>
+            <if test="parentId != null">
+                parent_id = #{parentId,jdbcType=BIGINT},
+            </if>
+            <if test="deptName != null">
+                dept_name = #{deptName,jdbcType=CHAR},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="deptDesc != null">
+                dept_desc = #{deptDesc,jdbcType=CHAR},
+            </if>
+            <if test="status != null">
+                `status` = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dr != null">
+                dr = #{dr,jdbcType=TINYINT},
+            </if>
+        </set>
+        where dept_id = #{deptId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.am.DeptPO">
     update am_dept
     set parent_id = #{parentId,jdbcType=BIGINT},
       dept_name = #{deptName,jdbcType=CHAR},
@@ -140,112 +141,127 @@
     where dept_id = #{deptId,jdbcType=BIGINT}
   </update>
 
-  <resultMap id="BOResultMap" type="com.smartindustry.common.bo.am.DeptBO" extends="BaseResultMap">
-    <result column="username" jdbcType="CHAR" property="username"/>
-    <result column="parentName" jdbcType="CHAR" property="parentName"/>
-  </resultMap>
-  <sql id="BO_Column_List">
+    <resultMap id="BOResultMap" type="com.smartindustry.common.bo.am.DeptBO" extends="BaseResultMap">
+        <result column="username" jdbcType="CHAR" property="username"/>
+        <result column="parentName" jdbcType="CHAR" property="parentName"/>
+    </resultMap>
+    <sql id="BO_Column_List">
         d.dept_id, d.parent_id, d.dept_name, d.user_id, d.dept_desc, d.`status`, d.create_time, d.update_time,
     d.dr,u.name as username,d2.dept_name as parentName
     </sql>
 
 
-  <select id="deptPageQuery" parameterType="java.util.Map" resultMap="BOResultMap">
-    select
-    <include refid="BO_Column_List"/>
-    from am_dept d
-    left join am_user u on d.user_id = u.user_id
-    left join am_dept d2 on d.parent_id = d2.dept_id
-    where d.dr = 1
-    <if test="dname != null and dname != ''">
-      and d.dept_name like concat('%',#{dname,jdbcType=CHAR},'%')
-    </if>
-    <if test="status != null and status != 0">
-      and d.`status` = #{status,jdbcType=TINYINT}
-    </if>
-    order by d.create_time desc
-  </select>
-
-<!--  批量禁用部门-->
-  <update id="updateBatch" parameterType="java.util.List">
-    <foreach collection="list" item="item" index="index" open="" close="" separator=";">
-      update am_dept
-      <set >
-        <if test="item.status != null" >
-          `status` = #{item.status,jdbcType=TINYINT},
+    <select id="deptPageQuery" parameterType="java.util.Map" resultMap="BOResultMap">
+        select
+        <include refid="BO_Column_List"/>
+        from am_dept d
+        left join am_user u on d.user_id = u.user_id
+        left join am_dept d2 on d.parent_id = d2.dept_id
+        where d.dr = 1
+        <if test="dname != null and dname != ''">
+            and d.dept_name like concat('%',#{dname,jdbcType=CHAR},'%')
         </if>
-      </set>
-      <if test="item.deptId != null">
-        where dept_id = #{item.deptId,jdbcType=BIGINT}
-      </if>
-    </foreach>
-  </update>
+        <if test="status != null and status != 0">
+            and d.`status` = #{status,jdbcType=TINYINT}
+        </if>
+        order by d.create_time desc
+    </select>
 
-  <update id="deleteBatch" parameterType="java.util.List">
-    <foreach collection="list" item="did" index="index" open="" close="" separator=";">
-      update am_dept
-      <set>
-          dr = 2
-      </set>
-      <if test="did != null">
-        where dept_id = #{did,jdbcType=BIGINT}
-      </if>
-    </foreach>
-  </update>
+    <!--  批量禁用部门-->
+    <update id="updateBatch" parameterType="java.util.List">
+        update am_dept
+        set `status` = case dept_id
+        <foreach collection="list" item="item">
+            when #{item.deptId,jdbcType=BIGINT} then #{item.status,jdbcType=TINYINT}
+        </foreach>
+        end
+        where dept_id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item.deptId,jdbcType=BIGINT}
+        </foreach>
+    </update>
 
-  <select id="queryChildren" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.am.DeptBO">
-    select d.dept_id as deptId,d.parent_id as parentId,d.status as status,d.dept_name as deptName,u.username as username,d1.dept_name as parentName
-    from am_dept d
-    left join am_user u on d.user_id = u.user_id
-    left join am_dept d1 on d.parent_id = d1.dept_id
-    <choose>
-      <when test="parentId != null and parentId !=''">
-        where d.parent_id = #{parentId,jdbcType=BIGINT} and d.dr = 1
-      </when>
-      <otherwise>
-        where d.parent_id is null and d.dr = 1
-      </otherwise>
-    </choose>
-  </select>
+    <update id="deleteBatch" parameterType="java.util.List">
+        update am_dept
+        set dr = case dept_id
+        <foreach collection="list" item="did">
+            when #{did,jdbcType=BIGINT} then 2
+        </foreach>
+        end
+        where dept_id in
+        <foreach collection="list" item="did" open="(" separator="," close=")">
+            #{did,jdbcType=BIGINT}
+        </foreach>
+    </update>
 
-<!--  判断当前部门id不是其他部门的父节点id-->
-  <select id="judgeExist" parameterType="java.lang.Long" resultType="java.lang.Integer">
+    <select id="queryChildren" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.am.DeptBO">
+        select d.dept_id as deptId,d.parent_id as parentId,d.status as status,d.dept_name as deptName,u.username as
+        username,d1.dept_name as parentName
+        from am_dept d
+        left join am_user u on d.user_id = u.user_id
+        left join am_dept d1 on d.parent_id = d1.dept_id
+        <choose>
+            <when test="parentId != null and parentId !=''">
+                where d.parent_id = #{parentId,jdbcType=BIGINT} and d.dr = 1
+            </when>
+            <otherwise>
+                where d.parent_id is null and d.dr = 1
+            </otherwise>
+        </choose>
+    </select>
+
+    <!--  判断当前部门id不是其他部门的父节点id-->
+    <select id="judgeExist" parameterType="java.lang.Long" resultType="java.lang.Integer">
      select case when exists(SELECT 1 from am_dept where parent_id = #{parentId,jdbcType=BIGINT} limit 1)
      then 1
      else 0 end as result
   </select>
 
-<!--  判断当前的部门name是否重复-->
-  <select id="judgeRepeatName" resultType="java.lang.Integer">
-     select case when exists(SELECT 1 from am_dept
-     where dept_name = #{deptName,jdbcType=CHAR}
-    <if test="deptId != null">
-      and dept_id != #{deptId,jdbcType=BIGINT}
-    </if>
-     and dr = 1 limit 1)
-     then 1
-     else 0 end as result
-  </select>
+    <!--  判断当前的部门name是否重复-->
+    <select id="judgeRepeatName" resultType="java.lang.Integer">
+        select case when exists(SELECT 1 from am_dept
+        where dept_name = #{deptName,jdbcType=CHAR}
+        <if test="deptId != null">
+            and dept_id != #{deptId,jdbcType=BIGINT}
+        </if>
+        and dr = 1 limit 1)
+        then 1
+        else 0 end as result
+    </select>
 
-<!--  将上级部门为当前输入的部门id的置空-->
-  <update id="updateParentId" parameterType="java.lang.Long">
-    update am_dept
-    set parent_id = null
-    where parent_id = #{deptId,jdbcType=BIGINT} and dr = 1
-  </update>
+    <!--  将上级部门为当前输入的部门id的置空-->
+    <update id="updateParentId" parameterType="java.lang.Long">
+        update am_dept
+        set parent_id = case parent_id
+        <foreach collection="list" item="did">
+            when #{did,jdbcType=BIGINT} then null
+        </foreach>
+        end
+        where parent_id in
+        <foreach collection="list" item="did" open="(" separator="," close=")">
+            #{did,jdbcType=BIGINT}
+        </foreach>
+    </update>
 
-  <!--  将上级部门为当前输入的部门id的置空-->
-  <update id="updateBossId" parameterType="java.lang.Long">
-    update am_dept
-    set user_id = null
-    where user_id = #{userId,jdbcType=BIGINT} and dr = 1
-  </update>
-   
-<!--   根据父节点找到子节点-->
-  <select id="queryByParent" resultType="java.lang.Long" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from am_dept
-    where parent_id = #{parentId,jdbcType=BIGINT}
-  </select>
+    <!--  将上级部门为当前输入的部门id的置空-->
+    <update id="updateBossId" parameterType="java.lang.Long">
+        update am_dept
+        set user_id  = case user_id
+        <foreach collection="list" item="uid">
+            when #{uid,jdbcType=BIGINT} then null
+        </foreach>
+        end
+        where user_id in
+        <foreach collection="list" item="uid" open="(" separator="," close=")">
+            #{uid,jdbcType=BIGINT}
+        </foreach>
+    </update>
+
+    <!--   根据父节点找到子节点-->
+    <select id="queryByParent" resultType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from am_dept
+        where parent_id = #{parentId,jdbcType=BIGINT}
+    </select>
 </mapper>
