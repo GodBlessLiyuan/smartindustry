@@ -3,7 +3,6 @@ package com.smartindustry.authority.service.impl;
 import com.github.pagehelper.Page;
 import com.smartindustry.authority.constant.AuthorityConstant;
 import com.smartindustry.authority.dto.EditDTO;
-import com.smartindustry.common.bo.am.LoginUserBO;
 import com.smartindustry.authority.dto.OperateDTO;
 import com.smartindustry.authority.dto.UserDTO;
 import com.smartindustry.authority.service.IUserService;
@@ -21,7 +20,6 @@ import com.smartindustry.common.pojo.am.UserRecordPO;
 import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.util.SecurityUtil;
-import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,10 +109,12 @@ public class UserServiceImpl implements IUserService {
             if (UserPO.isAdmin(uid)) {
                 return new ResultVO(1023);
             }
-            deleteUser(uid);
+        }
+        deleteUser(uids);
+        userMapper.deleteBatch(uids);
+        for (Long uid : uids) {
             userRecordMapper.insert(new UserRecordPO(uid, user.getUserId(), new Date(), AuthorityConstant.RECORD_DELETE));
         }
-        userMapper.deleteBatch(uids);
         return ResultVO.ok();
     }
 
@@ -190,13 +190,12 @@ public class UserServiceImpl implements IUserService {
 
     /**
      * 当禁用或删除某个用户，那么部门表的负责人需要置空，用户权限中间表需要删除
-     *
-     * @param userId
+     * @param uids
      */
     @Transactional(rollbackFor = Exception.class)
-    public void deleteUser(Long userId) {
-        deptMapper.updateBossId(userId);
-        mUserAuthorityMapper.deleteByUserId(userId);
+    public void deleteUser(List<Long> uids) {
+        deptMapper.updateBossId(uids);
+        mUserAuthorityMapper.deleteByUserId(uids);
     }
 
 

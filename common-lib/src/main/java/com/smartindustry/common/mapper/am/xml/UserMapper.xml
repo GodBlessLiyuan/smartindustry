@@ -247,24 +247,28 @@
     </select>
     <!--  批量禁用用户-->
     <update id="updateBatch" parameterType="java.util.List">
-        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
-            update am_user
-            <set>
-                <if test="item.status != null">
-                    `status` = #{item.status,jdbcType=TINYINT},
-                </if>
-            </set>
-            where user_id = #{item.userId,jdbcType=BIGINT} and dr =1
+        update am_user
+        set `status` = case user_id
+        <foreach collection="list" item="item">
+            when #{item.userId,jdbcType=BIGINT} then #{item.status,jdbcType=TINYINT}
+        </foreach>
+        end
+        where user_id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item.userId,jdbcType=BIGINT}
         </foreach>
     </update>
 
     <update id="deleteBatch" parameterType="java.util.List">
-        <foreach collection="list" item="uid" index="index" open="" close="" separator=";">
-            update am_user
-            <set>
-                dr = 2
-            </set>
-            where user_id = #{uid,jdbcType=BIGINT}
+        update am_user
+        set dr = case user_id
+        <foreach collection="list" item="uid">
+            when #{uid,jdbcType=BIGINT} then 2
+        </foreach>
+        end
+        where user_id in
+        <foreach collection="list" item="uid" open="(" separator="," close=")">
+            #{uid,jdbcType=BIGINT}
         </foreach>
     </update>
 
@@ -315,9 +319,15 @@
     <!--  将用户所对应的部门id置空-->
     <update id="updateDeptId" parameterType="java.lang.Long">
         update am_user
-        set dept_id = null
-        where dept_id = #{deptId,jdbcType=BIGINT}
-          and dr = 1
+        set dept_id = case dept_id
+        <foreach collection="list" item="did">
+            when #{did,jdbcType=BIGINT} then null
+        </foreach>
+        end
+        where dept_id in
+        <foreach collection="list" item="did" open="(" separator="," close=")">
+            #{did,jdbcType=BIGINT}
+        </foreach>
     </update>
 
     <!--  更新用户密码-->

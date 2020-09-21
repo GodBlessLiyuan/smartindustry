@@ -5,6 +5,7 @@ import com.smartindustry.authority.constant.AuthorityConstant;
 import com.smartindustry.authority.dto.LoginDTO;
 import com.smartindustry.authority.dto.OperateDTO;
 import com.smartindustry.authority.service.ILoginService;
+import com.smartindustry.authority.vo.LoginUserVO;
 import com.smartindustry.common.bo.am.LoginUserBO;
 import com.smartindustry.authority.vo.AuthorityVO;
 import com.smartindustry.common.bo.am.AuthorityBO;
@@ -70,7 +71,7 @@ public class LoginServiceImpl implements ILoginService {
         LoginUserBO user = (LoginUserBO) authentication.getPrincipal();
         Map<String, Object> map = new HashMap<>();
         map.put(SecurityConstant.SESSION_TOKEN, tokenService.createToken(user));
-        map.put(SecurityConstant.SESSION_USER, user);
+        map.put(SecurityConstant.SESSION_USER, LoginUserVO.convert(user));
         session.setAttribute(SecurityConstant.SESSION_USER, user);
         session.setMaxInactiveInterval(30*60*60);
         return ResultVO.ok().setData(map);

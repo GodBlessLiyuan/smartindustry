@@ -119,10 +119,11 @@ public class DeptServiceImpl implements IDeptService {
             List<DeptPO> pos = deptMapper.queryByParent(did);
             if(pos!=null && pos.size()!=0){
                return new ResultVO(1009);
-            }else {
-                deptMapper.deleteByPrimaryKey(did);
             }
-            deleteDept(did);
+        }
+        deleteDept(dids);
+        deptMapper.deleteBatch(dids);
+        for(Long did:dids){
             deptRecordMapper.insert(new DeptRecordPO(did,user.getUserId(),new Date(), AuthorityConstant.RECORD_DELETE));
         }
         return ResultVO.ok();
@@ -173,12 +174,12 @@ public class DeptServiceImpl implements IDeptService {
 
     /**
      * 若禁用或者删除某个部门id,那么相关联的部门的上级部门置为null,用户的关联部门置为null
-     * @param deptId
+     * @param dids
      */
     @Transactional(rollbackFor = Exception.class)
-    public void deleteDept(Long deptId){
-        deptMapper.updateParentId(deptId);
-        userMapper.updateDeptId(deptId);
+    public void deleteDept(List<Long> dids){
+        deptMapper.updateParentId(dids);
+        userMapper.updateDeptId(dids);
     }
 
     @Override

@@ -199,10 +199,8 @@ public class RoleServiceImpl implements IRoleService {
             // 先根据角色id找出所有符合用户角色的用户id
             List<Long> uids = userMapper.queryUser(dto.getRid());
             // 再更新用户权限中间表
-            for(Long uid:uids){
-                mUserAuthorityMapper.deleteByUserId(uid);
-                mUserAuthorityMapper.insertBatch(uid,dto.getPerms());
-            }
+            mUserAuthorityMapper.deleteByUserId(uids);
+            mUserAuthorityMapper.insertBatch(uids,dto.getPerms());
         }
         return ResultVO.ok();
     }

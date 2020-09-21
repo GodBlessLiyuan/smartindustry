@@ -139,24 +139,28 @@
 
 <!--  更新角色列表-->
   <update id="updateBatch" parameterType="java.util.List">
-    <foreach collection="list" item="item" index="index" open="" close="" separator=";">
-      update am_role
-      <set >
-        <if test="item.status != null" >
-          `status` = #{item.status,jdbcType=TINYINT},
-        </if>
-      </set>
-      where role_id = #{item.roleId,jdbcType=BIGINT} and dr =1
+    update am_role
+    set `status` = case role_id
+    <foreach collection="list" item="item">
+      when #{item.roleId,jdbcType=BIGINT} then #{item.status,jdbcType=TINYINT}
+    </foreach>
+    end
+    where role_id in
+    <foreach collection="list" item="item" open="(" separator="," close=")">
+      #{item.roleId,jdbcType=BIGINT}
     </foreach>
   </update>
 
   <update id="deleteBatch" parameterType="java.util.List">
-    <foreach collection="list" item="rid" index="index" open="" close="" separator=";">
-      update am_role
-      <set>
-        dr = 2
-      </set>
-      where role_id = #{rid,jdbcType=BIGINT}
+    update am_role
+    set dr = case role_id
+    <foreach collection="list" item="rid">
+      when #{rid,jdbcType=BIGINT} then 2
+    </foreach>
+    end
+    where role_id in
+    <foreach collection="list" item="rid" open="(" separator="," close=")">
+      #{rid,jdbcType=BIGINT}
     </foreach>
   </update>
 
