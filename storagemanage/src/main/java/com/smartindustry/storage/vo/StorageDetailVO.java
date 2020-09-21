@@ -8,6 +8,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author: xiahui
@@ -150,11 +152,39 @@ public class StorageDetailVO implements Serializable {
      * @param sgBOs
      * @return
      */
-    public static StorageDetailVO convert(StorageBO msBO, ReceiptBodyBO rbBO, List<StorageGroupBO> sgBOs, StorageGroupBO bo) {
-        StorageDetailVO vo = convert(msBO, rbBO, sgBOs);
-        if (bo != null) {
-            vo.setLabels(convert(bo.getDetail(), bo.getStorageGroupId()));
+    public static StorageDetailVO convert(StorageBO msBO, ReceiptBodyBO rbBO, List<StorageGroupBO> sgBOs, List<StorageGroupBO> unlocateBos) {
+        //先获取明细列表
+        List<DetailVO> details = new ArrayList<>();
+        if (unlocateBos != null && !unlocateBos.isEmpty()) {
+            for (StorageGroupBO bo: unlocateBos) {
+                details.addAll(convert(bo.getDetail(), bo.getStorageGroupId()));
+            }
         }
+
+        //综合入库详情组表
+        for (StorageGroupBO bo : sgBOs) {
+            //将所有的入库按照
+            Map<String, List<StorageDetailBO>> map = bo.getDetail().stream().collect(Collectors.toMap(StorageDetailBO::getMaterialNo, p -> {
+                        List<StorageDetailBO> bs = new ArrayList<>();
+                        bs.add(p);
+                        return bs;
+                    }, (List<StorageDetailBO> values1, List<StorageDetailBO> values2) -> {
+                        values1.addAll(values2);
+                        return values1;
+                    }
+            ));
+            List<StorageDetailBO> bos = new ArrayList<>(map.size());
+            for (String materialNo : map.keySet()) {
+                StorageDetailBO detailBO = map.get(materialNo).get(0);
+                detailBO.setPackageId(null);
+                detailBO.setNum(map.get(materialNo).stream().collect(Collectors.summingInt(StorageDetailBO::getNum)));
+                bos.add(detailBO);
+            }
+            bo.setDetail(bos);
+        }
+
+        StorageDetailVO vo = convert(msBO, rbBO, sgBOs);
+        vo.setLabels(details);
         return vo;
     }
 

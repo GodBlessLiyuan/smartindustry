@@ -372,7 +372,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
 
     @Override
     public ResultVO location(OperateDTO dto) {
-        if (null == dto.getWhid() || StringUtils.isEmpty(dto.getLno())) {
+        if (StringUtils.isEmpty(dto.getLno())) {
             return new ResultVO(1001);
         }
         LocationPO locationPO = locationMapper.queryByLnoAndWhid(dto.getLno(), dto.getWhid());
@@ -766,29 +766,8 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
 
         List<StorageGroupBO> unlocateBos = storageGroupBOs.stream().filter(StorageGroupBO -> StorageGroupBO.getLocationNo() == null).collect(Collectors.toList());
 
-        //综合入库详情组表
-        for (StorageGroupBO bo : storageGroupBOs) {
-            //将所有的入库按照
-            Map<String, List<StorageDetailBO>> map = bo.getDetail().stream().collect(Collectors.toMap(StorageDetailBO::getMaterialNo, p -> {
-                        List<StorageDetailBO> bs = new ArrayList<>();
-                        bs.add(p);
-                        return bs;
-                    }, (List<StorageDetailBO> values1, List<StorageDetailBO> values2) -> {
-                        values1.addAll(values2);
-                        return values1;
-                    }
-            ));
-            List<StorageDetailBO> bos = new ArrayList<>(map.size());
-            for (String materialNo : map.keySet()) {
-                StorageDetailBO detailBO = map.get(materialNo).get(0);
-                detailBO.setPackageId(null);
-                detailBO.setNum(map.get(materialNo).stream().collect(Collectors.summingInt(StorageDetailBO::getNum)));
-                bos.add(detailBO);
-            }
-            bo.setDetail(bos);
-        }
 
-        return ResultVO.ok().setData(StorageDetailVO.convert(storageBO, receiptBodyBO, storageGroupBOs, unlocateBos.isEmpty() ? null : unlocateBos.get(0)));
+        return ResultVO.ok().setData(StorageDetailVO.convert(storageBO, receiptBodyBO, storageGroupBOs, unlocateBos.isEmpty() ? null : unlocateBos));
     }
 
     @Override

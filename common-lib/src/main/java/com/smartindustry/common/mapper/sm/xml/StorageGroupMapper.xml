@@ -129,7 +129,7 @@
                     ofType="com.smartindustry.common.bo.sm.StorageDetailBO">
             <id column="storage_detail_id" jdbcType="BIGINT" property="storageDetailId"/>
             <result column="print_label_id" jdbcType="BIGINT" property="printLabelId"/>
-            <result column="package_id" jdbcType="BIGINT" property="packageId"/>
+            <result column="package_id" jdbcType="CHAR" property="packageId"/>
             <result column="location_no" jdbcType="CHAR" property="locationNo"/>
             <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
             <result column="num" jdbcType="INTEGER" property="num"/>
