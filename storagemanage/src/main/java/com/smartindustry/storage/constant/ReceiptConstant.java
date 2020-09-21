@@ -84,6 +84,10 @@ public class ReceiptConstant {
      * QE 检验
      */
     public static final Byte STORAGE_INSPECT_QE = 2;
+    /**
+     * 不启动
+     */
+    public static final Byte STORAGE_INSPECT_NO = 3;
 
     /**
      * 操作记录
