@@ -264,10 +264,6 @@ public class PickManageServiceImpl implements IPickManageService {
 
         //(2) 将扫描的pid的dr值设为2，并且按照分料数量分成两个pid
         PrintLabelPO po = printLabelMapper.selectByPrimaryKey(printLabelId);
-        MaterialAttributePO attributePO = materialAttributeMapper.queryByMid(po.getMaterialId());
-        if (null != attributePO && null != attributePO.getPickSplit() && attributePO.getPickSplit() == 1) {
-            return new ResultVO(1026);
-        }
         if (num >= po.getNum()) {
             //输入的拆分量大于原有量
             return new ResultVO(1019);
@@ -306,6 +302,10 @@ public class PickManageServiceImpl implements IPickManageService {
         if (bo == null) {
             // PID不存在
             return new ResultVO(1015);
+        }
+        MaterialAttributePO attributePO = materialAttributeMapper.queryByMid(bo.getMaterialId());
+        if (null != attributePO && null != attributePO.getPickSplit() && attributePO.getPickSplit() == 1) {
+            return new ResultVO(1026);
         }
         //判断当前PID的是否已在某工单拣货单扫码列表中
         Integer resultIn = pickHeadMapper.judgePidInPhid(packageId);
