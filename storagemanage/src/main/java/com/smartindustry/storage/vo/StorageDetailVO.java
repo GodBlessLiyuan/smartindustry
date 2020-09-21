@@ -153,7 +153,7 @@ public class StorageDetailVO implements Serializable {
     public static StorageDetailVO convert(StorageBO msBO, ReceiptBodyBO rbBO, List<StorageGroupBO> sgBOs, StorageGroupBO bo) {
         StorageDetailVO vo = convert(msBO, rbBO, sgBOs);
         if (bo != null) {
-            vo.setLabels(convert(bo.getDetail()));
+            vo.setLabels(convert(bo.getDetail(), bo.getStorageGroupId()));
         }
         return vo;
     }
@@ -180,6 +180,16 @@ public class StorageDetailVO implements Serializable {
         return detailVOs;
     }
 
+    public static List<DetailVO> convert(List<StorageDetailBO> bos, Long storageGroupId) {
+        List<DetailVO> detailVOs = new ArrayList<>(bos.size());
+        for (StorageDetailBO sdBO : bos) {
+            DetailVO vo = convert(sdBO);
+            vo.setSgid(storageGroupId);
+            detailVOs.add(vo);
+        }
+        return detailVOs;
+    }
+
     public static DetailVO convert(StorageDetailBO bo) {
         DetailVO vo = new DetailVO();
         vo.setSdid(bo.getStorageDetailId());
@@ -187,7 +197,7 @@ public class StorageDetailVO implements Serializable {
         vo.setPid(bo.getPackageId());
         vo.setMno(bo.getMaterialNo());
         vo.setMname(bo.getMaterialName());
-        vo.setMno(bo.getMaterialName());
+        vo.setMno(bo.getMaterialNo());
         vo.setMdesc(bo.getMaterialDesc());
         vo.setNum(bo.getNum());
         vo.setSgid(bo.getStorageGroupId());

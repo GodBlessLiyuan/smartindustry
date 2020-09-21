@@ -766,10 +766,8 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
 
         List<StorageGroupBO> unlocateBos = storageGroupBOs.stream().filter(StorageGroupBO -> StorageGroupBO.getLocationNo() == null).collect(Collectors.toList());
 
-        List<StorageGroupBO> locatedBos = storageGroupBOs.stream().filter(StorageGroupBO -> StorageGroupBO.getLocationNo() != null).collect(Collectors.toList());
-
         //综合入库详情组表
-        for (StorageGroupBO bo : locatedBos) {
+        for (StorageGroupBO bo : storageGroupBOs) {
             //将所有的入库按照
             Map<String, List<StorageDetailBO>> map = bo.getDetail().stream().collect(Collectors.toMap(StorageDetailBO::getMaterialNo, p -> {
                         List<StorageDetailBO> bs = new ArrayList<>();
@@ -790,7 +788,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
             bo.setDetail(bos);
         }
 
-        return ResultVO.ok().setData(StorageDetailVO.convert(storageBO, receiptBodyBO, locatedBos, unlocateBos.isEmpty() ? null : unlocateBos.get(0)));
+        return ResultVO.ok().setData(StorageDetailVO.convert(storageBO, receiptBodyBO, storageGroupBOs, unlocateBos.isEmpty() ? null : unlocateBos.get(0)));
     }
 
     @Override
