@@ -250,7 +250,7 @@
     </select>
 
 
-    <select id="queryByLnoAndWhid" resultType="com.smartindustry.common.pojo.si.LocationPO">
+    <select id="queryByLnoAndWhid" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from si_location

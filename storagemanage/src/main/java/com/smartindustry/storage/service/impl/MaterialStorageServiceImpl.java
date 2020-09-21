@@ -375,11 +375,11 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         if (StringUtils.isEmpty(dto.getLno())) {
             return new ResultVO(1001);
         }
-        LocationPO locationPO = locationMapper.queryByLnoAndWhid(dto.getLno(), dto.getWhid());
-        if (locationPO == null) {
+        List<LocationPO> locations = locationMapper.queryByLnoAndWhid(dto.getLno(), dto.getWhid());
+        if (locations == null || locations.isEmpty()) {
             return new ResultVO(1002);
         }
-        return ResultVO.ok().setData(LocationVO.convert(locationPO));
+        return ResultVO.ok().setData(LocationVO.convert(locations.get(0)));
 
     }
 
