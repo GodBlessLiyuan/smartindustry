@@ -150,10 +150,14 @@ public class StorageDetailVO implements Serializable {
      * @param sgBOs
      * @return
      */
-    public static StorageDetailVO convert(StorageBO msBO, ReceiptBodyBO rbBO, List<StorageGroupBO> sgBOs, StorageGroupBO bo) {
+    public static StorageDetailVO convert(StorageBO msBO, ReceiptBodyBO rbBO, List<StorageGroupBO> sgBOs, List<StorageGroupBO> bos) {
         StorageDetailVO vo = convert(msBO, rbBO, sgBOs);
-        if (bo != null) {
-            vo.setLabels(convert(bo.getDetail(), bo.getStorageGroupId()));
+        if (bos != null && !bos.isEmpty()) {
+            List<DetailVO> details = new ArrayList<>();
+            for (StorageGroupBO bo: bos) {
+                details.addAll(convert(bo.getDetail(), bo.getStorageGroupId()));
+            }
+            vo.setLabels(details);
         }
         return vo;
     }

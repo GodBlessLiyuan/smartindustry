@@ -372,7 +372,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
 
     @Override
     public ResultVO location(OperateDTO dto) {
-        if (null == dto.getWhid() || StringUtils.isEmpty(dto.getLno())) {
+        if (StringUtils.isEmpty(dto.getLno())) {
             return new ResultVO(1001);
         }
         LocationPO locationPO = locationMapper.queryByLnoAndWhid(dto.getLno(), dto.getWhid());
@@ -788,7 +788,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
             bo.setDetail(bos);
         }
 
-        return ResultVO.ok().setData(StorageDetailVO.convert(storageBO, receiptBodyBO, storageGroupBOs, unlocateBos.isEmpty() ? null : unlocateBos.get(0)));
+        return ResultVO.ok().setData(StorageDetailVO.convert(storageBO, receiptBodyBO, storageGroupBOs, unlocateBos.isEmpty() ? null : unlocateBos));
     }
 
     @Override
