@@ -30,7 +30,7 @@ public interface LocationMapper extends BaseMapper<LocationPO, Long> {
      * @param warehouseId
      * @return
      */
-    LocationPO queryByLnoAndWhid(@Param("locationNo") String locationNo,@Param("warehouseId") Long warehouseId);
+    List<LocationPO> queryByLnoAndWhid(@Param("locationNo") String locationNo,@Param("warehouseId") Long warehouseId);
 
     /**
      * 根据仓库ID查询
