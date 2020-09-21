@@ -262,6 +262,6 @@
         select
         <include refid="Base_Column_List"/>
         from am_dept
-        where parent_id = #{parentId,jdbcType=BIGINT}
+        where parent_id = #{parentId,jdbcType=BIGINT} and dr = 1
     </select>
 </mapper>

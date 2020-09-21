@@ -5,6 +5,7 @@ import com.smartindustry.authority.dto.RoleDTO;
 import com.smartindustry.authority.service.IRoleService;
 import com.smartindustry.common.mapper.am.AuthorityMapper;
 import com.smartindustry.common.mapper.am.MUserAuthorityMapper;
+import com.smartindustry.common.mapper.am.RoleAuthorityMapper;
 import com.smartindustry.common.pojo.am.AuthorityPO;
 import com.smartindustry.common.pojo.am.MUserAuthorityPO;
 import com.smartindustry.common.vo.ResultVO;
@@ -85,4 +86,5 @@ public class RoleController {
     public ResultVO queryRoleRecord(@RequestBody Map<String, Object> reqData) {
         return roleService.queryRoleRecord(reqData);
     }
+
 }
