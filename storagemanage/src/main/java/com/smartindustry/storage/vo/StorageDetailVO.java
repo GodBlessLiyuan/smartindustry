@@ -198,7 +198,7 @@ public class StorageDetailVO implements Serializable {
         GroupVO vo = new GroupVO();
         vo.setSgid(bo.getStorageGroupId());
         vo.setLno(bo.getLocationNo());
-        vo.setDetail(convert(bo.getDetail()));
+        vo.setDetail(convert(bo.getDetail(), bo.getStorageGroupId()));
         return vo;
     }
 

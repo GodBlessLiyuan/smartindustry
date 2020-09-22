@@ -422,7 +422,10 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
             Integer num = 0;
             for (StorageGroupDetailBO bo : groupMap.get(key)) {
                 details.addAll(bo.getDetail());
-                num += bo.getDetail().stream().collect(Collectors.summingInt(StorageDetailBO::getNum));
+                if (bo.getDetail() != null) {
+                    num += bo.getDetail().stream().collect(Collectors.summingInt(StorageDetailBO::getNum));
+                }
+
             }
 
             dbo.setDetail(details);
