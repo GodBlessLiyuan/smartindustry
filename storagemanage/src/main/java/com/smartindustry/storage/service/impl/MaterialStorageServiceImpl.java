@@ -375,11 +375,16 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         if (StringUtils.isEmpty(dto.getLno())) {
             return new ResultVO(1001);
         }
+
+        LocationPO locationPO = locationMapper.queryByLno(dto.getLno());
+        if (locationPO == null) {
+            return new ResultVO(1002);
+        }
         List<LocationPO> locations = locationMapper.queryByLnoAndWhid(dto.getLno(), dto.getWhid());
         if (locations == null || locations.isEmpty()) {
             return new ResultVO(1002);
         }
-        return ResultVO.ok().setData(LocationVO.convert(locations.get(0)));
+        return ResultVO.ok().setData(LocationVO.convert(locationPO));
 
     }
 
@@ -582,7 +587,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
 
         if (null != storageGroupPO.getLocationId()) {
             // 修改入库单及打印标签
-            StorageBO storageBO = storageMapper.queryReceiptBySid(dto.getSid());
+            StorageBO storageBO = storageMapper.queryReceiptBySid(storageGroupPO.getStorageId());
             if (null == storageBO) {
                 return new ResultVO(1002);
             }
