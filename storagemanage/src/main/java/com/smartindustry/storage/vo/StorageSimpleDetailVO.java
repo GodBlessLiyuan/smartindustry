@@ -43,34 +43,24 @@ public class StorageSimpleDetailVO implements Serializable {
         vo.setMname(bo.getMaterialName());
         vo.setMno(bo.getMaterialNo());
         vo.setNum(bo.getNum());
-        List<GroupVO> group = new ArrayList<>(bo.getDetail().size());
+        List<DetailVO> details = new ArrayList<>(bo.getDetail().size());
         for (StorageDetailBO dbo: bo.getDetail()) {
-            group.add(convertGroup(dbo));
+            details.add(convert(dbo));
         }
-        vo.setGroup(group);
+        vo.setDetails(details);
         return vo;
     }
 
-    public static GroupVO convertGroup(StorageDetailBO bo) {
-        GroupVO vo = new GroupVO();
-        vo.setLno(bo.getLocationNo());
-        vo.setWhname(bo.getWarehouseName());
-        List<DetailVO> details = new ArrayList<>(bo.getLabels().size());
-        for (StorageDetailBO dbo: bo.getLabels()) {
-            details.add(convertDetail(dbo, bo.getWarehouseName(),bo.getLocationNo()));
-        }
-        vo.setDetail(details);
-        return vo;
-    }
-
-    public static DetailVO convertDetail(StorageDetailBO bo, String mname, String lno) {
+    public static DetailVO convert(StorageDetailBO bo) {
         DetailVO vo = new DetailVO();
         vo.setPid(bo.getPackageId());
+        vo.setLno(bo.getLocationNo());
         vo.setNum(bo.getNum());
-        vo.setMname(mname);
-        vo.setLno(lno);
+        vo.setWhname(bo.getWarehouseName());
         return vo;
     }
+
+
 
     public static List<StorageSimpleDetailVO> convertLabel(List<PrintLabelBO> labels) {
         Map<String, List<PrintLabelBO>> map = labels.stream().collect(Collectors.toMap(
@@ -125,6 +115,8 @@ public class StorageSimpleDetailVO implements Serializable {
         private String lno;
 
         private String mname;
+
+        private String whname;
 
         public DetailVO() {}
 

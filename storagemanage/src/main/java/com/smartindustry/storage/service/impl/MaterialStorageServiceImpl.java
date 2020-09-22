@@ -425,28 +425,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
                 num += bo.getDetail().stream().collect(Collectors.summingInt(StorageDetailBO::getNum));
             }
 
-            Map<String, List<StorageDetailBO>> locationMap = details.stream().collect(Collectors.toMap(
-                    p -> p.getWarehouseName() +"_"+ p.getLocationNo(),
-                    p -> {
-                        List<StorageDetailBO> bs = new ArrayList<>();
-                        bs.add(p);
-                        return bs;
-                    },
-                    (List<StorageDetailBO> values1, List<StorageDetailBO> values2) -> {
-                        values1.addAll(values2);
-                        return values1;
-                    }
-            ));
-            List<StorageDetailBO> detail = new ArrayList<>();
-            for (String locationKey: locationMap.keySet()) {
-                String[] locationKeys = locationKey.split("_");
-                StorageDetailBO sdbo = new StorageDetailBO();
-                sdbo.setWarehouseName(locationKeys[0]);
-                sdbo.setLocationNo(locationKeys[1]);
-                sdbo.setLabels(locationMap.get(locationKey));
-                detail.add(sdbo);
-            }
-            dbo.setDetail(detail);
+            dbo.setDetail(details);
             dbo.setNum(num);
             bos.add(dbo);
         }
