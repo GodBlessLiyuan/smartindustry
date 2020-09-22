@@ -7,6 +7,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -47,6 +48,7 @@ public class StorageSimpleDetailVO implements Serializable {
         for (StorageDetailBO dbo: bo.getDetail()) {
             details.add(convert(dbo));
         }
+        details.sort(Comparator.comparing(DetailVO::getLno));
         vo.setDetails(details);
         return vo;
     }
