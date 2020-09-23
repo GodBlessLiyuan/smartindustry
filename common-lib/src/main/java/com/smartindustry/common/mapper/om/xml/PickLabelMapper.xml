@@ -113,7 +113,7 @@
     </select>
 
     <!--    查看当前的pid是否已在当前工单拣货下-->
-    <select id="judgeIsPidHave" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <select id="queryPickLabel" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from om_pick_label pl

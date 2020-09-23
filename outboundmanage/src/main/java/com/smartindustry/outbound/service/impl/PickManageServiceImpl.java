@@ -224,7 +224,7 @@ public class PickManageServiceImpl implements IPickManageService {
             return new ResultVO(1015);
         }
         //2 若当前输入的PID已经被自身或者其他扫码入库，则提示无法重复扫码
-        PickLabelPO pickLabelPO = pickLabelMapper.judgeIsPidHave(bo.getPrintLabelId());
+        PickLabelPO pickLabelPO = pickLabelMapper.queryPickLabel(bo.getPrintLabelId());
         if (pickLabelPO != null) {
             return new ResultVO(1018);
         }
@@ -257,6 +257,7 @@ public class PickManageServiceImpl implements IPickManageService {
         pickLabelPo.setCreateTime(new Date());
         pickHeadMapper.insertPickLabel(pickLabelPo);
         Integer flagTwo = pickHeadMapper.judgeIsPick(pickHeadId);
+        // 更新拣货状态为物料拣货
         int result = (flagTwo != null) ? pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_PICK, new Date()) : 0;
         return ResultVO.ok().setData(ScanOutVO.convert(bo));
     }
