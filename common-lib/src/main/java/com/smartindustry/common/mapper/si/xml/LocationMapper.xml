@@ -256,7 +256,7 @@
         from si_location
         where location_no = #{locationNo,jdbcType=CHAR} and dr = 1
         <if test="warehouseId != null">
-            and warehouse_id = ${warehouseId, jdbcType=BIGINT}
+            and warehouse_id = #{warehouseId, jdbcType=BIGINT}
         </if>
 
     </select>
