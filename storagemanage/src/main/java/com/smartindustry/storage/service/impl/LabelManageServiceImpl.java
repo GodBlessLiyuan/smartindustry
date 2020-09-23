@@ -67,6 +67,9 @@ public class LabelManageServiceImpl implements ILabelManageService {
     private StorageMapper storageMapper;
     @Autowired
     private MaterialAttributeMapper materialAttributeMapper;
+
+    @Autowired
+    private StorageDetailMapper storageDetailMapper;
     @Autowired
     TokenService tokenService;
 

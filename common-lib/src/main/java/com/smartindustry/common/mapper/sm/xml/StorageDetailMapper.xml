@@ -115,4 +115,13 @@
             #{sgid, jdbcType=BIGINT}
         </foreach>
     </select>
+
+
+    <select id="queryByGidAndLid" resultType="com.smartindustry.common.pojo.sm.StorageDetailPO">
+        select
+        <include refid="Base_Column_List"/>
+        from sm_storage_detail
+        where storage_group_id = #{sgId, jdbcType=BIGINT}
+        and print_label_id = #{printLabelId, jdbcType=BIGINT} limit 1
+    </select>
 </mapper>

@@ -367,18 +367,24 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
             //查询groupId
            List<PrintLabelBO> labelBOS =  printLabelMapper.queryByTSono(storageBO.getSourceNo());
            if (labelBOS != null && !labelBOS.isEmpty()) {
-               OperateDTO odto = new OperateDTO();
-               odto.setSid(dto.getSid());
-               for (PrintLabelBO bo: labelBOS) {
-                    odto.setPid(bo.getPackageId());
-                   StorageLabelVO vo  = (StorageLabelVO) materialStorageService.storageScan(odto).getData();
-                   if (vo != null) {
-                       odto.setSgid(vo.getSgid());
-                   }
 
+               Long sgId = storageGroupMapper.queryGroup(dto.getSid());
+               if (sgId == null) {
+                   StorageGroupPO sgPo = new StorageGroupPO();
+                   sgPo.setStorageId(dto.getSid());
+                   storageGroupMapper.insert(sgPo);
+                   sgId = sgPo.getStorageGroupId();
+               }
+               for (PrintLabelBO bo: labelBOS) {
+                   List<StorageDetailPO> list = storageDetailMapper.queryByGidAndLid(sgId, bo.getPrintLabelId());
+                   if (list == null || list.isEmpty()) {
+                       StorageDetailPO sdpo = new StorageDetailPO();
+                       sdpo.setPrintLabelId(bo.getPrintLabelId());
+                       sdpo.setStorageGroupId(sgId);
+//                       storageDetailMapper.insert(sdpo);
+                   }
                }
            }
-
         }
 
         List<StorageGroupBO> storageGroupBOs = storageGroupMapper.queryBySid(storageBO.getStorageId());

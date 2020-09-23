@@ -1,6 +1,7 @@
 package com.smartindustry.storage.vo;
 
 import com.smartindustry.common.bo.sm.*;
+import com.smartindustry.common.pojo.sm.StorageGroupPO;
 import lombok.Data;
 import org.springframework.util.StringUtils;
 
@@ -134,7 +135,12 @@ public class StorageDetailVO implements Serializable {
         vo.setPno(msBO.getPickNo());
         vo.setCono(msBO.getCorrespondNo());
         if(sgBOs != null && !sgBOs.isEmpty()) {
-            vo.setWid(sgBOs.get(0).getWarehouseId());
+            for (StorageGroupBO sdbo: sgBOs)  {
+                if (sdbo.getWarehouseId() != null) {
+                    vo.setWid(sdbo.getWarehouseId());
+                }
+            }
+
         }
         List<GroupVO> groupVOs = new ArrayList<>(sgBOs.size());
         for (StorageGroupBO sgBO : sgBOs) {
