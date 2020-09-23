@@ -330,4 +330,19 @@
         where rl.receipt_body_id = #{rbid,jdbcType=BIGINT}
         and pl.location_id is null and sd.storage_detail_id is null
     </select>
+
+    <select id="queryByTSono" parameterType="java.lang.String" resultMap="BOResultMap">
+        select
+        <include refid="BO_Column_List"/>
+        from si_print_label pl
+        left join om_pick_label o on o.print_label_id = pl.print_label_id
+        left join om_pick_head h on h.pick_head_id = o.pick_head_id
+        left join om_pick_body b on b.pick_head_id = h.pick_head_id
+        left join si_material m on m.material_id = b.material_id
+        where pl.dr = 1
+        <if test="sourceNo != null and sourceNo != ''">
+            and h.source_no = #{sourceNo, jdbcType = CHAR}
+        </if>
+
+    </select>
 </mapper>

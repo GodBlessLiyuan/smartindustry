@@ -103,6 +103,21 @@ public class LabelManageServiceImpl implements ILabelManageService {
         return ResultVO.ok().setData(StorageSimpleDetailVO.convertLabel(bos));
     }
 
+    /**
+     * 根据调拨订单的调拨单编号查询 待入库物料列表
+     *
+     * @param dto
+     * @return
+     */
+    @Override
+    public ResultVO queryTSono(OperateDTO dto) {
+        if (StringUtils.isEmpty(dto.getSono())) {
+            return new ResultVO(1001);
+        }
+        List<PrintLabelBO> bos = printLabelMapper.queryByTSono(dto.getSono());
+        return ResultVO.ok().setData(StorageSimpleDetailVO.convertLabel(bos));
+    }
+
     @Override
     public ResultVO print(@RequestBody OperateDTO dto) {
         UserPO user = tokenService.getLoginUser();

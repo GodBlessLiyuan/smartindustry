@@ -46,4 +46,9 @@ public class OperateDTO implements Serializable {
      */
     private Long whid;
 
+    /**
+     * 来源单号（调拨订单的调拨单编号）
+     */
+    private String sono;
+
 }

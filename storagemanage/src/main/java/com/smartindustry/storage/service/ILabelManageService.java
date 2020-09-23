@@ -84,4 +84,11 @@ public interface ILabelManageService {
      * @return
      */
     ResultVO queryRbid(OperateDTO dto);
+
+    /**
+     * 根据调拨订单的调拨单编号查询 待入库物料列表
+     * @param dto
+     * @return
+     */
+    ResultVO queryTSono(OperateDTO dto);
 }

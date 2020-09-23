@@ -48,6 +48,11 @@ public class StorageBO extends StoragePO {
     private Byte transferType;
 
     /**
+     * 调入仓库
+     */
+    private Long storageWid;
+
+    /**
      * 当前入库单是否存在库位id
      */
     private Long locationId;

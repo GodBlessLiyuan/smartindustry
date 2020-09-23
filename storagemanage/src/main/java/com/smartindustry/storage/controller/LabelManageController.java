@@ -42,6 +42,11 @@ public class LabelManageController {
         return labelManageService.queryRbid(dto);
     }
 
+    @PostMapping("queryTSono")
+    public ResultVO queryTSono(@RequestBody OperateDTO dto) {
+        return labelManageService.queryTSono(dto);
+    }
+
     @PostMapping("print")
     public ResultVO print(@RequestBody OperateDTO dto) {
         return labelManageService.print(dto);
