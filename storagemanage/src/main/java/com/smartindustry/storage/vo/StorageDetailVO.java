@@ -123,7 +123,8 @@ public class StorageDetailVO implements Serializable {
         vo.setSnum(msBO.getStoredNum());
         vo.setStatus(msBO.getStatus());
         vo.setRno(rbBO.getReceiptNo());
-        if (StringUtils.isEmpty(rbBO.getSourceNo())) {
+        vo.setStime(msBO.getStorageTime());
+        if (!StringUtils.isEmpty(rbBO.getSourceNo())) {
             vo.setSono(rbBO.getSourceNo());
         } else {
             //适应其他入库单查询

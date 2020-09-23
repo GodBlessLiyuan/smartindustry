@@ -346,15 +346,32 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
      */
     @Override
     public ResultVO storageDetail(OperateDTO dto) {
-        StoragePO storagePO = storageMapper.selectByPrimaryKey(dto.getSid());
-        if (null == storagePO) {
+        if ( null == dto.getSid()) {
+            return new ResultVO(1001);
+        }
+        StorageBO storageBO = storageMapper.queryBySid(dto.getSid());
+        if (null == storageBO) {
             return new ResultVO(1002);
         }
-        List<StorageGroupBO> storageGroupBOs = storageGroupMapper.queryBySid(storagePO.getStorageId());
+        //仓库ID
+        List<LocationPO> locationPOs = locationMapper.queryLocation(storageBO.getStorageWid());
+        //验证入库单对应的拣货单中入库仓库是否存在库位 true 存在  false 不存在
+        boolean existLocation = true;
+        if (locationPOs == null || locationPOs.isEmpty()) {
+            existLocation = false;
+        }
+
+        List<StorageGroupBO> storageGroupBOs = storageGroupMapper.queryBySid(storageBO.getStorageId());
         ReceiptBodyBO receiptBodyBO = new ReceiptBodyBO();
-        StorageBO storageBO = new StorageBO();
-        BeanUtils.copyProperties(storagePO, storageBO);
-        return ResultVO.ok().setData(StorageDetailVO.convert(storageBO, receiptBodyBO, storageGroupBOs));
+
+        List<StorageGroupBO> unlocateBos = storageGroupBOs;
+
+        //当入库仓库存在库位时则需要根据入库详情组 区分
+        if (existLocation) {
+            storageGroupBOs.stream().filter(StorageGroupBO -> StorageGroupBO.getLocationNo() == null).collect(Collectors.toList());
+        }
+
+        return ResultVO.ok().setData(StorageDetailVO.convert(storageBO, receiptBodyBO, storageGroupBOs, unlocateBos));
     }
 
 

@@ -83,4 +83,13 @@ public interface PrintLabelMapper extends BaseMapper<PrintLabelPO, Long> {
      * @return
      */
     List<PrintLabelBO> queryByRbid(@Param("rbid") Long rbid);
+
+    /**
+     * 根据sourceNo 查询其他入库单待入库物料列表
+     *
+     * @param sourceNo
+     * @return
+     */
+
+    List<PrintLabelBO> queryByTSono(@Param("sourceNo") String sourceNo);
 }
