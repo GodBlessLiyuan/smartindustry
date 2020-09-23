@@ -78,4 +78,12 @@ public interface StorageLabelMapper extends BaseMapper<StorageLabelPO, Long> {
      * @return
      */
     List<StorageLabelPO> queryByMlid(Long mlid);
+
+    /**
+     * 根据 打印标签id 查询
+     *
+     * @param plid
+     * @return
+     */
+    StorageLabelPO queryByPlid(Long plid);
 }

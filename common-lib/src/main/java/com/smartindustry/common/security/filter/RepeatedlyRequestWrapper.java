@@ -1,4 +1,4 @@
-package com.smartindustry.common.filter;
+package com.smartindustry.common.security.filter;
 
 import com.smartindustry.common.util.HttpHelper;
 

@@ -1,7 +1,7 @@
 package com.smartindustry.common.security.config;
 
 import com.alibaba.fastjson.JSONObject;
-import com.smartindustry.common.filter.RepeatedlyRequestWrapper;
+import com.smartindustry.common.security.filter.RepeatedlyRequestWrapper;
 import com.smartindustry.common.util.HttpHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;

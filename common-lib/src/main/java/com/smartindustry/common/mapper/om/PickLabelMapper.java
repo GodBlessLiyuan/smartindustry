@@ -4,6 +4,7 @@ import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.om.PickLabelPO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -27,4 +28,11 @@ public interface PickLabelMapper extends BaseMapper<PickLabelPO, Long> {
      * @return
      */
     List<PrintLabelBO> queryLockByPhid(Long pickHeadId);
+
+    /**
+     * 查看pid是否已经在当前的工单拣货单下
+     * @param printLabelId
+     * @return
+     */
+    PickLabelPO judgeIsPidHave(@Param("printLabelId") Long printLabelId);
 }
