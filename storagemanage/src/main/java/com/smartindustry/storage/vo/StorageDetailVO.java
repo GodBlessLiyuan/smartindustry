@@ -1,5 +1,6 @@
 package com.smartindustry.storage.vo;
 
+import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.bo.sm.*;
 import com.smartindustry.common.pojo.sm.StorageGroupPO;
 import lombok.Data;
@@ -134,8 +135,8 @@ public class StorageDetailVO implements Serializable {
         vo.setTtype(msBO.getTransferType());
         vo.setPno(msBO.getPickNo());
         vo.setCono(msBO.getCorrespondNo());
-        if(sgBOs != null && !sgBOs.isEmpty()) {
-            for (StorageGroupBO sdbo: sgBOs)  {
+        if (sgBOs != null && !sgBOs.isEmpty()) {
+            for (StorageGroupBO sdbo : sgBOs) {
                 if (sdbo.getWarehouseId() != null) {
                     vo.setWid(sdbo.getWarehouseId());
                 }
@@ -163,7 +164,7 @@ public class StorageDetailVO implements Serializable {
         //先获取明细列表
         List<DetailVO> details = new ArrayList<>();
         if (unlocateBos != null && !unlocateBos.isEmpty()) {
-            for (StorageGroupBO bo: unlocateBos) {
+            for (StorageGroupBO bo : unlocateBos) {
                 details.addAll(convert(bo.getDetail(), bo.getStorageGroupId()));
             }
         }
@@ -255,7 +256,7 @@ public class StorageDetailVO implements Serializable {
         vo.setMname(bo.getMaterialName());
         vo.setPnum(bo.getNum());
         List<GroupVO> groupVOS = new ArrayList<>(bo.getDetail().size());
-        for (StorageDetailBO dbo: bo.getDetail()) {
+        for (StorageDetailBO dbo : bo.getDetail()) {
             groupVOS.add(convertGroup(dbo));
         }
         vo.setGroup(groupVOS);
@@ -267,7 +268,7 @@ public class StorageDetailVO implements Serializable {
         vo.setLno(bo.getLocationNo());
         vo.setWhname(bo.getWarehouseName());
         List<DetailVO> vos = new ArrayList<>(bo.getLabels().size());
-        for (StorageDetailBO dbo: bo.getLabels()) {
+        for (StorageDetailBO dbo : bo.getLabels()) {
             vos.add(convert(dbo));
         }
         vo.setDetail(vos);
@@ -333,4 +334,5 @@ public class StorageDetailVO implements Serializable {
          */
         private Integer num;
     }
+
 }
