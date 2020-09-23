@@ -140,7 +140,7 @@ public class RoleServiceImpl implements IRoleService {
             List<AuthorityVO> vos = AuthorityVO.convert(bos);
             List<AuthorityVO> lastMenu = new ArrayList<>();
             menuMap.put(AuthorityConstant.NAME_MENU,getAuthTree(vos,lastMenu, AuthorityConstant.TYPE_MENU));
-            redisTemplate.opsForValue().set(AuthorityConstant.NAME_MENU, menuMap, AuthorityConstant.EXPIRE_TIME, TimeUnit.DAYS);
+            redisTemplate.opsForValue().set(AuthorityConstant.NAME_MENU, menuMap, AuthorityConstant.EXPIRE_TIME, TimeUnit.SECONDS);
         }else {
             menuMap = JSON.parseObject(JSON.toJSONString(menuObject),LinkedHashMap.class,Feature.OrderedField);
         }
@@ -161,7 +161,7 @@ public class RoleServiceImpl implements IRoleService {
             CollectionUtils.addAll(lastButton, new Object[lastMenu.size()]);
             Collections.copy(lastButton,lastMenu);
             res.put(AuthorityConstant.NAME_BUTTON,getAuthTree(lastMenu,new ArrayList<>(), AuthorityConstant.TYPE_BUTTON));
-            redisTemplate.opsForValue().set(AuthorityConstant.NAME_BUTTON, res, AuthorityConstant.EXPIRE_TIME, TimeUnit.DAYS);
+            redisTemplate.opsForValue().set(AuthorityConstant.NAME_BUTTON, res, AuthorityConstant.EXPIRE_TIME, TimeUnit.SECONDS);
         }else {
             res = JSON.parseObject(JSON.toJSONString(buttonObject), LinkedHashMap.class,Feature.OrderedField);
         }
