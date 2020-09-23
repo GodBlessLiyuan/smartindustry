@@ -375,18 +375,14 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
                     storageGroupMapper.insert(sgPo);
                     sgId = sgPo.getStorageGroupId();
                 }
-                List<StorageDetailPO> pos = new ArrayList<>(labelBOS.size());
                 for (PrintLabelBO bo : labelBOS) {
                     List<StorageDetailPO> list = storageDetailMapper.queryByGidAndLid(sgId, bo.getPrintLabelId());
                     if (list == null || list.isEmpty()) {
                         StorageDetailPO sdpo = new StorageDetailPO();
                         sdpo.setPrintLabelId(bo.getPrintLabelId());
                         sdpo.setStorageGroupId(sgId);
-                        pos.add(sdpo);
+                        storageDetailMapper.insert(sdpo);
                     }
-                }
-                if (!pos.isEmpty()) {
-                    storageDetailMapper.batchInsert(pos);
                 }
             }
         }
