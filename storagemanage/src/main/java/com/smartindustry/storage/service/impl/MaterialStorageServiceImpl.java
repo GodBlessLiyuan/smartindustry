@@ -347,7 +347,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
      */
     @Override
     public ResultVO storageDetail(OperateDTO dto) {
-        if ( null == dto.getSid()) {
+        if (null == dto.getSid()) {
             return new ResultVO(1001);
         }
         StorageBO storageBO = storageMapper.queryBySid(dto.getSid());
@@ -363,30 +363,33 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         }
 
         //当入库仓库没有库位时需要先插入入库详情组
-        if(!existLocation) {
+        if (!existLocation) {
             //查询groupId
-           List<PrintLabelBO> labelBOS =  printLabelMapper.queryByTSono(storageBO.getSourceNo());
-           if (labelBOS != null && !labelBOS.isEmpty()) {
+            List<PrintLabelBO> labelBOS = printLabelMapper.queryByTSono(storageBO.getSourceNo());
+            if (labelBOS != null && !labelBOS.isEmpty()) {
 
-               Long sgId = storageGroupMapper.queryGroup(dto.getSid());
-               if (sgId == null) {
-                   StorageGroupPO sgPo = new StorageGroupPO();
-                   sgPo.setStorageId(dto.getSid());
-                   storageGroupMapper.insert(sgPo);
-                   sgId = sgPo.getStorageGroupId();
-               }
-               for (PrintLabelBO bo: labelBOS) {
-                   List<StorageDetailPO> list = storageDetailMapper.queryByGidAndLid(sgId, bo.getPrintLabelId());
-                   if (list == null || list.isEmpty()) {
-                       StorageDetailPO sdpo = new StorageDetailPO();
-                       sdpo.setPrintLabelId(bo.getPrintLabelId());
-                       sdpo.setStorageGroupId(sgId);
-//                       storageDetailMapper.insert(sdpo);
-                   }
-               }
-           }
+                Long sgId = storageGroupMapper.queryGroup(dto.getSid());
+                if (sgId == null) {
+                    StorageGroupPO sgPo = new StorageGroupPO();
+                    sgPo.setStorageId(dto.getSid());
+                    storageGroupMapper.insert(sgPo);
+                    sgId = sgPo.getStorageGroupId();
+                }
+                List<StorageDetailPO> pos = new ArrayList<>(labelBOS.size());
+                for (PrintLabelBO bo : labelBOS) {
+                    List<StorageDetailPO> list = storageDetailMapper.queryByGidAndLid(sgId, bo.getPrintLabelId());
+                    if (list == null || list.isEmpty()) {
+                        StorageDetailPO sdpo = new StorageDetailPO();
+                        sdpo.setPrintLabelId(bo.getPrintLabelId());
+                        sdpo.setStorageGroupId(sgId);
+                        pos.add(sdpo);
+                    }
+                }
+                if (!pos.isEmpty()) {
+                    storageDetailMapper.batchInsert(pos);
+                }
+            }
         }
-
         List<StorageGroupBO> storageGroupBOs = storageGroupMapper.queryBySid(storageBO.getStorageId());
         ReceiptBodyBO receiptBodyBO = new ReceiptBodyBO();
 
@@ -398,6 +401,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         }
 
         return ResultVO.ok().setData(StorageDetailVO.convert(storageBO, receiptBodyBO, storageGroupBOs, unlocateBos));
+
     }
 
 
@@ -839,16 +843,16 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         receiptBodyMapper.updateByPrimaryKey(rbPO);
 
         List<Long> sgIds = new ArrayList<>(storageGroupPOS.size());
-        for(StorageGroupBO sgBO: storageGroupPOS) {
-           sgIds.add(sgBO.getStorageGroupId());
+        for (StorageGroupBO sgBO : storageGroupPOS) {
+            sgIds.add(sgBO.getStorageGroupId());
         }
 
         List<StorageDetailBO> storageDetailBOS = storageDetailMapper.queryByGroupIds(sgIds);
-        List<Long> plIds  = new ArrayList<>();
-        for (StorageDetailBO sdBo: storageDetailBOS) {
+        List<Long> plIds = new ArrayList<>();
+        for (StorageDetailBO sdBo : storageDetailBOS) {
             plIds.add(sdBo.getPrintLabelId());
         }
-        if(!plIds.isEmpty()) {
+        if (!plIds.isEmpty()) {
             printLabelMapper.updateLidByIds(null, plIds);
         }
 
