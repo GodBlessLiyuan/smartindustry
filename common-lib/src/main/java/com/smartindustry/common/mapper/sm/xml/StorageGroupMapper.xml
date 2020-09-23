@@ -23,8 +23,8 @@
 
     <delete id="batchDeleteByIds" parameterType="java.util.List">
         delete from sm_storage_group where storage_group_id in
-        <foreach collection="list" item="sgid" separator="," open="(" close=")">
-            ${sgid, jdbcType=BIGINT}
+        <foreach collection="list" item="sgid"  open="(" separator="," close=")">
+            #{sgid, jdbcType=BIGINT}
         </foreach>
     </delete>
 

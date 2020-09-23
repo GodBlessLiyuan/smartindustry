@@ -38,6 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -75,8 +76,8 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
     @Autowired
     TransferHeadMapper transferHeadMapper;
 
-    @Autowired
-    private WarehouseMapper warehouseMapper;
+    @Resource
+    private IMaterialStorageService materialStorageService;
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData) {
@@ -359,6 +360,25 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         boolean existLocation = true;
         if (locationPOs == null || locationPOs.isEmpty()) {
             existLocation = false;
+        }
+
+        //当入库仓库没有库位时需要先插入入库详情组
+        if(!existLocation) {
+            //查询groupId
+           List<PrintLabelBO> labelBOS =  printLabelMapper.queryByTSono(storageBO.getSourceNo());
+           if (labelBOS != null && !labelBOS.isEmpty()) {
+               OperateDTO odto = new OperateDTO();
+               odto.setSid(dto.getSid());
+               for (PrintLabelBO bo: labelBOS) {
+                    odto.setPid(bo.getPackageId());
+                   StorageLabelVO vo  = (StorageLabelVO) materialStorageService.storageScan(odto).getData();
+                   if (vo != null) {
+                       odto.setSgid(vo.getSgid());
+                   }
+
+               }
+           }
+
         }
 
         List<StorageGroupBO> storageGroupBOs = storageGroupMapper.queryBySid(storageBO.getStorageId());
@@ -789,6 +809,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ResultVO changeWarehouse(OperateDTO dto) {
         if (dto.getSid() == null) {
             return new ResultVO(1001);
@@ -821,7 +842,10 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         for (StorageDetailBO sdBo: storageDetailBOS) {
             plIds.add(sdBo.getPrintLabelId());
         }
-        printLabelMapper.updateLidByIds(null, plIds);
+        if(!plIds.isEmpty()) {
+            printLabelMapper.updateLidByIds(null, plIds);
+        }
+
         //step2 查找收料单， 更新入库数量和状态, 更新收料单
         storageBO.setStatus(ReceiptConstant.MATERIAL_STORAGE_PENDING);
         storageBO.setStoredNum(0);
@@ -832,7 +856,6 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
 
         //step 3 查找所有的入库详情、 都需要进行删除
         storageDetailMapper.deleteBySid(dto.getSid());
-
         //step 4 删除入库详情组
         storageGroupMapper.batchDeleteByIds(sgIds);
         return ResultVO.ok();
