@@ -500,16 +500,6 @@
         limit 1
     </select>
 
-    <!--    查看当前的pid是否已在当前工单拣货下-->
-    <select id="judgeIsPidHave" resultType="java.lang.Integer">
-        select 1
-        from om_pick_head ph
-                 left join om_pick_label pl on ph.pick_head_id = pl.pick_head_id
-                 left join si_print_label spl on pl.print_label_id = spl.print_label_id
-        where ph.pick_head_id = #{pickHeadId}
-          and spl.package_id = #{packageId}
-        limit 1
-    </select>
 
     <!--    恢复当前PID的标签打印单-->
     <update id="resumePid">

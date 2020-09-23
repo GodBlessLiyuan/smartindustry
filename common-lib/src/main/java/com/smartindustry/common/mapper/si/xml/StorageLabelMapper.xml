@@ -324,4 +324,11 @@
         from si_storage_label
         where material_lock_id = #{mlid,jdbcType=BIGINT}
     </select>
+
+    <select id="queryByPlid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_storage_label
+        where print_label_id = #{plid,jdbcType=BIGINT}
+    </select>
 </mapper>

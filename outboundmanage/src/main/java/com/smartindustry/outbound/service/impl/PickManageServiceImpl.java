@@ -18,6 +18,7 @@ import com.smartindustry.common.pojo.om.*;
 import com.smartindustry.common.pojo.si.ConfigPO;
 import com.smartindustry.common.pojo.si.MaterialAttributePO;
 import com.smartindustry.common.pojo.si.PrintLabelPO;
+import com.smartindustry.common.pojo.si.StorageLabelPO;
 import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.vo.PageInfoVO;
@@ -50,6 +51,8 @@ public class PickManageServiceImpl implements IPickManageService {
     private PickHeadMapper pickHeadMapper;
     @Autowired
     private PickBodyMapper pickBodyMapper;
+    @Autowired
+    private PickLabelMapper pickLabelMapper;
     @Autowired
     private LabelRecommendMapper labelRecommendMapper;
     @Autowired
@@ -220,6 +223,11 @@ public class PickManageServiceImpl implements IPickManageService {
             // 提示没有这个PID号
             return new ResultVO(1015);
         }
+        //2 若当前输入的PID已经被自身或者其他扫码入库，则提示无法重复扫码
+        PickLabelPO pickLabelPO = pickLabelMapper.judgeIsPidHave(bo.getPrintLabelId());
+        if (pickLabelPO != null) {
+            return new ResultVO(1018);
+        }
         //当销售，生产，采购强关联时，工单所扫码的PID来源必须是销售采购来源
         ConfigPO configPO = configMapper.queryByKey(OutboundConstant.K_PID_RELATE);
         if (null != configPO && OutboundConstant.V_YES.equals(configPO.getConfigValue())) {
@@ -229,18 +237,13 @@ public class PickManageServiceImpl implements IPickManageService {
                 return new ResultVO(1016);
             }
         }
-
         // 判断当前物料不在拣货清单中，则提示 该物料并不在出库清单中
         List<String> maList = pickHeadMapper.judgeMaterial(pickHeadId);
         boolean flag = maList.contains(bo.getMaterialNo());
         if (!flag) {
             return new ResultVO(1017);
         }
-        //2 若当前输入的PID已经扫码入库，则提示不需要重复扫码
-        Integer resultPid = pickHeadMapper.judgeIsPidHave(pickHeadId, packageId);
-        if (resultPid != null) {
-            return new ResultVO(1018);
-        }
+
         //2.将拣货单表体表中的已拣量作加操作
         pickHeadMapper.addPickNum(pickHeadId, bo.getMaterialId(), bo.getNum());
         //3.查看扫码的PID是否在推荐的库位标签表中是否存在推荐的PID,存在则更新拣货标签表中的是否推荐标志位
@@ -293,6 +296,29 @@ public class PickManageServiceImpl implements IPickManageService {
         printLabelMapper.insert(poDivTwo);
         po.setDr((byte) 2);
         printLabelMapper.updateByPrimaryKey(po);
+
+        // 同时更新库位标签表
+        StorageLabelPO po1 = storageLabelMapper.queryByPlid(printLabelId);
+        if(po1 == null){
+            // 当前PID不存在库位标签
+            return new ResultVO(1002);
+        }
+        StorageLabelPO po2 = new StorageLabelPO();
+        StorageLabelPO po3 = new StorageLabelPO();
+        BeanUtils.copyProperties(po1,po2,"storageLabelId");
+        BeanUtils.copyProperties(po1,po3,"storageLabelId");
+
+        System.out.println(po2);
+
+        po2.setPrintLabelId(poDivOne.getPrintLabelId());
+        po2.setPackageId(poDivOne.getPackageId());
+        po2.setStorageNum(poDivOne.getNum());
+        storageLabelMapper.insert(po2);
+        po3.setPrintLabelId(poDivTwo.getPrintLabelId());
+        po3.setPackageId(poDivTwo.getPackageId());
+        po3.setStorageNum(poDivTwo.getNum());
+        storageLabelMapper.insert(po3);
+        storageLabelMapper.deleteByPrimaryKey(po1.getStorageLabelId());
         return ResultVO.ok();
     }
 
