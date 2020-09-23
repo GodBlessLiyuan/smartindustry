@@ -34,5 +34,5 @@ public interface PickLabelMapper extends BaseMapper<PickLabelPO, Long> {
      * @param printLabelId
      * @return
      */
-    PickLabelPO judgeIsPidHave(@Param("printLabelId") Long printLabelId);
+    PickLabelPO queryPickLabel(@Param("printLabelId") Long printLabelId);
 }

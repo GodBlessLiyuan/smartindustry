@@ -218,7 +218,7 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
             List<LocationPO> pos = locationMapper.queryLocation(po.getStorageWid());
             if (pos.isEmpty()) {
                 po1.setStoredNum(sum);
-                po1.setStatus(OutboundConstant.MATERIAL_STORAGE_FINISH);
+                po1.setStatus(OutboundConstant.MATERIAL_STORAGE_BEING);
             } else {
                 po1.setStoredNum(0);
                 po1.setStatus(OutboundConstant.MATERIAL_STORAGE_PENDING);
