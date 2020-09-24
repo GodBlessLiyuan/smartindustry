@@ -37,6 +37,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author: xiahui
@@ -114,10 +115,17 @@ public class LabelManageServiceImpl implements ILabelManageService {
      */
     @Override
     public ResultVO queryTSono(OperateDTO dto) {
-        if (StringUtils.isEmpty(dto.getSono())) {
+        if (StringUtils.isEmpty(dto.getSono()) || dto.getSid() == null) {
             return new ResultVO(1001);
         }
+        //根据sono 的所有标签列表
         List<PrintLabelBO> bos = printLabelMapper.queryByTSono(dto.getSono());
+        //获取已经添加到库的标签列表
+        List<Long> plIds = storageDetailMapper.queryPlIdBySid(dto.getSid());
+        if (plIds != null && !plIds.isEmpty()) {
+            List<PrintLabelBO> list = bos.stream().filter(PrintLabelBO->(!plIds.contains(PrintLabelBO.getPrintLabelId()))).collect(Collectors.toList());
+            return ResultVO.ok().setData(StorageSimpleDetailVO.convertLabel(list));
+        }
         return ResultVO.ok().setData(StorageSimpleDetailVO.convertLabel(bos));
     }
 

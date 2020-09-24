@@ -155,7 +155,9 @@
                  left join si_location l on sg.location_id = l.location_id
 									LEFT JOIN si_warehouse w ON w.warehouse_id = l.warehouse_id
         where sg.storage_id = #{storageId, jdbcType=BIGINT}
-        and sg.location_id is not null
+        <if test="storageGroupId == null">
+            and sg.location_id is not null
+        </if>
         <if test="storageGroupId != null">
             and sg.storage_group_id = #{storageGroupId, jdbcType=BIGINT}
         </if>

@@ -338,8 +338,6 @@
         LEFT JOIN om_pick_label o ON o.print_label_id = pl.print_label_id
         LEFT JOIN om_pick_head h ON h.pick_head_id = o.pick_head_id
         LEFT JOIN si_material m ON m.material_id = pl.material_id
-        LEFT JOIN sm_storage_detail sd on sd.print_label_id = pl.print_label_id
         where h.source_no = #{sourceNo, jdbcType = CHAR}
-
     </select>
 </mapper>
