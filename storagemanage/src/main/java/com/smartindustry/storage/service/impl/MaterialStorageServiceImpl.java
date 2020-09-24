@@ -329,10 +329,11 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
                 storageLabelPOs.add(po);
             }
         }
+        if(storageLabelPOs.isEmpty()){
+            return new ResultVO(1002);
+        }
         storageLabelMapper.batchInsert(storageLabelPOs);
-
         // 物料库存信息
-
         // 操作记录
         recordMapper.insert(new StorageRecordPO(dto.getSid(), storagePO.getStorageId(), user.getUserId(), user.getName(), ReceiptConstant.RECORD_TYPE_STORAGE_CONFIRM, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
 
