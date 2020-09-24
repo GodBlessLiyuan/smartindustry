@@ -48,7 +48,10 @@ public class StorageSimpleDetailVO implements Serializable {
         for (StorageDetailBO dbo: bo.getDetail()) {
             details.add(convert(dbo));
         }
-        details.sort(Comparator.comparing(DetailVO::getLno));
+        if (!details.isEmpty()) {
+            details.sort(Comparator.comparing(DetailVO::getLno));
+        }
+
         vo.setDetails(details);
         return vo;
     }

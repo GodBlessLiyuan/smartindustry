@@ -128,11 +128,11 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         //判断当前扫码入库pid是否存在
         PrintLabelPO po1 = printLabelMapper.queryByPid(dto.getPid());
         if (po1 == null) {
-            return new ResultVO(1002);
+            return new ResultVO(1028);
         }
         //判断当前的扫码pid是否已经被使用
-        StorageDetailPO storageDetailPO = storageDetailMapper.queryByPlId(po1.getPrintLabelId());
-        if (null != storageDetailPO) {
+        List<StorageDetailPO> storageDetailPO = storageDetailMapper.queryByGidAndLid(dto.getSid(), po1.getPrintLabelId());
+        if (null != storageDetailPO && storageDetailPO.isEmpty()) {
             // 标签已使用
             return new ResultVO(1004);
         }
@@ -419,7 +419,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         }
         List<LocationPO> locations = locationMapper.queryByLnoAndWhid(dto.getLno(), dto.getWhid());
         if (locations == null || locations.isEmpty()) {
-            return new ResultVO(1002);
+            return new ResultVO(1027);
         }
         return ResultVO.ok().setData(LocationVO.convert(locationPO));
 
@@ -482,7 +482,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
 
         PrintLabelBO bo = printLabelMapper.queryByRbidAndPid(storageBO.getReceiptBodyId(), dto.getPid());
         if (null == bo) {
-            return new ResultVO(1002);
+            return new ResultVO(1028);
         }
         if (bo.getDr() == 2) {
             return new ResultVO(1006);
@@ -844,6 +844,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         }
         if (!plIds.isEmpty()) {
             printLabelMapper.updateLidByIds(null, plIds);
+            receiptLabelMapper.updateSidByPlids(null, plIds);
         }
 
         //step2 查找收料单， 更新入库数量和状态, 更新收料单
