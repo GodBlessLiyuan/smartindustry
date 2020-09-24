@@ -233,7 +233,7 @@ public class PickManageServiceImpl implements IPickManageService {
         if (null != configPO && OutboundConstant.V_YES.equals(configPO.getConfigValue())) {
             //若输入的PID并不属于该工单对应采购单的物料范围，则提示该物料并不属于该工单
             String ono = pickHeadMapper.queryOnoByPid(bo.getPrintLabelId());
-            if (!ono.equals(po.getSourceNo())) {
+            if (ono == null || !ono.equals(po.getSourceNo())) {
                 return new ResultVO(1016);
             }
         }
