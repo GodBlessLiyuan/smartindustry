@@ -124,4 +124,8 @@
         where storage_group_id = #{sgId, jdbcType=BIGINT}
         and print_label_id = #{printLabelId, jdbcType=BIGINT} limit 1
     </select>
+
+    <select id="queryPlIdBySid" parameterType="java.lang.Long" resultType="java.lang.Long">
+        select distinct sd.print_label_id from sm_storage_detail sd left join sm_storage_group sg on sg.storage_group_id = sd.storage_group_id where sg.storage_id = #{sid, jdbcType=BIGINT}
+    </select>
 </mapper>
