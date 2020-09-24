@@ -1,7 +1,6 @@
 package com.smartindustry.basic.vo;
 
 import com.smartindustry.common.bo.si.MaterialAttributeBO;
-import com.smartindustry.common.pojo.si.MaterialAttributePO;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -36,7 +35,7 @@ public class MaterialAttributeVO implements Serializable {
         vo.setLlimit(bo.getLowerLimit());
         vo.setUlimit(bo.getUpperLimit());
         vo.setDpurchase(bo.getDefaultPurchase());
-        vo.setWay(bo.getWay() == null || bo.getWay() == 2);
+        vo.setWay(bo.getWay() != null && bo.getWay() == 1);
         vo.setWid(bo.getWarehouseId());
         vo.setWname(bo.getWarehouseName());
         vo.setLid(bo.getLocationId());
