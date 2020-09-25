@@ -153,9 +153,7 @@
     <select id="pageQuery" parameterType="java.util.Map" resultType="java.lang.Long">
         select mi.material_inventory_id as materialInventoryId
         from im_material_inventory mi
-        <if test="keyword != null and keyword != '' or mtype != null and mtype != 0">
-            left join si_material m on mi.material_id = m.material_id
-        </if>
+        left join si_material m on mi.material_id = m.material_id
         <where>
             <if test="keyword != null and keyword != ''">
                 and (m.material_no like '%' #{keyword,jdbcType=CHAR} '%'
@@ -174,7 +172,7 @@
                 )
             </if>
         </where>
-        order by mi.`status` desc, mi.material_id desc
+        order by mi.`status` desc, m.create_time desc
     </select>
     <select id="queryByMiids" parameterType="java.util.Map" resultMap="BOResultMap">
         select
