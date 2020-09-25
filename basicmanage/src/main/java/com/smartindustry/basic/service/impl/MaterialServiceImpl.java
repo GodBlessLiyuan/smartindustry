@@ -161,6 +161,9 @@ public class MaterialServiceImpl implements IMaterialService {
         }
 
         materialMapper.batchDelete(mids);
+
+        materialInventoryMapper.batchDelete(mids);
+
         return ResultVO.ok();
     }
 

@@ -45,4 +45,11 @@ public interface MaterialInventoryMapper extends BaseMapper<MaterialInventoryPO,
      * @return
      */
     List<MaterialInventoryBO> queryByMiids(List<Long> miids);
+
+    /**
+     * 批量删除
+     *
+     * @param mids
+     */
+    void batchDelete(List<Long> mids);
 }

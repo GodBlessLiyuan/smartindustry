@@ -212,4 +212,12 @@
             #{mid,jdbcType=BIGINT}
         </foreach>)
     </select>
+    <update id="batchDelete" parameterType="java.util.List">
+        delete
+        from im_material_inventory
+        where material_id in
+        <foreach collection="list" item="mid" open="(" separator="," close=")">
+            #{mid,jdbcType=BIGINT}
+        </foreach>
+    </update>
 </mapper>
