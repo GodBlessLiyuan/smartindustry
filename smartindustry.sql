@@ -4,7 +4,7 @@ SET SESSION FOREIGN_KEY_CHECKS=0;
 
 DROP TABLE IF EXISTS am_m_user_authority;
 DROP TABLE IF EXISTS am_role_authority;
-DROP TABLE IF EXISTS am_role_stage;
+DROP TABLE IF EXISTS wm_work_bench;
 DROP TABLE IF EXISTS am_authority;
 DROP TABLE IF EXISTS am_dept_record;
 DROP TABLE IF EXISTS am_role_record;
@@ -174,31 +174,6 @@ CREATE TABLE am_role_record
 	create_time datetime,
 	type char(255),
 	PRIMARY KEY (role_record_id)
-);
-
-
-CREATE TABLE am_role_stage
-(
-	stage_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	authority_id bigint unsigned NOT NULL,
-	stage_name char(64),
-	-- 1. 待办工作
-	-- 2. 快捷入口
-	stage_type tinyint COMMENT '1. 待办工作
-2. 快捷入口',
-	-- 1. WMS
-	-- 2. MES
-	-- 3. ERP
-	-- 4. MDM
-	stage_module tinyint COMMENT '1. WMS
-2. MES
-3. ERP
-4. MDM',
-	icon_path char(255),
-	url_path char(255),
-	PRIMARY KEY (stage_id),
-	UNIQUE (stage_id),
-	UNIQUE (authority_id)
 );
 
 
@@ -1355,6 +1330,31 @@ CREATE TABLE sm_storage_record
 );
 
 
+CREATE TABLE wm_work_bench
+(
+	work_bench_id bigint unsigned NOT NULL AUTO_INCREMENT,
+	authority_id bigint unsigned NOT NULL,
+	bench_name char(64),
+	-- 1. 待办工作
+	-- 2. 快捷入口
+	bench_type tinyint COMMENT '1. 待办工作
+2. 快捷入口',
+	-- 1. WMS
+	-- 2. MES
+	-- 3. ERP
+	-- 4. MDM
+	bench_module tinyint COMMENT '1. WMS
+2. MES
+3. ERP
+4. MDM',
+	icon_path char(255),
+	url_path char(255),
+	PRIMARY KEY (work_bench_id),
+	UNIQUE (work_bench_id),
+	UNIQUE (authority_id)
+);
+
+
 
 /* Create Foreign Keys */
 
@@ -1382,7 +1382,7 @@ ALTER TABLE am_role_authority
 ;
 
 
-ALTER TABLE am_role_stage
+ALTER TABLE wm_work_bench
 	ADD FOREIGN KEY (authority_id)
 	REFERENCES am_authority (authority_id)
 	ON UPDATE RESTRICT
@@ -2215,7 +2215,7 @@ ALTER TABLE si_supplier_record
 
 
 ALTER TABLE em_transfer_head
-	ADD FOREIGN KEY (storage_wid)
+	ADD FOREIGN KEY (outbound_wid)
 	REFERENCES si_warehouse (warehouse_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
@@ -2223,7 +2223,7 @@ ALTER TABLE em_transfer_head
 
 
 ALTER TABLE em_transfer_head
-	ADD FOREIGN KEY (outbound_wid)
+	ADD FOREIGN KEY (storage_wid)
 	REFERENCES si_warehouse (warehouse_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT

@@ -1,25 +1,25 @@
-package com.smartindustry.common.pojo.am;
+package com.smartindustry.common.pojo.wm;
 
 import java.io.Serializable;
 import lombok.Data;
 
 /**
- * am_role_stage
+ * wm_work_bench
  * @author 
  */
 @Data
-public class RoleStagePO implements Serializable {
-    private Long stageId;
+public class WorkBenchPO implements Serializable {
+    private Long workBenchId;
 
     private Long authorityId;
 
-    private String stageName;
+    private String benchName;
 
     /**
      * 1. 待办工作
 2. 快捷入口
      */
-    private Byte stageType;
+    private Byte benchType;
 
     /**
      * 1. WMS
@@ -27,7 +27,7 @@ public class RoleStagePO implements Serializable {
 3. ERP
 4. MDM
      */
-    private Byte stageModule;
+    private Byte benchModule;
 
     private String iconPath;
 

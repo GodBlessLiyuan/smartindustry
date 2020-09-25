@@ -17,6 +17,7 @@
         <module>authoritymanage</module>
         <module>basicmanage</module>
         <module>inventorymanage</module>
+        <module>workbenchmanage</module>
     </modules>
 
     <name>smartindustry</name>
