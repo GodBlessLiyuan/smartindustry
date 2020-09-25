@@ -4,6 +4,7 @@ SET SESSION FOREIGN_KEY_CHECKS=0;
 
 DROP TABLE IF EXISTS am_m_user_authority;
 DROP TABLE IF EXISTS am_role_authority;
+DROP TABLE IF EXISTS am_role_stage;
 DROP TABLE IF EXISTS am_authority;
 DROP TABLE IF EXISTS am_dept_record;
 DROP TABLE IF EXISTS am_role_record;
@@ -32,6 +33,7 @@ DROP TABLE IF EXISTS si_material;
 DROP TABLE IF EXISTS si_supplier_record;
 DROP TABLE IF EXISTS si_supplier;
 DROP TABLE IF EXISTS dd_cert_status;
+DROP TABLE IF EXISTS si_client_record;
 DROP TABLE IF EXISTS si_client;
 DROP TABLE IF EXISTS dd_client_type;
 DROP TABLE IF EXISTS dd_credit_level;
@@ -81,8 +83,8 @@ CREATE TABLE am_authority
 	authority_id bigint unsigned NOT NULL AUTO_INCREMENT,
 	authority_name char(255) NOT NULL,
 	authority_path char(255) NOT NULL,
-	-- 1£º²Ëµ¥   2£º°´Å¥
-	type tinyint COMMENT '1£º²Ëµ¥   2£º°´Å¥',
+	-- 1ï¼šèœå•   2ï¼šæŒ‰é’®
+	type tinyint COMMENT '1ï¼šèœå•   2ï¼šæŒ‰é’®',
 	parent_id bigint unsigned,
 	PRIMARY KEY (authority_id),
 	UNIQUE (authority_id),
@@ -97,16 +99,16 @@ CREATE TABLE am_dept
 	dept_name char(32) NOT NULL,
 	user_id bigint unsigned,
 	dept_desc char(255),
-	-- 1 Æô¶¯
-	-- 2 ½ûÓÃ
-	status tinyint COMMENT '1 Æô¶¯
-2 ½ûÓÃ',
+	-- 1 å¯åŠ¨
+	-- 2 ç¦ç”¨
+	status tinyint COMMENT '1 å¯åŠ¨
+2 ç¦ç”¨',
 	create_time datetime,
 	update_time datetime,
-	-- 1£ºÎ´É¾³ı
-	-- 2£ºÒÑÉ¾³ı
-	dr tinyint COMMENT '1£ºÎ´É¾³ı
-2£ºÒÑÉ¾³ı',
+	-- 1ï¼šæœªåˆ é™¤
+	-- 2ï¼šå·²åˆ é™¤
+	dr tinyint COMMENT '1ï¼šæœªåˆ é™¤
+2ï¼šå·²åˆ é™¤',
 	PRIMARY KEY (dept_id),
 	UNIQUE (dept_id)
 );
@@ -139,16 +141,16 @@ CREATE TABLE am_role
 	role_id bigint unsigned NOT NULL AUTO_INCREMENT,
 	role_name char(32) NOT NULL,
 	role_desc char(255),
-	-- 1£ºÆôÓÃ
-	-- 2£º½ûÓÃ
-	status tinyint COMMENT '1£ºÆôÓÃ
-2£º½ûÓÃ',
+	-- 1ï¼šå¯ç”¨
+	-- 2ï¼šç¦ç”¨
+	status tinyint COMMENT '1ï¼šå¯ç”¨
+2ï¼šç¦ç”¨',
 	create_time datetime,
 	update_time datetime,
-	-- 1£ºÎ´É¾³ı
-	-- 2£ºÒÑÉ¾³ı
-	dr tinyint COMMENT '1£ºÎ´É¾³ı
-2£ºÒÑÉ¾³ı',
+	-- 1ï¼šæœªåˆ é™¤
+	-- 2ï¼šå·²åˆ é™¤
+	dr tinyint COMMENT '1ï¼šæœªåˆ é™¤
+2ï¼šå·²åˆ é™¤',
 	PRIMARY KEY (role_id),
 	UNIQUE (role_id)
 );
@@ -175,14 +177,39 @@ CREATE TABLE am_role_record
 );
 
 
+CREATE TABLE am_role_stage
+(
+	stage_id bigint unsigned NOT NULL AUTO_INCREMENT,
+	authority_id bigint unsigned NOT NULL,
+	stage_name char(64),
+	-- 1. å¾…åŠå·¥ä½œ
+	-- 2. å¿«æ·å…¥å£
+	stage_type tinyint COMMENT '1. å¾…åŠå·¥ä½œ
+2. å¿«æ·å…¥å£',
+	-- 1. WMS
+	-- 2. MES
+	-- 3. ERP
+	-- 4. MDM
+	stage_module tinyint COMMENT '1. WMS
+2. MES
+3. ERP
+4. MDM',
+	icon_path char(255),
+	url_path char(255),
+	PRIMARY KEY (stage_id),
+	UNIQUE (stage_id),
+	UNIQUE (authority_id)
+);
+
+
 CREATE TABLE am_user
 (
 	user_id bigint unsigned NOT NULL AUTO_INCREMENT,
 	name char(32) NOT NULL,
-	-- 1 ÄĞ
-	-- 2 Å®
-	sex tinyint COMMENT '1 ÄĞ
-2 Å®',
+	-- 1 ç”·
+	-- 2 å¥³
+	sex tinyint COMMENT '1 ç”·
+2 å¥³',
 	dept_id bigint unsigned NOT NULL,
 	username char(32) NOT NULL,
 	password char(128) NOT NULL,
@@ -190,17 +217,17 @@ CREATE TABLE am_user
 	job char(16),
 	phone char(16),
 	email char(255),
-	-- 1 ÆôÓÃ
-	-- 2 ½ûÓÃ
-	status tinyint COMMENT '1 ÆôÓÃ
-2 ½ûÓÃ',
+	-- 1 å¯ç”¨
+	-- 2 ç¦ç”¨
+	status tinyint COMMENT '1 å¯ç”¨
+2 ç¦ç”¨',
 	remark char(255),
 	create_time datetime,
 	update_time datetime,
-	-- 1£ºÎ´É¾³ı
-	-- 2£ºÒÑÉ¾³ı
-	dr tinyint COMMENT '1£ºÎ´É¾³ı
-2£ºÒÑÉ¾³ı',
+	-- 1ï¼šæœªåˆ é™¤
+	-- 2ï¼šå·²åˆ é™¤
+	dr tinyint COMMENT '1ï¼šæœªåˆ é™¤
+2ï¼šå·²åˆ é™¤',
 	PRIMARY KEY (user_id),
 	UNIQUE (user_id)
 );
@@ -214,7 +241,8 @@ CREATE TABLE am_user_record
 	create_time datetime,
 	type char(255),
 	PRIMARY KEY (user_record_id),
-	UNIQUE (user_record_id)
+	UNIQUE (user_record_id),
+	UNIQUE (operate_id)
 );
 
 
@@ -430,36 +458,36 @@ CREATE TABLE em_transfer_head
 (
 	transfer_head_id bigint unsigned NOT NULL AUTO_INCREMENT,
 	transfer_no char(128),
-	-- 1£º¹¤µ¥µ÷²¦
-	-- 2£º²»Á¼µ÷²¦
-	transfer_type tinyint COMMENT '1£º¹¤µ¥µ÷²¦
-2£º²»Á¼µ÷²¦',
+	-- 1ï¼šå·¥å•è°ƒæ‹¨
+	-- 2ï¼šä¸è‰¯è°ƒæ‹¨
+	transfer_type tinyint COMMENT '1ï¼šå·¥å•è°ƒæ‹¨
+2ï¼šä¸è‰¯è°ƒæ‹¨',
 	outbound_wid bigint unsigned NOT NULL,
 	storage_wid bigint unsigned NOT NULL,
 	plan_time datetime,
-	-- 1£ºÒÑÈë¿â
-	-- 2£ºÈë¿âÖĞ
-	-- 3£º´ıÈë¿â
-	outbound_status tinyint COMMENT '1£ºÒÑÈë¿â
-2£ºÈë¿âÖĞ
-3£º´ıÈë¿â',
-	-- 1£ºÒÑÈë¿â
-	-- 2£ºÈë¿âÖĞ
-	-- 3£º´ıÈë¿â
-	storage_status tinyint COMMENT '1£ºÒÑÈë¿â
-2£ºÈë¿âÖĞ
-3£º´ıÈë¿â',
-	-- 1£ºÒÑÉóºË
-	-- 2£º²µ»Ø
-	-- 3£º´ıÉóºË
-	status tinyint COMMENT '1£ºÒÑÉóºË
-2£º²µ»Ø
-3£º´ıÉóºË',
+	-- 1ï¼šå·²å…¥åº“
+	-- 2ï¼šå…¥åº“ä¸­
+	-- 3ï¼šå¾…å…¥åº“
+	outbound_status tinyint COMMENT '1ï¼šå·²å…¥åº“
+2ï¼šå…¥åº“ä¸­
+3ï¼šå¾…å…¥åº“',
+	-- 1ï¼šå·²å…¥åº“
+	-- 2ï¼šå…¥åº“ä¸­
+	-- 3ï¼šå¾…å…¥åº“
+	storage_status tinyint COMMENT '1ï¼šå·²å…¥åº“
+2ï¼šå…¥åº“ä¸­
+3ï¼šå¾…å…¥åº“',
+	-- 1ï¼šå·²å®¡æ ¸
+	-- 2ï¼šé©³å›
+	-- 3ï¼šå¾…å®¡æ ¸
+	status tinyint COMMENT '1ï¼šå·²å®¡æ ¸
+2ï¼šé©³å›
+3ï¼šå¾…å®¡æ ¸',
 	create_time datetime,
-	-- 1£ºÎ´É¾³ı
-	-- 2£ºÒÑÉ¾³ı
-	dr tinyint COMMENT '1£ºÎ´É¾³ı
-2£ºÒÑÉ¾³ı',
+	-- 1ï¼šæœªåˆ é™¤
+	-- 2ï¼šå·²åˆ é™¤
+	dr tinyint COMMENT '1ï¼šæœªåˆ é™¤
+2ï¼šå·²åˆ é™¤',
 	PRIMARY KEY (transfer_head_id),
 	UNIQUE (transfer_head_id)
 );
@@ -486,10 +514,10 @@ CREATE TABLE im_safe_stock
 	safe_stock_id bigint unsigned NOT NULL AUTO_INCREMENT,
 	material_inventory_id bigint unsigned NOT NULL,
 	lower_limit int,
-	-- 1£ºÊÇ
-	-- 2£º·ñ
-	way tinyint COMMENT '1£ºÊÇ
-2£º·ñ',
+	-- 1ï¼šæ˜¯
+	-- 2ï¼šå¦
+	way tinyint COMMENT '1ï¼šæ˜¯
+2ï¼šå¦',
 	user_id bigint unsigned,
 	create_time datetime,
 	PRIMARY KEY (safe_stock_id),
@@ -524,10 +552,10 @@ CREATE TABLE om_logistics_record
 	outbound_id bigint unsigned NOT NULL,
 	ship_date date,
 	logistics_no char(128),
-	-- 1£ºµ½¸¶
-	-- 2£º¼Ä¸¶
-	ship_way tinyint COMMENT '1£ºµ½¸¶
-2£º¼Ä¸¶',
+	-- 1ï¼šåˆ°ä»˜
+	-- 2ï¼šå¯„ä»˜
+	ship_way tinyint COMMENT '1ï¼šåˆ°ä»˜
+2ï¼šå¯„ä»˜',
 	remark char(255),
 	create_time datetime,
 	PRIMARY KEY (logistics_record_id),
@@ -543,15 +571,15 @@ CREATE TABLE om_outbound
 	outbound_no char(128) NOT NULL,
 	outbound_time datetime,
 	ship_time datetime,
-	-- 1£ºÒÑ³ö¿â
-	-- 3£º´ı³ö¿â
-	status tinyint COMMENT '1£ºÒÑ³ö¿â
-3£º´ı³ö¿â',
+	-- 1ï¼šå·²å‡ºåº“
+	-- 3ï¼šå¾…å‡ºåº“
+	status tinyint COMMENT '1ï¼šå·²å‡ºåº“
+3ï¼šå¾…å‡ºåº“',
 	create_time datetime,
-	-- 1£ºÎ´É¾³ı
-	-- 2£ºÒÑÉ¾³ı
-	dr tinyint COMMENT '1£ºÎ´É¾³ı
-2£ºÒÑÉ¾³ı',
+	-- 1ï¼šæœªåˆ é™¤
+	-- 2ï¼šå·²åˆ é™¤
+	dr tinyint COMMENT '1ï¼šæœªåˆ é™¤
+2ï¼šå·²åˆ é™¤',
 	PRIMARY KEY (outbound_id),
 	UNIQUE (outbound_id),
 	UNIQUE (pick_head_id),
@@ -568,22 +596,22 @@ CREATE TABLE om_outbound_record
 	name char(255),
 	type char(255),
 	create_time datetime,
-	-- 1£ºÎ´´¦Àí
-	-- 5£ºÎïÁÏ¼ğ»õ
-	-- 10£º¹¤µ¥ÉóºË|OQC¼ìÑé
-	-- 15£ºµÈÆëÌ×·¢»õ
-	-- 20£ºÈ¡Ïû·¢»õ£¬ÍË»õ²Ö¿â
-	-- 25£ºÎïÁÏ³ö¿â
-	-- 30£ºÍê³É³ö¿â
-	-- 35£ºÈ·ÈÏ³ö¿â
-	status tinyint COMMENT '1£ºÎ´´¦Àí
-5£ºÎïÁÏ¼ğ»õ
-10£º¹¤µ¥ÉóºË|OQC¼ìÑé
-15£ºµÈÆëÌ×·¢»õ
-20£ºÈ¡Ïû·¢»õ£¬ÍË»õ²Ö¿â
-25£ºÎïÁÏ³ö¿â
-30£ºÍê³É³ö¿â
-35£ºÈ·ÈÏ³ö¿â',
+	-- 1ï¼šæœªå¤„ç†
+	-- 5ï¼šç‰©æ–™æ‹£è´§
+	-- 10ï¼šå·¥å•å®¡æ ¸|OQCæ£€éªŒ
+	-- 15ï¼šç­‰é½å¥—å‘è´§
+	-- 20ï¼šå–æ¶ˆå‘è´§ï¼Œé€€è´§ä»“åº“
+	-- 25ï¼šç‰©æ–™å‡ºåº“
+	-- 30ï¼šå®Œæˆå‡ºåº“
+	-- 35ï¼šç¡®è®¤å‡ºåº“
+	status tinyint COMMENT '1ï¼šæœªå¤„ç†
+5ï¼šç‰©æ–™æ‹£è´§
+10ï¼šå·¥å•å®¡æ ¸|OQCæ£€éªŒ
+15ï¼šç­‰é½å¥—å‘è´§
+20ï¼šå–æ¶ˆå‘è´§ï¼Œé€€è´§ä»“åº“
+25ï¼šç‰©æ–™å‡ºåº“
+30ï¼šå®Œæˆå‡ºåº“
+35ï¼šç¡®è®¤å‡ºåº“',
 	PRIMARY KEY (record_id),
 	UNIQUE (record_id)
 );
@@ -598,10 +626,10 @@ CREATE TABLE om_pick_body
 	pick_num int,
 	create_time datetime,
 	exception char(255),
-	-- 1£ºÎ´É¾³ı
-	-- 2£ºÒÑÉ¾³ı
-	dr tinyint COMMENT '1£ºÎ´É¾³ı
-2£ºÒÑÉ¾³ı',
+	-- 1ï¼šæœªåˆ é™¤
+	-- 2ï¼šå·²åˆ é™¤
+	dr tinyint COMMENT '1ï¼šæœªåˆ é™¤
+2ï¼šå·²åˆ é™¤',
 	PRIMARY KEY (pick_body_id),
 	UNIQUE (pick_body_id)
 );
@@ -611,14 +639,14 @@ CREATE TABLE om_pick_check
 (
 	pick_head_id bigint unsigned NOT NULL,
 	remark char(255),
-	-- 1£ºÍ¬Òâ
-	-- 2£º²µ»Ø-È¡Ïû·¢»õ£¬ÍË»Ø²Ö¿â
-	-- 3£º´ıÉóºË
-	-- 4£º²µ»Ø-µÈÆëÌ×·¢»õ
-	status tinyint COMMENT '1£ºÍ¬Òâ
-2£º²µ»Ø-È¡Ïû·¢»õ£¬ÍË»Ø²Ö¿â
-3£º´ıÉóºË
-4£º²µ»Ø-µÈÆëÌ×·¢»õ',
+	-- 1ï¼šåŒæ„
+	-- 2ï¼šé©³å›-å–æ¶ˆå‘è´§ï¼Œé€€å›ä»“åº“
+	-- 3ï¼šå¾…å®¡æ ¸
+	-- 4ï¼šé©³å›-ç­‰é½å¥—å‘è´§
+	status tinyint COMMENT '1ï¼šåŒæ„
+2ï¼šé©³å›-å–æ¶ˆå‘è´§ï¼Œé€€å›ä»“åº“
+3ï¼šå¾…å®¡æ ¸
+4ï¼šé©³å›-ç­‰é½å¥—å‘è´§',
 	PRIMARY KEY (pick_head_id),
 	UNIQUE (pick_head_id)
 );
@@ -629,47 +657,47 @@ CREATE TABLE om_pick_head
 	pick_head_id bigint unsigned NOT NULL AUTO_INCREMENT,
 	pick_no char(128) NOT NULL,
 	source_no char(128) NOT NULL,
-	-- 1£º¹¤µ¥
-	-- 2£ºÏúÊÛ
-	-- 3£ºµ÷²¦
-	source_type tinyint NOT NULL COMMENT '1£º¹¤µ¥
-2£ºÏúÊÛ
-3£ºµ÷²¦',
-	-- 1£º´ıÍÆ¼ö
-	-- 5£ºÎ´´¦Àí
-	-- 10£ºÎïÁÏ¼ğ»õ
-	-- 15£º¹¤µ¥ÉóºË|OQC¼ìÑé
-	-- 20£ºµÈÆëÌ×·¢»õ
-	-- 25£ºÈ¡Ïû·¢»õ£¬ÍË»õ²Ö¿â
-	-- 30£ºÎïÁÏ³ö¿â
-	-- 35£ºÍê³É³ö¿â
-	-- 40£ºÈ·ÈÏ³ö¿â
-	material_status tinyint COMMENT '1£º´ıÍÆ¼ö
-5£ºÎ´´¦Àí
-10£ºÎïÁÏ¼ğ»õ
-15£º¹¤µ¥ÉóºË|OQC¼ìÑé
-20£ºµÈÆëÌ×·¢»õ
-25£ºÈ¡Ïû·¢»õ£¬ÍË»õ²Ö¿â
-30£ºÎïÁÏ³ö¿â
-35£ºÍê³É³ö¿â
-40£ºÈ·ÈÏ³ö¿â',
+	-- 1ï¼šå·¥å•
+	-- 2ï¼šé”€å”®
+	-- 3ï¼šè°ƒæ‹¨
+	source_type tinyint NOT NULL COMMENT '1ï¼šå·¥å•
+2ï¼šé”€å”®
+3ï¼šè°ƒæ‹¨',
+	-- 1ï¼šå¾…æ¨è
+	-- 5ï¼šæœªå¤„ç†
+	-- 10ï¼šç‰©æ–™æ‹£è´§
+	-- 15ï¼šå·¥å•å®¡æ ¸|OQCæ£€éªŒ
+	-- 20ï¼šç­‰é½å¥—å‘è´§
+	-- 25ï¼šå–æ¶ˆå‘è´§ï¼Œé€€è´§ä»“åº“
+	-- 30ï¼šç‰©æ–™å‡ºåº“
+	-- 35ï¼šå®Œæˆå‡ºåº“
+	-- 40ï¼šç¡®è®¤å‡ºåº“
+	material_status tinyint COMMENT '1ï¼šå¾…æ¨è
+5ï¼šæœªå¤„ç†
+10ï¼šç‰©æ–™æ‹£è´§
+15ï¼šå·¥å•å®¡æ ¸|OQCæ£€éªŒ
+20ï¼šç­‰é½å¥—å‘è´§
+25ï¼šå–æ¶ˆå‘è´§ï¼Œé€€è´§ä»“åº“
+30ï¼šç‰©æ–™å‡ºåº“
+35ï¼šå®Œæˆå‡ºåº“
+40ï¼šç¡®è®¤å‡ºåº“',
 	correspond_project char(255),
 	accept_customer char(255),
 	accept_address char(255),
 	plan_time datetime,
 	outbound_time datetime,
-	-- 1£ºÈ«²¿³ö¿â
-	-- 2£ºÇ·ÁÏ³ö¿â
-	-- 3£ºÎ´³ö¿â
-	outbound_status tinyint COMMENT '1£ºÈ«²¿³ö¿â
-2£ºÇ·ÁÏ³ö¿â
-3£ºÎ´³ö¿â',
+	-- 1ï¼šå…¨éƒ¨å‡ºåº“
+	-- 2ï¼šæ¬ æ–™å‡ºåº“
+	-- 3ï¼šæœªå‡ºåº“
+	outbound_status tinyint COMMENT '1ï¼šå…¨éƒ¨å‡ºåº“
+2ï¼šæ¬ æ–™å‡ºåº“
+3ï¼šæœªå‡ºåº“',
 	create_time datetime,
 	update_time datetime,
-	-- 1£ºÎ´É¾³ı
-	-- 2£ºÒÑÉ¾³ı
-	dr tinyint COMMENT '1£ºÎ´É¾³ı
-2£ºÒÑÉ¾³ı',
+	-- 1ï¼šæœªåˆ é™¤
+	-- 2ï¼šå·²åˆ é™¤
+	dr tinyint COMMENT '1ï¼šæœªåˆ é™¤
+2ï¼šå·²åˆ é™¤',
 	PRIMARY KEY (pick_head_id),
 	UNIQUE (pick_head_id),
 	UNIQUE (pick_no)
@@ -681,10 +709,10 @@ CREATE TABLE om_pick_label
 	pick_label_id bigint unsigned NOT NULL AUTO_INCREMENT,
 	pick_head_id bigint unsigned NOT NULL,
 	print_label_id bigint unsigned NOT NULL,
-	-- 1£ºÊÇ
-	-- 2£º·ñ
-	recommend tinyint COMMENT '1£ºÊÇ
-2£º·ñ',
+	-- 1ï¼šæ˜¯
+	-- 2ï¼šå¦
+	recommend tinyint COMMENT '1ï¼šæ˜¯
+2ï¼šå¦',
 	create_time datetime,
 	PRIMARY KEY (pick_label_id),
 	UNIQUE (pick_label_id)
@@ -698,25 +726,25 @@ CREATE TABLE si_bom_body
 	material_id bigint unsigned NOT NULL,
 	material_property_id bigint unsigned NOT NULL,
 	material_demand float(5,2) NOT NULL,
-	-- 1£ºÅä±È/±ÈÀı
-	-- 2£º¼ÆÊı
-	demand_type tinyint NOT NULL COMMENT '1£ºÅä±È/±ÈÀı
-2£º¼ÆÊı',
+	-- 1ï¼šé…æ¯”/æ¯”ä¾‹
+	-- 2ï¼šè®¡æ•°
+	demand_type tinyint NOT NULL COMMENT '1ï¼šé…æ¯”/æ¯”ä¾‹
+2ï¼šè®¡æ•°',
 	material_loss float(5,2),
-	-- 1£ºÅä±È/±ÈÀı
-	-- 2£º¼ÆÊı
-	loss_type tinyint COMMENT '1£ºÅä±È/±ÈÀı
-2£º¼ÆÊı',
+	-- 1ï¼šé…æ¯”/æ¯”ä¾‹
+	-- 2ï¼šè®¡æ•°
+	loss_type tinyint COMMENT '1ï¼šé…æ¯”/æ¯”ä¾‹
+2ï¼šè®¡æ•°',
 	process_id bigint unsigned,
 	parent_id bigint unsigned,
 	user_id bigint unsigned,
 	level int NOT NULL,
 	create_time datetime,
 	update_time datetime,
-	-- 1£ºÎ´É¾³ı
-	-- 2£ºÒÑÉ¾³ı
-	dr tinyint COMMENT '1£ºÎ´É¾³ı
-2£ºÒÑÉ¾³ı',
+	-- 1ï¼šæœªåˆ é™¤
+	-- 2ï¼šå·²åˆ é™¤
+	dr tinyint COMMENT '1ï¼šæœªåˆ é™¤
+2ï¼šå·²åˆ é™¤',
 	PRIMARY KEY (bom_body_id),
 	UNIQUE (bom_body_id)
 );
@@ -730,10 +758,10 @@ CREATE TABLE si_bom_head
 	user_id bigint unsigned,
 	create_time datetime,
 	update_time datetime,
-	-- 1£ºÎ´É¾³ı
-	-- 2£ºÒÑÉ¾³ı
-	dr tinyint COMMENT '1£ºÎ´É¾³ı
-2£ºÒÑÉ¾³ı',
+	-- 1ï¼šæœªåˆ é™¤
+	-- 2ï¼šå·²åˆ é™¤
+	dr tinyint COMMENT '1ï¼šæœªåˆ é™¤
+2ï¼šå·²åˆ é™¤',
 	PRIMARY KEY (bom_head_id),
 	UNIQUE (bom_head_id)
 );
@@ -747,8 +775,7 @@ CREATE TABLE si_bom_record
 	create_time datetime,
 	type char(255),
 	PRIMARY KEY (bom_record_id),
-	UNIQUE (bom_record_id),
-	UNIQUE (bom_head_id)
+	UNIQUE (bom_record_id)
 );
 
 
@@ -759,10 +786,10 @@ CREATE TABLE si_client
 	client_type_id bigint unsigned NOT NULL,
 	client_name char(64) NOT NULL,
 	contact char(64) NOT NULL,
-	-- 1£ºÄĞ
-	-- 2£ºÅ®
-	sex tinyint COMMENT '1£ºÄĞ
-2£ºÅ®',
+	-- 1ï¼šç”·
+	-- 2ï¼šå¥³
+	sex tinyint COMMENT '1ï¼šç”·
+2ï¼šå¥³',
 	phone char(16) NOT NULL,
 	email char(255),
 	fax char(16),
@@ -773,12 +800,24 @@ CREATE TABLE si_client
 	remark char(255),
 	create_time datetime,
 	update_time datetime,
-	-- 1 Î´É¾³ı
-	-- 2 ÒÑÉ¾³ı
-	dr tinyint COMMENT '1 Î´É¾³ı
-2 ÒÑÉ¾³ı',
+	-- 1 æœªåˆ é™¤
+	-- 2 å·²åˆ é™¤
+	dr tinyint COMMENT '1 æœªåˆ é™¤
+2 å·²åˆ é™¤',
 	PRIMARY KEY (client_id),
 	UNIQUE (client_id)
+);
+
+
+CREATE TABLE si_client_record
+(
+	client_record_id bigint unsigned NOT NULL AUTO_INCREMENT,
+	client_id bigint unsigned NOT NULL,
+	user_id bigint unsigned NOT NULL,
+	create_time datetime,
+	type char(255),
+	PRIMARY KEY (client_record_id),
+	UNIQUE (client_record_id)
 );
 
 
@@ -799,25 +838,25 @@ CREATE TABLE si_label_record
 	print_label_id bigint unsigned NOT NULL,
 	user_id bigint unsigned NOT NULL,
 	name char(255),
-	-- 1£ºÈë¿â¹ÜÀí
-	-- 2£º³ö¿â¹ÜÀí
-	module tinyint COMMENT '1£ºÈë¿â¹ÜÀí
-2£º³ö¿â¹ÜÀí',
+	-- 1ï¼šå…¥åº“ç®¡ç†
+	-- 2ï¼šå‡ºåº“ç®¡ç†
+	module tinyint COMMENT '1ï¼šå…¥åº“ç®¡ç†
+2ï¼šå‡ºåº“ç®¡ç†',
 	create_time datetime,
-	-- 1£ºÂ¼Èë±êÇ©
-	-- 5£ºIQC¼ì²â
-	-- 10£ºQE¼ì²â
-	-- 15£ºQEÈ·ÈÏ
-	-- 20£ºÎïÁÏÈë¿â
-	-- 25£ºÈë¿âÍê³É
-	-- 30£ºÍË¹©Ó¦ÉÌ
-	status tinyint COMMENT '1£ºÂ¼Èë±êÇ©
-5£ºIQC¼ì²â
-10£ºQE¼ì²â
-15£ºQEÈ·ÈÏ
-20£ºÎïÁÏÈë¿â
-25£ºÈë¿âÍê³É
-30£ºÍË¹©Ó¦ÉÌ',
+	-- 1ï¼šå½•å…¥æ ‡ç­¾
+	-- 5ï¼šIQCæ£€æµ‹
+	-- 10ï¼šQEæ£€æµ‹
+	-- 15ï¼šQEç¡®è®¤
+	-- 20ï¼šç‰©æ–™å…¥åº“
+	-- 25ï¼šå…¥åº“å®Œæˆ
+	-- 30ï¼šé€€ä¾›åº”å•†
+	status tinyint COMMENT '1ï¼šå½•å…¥æ ‡ç­¾
+5ï¼šIQCæ£€æµ‹
+10ï¼šQEæ£€æµ‹
+15ï¼šQEç¡®è®¤
+20ï¼šç‰©æ–™å…¥åº“
+25ï¼šå…¥åº“å®Œæˆ
+30ï¼šé€€ä¾›åº”å•†',
 	PRIMARY KEY (label_record_id),
 	UNIQUE (label_record_id)
 );
@@ -834,10 +873,10 @@ CREATE TABLE si_location
 	user_id bigint unsigned,
 	create_time datetime,
 	update_time datetime,
-	-- 1£ºÎ´É¾³ı
-	-- 2£ºÒÑÉ¾³ı
-	dr tinyint COMMENT '1£ºÎ´É¾³ı
-2£ºÒÑÉ¾³ı',
+	-- 1ï¼šæœªåˆ é™¤
+	-- 2ï¼šå·²åˆ é™¤
+	dr tinyint COMMENT '1ï¼šæœªåˆ é™¤
+2ï¼šå·²åˆ é™¤',
 	PRIMARY KEY (location_id),
 	UNIQUE (location_id)
 );
@@ -860,12 +899,12 @@ CREATE TABLE si_material
 	material_id bigint unsigned NOT NULL AUTO_INCREMENT,
 	material_no char(128) NOT NULL,
 	material_attribute_id bigint unsigned,
-	-- 1£ºÔ­²ÄÁÏ
-	-- 2£º°ë³ÉÆ·
-	-- 3£º³ÉÆ·
-	material_type tinyint COMMENT '1£ºÔ­²ÄÁÏ
-2£º°ë³ÉÆ·
-3£º³ÉÆ·',
+	-- 1ï¼šåŸææ–™
+	-- 2ï¼šåŠæˆå“
+	-- 3ï¼šæˆå“
+	material_type tinyint COMMENT '1ï¼šåŸææ–™
+2ï¼šåŠæˆå“
+3ï¼šæˆå“',
 	material_type_id bigint,
 	humidity_level_id bigint unsigned,
 	material_level_id bigint unsigned,
@@ -884,10 +923,10 @@ CREATE TABLE si_material
 	user_id bigint unsigned,
 	create_time datetime,
 	update_time datetime,
-	-- 1£ºÎ´É¾³ı
-	-- 2£ºÒÑÉ¾³ı
-	dr tinyint COMMENT '1£ºÎ´É¾³ı
-2£ºÒÑÉ¾³ı',
+	-- 1ï¼šæœªåˆ é™¤
+	-- 2ï¼šå·²åˆ é™¤
+	dr tinyint COMMENT '1ï¼šæœªåˆ é™¤
+2ï¼šå·²åˆ é™¤',
 	PRIMARY KEY (material_id),
 	UNIQUE (material_id)
 );
@@ -899,26 +938,26 @@ CREATE TABLE si_material_attribute
 	lower_limit decimal(10,2),
 	upper_limit decimal(10,2),
 	default_purchase decimal(10,2),
-	-- 1£ºÊÇ
-	-- 2£º·ñ
-	way tinyint COMMENT '1£ºÊÇ
-2£º·ñ',
+	-- 1ï¼šæ˜¯
+	-- 2ï¼šå¦
+	way tinyint COMMENT '1ï¼šæ˜¯
+2ï¼šå¦',
 	warehouse_id bigint unsigned,
 	location_id bigint unsigned,
-	-- 1£ºIQC¼ìÑé
-	-- 2£ºQE¼ìÑé
-	storage_inspect tinyint COMMENT '1£ºIQC¼ìÑé
-2£ºQE¼ìÑé',
+	-- 1ï¼šIQCæ£€éªŒ
+	-- 2ï¼šQEæ£€éªŒ
+	storage_inspect tinyint COMMENT '1ï¼šIQCæ£€éªŒ
+2ï¼šQEæ£€éªŒ',
 	storage_inspect_type tinyint,
 	storage_sampling_plan tinyint,
-	-- 1£º¹¤µ¥ÉóºË
-	-- 2£ºOQC¼ìÑé
-	outbound_inspect tinyint COMMENT '1£º¹¤µ¥ÉóºË
-2£ºOQC¼ìÑé',
-	-- 1£ºÊÇ
-	-- 2£º·ñ
-	pick_split tinyint COMMENT '1£ºÊÇ
-2£º·ñ',
+	-- 1ï¼šå·¥å•å®¡æ ¸
+	-- 2ï¼šOQCæ£€éªŒ
+	outbound_inspect tinyint COMMENT '1ï¼šå·¥å•å®¡æ ¸
+2ï¼šOQCæ£€éªŒ',
+	-- 1ï¼šæ˜¯
+	-- 2ï¼šå¦
+	pick_split tinyint COMMENT '1ï¼šæ˜¯
+2ï¼šå¦',
 	PRIMARY KEY (material_attribute_id),
 	UNIQUE (material_attribute_id)
 );
@@ -956,22 +995,22 @@ CREATE TABLE si_print_label
 	produce_batch char(32),
 	material_id bigint unsigned NOT NULL,
 	num int,
-	-- 1£ºÁ¼Æ·
-	-- 2£º·ÇÁ¼Æ·
-	type tinyint COMMENT '1£ºÁ¼Æ·
-2£º·ÇÁ¼Æ·',
-	-- 1£ºÉ¨Ãè
-	-- 2£º´òÓ¡
-	origin tinyint NOT NULL COMMENT '1£ºÉ¨Ãè
-2£º´òÓ¡',
+	-- 1ï¼šè‰¯å“
+	-- 2ï¼šéè‰¯å“
+	type tinyint COMMENT '1ï¼šè‰¯å“
+2ï¼šéè‰¯å“',
+	-- 1ï¼šæ‰«æ
+	-- 2ï¼šæ‰“å°
+	origin tinyint NOT NULL COMMENT '1ï¼šæ‰«æ
+2ï¼šæ‰“å°',
 	location_id bigint unsigned,
 	relate_label_id bigint unsigned,
 	relate_package_id char(32),
 	create_time datetime,
-	-- 1£ºÎ´·ÏÆú
-	-- 2£ºÒÑ·ÏÆú
-	dr tinyint COMMENT '1£ºÎ´·ÏÆú
-2£ºÒÑ·ÏÆú',
+	-- 1ï¼šæœªåºŸå¼ƒ
+	-- 2ï¼šå·²åºŸå¼ƒ
+	dr tinyint COMMENT '1ï¼šæœªåºŸå¼ƒ
+2ï¼šå·²åºŸå¼ƒ',
 	PRIMARY KEY (print_label_id),
 	UNIQUE (print_label_id),
 	UNIQUE (package_id)
@@ -986,31 +1025,31 @@ CREATE TABLE si_storage_label
 	location_id bigint unsigned NOT NULL,
 	package_id char(32),
 	source_no char(128),
-	-- 1£ºPOµ¥ÊÕÁÏ
-	-- 2£ºÑùÆ·²É¹º
-	-- 3£ºÉú²úÍËÁÏ
-	source_type tinyint COMMENT '1£ºPOµ¥ÊÕÁÏ
-2£ºÑùÆ·²É¹º
-3£ºÉú²úÍËÁÏ',
-	-- 1£ºÁ¼Æ·
-	-- 2£º·ÇÁ¼Æ·
-	type tinyint COMMENT '1£ºÁ¼Æ·
-2£º·ÇÁ¼Æ·',
+	-- 1ï¼šPOå•æ”¶æ–™
+	-- 2ï¼šæ ·å“é‡‡è´­
+	-- 3ï¼šç”Ÿäº§é€€æ–™
+	source_type tinyint COMMENT '1ï¼šPOå•æ”¶æ–™
+2ï¼šæ ·å“é‡‡è´­
+3ï¼šç”Ÿäº§é€€æ–™',
+	-- 1ï¼šè‰¯å“
+	-- 2ï¼šéè‰¯å“
+	type tinyint COMMENT '1ï¼šè‰¯å“
+2ï¼šéè‰¯å“',
 	storage_num int,
 	storage_time datetime,
 	material_lock_id bigint unsigned,
-	-- 1£ºÔÚ¿â
-	-- 11£ºµ÷²¦Èë¿â
-	-- 14£ºÉú²úÈë¿â
-	-- 20£º¹¤µ¥³ö¿â
-	-- 21£ºµ÷²¦³ö¿â
-	-- 23£ºÏúÊÛ³ö¿â
-	status tinyint COMMENT '1£ºÔÚ¿â
-11£ºµ÷²¦Èë¿â
-14£ºÉú²úÈë¿â
-20£º¹¤µ¥³ö¿â
-21£ºµ÷²¦³ö¿â
-23£ºÏúÊÛ³ö¿â',
+	-- 1ï¼šåœ¨åº“
+	-- 11ï¼šè°ƒæ‹¨å…¥åº“
+	-- 14ï¼šç”Ÿäº§å…¥åº“
+	-- 20ï¼šå·¥å•å‡ºåº“
+	-- 21ï¼šè°ƒæ‹¨å‡ºåº“
+	-- 23ï¼šé”€å”®å‡ºåº“
+	status tinyint COMMENT '1ï¼šåœ¨åº“
+11ï¼šè°ƒæ‹¨å…¥åº“
+14ï¼šç”Ÿäº§å…¥åº“
+20ï¼šå·¥å•å‡ºåº“
+21ï¼šè°ƒæ‹¨å‡ºåº“
+23ï¼šé”€å”®å‡ºåº“',
 	PRIMARY KEY (storage_label_id),
 	UNIQUE (storage_label_id),
 	UNIQUE (print_label_id)
@@ -1038,10 +1077,10 @@ CREATE TABLE si_supplier
 	user_id bigint unsigned,
 	create_time datetime,
 	update_time datetime,
-	-- 1£ºÎ´É¾³ı
-	-- 2£ºÒÑÉ¾³ı
-	dr tinyint COMMENT '1£ºÎ´É¾³ı
-2£ºÒÑÉ¾³ı',
+	-- 1ï¼šæœªåˆ é™¤
+	-- 2ï¼šå·²åˆ é™¤
+	dr tinyint COMMENT '1ï¼šæœªåˆ é™¤
+2ï¼šå·²åˆ é™¤',
 	PRIMARY KEY (supplier_id),
 	UNIQUE (supplier_id)
 );
@@ -1073,10 +1112,10 @@ CREATE TABLE si_warehouse
 	user_id bigint unsigned,
 	create_time datetime,
 	update_time datetime,
-	-- 1£ºÎ´É¾³ı
-	-- 2£ºÒÑÉ¾³ı
-	dr tinyint COMMENT '1£ºÎ´É¾³ı
-2£ºÒÑÉ¾³ı',
+	-- 1ï¼šæœªåˆ é™¤
+	-- 2ï¼šå·²åˆ é™¤
+	dr tinyint COMMENT '1ï¼šæœªåˆ é™¤
+2ï¼šå·²åˆ é™¤',
 	PRIMARY KEY (warehouse_id),
 	UNIQUE (warehouse_id)
 );
@@ -1098,12 +1137,12 @@ CREATE TABLE sm_iqc_detect
 (
 	receipt_body_id bigint unsigned NOT NULL,
 	remark char(255),
-	-- 1£ºÔÊĞíÁ¼Æ·
-	-- 2£ºQE²µ»ØÖØ¼ìÑé
-	-- 3£ºÎ´¼ìÑé
-	status tinyint COMMENT '1£ºÔÊĞíÁ¼Æ·
-2£ºQE²µ»ØÖØ¼ìÑé
-3£ºÎ´¼ìÑé',
+	-- 1ï¼šå…è®¸è‰¯å“
+	-- 2ï¼šQEé©³å›é‡æ£€éªŒ
+	-- 3ï¼šæœªæ£€éªŒ
+	status tinyint COMMENT '1ï¼šå…è®¸è‰¯å“
+2ï¼šQEé©³å›é‡æ£€éªŒ
+3ï¼šæœªæ£€éªŒ',
 	PRIMARY KEY (receipt_body_id),
 	UNIQUE (receipt_body_id)
 );
@@ -1113,14 +1152,14 @@ CREATE TABLE sm_qe_confirm
 (
 	receipt_body_id bigint unsigned NOT NULL,
 	remark char(255),
-	-- 1£ºÔÊĞí
-	-- 3£º²»Á¼£¬´ıÈ·ÈÏ
-	-- 4£ºÌØ²É
-	-- 5£ºÍË¹©Ó¦ÉÌ
-	status tinyint COMMENT '1£ºÔÊĞí
-3£º²»Á¼£¬´ıÈ·ÈÏ
-4£ºÌØ²É
-5£ºÍË¹©Ó¦ÉÌ',
+	-- 1ï¼šå…è®¸
+	-- 3ï¼šä¸è‰¯ï¼Œå¾…ç¡®è®¤
+	-- 4ï¼šç‰¹é‡‡
+	-- 5ï¼šé€€ä¾›åº”å•†
+	status tinyint COMMENT '1ï¼šå…è®¸
+3ï¼šä¸è‰¯ï¼Œå¾…ç¡®è®¤
+4ï¼šç‰¹é‡‡
+5ï¼šé€€ä¾›åº”å•†',
 	PRIMARY KEY (receipt_body_id),
 	UNIQUE (receipt_body_id)
 );
@@ -1130,14 +1169,14 @@ CREATE TABLE sm_qe_detect
 (
 	receipt_body_id bigint unsigned NOT NULL,
 	remark char(255),
-	-- 1£ºÔÊĞíÁ¼Æ·
-	-- 3£ºÎ´¼ìÑé
-	-- 4£ºÌØ²É
-	-- 5£ºÍË¹©Ó¦ÉÌ
-	status tinyint COMMENT '1£ºÔÊĞíÁ¼Æ·
-3£ºÎ´¼ìÑé
-4£ºÌØ²É
-5£ºÍË¹©Ó¦ÉÌ',
+	-- 1ï¼šå…è®¸è‰¯å“
+	-- 3ï¼šæœªæ£€éªŒ
+	-- 4ï¼šç‰¹é‡‡
+	-- 5ï¼šé€€ä¾›åº”å•†
+	status tinyint COMMENT '1ï¼šå…è®¸è‰¯å“
+3ï¼šæœªæ£€éªŒ
+4ï¼šç‰¹é‡‡
+5ï¼šé€€ä¾›åº”å•†',
 	PRIMARY KEY (receipt_body_id),
 	UNIQUE (receipt_body_id)
 );
@@ -1150,37 +1189,37 @@ CREATE TABLE sm_receipt_body
 	material_id bigint unsigned NOT NULL,
 	receipt_no char(128) NOT NULL,
 	source_no char(128),
-	-- 1£ºPOµ¥ÊÕÁÏ
-	-- 2£ºÑùÆ·²É¹º
-	-- 3£ºÉú²úÍËÁÏ
-	source_type tinyint COMMENT '1£ºPOµ¥ÊÕÁÏ
-2£ºÑùÆ·²É¹º
-3£ºÉú²úÍËÁÏ',
+	-- 1ï¼šPOå•æ”¶æ–™
+	-- 2ï¼šæ ·å“é‡‡è´­
+	-- 3ï¼šç”Ÿäº§é€€æ–™
+	source_type tinyint COMMENT '1ï¼šPOå•æ”¶æ–™
+2ï¼šæ ·å“é‡‡è´­
+3ï¼šç”Ÿäº§é€€æ–™',
 	order_total int,
 	accept_num int,
 	accept_date datetime,
 	good_num int,
 	bad_num int,
 	stock_num int,
-	-- 1£ºÂ¼Èë±êÇ©
-	-- 5£ºIQC¼ì²â
-	-- 10£ºQE¼ì²â
-	-- 15£ºQEÈ·ÈÏ
-	-- 20£ºÎïÁÏÈë¿â
-	-- 25£ºÈë¿âÍê³É
-	-- 30£ºÍË¹©Ó¦ÉÌ
-	status tinyint COMMENT '1£ºÂ¼Èë±êÇ©
-5£ºIQC¼ì²â
-10£ºQE¼ì²â
-15£ºQEÈ·ÈÏ
-20£ºÎïÁÏÈë¿â
-25£ºÈë¿âÍê³É
-30£ºÍË¹©Ó¦ÉÌ',
+	-- 1ï¼šå½•å…¥æ ‡ç­¾
+	-- 5ï¼šIQCæ£€æµ‹
+	-- 10ï¼šQEæ£€æµ‹
+	-- 15ï¼šQEç¡®è®¤
+	-- 20ï¼šç‰©æ–™å…¥åº“
+	-- 25ï¼šå…¥åº“å®Œæˆ
+	-- 30ï¼šé€€ä¾›åº”å•†
+	status tinyint COMMENT '1ï¼šå½•å…¥æ ‡ç­¾
+5ï¼šIQCæ£€æµ‹
+10ï¼šQEæ£€æµ‹
+15ï¼šQEç¡®è®¤
+20ï¼šç‰©æ–™å…¥åº“
+25ï¼šå…¥åº“å®Œæˆ
+30ï¼šé€€ä¾›åº”å•†',
 	create_time datetime,
-	-- 1£ºÎ´É¾³ı
-	-- 2£ºÒÑÉ¾³ı
-	dr tinyint COMMENT '1£ºÎ´É¾³ı
-2£ºÒÑÉ¾³ı',
+	-- 1ï¼šæœªåˆ é™¤
+	-- 2ï¼šå·²åˆ é™¤
+	dr tinyint COMMENT '1ï¼šæœªåˆ é™¤
+2ï¼šå·²åˆ é™¤',
 	PRIMARY KEY (receipt_body_id),
 	UNIQUE (receipt_body_id),
 	UNIQUE (receipt_no)
@@ -1191,29 +1230,29 @@ CREATE TABLE sm_receipt_head
 (
 	receipt_head_id bigint unsigned NOT NULL AUTO_INCREMENT,
 	source_no char(128) NOT NULL,
-	-- 1£ºPOµ¥ÊÕÁÏ
-	-- 2£ºÑùÆ·²É¹º
-	-- 3£ºÉú²úÍËÁÏ
-	source_type tinyint NOT NULL COMMENT '1£ºPOµ¥ÊÕÁÏ
-2£ºÑùÆ·²É¹º
-3£ºÉú²úÍËÁÏ',
+	-- 1ï¼šPOå•æ”¶æ–™
+	-- 2ï¼šæ ·å“é‡‡è´­
+	-- 3ï¼šç”Ÿäº§é€€æ–™
+	source_type tinyint NOT NULL COMMENT '1ï¼šPOå•æ”¶æ–™
+2ï¼šæ ·å“é‡‡è´­
+3ï¼šç”Ÿäº§é€€æ–™',
 	order_date date,
 	supplier char(128),
 	buyer char(128),
 	plan_date date,
 	logistics_company char(128),
 	logistics_no char(128),
-	-- 1£ºµ½¸¶
-	-- 2£º¼Ä¸¶
-	receipt_way tinyint COMMENT '1£ºµ½¸¶
-2£º¼Ä¸¶',
+	-- 1ï¼šåˆ°ä»˜
+	-- 2ï¼šå¯„ä»˜
+	receipt_way tinyint COMMENT '1ï¼šåˆ°ä»˜
+2ï¼šå¯„ä»˜',
 	remark char(255),
 	create_time datetime,
 	update_time datetime,
-	-- 1£ºÎ´É¾³ı
-	-- 2£ºÒÑÉ¾³ı
-	dr tinyint COMMENT '1£ºÎ´É¾³ı
-2£ºÒÑÉ¾³ı',
+	-- 1ï¼šæœªåˆ é™¤
+	-- 2ï¼šå·²åˆ é™¤
+	dr tinyint COMMENT '1ï¼šæœªåˆ é™¤
+2ï¼šå·²åˆ é™¤',
 	PRIMARY KEY (receipt_head_id),
 	UNIQUE (receipt_head_id)
 );
@@ -1235,32 +1274,32 @@ CREATE TABLE sm_storage
 	storage_id bigint unsigned NOT NULL AUTO_INCREMENT,
 	storage_no char(128) NOT NULL,
 	source_no char(128) NOT NULL,
-	-- 1£ºÊÕÁÏµ¥
-	-- 2£ºÆäËûÈë¿âµ¥
-	source_type tinyint NOT NULL COMMENT '1£ºÊÕÁÏµ¥
-2£ºÆäËûÈë¿âµ¥',
+	-- 1ï¼šæ”¶æ–™å•
+	-- 2ï¼šå…¶ä»–å…¥åº“å•
+	source_type tinyint NOT NULL COMMENT '1ï¼šæ”¶æ–™å•
+2ï¼šå…¶ä»–å…¥åº“å•',
 	pending_num int,
 	stored_num int,
 	storage_time datetime,
-	-- 1£ºÒÑÈë¿â
-	-- 2£ºÈë¿âÖĞ
-	-- 3£º´ıÈë¿â
-	--
-	--
-	status tinyint COMMENT '1£ºÒÑÈë¿â
-2£ºÈë¿âÖĞ
-3£º´ıÈë¿â
+	-- 1ï¼šå·²å…¥åº“
+	-- 2ï¼šå…¥åº“ä¸­
+	-- 3ï¼šå¾…å…¥åº“
+	-- 
+	-- 
+	status tinyint COMMENT '1ï¼šå·²å…¥åº“
+2ï¼šå…¥åº“ä¸­
+3ï¼šå¾…å…¥åº“
 
 ',
-	-- 1£ºÁ¼Æ·
-	-- 2£º·ÇÁ¼Æ·
-	type tinyint COMMENT '1£ºÁ¼Æ·
-2£º·ÇÁ¼Æ·',
+	-- 1ï¼šè‰¯å“
+	-- 2ï¼šéè‰¯å“
+	type tinyint COMMENT '1ï¼šè‰¯å“
+2ï¼šéè‰¯å“',
 	create_time datetime,
-	-- 1£ºÎ´É¾³ı
-	-- 2£ºÒÑÉ¾³ı
-	dr tinyint COMMENT '1£ºÎ´É¾³ı
-2£ºÒÑÉ¾³ı',
+	-- 1ï¼šæœªåˆ é™¤
+	-- 2ï¼šå·²åˆ é™¤
+	dr tinyint COMMENT '1ï¼šæœªåˆ é™¤
+2ï¼šå·²åˆ é™¤',
 	PRIMARY KEY (storage_id),
 	UNIQUE (storage_id),
 	UNIQUE (storage_no)
@@ -1297,20 +1336,20 @@ CREATE TABLE sm_storage_record
 	name char(255),
 	type char(255),
 	create_time datetime,
-	-- 1£ºÂ¼Èë±êÇ©
-	-- 5£ºIQC¼ì²â
-	-- 10£ºQE¼ì²â
-	-- 15£ºQEÈ·ÈÏ
-	-- 20£ºÎïÁÏÈë¿â
-	-- 25£ºÈë¿âÍê³É
-	-- 30£ºÍË¹©Ó¦ÉÌ
-	status tinyint COMMENT '1£ºÂ¼Èë±êÇ©
-5£ºIQC¼ì²â
-10£ºQE¼ì²â
-15£ºQEÈ·ÈÏ
-20£ºÎïÁÏÈë¿â
-25£ºÈë¿âÍê³É
-30£ºÍË¹©Ó¦ÉÌ',
+	-- 1ï¼šå½•å…¥æ ‡ç­¾
+	-- 5ï¼šIQCæ£€æµ‹
+	-- 10ï¼šQEæ£€æµ‹
+	-- 15ï¼šQEç¡®è®¤
+	-- 20ï¼šç‰©æ–™å…¥åº“
+	-- 25ï¼šå…¥åº“å®Œæˆ
+	-- 30ï¼šé€€ä¾›åº”å•†
+	status tinyint COMMENT '1ï¼šå½•å…¥æ ‡ç­¾
+5ï¼šIQCæ£€æµ‹
+10ï¼šQEæ£€æµ‹
+15ï¼šQEç¡®è®¤
+20ï¼šç‰©æ–™å…¥åº“
+25ï¼šå…¥åº“å®Œæˆ
+30ï¼šé€€ä¾›åº”å•†',
 	PRIMARY KEY (record_id),
 	UNIQUE (record_id)
 );
@@ -1336,6 +1375,14 @@ ALTER TABLE am_m_user_authority
 
 
 ALTER TABLE am_role_authority
+	ADD FOREIGN KEY (authority_id)
+	REFERENCES am_authority (authority_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
+ALTER TABLE am_role_stage
 	ADD FOREIGN KEY (authority_id)
 	REFERENCES am_authority (authority_id)
 	ON UPDATE RESTRICT
@@ -1416,7 +1463,7 @@ ALTER TABLE am_role_record
 
 
 ALTER TABLE am_user_record
-	ADD FOREIGN KEY (operate_id)
+	ADD FOREIGN KEY (user_id)
 	REFERENCES am_user (user_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
@@ -1424,7 +1471,7 @@ ALTER TABLE am_user_record
 
 
 ALTER TABLE am_user_record
-	ADD FOREIGN KEY (user_id)
+	ADD FOREIGN KEY (operate_id)
 	REFERENCES am_user (user_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
@@ -1616,6 +1663,14 @@ ALTER TABLE si_bom_head
 
 
 ALTER TABLE si_bom_record
+	ADD FOREIGN KEY (user_id)
+	REFERENCES am_user (user_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_client_record
 	ADD FOREIGN KEY (user_id)
 	REFERENCES am_user (user_id)
 	ON UPDATE RESTRICT
@@ -1959,6 +2014,14 @@ ALTER TABLE si_bom_record
 ;
 
 
+ALTER TABLE si_client_record
+	ADD FOREIGN KEY (client_id)
+	REFERENCES si_client (client_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
 ALTER TABLE si_location_record
 	ADD FOREIGN KEY (location_id)
 	REFERENCES si_location (location_id)
@@ -2152,7 +2215,7 @@ ALTER TABLE si_supplier_record
 
 
 ALTER TABLE em_transfer_head
-	ADD FOREIGN KEY (outbound_wid)
+	ADD FOREIGN KEY (storage_wid)
 	REFERENCES si_warehouse (warehouse_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
@@ -2160,7 +2223,7 @@ ALTER TABLE em_transfer_head
 
 
 ALTER TABLE em_transfer_head
-	ADD FOREIGN KEY (storage_wid)
+	ADD FOREIGN KEY (outbound_wid)
 	REFERENCES si_warehouse (warehouse_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT

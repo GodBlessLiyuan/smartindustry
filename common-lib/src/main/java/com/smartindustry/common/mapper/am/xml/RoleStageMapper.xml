@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.am.RoleStageMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.am.RoleStagePO">
+    <id column="stage_id" jdbcType="BIGINT" property="stageId" />
+    <result column="authority_id" jdbcType="BIGINT" property="authorityId" />
+    <result column="stage_name" jdbcType="CHAR" property="stageName" />
+    <result column="stage_type" jdbcType="TINYINT" property="stageType" />
+    <result column="stage_module" jdbcType="TINYINT" property="stageModule" />
+    <result column="icon_path" jdbcType="CHAR" property="iconPath" />
+    <result column="url_path" jdbcType="CHAR" property="urlPath" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    stage_id, authority_id, stage_name, stage_type, stage_module, icon_path, url_path
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from am_role_stage
+    where stage_id = #{stageId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from am_role_stage
+    where stage_id = #{stageId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.am.RoleStagePO">
+    insert into am_role_stage (stage_id, authority_id, stage_name, 
+      stage_type, stage_module, icon_path, 
+      url_path)
+    values (#{stageId,jdbcType=BIGINT}, #{authorityId,jdbcType=BIGINT}, #{stageName,jdbcType=CHAR}, 
+      #{stageType,jdbcType=TINYINT}, #{stageModule,jdbcType=TINYINT}, #{iconPath,jdbcType=CHAR}, 
+      #{urlPath,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.am.RoleStagePO">
+    insert into am_role_stage
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="stageId != null">
+        stage_id,
+      </if>
+      <if test="authorityId != null">
+        authority_id,
+      </if>
+      <if test="stageName != null">
+        stage_name,
+      </if>
+      <if test="stageType != null">
+        stage_type,
+      </if>
+      <if test="stageModule != null">
+        stage_module,
+      </if>
+      <if test="iconPath != null">
+        icon_path,
+      </if>
+      <if test="urlPath != null">
+        url_path,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="stageId != null">
+        #{stageId,jdbcType=BIGINT},
+      </if>
+      <if test="authorityId != null">
+        #{authorityId,jdbcType=BIGINT},
+      </if>
+      <if test="stageName != null">
+        #{stageName,jdbcType=CHAR},
+      </if>
+      <if test="stageType != null">
+        #{stageType,jdbcType=TINYINT},
+      </if>
+      <if test="stageModule != null">
+        #{stageModule,jdbcType=TINYINT},
+      </if>
+      <if test="iconPath != null">
+        #{iconPath,jdbcType=CHAR},
+      </if>
+      <if test="urlPath != null">
+        #{urlPath,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.am.RoleStagePO">
+    update am_role_stage
+    <set>
+      <if test="authorityId != null">
+        authority_id = #{authorityId,jdbcType=BIGINT},
+      </if>
+      <if test="stageName != null">
+        stage_name = #{stageName,jdbcType=CHAR},
+      </if>
+      <if test="stageType != null">
+        stage_type = #{stageType,jdbcType=TINYINT},
+      </if>
+      <if test="stageModule != null">
+        stage_module = #{stageModule,jdbcType=TINYINT},
+      </if>
+      <if test="iconPath != null">
+        icon_path = #{iconPath,jdbcType=CHAR},
+      </if>
+      <if test="urlPath != null">
+        url_path = #{urlPath,jdbcType=CHAR},
+      </if>
+    </set>
+    where stage_id = #{stageId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.am.RoleStagePO">
+    update am_role_stage
+    set authority_id = #{authorityId,jdbcType=BIGINT},
+      stage_name = #{stageName,jdbcType=CHAR},
+      stage_type = #{stageType,jdbcType=TINYINT},
+      stage_module = #{stageModule,jdbcType=TINYINT},
+      icon_path = #{iconPath,jdbcType=CHAR},
+      url_path = #{urlPath,jdbcType=CHAR}
+    where stage_id = #{stageId,jdbcType=BIGINT}
+  </update>
+</mapper>
