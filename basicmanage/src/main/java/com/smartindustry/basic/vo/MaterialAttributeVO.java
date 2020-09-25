@@ -44,7 +44,7 @@ public class MaterialAttributeVO implements Serializable {
         vo.setSitype(bo.getStorageInspectType());
         vo.setSsplan(bo.getStorageSamplingPlan());
         vo.setOinspect(bo.getOutboundInspect());
-        vo.setPsplit(bo.getPickSplit() == null || bo.getPickSplit() == 2);
+        vo.setPsplit(bo.getPickSplit() != null && bo.getPickSplit() == 1);
         return vo;
     }
 }

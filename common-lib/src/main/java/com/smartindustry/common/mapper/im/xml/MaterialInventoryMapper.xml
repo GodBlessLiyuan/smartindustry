@@ -190,6 +190,7 @@
         <foreach collection="list" item="miid" separator="," open="(" close=")">
             #{miid,jdbcType=BIGINT}
         </foreach>
+        order by mi.`status` desc, m.create_time desc
     </select>
 
     <sql id="MIBO_Column_List">
