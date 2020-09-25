@@ -129,7 +129,7 @@
         select case
                    when exists(SELECT 1
                                from am_authority
-                               where parent_id = #{parentId,jdbcType=BIGINT} and `type` = #{type,jdbcType=TINYINT}
+                               where parent_id = #{parentId,jdbcType=BIGINT}
                                limit 1)
                        then 1
                    else 0 end as result
@@ -162,10 +162,10 @@
         left join am_authority au1 on au.parent_id = au1.authority_id
         <choose>
             <when test="parentId != null and parentId !=0">
-                where au.parent_id = #{parentId,jdbcType=BIGINT} and au.type = #{type,jdbcType=TINYINT}
+                where au.parent_id = #{parentId,jdbcType=BIGINT}
             </when>
             <otherwise>
-                where au.parent_id is null and au.type = #{type,jdbcType=TINYINT}
+                where au.parent_id is null
             </otherwise>
         </choose>
     </select>

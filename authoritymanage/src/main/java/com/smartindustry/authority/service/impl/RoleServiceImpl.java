@@ -132,50 +132,28 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
-    public ResultVO queryAllMenu() {
-        Object menuObject = redisTemplate.opsForValue().get(AuthorityConstant.NAME_MENU);
-        Map<String, Object> menuMap = new LinkedHashMap<>();
-        if(menuObject == null){
-            List<AuthorityBO> bos = authorityMapper.queryChild(null, AuthorityConstant.TYPE_MENU);
+    public ResultVO queryAuthority(){
+        Object SysObject = redisTemplate.opsForValue().get(AuthorityConstant.NAME_SYS_AUTH);
+        List<AuthorityVO> result;
+        if(SysObject == null){
+            List<AuthorityBO> bos = authorityMapper.queryChild(null);
             List<AuthorityVO> vos = AuthorityVO.convert(bos);
             List<AuthorityVO> lastMenu = new ArrayList<>();
-            menuMap.put(AuthorityConstant.NAME_MENU,getAuthTree(vos,lastMenu, AuthorityConstant.TYPE_MENU));
-            redisTemplate.opsForValue().set(AuthorityConstant.NAME_MENU, menuMap, AuthorityConstant.EXPIRE_TIME, TimeUnit.DAYS);
+            result = getAuthTree(vos,lastMenu);
+            redisTemplate.opsForValue().set(AuthorityConstant.NAME_SYS_AUTH, result, AuthorityConstant.EXPIRE_TIME, TimeUnit.DAYS);
         }else {
-            menuMap = JSON.parseObject(JSON.toJSONString(menuObject),LinkedHashMap.class,Feature.OrderedField);
+            result = JSON.parseObject(JSON.toJSONString(SysObject), List.class,Feature.OrderedField);
         }
-        return ResultVO.ok().setData(menuMap);
+        return ResultVO.ok().setData(result);
     }
-
-    @Override
-    public ResultVO queryAllButton(){
-        Object buttonObject = redisTemplate.opsForValue().get(AuthorityConstant.NAME_BUTTON);
-        Map<String, Object> res = new HashMap<>();
-        if(buttonObject == null){
-            List<AuthorityBO> bos = authorityMapper.queryChild(null, AuthorityConstant.TYPE_MENU);
-            List<AuthorityVO> vos = AuthorityVO.convert(bos);
-
-            List<AuthorityVO> lastMenu = new ArrayList<>();
-            getAuthTree(vos,lastMenu, AuthorityConstant.TYPE_MENU);
-            List<AuthorityVO> lastButton = new ArrayList<>();
-            CollectionUtils.addAll(lastButton, new Object[lastMenu.size()]);
-            Collections.copy(lastButton,lastMenu);
-            res.put(AuthorityConstant.NAME_BUTTON,getAuthTree(lastMenu,new ArrayList<>(), AuthorityConstant.TYPE_BUTTON));
-            redisTemplate.opsForValue().set(AuthorityConstant.NAME_BUTTON, res, AuthorityConstant.EXPIRE_TIME, TimeUnit.DAYS);
-        }else {
-            res = JSON.parseObject(JSON.toJSONString(buttonObject), LinkedHashMap.class,Feature.OrderedField);
-        }
-        return ResultVO.ok().setData(res);
-    }
-
 
     /**
      * 递归查找权限列表
      */
-    private List<AuthorityVO> getAuthTree(List<AuthorityVO> vos,List<AuthorityVO> lastMenu,Byte type){
+    private List<AuthorityVO> getAuthTree(List<AuthorityVO> vos,List<AuthorityVO> lastMenu){
         for(AuthorityVO vo : vos){
-            if (authorityMapper.judgeExist(vo.getAid(),type).equals(1)){
-                List<AuthorityVO> vosTemp = getAuthTree(AuthorityVO.convert(authorityMapper.queryChild(vo.getAid(),type)),lastMenu,type);
+            if (authorityMapper.judgeExist(vo.getAid()).equals(AuthorityConstant.FLAG_EXIST)){
+                List<AuthorityVO> vosTemp = getAuthTree(AuthorityVO.convert(authorityMapper.queryChild(vo.getAid())),lastMenu);
                 vo.setChildren(vosTemp);
             }else {
                 lastMenu.add((AuthorityVO) vo.clone());
