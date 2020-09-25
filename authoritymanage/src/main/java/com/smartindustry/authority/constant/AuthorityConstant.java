@@ -23,6 +23,11 @@ public class AuthorityConstant {
     public static final Byte TYPE_BUTTON = 2;
 
     /**
+     * 系统标识
+     */
+    public static final Byte TYPE_SYS = 3;
+
+    /**
      * 操作记录
      */
     public static final String RECORD_INSERT = "新增";
@@ -36,7 +41,11 @@ public class AuthorityConstant {
      */
     public static final String NAME_MENU= "menu";
     public static final String NAME_BUTTON= "button";
+    public static final String NAME_SYS= "sys";
+    public static final String NAME_SYS_AUTH= "auth";
 
+
+    public static final Integer FLAG_EXIST= 1;
     /**
      * 所有菜单按钮权限列表的过期时间
      */

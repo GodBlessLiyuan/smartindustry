@@ -106,7 +106,7 @@ public class LoginServiceImpl implements ILoginService {
      */
     private List<AuthorityVO> getAuthTreeList(List<AuthorityVO> vos, Long roleId, List<AuthorityVO> lastMenu, Byte type) {
         for (AuthorityVO vo : vos) {
-            if (authorityMapper.judgeExist(vo.getAid(), type).equals(1)) {
+            if (authorityMapper.judgeExist(vo.getAid()).equals(AuthorityConstant.FLAG_EXIST)) {
                 List<AuthorityVO> vosTemp = getAuthTreeList(AuthorityVO.convert(authorityMapper.queryChildren(vo.getAid(), roleId, type)), roleId, lastMenu, type);
                 vo.setChildren(vosTemp);
             } else {
