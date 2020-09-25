@@ -327,7 +327,7 @@
         left join sm_receipt_label rl on pl.print_label_id = rl.print_label_id
         left join si_material m on pl.material_id = m.material_id
         left join sm_storage_detail sd on sd.print_label_id = pl.print_label_id
-        where rl.receipt_body_id = #{rbid,jdbcType=BIGINT}
+        where pl.dr = 1 and rl.receipt_body_id = #{rbid,jdbcType=BIGINT}
         and pl.location_id is null and sd.storage_detail_id is null
     </select>
 
