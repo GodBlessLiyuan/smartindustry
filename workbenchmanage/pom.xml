@@ -8,10 +8,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>workbench</artifactId>
+    <artifactId>workbenchmanage</artifactId>
     <version>1.0.0</version>
-    <name>authoritymanage</name>
-    <description>authority manage of smart industry</description>
+    <name>workbenchmanage</name>
+    <description>workbench manage of smart industry</description>
 
     <properties>
         <java.version>1.8</java.version>
@@ -150,7 +150,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.smartindustry.authority.AuthorityApplication</mainClass>
+                    <mainClass>com.smartindustry.workbench.WorkbenchApplication</mainClass>
                     <layout>ZIP</layout>
                     <includes>
                         <include>
