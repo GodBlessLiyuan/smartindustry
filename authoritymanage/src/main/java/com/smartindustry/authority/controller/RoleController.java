@@ -62,14 +62,9 @@ public class RoleController {
         return roleService.delete(dtos);
     }
 
-    @PostMapping("queryAllMenu")
-    public ResultVO queryAllMenu() {
-        return roleService.queryAllMenu();
-    }
-
-    @PostMapping("queryAllButton")
-    public ResultVO queryAllButton() {
-        return roleService.queryAllButton();
+    @PostMapping("queryAuthority")
+    public ResultVO queryAuthority() {
+        return roleService.queryAuthority();
     }
 
     @PostMapping("updatePerms")
