@@ -3,6 +3,7 @@ package com.smartindustry.common.mapper.si;
 import com.smartindustry.common.bo.si.BomBodyBO;
 import com.smartindustry.common.bo.si.BomHeadBO;
 import com.smartindustry.common.mapper.BaseMapper;
+import com.smartindustry.common.pojo.om.PickBodyPO;
 import com.smartindustry.common.pojo.si.BomBodyPO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -75,4 +76,6 @@ public interface BomBodyMapper extends BaseMapper<BomBodyPO, Long> {
      * @return
      */
     BomBodyPO queryByPid(@Param("parentId") Long parentId);
+
+
 }

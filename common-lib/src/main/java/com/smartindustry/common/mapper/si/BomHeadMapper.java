@@ -2,6 +2,7 @@ package com.smartindustry.common.mapper.si;
 
 import com.smartindustry.common.bo.si.BomHeadBO;
 import com.smartindustry.common.mapper.BaseMapper;
+import com.smartindustry.common.pojo.om.PickBodyPO;
 import com.smartindustry.common.pojo.si.BomHeadPO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -42,4 +43,11 @@ public interface BomHeadMapper extends BaseMapper<BomHeadPO, Long> {
      * @return
      */
     Integer deleteBatch(List<Long> bhids);
+
+    /**
+     * 根据主BOM清单得id查询是否当前物料与工单，出入库单相关联
+     * @param bhid
+     * @return
+     */
+    List<Long> queryByMid(Long bhid);
 }

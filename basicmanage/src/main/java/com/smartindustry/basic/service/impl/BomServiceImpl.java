@@ -12,6 +12,7 @@ import com.smartindustry.common.bo.si.BomRecordBO;
 import com.smartindustry.common.bo.si.MaterialBO;
 import com.smartindustry.common.mapper.dd.MaterialPropertyMapper;
 import com.smartindustry.common.mapper.dd.ProcessMapper;
+import com.smartindustry.common.mapper.om.PickBodyMapper;
 import com.smartindustry.common.mapper.si.BomBodyMapper;
 import com.smartindustry.common.mapper.si.BomHeadMapper;
 import com.smartindustry.common.mapper.si.BomRecordMapper;
@@ -54,6 +55,7 @@ public class BomServiceImpl implements IBomService {
     private BomRecordMapper bomRecordMapper;
     @Autowired
     private TokenService tokenService;
+
 
 
     @Override
@@ -118,6 +120,11 @@ public class BomServiceImpl implements IBomService {
             List<Long> ids = bomBodyMapper.queryByBhid(bhid);
             if (!ids.isEmpty()) {
                 bbids.addAll(ids);
+            }
+            //该物料有关联单据，不可删除(工单、出入库单)
+            List<Long> pbs = bomHeadMapper.queryByMid(bhid);
+            if(!pbs.isEmpty()){
+                return new ResultVO(1007);
             }
         }
         if(!bbids.isEmpty()){
