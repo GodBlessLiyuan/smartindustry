@@ -2,7 +2,10 @@ package com.smartindustry.workbench.service.impl;
 
 import com.smartindustry.common.bo.am.LoginUserBO;
 import com.smartindustry.common.bo.wm.WorkBenchBO;
+import com.smartindustry.common.mapper.om.OutboundMapper;
+import com.smartindustry.common.mapper.om.PickHeadMapper;
 import com.smartindustry.common.mapper.sm.ReceiptBodyMapper;
+import com.smartindustry.common.mapper.sm.StorageMapper;
 import com.smartindustry.common.mapper.wm.WorkBenchMapper;
 import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.ServletUtil;
@@ -15,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -36,6 +40,15 @@ public class WorkBenchServiceImpl implements IWorkBenchService {
     @Autowired
     private ReceiptBodyMapper receiptBodyMapper;
 
+    @Autowired
+    private StorageMapper storageMapper;
+
+    @Autowired
+    private PickHeadMapper pickHeadMapper;
+
+    @Autowired
+    private OutboundMapper outboundMapper;
+
     /**
      * 获取用户在只能工作台的权限列表
      *
@@ -53,18 +66,47 @@ public class WorkBenchServiceImpl implements IWorkBenchService {
         List<WorkBenchVO> vos = WorkBenchVO.convert(bos);
         for (WorkBenchVO vo : vos) {
             Long wbId = vo.getWbid();
+            Integer num = 0;
             //QE待质检
             if (wbId.equals(WorkBenchConstant.WORK_QE_WAIT_CHECK)) {
-                Integer num = receiptBodyMapper.countHandleNum(WorkBenchConstant.RECEIPT_STATUS_QE_CHECK, WorkBenchConstant.QUALITY_UNCHECK);
+                num = receiptBodyMapper.countHandleNum(WorkBenchConstant.RECEIPT_STATUS_QE_CHECK, WorkBenchConstant.QUALITY_UNCHECK);
             }
             //IQC检测
             if (wbId.equals(WorkBenchConstant.WORK_IQC_WAIT_CHECK)) {
-                Integer num = receiptBodyMapper.countHandleNum(WorkBenchConstant.RECEIPT_STATUS_IQC_CHECK, WorkBenchConstant.QUALITY_UNCHECK);
+                num = receiptBodyMapper.countHandleNum(WorkBenchConstant.RECEIPT_STATUS_IQC_CHECK, WorkBenchConstant.QUALITY_UNCHECK);
             }
             //QE待确认
             if (wbId.equals(WorkBenchConstant.WORK_QE_WAIT_CONFIRM)) {
-                Integer num = receiptBodyMapper.countHandleNum(WorkBenchConstant.RECEIPT_STATUS_QE_CONFIRM, WorkBenchConstant.QUALITY_UNCHECK);
+                num = receiptBodyMapper.countHandleNum(WorkBenchConstant.RECEIPT_STATUS_QE_CONFIRM, WorkBenchConstant.QUALITY_UNCHECK);
             }
+            //待入库
+            if(wbId.equals(WorkBenchConstant.WORK_WAIT_STORAGE)) {
+                //收料单
+                Map<String, Object> reqData = new HashMap<>(WorkBenchConstant.NUM_1);
+                reqData.put("status", WorkBenchConstant.STORAGE_STATUS_WAIT);
+                List<Long> sids = storageMapper.pageQuery(reqData);
+                num += sids!= null && !sids.isEmpty()?storageMapper.queryBySids(sids).size():0;
+                //其他入库单
+                num+= storageMapper.pageQueryOther(reqData).size();
+            }
+            //待拣货
+            if (wbId.equals(WorkBenchConstant.WORK_WAIT_PICK)) {
+                num = pickHeadMapper.countHandleNum(WorkBenchConstant.PICK_HEAD_STATUS_UNHANDLE, null);
+            }
+            //OQC待检验
+            if (wbId.equals(WorkBenchConstant.WORK_OQC_WAIT_CHECK)) {
+                num = pickHeadMapper.countHandleNum(WorkBenchConstant.PICK_HEAD_AUDIT_OQC, WorkBenchConstant.PICK_HEAD_SOURCE_SAIL);
+            }
+            //工单待审核
+            if (wbId.equals(WorkBenchConstant.WORK_ORDER_WAIT_AUDIT)) {
+                num = pickHeadMapper.countHandleNum(WorkBenchConstant.PICK_HEAD_AUDIT_OQC, WorkBenchConstant.PICK_HEAD_SOURCE_ORDER);
+            }
+
+            //待出库
+            if (wbId.equals(WorkBenchConstant.WORK_WAIT_OUTBOUND)) {
+                num = outboundMapper.countHandleNum(WorkBenchConstant.OUT_BOUND_STATUS_WAIT);
+            }
+            vo.setNum(num);
         }
 
         return ResultVO.ok().setData(vos);
