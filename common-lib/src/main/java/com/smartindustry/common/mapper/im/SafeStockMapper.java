@@ -17,4 +17,11 @@ public interface SafeStockMapper extends BaseMapper<SafeStockPO, Long> {
      * @param updPOs
      */
     void batchUpdate(List<SafeStockPO> updPOs);
+
+    /**
+     * 根据物料库存ID查询
+     * @param materialInventoryId
+     * @return
+     */
+    SafeStockPO queryByMiid(Long materialInventoryId);
 }

@@ -149,6 +149,18 @@ public class MaterialServiceImpl implements IMaterialService {
             if (null == attributePO) {
                 return new ResultVO(1002);
             }
+
+            // 物料下限及是否在途未发生变化时不更新物料库存信息
+            if (attributePO.getLowerLimit().compareTo(dto.getMattribute().getLlimit()) != 0 || attributePO.getWay() == 1 != dto.getMattribute().getWay()) {
+                MaterialInventoryBO inventoryBO = materialInventoryMapper.queryByMid(materialPO.getMaterialId());
+
+                SafeStockPO stockPO = safeStockMapper.queryByMiid(inventoryBO.getMaterialInventoryId());
+                stockPO.setWay((byte) (dto.getMattribute().getWay() != null && dto.getMattribute().getWay() ? 1 : 2));
+                stockPO.setLowerLimit(dto.getMattribute().getLlimit());
+                safeStockMapper.updateByPrimaryKey(stockPO);
+                materialInventoryMapper.updateByPrimaryKey(inventoryBO.updatePO(new MaterialInventoryPO()));
+            }
+
             MaterialAttributeDTO.buildPO(attributePO, dto.getMattribute());
             materialAttributeMapper.updateByPrimaryKey(attributePO);
         }

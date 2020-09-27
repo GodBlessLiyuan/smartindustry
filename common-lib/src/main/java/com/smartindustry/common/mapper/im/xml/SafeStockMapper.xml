@@ -136,4 +136,10 @@
             #{po.safeStockId,jdbcType=BIGINT}
         </foreach>
     </update>
+    <select id="queryByMiid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from im_safe_stock
+        where material_inventory_id = #{materialInventoryId,jdbcType=BIGINT}
+    </select>
 </mapper>
