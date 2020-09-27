@@ -183,7 +183,7 @@
         order by outbound_id desc limit 1
     </select>
 
-    <select id="countHandleNum"parameterType="java.lang.Byte" resultType="java.lang.Integer">
+    <select id="countHandleNum" parameterType="java.lang.Byte" resultType="java.lang.Integer">
         select count(0)
         from om_outbound o
         left join om_pick_head ph on o.pick_head_id = ph.pick_head_id

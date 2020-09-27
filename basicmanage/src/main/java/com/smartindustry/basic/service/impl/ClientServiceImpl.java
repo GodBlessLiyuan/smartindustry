@@ -83,7 +83,7 @@ public class ClientServiceImpl implements IClientService {
             // 新增
             ClientPO po = ClientDTO.createPO(dto);
             clientMapper.insert(po);
-            clientRecordMapper.insert(new ClientRecordPO(po.getClientId(),user.getUserId(),new Date(), BasicConstant.RECORD_ADD));
+            clientRecordMapper.insert(new ClientRecordPO(po.getClientId(),user.getUserId(),BasicConstant.RECORD_ADD));
             return ResultVO.ok();
         }
         // 编辑
@@ -94,7 +94,7 @@ public class ClientServiceImpl implements IClientService {
         ClientDTO.buildPO(clientPO, dto);
         clientPO.setUpdateTime(new Date());
         clientMapper.updateByPrimaryKeySelective(clientPO);
-        clientRecordMapper.insert(new ClientRecordPO(clientPO.getClientId(),user.getUserId(),new Date(), BasicConstant.RECORD_EDIT));
+        clientRecordMapper.insert(new ClientRecordPO(clientPO.getClientId(),user.getUserId(),BasicConstant.RECORD_EDIT));
         return ResultVO.ok();
     }
 

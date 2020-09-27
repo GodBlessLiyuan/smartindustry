@@ -22,10 +22,10 @@ public class ClientRecordPO implements Serializable {
 
     private String type;
 
-    public ClientRecordPO(Long clientId,Long userId,Date createTime,String type){
+    public ClientRecordPO(Long clientId,Long userId,String type){
         this.clientId = clientId;
         this.userId = userId;
-        this.createTime = createTime;
+        this.createTime = new Date();
         this.type = type;
     }
 

@@ -101,7 +101,7 @@ public class BomServiceImpl implements IBomService {
             po.setCreateTime(new Date());
             po.setDr((byte) 1);
             bomHeadMapper.insert(po);
-            bomRecordMapper.insert(new BomRecordPO(po.getBomHeadId(), user.getUserId(), new Date(), BasicConstant.RECORD_ADD));
+            bomRecordMapper.insert(new BomRecordPO(po.getBomHeadId(), user.getUserId(), BasicConstant.RECORD_ADD));
         }
         return ResultVO.ok();
     }
@@ -228,7 +228,7 @@ public class BomServiceImpl implements IBomService {
             BomBodyPO po2 = BomBodyDTO.buildPO(po, dto,curDeep);
             bomBodyMapper.updateByPrimaryKey(po2);
         }
-        bomRecordMapper.insert(new BomRecordPO(dto.getBhid(), user.getUserId(), new Date(), BasicConstant.RECORD_EDIT));
+        bomRecordMapper.insert(new BomRecordPO(dto.getBhid(), user.getUserId(), BasicConstant.RECORD_EDIT));
         return ResultVO.ok();
     }
 

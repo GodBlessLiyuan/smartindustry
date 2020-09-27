@@ -1,6 +1,7 @@
 package com.smartindustry.common.bo.si;
 
 import com.smartindustry.common.pojo.si.BomRecordPO;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.Date;
@@ -11,6 +12,7 @@ import java.util.Date;
  * @version: 1.0.0
  * @description:
  */
+@AllArgsConstructor
 @Data
 public class BomRecordBO extends BomRecordPO {
     private static final long SerialVersionUID = 1L;
@@ -19,10 +21,4 @@ public class BomRecordBO extends BomRecordPO {
      * 操作人姓名
      */
     private String name;
-
-    public BomRecordBO(Long bomHeadId, Long userId, Date createTime, String type, String name) {
-        super(bomHeadId, userId, createTime, type);
-        this.name = name;
-    }
-    public BomRecordBO(){}
 }

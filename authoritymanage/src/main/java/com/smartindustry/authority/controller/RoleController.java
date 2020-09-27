@@ -3,11 +3,6 @@ package com.smartindustry.authority.controller;
 import com.smartindustry.authority.dto.OperateDTO;
 import com.smartindustry.authority.dto.RoleDTO;
 import com.smartindustry.authority.service.IRoleService;
-import com.smartindustry.common.mapper.am.AuthorityMapper;
-import com.smartindustry.common.mapper.am.MUserAuthorityMapper;
-import com.smartindustry.common.mapper.am.RoleAuthorityMapper;
-import com.smartindustry.common.pojo.am.AuthorityPO;
-import com.smartindustry.common.pojo.am.MUserAuthorityPO;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,8 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
