@@ -123,7 +123,7 @@ public class BomServiceImpl implements IBomService {
             }
             //该物料有关联单据，不可删除(工单、出入库单)
             List<Long> pbs = bomHeadMapper.queryByMid(bhid);
-            if(!ids.isEmpty()){
+            if(!pbs.isEmpty()){
                 return new ResultVO(1007);
             }
         }
