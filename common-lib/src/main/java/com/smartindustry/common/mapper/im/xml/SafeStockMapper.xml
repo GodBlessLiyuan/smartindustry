@@ -4,7 +4,7 @@
     <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.im.SafeStockPO">
         <id column="safe_stock_id" jdbcType="BIGINT" property="safeStockId"/>
         <result column="material_inventory_id" jdbcType="BIGINT" property="materialInventoryId"/>
-        <result column="lower_limit" jdbcType="INTEGER" property="lowerLimit"/>
+        <result column="lower_limit" jdbcType="DECIMAL" property="lowerLimit"/>
         <result column="way" jdbcType="TINYINT" property="way"/>
         <result column="user_id" jdbcType="BIGINT" property="userId"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
@@ -26,7 +26,7 @@
     <insert id="insert" parameterType="com.smartindustry.common.pojo.im.SafeStockPO">
         insert into im_safe_stock (safe_stock_id, material_inventory_id, lower_limit,
                                    way, user_id, create_time)
-        values (#{safeStockId,jdbcType=BIGINT}, #{materialInventoryId,jdbcType=BIGINT}, #{lowerLimit,jdbcType=INTEGER},
+        values (#{safeStockId,jdbcType=BIGINT}, #{materialInventoryId,jdbcType=BIGINT}, #{lowerLimit,jdbcType=DECIMAL},
                 #{way,jdbcType=TINYINT}, #{userId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP})
     </insert>
     <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.im.SafeStockPO">
@@ -59,7 +59,7 @@
                 #{materialInventoryId,jdbcType=BIGINT},
             </if>
             <if test="lowerLimit != null">
-                #{lowerLimit,jdbcType=INTEGER},
+                #{lowerLimit,jdbcType=DECIMAL},
             </if>
             <if test="way != null">
                 #{way,jdbcType=TINYINT},
@@ -79,7 +79,7 @@
                 material_inventory_id = #{materialInventoryId,jdbcType=BIGINT},
             </if>
             <if test="lowerLimit != null">
-                lower_limit = #{lowerLimit,jdbcType=INTEGER},
+                lower_limit = #{lowerLimit,jdbcType=DECIMAL},
             </if>
             <if test="way != null">
                 way = #{way,jdbcType=TINYINT},
@@ -96,7 +96,7 @@
     <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.im.SafeStockPO">
         update im_safe_stock
         set material_inventory_id = #{materialInventoryId,jdbcType=BIGINT},
-            lower_limit           = #{lowerLimit,jdbcType=INTEGER},
+            lower_limit           = #{lowerLimit,jdbcType=DECIMAL},
             way                   = #{way,jdbcType=TINYINT},
             user_id               = #{userId,jdbcType=BIGINT},
             create_time           = #{createTime,jdbcType=TIMESTAMP}
@@ -123,7 +123,7 @@
         end,
         lower_limit = case safe_stock_id
         <foreach collection="list" item="po">
-            when #{po.safeStockId,jdbcType=BIGINT} then #{po.lowerLimit,jdbcType=INTEGER}
+            when #{po.safeStockId,jdbcType=BIGINT} then #{po.lowerLimit,jdbcType=DECIMAL}
         </foreach>
         end,
         way = case safe_stock_id

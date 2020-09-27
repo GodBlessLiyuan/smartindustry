@@ -3,6 +3,7 @@ package com.smartindustry.inventory.dto;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ public class SafeStockDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private List<MaterialInventoryDTO> mi;
-    private Integer llimit;
+    private BigDecimal llimit;
     private Byte way;
 
     @Data

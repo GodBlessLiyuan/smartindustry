@@ -26,7 +26,8 @@
         from im_material_inventory
         where material_inventory_id = #{materialInventoryId,jdbcType=BIGINT}
     </delete>
-    <insert id="insert" parameterType="com.smartindustry.common.pojo.im.MaterialInventoryPO">
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.im.MaterialInventoryPO" useGeneratedKeys="true"
+            keyProperty="materialInventoryId">
         insert into im_material_inventory (material_inventory_id, material_id, way_num,
                                            `status`, storage_num, lock_num,
                                            relate_num, available_num)

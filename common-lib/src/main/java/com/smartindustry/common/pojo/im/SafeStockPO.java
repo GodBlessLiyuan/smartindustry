@@ -1,6 +1,7 @@
 package com.smartindustry.common.pojo.im;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import lombok.Data;
 
@@ -14,7 +15,7 @@ public class SafeStockPO implements Serializable {
 
     private Long materialInventoryId;
 
-    private Integer lowerLimit;
+    private BigDecimal lowerLimit;
 
     /**
      * 1：是

@@ -110,7 +110,7 @@ public class MaterialServiceImpl implements IMaterialService {
                 // 物料库存
                 SafeStockPO stockPO = new SafeStockPO();
                 stockPO.setMaterialInventoryId(materialInventoryPO.getMaterialInventoryId());
-//                stockPO.setLowerLimit(dto.getMattribute().getLlimit());
+                stockPO.setLowerLimit(dto.getMattribute().getLlimit());
                 stockPO.setWay((byte) (null != dto.getMattribute().getWay() && dto.getMattribute().getWay() ? 1 : 2));
                 stockPO.setUserId(1L);
                 stockPO.setCreateTime(new Date());
