@@ -5,6 +5,7 @@ import com.smartindustry.common.bo.sm.ReceiptBodyBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.sm.ReceiptBodyPO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -67,4 +68,13 @@ public interface ReceiptBodyMapper extends BaseMapper<ReceiptBodyPO, Long> {
      * @return
      */
     List<ReceiptBodyPO> queryByMids(List<Long> mids);
+
+    /**
+     * 统计根据入库单状态和 质检状态 的入库单数量
+     * @param status 入库单状态
+     * @param qaStatus
+     * @return
+     */
+
+    Integer countHandleNum(@Param("status") Byte status ,@Param("qaStatus") Byte qaStatus);
 }

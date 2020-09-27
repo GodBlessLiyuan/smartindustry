@@ -19,7 +19,26 @@
     from wm_work_bench
     where work_bench_id = #{workBenchId,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+
+  <resultMap id="BOResultMap" type="com.smartindustry.common.bo.wm.WorkBenchBO" extends="BaseResultMap">
+      <result column="authority_name" jdbcType="CHAR" property="authorityName"/>
+  </resultMap>
+  <sql id="BO_Column_List">
+        wb.work_bench_id, wb.authority_id, wb.bench_name, wb.bench_type, wb.bench_module, wb.icon_path, wb.url_path, au.authority_name
+  </sql>
+
+    <select id="queryByModuleId" resultMap="BOResultMap">
+        select
+        <include refid="BO_Column_List"/>
+        from wm_work_bench wb left join am_authority au on au.authority_id = wb.authority_id
+        where wb.bench_type = #{benchType, jdbcType=TINYINT}
+        <if test="benchModule != null">
+          and wb.bench_module = #{benchModule, jdbcType=TINYINT}
+        </if>
+
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from wm_work_bench
     where work_bench_id = #{workBenchId,jdbcType=BIGINT}
   </delete>
