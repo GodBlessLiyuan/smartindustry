@@ -3,6 +3,7 @@
 <mapper namespace="com.smartindustry.common.mapper.si.MaterialAttributeMapper">
     <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.MaterialAttributePO">
         <id column="material_attribute_id" jdbcType="BIGINT" property="materialAttributeId"/>
+        <result column="material_id" jdbcType="BIGINT" property="materialId"/>
         <result column="lower_limit" jdbcType="DECIMAL" property="lowerLimit"/>
         <result column="upper_limit" jdbcType="DECIMAL" property="upperLimit"/>
         <result column="default_purchase" jdbcType="DECIMAL" property="defaultPurchase"/>
@@ -16,9 +17,9 @@
         <result column="pick_split" jdbcType="TINYINT" property="pickSplit"/>
     </resultMap>
     <sql id="Base_Column_List">
-        material_attribute_id, lower_limit, upper_limit, default_purchase, way, warehouse_id,
-    location_id, storage_inspect, storage_inspect_type, storage_sampling_plan, outbound_inspect, 
-    pick_split
+        material_attribute_id, material_id, lower_limit, upper_limit, default_purchase, way,
+    warehouse_id, location_id, storage_inspect, storage_inspect_type, storage_sampling_plan, 
+    outbound_inspect, pick_split
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
@@ -31,24 +32,27 @@
         from si_material_attribute
         where material_attribute_id = #{materialAttributeId,jdbcType=BIGINT}
     </delete>
-    <insert id="insert" parameterType="com.smartindustry.common.pojo.si.MaterialAttributePO"
-            useGeneratedKeys="true" keyProperty="materialAttributeId">
-        insert into si_material_attribute (material_attribute_id, lower_limit, upper_limit,
-                                           default_purchase, way, warehouse_id,
-                                           location_id, storage_inspect, storage_inspect_type,
-                                           storage_sampling_plan, outbound_inspect, pick_split)
-        values (#{materialAttributeId,jdbcType=BIGINT}, #{lowerLimit,jdbcType=DECIMAL}, #{upperLimit,jdbcType=DECIMAL},
-                #{defaultPurchase,jdbcType=DECIMAL}, #{way,jdbcType=TINYINT}, #{warehouseId,jdbcType=BIGINT},
-                #{locationId,jdbcType=BIGINT}, #{storageInspect,jdbcType=TINYINT},
-                #{storageInspectType,jdbcType=TINYINT},
-                #{storageSamplingPlan,jdbcType=TINYINT}, #{outboundInspect,jdbcType=TINYINT},
-                #{pickSplit,jdbcType=TINYINT})
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.si.MaterialAttributePO" useGeneratedKeys="true"
+            keyProperty="materialAttributeId">
+        insert into si_material_attribute (material_attribute_id, material_id, lower_limit,
+                                           upper_limit, default_purchase, way,
+                                           warehouse_id, location_id, storage_inspect,
+                                           storage_inspect_type, storage_sampling_plan,
+                                           outbound_inspect, pick_split)
+        values (#{materialAttributeId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT}, #{lowerLimit,jdbcType=DECIMAL},
+                #{upperLimit,jdbcType=DECIMAL}, #{defaultPurchase,jdbcType=DECIMAL}, #{way,jdbcType=TINYINT},
+                #{warehouseId,jdbcType=BIGINT}, #{locationId,jdbcType=BIGINT}, #{storageInspect,jdbcType=TINYINT},
+                #{storageInspectType,jdbcType=TINYINT}, #{storageSamplingPlan,jdbcType=TINYINT},
+                #{outboundInspect,jdbcType=TINYINT}, #{pickSplit,jdbcType=TINYINT})
     </insert>
     <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.MaterialAttributePO">
         insert into si_material_attribute
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="materialAttributeId != null">
                 material_attribute_id,
+            </if>
+            <if test="materialId != null">
+                material_id,
             </if>
             <if test="lowerLimit != null">
                 lower_limit,
@@ -88,6 +92,9 @@
             <if test="materialAttributeId != null">
                 #{materialAttributeId,jdbcType=BIGINT},
             </if>
+            <if test="materialId != null">
+                #{materialId,jdbcType=BIGINT},
+            </if>
             <if test="lowerLimit != null">
                 #{lowerLimit,jdbcType=DECIMAL},
             </if>
@@ -126,6 +133,9 @@
     <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.si.MaterialAttributePO">
         update si_material_attribute
         <set>
+            <if test="materialId != null">
+                material_id = #{materialId,jdbcType=BIGINT},
+            </if>
             <if test="lowerLimit != null">
                 lower_limit = #{lowerLimit,jdbcType=DECIMAL},
             </if>
@@ -164,7 +174,8 @@
     </update>
     <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.MaterialAttributePO">
         update si_material_attribute
-        set lower_limit           = #{lowerLimit,jdbcType=DECIMAL},
+        set material_id           = #{materialId,jdbcType=BIGINT},
+            lower_limit           = #{lowerLimit,jdbcType=DECIMAL},
             upper_limit           = #{upperLimit,jdbcType=DECIMAL},
             default_purchase      = #{defaultPurchase,jdbcType=DECIMAL},
             way                   = #{way,jdbcType=TINYINT},
@@ -188,30 +199,19 @@
     ma.pick_split,
     w.warehouse_name, l.location_name
     </sql>
-    <select id="queryById" parameterType="java.lang.Long" resultMap="BOResultMap">
+    <select id="detail" parameterType="java.lang.Long" resultMap="BOResultMap">
         select
         <include refid="BO_Column_List"/>
         from si_material_attribute ma
         left join si_warehouse w on ma.warehouse_id = w.warehouse_id
         left join si_location l on ma.location_id = l.location_id
-        where material_attribute_id = #{maid,jdbcType=BIGINT}
+        where ma.material_id = #{mid,jdbcType=BIGINT}
     </select>
 
     <select id="queryByMid" parameterType="java.lang.Long" resultMap="BaseResultMap">
-        select ma.material_attribute_id,
-               ma.lower_limit,
-               ma.upper_limit,
-               ma.default_purchase,
-               ma.way,
-               ma.warehouse_id,
-               ma.location_id,
-               ma.storage_inspect,
-               ma.storage_inspect_type,
-               ma.storage_sampling_plan,
-               ma.outbound_inspect,
-               ma.pick_split
-        from si_material m
-                 left join si_material_attribute ma on m.material_attribute_id = ma.material_attribute_id
-        where m.material_id = #{mid,jdbcType=BIGINT}
+        select
+        <include refid="Base_Column_List"/>
+        from si_material_attribute
+        where material_id = #{mid,jdbcType=BIGINT}
     </select>
 </mapper>

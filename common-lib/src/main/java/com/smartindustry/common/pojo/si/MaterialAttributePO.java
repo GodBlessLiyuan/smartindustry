@@ -2,17 +2,17 @@ package com.smartindustry.common.pojo.si;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-
 import lombok.Data;
 
 /**
  * si_material_attribute
- *
- * @author
+ * @author 
  */
 @Data
 public class MaterialAttributePO implements Serializable {
     private Long materialAttributeId;
+
+    private Long materialId;
 
     private BigDecimal lowerLimit;
 
@@ -22,7 +22,7 @@ public class MaterialAttributePO implements Serializable {
 
     /**
      * 1：是
-     * 2：否
+2：否
      */
     private Byte way;
 
@@ -32,7 +32,7 @@ public class MaterialAttributePO implements Serializable {
 
     /**
      * 1：IQC检验
-     * 2：QE检验
+2：QE检验
      */
     private Byte storageInspect;
 
@@ -42,13 +42,13 @@ public class MaterialAttributePO implements Serializable {
 
     /**
      * 1：工单审核
-     * 2：OQC检验
+2：OQC检验
      */
     private Byte outboundInspect;
 
     /**
      * 1：是
-     * 2：否
+2：否
      */
     private Byte pickSplit;
 

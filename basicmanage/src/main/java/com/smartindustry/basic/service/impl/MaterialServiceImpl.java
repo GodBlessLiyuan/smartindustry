@@ -98,10 +98,12 @@ public class MaterialServiceImpl implements IMaterialService {
 
             // 物料属性
             if (null != dto.getMattribute()) {
-                MaterialAttributePO attributePO = MaterialAttributeDTO.createPO(dto.getMattribute());
-                materialAttributeMapper.insert(attributePO);
-                materialPO.setMaterialAttributeId(attributePO.getMaterialAttributeId());
                 materialMapper.insert(materialPO);
+
+                MaterialAttributePO attributePO = MaterialAttributeDTO.createPO(dto.getMattribute());
+                attributePO.setMaterialId(materialPO.getMaterialId());
+                materialAttributeMapper.insert(attributePO);
+
 
                 // 物料库存信息
                 MaterialInventoryPO materialInventoryPO = new MaterialInventoryPO();
@@ -143,12 +145,13 @@ public class MaterialServiceImpl implements IMaterialService {
             return new ResultVO(1002);
         }
 
+        MaterialAttributePO attributePO = materialAttributeMapper.queryByMid(materialPO.getMaterialId());
         // 物料属性
-        if (null == materialPO.getMaterialAttributeId()) {
+        if (null == attributePO) {
             if (null != dto.getMattribute()) {
-                MaterialAttributePO attributePO = MaterialAttributeDTO.createPO(dto.getMattribute());
+                attributePO = MaterialAttributeDTO.createPO(dto.getMattribute());
+                attributePO.setMaterialId(materialPO.getMaterialId());
                 materialAttributeMapper.insert(attributePO);
-                materialPO.setMaterialAttributeId(attributePO.getMaterialAttributeId());
 
                 // 物料库存信息
                 MaterialInventoryPO materialInventoryPO = new MaterialInventoryPO();
@@ -168,11 +171,6 @@ public class MaterialServiceImpl implements IMaterialService {
                 materialInventoryMapper.updateByPrimaryKey(inventoryBO.updatePO(new MaterialInventoryPO()));
             }
         } else {
-            MaterialAttributePO attributePO = materialAttributeMapper.selectByPrimaryKey(materialPO.getMaterialAttributeId());
-            if (null == attributePO) {
-                return new ResultVO(1002);
-            }
-
             // 物料下限及是否在途未发生变化时不更新物料库存信息
             if (attributePO.getLowerLimit().compareTo(dto.getMattribute().getLlimit()) != 0 || attributePO.getWay() == 1 != dto.getMattribute().getWay()) {
                 MaterialInventoryBO inventoryBO = materialInventoryMapper.queryByMid(materialPO.getMaterialId());
@@ -230,10 +228,8 @@ public class MaterialServiceImpl implements IMaterialService {
         }
 
         MaterialVO vo = MaterialVO.convert(materialBO, filePathConfig);
-        if (null != materialBO.getMaterialAttributeId()) {
-            MaterialAttributeBO attributeBO = materialAttributeMapper.queryById(materialBO.getMaterialAttributeId());
-            vo.setMattribute(MaterialAttributeVO.convert(attributeBO));
-        }
+        MaterialAttributeBO attributeBO = materialAttributeMapper.detail(materialBO.getMaterialId());
+        vo.setMattribute(MaterialAttributeVO.convert(attributeBO));
 
         return ResultVO.ok().setData(vo);
     }
