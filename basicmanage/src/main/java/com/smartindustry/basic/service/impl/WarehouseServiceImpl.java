@@ -78,7 +78,7 @@ public class WarehouseServiceImpl implements IWarehouseService {
         warehousePO.setUpdateTime(new Date());
         warehouseMapper.updateByPrimaryKey(warehousePO);
 
-        warehouseRecordMapper.insert(new WarehouseRecordPO(warehousePO.getWarehouseId(), 1L, BasicConstant.RECORD_MODIFY));
+        warehouseRecordMapper.insert(new WarehouseRecordPO(warehousePO.getWarehouseId(), 1L, BasicConstant.RECORD_EDIT));
 
         return ResultVO.ok();
     }
