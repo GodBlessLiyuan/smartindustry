@@ -4,8 +4,10 @@ import com.github.pagehelper.Page;
 import com.smartindustry.common.bo.im.MaterialInventoryBO;
 import com.smartindustry.common.mapper.im.MaterialInventoryMapper;
 import com.smartindustry.common.mapper.im.SafeStockMapper;
+import com.smartindustry.common.mapper.si.MaterialAttributeMapper;
 import com.smartindustry.common.pojo.im.MaterialInventoryPO;
 import com.smartindustry.common.pojo.im.SafeStockPO;
+import com.smartindustry.common.pojo.si.MaterialAttributePO;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
@@ -17,10 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author: xiahui
@@ -35,6 +34,8 @@ public class MaterialInventoryServiceImpl implements IMaterialInventoryService {
     private MaterialInventoryMapper materialInventoryMapper;
     @Autowired
     private SafeStockMapper safeStockMapper;
+    @Autowired
+    private MaterialAttributeMapper materialAttributeMapper;
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData) {
@@ -81,6 +82,15 @@ public class MaterialInventoryServiceImpl implements IMaterialInventoryService {
         for (MaterialInventoryBO materialInventoryBO : materialInventoryBOs) {
             materialInventoryMapper.updateByPrimaryKey(materialInventoryBO.updatePO(new MaterialInventoryPO()));
         }
+
+        // 物料属性
+//        List<MaterialAttributePO> attributePOs = materialAttributeMapper.queryByMids(mids);
+//        Map<Long, MaterialAttributePO> attributeMap = new HashMap<>();
+//        for(MaterialAttributePO po : attributePOs) {
+//            po.setLowerLimit(dto.getLlimit());
+//            po.setWay(dto.getWay());
+//            attributeMap.put(po.get)
+//        }
 
         return ResultVO.ok();
     }

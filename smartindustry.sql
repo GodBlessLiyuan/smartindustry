@@ -16,6 +16,7 @@ DROP TABLE IF EXISTS om_pick_body;
 DROP TABLE IF EXISTS si_bom_body;
 DROP TABLE IF EXISTS si_bom_record;
 DROP TABLE IF EXISTS si_bom_head;
+DROP TABLE IF EXISTS si_material_attribute;
 DROP TABLE IF EXISTS si_material_record;
 DROP TABLE IF EXISTS si_material_specification;
 DROP TABLE IF EXISTS om_pick_label;
@@ -41,7 +42,6 @@ DROP TABLE IF EXISTS dd_currency;
 DROP TABLE IF EXISTS dd_humidity_level;
 DROP TABLE IF EXISTS dd_life_cycle_state;
 DROP TABLE IF EXISTS si_location_record;
-DROP TABLE IF EXISTS si_material_attribute;
 DROP TABLE IF EXISTS sm_storage_group;
 DROP TABLE IF EXISTS si_location;
 DROP TABLE IF EXISTS dd_location_type;
@@ -873,7 +873,6 @@ CREATE TABLE si_material
 (
 	material_id bigint unsigned NOT NULL AUTO_INCREMENT,
 	material_no char(128) NOT NULL,
-	material_attribute_id bigint unsigned,
 	-- 1：原材料
 	-- 2：半成品
 	-- 3：成品
@@ -910,6 +909,7 @@ CREATE TABLE si_material
 CREATE TABLE si_material_attribute
 (
 	material_attribute_id bigint unsigned NOT NULL AUTO_INCREMENT,
+	material_id bigint unsigned NOT NULL,
 	lower_limit decimal(10,2),
 	upper_limit decimal(10,2),
 	default_purchase decimal(10,2),
@@ -934,7 +934,8 @@ CREATE TABLE si_material_attribute
 	pick_split tinyint COMMENT '1：是
 2：否',
 	PRIMARY KEY (material_attribute_id),
-	UNIQUE (material_attribute_id)
+	UNIQUE (material_attribute_id),
+	UNIQUE (material_id)
 );
 
 
@@ -1462,7 +1463,7 @@ ALTER TABLE am_role_record
 
 
 ALTER TABLE am_user_record
-	ADD FOREIGN KEY (operate_id)
+	ADD FOREIGN KEY (user_id)
 	REFERENCES am_user (user_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
@@ -1470,7 +1471,7 @@ ALTER TABLE am_user_record
 
 
 ALTER TABLE am_user_record
-	ADD FOREIGN KEY (user_id)
+	ADD FOREIGN KEY (operate_id)
 	REFERENCES am_user (user_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
@@ -2093,6 +2094,14 @@ ALTER TABLE si_bom_head
 ;
 
 
+ALTER TABLE si_material_attribute
+	ADD FOREIGN KEY (material_id)
+	REFERENCES si_material (material_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
 ALTER TABLE si_material_record
 	ADD FOREIGN KEY (material_id)
 	REFERENCES si_material (material_id)
@@ -2128,14 +2137,6 @@ ALTER TABLE si_storage_label
 ALTER TABLE sm_receipt_body
 	ADD FOREIGN KEY (material_id)
 	REFERENCES si_material (material_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE si_material
-	ADD FOREIGN KEY (material_attribute_id)
-	REFERENCES si_material_attribute (material_attribute_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
 ;
@@ -2214,7 +2215,7 @@ ALTER TABLE si_supplier_record
 
 
 ALTER TABLE em_transfer_head
-	ADD FOREIGN KEY (outbound_wid)
+	ADD FOREIGN KEY (storage_wid)
 	REFERENCES si_warehouse (warehouse_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
@@ -2222,7 +2223,7 @@ ALTER TABLE em_transfer_head
 
 
 ALTER TABLE em_transfer_head
-	ADD FOREIGN KEY (storage_wid)
+	ADD FOREIGN KEY (outbound_wid)
 	REFERENCES si_warehouse (warehouse_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
