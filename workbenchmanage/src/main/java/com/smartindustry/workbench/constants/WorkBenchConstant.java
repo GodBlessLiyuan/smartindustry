@@ -50,4 +50,16 @@ public class WorkBenchConstant {
      */
     public static final Long WORK_WAIT_OUTBOUND=8L;
 
+
+    /**
+     * 入库单状态
+     */
+    public static final Byte RECEIPT_STATUS_QE_CHECK=10;
+
+    public static final Byte RECEIPT_STATUS_QE_CONFIRM = 15;
+
+    public static final Byte RECEIPT_STATUS_IQC_CHECK=5;
+
+    public static final Byte QUALITY_UNCHECK= 3;
+
 }

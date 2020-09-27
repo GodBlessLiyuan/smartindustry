@@ -55,15 +55,15 @@ public class WorkBenchServiceImpl implements IWorkBenchService {
             Long wbId = vo.getWbid();
             //QE待质检
             if (wbId.equals(WorkBenchConstant.WORK_QE_WAIT_CHECK)) {
-                Integer num = receiptBodyMapper.countHandleNum((byte) 10, (byte) 3);
+                Integer num = receiptBodyMapper.countHandleNum(WorkBenchConstant.RECEIPT_STATUS_QE_CHECK, WorkBenchConstant.QUALITY_UNCHECK);
             }
             //IQC检测
             if (wbId.equals(WorkBenchConstant.WORK_IQC_WAIT_CHECK)) {
-                Integer num = receiptBodyMapper.countHandleNum((byte) 5, (byte) 3);
+                Integer num = receiptBodyMapper.countHandleNum(WorkBenchConstant.RECEIPT_STATUS_IQC_CHECK, WorkBenchConstant.QUALITY_UNCHECK);
             }
             //QE待确认
             if (wbId.equals(WorkBenchConstant.WORK_QE_WAIT_CONFIRM)) {
-                Integer num = receiptBodyMapper.countHandleNum((byte) 15, (byte) 3);
+                Integer num = receiptBodyMapper.countHandleNum(WorkBenchConstant.RECEIPT_STATUS_QE_CONFIRM, WorkBenchConstant.QUALITY_UNCHECK);
             }
         }
 
