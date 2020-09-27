@@ -163,4 +163,11 @@
       </if>
     </foreach>
   </update>
+
+  <select id="queryByMid" parameterType="java.lang.Long" resultType="java.lang.Long">
+    select pb.pick_head_id
+    from si_bom_head bh
+    left join om_pick_body pb on bh.material_id = pb.material_id
+    where bom_head_id = #{bhid,jdbcType=BIGINT} and bh.dr = 1 and pb.dr = 1
+  </select>
 </mapper>
