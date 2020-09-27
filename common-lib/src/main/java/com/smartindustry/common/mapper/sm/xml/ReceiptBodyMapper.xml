@@ -340,4 +340,26 @@
             #{mid,jdbcType=BIGINT}
         </foreach>
     </select>
+
+    <select id="countHandleNum" resultType="java.lang.Integer">
+         SELECT
+		      count(rb.receipt_body_id
+         FROM
+	           sm_receipt_body rb
+	      LEFT JOIN si_material m ON rb.material_id = m.material_id
+	      LEFT JOIN sm_receipt_head rh ON rb.receipt_head_id = rh.receipt_head_id
+        <choose>
+            <when test="status == 5">
+                left join sm_iqc_detect q on rb.receipt_body_id = q.receipt_body_id
+            </when>
+            <when test="status == 10">
+                left join sm_qe_detect q on rb.receipt_body_id = q.receipt_body_id
+            </when>
+            <when test="status == 15">
+                left join sm_qe_confirm q on rb.receipt_body_id = q.receipt_body_id
+            </when>
+        </choose>
+          WHERE rh.dr = 1 AND rb.dr = 1
+            AND rb.`status` = #{status, jdbcType=TINYINT} and q.status = #{qaStatus, jdbcType=TINYINT}
+    </select>
 </mapper>
