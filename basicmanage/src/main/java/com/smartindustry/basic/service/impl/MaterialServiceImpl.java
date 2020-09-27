@@ -95,10 +95,6 @@ public class MaterialServiceImpl implements IMaterialService {
         if (null == dto.getMid()) {
             // 新增
             MaterialPO materialPO = MaterialDTO.createPO(dto);
-            // 物料库存信息
-            MaterialInventoryPO materialInventoryPO = new MaterialInventoryPO();
-            materialInventoryPO.setMaterialId(materialPO.getMaterialId());
-            materialInventoryMapper.insert(materialInventoryPO);
 
             // 物料属性
             if (null != dto.getMattribute()) {
@@ -106,6 +102,11 @@ public class MaterialServiceImpl implements IMaterialService {
                 materialAttributeMapper.insert(attributePO);
                 materialPO.setMaterialAttributeId(attributePO.getMaterialAttributeId());
                 materialMapper.insert(materialPO);
+
+                // 物料库存信息
+                MaterialInventoryPO materialInventoryPO = new MaterialInventoryPO();
+                materialInventoryPO.setMaterialId(materialPO.getMaterialId());
+                materialInventoryMapper.insert(materialInventoryPO);
 
                 // 物料库存
                 SafeStockPO stockPO = new SafeStockPO();
@@ -120,6 +121,11 @@ public class MaterialServiceImpl implements IMaterialService {
                 materialInventoryMapper.updateByPrimaryKey(inventoryBO.updatePO(new MaterialInventoryPO()));
             } else {
                 materialMapper.insert(materialPO);
+
+                // 物料库存信息
+                MaterialInventoryPO materialInventoryPO = new MaterialInventoryPO();
+                materialInventoryPO.setMaterialId(materialPO.getMaterialId());
+                materialInventoryMapper.insert(materialInventoryPO);
             }
 
             materialRecordMapper.insert(new MaterialRecordPO(materialPO.getMaterialId(), user.getUserId(), BasicConstant.RECORD_ADD));
