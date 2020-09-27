@@ -50,4 +50,11 @@ public class SecurityConstant {
      * session user
      */
     public static final String SESSION_USER = "authAndUser";
+
+
+    /**
+     * 登入和获取验证码的地址
+     */
+    public static final String URL_LOGIN = "/login/login";
+    public static final String URL_CODE = "/login/getCode";
 }
