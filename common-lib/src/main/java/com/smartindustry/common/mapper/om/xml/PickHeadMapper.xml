@@ -591,4 +591,14 @@
         from om_pick_head ph
         where ph.dr = 1 and ph.accept_customer = #{clientName,jdbcType=CHAR}
     </select>
+
+    <select id="countHandleNum" resultType="java.lang.Integer">
+        select count(0)
+        from om_pick_head ph
+        left join em_transfer_head th on ph.source_no = th.transfer_no
+        where ph.dr = 1 and ph.material_status = #{status, jdbcType=TINYINT}
+        <if test="sourceType != null">
+             and ph.source_type=#{sourceType, jdbcType=TINYINT}
+        </if>
+    </select>
 </mapper>

@@ -83,7 +83,7 @@ public class SupplierServiceImpl implements ISupplierService {
         supplierPO.setUpdateTime(new Date());
         supplierMapper.updateByPrimaryKey(supplierPO);
 
-        supplierRecordMapper.insert(new SupplierRecordPO(supplierPO.getSupplierId(), user.getUserId(), BasicConstant.RECORD_MODIFY));
+        supplierRecordMapper.insert(new SupplierRecordPO(supplierPO.getSupplierId(), user.getUserId(), BasicConstant.RECORD_EDIT));
 
         return ResultVO.ok();
     }
@@ -105,7 +105,6 @@ public class SupplierServiceImpl implements ISupplierService {
         if (null == supplierBO) {
             return new ResultVO(1002);
         }
-
         return ResultVO.ok().setData(SupplierVO.convert(supplierBO));
     }
 

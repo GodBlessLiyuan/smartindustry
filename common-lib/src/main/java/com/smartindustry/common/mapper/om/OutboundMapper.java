@@ -5,6 +5,7 @@ import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.om.OutboundPO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.security.core.parameters.P;
 
 import java.util.List;
 import java.util.Map;
@@ -31,4 +32,11 @@ public interface OutboundMapper extends BaseMapper<OutboundPO, Long> {
     OutboundBO queryByOid(@Param("oId") Long oId);
 
 
+    /**
+     * 根据出库单查询出库单列表
+     *
+     * @param status
+     * @return
+     */
+    Integer countHandleNum(@Param("status") Byte status);
 }

@@ -88,4 +88,5 @@ public interface StorageMapper extends BaseMapper<StoragePO, Long> {
      * @return
      */
     List<StorageBO> queryBySids(List<Long> sids);
+
 }

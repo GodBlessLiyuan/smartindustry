@@ -9,7 +9,8 @@ insert into si_location(location_id, location_no, location_name, location_type_i
 INSERT INTO `am_authority` VALUES (1, '入库管理', 'sm', 1, 1000);
 INSERT INTO `am_authority` VALUES (2, '出库管理', 'om', 1, 1000);
 INSERT INTO `am_authority` VALUES (3, '库内管理', 'im', 1, 1000);
-INSERT INTO `am_authority` VALUES (4, '基础信息管理', 'bm', 1, 4000);
+INSERT INTO `am_authority` VALUES (4, '基础信息管理', 'bm', 1, 1000);
+INSERT INTO `am_authority` VALUES (5, '基础信息管理', 'cm', 1, 4000);
 INSERT INTO `am_authority` VALUES (10, '收料管理', 'sm:rm', 1, 1);
 INSERT INTO `am_authority` VALUES (11, '质量管理', 'sm:qm', 1, 1);
 INSERT INTO `am_authority` VALUES (12, '物料入库管理', 'sm:ms', 1, 1);
@@ -113,7 +114,7 @@ INSERT INTO `am_authority` VALUES (217, '物料库存明细查询-物料解锁',
 INSERT INTO `am_authority` VALUES (220, '物料管理', 'bm:mm', 1, 4);
 INSERT INTO `am_authority` VALUES (221, '供应商管理', 'bm:sm', 1, 4);
 INSERT INTO `am_authority` VALUES (222, '仓库管理', 'bm:wm', 1, 4);
-INSERT INTO `am_authority` VALUES (223, '系统管理', 'bm:am', 1, 4);
+INSERT INTO `am_authority` VALUES (223, '系统管理', 'bm:am', 1, 5);
 INSERT INTO `am_authority` VALUES (224, '客户管理', 'bm:cm', 1, 4);
 INSERT INTO `am_authority` VALUES (225, '物料主数据管理', 'bm:mm:main', 1, 220);
 INSERT INTO `am_authority` VALUES (226, '物料清单管理', 'bm:mm:items', 1, 220);

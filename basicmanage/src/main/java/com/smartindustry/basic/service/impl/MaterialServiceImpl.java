@@ -190,7 +190,7 @@ public class MaterialServiceImpl implements IMaterialService {
         materialPO.setUpdateTime(new Date());
         materialMapper.updateByPrimaryKey(materialPO);
 
-        materialRecordMapper.insert(new MaterialRecordPO(materialPO.getMaterialId(), user.getUserId(), BasicConstant.RECORD_MODIFY));
+        materialRecordMapper.insert(new MaterialRecordPO(materialPO.getMaterialId(), user.getUserId(), BasicConstant.RECORD_EDIT));
 
         materialSpecificationMapper.deleteByMid(dto.getMid());
         if (null != dto.getFiles() && dto.getFiles().size() > 0) {

@@ -270,4 +270,13 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
      * @return
      */
     List<PickHeadPO> queryByCname(String clientName);
+
+    /**
+     * 根据拣货单状态查询拣货单列表
+     * @param status
+     * @param  sourceType
+     * @return
+     */
+
+    Integer countHandleNum(@Param("status") Byte status, @Param("sourceType") Byte sourceType);
 }

@@ -228,7 +228,7 @@ public class BomServiceImpl implements IBomService {
             BomBodyPO po2 = BomBodyDTO.buildPO(po, dto,curDeep);
             bomBodyMapper.updateByPrimaryKey(po2);
         }
-        bomRecordMapper.insert(new BomRecordPO(dto.getBhid(), user.getUserId(), new Date(), BasicConstant.RECORD_MODIFY));
+        bomRecordMapper.insert(new BomRecordPO(dto.getBhid(), user.getUserId(), new Date(), BasicConstant.RECORD_EDIT));
         return ResultVO.ok();
     }
 
