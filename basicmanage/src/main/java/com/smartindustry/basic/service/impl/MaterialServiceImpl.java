@@ -154,20 +154,20 @@ public class MaterialServiceImpl implements IMaterialService {
                 materialAttributeMapper.insert(attributePO);
 
                 // 物料库存信息
-                MaterialInventoryPO materialInventoryPO = new MaterialInventoryPO();
-                materialInventoryPO.setMaterialId(materialPO.getMaterialId());
-                materialInventoryMapper.insert(materialInventoryPO);
+                MaterialInventoryBO inventoryBO = materialInventoryMapper.queryByMid(materialPO.getMaterialId());
 
                 // 物料库存
                 SafeStockPO stockPO = new SafeStockPO();
-                stockPO.setMaterialInventoryId(materialInventoryPO.getMaterialInventoryId());
+                stockPO.setMaterialInventoryId(inventoryBO.getMaterialInventoryId());
                 stockPO.setLowerLimit(dto.getMattribute().getLlimit());
                 stockPO.setWay((byte) (null != dto.getMattribute().getWay() && dto.getMattribute().getWay() ? 1 : 2));
                 stockPO.setUserId(user.getUserId());
                 stockPO.setCreateTime(new Date());
                 safeStockMapper.insert(stockPO);
 
-                MaterialInventoryBO inventoryBO = materialInventoryMapper.queryByMid(materialPO.getMaterialId());
+                inventoryBO.setWay(stockPO.getWay());
+                inventoryBO.setLowerLimit(stockPO.getLowerLimit());
+
                 materialInventoryMapper.updateByPrimaryKey(inventoryBO.updatePO(new MaterialInventoryPO()));
             }
         } else {
