@@ -113,7 +113,7 @@ public class MaterialServiceImpl implements IMaterialService {
                 stockPO.setMaterialInventoryId(materialInventoryPO.getMaterialInventoryId());
                 stockPO.setLowerLimit(dto.getMattribute().getLlimit());
                 stockPO.setWay((byte) (null != dto.getMattribute().getWay() && dto.getMattribute().getWay() ? 1 : 2));
-                stockPO.setUserId(1L);
+                stockPO.setUserId(user.getUserId());
                 stockPO.setCreateTime(new Date());
                 safeStockMapper.insert(stockPO);
 
@@ -160,7 +160,7 @@ public class MaterialServiceImpl implements IMaterialService {
                 stockPO.setMaterialInventoryId(materialInventoryPO.getMaterialInventoryId());
                 stockPO.setLowerLimit(dto.getMattribute().getLlimit());
                 stockPO.setWay((byte) (null != dto.getMattribute().getWay() && dto.getMattribute().getWay() ? 1 : 2));
-                stockPO.setUserId(1L);
+                stockPO.setUserId(user.getUserId());
                 stockPO.setCreateTime(new Date());
                 safeStockMapper.insert(stockPO);
 
