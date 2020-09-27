@@ -65,14 +65,22 @@ public class TokenService {
     public LoginUserBO getLoginUser(HttpServletRequest request) {
         // 获取请求携带的令牌
         String token = getToken(request);
-        if (!StringUtils.isEmpty(token)) {
+        // token不为空并且请求路径不为登入和获取验证码
+        if (!StringUtils.isEmpty(token) && delToken4Login(request)) {
             Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
             // 解析对应的权限以及用户信息
             String userKey = SecurityConstant.LOGIN_TOKEN_KEY + claims.get(SecurityConstant.LOGIN_USER_KEY);
             return (LoginUserBO) redisTemplate.opsForValue().get(userKey);
         }
-
         return null;
+    }
+
+    /**
+     * 当过滤到的接口是login或者是getcode获取验证码的时候，返回false
+     * @param request
+     */
+    public boolean delToken4Login(HttpServletRequest request) {
+        return !(SecurityConstant.URL_CODE.equals(request.getRequestURI()) || SecurityConstant.URL_LOGIN.equals(request.getRequestURI()));
     }
 
     /**
