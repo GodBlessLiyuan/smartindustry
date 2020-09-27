@@ -229,7 +229,9 @@ public class MaterialServiceImpl implements IMaterialService {
 
         MaterialVO vo = MaterialVO.convert(materialBO, filePathConfig);
         MaterialAttributeBO attributeBO = materialAttributeMapper.detail(materialBO.getMaterialId());
-        vo.setMattribute(MaterialAttributeVO.convert(attributeBO));
+        if (null != attributeBO) {
+            vo.setMattribute(MaterialAttributeVO.convert(attributeBO));
+        }
 
         return ResultVO.ok().setData(vo);
     }
