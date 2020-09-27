@@ -5,6 +5,7 @@ import com.smartindustry.common.bo.si.LocationBO;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class MaterialInventoryVO implements Serializable {
     private String supplier;
     private String warehouse;
     private Integer wnum;
-    private Integer llimit;
+    private BigDecimal llimit;
     private Byte status;
     private Integer lnum;
     private Integer rnum;
