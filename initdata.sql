@@ -10,7 +10,7 @@ INSERT INTO `am_authority` VALUES (1, '入库管理', 'sm', 1, 1000);
 INSERT INTO `am_authority` VALUES (2, '出库管理', 'om', 1, 1000);
 INSERT INTO `am_authority` VALUES (3, '库内管理', 'im', 1, 1000);
 INSERT INTO `am_authority` VALUES (4, '基础信息管理', 'bm', 1, 1000);
-INSERT INTO `am_authority` VALUES (5, '基础信息管理', 'cm', 1, 4000);
+INSERT INTO `am_authority` VALUES (5, '系统配置', 'cm', 1, 4000);
 INSERT INTO `am_authority` VALUES (10, '收料管理', 'sm:rm', 1, 1);
 INSERT INTO `am_authority` VALUES (11, '质量管理', 'sm:qm', 1, 1);
 INSERT INTO `am_authority` VALUES (12, '物料入库管理', 'sm:ms', 1, 1);
@@ -150,13 +150,28 @@ INSERT INTO `am_authority` VALUES (274, '用户管理-查询', 'bm:am:user:query
 INSERT INTO `am_authority` VALUES (275, '用户管理-查看', 'bm:am:user:queryinfo', 2, 242);
 INSERT INTO `am_authority` VALUES (276, '用户管理-编辑', 'bm:am:user:update', 2, 242);
 INSERT INTO `am_authority` VALUES (277, '用户管理-重置', 'bm:am:user:reset', 2, 242);
-INSERT INTO `am_authority` VALUES (280, '系统配置-新增', 'bm:am:sys:insert', 2, 242);
-INSERT INTO `am_authority` VALUES (281, '系统配置-流程配置', 'bm:am:sys:setting', 2, 242);
+
+
+INSERT INTO `am_authority` VALUES (280, '系统配置-数据字典-查看', 'bm:am:sys:dquery', 2, 244);
+INSERT INTO `am_authority` VALUES (281, '系统配置-数据字典-新增', 'bm:am:sys:insert', 2, 244);
+INSERT INTO `am_authority` VALUES (282, '系统配置-流程配置-查看', 'bm:am:sys:query', 2, 244);
+INSERT INTO `am_authority` VALUES (283, '系统配置-流程配置-修改', 'bm:am:sys:update', 2, 244);
+
+INSERT INTO `am_authority` VALUES (285, '个人中心-查看', 'bm:am:userinfo:query', 2, 243);
+INSERT INTO `am_authority` VALUES (286, '个人中心-修改', 'bm:am:userinfo:update', 2, 243);
+
 INSERT INTO `am_authority` VALUES (290, '物料主数据管理-查询', 'bm:mm:main:query', 2, 225);
 INSERT INTO `am_authority` VALUES (291, '物料主数据管理-新增', 'bm:mm:main:insert', 2, 225);
 INSERT INTO `am_authority` VALUES (292, '物料主数据管理-查看', 'bm:mm:main:queryinfo', 2, 225);
 INSERT INTO `am_authority` VALUES (293, '物料主数据管理-修改', 'bm:mm:main:update', 2, 225);
 INSERT INTO `am_authority` VALUES (294, '物料主数据管理-删除', 'bm:mm:main:delete', 2, 225);
+
+INSERT INTO `am_authority` VALUES (295, '物料清单管理-删除', 'bm:mm:items:delete', 2, 226);
+INSERT INTO `am_authority` VALUES (296, '物料清单管理-查询', 'bm:mm:items:query', 2, 226);
+INSERT INTO `am_authority` VALUES (297, '物料清单管理-新增', 'bm:mm:items:insert', 2, 226);
+INSERT INTO `am_authority` VALUES (298, '物料清单管理-查看', 'bm:mm:items:queryinfo', 2, 226);
+INSERT INTO `am_authority` VALUES (299, '物料清单管理-编辑', 'bm:mm:items:edit', 2, 226);
+
 INSERT INTO `am_authority` VALUES (300, '供应商基础信息管理-查询', 'bm:sm:info:query', 2, 230);
 INSERT INTO `am_authority` VALUES (301, '供应商基础信息管理-新增', 'bm:sm:info:insert', 2, 230);
 INSERT INTO `am_authority` VALUES (302, '供应商基础信息管理-查看', 'bm:sm:info:queryinfo', 2, 230);
@@ -181,6 +196,7 @@ INSERT INTO `am_authority` VALUES (1000, 'WMS系统', 'wms', 3, 0);
 INSERT INTO `am_authority` VALUES (2000, 'MES系统', 'mes', 3, 0);
 INSERT INTO `am_authority` VALUES (3000, 'ERP系统', 'erp', 3, 0);
 INSERT INTO `am_authority` VALUES (4000, 'MDM系统', 'mdm', 3, 0);
+
 
 
 

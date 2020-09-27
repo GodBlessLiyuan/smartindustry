@@ -93,9 +93,9 @@ public class UserServiceImpl implements IUserService {
         userMapper.updateBatch(pos);
         for (OperateDTO dto : dtos) {
             if (dto.getStatus().equals(AuthorityConstant.STATUS_DISABLE)) {
-                userRecordMapper.insert(new UserRecordPO(dto.getUid(), user.getUserId(), new Date(), AuthorityConstant.RECORD_DISABLE));
+                userRecordMapper.insert(new UserRecordPO(dto.getUid(), user.getUserId(), AuthorityConstant.RECORD_DISABLE));
             } else {
-                userRecordMapper.insert(new UserRecordPO(dto.getUid(), user.getUserId(), new Date(), AuthorityConstant.RECORD_USE));
+                userRecordMapper.insert(new UserRecordPO(dto.getUid(), user.getUserId(), AuthorityConstant.RECORD_USE));
             }
         }
         return ResultVO.ok();
@@ -113,7 +113,7 @@ public class UserServiceImpl implements IUserService {
         deleteUser(uids);
         userMapper.deleteBatch(uids);
         for (Long uid : uids) {
-            userRecordMapper.insert(new UserRecordPO(uid, user.getUserId(), new Date(), AuthorityConstant.RECORD_DELETE));
+            userRecordMapper.insert(new UserRecordPO(uid, user.getUserId(), AuthorityConstant.RECORD_DELETE));
         }
         return ResultVO.ok();
     }
@@ -128,7 +128,7 @@ public class UserServiceImpl implements IUserService {
         }
         UserPO po = UserDTO.createPO(dto);
         userMapper.insert(po);
-        userRecordMapper.insert(new UserRecordPO(po.getUserId(), user.getUserId(), new Date(), AuthorityConstant.RECORD_INSERT));
+        userRecordMapper.insert(new UserRecordPO(po.getUserId(), user.getUserId(), AuthorityConstant.RECORD_INSERT));
         return ResultVO.ok();
     }
 
@@ -150,7 +150,7 @@ public class UserServiceImpl implements IUserService {
             return new ResultVO(1023);
         }
         userMapper.updateByPrimaryKeySelective(po);
-        userRecordMapper.insert(new UserRecordPO(dto.getUid(), user.getUserId(), new Date(), AuthorityConstant.RECORD_UPDATE));
+        userRecordMapper.insert(new UserRecordPO(dto.getUid(), user.getUserId(), AuthorityConstant.RECORD_UPDATE));
         return ResultVO.ok();
     }
 

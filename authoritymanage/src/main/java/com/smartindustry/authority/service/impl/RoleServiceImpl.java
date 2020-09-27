@@ -76,9 +76,9 @@ public class RoleServiceImpl implements IRoleService {
         roleMapper.updateBatch(pos);
         for(OperateDTO dto:dtos){
             if(dto.getStatus().equals(AuthorityConstant.STATUS_DISABLE)){
-                roleRecordMapper.insert(new RoleRecordPO(dto.getRid(),user.getUserId(),new Date(), AuthorityConstant.RECORD_DISABLE));
+                roleRecordMapper.insert(new RoleRecordPO(dto.getRid(),user.getUserId(), AuthorityConstant.RECORD_DISABLE));
             }else{
-                roleRecordMapper.insert(new RoleRecordPO(dto.getRid(),user.getUserId(),new Date(), AuthorityConstant.RECORD_USE));
+                roleRecordMapper.insert(new RoleRecordPO(dto.getRid(),user.getUserId(), AuthorityConstant.RECORD_USE));
             }
         }
         return ResultVO.ok();
@@ -93,7 +93,7 @@ public class RoleServiceImpl implements IRoleService {
         }
         RolePO po = RoleDTO.createPO(dto);
         roleMapper.insert(po);
-        roleRecordMapper.insert(new RoleRecordPO(po.getRoleId(),1L,new Date(), AuthorityConstant.RECORD_INSERT));
+        roleRecordMapper.insert(new RoleRecordPO(po.getRoleId(),1L, AuthorityConstant.RECORD_INSERT));
         return ResultVO.ok();
     }
 
@@ -109,7 +109,7 @@ public class RoleServiceImpl implements IRoleService {
             return new ResultVO(1023);
         }
         roleMapper.updateByPrimaryKeySelective(po);
-        roleRecordMapper.insert(new RoleRecordPO(dto.getRid(),1L,new Date(), AuthorityConstant.RECORD_UPDATE));
+        roleRecordMapper.insert(new RoleRecordPO(dto.getRid(),1L, AuthorityConstant.RECORD_UPDATE));
         return ResultVO.ok();
     }
 
@@ -125,7 +125,7 @@ public class RoleServiceImpl implements IRoleService {
                 return new ResultVO(1007);
             }
             deleteRole(rid);
-            roleRecordMapper.insert(new RoleRecordPO(rid,1L,new Date(), AuthorityConstant.RECORD_DELETE));
+            roleRecordMapper.insert(new RoleRecordPO(rid,1L, AuthorityConstant.RECORD_DELETE));
         }
         roleMapper.deleteBatch(rids);
         return ResultVO.ok();
