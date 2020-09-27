@@ -1350,8 +1350,7 @@ CREATE TABLE wm_work_bench
 	icon_path char(255),
 	url_path char(255),
 	PRIMARY KEY (work_bench_id),
-	UNIQUE (work_bench_id),
-	UNIQUE (authority_id)
+	UNIQUE (work_bench_id)
 );
 
 
