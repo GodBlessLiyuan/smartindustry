@@ -84,13 +84,30 @@ public class MaterialInventoryServiceImpl implements IMaterialInventoryService {
         }
 
         // 物料属性
-//        List<MaterialAttributePO> attributePOs = materialAttributeMapper.queryByMids(mids);
-//        Map<Long, MaterialAttributePO> attributeMap = new HashMap<>();
-//        for(MaterialAttributePO po : attributePOs) {
-//            po.setLowerLimit(dto.getLlimit());
-//            po.setWay(dto.getWay());
-//            attributeMap.put(po.get)
-//        }
+        List<MaterialAttributePO> attributePOs = materialAttributeMapper.queryByMids(mids);
+        Map<Long, MaterialAttributePO> attributeMap = new HashMap<>();
+        for (MaterialAttributePO attributePO : attributePOs) {
+            attributePO.setWay(dto.getWay());
+            attributePO.setLowerLimit(dto.getLlimit());
+            attributeMap.put(attributePO.getMaterialId(), attributePO);
+        }
+        List<MaterialAttributePO> insAttrPOs = new ArrayList<>();
+        for (Long mid : mids) {
+            if (!attributeMap.containsKey(mid)) {
+                MaterialAttributePO po = new MaterialAttributePO();
+                po.setLowerLimit(dto.getLlimit());
+                po.setWay(dto.getWay());
+                po.setMaterialId(mid);
+                insAttrPOs.add(po);
+            }
+        }
+
+        if (attributePOs.size() > 0) {
+            materialAttributeMapper.batchUpdate(new ArrayList<>(attributeMap.values()));
+        }
+        if (insAttrPOs.size() > 0) {
+            materialAttributeMapper.batchInsert(insAttrPOs);
+        }
 
         return ResultVO.ok();
     }

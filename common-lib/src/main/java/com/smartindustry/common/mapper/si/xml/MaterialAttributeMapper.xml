@@ -214,4 +214,47 @@
         from si_material_attribute
         where material_id = #{mid,jdbcType=BIGINT}
     </select>
+    <select id="queryByMids" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_material_attribute
+        where material_id in
+        <foreach collection="list" item="mid" separator="," open="(" close=")">
+            #{mid,jdbcType=BIGINT}
+        </foreach>
+    </select>
+
+    <insert id="batchInsert" parameterType="com.smartindustry.common.pojo.si.MaterialAttributePO">
+        insert into si_material_attribute (material_attribute_id, material_id, lower_limit,
+        upper_limit, default_purchase, way,
+        warehouse_id, location_id, storage_inspect,
+        storage_inspect_type, storage_sampling_plan,
+        outbound_inspect, pick_split)
+        values
+        <foreach collection="list" item="po" separator=",">
+            (#{po.materialAttributeId,jdbcType=BIGINT}, #{po.materialId,jdbcType=BIGINT}, #{po.lowerLimit,jdbcType=DECIMAL},
+            #{po.upperLimit,jdbcType=DECIMAL}, #{po.defaultPurchase,jdbcType=DECIMAL}, #{po.way,jdbcType=TINYINT},
+            #{po.warehouseId,jdbcType=BIGINT}, #{po.locationId,jdbcType=BIGINT}, #{po.storageInspect,jdbcType=TINYINT},
+            #{po.storageInspectType,jdbcType=TINYINT}, #{po.storageSamplingPlan,jdbcType=TINYINT},
+            #{po.outboundInspect,jdbcType=TINYINT}, #{po.pickSplit,jdbcType=TINYINT})
+        </foreach>
+    </insert>
+    <update id="batchUpdate" parameterType="java.util.List">
+        update si_material_attribute
+        set
+        lower_limit = case material_attribute_id
+        <foreach collection="list" item="po">
+            when #{po.materialAttributeId,jdbcType=BIGINT} then #{po.lowerLimit,jdbcType=DECIMAL}
+        </foreach>
+        end,
+        way = case material_attribute_id
+        <foreach collection="list" item="po">
+            when #{po.materialAttributeId,jdbcType=BIGINT} then #{po.way,jdbcType=TINYINT}
+        </foreach>
+        end
+        where material_attribute_id in
+        <foreach collection="list" item="po" open="(" separator="," close=")">
+            #{po.materialAttributeId,jdbcType=BIGINT}
+        </foreach>
+    </update>
 </mapper>

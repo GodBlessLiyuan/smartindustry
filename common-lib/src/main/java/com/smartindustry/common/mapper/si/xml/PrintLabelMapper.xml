@@ -259,7 +259,7 @@
         from si_print_label pl
         left join sm_receipt_label rl on pl.print_label_id = rl.print_label_id
         left join si_material m on pl.material_id = m.material_id
-        left join si_material_attribute ma on ma.material_attribute_id = m.material_attribute_id
+        left join si_material_attribute ma on ma.material_id = m.material_id
         left join si_warehouse w on w.warehouse_id = ma.warehouse_id
         left join si_location lo on lo.location_id = ma.location_id
         where rl.receipt_body_id = #{rbid,jdbcType=BIGINT}
