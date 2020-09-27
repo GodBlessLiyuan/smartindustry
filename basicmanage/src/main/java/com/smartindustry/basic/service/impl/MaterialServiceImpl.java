@@ -9,12 +9,14 @@ import com.smartindustry.basic.service.IMaterialService;
 import com.smartindustry.basic.vo.MaterialAttributeVO;
 import com.smartindustry.basic.vo.MaterialRecordVO;
 import com.smartindustry.basic.vo.MaterialVO;
+import com.smartindustry.common.bo.im.MaterialInventoryBO;
 import com.smartindustry.common.bo.si.MaterialAttributeBO;
 import com.smartindustry.common.bo.si.MaterialBO;
 import com.smartindustry.common.bo.si.MaterialRecordBO;
 import com.smartindustry.common.config.FilePathConfig;
 import com.smartindustry.common.constant.ResultConstant;
 import com.smartindustry.common.mapper.im.MaterialInventoryMapper;
+import com.smartindustry.common.mapper.im.SafeStockMapper;
 import com.smartindustry.common.mapper.om.PickBodyMapper;
 import com.smartindustry.common.mapper.si.MaterialAttributeMapper;
 import com.smartindustry.common.mapper.si.MaterialMapper;
@@ -23,6 +25,7 @@ import com.smartindustry.common.mapper.si.MaterialSpecificationMapper;
 import com.smartindustry.common.mapper.sm.ReceiptBodyMapper;
 import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.im.MaterialInventoryPO;
+import com.smartindustry.common.pojo.im.SafeStockPO;
 import com.smartindustry.common.pojo.om.PickBodyPO;
 import com.smartindustry.common.pojo.si.MaterialAttributePO;
 import com.smartindustry.common.pojo.si.MaterialPO;
@@ -69,6 +72,8 @@ public class MaterialServiceImpl implements IMaterialService {
     TokenService tokenService;
     @Autowired
     private FilePathConfig filePathConfig;
+    @Autowired
+    private SafeStockMapper safeStockMapper;
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData) {
@@ -90,24 +95,39 @@ public class MaterialServiceImpl implements IMaterialService {
         if (null == dto.getMid()) {
             // 新增
             MaterialPO materialPO = MaterialDTO.createPO(dto);
+            // 物料库存信息
+            MaterialInventoryPO materialInventoryPO = new MaterialInventoryPO();
+            materialInventoryPO.setMaterialId(materialPO.getMaterialId());
+            materialInventoryMapper.insert(materialInventoryPO);
+
             // 物料属性
             if (null != dto.getMattribute()) {
                 MaterialAttributePO attributePO = MaterialAttributeDTO.createPO(dto.getMattribute());
                 materialAttributeMapper.insert(attributePO);
                 materialPO.setMaterialAttributeId(attributePO.getMaterialAttributeId());
+                materialMapper.insert(materialPO);
+
+                // 物料库存
+                SafeStockPO stockPO = new SafeStockPO();
+                stockPO.setMaterialInventoryId(materialInventoryPO.getMaterialInventoryId());
+//                stockPO.setLowerLimit(dto.getMattribute().getLlimit());
+                stockPO.setWay((byte) (null != dto.getMattribute().getWay() && dto.getMattribute().getWay() ? 1 : 2));
+                stockPO.setUserId(1L);
+                stockPO.setCreateTime(new Date());
+                safeStockMapper.insert(stockPO);
+
+                MaterialInventoryBO inventoryBO = materialInventoryMapper.queryByMid(materialPO.getMaterialId());
+                materialInventoryMapper.updateByPrimaryKey(inventoryBO.updatePO(new MaterialInventoryPO()));
+            } else {
+                materialMapper.insert(materialPO);
             }
-            materialMapper.insert(materialPO);
+
             materialRecordMapper.insert(new MaterialRecordPO(materialPO.getMaterialId(), user.getUserId(), BasicConstant.RECORD_ADD));
 
             if (null != dto.getFiles() && dto.getFiles().size() > 0) {
                 dto.setMid(materialPO.getMaterialId());
                 materialSpecificationMapper.batchInsert(MaterialDTO.createFilePO(dto, filePathConfig));
             }
-
-            // 物料库存信息
-            MaterialInventoryPO materialInventoryPO = new MaterialInventoryPO();
-            materialInventoryPO.setMaterialId(materialPO.getMaterialId());
-            materialInventoryMapper.insert(materialInventoryPO);
 
             return ResultVO.ok();
         }
