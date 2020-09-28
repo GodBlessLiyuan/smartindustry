@@ -22,10 +22,10 @@ public class RoleRecordPO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public RoleRecordPO(Long roleId, Long userId, Date createTime, String type) {
+    public RoleRecordPO(Long roleId, Long userId, String type) {
         this.roleId = roleId;
         this.userId = userId;
-        this.createTime = createTime;
+        this.createTime = new Date();
         this.type = type;
     }
 

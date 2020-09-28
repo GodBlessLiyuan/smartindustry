@@ -20,10 +20,10 @@ public class BomRecordPO implements Serializable {
 
     private String type;
 
-    public BomRecordPO(Long bomHeadId, Long userId, Date createTime, String type) {
+    public BomRecordPO(Long bomHeadId, Long userId, String type) {
         this.bomHeadId = bomHeadId;
         this.userId = userId;
-        this.createTime = createTime;
+        this.createTime = new Date();
         this.type = type;
     }
     public BomRecordPO(){}

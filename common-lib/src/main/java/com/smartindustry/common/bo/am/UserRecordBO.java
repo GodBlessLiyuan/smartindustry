@@ -1,6 +1,7 @@
 package com.smartindustry.common.bo.am;
 
 import com.smartindustry.common.pojo.am.UserRecordPO;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.Date;
@@ -11,18 +12,11 @@ import java.util.Date;
  * @version: 1.0.0
  * @description:
  */
+@AllArgsConstructor
 @Data
 public class UserRecordBO extends UserRecordPO {
     private static final long SerialVersionUID = 1L;
     private String userName;
 
     private String operateName;
-
-    public UserRecordBO(Long userId, Long operateId, Date createTime, String type, String userName, String operateName) {
-        super(userId, operateId, createTime, type);
-        this.userName = userName;
-        this.operateName = operateName;
-    }
-
-    public UserRecordBO(){}
 }

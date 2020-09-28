@@ -11,6 +11,7 @@ import java.util.Date;
  * @version: 1.0.0
  * @description:
  */
+@AllArgsConstructor
 @Data
 public class DeptRecordBO extends DeptRecordPO {
     private static final long SerialVersionUID = 1L;
@@ -18,14 +19,4 @@ public class DeptRecordBO extends DeptRecordPO {
     private String deptName;
 
     private String name;
-
-    public DeptRecordBO(Long deptId, Long userId, Date createTime, String type, String deptName, String name) {
-        super(deptId, userId, createTime, type);
-        this.deptName = deptName;
-        this.name = name;
-    }
-
-    public DeptRecordBO(){
-
-    }
 }

@@ -65,9 +65,9 @@ public class DeptServiceImpl implements IDeptService {
         deptMapper.updateBatch(pos);
         for(OperateDTO dto:dtos){
             if(dto.getStatus().equals(AuthorityConstant.STATUS_DISABLE)){
-                deptRecordMapper.insert(new DeptRecordPO(dto.getDid(),user.getUserId(),new Date(), AuthorityConstant.RECORD_DISABLE));
+                deptRecordMapper.insert(new DeptRecordPO(dto.getDid(),user.getUserId(), AuthorityConstant.RECORD_DISABLE));
             }else {
-                deptRecordMapper.insert(new DeptRecordPO(dto.getDid(),user.getUserId(),new Date(), AuthorityConstant.RECORD_USE));
+                deptRecordMapper.insert(new DeptRecordPO(dto.getDid(),user.getUserId(), AuthorityConstant.RECORD_USE));
             }
         }
         return ResultVO.ok();
@@ -83,7 +83,7 @@ public class DeptServiceImpl implements IDeptService {
         }
         DeptPO po = DeptDTO.createPO(dto);
         deptMapper.insert(po);
-        deptRecordMapper.insert(new DeptRecordPO(po.getDeptId(),user.getUserId(),new Date(), AuthorityConstant.RECORD_INSERT));
+        deptRecordMapper.insert(new DeptRecordPO(po.getDeptId(),user.getUserId(), AuthorityConstant.RECORD_INSERT));
         return ResultVO.ok();
     }
 
@@ -104,7 +104,7 @@ public class DeptServiceImpl implements IDeptService {
         }
         DeptPO po = DeptDTO.createPO(dto);
         deptMapper.updateByPrimaryKeySelective(po);
-        deptRecordMapper.insert(new DeptRecordPO(dto.getDid(),user.getUserId(),new Date(), AuthorityConstant.RECORD_UPDATE));
+        deptRecordMapper.insert(new DeptRecordPO(dto.getDid(),user.getUserId(), AuthorityConstant.RECORD_UPDATE));
         return ResultVO.ok();
     }
 
@@ -124,7 +124,7 @@ public class DeptServiceImpl implements IDeptService {
         deleteDept(dids);
         deptMapper.deleteBatch(dids);
         for(Long did:dids){
-            deptRecordMapper.insert(new DeptRecordPO(did,user.getUserId(),new Date(), AuthorityConstant.RECORD_DELETE));
+            deptRecordMapper.insert(new DeptRecordPO(did,user.getUserId(), AuthorityConstant.RECORD_DELETE));
         }
         return ResultVO.ok();
     }
