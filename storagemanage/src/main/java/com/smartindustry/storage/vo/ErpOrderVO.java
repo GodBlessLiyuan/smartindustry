@@ -38,5 +38,6 @@ public class ErpOrderVO implements Serializable {
         private String mmodel;
         private String mdesc;
         private Integer ototal;
+        private String munit;
     }
 }

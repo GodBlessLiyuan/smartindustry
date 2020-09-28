@@ -23,4 +23,6 @@ public class StorageLabelBO extends StorageLabelPO {
     private String produceBatch;
 
     private String produceDate;
+
+    private String measureUnitName;
 }

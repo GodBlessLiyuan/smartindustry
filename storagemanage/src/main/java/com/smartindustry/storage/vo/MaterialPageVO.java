@@ -25,6 +25,7 @@ public class MaterialPageVO implements Serializable {
     private String mname;
     private String mmodel;
     private String mdesc;
+    private String munit;
 
 
     /**
@@ -57,6 +58,7 @@ public class MaterialPageVO implements Serializable {
         vo.setMname(po.getMaterialName());
         vo.setMmodel(po.getMaterialModel());
         vo.setMdesc(po.getMaterialDesc());
+        vo.setMunit(po.getMeasureUnitName());
         return vo;
     }
 }

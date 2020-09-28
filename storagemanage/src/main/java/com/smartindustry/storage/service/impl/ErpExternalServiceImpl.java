@@ -1,6 +1,8 @@
 package com.smartindustry.storage.service.impl;
 
+import com.smartindustry.common.mapper.dd.MeasureUnitMapper;
 import com.smartindustry.common.mapper.si.MaterialMapper;
+import com.smartindustry.common.pojo.dd.MeasureUnitPO;
 import com.smartindustry.common.pojo.si.MaterialPO;
 import com.smartindustry.common.util.DateUtil;
 import com.smartindustry.common.vo.PageInfoVO;
@@ -27,6 +29,9 @@ public class ErpExternalServiceImpl implements IErpExternalService {
     @Autowired
     private MaterialMapper materialMapper;
 
+    @Autowired
+    private MeasureUnitMapper measureUnitMapper;
+
     @Override
     public ResultVO order(Map<String, Object> reqData) {
 
@@ -49,11 +54,25 @@ public class ErpExternalServiceImpl implements IErpExternalService {
         List<ErpOrderVO.ErpOrderBodyVO> body = vo.getBody();
         MaterialPO materialPO = materialMapper.selectByPrimaryKey(1L);
         if (null != materialPO) {
-            body.add(createBVO(materialPO));
+            String measureUnitName = null;
+            if (materialPO.getMeasureUnitId() != null) {
+                MeasureUnitPO unitPO = measureUnitMapper.selectByPrimaryKey(materialPO.getMeasureUnitId());
+                if (unitPO != null) {
+                    measureUnitName = unitPO.getMeasureUnitName();
+                }
+            }
+            body.add(createBVO(materialPO, measureUnitName));
         }
         MaterialPO materialPO2 = materialMapper.selectByPrimaryKey(2L);
         if (null != materialPO2) {
-            body.add(createBVO(materialPO2));
+            String measureUnitName = null;
+            if (materialPO2.getMeasureUnitId() != null) {
+                MeasureUnitPO unitPO = measureUnitMapper.selectByPrimaryKey(materialPO2.getMeasureUnitId());
+                if (unitPO != null) {
+                    measureUnitName = unitPO.getMeasureUnitName();
+                }
+            }
+            body.add(createBVO(materialPO2, measureUnitName));
         }
 
         new Thread(() -> {
@@ -62,6 +81,13 @@ public class ErpExternalServiceImpl implements IErpExternalService {
 
         return ResultVO.ok().setData(vo);
     }
+    private ErpOrderVO.ErpOrderBodyVO createBVO(MaterialPO po, String measureUnitName) {
+        ErpOrderVO.ErpOrderBodyVO vo = createBVO(po);
+        vo.setMunit(measureUnitName);
+        return vo;
+
+    }
+
 
     private ErpOrderVO.ErpOrderBodyVO createBVO(MaterialPO po) {
         ErpOrderVO.ErpOrderBodyVO vo = new ErpOrderVO.ErpOrderBodyVO();

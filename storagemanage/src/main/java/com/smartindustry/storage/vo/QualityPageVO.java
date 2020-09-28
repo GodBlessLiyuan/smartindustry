@@ -2,6 +2,7 @@ package com.smartindustry.storage.vo;
 
 import com.smartindustry.common.bo.sm.ReceiptBO;
 import lombok.Data;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -50,14 +51,29 @@ public class QualityPageVO implements Serializable {
      * 收料数量
      */
     private Integer anum;
+
+    /**
+     * 收料数量+计量单位
+     */
+    private String anummunit;
     /**
      * 良数
      */
     private Integer gnum;
+
+    /**
+     * 良数+计量单位
+     */
+    private String gnummunit;
     /**
      * 不良数
      */
     private Integer bnum;
+
+    /**
+     * 不良数+计量单位
+     */
+    private String bnummunit;
     /**
      * 质检状态
      */
@@ -101,6 +117,16 @@ public class QualityPageVO implements Serializable {
         vo.setBnum(bo.getBadNum());
         vo.setStatus(bo.getQaStatus());
         vo.setAdate(bo.getAcceptDate());
+        String munit = StringUtils.isEmpty(bo.getMeasureUnitName()) ?"":(" "+bo.getMeasureUnitName());
+        if (bo.getAcceptNum() != null) {
+            vo.setAnummunit(bo.getAcceptNum()+munit);
+        }
+        if (bo.getGoodNum() != null) {
+            vo.setGnummunit(bo.getGoodNum()+munit);
+        }
+        if (bo.getBadNum() != null) {
+            vo.setBnummunit(bo.getBadNum() +munit);
+        }
         return vo;
     }
 }
