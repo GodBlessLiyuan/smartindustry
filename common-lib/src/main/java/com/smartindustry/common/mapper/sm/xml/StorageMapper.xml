@@ -214,15 +214,15 @@
 
     <sql id="StorageBO_Column_List_Other">
         s.storage_id, s.storage_no, s.source_no, s.source_type, s.pending_num, s.stored_num, s.storage_time, s.`status`,
-    s.`type`, s.create_time, s.dr,o.outbound_no,th.transfer_type,w.warehouse_name,ph.pick_no, th.transfer_head_id,l.location_id
+    s.`type`, s.create_time, s.dr,o.outbound_no,th.transfer_type,w.warehouse_name,ph.pick_no, th.transfer_head_id, l.location_id
     </sql>
     <resultMap id="OtherBOResultMap" type="com.smartindustry.common.bo.sm.StorageBO" extends="BaseResultMap">
         <result column="outbound_no" jdbcType="CHAR" property="correspondNo"/>
         <result column="transfer_type" jdbcType="TINYINT" property="transferType"/>
         <result column="pick_no" jdbcType="CHAR" property="pickNo"/>
-        <result column="location_id" jdbcType="BIGINT" property="locationId"/>
         <result column="storage_wid" jdbcType="BIGINT" property="storageWid"/>
         <collection property="locations" ofType="com.smartindustry.common.bo.si.LocationBO">
+            <result column="location_id" jdbcType="BIGINT" property="locationId"/>
             <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
         </collection>
     </resultMap>
@@ -252,6 +252,7 @@
         from sm_storage s
         left join em_transfer_head th on s.source_no = th.transfer_no
         left join si_warehouse w on th.storage_wid = w.warehouse_id
+        left join si_location l on l.warehouse_id = w.warehouse_id
         left join om_pick_head ph on s.source_no = ph.source_no
         left join om_outbound o on ph.pick_head_id = o.pick_head_id
         where s.dr = 1 and s.source_type = 2

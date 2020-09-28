@@ -466,6 +466,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
 
             dbo.setDetail(details);
             dbo.setNum(num);
+            dbo.setMeasureUnitName(groupMap.get(key).get(0).getMeasureUnitName());
             bos.add(dbo);
         }
         return ResultVO.ok().setData(StorageSimpleDetailVO.convert(bos));

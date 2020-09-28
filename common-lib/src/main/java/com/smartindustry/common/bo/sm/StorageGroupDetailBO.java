@@ -17,5 +17,7 @@ public class StorageGroupDetailBO extends StorageGroupPO {
     private String materialNo;
     private String materialName;
     private Integer num;
+
+    private String measureUnitName;
     List<StorageDetailBO> detail;
 }

@@ -23,7 +23,7 @@
 
     <delete id="batchDeleteByIds" parameterType="java.util.List">
         delete from sm_storage_group where storage_group_id in
-        <foreach collection="list" item="sgid"  open="(" separator="," close=")">
+        <foreach collection="list" item="sgid" open="(" separator="," close=")">
             #{sgid, jdbcType=BIGINT}
         </foreach>
     </delete>
@@ -89,6 +89,7 @@
             <result column="material_no" jdbcType="CHAR" property="materialNo"/>
             <result column="material_name" jdbcType="CHAR" property="materialName"/>
             <result column="material_desc" jdbcType="CHAR" property="materialDesc"/>
+            <result column="measure_unit_name" jdbcType="CHAR" property="measureUnitName"/>
             <result column="num" jdbcType="INTEGER" property="num"/>
         </collection>
     </resultMap>
@@ -104,27 +105,31 @@
                m.material_id,
                m.material_no,
                m.material_desc,
-               m.material_name
+               m.material_name,
+               me.measure_unit_name
         from sm_storage_group sg
                  left join sm_storage_detail sd on sg.storage_group_id = sd.storage_group_id
                  left join si_print_label pl on sd.print_label_id = pl.print_label_id
                  left join si_material m on pl.material_id = m.material_id
                  left join si_location l on sg.location_id = l.location_id
+                 left join dd_measure_unit me on me.measure_unit_id = m.measure_unit_id
         where sg.storage_id = #{storageId,jdbcType=BIGINT}
         order by sg.storage_group_id desc, sd.storage_detail_id desc
     </select>
 
-<!--    根据入库单id查询入库单详情表-->
+    <!--    根据入库单id查询入库单详情表-->
     <select id="queryGroup" parameterType="java.lang.Long" resultType="java.lang.Long">
         select storage_group_id
         from sm_storage_group
         where storage_id = #{storageId,jdbcType=BIGINT} limit 1
     </select>
 
-    <resultMap id="GroupDetailBOResultMap" type="com.smartindustry.common.bo.sm.StorageGroupDetailBO" extends="BaseResultMap">
+    <resultMap id="GroupDetailBOResultMap" type="com.smartindustry.common.bo.sm.StorageGroupDetailBO"
+               extends="BaseResultMap">
         <result column="material_id" jdbcType="BIGINT" property="materialId"/>
         <result column="material_no" jdbcType="CHAR" property="materialNo"/>
         <result column="material_name" jdbcType="CHAR" property="materialName"/>
+        <result column = "measure_unit_name" jdbcType="CHAR" property="measureUnitName"/>
         <collection property="detail" column="storage_detail_id"
                     ofType="com.smartindustry.common.bo.sm.StorageDetailBO">
             <id column="storage_detail_id" jdbcType="BIGINT" property="storageDetailId"/>
@@ -136,24 +141,26 @@
         </collection>
     </resultMap>
     <select id="queryStorageDetail" resultMap="GroupDetailBOResultMap">
-             select sg.storage_group_id,
-               sg.location_id,
-               sd.storage_detail_id,
-               pl.print_label_id,
-               pl.package_id,
-               pl.num,
-               l.location_no,
-               m.material_id,
-               m.material_no,
-               m.material_desc,
-               m.material_name,
-								w.warehouse_name
+        select sg.storage_group_id,
+        sg.location_id,
+        sd.storage_detail_id,
+        pl.print_label_id,
+        pl.package_id,
+        pl.num,
+        l.location_no,
+        m.material_id,
+        m.material_no,
+        m.material_desc,
+        m.material_name,
+        w.warehouse_name,
+        me.measure_unit_name
         from sm_storage_group sg
-                 left join sm_storage_detail sd on sg.storage_group_id = sd.storage_group_id
-                 left join si_print_label pl on sd.print_label_id = pl.print_label_id
-                 left join si_material m on pl.material_id = m.material_id
-                 left join si_location l on sg.location_id = l.location_id
-									LEFT JOIN si_warehouse w ON w.warehouse_id = l.warehouse_id
+        left join sm_storage_detail sd on sg.storage_group_id = sd.storage_group_id
+        left join si_print_label pl on sd.print_label_id = pl.print_label_id
+        left join si_material m on pl.material_id = m.material_id
+        left join si_location l on sg.location_id = l.location_id
+        left join dd_measure_unit me on me.measure_unit_id  = m.measure_unit_id
+        LEFT JOIN si_warehouse w ON w.warehouse_id = l.warehouse_id
         where sg.storage_id = #{storageId, jdbcType=BIGINT}
         <if test="storageGroupId == null">
             and sg.location_id is not null
