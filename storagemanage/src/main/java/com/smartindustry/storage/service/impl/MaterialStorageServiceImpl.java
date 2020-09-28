@@ -132,7 +132,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         }
         //判断当前的扫码pid是否已经被使用
         List<StorageDetailPO> storageDetailPO = storageDetailMapper.queryByGidAndLid(dto.getSid(), po1.getPrintLabelId());
-        if (null != storageDetailPO && storageDetailPO.isEmpty()) {
+        if (null != storageDetailPO && !storageDetailPO.isEmpty()) {
             // 标签已使用
             return new ResultVO(1004);
         }
@@ -386,8 +386,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         }
         List<StorageGroupBO> storageGroupBOs = storageGroupMapper.queryBySid(storageBO.getStorageId());
 
-        //按照物料分类统计
-        groupByMaterial(storageGroupBOs);
+
         ReceiptBodyBO receiptBodyBO = new ReceiptBodyBO();
 
         return ResultVO.ok().setData(StorageDetailVO.convert(storageBO, receiptBodyBO, storageGroupBOs));
@@ -487,6 +486,8 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         if (bo.getDr() == 2) {
             return new ResultVO(1006);
         }
+
+        //判断标签关联物料所对应的仓库是否有库位
 
         StorageDetailPO storageDetailPO = storageDetailMapper.queryByPlId(bo.getPrintLabelId());
         if (null != storageDetailPO) {
@@ -788,9 +789,6 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
 
         List<StorageGroupBO> storageGroupBOs = storageGroupMapper.queryBySid(storageBO.getStorageId());
 
-        //按照物料种类分组
-        groupByMaterial(storageGroupBOs);
-
         return ResultVO.ok().setData(StorageDetailVO.convert(storageBO, receiptBodyBO, storageGroupBOs));
     }
 
@@ -877,30 +875,53 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         return ResultVO.ok().setData(StorageDetailVO.convert(storageDetailBOS));
     }
 
-
-    //----------------- private method-----------------------------------
-
-    private void groupByMaterial(List<StorageGroupBO> sgBos ) {
-        //综合入库详情组表
-        for (StorageGroupBO bo : sgBos) {
-            //将所有的入库按照
-            Map<String, List<StorageDetailBO>> map = bo.getDetail().stream().collect(Collectors.toMap(StorageDetailBO::getMaterialNo, p -> {
-                        List<StorageDetailBO> bs = new ArrayList<>();
-                        bs.add(p);
-                        return bs;
-                    }, (List<StorageDetailBO> values1, List<StorageDetailBO> values2) -> {
-                        values1.addAll(values2);
-                        return values1;
-                    }
-            ));
-            List<StorageDetailBO> bos = new ArrayList<>(map.size());
-            for (String materialNo : map.keySet()) {
-                StorageDetailBO detailBO = map.get(materialNo).get(0);
-                detailBO.setPackageId(null);
-                detailBO.setNum(map.get(materialNo).stream().collect(Collectors.summingInt(StorageDetailBO::getNum)));
-                bos.add(detailBO);
-            }
-            bo.setDetail(bos);
+    /**
+     * 其他入库单更换仓库时清空所有的入库数据
+     *
+     * @param dto
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public ResultVO changeWarehouseOther(OperateDTO dto) {
+        if (dto.getSid() == null) {
+            return new ResultVO(1001);
         }
+        StorageBO storageBO = storageMapper.queryBySid(dto.getSid());
+        if (null == storageBO) {
+            return new ResultVO(1002);
+        }
+        /**
+         * step 1 查找标签列表  去除仓位
+         * step 2 查找所有的入库详情、 都需要进行删除
+         * step 3 删除入库详情组
+         */
+        List<StorageGroupBO> storageGroupPOS = storageGroupMapper.queryBySid(dto.getSid());
+
+        //step 1 查找标签列表  去除仓位
+        List<Long> sgIds = new ArrayList<>(storageGroupPOS.size());
+        for (StorageGroupBO sgBO : storageGroupPOS) {
+            sgIds.add(sgBO.getStorageGroupId());
+        }
+
+        List<StorageDetailBO> storageDetailBOS = storageDetailMapper.queryByGroupIds(sgIds);
+        List<Long> plIds = new ArrayList<>();
+        for (StorageDetailBO sdBo : storageDetailBOS) {
+            plIds.add(sdBo.getPrintLabelId());
+        }
+        if (!plIds.isEmpty()) {
+            printLabelMapper.updateLidByIds(null, plIds);
+        }
+
+        //step2 查找收料单， 更新入库数量和状态, 更新收料单
+        storageBO.setStatus(ReceiptConstant.MATERIAL_STORAGE_PENDING);
+        storageBO.setStoredNum(0);
+        storageMapper.updateByPrimaryKey(storageBO);
+
+        //step 3 查找所有的入库详情、 都需要进行删除
+        storageDetailMapper.deleteBySid(dto.getSid());
+        //step 4 删除入库详情组
+        storageGroupMapper.batchDeleteByIds(sgIds);
+        return ResultVO.ok();
     }
 }

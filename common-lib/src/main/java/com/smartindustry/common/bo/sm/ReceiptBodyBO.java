@@ -18,4 +18,10 @@ public class ReceiptBodyBO extends ReceiptBodyPO {
     private String materialModel;
     private String materialDesc;
     private Byte testType;
+
+    private Long warehouseId;
+
+    private Long locationId;
+
+    private String locationNo;
 }

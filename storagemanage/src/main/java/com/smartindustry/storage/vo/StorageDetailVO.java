@@ -1,8 +1,6 @@
 package com.smartindustry.storage.vo;
 
-import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.bo.sm.*;
-import com.smartindustry.common.pojo.sm.StorageGroupPO;
 import lombok.Data;
 import org.springframework.util.StringUtils;
 
@@ -56,6 +54,16 @@ public class StorageDetailVO implements Serializable {
     private Long wid;
 
     /**
+     * 默认库位编号
+     */
+    private String lno;
+
+    /**
+     * 默认库位ID
+     */
+    private Long lid;
+
+    /**
      * 入库时间
      */
     private Date stime;
@@ -104,6 +112,11 @@ public class StorageDetailVO implements Serializable {
     private List<GroupVO> group;
 
     /**
+     * 待入库列表
+     */
+    private List<DetailVO> labels;
+
+    /**
      * po bo 转 vo
      *
      * @param msBO
@@ -131,20 +144,22 @@ public class StorageDetailVO implements Serializable {
         vo.setTtype(msBO.getTransferType());
         vo.setPno(msBO.getPickNo());
         vo.setCono(msBO.getCorrespondNo());
-        if (sgBOs != null && !sgBOs.isEmpty()) {
-            for (StorageGroupBO sdbo : sgBOs) {
-                if (sdbo.getWarehouseId() != null) {
-                    vo.setWid(sdbo.getWarehouseId());
-                }
-            }
-
+        vo.setWid(rbBO.getWarehouseId());
+        vo.setLid(rbBO.getLocationId());
+        vo.setLno(rbBO.getLocationNo());
+        //设置待入库列表
+        List<DetailVO> labels = new ArrayList<>();
+        for (StorageGroupBO sgBo: sgBOs) {
+            labels.addAll(convert(sgBo.getDetail(), sgBo.getStorageGroupId()));
         }
+        vo.setLabels(labels);
         List<GroupVO> groupVOs = new ArrayList<>(sgBOs.size());
+        //按照物料种类分组
+        groupByMaterial(sgBOs);
         for (StorageGroupBO sgBO : sgBOs) {
             groupVOs.add(convert(sgBO));
         }
         vo.setGroup(groupVOs);
-
         return vo;
     }
 
@@ -286,6 +301,32 @@ public class StorageDetailVO implements Serializable {
          * 数量
          */
         private Integer num;
+    }
+
+    //----------------- private method-----------------------------------
+
+    public static void groupByMaterial(List<StorageGroupBO> sgBos ) {
+        //综合入库详情组表
+        for (StorageGroupBO bo : sgBos) {
+            //将所有的入库按照
+            Map<String, List<StorageDetailBO>> map = bo.getDetail().stream().collect(Collectors.toMap(StorageDetailBO::getMaterialNo, p -> {
+                        List<StorageDetailBO> bs = new ArrayList<>();
+                        bs.add(p);
+                        return bs;
+                    }, (List<StorageDetailBO> values1, List<StorageDetailBO> values2) -> {
+                        values1.addAll(values2);
+                        return values1;
+                    }
+            ));
+            List<StorageDetailBO> bos = new ArrayList<>(map.size());
+            for (String materialNo : map.keySet()) {
+                StorageDetailBO detailBO = map.get(materialNo).get(0);
+                detailBO.setPackageId(null);
+                detailBO.setNum(map.get(materialNo).stream().collect(Collectors.summingInt(StorageDetailBO::getNum)));
+                bos.add(detailBO);
+            }
+            bo.setDetail(bos);
+        }
     }
 
 }
