@@ -3,6 +3,7 @@ package com.smartindustry.outbound.vo;
 import com.smartindustry.common.bo.om.PickBodyBO;
 import com.smartindustry.common.bo.si.PrintLabelBO;
 import lombok.Data;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -44,6 +45,11 @@ public class PickBodyVO implements Serializable {
     private Integer num;
 
     /**
+     * 数量+计量单位
+     */
+    private String nummname;
+
+    /**
      * bo 转 vo
      *
      * @param bo
@@ -55,6 +61,10 @@ public class PickBodyVO implements Serializable {
         vo.setMno(bo.getMaterialNo());
         vo.setMdesc(bo.getMaterialDesc());
         vo.setNum(bo.getDemandNum());
+        String mname = StringUtils.isEmpty(bo.getMeasureUnitName()) ?(" "+bo.getMeasureUnitName()): "";
+        if (bo.getDemandNum() != null) {
+            vo.setNummname(bo.getDemandNum()+mname);
+        }
         return vo;
     }
 }

@@ -51,6 +51,7 @@ public class StorageSimpleDetailVO implements Serializable {
         }
         List<DetailVO> details = new ArrayList<>(bo.getDetail().size());
         for (StorageDetailBO dbo: bo.getDetail()) {
+            dbo.setMeasureUnitName(bo.getMeasureUnitName());
             details.add(convert(dbo));
         }
         if (!details.isEmpty()) {

@@ -97,10 +97,12 @@
                m.material_no   as materialNo,
                m.material_name as materialName,
                m.material_desc as materialDesc,
-               spl.num
+               spl.num,
+               me.mearsure_unit_name as measureUnitName
         from om_pick_label opl
                  left join si_print_label spl on opl.print_label_id = spl.print_label_id
                  left join si_material m on spl.material_id = m.material_id
+                 left join dd_measure_unit me on me.measure_unit_id = m.measure_unit_id
         where opl.pick_head_id = #{pickHeadId,jdbcType=BIGINT}
     </select>
     <select id="queryLockByPhid" parameterType="java.lang.Long"

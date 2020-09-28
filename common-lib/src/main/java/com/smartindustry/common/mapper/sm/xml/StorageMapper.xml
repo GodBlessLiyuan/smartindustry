@@ -214,7 +214,7 @@
 
     <sql id="StorageBO_Column_List_Other">
         s.storage_id, s.storage_no, s.source_no, s.source_type, s.pending_num, s.stored_num, s.storage_time, s.`status`,
-    s.`type`, s.create_time, s.dr,o.outbound_no,th.transfer_type,w.warehouse_name,ph.pick_no, th.transfer_head_id, l.location_id
+    s.`type`, s.create_time, s.dr,o.outbound_no,th.storage_wid,th.transfer_type,w.warehouse_name,ph.pick_no, th.transfer_head_id, l.location_id
     </sql>
     <resultMap id="OtherBOResultMap" type="com.smartindustry.common.bo.sm.StorageBO" extends="BaseResultMap">
         <result column="outbound_no" jdbcType="CHAR" property="correspondNo"/>

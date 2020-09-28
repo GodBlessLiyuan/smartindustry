@@ -296,10 +296,12 @@
         end) as lackNum,
         (case
         when pb.demand_num-pb.pick_num > 0 then 0 else 1
-        end) as flag
+        end) as flag,
+        me.measure_unit_name
         from om_pick_head ph
         left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
         left join si_material ma on pb.material_id = ma.material_id
+        left join dd_measure_unit me on me.measure_unit_id = ma.measure_unit_id
         where ph.dr =1 and ph.pick_head_id = #{pickHeadId}
         <if test="materialNo != null and materialNo != ''">
             and ma.material_no like concat('%',#{materialNo,jdbcType=VARCHAR},'%')
@@ -411,10 +413,12 @@
                ma.material_no    as materialNo,
                ma.material_name  as materialName,
                ma.material_desc  as materialDesc,
-               spl.num           as num
+               spl.num           as num,
+               me.measure_unit_name as measureUnitName
         from om_pick_label pl
                  left join si_print_label spl on pl.print_label_id = spl.print_label_id
                  left join si_material ma on spl.material_id = ma.material_id
+                 left join dd_measure_unit me on me.measure_unit_id = m.measure_unit_id
         where pl.pick_head_id = #{pickHeadId}
           and spl.dr = 1
         order by pl.create_time desc

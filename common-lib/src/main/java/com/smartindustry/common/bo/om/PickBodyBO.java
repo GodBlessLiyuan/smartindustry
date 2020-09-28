@@ -35,4 +35,9 @@ public class PickBodyBO extends PickBodyPO {
      * 物料状态, 1 标识欠料 2 标识不欠料
      */
     private Byte flag;
+
+    /**
+     * 物料 计量单位
+     */
+    private String measureUnitName;
 }
