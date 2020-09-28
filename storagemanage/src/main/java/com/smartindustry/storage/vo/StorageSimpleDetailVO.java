@@ -105,7 +105,7 @@ public class StorageSimpleDetailVO implements Serializable {
     public static List<DetailVO> convertDetail(List<PrintLabelBO> bos) {
         List<DetailVO> details = new ArrayList<>(bos.size());
         for (PrintLabelBO bo: bos) {
-            details.add(new DetailVO(bo.getPackageId(), bo.getNum()));
+            details.add(new DetailVO(bo.getPackageId(), bo.getNum(), bo.getMeasureUnitName()));
         }
         return details;
     }
@@ -137,9 +137,10 @@ public class StorageSimpleDetailVO implements Serializable {
 
         public DetailVO() {}
 
-        public DetailVO(String pid, Integer num) {
+        public DetailVO(String pid, Integer num, String measureUnitName) {
             this.pid = pid;
             this.num = num;
+            this.nummunit = num+" "+measureUnitName;
         }
     }
 }
