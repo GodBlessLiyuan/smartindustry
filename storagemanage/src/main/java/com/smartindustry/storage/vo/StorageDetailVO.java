@@ -208,7 +208,7 @@ public class StorageDetailVO implements Serializable {
         vo.setNum(bo.getNum());
         vo.setSgid(bo.getStorageGroupId());
         if (bo.getNum() != null) {
-            vo.setNummname(bo.getNum()+" "+bo.getMeasureUnitName());
+            vo.setNummunit(bo.getNum()+" "+bo.getMeasureUnitName());
         }
 
         return vo;
@@ -309,7 +309,7 @@ public class StorageDetailVO implements Serializable {
         /**
          * 数量 带单位
          */
-        private String nummname;
+        private String nummunit;
     }
 
     //----------------- private method-----------------------------------

@@ -27,7 +27,7 @@ public class StorageSimpleDetailVO implements Serializable {
 
     private Integer num;
 
-    private String nummname;
+    private String nummunit;
 
     private List<GroupVO> group;
 
@@ -47,7 +47,7 @@ public class StorageSimpleDetailVO implements Serializable {
         vo.setMno(bo.getMaterialNo());
         vo.setNum(bo.getNum());
         if (bo.getNum() != null) {
-            vo.setNummname(bo.getNum()+" "+(bo.getMeasureUnitName() != null ? bo.getMeasureUnitName():""));
+            vo.setNummunit(bo.getNum()+" "+(bo.getMeasureUnitName() != null ? bo.getMeasureUnitName():""));
         }
         List<DetailVO> details = new ArrayList<>(bo.getDetail().size());
         for (StorageDetailBO dbo: bo.getDetail()) {
@@ -69,7 +69,7 @@ public class StorageSimpleDetailVO implements Serializable {
         vo.setNum(bo.getNum());
         vo.setWhname(bo.getWarehouseName());
         if (bo.getNum() != null) {
-            vo.setNummname(bo.getNum()+" "+(bo.getMeasureUnitName() != null?bo.getMeasureUnitName():""));
+            vo.setNummunit(bo.getNum()+" "+(bo.getMeasureUnitName() != null?bo.getMeasureUnitName():""));
         }
         return vo;
     }
@@ -95,7 +95,7 @@ public class StorageSimpleDetailVO implements Serializable {
             vo.setMno(keys[0]);
             vo.setMname(keys[1]);
             vo.setNum(map.get(key).stream().collect(Collectors.summingInt(PrintLabelBO::getNum)));
-            vo.setNummname(vo.getNum()+" "+map.get(key).get(0).getMeasureUnitName());
+            vo.setNummunit(vo.getNum()+" "+map.get(key).get(0).getMeasureUnitName());
             vo.setDetails(convertDetail(map.get(key)));
             vos.add(vo);
         }
@@ -133,7 +133,7 @@ public class StorageSimpleDetailVO implements Serializable {
 
         private String whname;
 
-        private String nummname;
+        private String nummunit;
 
         public DetailVO() {}
 

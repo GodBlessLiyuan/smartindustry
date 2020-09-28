@@ -37,7 +37,7 @@ public class LackMaterialVO implements Serializable {
     /**
      * 需求数量 计量单位
      */
-    private String dnummname;
+    private String dnummunit;
     /**
      * 已扫描数量
      */
@@ -46,7 +46,7 @@ public class LackMaterialVO implements Serializable {
     /**
      * 已扫描数量+计量单位
      */
-    private String pnummname;
+    private String pnummunit;
     /**
      * 欠料的数量
      */
@@ -55,7 +55,7 @@ public class LackMaterialVO implements Serializable {
     /**
      * 欠料数量+计量单位
      */
-    private String lnummname;
+    private String lnummunit;
 
     private Byte flag;
 
@@ -79,13 +79,13 @@ public class LackMaterialVO implements Serializable {
         vo.setFlag(bo.getFlag());
         String mname = bo.getMeasureUnitName() != null? bo.getMeasureUnitName():"";
         if (bo.getDemandNum() != null) {
-            vo.setDnummname(bo.getDemandNum()+" "+mname);
+            vo.setDnummunit(bo.getDemandNum()+" "+mname);
         }
         if (bo.getPickNum() != null) {
-            vo.setPnummname(bo.getPickNum()+" "+mname);
+            vo.setPnummunit(bo.getPickNum()+" "+mname);
         }
         if (bo.getLackNum() != null) {
-            vo.setLnummname(bo.getLackNum() +" "+mname);
+            vo.setLnummunit(bo.getLackNum() +" "+mname);
         }
         return vo;
     }

@@ -64,7 +64,7 @@ public class ReceiptPageVO implements Serializable {
     /**
      * 订单总数 （携带单位）
      */
-    private String ototalmname;
+    private String ototalmunit;
     /**
      * 采购日期
      */
@@ -89,7 +89,7 @@ public class ReceiptPageVO implements Serializable {
     /**
      * 接受数量 带单位
      */
-    private String anummname;
+    private String anummunit;
     /**
      * 收料日期
      */
@@ -102,7 +102,7 @@ public class ReceiptPageVO implements Serializable {
     /**
      * 实际入库数 带单位
      */
-    private String snummname;
+    private String snummunit;
 
     /**
      * 计量单位名称
@@ -155,13 +155,13 @@ public class ReceiptPageVO implements Serializable {
         vo.setSnum(bo.getStockNum());
         String muname = bo.getMeasureUnitName() != null?(" "+ bo.getMeasureUnitName()):"";
         if (bo.getOrderTotal() != null) {
-            vo.setOtotalmname(bo.getOrderTotal()+muname);
+            vo.setOtotalmunit(bo.getOrderTotal()+muname);
         }
         if (bo.getAcceptNum() != null) {
-            vo.setAnummname(bo.getAcceptNum()+muname);
+            vo.setAnummunit(bo.getAcceptNum()+muname);
         }
         if (bo.getStockNum() != null) {
-            vo.setSnummname(bo.getStockNum()+muname);
+            vo.setSnummunit(bo.getStockNum()+muname);
         }
 
 

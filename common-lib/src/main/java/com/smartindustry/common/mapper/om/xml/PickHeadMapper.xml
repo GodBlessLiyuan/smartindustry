@@ -418,7 +418,7 @@
         from om_pick_label pl
                  left join si_print_label spl on pl.print_label_id = spl.print_label_id
                  left join si_material ma on spl.material_id = ma.material_id
-                 left join dd_measure_unit me on me.measure_unit_id = m.measure_unit_id
+                 left join dd_measure_unit me on me.measure_unit_id = ma.measure_unit_id
         where pl.pick_head_id = #{pickHeadId}
           and spl.dr = 1
         order by pl.create_time desc
