@@ -178,4 +178,11 @@ public interface IMaterialStorageService {
      * @return
      */
     ResultVO queryBySgid(OperateDTO dto);
+
+    /**
+     * 其他入库单更换仓库时清空所有的入库数据
+     * @param dto
+     * @return
+     */
+    ResultVO changeWarehouseOther(OperateDTO dto);
 }
