@@ -332,7 +332,7 @@
         <include refid="ReceiptBodyBO_Column_List"/>
         from sm_receipt_body rb
         left join si_material m on rb.material_id = m.material_id
-        left join si_material_attribute ma on ma.material_attribute_id = m.material_attribute_id
+        left join si_material_attribute ma on ma.material_id = m.material_id
         left join si_location l on l.location_id = ma.location_id
         where rb.receipt_body_id = #{rbId,jdbcType=BIGINT} and rb.dr = 1
     </select>
