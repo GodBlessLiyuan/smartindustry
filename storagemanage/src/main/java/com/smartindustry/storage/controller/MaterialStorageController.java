@@ -159,6 +159,16 @@ public class MaterialStorageController {
         return materialStorageService.changeWarehouse(dto);
     }
 
+
+    /**
+     * 其他入库单 更换仓库，清空已经入库的数据
+     * @return
+     */
+    @PostMapping("changeWarehouseOther")
+    public ResultVO changeWarehouseOther(@RequestBody OperateDTO dto) {
+        return materialStorageService.changeWarehouseOther(dto);
+    }
+
     /**
      * 通过入库详情组ID 查询标签列表
      * @param dto
