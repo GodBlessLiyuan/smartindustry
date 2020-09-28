@@ -20,12 +20,22 @@ public class WorkBenchController {
     @Autowired
     private IWorkBenchService workBenchService;
 
+    /**
+     * 智能工作台  待办工作
+     * @param dto
+     * @return
+     */
     @RequestMapping("work")
     public ResultVO work(@RequestBody OperateDTO dto) {
         return workBenchService.work(dto);
 
     }
 
+    /**
+     * 智能工作台 快捷访问
+     * @param dto
+     * @return
+     */
     @RequestMapping("shortcut")
     public ResultVO shortcut(@RequestBody OperateDTO dto)  {
         return workBenchService.shortcut(dto);

@@ -43,4 +43,10 @@ public class PrintLabelBO extends PrintLabelPO {
      * 默认库位编码
      */
     private String locationNo;
+
+    /**
+     * 物料计量单位
+     */
+
+    private String measureUnitName;
 }

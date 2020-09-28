@@ -21,6 +21,8 @@ public class ReceiptBodyBO extends ReceiptBodyPO {
 
     private Long warehouseId;
 
+    private String measureUnitName;
+
     private Long locationId;
 
     private String locationNo;

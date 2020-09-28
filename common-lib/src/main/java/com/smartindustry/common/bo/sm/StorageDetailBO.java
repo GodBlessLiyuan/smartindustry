@@ -28,6 +28,8 @@ public class StorageDetailBO extends StorageDetailPO {
 
     private Long printLabelId;
 
+    private String measureUnitName;
+
     /**
      * 表示同一库位下的标签列表
      */
