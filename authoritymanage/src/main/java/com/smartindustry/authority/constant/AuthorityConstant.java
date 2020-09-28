@@ -31,7 +31,7 @@ public class AuthorityConstant {
      * 操作记录
      */
     public static final String RECORD_INSERT = "新增";
-    public static final String RECORD_UPDATE = "修改";
+    public static final String RECORD_UPDATE = "编辑";
     public static final String RECORD_USE = "启用";
     public static final String RECORD_DISABLE = "禁用";
     public static final String RECORD_DELETE = "删除";
