@@ -48,6 +48,9 @@ public class OutboundDetailVO implements Serializable {
             vo.setMname(bo.getMaterialName());
             vo.setMdesc(bo.getMaterialDesc());
             vo.setNum(bo.getNum());
+            if (bo.getNum() != null) {
+                vo.setNummname(bo.getNum()+" "+(bo.getMeasureUnitName()!=null?bo.getMeasureUnitName():""));
+            }
             body.add(vo);
         }
         detailVO.setBody(body);

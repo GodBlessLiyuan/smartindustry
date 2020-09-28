@@ -790,7 +790,26 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
 
         List<StorageGroupBO> storageGroupBOs = storageGroupMapper.queryBySid(storageBO.getStorageId());
 
-        return ResultVO.ok().setData(StorageDetailVO.convert(storageBO, receiptBodyBO, storageGroupBOs));
+        Long wid = null;
+        String lno = null;
+
+        if (storageGroupBOs != null && !storageGroupBOs.isEmpty()) {
+            StorageGroupBO bo  = storageGroupBOs.get(storageGroupBOs.size()-1);
+            wid = bo.getWarehouseId();
+            lno = bo.getLocationNo();
+        }
+
+        /**
+         * 当物料没有设置默认仓库并且已入库物料设定了仓库库位时，返回值设定仓库库位
+         */
+        StorageDetailVO detailVO = StorageDetailVO.convert(storageBO, receiptBodyBO, storageGroupBOs);
+        if (detailVO.getWid() == null && wid != null) {
+            detailVO.setWid(wid);
+        }
+        if (detailVO.getLno() == null && lno != null) {
+            detailVO.setLno(lno);
+        }
+        return ResultVO.ok().setData(detailVO);
     }
 
     @Override
