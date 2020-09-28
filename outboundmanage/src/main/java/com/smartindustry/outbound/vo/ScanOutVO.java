@@ -39,7 +39,7 @@ public class ScanOutVO implements Serializable {
     /**
      * 物料数量 添加单位
      */
-    private String nummname;
+    private String nummunit;
 
     public static List<ScanOutVO> convert(List<PrintLabelBO> pos) {
         List<ScanOutVO> vos = new ArrayList<>(pos.size());
@@ -58,7 +58,7 @@ public class ScanOutVO implements Serializable {
         vo.setMdesc(bo.getMaterialDesc());
         vo.setNum(bo.getNum());
         if (bo.getNum() != null) {
-            vo.setNummname(bo.getNum()+" "+(bo.getMeasureUnitName() != null? bo.getMeasureUnitName():""));
+            vo.setNummunit(bo.getNum()+" "+(bo.getMeasureUnitName() != null? bo.getMeasureUnitName():""));
         }
         return vo;
     }

@@ -47,7 +47,7 @@ public class PickBodyVO implements Serializable {
     /**
      * 数量+计量单位
      */
-    private String nummname;
+    private String nummunit;
 
     /**
      * bo 转 vo
@@ -63,7 +63,7 @@ public class PickBodyVO implements Serializable {
         vo.setNum(bo.getDemandNum());
         String mname = StringUtils.isEmpty(bo.getMeasureUnitName()) ?(" "+bo.getMeasureUnitName()): "";
         if (bo.getDemandNum() != null) {
-            vo.setNummname(bo.getDemandNum()+mname);
+            vo.setNummunit(bo.getDemandNum()+mname);
         }
         return vo;
     }

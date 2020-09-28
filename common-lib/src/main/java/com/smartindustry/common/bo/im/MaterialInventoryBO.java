@@ -26,6 +26,7 @@ public class MaterialInventoryBO extends MaterialInventoryPO {
     private BigDecimal lowerLimit;
     private Byte way;
     private Integer availableNum;
+    private String measureUnitName;
 
     public MaterialInventoryPO updatePO(MaterialInventoryPO po) {
         po.setMaterialInventoryId(this.getMaterialInventoryId());

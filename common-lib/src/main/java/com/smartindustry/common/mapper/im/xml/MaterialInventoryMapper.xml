@@ -138,6 +138,7 @@
         <result column="supplier_name" jdbcType="CHAR" property="supplierName"/>
         <result column="safe_stock_id" jdbcType="BIGINT" property="safeStockId"/>
         <result column="lower_limit" jdbcType="INTEGER" property="lowerLimit"/>
+        <result column="measure_unit_name" jdbcType="CHAR" property="measureUnitName"/>
         <result column="way" jdbcType="TINYINT" property="way"/>
         <result column="available_num" jdbcType="INTEGER" property="availableNum"/>
         <collection property="locations" ofType="com.smartindustry.common.bo.si.LocationBO">
@@ -146,7 +147,7 @@
     </resultMap>
     <sql id="BO_Column_List">
         mi.material_inventory_id, mi.material_id, mi.way_num, mi.storage_num, mi.lock_num, mi.relate_num, mi.`status`, mi.available_num,
-        m.material_no, m.material_name, m.material_type, m.material_model, m.material_desc,
+        m.material_no, m.material_name, m.material_type, m.material_model, m.material_desc,me.measure_unit_name,
         s.supplier_name,
         ss.safe_stock_id, ss.lower_limit,
         w.warehouse_name
@@ -180,6 +181,7 @@
         <include refid="BO_Column_List"/>
         from im_material_inventory mi
         left join si_material m on mi.material_id = m.material_id
+        left join dd_measure_unit me on me.measure_unit_id = m.measure_unit_id
         left join si_supplier s on m.supplier_id = s.supplier_id
         left join im_safe_stock ss on mi.material_inventory_id = ss.material_inventory_id
         left join si_storage_label sl on mi.material_id = sl.material_id
