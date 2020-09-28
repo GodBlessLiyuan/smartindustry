@@ -30,11 +30,17 @@ public class MaterialInventoryVO implements Serializable {
     private String supplier;
     private String warehouse;
     private Integer wnum;
+    private String wnummunit;
     private BigDecimal llimit;
+    private String llimitmunit;
     private Byte status;
     private Integer lnum;
+    private String lnummunit;
     private Integer rnum;
+    private String rnummunit;
     private Integer anum;
+    private String anummunit;
+    private String munit;
 
     public static List<MaterialInventoryVO> convert(List<MaterialInventoryBO> bos) {
         List<MaterialInventoryVO> vos = new ArrayList<>(bos.size());
@@ -64,12 +70,29 @@ public class MaterialInventoryVO implements Serializable {
             sb.deleteCharAt(sb.length() - 1);
             vo.setWarehouse(sb.toString());
         }
+        String munit = bo.getMeasureUnitName() != null? (" "+bo.getMeasureUnitName()):"";
+        vo.setMunit(bo.getMeasureUnitName());
         vo.setWnum(bo.getWayNum());
+        if (bo.getWayNum() != null ) {
+            vo.setWnummunit(bo.getWayNum()+munit);
+        }
         vo.setLlimit(bo.getLowerLimit());
+        if (bo.getLowerLimit() != null) {
+            vo.setLlimitmunit(bo.getLowerLimit()+munit);
+        }
         vo.setStatus(bo.getStatus());
         vo.setLnum(bo.getLockNum());
+        if (bo.getLockNum() != null) {
+            vo.setLnummunit(bo.getLockNum()+munit);
+        }
         vo.setRnum(bo.getRelateNum());
+        if (bo.getRelateNum() != null) {
+            vo.setRnummunit(bo.getRelateNum()+munit);
+        }
         vo.setAnum(bo.getAvailableNum());
+        if (bo.getAvailableNum() != null) {
+            vo.setAnummunit(bo.getAvailableNum()+munit);
+        }
 
         return vo;
     }

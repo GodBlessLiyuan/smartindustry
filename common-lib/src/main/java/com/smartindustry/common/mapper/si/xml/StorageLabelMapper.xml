@@ -199,6 +199,7 @@
         <result column="material_name" jdbcType="CHAR" property="materialName"/>
         <result column="material_type" jdbcType="TINYINT" property="materialType"/>
         <result column="material_model" jdbcType="CHAR" property="materialModel"/>
+        <result column="measure_unit_name" jdbcType="CHAR" property="measureUnitName"/>
         <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
         <result column="material_lock_name" jdbcType="CHAR" property="materialLockName"/>
         <result column="supplier_name" jdbcType="CHAR" property="supplierName"/>
@@ -208,7 +209,7 @@
         sl.storage_label_id, sl.print_label_id, sl.material_id, sl.location_id, sl.package_id, sl.source_no,
     sl.source_type, sl.`type`, sl.storage_num, sl.storage_time, sl.material_lock_id, sl.`status`,
     l.location_no,
-    m.material_no, m.material_name, m.material_type, m.material_model,
+    m.material_no, m.material_name, m.material_type, m.material_model,me.measure_unit_name,
     w.warehouse_name,
     ml.material_lock_name,
     s.supplier_name,
@@ -219,6 +220,7 @@
         <include refid="IMBO_Column_List"/>
         from si_storage_label sl
         left join si_material m on sl.material_id = m.material_id
+        left join dd_measure_unit me on me.measure_unit_id = m.measure_unit_id
         left join si_location l on sl.location_id = l.location_id
         left join si_warehouse w on l.warehouse_id = w.warehouse_id
         left join dd_material_lock ml on sl.material_lock_id = ml.material_lock_id

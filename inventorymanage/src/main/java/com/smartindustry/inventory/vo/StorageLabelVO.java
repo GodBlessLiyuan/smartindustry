@@ -34,6 +34,7 @@ public class StorageLabelVO implements Serializable {
     private String wname;
     private String lno;
     private Integer mnum;
+    private String mnummunit;
 
     private String cname;
 
@@ -63,6 +64,9 @@ public class StorageLabelVO implements Serializable {
         vo.setWname(bo.getWarehouseName());
         vo.setLno(bo.getLocationNo());
         vo.setMnum(bo.getStorageNum());
+        if (bo.getStorageNum() != null) {
+            vo.setMnummunit(bo.getStorageNum()+" "+(bo.getMeasureUnitName() != null?bo.getMeasureUnitName():""));
+        }
         vo.setCname(null);
         return vo;
     }

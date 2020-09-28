@@ -364,7 +364,7 @@
     </resultMap>
     <sql id="BO_Column_List">
         m.material_id, m.material_no, m.material_type, m.material_type_id, m.humidity_level_id, m.material_level_id,
-    m.measure_unit_id, m.material_version_id, m.produce_loss_level_id, m.life_cycle_state_id,
+    m.measure_unit_id,  m.material_version_id, m.produce_loss_level_id, m.life_cycle_state_id,
     m.material_name, m.delivery_days, m.moq, m.material_model, m.material_draw, m.supplier_id, m.material_desc,
     m.test_type, m.user_id, m.create_time, m.update_time, m.dr,
     mt.material_type_name, hl.humidity_level_name, ml.material_level_name, mu.measure_unit_name, mv.material_version_name,
