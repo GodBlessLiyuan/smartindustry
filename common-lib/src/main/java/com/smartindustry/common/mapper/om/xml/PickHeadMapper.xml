@@ -297,7 +297,7 @@
         (case
         when pb.demand_num-pb.pick_num > 0 then 0 else 1
         end) as flag,
-        me.measure_unit_name
+        me.measure_unit_name as measureUnitName
         from om_pick_head ph
         left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
         left join si_material ma on pb.material_id = ma.material_id
