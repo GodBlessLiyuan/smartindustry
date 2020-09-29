@@ -242,7 +242,7 @@
         <if test="wid != null and wid != 0">and w.warehouse_id = #{wid,jdbcType=TINYINT}</if>
         <if test="status != null and status != 0">and s.`status` = #{status,jdbcType=TINYINT}</if>
         group by s.storage_id
-        order by s.create_time
+        order by s.create_time desc
     </select>
 
     <select id="queryByOtherSids" resultMap="OtherBOResultMap">
