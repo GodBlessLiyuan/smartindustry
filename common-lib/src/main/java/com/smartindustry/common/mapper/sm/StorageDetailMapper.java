@@ -57,4 +57,5 @@ public interface StorageDetailMapper extends BaseMapper<StorageDetailPO, Long> {
      * @return
      */
     List<Long> queryPlIdBySid(@Param("sid") Long sid);
+
 }

@@ -102,11 +102,7 @@ public class StoragePageVO implements Serializable {
             vo.setSono(bo.getSourceNo());
         }
         if (null != bo.getLocations() && bo.getLocations().size() > 0) {
-            StringBuilder sb = new StringBuilder();
-            for (LocationBO lbo : bo.getLocations()) {
-                sb.append(lbo.getWarehouseName()).append(",");
-            }
-            vo.setWname(sb.deleteCharAt(sb.length() - 1).toString());
+           vo.setWname(bo.getLocations().get(0).getWarehouseName());
         }
         vo.setStatus(bo.getStatus());
         vo.setStime(bo.getStorageTime());
