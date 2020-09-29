@@ -57,9 +57,6 @@ public class WorkBenchServiceImpl implements IWorkBenchService {
      */
     @Override
     public ResultVO work(OperateDTO dto) {
-        if (dto.getBmodule() == null) {
-            return new ResultVO(1001);
-        }
         dto.setBtype((byte) 1);
         List<WorkBenchBO> bos = query(dto);
         //查询各个模块运行数量
