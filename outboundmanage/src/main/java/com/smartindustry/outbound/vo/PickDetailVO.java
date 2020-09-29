@@ -29,7 +29,7 @@ public class PickDetailVO implements Serializable {
     /**
      * 来源单号
      */
-    private String ono;
+    private String sno;
     /**
      * 对应项目
      */
@@ -51,7 +51,7 @@ public class PickDetailVO implements Serializable {
     public void setPickHeadVO(PickHeadPO po) {
         this.phid = po.getPickHeadId();
         this.pno = po.getPickNo();
-        this.ono = po.getSourceNo();
+        this.sno = po.getSourceNo();
         this.cproject = po.getCorrespondProject();
         if (!StringUtils.isEmpty(po.getPlanTime())) {
             this.ptime = DateUtil.date2Str(po.getPlanTime(), DateUtil.Y_M_D);
