@@ -78,8 +78,6 @@ public class StoragePageVO implements Serializable {
     public static List<StoragePageVO> convert(List<StorageBO> bos) {
         List<StoragePageVO> vos = new ArrayList<>(bos.size());
         for (StorageBO bo : bos) {
-            System.out.println(bo.getLocations());
-
             vos.add(convert(bo));
         }
         return vos;
