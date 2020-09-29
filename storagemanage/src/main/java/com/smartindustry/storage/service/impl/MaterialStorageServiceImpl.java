@@ -74,9 +74,6 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
     @Autowired
     TransferHeadMapper transferHeadMapper;
 
-    @Resource
-    private IMaterialStorageService materialStorageService;
-
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData) {
         Page<Long> page = PageQueryUtil.startPage(reqData);
@@ -439,7 +436,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
 
         LocationPO locationPO = locationMapper.queryByLno(dto.getLno());
         if (locationPO == null) {
-            return new ResultVO(1002);
+            return new ResultVO(1029);
         }
         List<LocationPO> locations = locationMapper.queryByLnoAndWhid(dto.getLno(), dto.getWhid());
         if (locations == null || locations.isEmpty()) {

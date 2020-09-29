@@ -1,6 +1,7 @@
 package com.smartindustry.workbench.vo;
 
 import com.smartindustry.common.bo.wm.WorkBenchBO;
+import com.smartindustry.common.config.FilePathConfig;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -50,22 +51,27 @@ public class WorkBenchVO implements Serializable {
      */
     private Integer num;
 
-    public static List<WorkBenchVO> convert(List<WorkBenchBO> bos) {
+    public static List<WorkBenchVO> convert(List<WorkBenchBO> bos, String basePath) {
+
         List<WorkBenchVO> vos = new ArrayList<>(bos.size());
         for (WorkBenchBO bo: bos) {
-            vos.add(convert(bo));
+            vos.add(convert(bo, basePath));
         }
         return vos;
     }
 
-    public static WorkBenchVO convert(WorkBenchBO bo) {
+    public static WorkBenchVO convert(WorkBenchBO bo, String basePath) {
         WorkBenchVO vo = new WorkBenchVO();
         vo.setAid(bo.getAuthorityId());
         vo.setAname(bo.getAuthorityName());
         vo.setBmodule(bo.getBenchModule());
         vo.setBname(bo.getBenchName());
         vo.setBtype(bo.getBenchType());
-        vo.setIpath(bo.getIconPath());
+
+        basePath = basePath== null? "":basePath;
+        if (bo.getIconPath() != null) {
+            vo.setIpath(basePath+bo.getIconPath());
+        }
         vo.setUpath(bo.getUrlPath());
         vo.setWbid(bo.getWorkBenchId());
         return vo;
