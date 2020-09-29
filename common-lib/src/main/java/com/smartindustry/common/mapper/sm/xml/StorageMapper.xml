@@ -227,7 +227,7 @@
         </collection>
     </resultMap>
     <select id="pageQueryOther" parameterType="java.util.Map" resultType="java.lang.Long">
-        select distinct s.storage_id as storageId
+        select s.storage_id as storageId
         from sm_storage s
         left join em_transfer_head th on s.source_no = th.transfer_no
         left join si_warehouse w on th.storage_wid = w.warehouse_id
@@ -241,7 +241,8 @@
         <if test="ttype != null and ttype != 0">and th.transfer_type = #{ttype,jdbcType=TINYINT}</if>
         <if test="wid != null and wid != 0">and w.warehouse_id = #{wid,jdbcType=TINYINT}</if>
         <if test="status != null and status != 0">and s.`status` = #{status,jdbcType=TINYINT}</if>
-
+        group by s.storage_id
+        order by s.create_time
     </select>
 
     <select id="queryByOtherSids" resultMap="OtherBOResultMap">
