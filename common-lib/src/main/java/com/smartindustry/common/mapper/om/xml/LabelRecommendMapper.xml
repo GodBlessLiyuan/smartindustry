@@ -68,7 +68,7 @@
         where label_recommend_id = #{labelRecommendId,jdbcType=BIGINT}
     </update>
 
-    <resultMap id="BOResultMap" type="com.smartindustry.common.bo.om.LabelRecommendBO">
+    <resultMap id="BOResultMap" type="com.smartindustry.common.bo.om.LabelRecommendBO" extends="BaseResultMap">
         <result column="location_no" jdbcType="CHAR" property="locationNo"/>
         <result column="package_id" jdbcType="CHAR" property="packageId"/>
     </resultMap>
