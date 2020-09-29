@@ -77,17 +77,18 @@
         storage_detail_id, storage_group_id, sd.print_label_id, num
     </sql>
     <resultMap id="BoResultMap" type="com.smartindustry.common.bo.sm.StorageDetailBO" extends="BaseResultMap">
-        <result column="num" jdbcType="INTEGER" property="num"/>
+        <result column="num" jdbcType="BIGINT" property="num"/>
     </resultMap>
 
     <sql id="Bo_detail_Column_List">
-        sd.storage_detail_id, sd.storage_group_id, sd.print_label_id, pl.num,pl.package_id, m.material_no, m.material_id, m.material_name
+        sd.storage_detail_id, sd.storage_group_id, sd.print_label_id, pl.num,pl.package_id, m.material_no, m.material_id, m.material_name, me.measure_unit_name
     </sql>
     <resultMap id="BoDetailResultMap" type="com.smartindustry.common.bo.sm.StorageDetailBO" extends="BoResultMap">
-        <result column="package_id" jdbcType="INTEGER" property="packageId"/>
-        <result column="material_no" jdbcType="INTEGER" property="materialNo"/>
-        <result column="material_id" jdbcType="INTEGER" property="materialId"/>
-        <result column="material_name" jdbcType="INTEGER" property="materialName"/>
+        <result column="package_id" jdbcType="BIGINT" property="packageId"/>
+        <result column="material_no" jdbcType="CHAR" property="materialNo"/>
+        <result column="material_id" jdbcType="BIGINT" property="materialId"/>
+        <result column="material_name" jdbcType="CHAR" property="materialName"/>
+        <result column="measure_unit_name" jdbcType="CHAR" property="measureUnitName"/>
     </resultMap>
     <select id="queryByGroupId" parameterType="java.lang.Long" resultMap="BoDetailResultMap">
         select
@@ -95,6 +96,7 @@
         from sm_storage_detail sd
         left join si_print_label pl on sd.print_label_id = pl.print_label_id
         left join si_material m on m.material_id = pl.material_id
+        left join dd_measure_unit me on me.measure_unit_id = m.measure_unit_id
         where storage_group_id = #{storageGroupId,jdbcType=BIGINT}
     </select>
     <select id="queryByPlId" parameterType="java.lang.Long" resultMap="BaseResultMap">
