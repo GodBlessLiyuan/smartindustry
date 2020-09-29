@@ -341,9 +341,10 @@
         LEFT JOIN om_pick_head h ON h.pick_head_id = o.pick_head_id
         LEFT JOIN si_material m ON m.material_id = pl.material_id
         left join dd_measure_unit me on me.measure_unit_id = m.measure_unit_id
+        left join sm_storage_detail sd on sd.print_label_id = pl.print_label_id
         where h.source_no = #{sourceNo, jdbcType = CHAR}
         <if test="flag != null and flag">
-            and pl.location_id is null
+            and pl.location_id is null and sd.storage_detail_id is null
         </if>
     </select>
 </mapper>
