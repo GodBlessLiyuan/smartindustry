@@ -83,8 +83,18 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         if (null != sids && sids.size() > 0) {
             bos = storageMapper.queryBySids(sids);
         }
+        List<StoragePageVO> vos = StoragePageVO.convert(bos);
+        for (StoragePageVO vo: vos) {
+            if (StringUtils.isEmpty(vo.getWname())) {
+                ReceiptBodyBO bo = receiptBodyMapper.queryByBodyId(vo.getRbid());
+                if (bo != null) {
+                    vo.setWname(bo.getWarehouseName());
+                }
+            }
 
-        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), StoragePageVO.convert(bos)));
+        }
+
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), vos));
     }
 
     @Override

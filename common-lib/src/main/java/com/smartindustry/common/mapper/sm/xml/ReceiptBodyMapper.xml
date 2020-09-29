@@ -213,7 +213,7 @@
     <sql id="ReceiptBodyBO_Column_List">
         rb.receipt_body_id, rb.receipt_head_id, rb.material_id, rb.source_no, rb.source_type, rb.receipt_no,
     rb.order_total, rb.accept_num, rb.accept_date, rb.good_num, rb.bad_num, rb.stock_num, rb.`status`, rb.create_time, rb.dr,
-    m.material_id, m.material_no, m.material_type, m.material_name, m.material_model, m.material_desc, m.test_type, ma.warehouse_id, ma.location_id , l.location_no, me.measure_unit_name
+    m.material_id, m.material_no, m.material_type, m.material_name, m.material_model, m.material_desc, m.test_type, ma.warehouse_id, ma.location_id , l.location_no, me.measure_unit_name, w.warehouse_name
     </sql>
     <sql id="ReceiptBO_Column_List">
         rb.receipt_body_id, rb.receipt_head_id, rb.material_id, rb.source_no, rb.source_type, rb.receipt_no,
@@ -233,6 +233,7 @@
         <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId"/>
         <result column="location_id" jdbcType="BIGINT" property="locationId"/>
         <result column="location_no" jdbcType="CHAR" property="locationNo"/>
+        <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
     </resultMap>
     <resultMap id="ReceiptBOResultMap" type="com.smartindustry.common.bo.sm.ReceiptBO" extends="ReceiptBodyBOResultMap">
         <result column="order_date" jdbcType="DATE" property="orderDate"/>
@@ -336,6 +337,7 @@
         left join si_material m on rb.material_id = m.material_id
         left join si_material_attribute ma on ma.material_id = m.material_id
         left join dd_measure_unit me on me.measure_unit_id = m.measure_unit_id
+        left join si_warehouse w on w.warehouse_id = ma.warehouse_id
         left join si_location l on l.location_id = ma.location_id
         where rb.receipt_body_id = #{rbId,jdbcType=BIGINT} and rb.dr = 1
     </select>
