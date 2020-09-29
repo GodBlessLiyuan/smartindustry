@@ -119,7 +119,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
             return new ResultVO(1001);
         }
         //根据sono 的所有标签列表
-        List<PrintLabelBO> bos = printLabelMapper.queryByTSono(dto.getSono());
+        List<PrintLabelBO> bos = printLabelMapper.queryByTSono(dto.getSono(), true);
         return ResultVO.ok().setData(StorageSimpleDetailVO.convertLabel(bos));
     }
 

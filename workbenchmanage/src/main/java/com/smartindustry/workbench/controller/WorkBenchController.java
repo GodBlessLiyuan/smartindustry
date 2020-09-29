@@ -4,6 +4,7 @@ import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.workbench.dto.OperateDTO;
 import com.smartindustry.workbench.service.IWorkBenchService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +26,7 @@ public class WorkBenchController {
      * @param dto
      * @return
      */
-    @RequestMapping("work")
+    @PostMapping("work")
     public ResultVO work(@RequestBody OperateDTO dto) {
         return workBenchService.work(dto);
 
@@ -36,7 +37,7 @@ public class WorkBenchController {
      * @param dto
      * @return
      */
-    @RequestMapping("shortcut")
+    @PostMapping("shortcut")
     public ResultVO shortcut(@RequestBody OperateDTO dto)  {
         return workBenchService.shortcut(dto);
     }

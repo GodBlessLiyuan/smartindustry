@@ -91,5 +91,5 @@ public interface PrintLabelMapper extends BaseMapper<PrintLabelPO, Long> {
      * @return
      */
 
-    List<PrintLabelBO> queryByTSono(@Param("sourceNo") String sourceNo);
+    List<PrintLabelBO> queryByTSono(@Param("sourceNo") String sourceNo, @Param("flag") Boolean flag);
 }

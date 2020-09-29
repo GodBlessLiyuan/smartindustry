@@ -367,7 +367,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         //当入库仓库没有库位时需要先插入入库详情组
         if (!existLocation) {
             //查询groupId
-            List<PrintLabelBO> labelBOS = printLabelMapper.queryByTSono(storageBO.getSourceNo());
+            List<PrintLabelBO> labelBOS = printLabelMapper.queryByTSono(storageBO.getSourceNo(), false);
             if (labelBOS != null && !labelBOS.isEmpty()) {
 
                 Long sgId = storageGroupMapper.queryGroup(dto.getSid());
@@ -391,9 +391,26 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         List<StorageGroupBO> storageGroupBOs = storageGroupMapper.queryBySid(storageBO.getStorageId());
 
 
-        ReceiptBodyBO receiptBodyBO = new ReceiptBodyBO();
+        Long wid = null;
+        String lno = null;
 
-        return ResultVO.ok().setData(StorageDetailVO.convert(storageBO, receiptBodyBO, storageGroupBOs));
+        if (storageGroupBOs != null && !storageGroupBOs.isEmpty()) {
+            StorageGroupBO bo  = storageGroupBOs.get(storageGroupBOs.size()-1);
+            wid = bo.getWarehouseId();
+            lno = bo.getLocationNo();
+        }
+
+        /**
+         * 当物料没有设置默认仓库并且已入库物料设定了仓库库位时，返回值设定仓库库位
+         */
+        ReceiptBodyBO receiptBodyBO = new ReceiptBodyBO();
+        receiptBodyBO.setWarehouseId(storageBO.getStorageWid());
+        StorageDetailVO detailVO = StorageDetailVO.convert(storageBO, receiptBodyBO, storageGroupBOs);
+
+        if (storageBO.getStorageWid()  != null &&detailVO.getWid()  == null) {
+            detailVO.setWid(storageBO.getStorageWid());
+        }
+        return ResultVO.ok().setData(detailVO);
 
     }
 

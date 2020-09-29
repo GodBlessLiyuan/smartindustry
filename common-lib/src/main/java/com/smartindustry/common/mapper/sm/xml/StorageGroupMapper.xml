@@ -111,7 +111,7 @@
                  left join sm_storage_detail sd on sg.storage_group_id = sd.storage_group_id
                  left join si_print_label pl on sd.print_label_id = pl.print_label_id
                  left join si_material m on pl.material_id = m.material_id
-                 left join si_location l on sg.location_id = l.location_id
+                 left join si_location l on pl.location_id = l.location_id
                  left join dd_measure_unit me on me.measure_unit_id = m.measure_unit_id
         where sg.storage_id = #{storageId,jdbcType=BIGINT}
         order by sg.storage_group_id desc, sd.storage_detail_id desc
