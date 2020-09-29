@@ -30,7 +30,14 @@ public interface StorageMapper extends BaseMapper<StoragePO, Long> {
      * @param reqData
      * @return
      */
-    List<StorageBO> pageQueryOther(Map<String, Object> reqData);
+    List<Long> pageQueryOther(Map<String, Object> reqData);
+
+    /**
+     * 根据sids
+     * @param sids
+     * @return
+     */
+    List<StorageBO> queryByOtherSids(List<Long> sids);
 
     /**
      * 根据入库id查询入库相关信息
