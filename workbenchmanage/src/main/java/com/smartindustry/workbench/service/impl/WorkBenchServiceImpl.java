@@ -126,7 +126,7 @@ public class WorkBenchServiceImpl implements IWorkBenchService {
         //获取 添加用户权限的用户信息
         LoginUserBO userBO = tokenService.getLoginUser(ServletUtil.getRequest());
         dto.setBtype((byte) 2);
-        List<WorkBenchVO> vos = WorkBenchVO.convert(query(dto),"");
+        List<WorkBenchVO> vos = WorkBenchVO.convert(query(dto),basePath);
         //按照工作台权限模块进行划分
         Map<Byte, List<WorkBenchVO>> map = vos.stream().collect(Collectors.toMap(WorkBenchVO::getBmodule, p -> {
             List<WorkBenchVO> list = new ArrayList<>();

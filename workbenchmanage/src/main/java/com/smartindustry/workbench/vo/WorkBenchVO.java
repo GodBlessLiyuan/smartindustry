@@ -51,6 +51,11 @@ public class WorkBenchVO implements Serializable {
      */
     private Integer num;
 
+    /**
+     * 背景颜色
+     */
+    private String bcolor;
+
     public static List<WorkBenchVO> convert(List<WorkBenchBO> bos, String basePath) {
 
         List<WorkBenchVO> vos = new ArrayList<>(bos.size());
@@ -74,6 +79,7 @@ public class WorkBenchVO implements Serializable {
         }
         vo.setUpath(bo.getUrlPath());
         vo.setWbid(bo.getWorkBenchId());
+        vo.setBcolor(bo.getBackgroundColor());
         return vo;
     }
 

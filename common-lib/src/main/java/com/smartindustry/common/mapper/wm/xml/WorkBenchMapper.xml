@@ -9,9 +9,11 @@
     <result column="bench_module" jdbcType="TINYINT" property="benchModule" />
     <result column="icon_path" jdbcType="CHAR" property="iconPath" />
     <result column="url_path" jdbcType="CHAR" property="urlPath" />
+    <result column="background_color" jdbcType="CHAR" property="backgroundColor" />
   </resultMap>
   <sql id="Base_Column_List">
-    work_bench_id, authority_id, bench_name, bench_type, bench_module, icon_path, url_path
+    work_bench_id, authority_id, bench_name, bench_type, bench_module, icon_path, url_path, 
+    background_color
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -21,34 +23,31 @@
   </select>
 
   <resultMap id="BOResultMap" type="com.smartindustry.common.bo.wm.WorkBenchBO" extends="BaseResultMap">
-      <result column="authority_name" jdbcType="CHAR" property="authorityName"/>
+    <result column="authority_name" jdbcType="CHAR" property="authorityName"/>
   </resultMap>
   <sql id="BO_Column_List">
-        wb.work_bench_id, wb.authority_id, wb.bench_name, wb.bench_type, wb.bench_module, wb.icon_path, wb.url_path, au.authority_name
+        wb.work_bench_id, wb.authority_id, wb.bench_name, wb.bench_type, wb.bench_module, wb.icon_path, wb.url_path,wb.background_color, au.authority_name
   </sql>
-
-    <select id="queryByModuleId" resultMap="BOResultMap">
-        select
-        <include refid="BO_Column_List"/>
-        from wm_work_bench wb left join am_authority au on au.authority_id = wb.authority_id
-        where wb.bench_type = #{benchType, jdbcType=TINYINT}
-        <if test="benchModule != null">
-          and wb.bench_module = #{benchModule, jdbcType=TINYINT}
-        </if>
-
-    </select>
-
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+  <select id="queryByModuleId" resultMap="BOResultMap">
+    select
+    <include refid="BO_Column_List"/>
+    from wm_work_bench wb left join am_authority au on au.authority_id = wb.authority_id
+    where wb.bench_type = #{benchType, jdbcType=TINYINT}
+    <if test="benchModule != null">
+      and wb.bench_module = #{benchModule, jdbcType=TINYINT}
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from wm_work_bench
     where work_bench_id = #{workBenchId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.smartindustry.common.pojo.wm.WorkBenchPO">
     insert into wm_work_bench (work_bench_id, authority_id, bench_name, 
       bench_type, bench_module, icon_path, 
-      url_path)
+      url_path, background_color)
     values (#{workBenchId,jdbcType=BIGINT}, #{authorityId,jdbcType=BIGINT}, #{benchName,jdbcType=CHAR}, 
       #{benchType,jdbcType=TINYINT}, #{benchModule,jdbcType=TINYINT}, #{iconPath,jdbcType=CHAR}, 
-      #{urlPath,jdbcType=CHAR})
+      #{urlPath,jdbcType=CHAR}, #{backgroundColor,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.wm.WorkBenchPO">
     insert into wm_work_bench
@@ -74,6 +73,9 @@
       <if test="urlPath != null">
         url_path,
       </if>
+      <if test="backgroundColor != null">
+        background_color,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="workBenchId != null">
@@ -96,6 +98,9 @@
       </if>
       <if test="urlPath != null">
         #{urlPath,jdbcType=CHAR},
+      </if>
+      <if test="backgroundColor != null">
+        #{backgroundColor,jdbcType=CHAR},
       </if>
     </trim>
   </insert>
@@ -120,6 +125,9 @@
       <if test="urlPath != null">
         url_path = #{urlPath,jdbcType=CHAR},
       </if>
+      <if test="backgroundColor != null">
+        background_color = #{backgroundColor,jdbcType=CHAR},
+      </if>
     </set>
     where work_bench_id = #{workBenchId,jdbcType=BIGINT}
   </update>
@@ -130,7 +138,8 @@
       bench_type = #{benchType,jdbcType=TINYINT},
       bench_module = #{benchModule,jdbcType=TINYINT},
       icon_path = #{iconPath,jdbcType=CHAR},
-      url_path = #{urlPath,jdbcType=CHAR}
+      url_path = #{urlPath,jdbcType=CHAR},
+      background_color = #{backgroundColor,jdbcType=CHAR}
     where work_bench_id = #{workBenchId,jdbcType=BIGINT}
   </update>
 </mapper>
