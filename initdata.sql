@@ -213,27 +213,43 @@ INSERT INTO `si_config` VALUES (3, 'outbound_quality', 'Y');
 
 
 //工作台初始数据
-INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, icon_path, url_path) VALUES (20, "IQC待质检", 1, 1, NULL, "/warehousing/quality/IQCCheck");
-INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, icon_path, url_path) VALUES (22, "QE待质检", 1, 1, NULL, "/warehousing/quality/QECheck");
-INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, icon_path, url_path) VALUES (21, "QE待确认", 1, 1, NULL, "/warehousing/quality/IQCAbnormal");
-INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, icon_path, url_path) VALUES (12, "待入库", 1, 1, NULL, "/warehousing/materialWarehousing/");
-INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, icon_path, url_path) VALUES (110, "待拣货", 1, 1, NULL, "/outbound/delivery/");
-INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, icon_path, url_path) VALUES (120, "OQC待检验", 1, 1, NULL, "/outbound/quality/OQCCheck");
-INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, icon_path, url_path) VALUES (118, "工单待审核", 1, 1, NULL, "/outbound/pickinglist/lack");
-INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, icon_path, url_path) VALUES (112, "待出库", 1, 1, NULL, "/outbound/delivery/");
+INSERT INTO wm_work_bench( authority_id, bench_name, bench_type, bench_module, path, url_path) VALUES ( 20, 'IQC待质检', 1, 2, '/industryfile/icon/iqc_check.png', '/warehousing/quality/IQCCheck');
+INSERT INTO wm_work_bench( authority_id, bench_name, bench_type, bench_module, path, url_path) VALUES ( 22, 'QE待质检', 1, 2, '/industryfile/icon/qe_check.png', '/warehousing/quality/QECheck');
+INSERT INTO wm_work_bench( authority_id, bench_name, bench_type, bench_module, path, url_path) VALUES ( 21, 'QE待确认', 1, 1, '/industryfile/icon/qe_confirm.png', '/warehousing/quality/IQCAbnormal');
+INSERT INTO wm_work_bench( authority_id, bench_name, bench_type, bench_module, path, url_path) VALUES ( 12, '待入库', 1, 1, '/industryfile/icon/storage.png', '/warehousing/materialWarehousing/');
+INSERT INTO wm_work_bench( authority_id, bench_name, bench_type, bench_module, path, url_path) VALUES ( 110, '待拣货', 1, 1, '/industryfile/icon/pickup.png', '/outbound/delivery/');
+INSERT INTO wm_work_bench( authority_id, bench_name, bench_type, bench_module, path, url_path) VALUES ( 120, 'OQC待检验', 1, 1, '/industryfile/icon/oqc_check.png', '/outbound/quality/OQCCheck');
+INSERT INTO wm_work_bench( authority_id, bench_name, bench_type, bench_module, path, url_path) VALUES ( 118, '工单待审核', 1, 1, '/industryfile/icon/order_audit.png', '/outbound/pickinglist/lack');
+INSERT INTO wm_work_bench( authority_id, bench_name, bench_type, bench_module, path, url_path) VALUES ( 112, '待出库', 1, 1, '/industryfile/icon/outbound.png', '/outbound/delivery/');
 
-INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, icon_path, url_path) VALUES (10, "收料管理", 2, 1, NULL, "/warehousing/goodsReceipt/");
-INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, icon_path, url_path) VALUES (11, "质量管理", 2, 1, NULL, "/warehousing/quality/");
-INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, icon_path, url_path) VALUES (12, "物料入库", 2, 1, NULL, "/warehousing/materialWarehousing/");
-INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, icon_path, url_path) VALUES (110, "拣货单管理", 2, 1, NULL, "/outbound/delivery/");
-INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, icon_path, url_path) VALUES (111, "质量管理", 2, 1, NULL, "/outbound/quality/");
-INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, icon_path, url_path) VALUES (112, "物料出库", 2, 1, NULL, "/outbound/pickinglist/");
-INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, icon_path, url_path) VALUES (190, "库存信息", 2, 1, NULL, "/library/stock/");
-INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, icon_path, url_path) VALUES (220, "物料管理", 2, 1, NULL, "/basedata/materiel/");
-INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, icon_path, url_path) VALUES (221, "供应商管理", 2, 1, NULL, "/basedata/supplier/");
-INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, icon_path, url_path) VALUES (222, "客户管理", 2, 1, NULL, "/basedata/client/");
-INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, icon_path, url_path) VALUES (223, "仓库管理", 2, 1, NULL, "/basedata/warehouse/");
-INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, icon_path, url_path) VALUES (224, "系统管理", 2, 1, NULL, "/basedata/system/");
+
+INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, path, url_path) VALUES (10, "收料管理", 2, 1, NULL, "/warehousing/goodsReceipt/");
+INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, path, url_path) VALUES (11, "质量管理", 2, 1, NULL, "/warehousing/quality/");
+INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, path, url_path) VALUES (12, "物料入库", 2, 1, NULL, "/warehousing/materialWarehousing/");
+INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, path, url_path) VALUES (110, "拣货单管理", 2, 1, NULL, "/outbound/delivery/");
+INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, path, url_path) VALUES (111, "质量管理", 2, 1, NULL, "/outbound/quality/");
+INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, path, url_path) VALUES (112, "物料出库", 2, 1, NULL, "/outbound/pickinglist/");
+INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, path, url_path) VALUES (190, "库存信息", 2, 1, '/industryfile/icon/inventory.png', "/library/stock/");
+INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, path, url_path) VALUES (220, "物料管理", 2, 1, NULL, "/basedata/materiel/");
+INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, path, url_path) VALUES (221, "供应商管理", 2, 1, NULL, "/basedata/supplier/");
+INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, path, url_path) VALUES (222, "客户管理", 2, 1, NULL, "/basedata/client/");
+INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, path, url_path) VALUES (223, "仓库管理", 2, 1, NULL, "/basedata/warehouse/");
+INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, path, url_path) VALUES (224, "系统管理", 2, 1, '/industryfile/icon/system_manage.png', "/basedata/system/");
+
+INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, path, url_path) VALUES (222, "物料清单", 2, 2, '/industryfile/icon/material_bill.png', "/basedata/client/");
+INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, path, url_path) VALUES (223, "计划排产", 2, 2, '/industryfile/icon/plan_product.png', "/basedata/warehouse/");
+INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, path, url_path) VALUES (224, "设备管理", 2, 2, '/industryfile/icon/device_manage.png', "/basedata/system/");
+
+INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, path, url_path) VALUES (222, "销售订单", 2, 3, '/industryfile/icon/sale_order.png', "/basedata/client/");
+INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, path, url_path) VALUES (223, "采购订单", 2, 3, '/industryfile/icon/purchase_order.png', "/basedata/warehouse/");
+INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, path, url_path) VALUES (224, "生产订单", 2, 3, '/industryfile/icon/product_order.png', "/basedata/system/");
+
+INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, path, url_path) VALUES (222, "物料管理", 2, 4, '/industryfile/icon/materal_relate.png', "/basedata/client/");
+INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, path, url_path) VALUES (223, "系统管理", 2, 4, '/industryfile/icon/system_manage.png', "/basedata/warehouse/");
+
+
+
+
 
 
 
