@@ -204,7 +204,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         }
         if (null != storageGroupPO.getLocationId()) {
             // 修改入库单及打印标签
-            StorageBO storageBO = storageMapper.queryReceiptBySid(dto.getSid());
+            StorageBO storageBO = storageMapper.queryBySid(dto.getSid());
             if (null == storageBO) {
                 return new ResultVO(1002);
             }
@@ -225,10 +225,14 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
             List<Long> plids = new ArrayList<>(1);
             plids.add(oldLabelPO.getPrintLabelId());
             printLabelMapper.updateLidByIds(null, plids);
-            receiptLabelMapper.updateSidByPlids(null, plids);
         }
         // 删除入库详细
         storageDetailMapper.deleteByPrimaryKey(dto.getSdid());
+
+        List<StorageDetailBO> details = storageDetailMapper.queryByGroupId(dto.getSgid());
+        if (details.isEmpty()) {
+            storageGroupMapper.deleteByPrimaryKey(dto.getSgid());
+        }
         return ResultVO.ok();
     }
 
