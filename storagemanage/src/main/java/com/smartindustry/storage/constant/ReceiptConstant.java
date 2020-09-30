@@ -90,6 +90,11 @@ public class ReceiptConstant {
     public static final Byte STORAGE_INSPECT_NO = 3;
 
     /**
+     * 入库标签 状态  调拨入库
+     */
+    public static final Byte STORAGE_LABEL_TRANSFER = 11;
+
+    /**
      * 操作记录
      */
     public static final String RECORD_TYPE_ADD = "新增";

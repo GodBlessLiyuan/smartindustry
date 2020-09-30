@@ -5,8 +5,10 @@ import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.si.StorageLabelPO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.security.core.parameters.P;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -55,6 +57,13 @@ public interface StorageLabelMapper extends BaseMapper<StorageLabelPO, Long> {
      */
     void updateStatus(@Param("slids") ArrayList<Long> slids, @Param("status") Byte status);
 
+    /**
+     * 根据标签ID 批量更新状态
+     *
+     *      * @param plids
+     *      * @param status
+     */
+    void updateStatusByPlids(@Param("plids") List<Long> plids, @Param("status") Byte status);
     /**
      * 根据slids 查询
      *
