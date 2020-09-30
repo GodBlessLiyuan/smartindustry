@@ -224,10 +224,10 @@ INSERT INTO wm_work_bench( authority_id, bench_name, bench_type, bench_module, i
 
 
 INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, icon_path, url_path) VALUES (10, "收料管理", 2, 1, NULL, "/warehousing/goodsReceipt/");
-INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, icon_path, url_path) VALUES (11, "质量管理", 2, 1, NULL, "/warehousing/quality/");
+INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, icon_path, url_path) VALUES (11, "入库质检", 2, 1, NULL, "/warehousing/quality/");
 INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, icon_path, url_path) VALUES (12, "物料入库", 2, 1, NULL, "/warehousing/materialWarehousing/");
 INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, icon_path, url_path) VALUES (110, "拣货单管理", 2, 1, NULL, "/outbound/delivery/");
-INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, icon_path, url_path) VALUES (111, "质量管理", 2, 1, NULL, "/outbound/quality/");
+INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, icon_path, url_path) VALUES (111, "出库质检", 2, 1, NULL, "/outbound/quality/");
 INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, icon_path, url_path) VALUES (112, "物料出库", 2, 1, NULL, "/outbound/pickinglist/");
 INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, icon_path, url_path) VALUES (190, "库存信息", 2, 1, '/industryfile/icon/inventory.png', "/library/stock/");
 INSERT INTO wm_work_bench ( authority_id, bench_name, bench_type, bench_module, icon_path, url_path) VALUES (220, "物料管理", 2, 1, NULL, "/basedata/materiel/");
