@@ -302,6 +302,15 @@
         </foreach>
     </update>
 
+    <update id="updateStatusByPlids">
+        update si_storage_label
+        set `status` = #{status,jdbcType=TINYINT}
+        where print_label_id in
+        <foreach collection="plids" item="plid" open="(" separator="," close=")">
+            #{plid,jdbcType=BIGINT}
+        </foreach>
+    </update>
+
     <select id="qureyBySlids" parameterType="java.util.List" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>

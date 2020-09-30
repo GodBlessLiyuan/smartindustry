@@ -296,7 +296,11 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
             num += bo.getNum();
             plIds.add(bo.getPrintLabelId());
         }
-        printLabelMapper.updateLidByIds(locationPO.getLocationId(), plIds);
+        if  (!plIds.isEmpty()) {
+            printLabelMapper.updateLidByIds(locationPO.getLocationId(), plIds);
+            //入库标签表更新状态
+            storageLabelMapper.updateStatusByPlids(plIds, ReceiptConstant.STORAGE_LABEL_TRANSFER);
+        }
 
         if (null == storageGroupPO.getLocationId()) {
             // 入库单
@@ -307,6 +311,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         // 入库分组
         storageGroupPO.setLocationId(locationPO.getLocationId());
         storageGroupMapper.updateByPrimaryKey(storageGroupPO);
+
         return ResultVO.ok();
     }
 
