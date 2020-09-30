@@ -119,7 +119,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
             return new ResultVO(1001);
         }
         //根据sono 的所有标签列表
-        List<PrintLabelBO> bos = printLabelMapper.queryByTSono(dto.getSono(), true);
+        List<PrintLabelBO> bos = printLabelMapper.queryByTSono(dto.getSono());
         //查询该入库单已经入库的标签ID
         List<Long> plids = storageDetailMapper.queryPlIdBySid(dto.getSid());
         List<PrintLabelBO> labels = bos.stream().filter(p -> !plids.contains(p.getPrintLabelId())).collect(Collectors.toList());

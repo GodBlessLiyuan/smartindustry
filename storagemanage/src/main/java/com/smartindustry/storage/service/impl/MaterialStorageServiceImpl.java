@@ -84,12 +84,29 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
             bos = storageMapper.queryBySids(sids);
         }
         List<StoragePageVO> vos = StoragePageVO.convert(bos);
+        //查询未入库物料的入库单的默认仓库情况
         for (StoragePageVO vo: vos) {
             if (StringUtils.isEmpty(vo.getWname())) {
                 ReceiptBodyBO bo = receiptBodyMapper.queryByBodyId(vo.getRbid());
                 if (bo != null) {
                     vo.setWname(bo.getWarehouseName());
+                    List<LocationPO> locations = locationMapper.queryLocation(bo.getWarehouseId());
+                    if (locations != null && !locations.isEmpty()) {
+                        vo.setFlag(true);
+                    } else {
+                        vo.setFlag(false);
+                    }
+                } else {
+                    //没有默认仓库时，设定为true
+                    vo.setFlag(true);
                 }
+
+            } else {
+                /**
+                 * 当列表中存在仓库名称，即表示已经入了有库位的仓库
+                 *  则必然是存在库位的
+                 */
+                vo.setFlag(true);
             }
 
         }
@@ -378,7 +395,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         //当入库仓库没有库位时需要先插入入库详情组
         if (!existLocation) {
             //查询groupId
-            List<PrintLabelBO> labelBOS = printLabelMapper.queryByTSono(storageBO.getSourceNo(), false);
+            List<PrintLabelBO> labelBOS = printLabelMapper.queryByTSono(storageBO.getSourceNo());
             if (labelBOS != null && !labelBOS.isEmpty()) {
 
                 Long sgId = storageGroupMapper.queryGroup(dto.getSid());

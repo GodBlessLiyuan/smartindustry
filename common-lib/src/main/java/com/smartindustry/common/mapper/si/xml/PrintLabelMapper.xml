@@ -342,9 +342,6 @@
         LEFT JOIN si_material m ON m.material_id = pl.material_id
         left join dd_measure_unit me on me.measure_unit_id = m.measure_unit_id
         left join om_outbound ob on ob.pick_head_id = h.pick_head_id
-        where h.source_no = #{sourceNo, jdbcType = CHAR} and ob.status=1
-        <if test="flag != null and flag">
-            and pl.location_id is null
-        </if>
+        where ob.source_no = #{sourceNo, jdbcType = CHAR} and ob.status=1
     </select>
 </mapper>
