@@ -88,10 +88,8 @@ public interface PrintLabelMapper extends BaseMapper<PrintLabelPO, Long> {
      * 根据sourceNo 查询其他入库单待入库物料列表
      *
      * @param sourceNo
-     * @param flag 判断是否需要需要全部标签 true 为需要
-     * @param  storageId
      * @return
      */
 
-    List<PrintLabelBO> queryByTSono(@Param("sourceNo") String sourceNo, @Param("flag") Boolean flag);
+    List<PrintLabelBO> queryByTSono(@Param("sourceNo") String sourceNo);
 }
