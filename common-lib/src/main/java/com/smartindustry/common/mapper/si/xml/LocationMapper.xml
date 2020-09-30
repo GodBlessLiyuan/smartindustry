@@ -233,10 +233,9 @@
     <!--    查看当前的入库调拨单的调入仓库是否有库位存在-->
     <select id="queryLocation" parameterType="java.lang.Long" resultType="com.smartindustry.common.pojo.si.LocationPO">
         select l.location_id as locationId, l.location_no as locationNo, l.location_name as locationName
-        from si_warehouse wh
-                 left join si_location l on wh.warehouse_id = l.warehouse_id
-        where wh.dr = 1
-          and wh.warehouse_id = #{wid,jdbcType=BIGINT}
+        from si_location l
+        where l.dr = 1
+          and l.warehouse_id = #{wid,jdbcType=BIGINT}
     </select>
 
     <select id="queryLocBySid" parameterType="java.lang.Long" resultMap="BaseResultMap">
