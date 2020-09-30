@@ -166,7 +166,9 @@
   <select id="queryBySid" parameterType="java.lang.Long" resultType="com.smartindustry.common.pojo.em.TransferHeadPO">
     select th.transfer_head_id as transferHeadId,th.transfer_no as transferNo,th.transfer_type as transferType
     from sm_storage s
-    left join em_transfer_head th on s.source_no = th.transfer_no
+    left join om_outbound ob on ob.outbound_no = s.source_no
+    left join om_pick_head ph on ph.pick_head_id = ob.pick_head_id
+    left join em_transfer_head th on th.transfer_no = ph.source_no
     where s.dr = 1 and s.storage_id = #{storageId,jdbcType=BIGINT}
   </select>
 

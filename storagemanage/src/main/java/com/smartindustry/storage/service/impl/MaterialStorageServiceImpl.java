@@ -298,8 +298,6 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         }
         if  (!plIds.isEmpty()) {
             printLabelMapper.updateLidByIds(locationPO.getLocationId(), plIds);
-            //入库标签表更新状态
-            storageLabelMapper.updateStatusByPlids(plIds, ReceiptConstant.STORAGE_LABEL_TRANSFER);
         }
 
         if (null == storageGroupPO.getLocationId()) {
@@ -356,7 +354,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
                 po.setType(storagePO.getType());
                 po.setStorageNum(detailBO.getNum());
                 po.setStorageTime(storagePO.getStorageTime());
-                po.setStatus((byte) 1);
+                po.setStatus(ReceiptConstant.STORAGE_LABEL_TRANSFER);
                 if (!ReceiptConstant.STORAGE_TYPE_GOOD.equals(storagePO.getType())) {
                     // 不良锁定
                     po.setMaterialLockId(1L);
