@@ -70,28 +70,28 @@ public class MaterialInventoryVO implements Serializable {
             sb.deleteCharAt(sb.length() - 1);
             vo.setWarehouse(sb.toString());
         }
-        String munit = bo.getMeasureUnitName() != null? (" "+bo.getMeasureUnitName()):"";
+        String munit = bo.getMeasureUnitName() != null ? (" " + bo.getMeasureUnitName()) : "";
         vo.setMunit(bo.getMeasureUnitName());
         vo.setWnum(bo.getWayNum());
-        if (bo.getWayNum() != null ) {
-            vo.setWnummunit(bo.getWayNum()+munit);
+        if (bo.getWayNum() != null) {
+            vo.setWnummunit(bo.getWayNum() + munit);
         }
         vo.setLlimit(bo.getLowerLimit());
         if (bo.getLowerLimit() != null) {
-            vo.setLlimitmunit(bo.getLowerLimit()+munit);
+            vo.setLlimitmunit(bo.getLowerLimit().stripTrailingZeros() + munit);
         }
         vo.setStatus(bo.getStatus());
         vo.setLnum(bo.getLockNum());
         if (bo.getLockNum() != null) {
-            vo.setLnummunit(bo.getLockNum()+munit);
+            vo.setLnummunit(bo.getLockNum() + munit);
         }
         vo.setRnum(bo.getRelateNum());
         if (bo.getRelateNum() != null) {
-            vo.setRnummunit(bo.getRelateNum()+munit);
+            vo.setRnummunit(bo.getRelateNum() + munit);
         }
         vo.setAnum(bo.getAvailableNum());
         if (bo.getAvailableNum() != null) {
-            vo.setAnummunit(bo.getAvailableNum()+munit);
+            vo.setAnummunit(bo.getAvailableNum() + munit);
         }
 
         return vo;
