@@ -55,6 +55,9 @@ public interface StorageLabelMapper extends BaseMapper<StorageLabelPO, Long> {
      */
     void updateStatus(@Param("slids") ArrayList<Long> slids, @Param("status") Byte status);
 
+
+    void updateStatusByPlid(@Param("plids") List<Long> plids, @Param("status") Byte status);
+
     /**
      * 根据slids 查询
      *

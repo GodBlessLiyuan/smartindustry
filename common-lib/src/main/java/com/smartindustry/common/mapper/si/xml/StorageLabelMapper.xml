@@ -267,7 +267,7 @@
         left join si_print_label pl on sl.print_label_id = pl.print_label_id
         left join si_location l on sl.location_id = l.location_id
         where sl.material_id = #{materialId,jdbcType=BIGINT} and sl.type = 1 and sl.material_lock_id is null
-        and sl.`status` = 1 and pl.dr = 1
+        and sl.`status` = 1  and pl.dr = 1
         <if test="orderNo != null and orderNo != ''">
             and sl.source_no = #{orderNo,jdbcType=CHAR}
         </if>
@@ -333,4 +333,13 @@
         from si_storage_label
         where print_label_id = #{plid,jdbcType=BIGINT}
     </select>
+
+    <update id="updateStatusByPlid">
+        update si_storage_label
+        set `status` = #{status,jdbcType=TINYINT}
+        where print_label_id in
+        <foreach collection="plids" item="plid" open="(" separator="," close=")">
+            #{plid,jdbcType=BIGINT}
+        </foreach>
+    </update>
 </mapper>
