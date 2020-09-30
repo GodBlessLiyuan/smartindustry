@@ -229,11 +229,11 @@
     <select id="pageQueryOther" parameterType="java.util.Map" resultType="java.lang.Long">
         select s.storage_id as storageId
         from sm_storage s
-        left join em_transfer_head th on s.source_no = th.transfer_no
+        left join om_outbound o on o.outbound_no = s.source_no
+        left join om_pick_head ph on ph.pick_head_id = o.pick_head_id
+        left join em_transfer_head th on ph.source_no = th.transfer_no
         left join si_warehouse w on th.storage_wid = w.warehouse_id
         left join si_location l on w.warehouse_id = l.warehouse_id
-        left join om_pick_head ph on s.source_no = ph.source_no
-        left join om_outbound o on ph.pick_head_id = o.pick_head_id
         where s.dr = 1 and s.source_type = 2
         <if test="no != null and no != ''">
            and (s.storage_no like concat('%',#{no,jdbcType=VARCHAR},'%') or s.source_no like concat('%',#{no,jdbcType=VARCHAR},'%') or o.outbound_no like concat('%',#{no,jdbcType=VARCHAR},'%'))
@@ -249,11 +249,11 @@
         select
         <include refid="StorageBO_Column_List_Other"/>
         from sm_storage s
-        left join em_transfer_head th on s.source_no = th.transfer_no
+        left join om_outbound o on o.outbound_no = s.source_no
+        left join om_pick_head ph on ph.pick_head_id = o.pick_head_id
+        left join em_transfer_head th on ph.source_no = th.transfer_no
         left join si_warehouse w on th.storage_wid = w.warehouse_id
         left join si_location l on w.warehouse_id = l.warehouse_id
-        left join om_pick_head ph on s.source_no = ph.source_no
-        left join om_outbound o on ph.pick_head_id = o.pick_head_id
         where s.storage_id in
         <foreach collection="list" item="sid" separator="," open="(" close=")">
             #{sid,jdbcType=BIGINT}
@@ -266,11 +266,11 @@
         select
         <include refid="StorageBO_Column_List_Other"/>
         from sm_storage s
-        left join em_transfer_head th on s.source_no = th.transfer_no
+        left join om_outbound o on o.outbound_no = s.source_no
+        left join om_pick_head ph on ph.pick_head_id = o.pick_head_id
+        left join em_transfer_head th on ph.source_no = th.transfer_no
         left join si_warehouse w on th.storage_wid = w.warehouse_id
-        left join si_location l on l.warehouse_id = w.warehouse_id
-        left join om_pick_head ph on s.source_no = ph.source_no
-        left join om_outbound o on ph.pick_head_id = o.pick_head_id
+        left join si_location l on w.warehouse_id = l.warehouse_id
         where s.dr = 1 and s.source_type = 2
          and storage_id = #{sid,jdbcType=BIGINT}
     </select>

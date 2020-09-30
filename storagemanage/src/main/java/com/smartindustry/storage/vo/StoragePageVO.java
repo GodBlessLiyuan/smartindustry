@@ -109,7 +109,12 @@ public class StoragePageVO implements Serializable {
         vo.setCono(bo.getCorrespondNo());
         vo.setTtype(bo.getTransferType());
         if (bo.getLocations() != null && !bo.getLocations().isEmpty()) {
-            vo.setFlag(true);
+            if (bo.getLocations().get(0).getLocationId() == null) {
+                vo.setFlag(false);
+            } else {
+                vo.setFlag(true);
+            }
+
         } else {
             vo.setFlag(false);
         }
