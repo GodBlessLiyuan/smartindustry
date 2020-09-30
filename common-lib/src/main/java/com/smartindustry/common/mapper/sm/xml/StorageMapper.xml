@@ -339,7 +339,8 @@
     <select id="queryRelatePid" parameterType="java.lang.Long" resultType="java.lang.String">
         select prl.package_id
         from sm_storage s
-                 left join om_pick_head ph on s.source_no = ph.source_no
+                left join om_outbound ob on ob.outbound_no = s.source_no
+                 left join om_pick_head ph on ob.pick_head_id = ph.pick_head_id
                  left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
                  left join si_material m on pb.material_id = m.material_id
                  left join om_pick_label pl on pb.pick_head_id = pl.pick_head_id
