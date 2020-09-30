@@ -354,7 +354,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
                 po.setType(storagePO.getType());
                 po.setStorageNum(detailBO.getNum());
                 po.setStorageTime(storagePO.getStorageTime());
-                po.setStatus(ReceiptConstant.STORAGE_LABEL_TRANSFER);
+                po.setStatus((byte)1);
                 if (!ReceiptConstant.STORAGE_TYPE_GOOD.equals(storagePO.getType())) {
                     // 不良锁定
                     po.setMaterialLockId(1L);
@@ -487,7 +487,22 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         if (dto.getSid() == null) {
             return new ResultVO(1001);
         }
+        StoragePO storagePO = storageMapper.selectByPrimaryKey(dto.getSid());
+        if (storagePO == null) {
+            return new ResultVO(1002);
+        }
         List<StorageGroupDetailBO> storageGroupBOs = storageGroupMapper.queryStorageDetail(dto.getSid(), dto.getSgid());
+        /**
+         * 当入库单选择的仓库没有库位时，此时storageGroupBO 中不存在仓库名称
+         */
+        String wareHouseName = "";
+
+        if (storagePO.getSourceType().equals(ReceiptConstant.STORAGE_SOURCE_TYPE_TRANSFER)) {
+            StorageBO storageBO = storageMapper.queryBySid(dto.getSid());
+            wareHouseName = storageBO.getLocations().get(0).getWarehouseName();
+        }
+
+
         Map<String, List<StorageGroupDetailBO>> groupMap = storageGroupBOs.stream().collect(Collectors.toMap(
                 p -> p.getMaterialName() + "_" + p.getMaterialNo(),
                 p -> {
@@ -511,6 +526,11 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
             for (StorageGroupDetailBO bo : groupMap.get(key)) {
                 details.addAll(bo.getDetail());
                 if (bo.getDetail() != null) {
+                    for (StorageDetailBO dbo1: bo.getDetail()) {
+                        if (StringUtils.isEmpty(dbo1.getWarehouseName())) {
+                            dbo1.setWarehouseName(wareHouseName);
+                        }
+                    }
                     num += bo.getDetail().stream().collect(Collectors.summingInt(StorageDetailBO::getNum));
                 }
 
@@ -855,10 +875,10 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
          * 当物料没有设置默认仓库并且已入库物料设定了仓库库位时，返回值设定仓库库位
          */
         StorageDetailVO detailVO = StorageDetailVO.convert(storageBO, receiptBodyBO, storageGroupBOs);
-        if (detailVO.getWid() == null && wid != null) {
+        if ( wid != null) {
             detailVO.setWid(wid);
         }
-        if (detailVO.getLno() == null && lno != null) {
+        if ( lno != null) {
             detailVO.setLno(lno);
         }
         return ResultVO.ok().setData(detailVO);

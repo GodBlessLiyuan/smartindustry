@@ -94,6 +94,12 @@ public class ReceiptConstant {
      */
     public static final Byte STORAGE_LABEL_TRANSFER = 11;
 
+
+    public static final Byte STORAGE_SOURCE_TYPE_RECEIPT = 1;
+
+    public static final Byte STORAGE_SOURCE_TYPE_TRANSFER = 2;
+
+
     /**
      * 操作记录
      */

@@ -162,9 +162,6 @@
         left join dd_measure_unit me on me.measure_unit_id  = m.measure_unit_id
         LEFT JOIN si_warehouse w ON w.warehouse_id = l.warehouse_id
         where sg.storage_id = #{storageId, jdbcType=BIGINT}
-        <if test="storageGroupId == null">
-            and sg.location_id is not null
-        </if>
         <if test="storageGroupId != null">
             and sg.storage_group_id = #{storageGroupId, jdbcType=BIGINT}
         </if>
