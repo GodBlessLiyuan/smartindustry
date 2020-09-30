@@ -169,4 +169,12 @@
     left join em_transfer_head th on s.source_no = th.transfer_no
     where s.dr = 1 and s.storage_id = #{storageId,jdbcType=BIGINT}
   </select>
+
+<!--  根据调拨订单编号查询明细-->
+  <select id="queryNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from em_transfer_head
+    where transfer_no = #{transferNo,jdbcType=CHAR}
+  </select>
 </mapper>
