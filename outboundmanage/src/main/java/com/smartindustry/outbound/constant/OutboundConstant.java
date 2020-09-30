@@ -150,13 +150,25 @@ public class OutboundConstant {
     /**
      * 工单出库
      */
-    public static final Byte TYPE_OUT_WORK = 1;
+    public static final byte TYPE_OUT_WORK = 1;
     /**
      * 销售出库
      */
-    public static final Byte TYPE_OUT_SHIP = 2;
+    public static final byte TYPE_OUT_SHIP = 2;
     /**
      * 其他出库
      */
-    public static final Byte TYPE_OUT_OTHER= 3;
+    public static final byte TYPE_OUT_OTHER= 3;
+    /**
+     * 库内标签状态--工单出库
+     */
+    public static final Byte TYPE_STORAGE_LABEL_PICK = 20;
+    /**
+     * 库内标签状态--销售出库
+     */
+    public static final Byte TYPE_STORAGE_LABEL_SHIP = 23;
+    /**
+     * 库内标签状态--调拨出库
+     */
+    public static final Byte TYPE_STORAGE_LABEL_TRANSFER = 21;
 }

@@ -6,7 +6,6 @@ import com.smartindustry.common.bo.om.LogisticsRecordBO;
 import com.smartindustry.common.bo.om.OutboundBO;
 import com.smartindustry.common.bo.om.PickBodyBO;
 import com.smartindustry.common.bo.si.PrintLabelBO;
-import com.smartindustry.common.bo.si.StorageLabelBO;
 import com.smartindustry.common.config.FilePathConfig;
 import com.smartindustry.common.constant.ResultConstant;
 import com.smartindustry.common.mapper.em.TransferHeadMapper;
@@ -23,10 +22,10 @@ import com.smartindustry.common.pojo.im.MaterialInventoryPO;
 import com.smartindustry.common.pojo.om.*;
 import com.smartindustry.common.pojo.si.ConfigPO;
 import com.smartindustry.common.pojo.si.LocationPO;
+import com.smartindustry.common.pojo.si.PrintLabelPO;
 import com.smartindustry.common.pojo.sm.StoragePO;
 import com.smartindustry.common.pojo.sm.StorageRecordPO;
 import com.smartindustry.common.security.service.TokenService;
-import com.smartindustry.common.util.DateUtil;
 import com.smartindustry.common.util.FileUtil;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.vo.PageInfoVO;
@@ -36,6 +35,7 @@ import com.smartindustry.outbound.dto.LogisticsRecordDTO;
 import com.smartindustry.outbound.dto.OperateDTO;
 import com.smartindustry.outbound.service.IMaterialOutboundService;
 import com.smartindustry.outbound.util.OmNoUtil;
+import com.smartindustry.outbound.util.BusinessUtil;
 import com.smartindustry.outbound.vo.LogisticsRecordVO;
 import com.smartindustry.outbound.vo.OutboundDetailVO;
 import com.smartindustry.outbound.vo.OutboundRecordVO;
@@ -46,7 +46,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.text.ParseException;
 import java.util.*;
 
 /**
@@ -122,6 +121,7 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
             return new ResultVO(1002);
         }
         PickHeadPO headPO = pickHeadMapper.selectByPrimaryKey(outboundPO.getPickHeadId());
+        List<PrintLabelPO> pos1 = pickHeadMapper.queryByPhidItems(headPO.getPickHeadId());
         if (null == headPO) {
             return new ResultVO(1002);
         }
@@ -142,7 +142,6 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
                 break;
             }
         }
-
         outboundPO.setOutboundTime(new Date());
         outboundPO.setStatus(OutboundConstant.OUTBOUND_STATUS_FINISH);
         headPO.setMaterialStatus(OutboundConstant.MATERIAL_STATUS_FINISH);
@@ -175,69 +174,19 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
                 materialInventoryMapper.updateByPrimaryKey(materialInventoryBO.updatePO(updateInventoryPO));
             }
         }
-
         outboundRecordMapper.insert(new OutboundRecordPO(headPO.getPickHeadId(), outboundPO.getOutboundId(), user.getUserId(), user.getName(), OutboundConstant.RECORD_CONFIRM_OUTBOUND, OutboundConstant.MATERIAL_STATUS_FINISH));
         //当销售，生产，采购强关联时，工单所扫码的PID来源必须是销售采购来源
         ConfigPO configPO = configMapper.queryByKey(OutboundConstant.K_PID_RELATE);
-        // 重新推荐货位
-        new Thread(() -> {
-            List<PickHeadPO> notRecommendHeadPOs = new ArrayList<>();
-            if (null != configPO && OutboundConstant.V_YES.equals(configPO.getConfigValue())) {
-                notRecommendHeadPOs = pickHeadMapper.queryNotRecommodByOno(headPO.getSourceNo());
-            }else {
-                notRecommendHeadPOs = pickHeadMapper.queryNotRecommodByOno(null);
-            }
-            for (PickHeadPO notRecommendHeadPO : notRecommendHeadPOs) {
-                List<PickBodyBO> bodyBOs = pickBodyMapper.queryByHeadId(notRecommendHeadPO.getPickHeadId());
-                Map<Long, LabelRecommendPO> labelRecommendPOs = new HashMap<>();
-                for (PickBodyBO bodyBO : bodyBOs) {
-                    List<StorageLabelBO> storageLabelBOS = new ArrayList<>();
-                    if (null != configPO && OutboundConstant.V_YES.equals(configPO.getConfigValue())) {
-                        storageLabelBOS = storageLabelMapper.queryNotRecommend(notRecommendHeadPO.getSourceNo(), bodyBO.getMaterialId());
-                    }else {
-                        storageLabelBOS = storageLabelMapper.queryNotRecommend(null, bodyBO.getMaterialId());
-                    }
-                    Collections.sort(storageLabelBOS, new Comparator<StorageLabelBO>(){
-                        @Override
-                        public int compare(StorageLabelBO bo1, StorageLabelBO bo2) {
-                            int result = 0;
-                            try {
-                                result = DateUtil.YMD.parse(bo1.getProduceDate()).compareTo(DateUtil.YMD.parse(bo2.getProduceDate()));
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                            return result;
-                        }
-                    });
-                    int num = 0;
-                    for (StorageLabelBO storageLabelBO : storageLabelBOS) {
-                        if (labelRecommendPOs.containsKey(storageLabelBO.getStorageLabelId())) {
-                            continue;
-                        }
-
-                        LabelRecommendPO labelRecommendPO = new LabelRecommendPO();
-                        labelRecommendPO.setPickBodyId(bodyBO.getPickBodyId());
-                        labelRecommendPO.setStorageLabelId(storageLabelBO.getStorageLabelId());
-                        labelRecommendPOs.put(storageLabelBO.getStorageLabelId(), labelRecommendPO);
-
-                        num += storageLabelBO.getStorageNum();
-                        if (num >= bodyBO.getDemandNum()) {
-                            break;
-                        }
-                    }
-
-                    if (num < bodyBO.getDemandNum()) {
-                        return;
-                    }
-                }
-
-                labelRecommendMapper.batchInsert(new ArrayList<>(labelRecommendPOs.values()));
-                storageLabelMapper.updateStatus(new ArrayList<>(labelRecommendPOs.keySet()), OutboundConstant.WORK_ORDER_OUTBOUND);
-
-                notRecommendHeadPO.setMaterialStatus(OutboundConstant.MATERIAL_STATUS_UNPROCESSED);
-                pickHeadMapper.updateByPrimaryKey(notRecommendHeadPO);
-            }
-        }).start();
+        boolean flag = (null != configPO && OutboundConstant.V_YES.equals(configPO.getConfigValue()));
+        // 当出库时，重新刷新所有的推荐列表
+        List<PickHeadPO> notRecommendHeadPOs = new ArrayList<>();
+        if (flag) {
+            notRecommendHeadPOs = pickHeadMapper.queryNotRecommodByOno(headPO.getSourceNo());
+        }else {
+            notRecommendHeadPOs = pickHeadMapper.queryNotRecommodByOno(null);
+        }
+        BusinessUtil businessUtil = new BusinessUtil();
+        businessUtil.recommend(notRecommendHeadPOs,flag);
 
         //当出库是调拨出库时,会生成新得入库单
         OutboundBO po = outboundMapper.queryByOid(dto.getOid());

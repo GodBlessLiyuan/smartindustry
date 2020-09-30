@@ -309,8 +309,6 @@ public class PickManageServiceImpl implements IPickManageService {
         BeanUtils.copyProperties(po1,po2,"storageLabelId");
         BeanUtils.copyProperties(po1,po3,"storageLabelId");
 
-        System.out.println(po2);
-
         po2.setPrintLabelId(poDivOne.getPrintLabelId());
         po2.setPackageId(poDivOne.getPackageId());
         po2.setStorageNum(poDivOne.getNum());
@@ -396,7 +394,6 @@ public class PickManageServiceImpl implements IPickManageService {
         int statusCode = 0;
         Integer resultEx = pickHeadMapper.judgeIsEx(pickHeadId);
         Integer resultLack = pickHeadMapper.judgeIsLack(pickHeadId);
-
         OutboundPO po = new OutboundPO();
         po.setPickHeadId(pickHeadId);
         Date date = new Date();

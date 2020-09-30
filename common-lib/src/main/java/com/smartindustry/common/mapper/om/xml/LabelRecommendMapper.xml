@@ -84,6 +84,7 @@
         left join si_location l on sl.location_id = l.location_id
         where lr.pick_body_id = #{pickBodyId,jdbcType=BIGINT}
     </select>
+
     <insert id="batchInsert" parameterType="java.util.List">
         insert into om_label_recommend (label_recommend_id, pick_body_id, storage_label_id)
         values
