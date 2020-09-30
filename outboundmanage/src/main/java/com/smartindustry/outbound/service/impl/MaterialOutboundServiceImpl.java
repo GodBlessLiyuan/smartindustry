@@ -246,7 +246,7 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
             StoragePO po1 = new StoragePO();
             String head = OmNoUtil.MATERIAL_STORAGE_QTCK;
             po1.setStorageNo(OmNoUtil.genStorageNo(storageMapper, head, new Date()));
-            po1.setSourceNo(po.getSourceNo());
+            po1.setSourceNo(po.getOutboundNo());
             po1.setSourceType(OutboundConstant.TYPE_TRANSFER_INSERT);
             Integer sum = pickBodyMapper.queryPickNum(po.getPickHeadId());
             List<LocationPO> pos = locationMapper.queryLocation(po.getStorageWid());

@@ -391,44 +391,40 @@ public class PickManageServiceImpl implements IPickManageService {
     @Transactional(rollbackFor = Exception.class)
     public ResultVO outBoundItems(Long pickHeadId) {
         UserPO user = tokenService.getLoginUser();
+        PickHeadPO po1 = pickHeadMapper.selectByPrimaryKey(pickHeadId);
         //1 当形成出库单，由于物料欠缺，异常数据，则由物料拣货10变成工单审核15
         int statusCode = 0;
         Integer resultEx = pickHeadMapper.judgeIsEx(pickHeadId);
         Integer resultLack = pickHeadMapper.judgeIsLack(pickHeadId);
-        // 2判断出库审核是否被关闭
-        ConfigPO configPo = configMapper.queryByKey(ConfigConstant.K_OUTBOUND_QUALITY_KEY);
-        if (null != configPo && ConfigConstant.V_NO.equals(configPo.getConfigValue())) {
+
+        OutboundPO po = new OutboundPO();
+        po.setPickHeadId(pickHeadId);
+        Date date = new Date();
+        po.setOutboundNo(OmNoUtil.getOutboundNo(outboundMapper, OmNoUtil.OUTBOUND, date));
+        po.setStatus(OutboundConstant.OUTBOUND_STATUS_WAIT);
+        po.setSourceNo(po1.getPickNo());
+        po.setCreateTime(date);
+        po.setDr((byte) 1);
+        if(OutboundConstant.TYPE_TRANSFER.equals(po1.getSourceType())){
             pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_STORAGE, new Date());
-            OutboundPO po = new OutboundPO();
-            po.setPickHeadId(pickHeadId);
-            Date date = new Date();
-            po.setOutboundNo(OmNoUtil.getOutboundNo(outboundMapper, OmNoUtil.OUTBOUND, date));
-            po.setStatus(OutboundConstant.OUTBOUND_STATUS_WAIT);
-            po.setCreateTime(date);
-            po.setDr((byte) 1);
+            po.setSourceType(OutboundConstant.TYPE_OUT_OTHER);
             outboundMapper.insert(po);
             outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, user.getUserId(), user.getName(), OutboundConstant.RECORD_SUBMIT, OutboundConstant.MATERIAL_STATUS_PICK));
             outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, po.getOutboundId(), user.getUserId(), user.getName(), OutboundConstant.RECORD_ADD, OutboundConstant.MATERIAL_STATUS_STORAGE));
-        } else {
+        }else {
             if (resultEx != null || resultLack != null) {
                 pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_CHECK, new Date());
-                PickCheckPO po = new PickCheckPO();
-                po.setPickHeadId(pickHeadId);
-                po.setStatus(OutboundConstant.OUTBOUND_STATUS_WAIT);
-                pickCheckMapper.insert(po);
+                PickCheckPO po2 = new PickCheckPO();
+                po2.setPickHeadId(pickHeadId);
+                po2.setStatus(OutboundConstant.OUTBOUND_STATUS_WAIT);
+                pickCheckMapper.insert(po2);
                 statusCode = 1;
                 // 当欠料异常形成出库单，将新增审核操作记录到操作记录表中
                 outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, user.getUserId(), user.getName(), OutboundConstant.RECORD_SUBMIT, OutboundConstant.MATERIAL_STATUS_PICK));
                 outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, user.getUserId(), user.getName(), OutboundConstant.RECORD_ADD, OutboundConstant.MATERIAL_STATUS_CHECK));
             } else {
                 pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_STORAGE, new Date());
-                OutboundPO po = new OutboundPO();
-                po.setPickHeadId(pickHeadId);
-                Date date = new Date();
-                po.setOutboundNo(OmNoUtil.getOutboundNo(outboundMapper, OmNoUtil.OUTBOUND, date));
-                po.setStatus(OutboundConstant.OUTBOUND_STATUS_WAIT);
-                po.setCreateTime(date);
-                po.setDr((byte) 1);
+                po.setSourceType(OutboundConstant.TYPE_OUT_WORK);
                 outboundMapper.insert(po);
                 outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, null, user.getUserId(), user.getName(), OutboundConstant.RECORD_SUBMIT, OutboundConstant.MATERIAL_STATUS_PICK));
                 outboundRecordMapper.insert(new OutboundRecordPO(pickHeadId, po.getOutboundId(), user.getUserId(), user.getName(), OutboundConstant.RECORD_ADD, OutboundConstant.MATERIAL_STATUS_STORAGE));
@@ -489,6 +485,7 @@ public class PickManageServiceImpl implements IPickManageService {
     @Transactional(rollbackFor = Exception.class)
     public ResultVO agreeOutBound(Long pickHeadId) {
         UserPO user = tokenService.getLoginUser();
+        PickHeadPO po1 = pickHeadMapper.selectByPrimaryKey(pickHeadId);
         // 欠料出库，将物料状态改成“物料出库”
         pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_STORAGE, new Date());
         // 形成出库单
@@ -497,6 +494,13 @@ public class PickManageServiceImpl implements IPickManageService {
         Date date = new Date();
         po.setOutboundNo(OmNoUtil.getOutboundNo(outboundMapper, OmNoUtil.OUTBOUND, date));
         po.setStatus(OutboundConstant.OUTBOUND_STATUS_WAIT);
+        if(OutboundConstant.TYPE_PICK.equals(po1.getSourceType())){
+            po.setSourceNo(po1.getPickNo());
+            po.setSourceType(OutboundConstant.TYPE_OUT_WORK);
+        }else {
+            po.setSourceNo(po1.getPickNo());
+            po.setSourceType(OutboundConstant.TYPE_OUT_SHIP);
+        }
         po.setCreateTime(date);
         po.setDr((byte) 1);
         outboundMapper.insert(po);

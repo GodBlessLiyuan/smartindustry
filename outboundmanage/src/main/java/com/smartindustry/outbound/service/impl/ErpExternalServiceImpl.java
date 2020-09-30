@@ -65,7 +65,7 @@ public class ErpExternalServiceImpl implements IErpExternalService {
         List<PickBodyPO> bodyPOs = PickDTO.convert(headPO, dto.getBody());
         pickBodyMapper.batchInsert(bodyPOs);
         outboundRecordMapper.insert(new OutboundRecordPO(headPO.getPickHeadId(), null, user.getUserId(), user.getName(), OutboundConstant.RECORD_ADD, OutboundConstant.MATERIAL_STATUS_PICK));
-        DateUtil sort = new DateUtil();
+
         // 推荐货位
         new Thread(() -> {
             Map<Long, LabelRecommendPO> labelRecommendPOs = new HashMap<>();

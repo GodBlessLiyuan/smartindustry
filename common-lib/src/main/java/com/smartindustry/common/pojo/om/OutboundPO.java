@@ -16,13 +16,20 @@ public class OutboundPO implements Serializable {
 
     private String outboundNo;
 
+    private String sourceNo;
+
+    /**
+     * 1 工单出库 2销售出库 3 其他出库
+     */
+    private Byte sourceType;
+
     private Date outboundTime;
 
     private Date shipTime;
 
     /**
      * 1：已出库
-2：待出库
+3：待出库
      */
     private Byte status;
 
