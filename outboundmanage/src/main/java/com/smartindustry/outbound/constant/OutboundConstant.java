@@ -146,4 +146,17 @@ public class OutboundConstant {
      * 否
      */
     public static final String V_NO = "N";
+
+    /**
+     * 工单出库
+     */
+    public static final Byte TYPE_OUT_WORK = 1;
+    /**
+     * 销售出库
+     */
+    public static final Byte TYPE_OUT_SHIP = 2;
+    /**
+     * 其他出库
+     */
+    public static final Byte TYPE_OUT_OTHER= 3;
 }

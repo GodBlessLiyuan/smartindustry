@@ -2,8 +2,6 @@ package com.smartindustry.workbench.service.impl;
 
 import com.smartindustry.common.bo.am.LoginUserBO;
 import com.smartindustry.common.bo.wm.WorkBenchBO;
-import com.smartindustry.common.config.FilePathConfig;
-import com.smartindustry.common.mapper.om.OutboundMapper;
 import com.smartindustry.common.mapper.om.PickHeadMapper;
 import com.smartindustry.common.mapper.sm.ReceiptBodyMapper;
 import com.smartindustry.common.mapper.sm.StorageMapper;

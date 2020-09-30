@@ -64,6 +64,7 @@ public class QualityManageServiceImpl implements IQualityManageService {
     @Transactional(rollbackFor = Exception.class)
     public ResultVO pickOqcButton(Long pickHeadId){
         UserPO user = tokenService.getLoginUser();
+        PickHeadPO po1 = pickHeadMapper.selectByPrimaryKey(pickHeadId);
         ConfigPO configPo = configMapper.queryByKey(ConfigConstant.K_OUTBOUND_QUALITY_KEY);
         if (null != configPo && ConfigConstant.V_NO.equals(configPo.getConfigValue())) {
             pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_STORAGE,new Date());
@@ -71,6 +72,8 @@ public class QualityManageServiceImpl implements IQualityManageService {
             po.setPickHeadId(pickHeadId);
             Date date = new Date();
             po.setOutboundNo(OmNoUtil.getOutboundNo(outboundMapper, OmNoUtil.OUTBOUND, date));
+            po.setSourceNo(po1.getPickNo());
+            po.setSourceType(OutboundConstant.TYPE_OUT_SHIP);
             po.setStatus(OutboundConstant.OUTBOUND_STATUS_WAIT);
             po.setCreateTime(date);
             po.setDr((byte) 1);
