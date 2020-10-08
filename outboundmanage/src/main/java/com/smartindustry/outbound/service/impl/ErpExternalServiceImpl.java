@@ -1,6 +1,5 @@
 package com.smartindustry.outbound.service.impl;
 
-import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.mapper.om.*;
 import com.smartindustry.common.mapper.si.ConfigMapper;
 import com.smartindustry.common.mapper.si.StorageLabelMapper;
@@ -61,28 +60,28 @@ public class ErpExternalServiceImpl implements IErpExternalService {
         pickHeadMapper.insert(headPO);
         List<PickHeadPO> pos = new ArrayList<>();
         pos.add(headPO);
+
+
         List<PickBodyPO> bodyPOs = PickDTO.convert(headPO, dto.getBody());
         pickBodyMapper.batchInsert(bodyPOs);
         outboundRecordMapper.insert(new OutboundRecordPO(headPO.getPickHeadId(), null, user.getUserId(), user.getName(), OutboundConstant.RECORD_ADD, OutboundConstant.MATERIAL_STATUS_PICK));
 
-        List<PrintLabelBO> printLabelBOs = pickLabelMapper.queryByPhid(headPO.getPickHeadId());
-        List<Long> plIds = new ArrayList<>();
-        for (PrintLabelBO printLabelBO : printLabelBOs) {
-            plIds.add(printLabelBO.getPrintLabelId());
-        }
+       // 先推荐
         BusinessUtil businessUtil = new BusinessUtil();
-        businessUtil.recommend(pos,flag);
+        businessUtil.recommend(pos,flag,pickBodyMapper,pickHeadMapper,storageLabelMapper,labelRecommendMapper);
 
+        // 然后更新推荐的库内标签pid
+        List<Long> plIds = labelRecommendMapper.queryRecommedPlids(headPO.getPickHeadId());
         // 当出库时会根据不同的pid进行更新库内标签表
         switch (headPO.getSourceType()){
             case OutboundConstant.TYPE_OUT_WORK:
-                businessUtil.updateStorageLabel(plIds,OutboundConstant.TYPE_STORAGE_LABEL_PICK);
+                businessUtil.updateStorageLabel(plIds,OutboundConstant.TYPE_STORAGE_LABEL_PICK,storageLabelMapper);
                 break;
             case OutboundConstant.TYPE_OUT_SHIP:
-                businessUtil.updateStorageLabel(plIds,OutboundConstant.TYPE_STORAGE_LABEL_SHIP);
+                businessUtil.updateStorageLabel(plIds,OutboundConstant.TYPE_STORAGE_LABEL_SHIP,storageLabelMapper);
                 break;
             case OutboundConstant.TYPE_OUT_OTHER:
-                businessUtil.updateStorageLabel(plIds,OutboundConstant.TYPE_STORAGE_LABEL_TRANSFER);
+                businessUtil.updateStorageLabel(plIds,OutboundConstant.TYPE_STORAGE_LABEL_TRANSFER,storageLabelMapper);
                 break;
             default:
                 break;

@@ -19,4 +19,11 @@ public interface LabelRecommendMapper extends BaseMapper<LabelRecommendPO, Long>
      * @return
      */
     List<LabelRecommendBO> queryByPbid(Long pickBodyId);
+
+    /**
+     * 根据拣货单id 查询所有被推荐的pid
+     * @param pickHeadId
+     * @return
+     */
+    List<Long> queryRecommedPlids(Long pickHeadId);
 }
