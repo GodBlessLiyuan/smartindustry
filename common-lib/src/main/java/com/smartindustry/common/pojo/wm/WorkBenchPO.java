@@ -35,5 +35,7 @@ public class WorkBenchPO implements Serializable {
 
     private String backgroundColor;
 
+    private Byte benchNode;
+
     private static final long serialVersionUID = 1L;
 }

@@ -51,5 +51,10 @@ public class StoragePO implements Serializable {
      */
     private Byte dr;
 
+    /**
+     * 仓库ID
+     */
+    private Long warehouseId;
+
     private static final long serialVersionUID = 1L;
 }
