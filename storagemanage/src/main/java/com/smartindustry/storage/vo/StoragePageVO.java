@@ -1,6 +1,6 @@
 package com.smartindustry.storage.vo;
 
-import com.smartindustry.common.bo.si.LocationBO;
+
 import com.smartindustry.common.bo.sm.StorageBO;
 import lombok.Data;
 
@@ -95,12 +95,7 @@ public class StoragePageVO implements Serializable {
         vo.setRbid(bo.getReceiptBodyId());
         vo.setSno(bo.getStorageNo());
         vo.setRno(bo.getReceiptNo());
-        if(bo.getReceiptSourceNo()!=null){
-            vo.setSono(bo.getReceiptSourceNo());
-        }else {
-            //适应其他入库单查询
-            vo.setSono(bo.getSourceNo());
-        }
+        vo.setSono(bo.getReceiptSourceNo());
         if (null != bo.getLocations() && bo.getLocations().size() > 0) {
            vo.setWname(bo.getLocations().get(0).getWarehouseName());
         }
