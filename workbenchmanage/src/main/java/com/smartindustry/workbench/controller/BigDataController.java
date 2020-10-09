@@ -2,6 +2,8 @@ package com.smartindustry.workbench.controller;
 
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.workbench.service.IBigDataService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +21,8 @@ public class BigDataController {
     @Autowired
     private IBigDataService bigDataService;
 
+    Logger logger = LoggerFactory.getLogger(BigDataController.class);
+
     /**
      * WMS
      *
@@ -26,6 +30,7 @@ public class BigDataController {
      */
     @PostMapping("wms")
     public ResultVO wms() {
+        logger.info("workbench - wms");
         return bigDataService.wms();
     }
 }

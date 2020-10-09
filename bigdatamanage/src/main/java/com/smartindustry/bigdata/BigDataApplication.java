@@ -2,6 +2,7 @@ package com.smartindustry.bigdata;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 
 /**
  * @author: xiahui
@@ -9,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @description: 大数据
  * @version: 1.0
  */
-@SpringBootApplication
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 public class BigDataApplication {
     public static void main(String[] args) {
         SpringApplication.run(BigDataApplication.class, args);

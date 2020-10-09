@@ -1,6 +1,8 @@
 package com.smartindustry.common.vo;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -10,6 +12,8 @@ import java.io.Serializable;
  * @description: 返回前端统一封装结构
  * @version: 1.0
  */
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class ResultVO<T> implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -22,17 +26,12 @@ public class ResultVO<T> implements Serializable {
         this(status, null);
     }
 
-    public ResultVO(Integer status, T data) {
-        this.status = status;
-        this.data = data;
-    }
-
     /**
      * 构造成功执行的构造参数
      * @return
      */
     public static ResultVO<Object> ok(){
-        return new ResultVO<Object>(1000);
+        return new ResultVO<>(1000);
     }
 
     public ResultVO setData(T data){
