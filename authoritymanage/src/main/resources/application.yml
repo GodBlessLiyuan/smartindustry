@@ -10,6 +10,7 @@ spring:
       indent-output: true
       fail-on-empty-beans: true
     date-format: yyyy-MM-dd HH:mm:ss
+    default-property-inclusion: non_null
     time-zone: GMT+08
   datasource:
     url: jdbc:mysql://39.97.253.38:3306/smartindustry?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
