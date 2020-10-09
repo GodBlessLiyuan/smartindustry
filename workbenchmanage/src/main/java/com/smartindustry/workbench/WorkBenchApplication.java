@@ -14,6 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
 @MapperScan("com.smartindustry.common.mapper")
 @ComponentScan({"com.smartindustry.common.security","com.smartindustry.workbench"})
 @SpringBootApplication
+
 public class WorkBenchApplication {
 
     public static void main(String[] args) {

@@ -2,6 +2,7 @@ package com.smartindustry.workbench.service.impl;
 
 import com.smartindustry.common.bo.am.LoginUserBO;
 import com.smartindustry.common.bo.wm.WorkBenchBO;
+import com.smartindustry.common.config.FilePathConfig;
 import com.smartindustry.common.mapper.om.OutboundMapper;
 import com.smartindustry.common.mapper.om.PickHeadMapper;
 import com.smartindustry.common.mapper.sm.ReceiptBodyMapper;
@@ -15,7 +16,6 @@ import com.smartindustry.workbench.dto.OperateDTO;
 import com.smartindustry.workbench.service.IWorkBenchService;
 import com.smartindustry.workbench.vo.WorkBenchVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -50,8 +50,8 @@ public class WorkBenchServiceImpl implements IWorkBenchService {
     @Autowired
     private OutboundMapper outboundMapper;
 
-    @Value("${config.file.publicPath}")
-    private String basePath;
+    @Autowired
+    private FilePathConfig filePathConfig;
 
     /**
      * 获取用户在只能工作台的权限列表
@@ -65,7 +65,7 @@ public class WorkBenchServiceImpl implements IWorkBenchService {
         dto.setBtype((byte) 1);
         List<WorkBenchBO> bos = query(dto);
         //查询各个模块运行数量
-        List<WorkBenchVO> vos = WorkBenchVO.convert(bos, basePath);
+        List<WorkBenchVO> vos = WorkBenchVO.convert(bos, filePathConfig.getPublicPath());
         for (WorkBenchVO vo : vos) {
             Long wbId = vo.getWbid();
             Integer num = 0;
@@ -125,7 +125,7 @@ public class WorkBenchServiceImpl implements IWorkBenchService {
         //获取 添加用户权限的用户信息
         LoginUserBO userBO = tokenService.getLoginUser(ServletUtil.getRequest());
         dto.setBtype((byte) 2);
-        List<WorkBenchVO> vos = WorkBenchVO.convert(query(dto),basePath);
+        List<WorkBenchVO> vos = WorkBenchVO.convert(query(dto),filePathConfig.getPublicPath());
         //按照工作台权限模块进行划分
         Map<Byte, List<WorkBenchVO>> map = vos.stream().collect(Collectors.toMap(WorkBenchVO::getBmodule, p -> {
             List<WorkBenchVO> list = new ArrayList<>();
