@@ -1,0 +1,41 @@
+server:
+  port: 8037
+  tomcat:
+    uri-encoding: UTF-8
+spring:
+  application:
+    name: bigdatamanage
+  jackson:
+    serialization:
+      indent-output: true
+      fail-on-empty-beans: true
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+08
+  datasource:
+    url: jdbc:mysql://39.97.253.38:3306/smartindustry?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    username: root
+    password: '!qaZXSw2'
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  servlet:
+    multipart:
+      enabled: true #是否启用http上传处理
+      max-request-size: 100MB #最大请求文件的大小
+      max-file-size: 100MB #设置单个文件最大长度
+  security:
+    user:
+      name: vbooster
+      password: 123456a
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@localhost:8030/eureka/
+
+logging:
+  level:
+    com:
+      smartindustry:
+        bigdata:
+          mapper: debug
+  config: classpath:logback-spring-test.xml

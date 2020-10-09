@@ -1,4 +1,4 @@
-package com.smartindustry.workbench.vo;
+package com.smartindustry.bigdata.vo;
 
 import lombok.Data;
 

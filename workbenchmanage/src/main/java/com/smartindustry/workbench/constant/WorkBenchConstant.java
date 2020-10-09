@@ -1,6 +1,4 @@
-package com.smartindustry.workbench.constants;
-
-import javax.print.DocFlavor;
+package com.smartindustry.workbench.constant;
 
 /**
  * @author hui.feng

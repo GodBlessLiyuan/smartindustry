@@ -18,6 +18,7 @@
         <module>basicmanage</module>
         <module>inventorymanage</module>
         <module>workbenchmanage</module>
+        <module>bigdatamanage</module>
     </modules>
 
     <name>smartindustry</name>

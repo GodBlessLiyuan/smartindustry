@@ -11,7 +11,7 @@ import com.smartindustry.common.mapper.wm.WorkBenchMapper;
 import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.workbench.constants.WorkBenchConstant;
+import com.smartindustry.workbench.constant.WorkBenchConstant;
 import com.smartindustry.workbench.dto.OperateDTO;
 import com.smartindustry.workbench.service.IWorkBenchService;
 import com.smartindustry.workbench.vo.WorkBenchVO;
