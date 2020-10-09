@@ -58,6 +58,7 @@ DROP TABLE IF EXISTS dd_supplier_group;
 DROP TABLE IF EXISTS dd_supplier_type;
 DROP TABLE IF EXISTS em_transfer_head;
 DROP TABLE IF EXISTS si_warehouse_record;
+DROP TABLE IF EXISTS sm_storage;
 DROP TABLE IF EXISTS si_warehouse;
 DROP TABLE IF EXISTS dd_warehouse_type;
 DROP TABLE IF EXISTS om_outbound_record;
@@ -71,7 +72,6 @@ DROP TABLE IF EXISTS om_pick_check;
 DROP TABLE IF EXISTS om_pick_head;
 DROP TABLE IF EXISTS si_config;
 DROP TABLE IF EXISTS sm_receipt_head;
-DROP TABLE IF EXISTS sm_storage;
 
 
 
@@ -544,6 +544,13 @@ CREATE TABLE om_outbound
 	outbound_id bigint unsigned NOT NULL AUTO_INCREMENT,
 	pick_head_id bigint unsigned NOT NULL,
 	outbound_no char(128) NOT NULL,
+	source_no char(128) NOT NULL,
+	-- 1 工单出库
+	-- 2 销售出库
+	-- 3 其他出库
+	source_type tinyint NOT NULL COMMENT '1 工单出库
+2 销售出库
+3 其他出库',
 	outbound_time datetime,
 	ship_time datetime,
 	-- 1：已出库
@@ -1276,6 +1283,7 @@ CREATE TABLE sm_storage
 	-- 2：已删除
 	dr tinyint COMMENT '1：未删除
 2：已删除',
+	warehouse_id bigint unsigned,
 	PRIMARY KEY (storage_id),
 	UNIQUE (storage_id),
 	UNIQUE (storage_no)
@@ -2216,7 +2224,7 @@ ALTER TABLE si_supplier_record
 
 
 ALTER TABLE em_transfer_head
-	ADD FOREIGN KEY (outbound_wid)
+	ADD FOREIGN KEY (storage_wid)
 	REFERENCES si_warehouse (warehouse_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
@@ -2224,7 +2232,7 @@ ALTER TABLE em_transfer_head
 
 
 ALTER TABLE em_transfer_head
-	ADD FOREIGN KEY (storage_wid)
+	ADD FOREIGN KEY (outbound_wid)
 	REFERENCES si_warehouse (warehouse_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
@@ -2248,6 +2256,14 @@ ALTER TABLE si_material_attribute
 
 
 ALTER TABLE si_warehouse_record
+	ADD FOREIGN KEY (warehouse_id)
+	REFERENCES si_warehouse (warehouse_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
+ALTER TABLE sm_storage
 	ADD FOREIGN KEY (warehouse_id)
 	REFERENCES si_warehouse (warehouse_id)
 	ON UPDATE RESTRICT
