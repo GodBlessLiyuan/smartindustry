@@ -186,7 +186,7 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
             notRecommendHeadPOs = pickHeadMapper.queryNotRecommodByOno(null);
         }
         BusinessUtil businessUtil = new BusinessUtil();
-        businessUtil.recommend(notRecommendHeadPOs,flag);
+        businessUtil.recommend(notRecommendHeadPOs,flag,pickBodyMapper,pickHeadMapper,storageLabelMapper,labelRecommendMapper);
 
         //当出库是调拨出库时,会生成新得入库单
         OutboundBO po = outboundMapper.queryByOid(dto.getOid());

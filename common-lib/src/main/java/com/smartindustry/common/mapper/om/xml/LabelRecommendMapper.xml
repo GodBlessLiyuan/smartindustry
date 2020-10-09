@@ -85,6 +85,15 @@
         where lr.pick_body_id = #{pickBodyId,jdbcType=BIGINT}
     </select>
 
+    <select id="queryRecommedPlids" parameterType="java.lang.Long" resultType="java.lang.Long">
+        select sl.print_label_id
+        from om_pick_head ph
+        left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
+        left join om_label_recommend lr on pb.pick_body_id = lr.pick_body_id
+        left join si_storage_label sl on lr.storage_label_id = sl.storage_label_id
+        where ph.pick_head_id = #{pickHeadId,jdbcType=BIGINT}
+    </select>
+
     <insert id="batchInsert" parameterType="java.util.List">
         insert into om_label_recommend (label_recommend_id, pick_body_id, storage_label_id)
         values
