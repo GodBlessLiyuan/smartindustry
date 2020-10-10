@@ -107,6 +107,13 @@ public class StorageDetailVO implements Serializable {
     private Byte status;
 
     /**
+     * 仓库是否包含库位
+     * true 包含库位
+     * false 没有库位
+     */
+    private Boolean flag;
+
+    /**
      * 分组数据
      */
     private List<GroupVO> group;
