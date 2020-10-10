@@ -96,20 +96,13 @@ public class StoragePageVO implements Serializable {
         vo.setSno(bo.getStorageNo());
         vo.setRno(bo.getReceiptNo());
         vo.setSono(bo.getReceiptSourceNo());
-        if (null != bo.getLocations() && bo.getLocations().size() > 0) {
-           vo.setWname(bo.getLocations().get(0).getWarehouseName());
-        }
+        vo.setWname(bo.getWarehouseName());
         vo.setStatus(bo.getStatus());
         vo.setStime(bo.getStorageTime());
         vo.setCono(bo.getCorrespondNo());
         vo.setTtype(bo.getTransferType());
         if (bo.getLocations() != null && !bo.getLocations().isEmpty()) {
-            if (bo.getLocations().get(0).getLocationId() == null) {
-                vo.setFlag(false);
-            } else {
-                vo.setFlag(true);
-            }
-
+            vo.setFlag(true);
         } else {
             vo.setFlag(false);
         }
