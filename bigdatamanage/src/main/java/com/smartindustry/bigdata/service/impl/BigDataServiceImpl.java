@@ -83,7 +83,7 @@ public class BigDataServiceImpl implements IBigDataService {
         }
 
         GoodsFundsPO goodsFundsPO = goodsFundsMapper.queryLastDay();
-        if (null != maWareFundsPO) {
+        if (null != goodsFundsPO) {
             BigDataWmsVO.A iimoney = new BigDataWmsVO.A();
             iimoney.setTotal(goodsFundsPO.getGoodsFunds());
             iimoney.setMoy(goodsFundsPO.getSameRate());
