@@ -41,8 +41,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -171,13 +173,18 @@ public class MaterialServiceImpl implements IMaterialService {
                 materialInventoryMapper.updateByPrimaryKey(inventoryBO.updatePO(new MaterialInventoryPO()));
             }
         } else {
+            BigDecimal llimit = dto.getMattribute().getLlimit();
+            if(null == llimit || "".equals(llimit.toString())) {
+                llimit = BigDecimal.ZERO;
+            }
+
             // 物料下限及是否在途未发生变化时不更新物料库存信息
-            if (null == attributePO.getLowerLimit() || attributePO.getLowerLimit().compareTo(dto.getMattribute().getLlimit()) != 0 || attributePO.getWay() == 1 != dto.getMattribute().getWay()) {
+            if (null == attributePO.getLowerLimit() || attributePO.getLowerLimit().compareTo(llimit) != 0 || attributePO.getWay() == 1 != dto.getMattribute().getWay()) {
                 MaterialInventoryBO inventoryBO = materialInventoryMapper.queryByMid(materialPO.getMaterialId());
 
                 SafeStockPO stockPO = safeStockMapper.queryByMiid(inventoryBO.getMaterialInventoryId());
                 stockPO.setWay((byte) (dto.getMattribute().getWay() != null && dto.getMattribute().getWay() ? 1 : 2));
-                stockPO.setLowerLimit(dto.getMattribute().getLlimit());
+                stockPO.setLowerLimit(llimit);
                 safeStockMapper.updateByPrimaryKey(stockPO);
                 materialInventoryMapper.updateByPrimaryKey(inventoryBO.updatePO(new MaterialInventoryPO()));
             }
