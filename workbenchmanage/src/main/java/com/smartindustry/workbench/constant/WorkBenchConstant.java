@@ -10,6 +10,36 @@ public class WorkBenchConstant {
     /**
      * 下面常量均为wm_work_bench type为1时的常量
      */
+    /**
+     *  工作台类型- 待办工作
+     */
+    public static final Byte BENCH_TYPE_UNHANDLE = 1;
+
+    /**
+     *  工作台类型-快捷入口
+     */
+    public static final Byte BENCH_TYPE_SHORTCUT = 2;
+
+    /**
+     * 工作台模块 -WMS
+     */
+    public static final Byte BENCH_MODULE_WMS = 1;
+    /**
+     * 工作台模块 -MES
+     */
+    public static final Byte BENCH_MODULE_MES = 2;
+
+    /**
+     * 工作台模块 -ERP
+     */
+    public static final Byte BENCH_MODULE_ERP = 3;
+
+    /**
+     * 工作台模块 -MDM
+     */
+    public static final Byte BENCH_MODULE_MDM = 4;
+
+
 
     /**
      * IQC待确认

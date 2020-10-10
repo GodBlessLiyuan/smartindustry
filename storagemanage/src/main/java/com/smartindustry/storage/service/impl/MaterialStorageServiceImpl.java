@@ -84,33 +84,6 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
             bos = storageMapper.queryBySids(sids);
         }
         List<StoragePageVO> vos = StoragePageVO.convert(bos);
-        //查询未入库物料的入库单的默认仓库情况
-        for (StoragePageVO vo: vos) {
-            if (StringUtils.isEmpty(vo.getWname())) {
-                ReceiptBodyBO bo = receiptBodyMapper.queryByBodyId(vo.getRbid());
-                if (bo != null) {
-                    vo.setWname(bo.getWarehouseName());
-                    List<LocationPO> locations = locationMapper.queryLocation(bo.getWarehouseId());
-                    if (locations != null && !locations.isEmpty()) {
-                        vo.setFlag(true);
-                    } else {
-                        vo.setFlag(false);
-                    }
-                } else {
-                    //没有默认仓库时，设定为true
-                    vo.setFlag(true);
-                }
-
-            } else {
-                /**
-                 * 当列表中存在仓库名称，即表示已经入了有库位的仓库
-                 *  则必然是存在库位的
-                 */
-                vo.setFlag(true);
-            }
-
-        }
-
         return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), vos));
     }
 
@@ -499,7 +472,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
 
         if (storagePO.getSourceType().equals(ReceiptConstant.STORAGE_SOURCE_TYPE_TRANSFER)) {
             StorageBO storageBO = storageMapper.queryBySid(dto.getSid());
-            wareHouseName = storageBO.getLocations().get(0).getWarehouseName();
+            wareHouseName = storageBO.getWarehouseName();
         }
 
 
@@ -759,6 +732,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
             // 入库单
             storagePO.setStoredNum(storagePO.getStoredNum() + num);
             storagePO.setStatus(ReceiptConstant.MATERIAL_STORAGE_BEING);
+            storagePO.setWarehouseId(locationPO.getWarehouseId());
             storageMapper.updateByPrimaryKey(storagePO);
 
             // 收料单
@@ -859,6 +833,40 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         if (null == receiptBodyBO) {
             return new ResultVO(1002);
         }
+        /**
+         * 判断入库单默认仓库是否存在库位，若无默认库位，则直接按照有库位处理
+         */
+        if (storageBO.getWarehouseId() != null) {
+            List<LocationPO> locationPOS = locationMapper.queryLocation(receiptBodyBO.getWarehouseId());
+            //检验物料默认仓库中知否存在库位 true 存在 false 不存在
+            boolean existLocation = true;
+            if (locationPOS == null || locationPOS.isEmpty()) {
+                existLocation = false;
+            }
+            //当默认入库仓库没有库位时需要先插入入库详情组
+            if (!existLocation) {
+                //查询groupId
+                List<PrintLabelBO> labelBOS = printLabelMapper.queryByRbid(storageBO.getReceiptBodyId());
+                if (labelBOS != null && !labelBOS.isEmpty()) {
+                    Long sgId = storageGroupMapper.queryGroup(dto.getSid());
+                    if (sgId == null) {
+                        StorageGroupPO sgPo = new StorageGroupPO();
+                        sgPo.setStorageId(dto.getSid());
+                        storageGroupMapper.insert(sgPo);
+                        sgId = sgPo.getStorageGroupId();
+                    }
+                    for (PrintLabelBO bo: labelBOS) {
+                        List<StorageDetailPO> list = storageDetailMapper.queryByGidAndLid(sgId, bo.getPrintLabelId());
+                        if (list == null || list.isEmpty()) {
+                            StorageDetailPO sdpo = new StorageDetailPO();
+                            sdpo.setPrintLabelId(bo.getPrintLabelId());
+                            sdpo.setStorageGroupId(sgId);
+                            storageDetailMapper.insert(sdpo);
+                        }
+                    }
+                }
+            }
+        }
 
         List<StorageGroupBO> storageGroupBOs = storageGroupMapper.queryBySid(storageBO.getStorageId());
 
@@ -901,13 +909,14 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO changeWarehouse(OperateDTO dto) {
-        if (dto.getSid() == null) {
+        if (dto.getSid() == null || dto.getWhid() == null) {
             return new ResultVO(1001);
         }
         StorageBO storageBO = storageMapper.queryReceiptBySid(dto.getSid());
         if (null == storageBO) {
             return new ResultVO(1002);
         }
+
         /**
          * step 1 查找标签列表  去除仓位
          * step 2 查找收料单， 更新入库数量和状态,更新入库单的入库数量
@@ -940,6 +949,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         //step2 查找收料单， 更新入库数量和状态, 更新收料单
         storageBO.setStatus(ReceiptConstant.MATERIAL_STORAGE_PENDING);
         storageBO.setStoredNum(0);
+        storageBO.setWarehouseId(dto.getWhid());
         storageMapper.updateByPrimaryKey(storageBO);
 
         rbPO.setStockNum(0);

@@ -52,6 +52,11 @@ public class WorkBenchVO implements Serializable {
     private Integer num;
 
     /**
+     * 节点
+     */
+    private Byte bnode;
+
+    /**
      * 背景颜色
      */
     private String bcolor;
@@ -80,6 +85,7 @@ public class WorkBenchVO implements Serializable {
         vo.setUpath(bo.getUrlPath());
         vo.setWbid(bo.getWorkBenchId());
         vo.setBcolor(bo.getBackgroundColor());
+        vo.setBnode(bo.getBenchNode());
         return vo;
     }
 

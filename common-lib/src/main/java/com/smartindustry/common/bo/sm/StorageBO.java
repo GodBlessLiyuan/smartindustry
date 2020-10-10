@@ -1,6 +1,7 @@
 package com.smartindustry.common.bo.sm;
 
 import com.smartindustry.common.bo.si.LocationBO;
+import com.smartindustry.common.pojo.si.LocationPO;
 import com.smartindustry.common.pojo.sm.StoragePO;
 import lombok.Data;
 
@@ -35,7 +36,7 @@ public class StorageBO extends StoragePO {
     /**
      * 仓库名称
      */
-    private List<LocationBO> locations;
+    private String warehouseName;
 
     /**
      * 对应单号
@@ -61,4 +62,9 @@ public class StorageBO extends StoragePO {
      * 拣货工单号
      */
     private String pickNo;
+
+    /**
+     * 仓库的库位
+     */
+    private List<LocationBO> locations;
 }

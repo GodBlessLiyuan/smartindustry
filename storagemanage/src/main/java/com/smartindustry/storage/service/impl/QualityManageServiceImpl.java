@@ -6,8 +6,10 @@ import com.smartindustry.common.bo.sm.ReceiptBO;
 import com.smartindustry.common.constant.ModuleConstant;
 import com.smartindustry.common.constant.ResultConstant;
 import com.smartindustry.common.mapper.si.LabelRecordMapper;
+import com.smartindustry.common.mapper.si.MaterialAttributeMapper;
 import com.smartindustry.common.mapper.sm.*;
 import com.smartindustry.common.pojo.am.UserPO;
+import com.smartindustry.common.pojo.si.MaterialAttributePO;
 import com.smartindustry.common.pojo.sm.*;
 import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.PageQueryUtil;
@@ -59,6 +61,9 @@ public class QualityManageServiceImpl implements IQualityManageService {
     private LabelRecordMapper labelRecordMapper;
     @Autowired
     TokenService tokenService;
+
+    @Autowired
+    private MaterialAttributeMapper materialAttributeMapper;
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData) {
@@ -331,6 +336,11 @@ public class QualityManageServiceImpl implements IQualityManageService {
             storagePO.setType(ReceiptConstant.MATERIAL_TYPE_GOOD);
             storagePO.setCreateTime(new Date());
             storagePO.setDr((byte) 1);
+            //存入默认仓库
+            MaterialAttributePO maPO = materialAttributeMapper.queryByMid(receiptBodyPO.getMaterialId());
+            if (maPO != null) {
+                storagePO.setWarehouseId(maPO.getWarehouseId());
+            }
             storageMapper.insert(storagePO);
 
             recordMapper.insert(new StorageRecordPO(dto.getRbid(), storagePO.getStorageId(), user.getUserId(), user.getName(), ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));

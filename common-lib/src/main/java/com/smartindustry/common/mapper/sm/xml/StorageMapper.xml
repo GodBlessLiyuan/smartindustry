@@ -12,11 +12,12 @@
         <result column="status" jdbcType="TINYINT" property="status"/>
         <result column="type" jdbcType="TINYINT" property="type"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="warehouse_id" jdbcType="TINYINT" property="warehouseId"/>
         <result column="dr" jdbcType="TINYINT" property="dr"/>
     </resultMap>
     <sql id="Base_Column_List">
-        storage_id, storage_no, source_no, source_type, pending_num, stored_num, storage_time,
-    `status`, `type`, create_time, dr
+    storage_id, storage_no, source_no, source_type, pending_num, stored_num, storage_time,
+    `status`, `type`, create_time, dr, warehouse_id
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
@@ -34,11 +35,11 @@
         insert into sm_storage (storage_id, storage_no, source_no,
                                 source_type, pending_num, stored_num,
                                 storage_time, `status`, `type`,
-                                create_time, dr)
+                                create_time,warehouse_id, dr)
         values (#{storageId,jdbcType=BIGINT}, #{storageNo,jdbcType=CHAR}, #{sourceNo,jdbcType=CHAR},
                 #{sourceType,jdbcType=TINYINT}, #{pendingNum,jdbcType=INTEGER}, #{storedNum,jdbcType=INTEGER},
                 #{storageTime,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT}, #{type,jdbcType=TINYINT},
-                #{createTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
+                #{createTime,jdbcType=TIMESTAMP},#{warehouseId, jdbcType=TINYINT}, #{dr,jdbcType=TINYINT})
     </insert>
     <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.sm.StoragePO">
         insert into sm_storage
@@ -76,6 +77,9 @@
             <if test="dr != null">
                 dr,
             </if>
+            <if test="warehouseId != null">
+                warehouse_id,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="storageId != null">
@@ -110,6 +114,9 @@
             </if>
             <if test="dr != null">
                 #{dr,jdbcType=TINYINT},
+            </if>
+            <if test="warehouseId != null">
+                #{warehouseId,jdbcType=BIGINT},
             </if>
         </trim>
     </insert>
@@ -146,6 +153,9 @@
             <if test="dr != null">
                 dr = #{dr,jdbcType=TINYINT},
             </if>
+            <if test="warehouseId != null">
+                warehouse_id = #{warehouseId,jdbcType=BIGINT},
+            </if>
         </set>
         where storage_id = #{storageId,jdbcType=BIGINT}
     </update>
@@ -160,7 +170,8 @@
             `status`     = #{status,jdbcType=TINYINT},
             `type`       = #{type,jdbcType=TINYINT},
             create_time  = #{createTime,jdbcType=TIMESTAMP},
-            dr           = #{dr,jdbcType=TINYINT}
+            dr           = #{dr,jdbcType=TINYINT},
+            warehouse_id = #{warehouseId,jdbcType=BIGINT}
         where storage_id = #{storageId,jdbcType=BIGINT}
     </update>
 
@@ -168,15 +179,18 @@
         s.storage_id, s.storage_no, s.source_no, s.source_type, s.pending_num, s.stored_num, s.storage_time, s.`status`,
     s.`type`, s.create_time, s.dr,
     rb.receipt_body_id, rb.receipt_no, rb.source_no as receipt_source_no, rb.source_type as receipt_source_type,
-    w.warehouse_name
+    w.warehouse_name, l.location_id, l.location_no, w.warehouse_id
     </sql>
     <resultMap id="BOResultMap" type="com.smartindustry.common.bo.sm.StorageBO" extends="BaseResultMap">
         <result column="receipt_body_id" jdbcType="BIGINT" property="receiptBodyId"/>
         <result column="receipt_no" jdbcType="CHAR" property="receiptNo"/>
         <result column="receipt_source_no" jdbcType="CHAR" property="receiptSourceNo"/>
         <result column="receipt_source_type" jdbcType="TINYINT" property="receiptSourceType"/>
+        <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
+        <result column="warehouse_id" jdbcType="BIGINT" property="storageWid"/>
         <collection property="locations" ofType="com.smartindustry.common.bo.si.LocationBO">
-            <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
+            <result column="location_id" jdbcType="BIGINT" property="locationId"/>
+            <result column="location_no" jdbcType="CHAR" property="locationNo"/>
         </collection>
     </resultMap>
     <select id="pageQuery" resultType="java.lang.Long">
@@ -184,14 +198,14 @@
         from sm_storage s
         left join sm_receipt_body rb on s.source_no = rb.receipt_no
         left join sm_storage_group sg on s.storage_id = sg.storage_id
-        left join si_location l on sg.location_id = l.location_id
-        left join si_warehouse w on l.warehouse_id = w.warehouse_id
+        left join si_warehouse w on s.warehouse_id = w.warehouse_id
+        left join si_location l on l.warehouse_id = w.warehouse_id
         where rb.dr = 1 and s.source_type = 1
         <if test="no != null and no != ''">and (s.storage_no like '%' #{no,jdbcType=CHAR} '%' or rb.receipt_no like '%'
             #{no,jdbcType=CHAR} '%' or rb.source_no like '%' #{no,jdbcType=CHAR} '%')
         </if>
         <if test="status != null and status != 0">and s.`status` = #{status,jdbcType=TINYINT}</if>
-        <if test="wid != null and wid != 0">and w.warehouse_id = #{wid,jdbcType=TINYINT}</if>
+        <if test="wid != null and wid != 0">and s.warehouse_id = #{wid,jdbcType=TINYINT}</if>
         <if test="type == 1">and rb.source_type in (1, 2)</if>
         <if test="type == 3">and rb.source_type = 3</if>
         order by s.storage_id desc
@@ -202,8 +216,8 @@
         from sm_storage s
         left join sm_receipt_body rb on s.source_no = rb.receipt_no
         left join sm_storage_group sg on s.storage_id = sg.storage_id
-        left join si_location l on sg.location_id = l.location_id
-        left join si_warehouse w on l.warehouse_id = w.warehouse_id
+        left join si_warehouse w on s.warehouse_id = w.warehouse_id
+        left join si_location l on l.warehouse_id = w.warehouse_id
         where rb.dr = 1 and s.source_type = 1 and s.storage_id in
         <foreach collection="list" item="sid" separator="," open="(" close=")">
             #{sid,jdbcType=BIGINT}
@@ -214,16 +228,18 @@
 
     <sql id="StorageBO_Column_List_Other">
         s.storage_id, s.storage_no, s.source_no, s.source_type, s.pending_num, s.stored_num, s.storage_time, s.`status`,
-    s.`type`, s.create_time, s.dr,o.outbound_no,th.storage_wid,th.transfer_type,w.warehouse_name,ph.pick_no, th.transfer_head_id, l.location_id
+    s.`type`, s.create_time, s.dr,o.outbound_no,th.storage_wid,th.transfer_type,w.warehouse_name,ph.pick_no, th.transfer_head_id, l.location_id, th.transfer_no
     </sql>
     <resultMap id="OtherBOResultMap" type="com.smartindustry.common.bo.sm.StorageBO" extends="BaseResultMap">
         <result column="outbound_no" jdbcType="CHAR" property="correspondNo"/>
         <result column="transfer_type" jdbcType="TINYINT" property="transferType"/>
         <result column="pick_no" jdbcType="CHAR" property="pickNo"/>
         <result column="storage_wid" jdbcType="BIGINT" property="storageWid"/>
+        <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
+        <result column="transfer_no" jdbcType="CHAR" property="receiptSourceNo"/>
         <collection property="locations" ofType="com.smartindustry.common.bo.si.LocationBO">
             <result column="location_id" jdbcType="BIGINT" property="locationId"/>
-            <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
+            <result column="location_no" jdbcType="CHAR" property="locationNo"/>
         </collection>
     </resultMap>
     <select id="pageQueryOther" parameterType="java.util.Map" resultType="java.lang.Long">
@@ -236,7 +252,7 @@
         left join si_location l on w.warehouse_id = l.warehouse_id
         where s.dr = 1 and s.source_type = 2
         <if test="no != null and no != ''">
-           and (s.storage_no like concat('%',#{no,jdbcType=VARCHAR},'%') or s.source_no like concat('%',#{no,jdbcType=VARCHAR},'%') or o.outbound_no like concat('%',#{no,jdbcType=VARCHAR},'%'))
+            and (s.storage_no like concat('%',#{no,jdbcType=VARCHAR},'%') or s.source_no like concat('%',#{no,jdbcType=VARCHAR},'%') or o.outbound_no like concat('%',#{no,jdbcType=VARCHAR},'%'))
         </if>
         <if test="ttype != null and ttype != 0">and th.transfer_type = #{ttype,jdbcType=TINYINT}</if>
         <if test="wid != null and wid != 0">and w.warehouse_id = #{wid,jdbcType=TINYINT}</if>
@@ -272,7 +288,7 @@
         left join si_warehouse w on th.storage_wid = w.warehouse_id
         left join si_location l on w.warehouse_id = l.warehouse_id
         where s.dr = 1 and s.source_type = 2
-         and storage_id = #{sid,jdbcType=BIGINT}
+        and storage_id = #{sid,jdbcType=BIGINT}
     </select>
 
     <select id="queryNo" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -295,6 +311,7 @@
                s.`type`,
                s.create_time,
                s.dr,
+               s.warehouse_id,
                rb.receipt_body_id
         from sm_storage s
                  left join sm_receipt_body rb on s.source_no = rb.receipt_no
