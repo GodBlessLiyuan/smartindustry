@@ -4,7 +4,7 @@
     <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.bd.OrderGoodsRatePO">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="dates" jdbcType="DATE" property="dates"/>
-        <result column="order_goods_rate" jdbcType="REAL" property="orderGoodsRate"/>
+        <result column="order_goods_rate" jdbcType="DECIMAL" property="orderGoodsRate"/>
         <result column="goods_num" jdbcType="INTEGER" property="goodsNum"/>
     </resultMap>
     <sql id="Base_Column_List">
@@ -24,7 +24,7 @@
     <insert id="insert" parameterType="com.smartindustry.common.pojo.bd.OrderGoodsRatePO">
         insert into t_order_goods_rate (id, dates, order_goods_rate,
                                         goods_num)
-        values (#{id,jdbcType=BIGINT}, #{dates,jdbcType=DATE}, #{orderGoodsRate,jdbcType=REAL},
+        values (#{id,jdbcType=BIGINT}, #{dates,jdbcType=DATE}, #{orderGoodsRate,jdbcType=DECIMAL},
                 #{goodsNum,jdbcType=INTEGER})
     </insert>
     <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.bd.OrderGoodsRatePO">
@@ -51,7 +51,7 @@
                 #{dates,jdbcType=DATE},
             </if>
             <if test="orderGoodsRate != null">
-                #{orderGoodsRate,jdbcType=REAL},
+                #{orderGoodsRate,jdbcType=DECIMAL},
             </if>
             <if test="goodsNum != null">
                 #{goodsNum,jdbcType=INTEGER},
@@ -65,7 +65,7 @@
                 dates = #{dates,jdbcType=DATE},
             </if>
             <if test="orderGoodsRate != null">
-                order_goods_rate = #{orderGoodsRate,jdbcType=REAL},
+                order_goods_rate = #{orderGoodsRate,jdbcType=DECIMAL},
             </if>
             <if test="goodsNum != null">
                 goods_num = #{goodsNum,jdbcType=INTEGER},
@@ -76,7 +76,7 @@
     <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.bd.OrderGoodsRatePO">
         update t_order_goods_rate
         set dates            = #{dates,jdbcType=DATE},
-            order_goods_rate = #{orderGoodsRate,jdbcType=REAL},
+            order_goods_rate = #{orderGoodsRate,jdbcType=DECIMAL},
             goods_num        = #{goodsNum,jdbcType=INTEGER}
         where id = #{id,jdbcType=BIGINT}
     </update>

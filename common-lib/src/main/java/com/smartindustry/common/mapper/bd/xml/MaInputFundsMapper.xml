@@ -4,10 +4,10 @@
     <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.bd.MaInputFundsPO">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="dates" jdbcType="DATE" property="dates"/>
-        <result column="ma_input_funds" jdbcType="REAL" property="maInputFunds"/>
-        <result column="goods_input_funds" jdbcType="REAL" property="goodsInputFunds"/>
-        <result column="same_rate" jdbcType="REAL" property="sameRate"/>
-        <result column="circle_rate" jdbcType="REAL" property="circleRate"/>
+        <result column="ma_input_funds" jdbcType="DECIMAL" property="maInputFunds"/>
+        <result column="goods_input_funds" jdbcType="DECIMAL" property="goodsInputFunds"/>
+        <result column="same_rate" jdbcType="DECIMAL" property="sameRate"/>
+        <result column="circle_rate" jdbcType="DECIMAL" property="circleRate"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, dates, ma_input_funds, goods_input_funds, same_rate, circle_rate
@@ -26,8 +26,8 @@
     <insert id="insert" parameterType="com.smartindustry.common.pojo.bd.MaInputFundsPO">
         insert into t_ma_input_funds (id, dates, ma_input_funds,
                                       goods_input_funds, same_rate, circle_rate)
-        values (#{id,jdbcType=BIGINT}, #{dates,jdbcType=DATE}, #{maInputFunds,jdbcType=REAL},
-                #{goodsInputFunds,jdbcType=REAL}, #{sameRate,jdbcType=REAL}, #{circleRate,jdbcType=REAL})
+        values (#{id,jdbcType=BIGINT}, #{dates,jdbcType=DATE}, #{maInputFunds,jdbcType=DECIMAL},
+                #{goodsInputFunds,jdbcType=DECIMAL}, #{sameRate,jdbcType=DECIMAL}, #{circleRate,jdbcType=DECIMAL})
     </insert>
     <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.bd.MaInputFundsPO">
         insert into t_ma_input_funds
@@ -59,16 +59,16 @@
                 #{dates,jdbcType=DATE},
             </if>
             <if test="maInputFunds != null">
-                #{maInputFunds,jdbcType=REAL},
+                #{maInputFunds,jdbcType=DECIMAL},
             </if>
             <if test="goodsInputFunds != null">
-                #{goodsInputFunds,jdbcType=REAL},
+                #{goodsInputFunds,jdbcType=DECIMAL},
             </if>
             <if test="sameRate != null">
-                #{sameRate,jdbcType=REAL},
+                #{sameRate,jdbcType=DECIMAL},
             </if>
             <if test="circleRate != null">
-                #{circleRate,jdbcType=REAL},
+                #{circleRate,jdbcType=DECIMAL},
             </if>
         </trim>
     </insert>
@@ -79,16 +79,16 @@
                 dates = #{dates,jdbcType=DATE},
             </if>
             <if test="maInputFunds != null">
-                ma_input_funds = #{maInputFunds,jdbcType=REAL},
+                ma_input_funds = #{maInputFunds,jdbcType=DECIMAL},
             </if>
             <if test="goodsInputFunds != null">
-                goods_input_funds = #{goodsInputFunds,jdbcType=REAL},
+                goods_input_funds = #{goodsInputFunds,jdbcType=DECIMAL},
             </if>
             <if test="sameRate != null">
-                same_rate = #{sameRate,jdbcType=REAL},
+                same_rate = #{sameRate,jdbcType=DECIMAL},
             </if>
             <if test="circleRate != null">
-                circle_rate = #{circleRate,jdbcType=REAL},
+                circle_rate = #{circleRate,jdbcType=DECIMAL},
             </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
@@ -96,10 +96,10 @@
     <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.bd.MaInputFundsPO">
         update t_ma_input_funds
         set dates             = #{dates,jdbcType=DATE},
-            ma_input_funds    = #{maInputFunds,jdbcType=REAL},
-            goods_input_funds = #{goodsInputFunds,jdbcType=REAL},
-            same_rate         = #{sameRate,jdbcType=REAL},
-            circle_rate       = #{circleRate,jdbcType=REAL}
+            ma_input_funds    = #{maInputFunds,jdbcType=DECIMAL},
+            goods_input_funds = #{goodsInputFunds,jdbcType=DECIMAL},
+            same_rate         = #{sameRate,jdbcType=DECIMAL},
+            circle_rate       = #{circleRate,jdbcType=DECIMAL}
         where id = #{id,jdbcType=BIGINT}
     </update>
 

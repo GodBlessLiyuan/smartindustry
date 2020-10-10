@@ -1,6 +1,7 @@
 package com.smartindustry.common.pojo.bd;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import lombok.Data;
 
@@ -14,13 +15,13 @@ public class OrderGoodsFundsPO implements Serializable {
 
     private Date dates;
 
-    private Float goodsFunds;
+    private BigDecimal goodsFunds;
 
-    private Float goodsFundsDay;
+    private BigDecimal goodsFundsDay;
 
-    private Float sameRate;
+    private BigDecimal sameRate;
 
-    private Float circleRate;
+    private BigDecimal circleRate;
 
     private static final long serialVersionUID = 1L;
 }

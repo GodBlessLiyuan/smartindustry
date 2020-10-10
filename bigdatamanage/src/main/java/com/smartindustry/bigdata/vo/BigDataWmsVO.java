@@ -3,6 +3,7 @@ package com.smartindustry.bigdata.vo;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * @author: xiahui
@@ -48,19 +49,19 @@ public class BigDataWmsVO implements Serializable {
         /**
          * 数量/金额
          */
-        private double total;
+        private BigDecimal total;
         /**
          * 月同比
          */
-        private double moy;
+        private BigDecimal moy;
         /**
          * 月环比
          */
-        private double mom;
+        private BigDecimal mom;
         /**
          * 日均
          */
-        private double average;
+        private BigDecimal average;
     }
 
     @Data
@@ -68,10 +69,10 @@ public class BigDataWmsVO implements Serializable {
         /**
          * 发货率
          */
-        private double rate;
+        private BigDecimal rate;
         /**
          * 发货数
          */
-        private double num;
+        private Integer num;
     }
 }

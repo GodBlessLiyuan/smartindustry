@@ -1,6 +1,7 @@
 package com.smartindustry.common.pojo.bd;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import lombok.Data;
 
@@ -14,11 +15,11 @@ public class MaWareFundsPO implements Serializable {
 
     private Date dates;
 
-    private Float maWareFunds;
+    private BigDecimal maWareFunds;
 
-    private Float sameRate;
+    private BigDecimal sameRate;
 
-    private Float circleRate;
+    private BigDecimal circleRate;
 
     private static final long serialVersionUID = 1L;
 }

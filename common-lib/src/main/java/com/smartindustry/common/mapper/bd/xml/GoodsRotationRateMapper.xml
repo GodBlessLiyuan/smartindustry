@@ -4,9 +4,9 @@
     <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.bd.GoodsRotationRatePO">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="dates" jdbcType="DATE" property="dates"/>
-        <result column="rotation_num" jdbcType="INTEGER" property="rotationNum"/>
-        <result column="same_rate" jdbcType="REAL" property="sameRate"/>
-        <result column="circle_rate" jdbcType="REAL" property="circleRate"/>
+        <result column="rotation_num" jdbcType="DECIMAL" property="rotationNum"/>
+        <result column="same_rate" jdbcType="DECIMAL" property="sameRate"/>
+        <result column="circle_rate" jdbcType="DECIMAL" property="circleRate"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, dates, rotation_num, same_rate, circle_rate
@@ -25,8 +25,8 @@
     <insert id="insert" parameterType="com.smartindustry.common.pojo.bd.GoodsRotationRatePO">
         insert into t_goods_rotation_rate (id, dates, rotation_num,
                                            same_rate, circle_rate)
-        values (#{id,jdbcType=BIGINT}, #{dates,jdbcType=DATE}, #{rotationNum,jdbcType=INTEGER},
-                #{sameRate,jdbcType=REAL}, #{circleRate,jdbcType=REAL})
+        values (#{id,jdbcType=BIGINT}, #{dates,jdbcType=DATE}, #{rotationNum,jdbcType=DECIMAL},
+                #{sameRate,jdbcType=DECIMAL}, #{circleRate,jdbcType=DECIMAL})
     </insert>
     <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.bd.GoodsRotationRatePO">
         insert into t_goods_rotation_rate
@@ -55,13 +55,13 @@
                 #{dates,jdbcType=DATE},
             </if>
             <if test="rotationNum != null">
-                #{rotationNum,jdbcType=INTEGER},
+                #{rotationNum,jdbcType=DECIMAL},
             </if>
             <if test="sameRate != null">
-                #{sameRate,jdbcType=REAL},
+                #{sameRate,jdbcType=DECIMAL},
             </if>
             <if test="circleRate != null">
-                #{circleRate,jdbcType=REAL},
+                #{circleRate,jdbcType=DECIMAL},
             </if>
         </trim>
     </insert>
@@ -72,13 +72,13 @@
                 dates = #{dates,jdbcType=DATE},
             </if>
             <if test="rotationNum != null">
-                rotation_num = #{rotationNum,jdbcType=INTEGER},
+                rotation_num = #{rotationNum,jdbcType=DECIMAL},
             </if>
             <if test="sameRate != null">
-                same_rate = #{sameRate,jdbcType=REAL},
+                same_rate = #{sameRate,jdbcType=DECIMAL},
             </if>
             <if test="circleRate != null">
-                circle_rate = #{circleRate,jdbcType=REAL},
+                circle_rate = #{circleRate,jdbcType=DECIMAL},
             </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
@@ -86,9 +86,9 @@
     <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.bd.GoodsRotationRatePO">
         update t_goods_rotation_rate
         set dates        = #{dates,jdbcType=DATE},
-            rotation_num = #{rotationNum,jdbcType=INTEGER},
-            same_rate    = #{sameRate,jdbcType=REAL},
-            circle_rate  = #{circleRate,jdbcType=REAL}
+            rotation_num = #{rotationNum,jdbcType=DECIMAL},
+            same_rate    = #{sameRate,jdbcType=DECIMAL},
+            circle_rate  = #{circleRate,jdbcType=DECIMAL}
         where id = #{id,jdbcType=BIGINT}
     </update>
 

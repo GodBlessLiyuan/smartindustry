@@ -1,6 +1,7 @@
 package com.smartindustry.common.pojo.bd;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import lombok.Data;
 
@@ -14,7 +15,7 @@ public class OrderGoodsRatePO implements Serializable {
 
     private Date dates;
 
-    private Float orderGoodsRate;
+    private BigDecimal orderGoodsRate;
 
     private Integer goodsNum;
 

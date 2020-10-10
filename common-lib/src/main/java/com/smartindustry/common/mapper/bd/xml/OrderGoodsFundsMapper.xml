@@ -4,10 +4,10 @@
     <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.bd.OrderGoodsFundsPO">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="dates" jdbcType="DATE" property="dates"/>
-        <result column="goods_funds" jdbcType="REAL" property="goodsFunds"/>
-        <result column="goods_funds_day" jdbcType="REAL" property="goodsFundsDay"/>
-        <result column="same_rate" jdbcType="REAL" property="sameRate"/>
-        <result column="circle_rate" jdbcType="REAL" property="circleRate"/>
+        <result column="goods_funds" jdbcType="DECIMAL" property="goodsFunds"/>
+        <result column="goods_funds_day" jdbcType="DECIMAL" property="goodsFundsDay"/>
+        <result column="same_rate" jdbcType="DECIMAL" property="sameRate"/>
+        <result column="circle_rate" jdbcType="DECIMAL" property="circleRate"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, dates, goods_funds, goods_funds_day, same_rate, circle_rate
@@ -26,8 +26,8 @@
     <insert id="insert" parameterType="com.smartindustry.common.pojo.bd.OrderGoodsFundsPO">
         insert into t_order_goods_funds (id, dates, goods_funds,
                                          goods_funds_day, same_rate, circle_rate)
-        values (#{id,jdbcType=BIGINT}, #{dates,jdbcType=DATE}, #{goodsFunds,jdbcType=REAL},
-                #{goodsFundsDay,jdbcType=REAL}, #{sameRate,jdbcType=REAL}, #{circleRate,jdbcType=REAL})
+        values (#{id,jdbcType=BIGINT}, #{dates,jdbcType=DATE}, #{goodsFunds,jdbcType=DECIMAL},
+                #{goodsFundsDay,jdbcType=DECIMAL}, #{sameRate,jdbcType=DECIMAL}, #{circleRate,jdbcType=DECIMAL})
     </insert>
     <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.bd.OrderGoodsFundsPO">
         insert into t_order_goods_funds
@@ -59,16 +59,16 @@
                 #{dates,jdbcType=DATE},
             </if>
             <if test="goodsFunds != null">
-                #{goodsFunds,jdbcType=REAL},
+                #{goodsFunds,jdbcType=DECIMAL},
             </if>
             <if test="goodsFundsDay != null">
-                #{goodsFundsDay,jdbcType=REAL},
+                #{goodsFundsDay,jdbcType=DECIMAL},
             </if>
             <if test="sameRate != null">
-                #{sameRate,jdbcType=REAL},
+                #{sameRate,jdbcType=DECIMAL},
             </if>
             <if test="circleRate != null">
-                #{circleRate,jdbcType=REAL},
+                #{circleRate,jdbcType=DECIMAL},
             </if>
         </trim>
     </insert>
@@ -79,16 +79,16 @@
                 dates = #{dates,jdbcType=DATE},
             </if>
             <if test="goodsFunds != null">
-                goods_funds = #{goodsFunds,jdbcType=REAL},
+                goods_funds = #{goodsFunds,jdbcType=DECIMAL},
             </if>
             <if test="goodsFundsDay != null">
-                goods_funds_day = #{goodsFundsDay,jdbcType=REAL},
+                goods_funds_day = #{goodsFundsDay,jdbcType=DECIMAL},
             </if>
             <if test="sameRate != null">
-                same_rate = #{sameRate,jdbcType=REAL},
+                same_rate = #{sameRate,jdbcType=DECIMAL},
             </if>
             <if test="circleRate != null">
-                circle_rate = #{circleRate,jdbcType=REAL},
+                circle_rate = #{circleRate,jdbcType=DECIMAL},
             </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
@@ -96,10 +96,10 @@
     <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.bd.OrderGoodsFundsPO">
         update t_order_goods_funds
         set dates           = #{dates,jdbcType=DATE},
-            goods_funds     = #{goodsFunds,jdbcType=REAL},
-            goods_funds_day = #{goodsFundsDay,jdbcType=REAL},
-            same_rate       = #{sameRate,jdbcType=REAL},
-            circle_rate     = #{circleRate,jdbcType=REAL}
+            goods_funds     = #{goodsFunds,jdbcType=DECIMAL},
+            goods_funds_day = #{goodsFundsDay,jdbcType=DECIMAL},
+            same_rate       = #{sameRate,jdbcType=DECIMAL},
+            circle_rate     = #{circleRate,jdbcType=DECIMAL}
         where id = #{id,jdbcType=BIGINT}
     </update>
 
