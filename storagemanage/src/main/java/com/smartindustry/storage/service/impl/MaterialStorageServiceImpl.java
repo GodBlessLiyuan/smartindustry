@@ -837,7 +837,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
          * 判断入库单默认仓库是否存在库位，若无默认库位，则直接按照有库位处理
          */
         if (storageBO.getWarehouseId() != null) {
-            List<LocationPO> locationPOS = locationMapper.queryLocation(receiptBodyBO.getWarehouseId());
+            List<LocationPO> locationPOS = locationMapper.queryLocation(storageBO.getWarehouseId());
             //检验物料默认仓库中知否存在库位 true 存在 false 不存在
             boolean existLocation = true;
             if (locationPOS == null || locationPOS.isEmpty()) {

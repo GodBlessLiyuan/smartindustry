@@ -144,7 +144,12 @@ public class StorageDetailVO implements Serializable {
         vo.setTtype(msBO.getTransferType());
         vo.setPno(msBO.getPickNo());
         vo.setCono(msBO.getCorrespondNo());
-        vo.setWid(rbBO.getWarehouseId());
+        if (msBO.getWarehouseId() == null && msBO.getStorageWid() == null) {
+            vo.setWid(rbBO.getWarehouseId());
+        } else {
+            vo.setWid(msBO.getWarehouseId()!= null? msBO.getWarehouseId(): msBO.getStorageWid());
+        }
+
         vo.setLid(rbBO.getLocationId());
         vo.setLno(rbBO.getLocationNo());
         //设置待入库列表
