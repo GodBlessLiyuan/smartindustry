@@ -11,6 +11,7 @@ import com.smartindustry.common.mapper.im.MaterialInventoryMapper;
 import com.smartindustry.common.mapper.si.LocationMapper;
 import com.smartindustry.common.mapper.si.PrintLabelMapper;
 import com.smartindustry.common.mapper.si.StorageLabelMapper;
+import com.smartindustry.common.mapper.si.WarehouseMapper;
 import com.smartindustry.common.mapper.sm.*;
 import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.em.TransferHeadPO;
@@ -36,7 +37,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -72,7 +72,10 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
     @Autowired
     TokenService tokenService;
     @Autowired
-    TransferHeadMapper transferHeadMapper;
+    private TransferHeadMapper transferHeadMapper;
+
+    @Autowired
+    private WarehouseMapper warehouseMapper;
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData) {
@@ -935,16 +938,18 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         for (StorageGroupBO sgBO : storageGroupPOS) {
             sgIds.add(sgBO.getStorageGroupId());
         }
+        if (!sgIds.isEmpty()) {
+            List<StorageDetailBO> storageDetailBOS = storageDetailMapper.queryByGroupIds(sgIds);
+            List<Long> plIds = new ArrayList<>();
+            for (StorageDetailBO sdBo : storageDetailBOS) {
+                plIds.add(sdBo.getPrintLabelId());
+            }
+            if (!plIds.isEmpty()) {
+                printLabelMapper.updateLidByIds(null, plIds);
+                receiptLabelMapper.updateSidByPlids(null, plIds);
+            }
+        }
 
-        List<StorageDetailBO> storageDetailBOS = storageDetailMapper.queryByGroupIds(sgIds);
-        List<Long> plIds = new ArrayList<>();
-        for (StorageDetailBO sdBo : storageDetailBOS) {
-            plIds.add(sdBo.getPrintLabelId());
-        }
-        if (!plIds.isEmpty()) {
-            printLabelMapper.updateLidByIds(null, plIds);
-            receiptLabelMapper.updateSidByPlids(null, plIds);
-        }
 
         //step2 查找收料单， 更新入库数量和状态, 更新收料单
         storageBO.setStatus(ReceiptConstant.MATERIAL_STORAGE_PENDING);
@@ -959,7 +964,12 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         storageDetailMapper.deleteBySid(dto.getSid());
         //step 4 删除入库详情组
         storageGroupMapper.batchDeleteByIds(sgIds);
-        return ResultVO.ok();
+
+        //判断新的
+        List<LocationPO> locationPOS = locationMapper.queryLocation(dto.getWhid());
+        WarehouseVO wvo = WarehouseVO.convert(warehouseMapper.selectByPrimaryKey(dto.getWhid()));
+        wvo.setFlag(locationPOS.isEmpty()?false: true);
+        return ResultVO.ok().setData(wvo);
     }
 
     /**
