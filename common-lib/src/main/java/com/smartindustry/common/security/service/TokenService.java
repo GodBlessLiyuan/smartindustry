@@ -46,9 +46,9 @@ public class TokenService {
     @Value("${token.expireTime}")
     private int expireTime;
 
-    private static final long MILLIS_MINUTE = 1000;
+    private static final long MILLIS_MINUTE = 60 * 1000;
 
-    private static final long MILLIS_MINUTE_TEN = 20 * 1000L;
+    private static final long MILLIS_MINUTE_TEN = 20 * 60 * 1000L;
 
     @Autowired
     private RedisTemplate redisTemplate;
@@ -133,7 +133,7 @@ public class TokenService {
         loginUserBO.setExpireTime(loginUserBO.getLoginTime() + expireTime * MILLIS_MINUTE);
         // 根据uuid将loginUser缓存
         String userKey = SecurityConstant.LOGIN_TOKEN_KEY + loginUserBO.getToken();
-        redisTemplate.opsForValue().set(userKey, loginUserBO, expireTime, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(userKey, loginUserBO, expireTime, TimeUnit.MINUTES);
     }
 
     /**
