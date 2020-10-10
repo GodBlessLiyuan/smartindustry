@@ -1,5 +1,6 @@
 package com.smartindustry.bigdata;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -10,6 +11,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
  * @description: 大数据
  * @version: 1.0
  */
+@MapperScan("com.smartindustry.common.mapper.bd")
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 public class BigDataApplication {
     public static void main(String[] args) {

@@ -26,7 +26,7 @@ spring:
       name: vbooster
       password: 123456a
 mybatis:
-  mapper-locations: com/smartindustry/common/mapper/**/*.xml
+  mapper-locations: com/smartindustry/common/mapper/bd/**/*.xml
 eureka:
   client:
     service-url:
@@ -37,5 +37,6 @@ logging:
     com:
       smartindustry:
         common:
-          mapper: debug
+          mapper:
+            bd: debug
   config: classpath:logback-spring-test.xml
