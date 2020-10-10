@@ -209,6 +209,7 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
             po1.setPendingNum(sum);
             po1.setCreateTime(new Date());
             po1.setDr((byte) 1);
+            po1.setWarehouseId(po2.getStorageWid());
             storageMapper.insert(po1);
             storageRecordMapper.insert(new StorageRecordPO(dto.getSid(), po1.getStorageId(), user.getUserId(), user.getName(), OutboundConstant.RECORD_TYPE_STORAGE_INVOICE, OutboundConstant.RECEIPT_MATERIAL_STORAGE));
         }

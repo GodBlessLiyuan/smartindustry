@@ -227,8 +227,8 @@ public class LabelManageServiceImpl implements ILabelManageService {
         }
 
         ConfigPO configPO = configMapper.queryByKey(ConfigConstant.K_STORAGE_QUALITY);
+        MaterialAttributePO attributePO = materialAttributeMapper.queryByMid(bodyPO.getMaterialId());
         if (null != configPO && ConfigConstant.V_YES.equals(configPO.getConfigValue())) {
-            MaterialAttributePO attributePO = materialAttributeMapper.queryByMid(bodyPO.getMaterialId());
             if (null != attributePO && null != attributePO.getStorageInspect() && !ReceiptConstant.STORAGE_INSPECT_NO.equals(attributePO.getStorageInspect())) {
                 Byte status;    // 操作记录类型
                 if (ReceiptConstant.STORAGE_INSPECT_IQC.equals(attributePO.getStorageInspect())) {
@@ -282,6 +282,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
         storagePO.setType(ReceiptConstant.MATERIAL_TYPE_GOOD);
         storagePO.setCreateTime(new Date());
         storagePO.setDr((byte) 1);
+        storagePO.setWarehouseId(attributePO.getWarehouseId());
         storageMapper.insert(storagePO);
 
         // 操作记录
