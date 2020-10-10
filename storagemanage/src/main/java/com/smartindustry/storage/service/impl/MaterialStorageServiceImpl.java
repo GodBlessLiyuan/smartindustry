@@ -963,8 +963,9 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         //step 3 查找所有的入库详情、 都需要进行删除
         storageDetailMapper.deleteBySid(dto.getSid());
         //step 4 删除入库详情组
-        storageGroupMapper.batchDeleteByIds(sgIds);
-
+        if (!sgIds.isEmpty()) {
+            storageGroupMapper.batchDeleteByIds(sgIds);
+        }
         //判断新的
         List<LocationPO> locationPOS = locationMapper.queryLocation(dto.getWhid());
         WarehouseVO wvo = WarehouseVO.convert(warehouseMapper.selectByPrimaryKey(dto.getWhid()));
