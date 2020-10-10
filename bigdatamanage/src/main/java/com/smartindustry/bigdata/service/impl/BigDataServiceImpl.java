@@ -2,62 +2,88 @@ package com.smartindustry.bigdata.service.impl;
 
 import com.smartindustry.bigdata.service.IBigDataService;
 import com.smartindustry.bigdata.vo.BigDataWmsVO;
+import com.smartindustry.common.mapper.bd.*;
+import com.smartindustry.common.pojo.bd.*;
 import com.smartindustry.common.vo.ResultVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
  * @author: xiahui
  * @date: Created in 2020/10/9 10:07
- * @description: TODO
+ * @description: 大数据查询
  * @version: 1.0
  */
 @Service
 public class BigDataServiceImpl implements IBigDataService {
+    @Autowired
+    private OrderGoodsNumMapper orderGoodsNumMapper;
+    @Autowired
+    private OrderGoodsRateMapper orderGoodsRateMapper;
+    @Autowired
+    private OrderGoodsFundsMapper orderGoodsFundsMapper;
+    @Autowired
+    private MaInputFundsMapper maInputFundsMapper;
+    @Autowired
+    private MaWareFundsMapper maWareFundsMapper;
+    @Autowired
+    private GoodsFundsMapper goodsFundsMapper;
+    @Autowired
+    private GoodsRotationRateMapper goodsRotationRateMapper;
+
     @Override
     public ResultVO wms() {
         BigDataWmsVO vo = new BigDataWmsVO();
+
+        OrderGoodsNumPO orderGoodsNumPO = orderGoodsNumMapper.queryLastDay();
         BigDataWmsVO.A osnum = new BigDataWmsVO.A();
-        osnum.setTotal(1200);
-        osnum.setMoy(12);
-        osnum.setMom(11);
-        osnum.setAverage(200);
+        osnum.setTotal(orderGoodsNumPO.getOrderGoodsNum());
+        osnum.setMoy(orderGoodsNumPO.getSameRate());
+        osnum.setMom(orderGoodsNumPO.getCircleRate());
+        osnum.setAverage(orderGoodsNumPO.getGoodsNumDay());
         vo.setOsnum(osnum);
 
+        OrderGoodsRatePO orderGoodsRatePO = orderGoodsRateMapper.queryLastDay();
         BigDataWmsVO.B odrate = new BigDataWmsVO.B();
-        odrate.setRate(90);
-        odrate.setNum(50);
+        odrate.setRate(orderGoodsRatePO.getOrderGoodsRate());
+        odrate.setNum(orderGoodsRatePO.getGoodsNum());
         vo.setOdrate(odrate);
 
+        OrderGoodsFundsPO orderGoodsFundsPO = orderGoodsFundsMapper.queryLastDay();
         BigDataWmsVO.A osmoney = new BigDataWmsVO.A();
-        osmoney.setTotal(500000);
-        osmoney.setMoy(12);
-        osmoney.setMom(11);
-        osmoney.setAverage(10000);
+        osmoney.setTotal(orderGoodsFundsPO.getGoodsFunds());
+        osmoney.setMoy(orderGoodsFundsPO.getSameRate());
+        osmoney.setMom(orderGoodsFundsPO.getCircleRate());
+        osmoney.setAverage(orderGoodsFundsPO.getGoodsFundsDay());
         vo.setOsmoney(osmoney);
 
+        MaInputFundsPO maInputFundsPO = maInputFundsMapper.queryLastDay();
         BigDataWmsVO.A psmoney = new BigDataWmsVO.A();
-        psmoney.setTotal(5000000);
-        psmoney.setMoy(12);
-        psmoney.setMom(11);
-        psmoney.setAverage(200000);
+        psmoney.setTotal(maInputFundsPO.getMaInputFunds());
+        psmoney.setMoy(maInputFundsPO.getSameRate());
+        psmoney.setMom(maInputFundsPO.getCircleRate());
+        psmoney.setAverage(maInputFundsPO.getGoodsInputFunds());
         vo.setPsmoney(psmoney);
 
+        MaWareFundsPO maWareFundsPO = maWareFundsMapper.queryLastDay();
         BigDataWmsVO.A rimoney = new BigDataWmsVO.A();
-        rimoney.setTotal(5000000);
-        rimoney.setMoy(12);
-        rimoney.setMom(11);
+        rimoney.setTotal(maWareFundsPO.getMaWareFunds());
+        rimoney.setMoy(maWareFundsPO.getSameRate());
+        rimoney.setMom(maWareFundsPO.getCircleRate());
         vo.setRimoney(rimoney);
 
+        GoodsFundsPO goodsFundsPO = goodsFundsMapper.queryLastDay();
         BigDataWmsVO.A iimoney = new BigDataWmsVO.A();
-        iimoney.setTotal(5000000);
-        iimoney.setMoy(12);
-        iimoney.setMom(11);
+        iimoney.setTotal(goodsFundsPO.getGoodsFunds());
+        iimoney.setMoy(goodsFundsPO.getSameRate());
+        iimoney.setMom(goodsFundsPO.getCircleRate());
         vo.setIimoney(iimoney);
 
+        GoodsRotationRatePO goodsRotationRatePO = goodsRotationRateMapper.queryLastDay();
         BigDataWmsVO.A iturnover = new BigDataWmsVO.A();
-        iturnover.setTotal(5);
-        iturnover.setMoy(12);
-        iturnover.setMom(11);
+        iturnover.setTotal(goodsRotationRatePO.getRotationNum());
+        iturnover.setMoy(goodsRotationRatePO.getSameRate());
+        iturnover.setMom(goodsRotationRatePO.getCircleRate());
         vo.setIturnover(iturnover);
 
         return ResultVO.ok().setData(vo);

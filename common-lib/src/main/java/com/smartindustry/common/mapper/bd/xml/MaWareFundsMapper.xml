@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.bd.MaWareFundsMapper">
+    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.bd.MaWareFundsPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="dates" jdbcType="DATE" property="dates"/>
+        <result column="ma_ware_funds" jdbcType="REAL" property="maWareFunds"/>
+        <result column="same_rate" jdbcType="REAL" property="sameRate"/>
+        <result column="circle_rate" jdbcType="REAL" property="circleRate"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, dates, ma_ware_funds, same_rate, circle_rate
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_ma_ware_funds
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from t_ma_ware_funds
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.bd.MaWareFundsPO">
+        insert into t_ma_ware_funds (id, dates, ma_ware_funds,
+                                     same_rate, circle_rate)
+        values (#{id,jdbcType=BIGINT}, #{dates,jdbcType=DATE}, #{maWareFunds,jdbcType=REAL},
+                #{sameRate,jdbcType=REAL}, #{circleRate,jdbcType=REAL})
+    </insert>
+    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.bd.MaWareFundsPO">
+        insert into t_ma_ware_funds
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="dates != null">
+                dates,
+            </if>
+            <if test="maWareFunds != null">
+                ma_ware_funds,
+            </if>
+            <if test="sameRate != null">
+                same_rate,
+            </if>
+            <if test="circleRate != null">
+                circle_rate,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="dates != null">
+                #{dates,jdbcType=DATE},
+            </if>
+            <if test="maWareFunds != null">
+                #{maWareFunds,jdbcType=REAL},
+            </if>
+            <if test="sameRate != null">
+                #{sameRate,jdbcType=REAL},
+            </if>
+            <if test="circleRate != null">
+                #{circleRate,jdbcType=REAL},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.bd.MaWareFundsPO">
+        update t_ma_ware_funds
+        <set>
+            <if test="dates != null">
+                dates = #{dates,jdbcType=DATE},
+            </if>
+            <if test="maWareFunds != null">
+                ma_ware_funds = #{maWareFunds,jdbcType=REAL},
+            </if>
+            <if test="sameRate != null">
+                same_rate = #{sameRate,jdbcType=REAL},
+            </if>
+            <if test="circleRate != null">
+                circle_rate = #{circleRate,jdbcType=REAL},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.bd.MaWareFundsPO">
+        update t_ma_ware_funds
+        set dates         = #{dates,jdbcType=DATE},
+            ma_ware_funds = #{maWareFunds,jdbcType=REAL},
+            same_rate     = #{sameRate,jdbcType=REAL},
+            circle_rate   = #{circleRate,jdbcType=REAL}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="queryLastDay" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_ma_ware_funds
+        order by dates desc limit 1;
+    </select>
+</mapper>
