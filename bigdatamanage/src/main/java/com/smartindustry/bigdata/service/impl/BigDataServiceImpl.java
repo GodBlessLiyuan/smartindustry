@@ -36,55 +36,69 @@ public class BigDataServiceImpl implements IBigDataService {
         BigDataWmsVO vo = new BigDataWmsVO();
 
         OrderGoodsNumPO orderGoodsNumPO = orderGoodsNumMapper.queryLastDay();
-        BigDataWmsVO.A osnum = new BigDataWmsVO.A();
-        osnum.setTotal(orderGoodsNumPO.getOrderGoodsNum());
-        osnum.setMoy(orderGoodsNumPO.getSameRate());
-        osnum.setMom(orderGoodsNumPO.getCircleRate());
-        osnum.setAverage(orderGoodsNumPO.getGoodsNumDay());
-        vo.setOsnum(osnum);
+        if (null != orderGoodsNumPO) {
+            BigDataWmsVO.A osnum = new BigDataWmsVO.A();
+            osnum.setTotal(orderGoodsNumPO.getOrderGoodsNum());
+            osnum.setMoy(orderGoodsNumPO.getSameRate());
+            osnum.setMom(orderGoodsNumPO.getCircleRate());
+            osnum.setAverage(orderGoodsNumPO.getGoodsNumDay());
+            vo.setOsnum(osnum);
+        }
 
         OrderGoodsRatePO orderGoodsRatePO = orderGoodsRateMapper.queryLastDay();
-        BigDataWmsVO.B odrate = new BigDataWmsVO.B();
-        odrate.setRate(orderGoodsRatePO.getOrderGoodsRate());
-        odrate.setNum(orderGoodsRatePO.getGoodsNum());
-        vo.setOdrate(odrate);
+        if (null != orderGoodsRatePO) {
+            BigDataWmsVO.B odrate = new BigDataWmsVO.B();
+            odrate.setRate(orderGoodsRatePO.getOrderGoodsRate());
+            odrate.setNum(orderGoodsRatePO.getGoodsNum());
+            vo.setOdrate(odrate);
+        }
 
         OrderGoodsFundsPO orderGoodsFundsPO = orderGoodsFundsMapper.queryLastDay();
-        BigDataWmsVO.A osmoney = new BigDataWmsVO.A();
-        osmoney.setTotal(orderGoodsFundsPO.getGoodsFunds());
-        osmoney.setMoy(orderGoodsFundsPO.getSameRate());
-        osmoney.setMom(orderGoodsFundsPO.getCircleRate());
-        osmoney.setAverage(orderGoodsFundsPO.getGoodsFundsDay());
-        vo.setOsmoney(osmoney);
+        if (null != orderGoodsFundsPO) {
+            BigDataWmsVO.A osmoney = new BigDataWmsVO.A();
+            osmoney.setTotal(orderGoodsFundsPO.getGoodsFunds());
+            osmoney.setMoy(orderGoodsFundsPO.getSameRate());
+            osmoney.setMom(orderGoodsFundsPO.getCircleRate());
+            osmoney.setAverage(orderGoodsFundsPO.getGoodsFundsDay());
+            vo.setOsmoney(osmoney);
+        }
 
         MaInputFundsPO maInputFundsPO = maInputFundsMapper.queryLastDay();
-        BigDataWmsVO.A psmoney = new BigDataWmsVO.A();
-        psmoney.setTotal(maInputFundsPO.getMaInputFunds());
-        psmoney.setMoy(maInputFundsPO.getSameRate());
-        psmoney.setMom(maInputFundsPO.getCircleRate());
-        psmoney.setAverage(maInputFundsPO.getGoodsInputFunds());
-        vo.setPsmoney(psmoney);
+        if (null != maInputFundsPO) {
+            BigDataWmsVO.A psmoney = new BigDataWmsVO.A();
+            psmoney.setTotal(maInputFundsPO.getMaInputFunds());
+            psmoney.setMoy(maInputFundsPO.getSameRate());
+            psmoney.setMom(maInputFundsPO.getCircleRate());
+            psmoney.setAverage(maInputFundsPO.getGoodsInputFunds());
+            vo.setPsmoney(psmoney);
+        }
 
         MaWareFundsPO maWareFundsPO = maWareFundsMapper.queryLastDay();
-        BigDataWmsVO.A rimoney = new BigDataWmsVO.A();
-        rimoney.setTotal(maWareFundsPO.getMaWareFunds());
-        rimoney.setMoy(maWareFundsPO.getSameRate());
-        rimoney.setMom(maWareFundsPO.getCircleRate());
-        vo.setRimoney(rimoney);
+        if (null != maWareFundsPO) {
+            BigDataWmsVO.A rimoney = new BigDataWmsVO.A();
+            rimoney.setTotal(maWareFundsPO.getMaWareFunds());
+            rimoney.setMoy(maWareFundsPO.getSameRate());
+            rimoney.setMom(maWareFundsPO.getCircleRate());
+            vo.setRimoney(rimoney);
+        }
 
         GoodsFundsPO goodsFundsPO = goodsFundsMapper.queryLastDay();
-        BigDataWmsVO.A iimoney = new BigDataWmsVO.A();
-        iimoney.setTotal(goodsFundsPO.getGoodsFunds());
-        iimoney.setMoy(goodsFundsPO.getSameRate());
-        iimoney.setMom(goodsFundsPO.getCircleRate());
-        vo.setIimoney(iimoney);
+        if (null != maWareFundsPO) {
+            BigDataWmsVO.A iimoney = new BigDataWmsVO.A();
+            iimoney.setTotal(goodsFundsPO.getGoodsFunds());
+            iimoney.setMoy(goodsFundsPO.getSameRate());
+            iimoney.setMom(goodsFundsPO.getCircleRate());
+            vo.setIimoney(iimoney);
+        }
 
         GoodsRotationRatePO goodsRotationRatePO = goodsRotationRateMapper.queryLastDay();
-        BigDataWmsVO.A iturnover = new BigDataWmsVO.A();
-        iturnover.setTotal(goodsRotationRatePO.getRotationNum());
-        iturnover.setMoy(goodsRotationRatePO.getSameRate());
-        iturnover.setMom(goodsRotationRatePO.getCircleRate());
-        vo.setIturnover(iturnover);
+        if (null != goodsRotationRatePO) {
+            BigDataWmsVO.A iturnover = new BigDataWmsVO.A();
+            iturnover.setTotal(goodsRotationRatePO.getRotationNum());
+            iturnover.setMoy(goodsRotationRatePO.getSameRate());
+            iturnover.setMom(goodsRotationRatePO.getCircleRate());
+            vo.setIturnover(iturnover);
+        }
 
         return ResultVO.ok().setData(vo);
     }
