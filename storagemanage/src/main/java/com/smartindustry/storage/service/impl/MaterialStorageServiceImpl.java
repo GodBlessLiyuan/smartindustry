@@ -836,41 +836,6 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         if (null == receiptBodyBO) {
             return new ResultVO(1002);
         }
-        /**
-         * 判断入库单默认仓库是否存在库位，若无默认库位，则直接按照有库位处理
-         */
-        if (storageBO.getWarehouseId() != null) {
-            List<LocationPO> locationPOS = locationMapper.queryLocation(storageBO.getWarehouseId());
-            //检验物料默认仓库中知否存在库位 true 存在 false 不存在
-            boolean existLocation = true;
-            if (locationPOS == null || locationPOS.isEmpty()) {
-                existLocation = false;
-            }
-            //当默认入库仓库没有库位时需要先插入入库详情组
-            if (!existLocation) {
-                //查询groupId
-                List<PrintLabelBO> labelBOS = printLabelMapper.queryByRbid(storageBO.getReceiptBodyId());
-                if (labelBOS != null && !labelBOS.isEmpty()) {
-                    Long sgId = storageGroupMapper.queryGroup(dto.getSid());
-                    if (sgId == null) {
-                        StorageGroupPO sgPo = new StorageGroupPO();
-                        sgPo.setStorageId(dto.getSid());
-                        storageGroupMapper.insert(sgPo);
-                        sgId = sgPo.getStorageGroupId();
-                    }
-                    for (PrintLabelBO bo: labelBOS) {
-                        List<StorageDetailPO> list = storageDetailMapper.queryByGidAndLid(sgId, bo.getPrintLabelId());
-                        if (list == null || list.isEmpty()) {
-                            StorageDetailPO sdpo = new StorageDetailPO();
-                            sdpo.setPrintLabelId(bo.getPrintLabelId());
-                            sdpo.setStorageGroupId(sgId);
-                            storageDetailMapper.insert(sdpo);
-                        }
-                    }
-                }
-            }
-        }
-
         List<StorageGroupBO> storageGroupBOs = storageGroupMapper.queryBySid(storageBO.getStorageId());
 
         Long wid = null;
@@ -891,6 +856,12 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         }
         if ( lno != null) {
             detailVO.setLno(lno);
+        }
+
+        //查询仓库是否包含库位
+        if (detailVO.getWid() != null) {
+            List<LocationPO> locations = locationMapper.queryLocation(detailVO.getWid());
+            detailVO.setFlag(locations.isEmpty()?false: true);
         }
         return ResultVO.ok().setData(detailVO);
     }
@@ -966,10 +937,40 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         if (!sgIds.isEmpty()) {
             storageGroupMapper.batchDeleteByIds(sgIds);
         }
-        //判断新的
-        List<LocationPO> locationPOS = locationMapper.queryLocation(dto.getWhid());
+        /**
+         * 判断入库单默认仓库是否存在库位，若无默认库位，则直接按照有库位处理
+         */
+            List<LocationPO> locationPOS = locationMapper.queryLocation(storageBO.getWarehouseId());
         WarehouseVO wvo = WarehouseVO.convert(warehouseMapper.selectByPrimaryKey(dto.getWhid()));
         wvo.setFlag(locationPOS.isEmpty()?false: true);
+            //检验物料默认仓库中知否存在库位 true 存在 false 不存在
+            boolean existLocation = true;
+            if (locationPOS == null || locationPOS.isEmpty()) {
+                existLocation = false;
+            }
+            //当默认入库仓库没有库位时需要先插入入库详情组
+            if (!existLocation) {
+                //查询groupId
+                List<PrintLabelBO> labelBOS = printLabelMapper.queryByRbid(storageBO.getReceiptBodyId());
+                if (labelBOS != null && !labelBOS.isEmpty()) {
+                    Long sgId = storageGroupMapper.queryGroup(dto.getSid());
+                    if (sgId == null) {
+                        StorageGroupPO sgPo = new StorageGroupPO();
+                        sgPo.setStorageId(dto.getSid());
+                        storageGroupMapper.insert(sgPo);
+                        sgId = sgPo.getStorageGroupId();
+                    }
+                    for (PrintLabelBO bo: labelBOS) {
+                        List<StorageDetailPO> list = storageDetailMapper.queryByGidAndLid(sgId, bo.getPrintLabelId());
+                        if (list == null || list.isEmpty()) {
+                            StorageDetailPO sdpo = new StorageDetailPO();
+                            sdpo.setPrintLabelId(bo.getPrintLabelId());
+                            sdpo.setStorageGroupId(sgId);
+                            storageDetailMapper.insert(sdpo);
+                        }
+                    }
+                }
+            }
         return ResultVO.ok().setData(wvo);
     }
 
