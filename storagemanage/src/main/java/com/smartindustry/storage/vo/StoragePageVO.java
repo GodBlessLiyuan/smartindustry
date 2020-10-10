@@ -104,7 +104,11 @@ public class StoragePageVO implements Serializable {
         if (bo.getLocations() != null && !bo.getLocations().isEmpty()) {
             vo.setFlag(true);
         } else {
-            vo.setFlag(false);
+            if (bo.getWarehouseId() == null && bo.getStorageWid() == null) {
+                vo.setFlag(true);
+            } else {
+                vo.setFlag(false);
+            }
         }
         vo.setPno(bo.getPickNo());
         return vo;
