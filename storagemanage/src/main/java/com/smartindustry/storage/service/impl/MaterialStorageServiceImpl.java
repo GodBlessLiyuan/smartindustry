@@ -472,7 +472,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
 
         if (storagePO.getSourceType().equals(ReceiptConstant.STORAGE_SOURCE_TYPE_TRANSFER)) {
             StorageBO storageBO = storageMapper.queryBySid(dto.getSid());
-            wareHouseName = storageBO.getLocations().get(0).getWarehouseName();
+            wareHouseName = storageBO.getWarehouseName();
         }
 
 
@@ -732,6 +732,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
             // 入库单
             storagePO.setStoredNum(storagePO.getStoredNum() + num);
             storagePO.setStatus(ReceiptConstant.MATERIAL_STORAGE_BEING);
+            storagePO.setWarehouseId(locationPO.getWarehouseId());
             storageMapper.updateByPrimaryKey(storagePO);
 
             // 收料单
