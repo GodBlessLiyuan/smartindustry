@@ -78,7 +78,7 @@ public class MaterialInventoryVO implements Serializable {
         }
         vo.setLlimit(bo.getLowerLimit());
         if (bo.getLowerLimit() != null) {
-            vo.setLlimitmunit(bo.getLowerLimit().stripTrailingZeros() + munit);
+            vo.setLlimitmunit(bo.getLowerLimit() + munit);
         }
         vo.setStatus(bo.getStatus());
         vo.setLnum(bo.getLockNum());
