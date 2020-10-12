@@ -880,6 +880,10 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
                     storageBO.setStoredNum(storedNum);
                     storageBO.setStatus(ReceiptConstant.MATERIAL_STORAGE_BEING);
                     storageMapper.updateByPrimaryKey(storageBO);
+
+                    Integer  stockNum = num + (receiptBodyBO.getStockNum()!= null? receiptBodyBO.getStockNum():0);
+                    receiptBodyBO.setStockNum(stockNum);
+                    receiptBodyMapper.updateByPrimaryKeySelective(receiptBodyBO);
                 }
             }
         }
