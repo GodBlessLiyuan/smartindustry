@@ -20,6 +20,10 @@ public class FilePathConfig {
      * 网络访问域名
      */
     private String publicPath;
+    /**
+     * 更改tomcat临时文件
+     */
+    private String tmpPath;
 
     /**
      * 项目目录

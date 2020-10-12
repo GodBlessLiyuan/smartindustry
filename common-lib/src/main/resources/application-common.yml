@@ -38,6 +38,7 @@ config:
   file:
     localPath: D:\\testFile
     publicPath: http://dev.smartindustry.vbooster.cn
+    tmpPath: E:\\tmp\\
 
 # token配置
 token:
