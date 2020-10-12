@@ -231,12 +231,12 @@
     s.`type`, s.create_time, s.dr,o.outbound_no,th.storage_wid,th.transfer_type,w.warehouse_name,ph.pick_no, th.transfer_head_id, l.location_id, th.transfer_no
     </sql>
     <resultMap id="OtherBOResultMap" type="com.smartindustry.common.bo.sm.StorageBO" extends="BaseResultMap">
-        <result column="outbound_no" jdbcType="CHAR" property="correspondNo"/>
+        <result column="transfer_no" jdbcType="CHAR" property="correspondNo"/>
         <result column="transfer_type" jdbcType="TINYINT" property="transferType"/>
         <result column="pick_no" jdbcType="CHAR" property="pickNo"/>
         <result column="storage_wid" jdbcType="BIGINT" property="storageWid"/>
         <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
-        <result column="transfer_no" jdbcType="CHAR" property="receiptSourceNo"/>
+        <result column="outbound_no" jdbcType="CHAR" property="receiptSourceNo"/>
         <collection property="locations" ofType="com.smartindustry.common.bo.si.LocationBO">
             <result column="location_id" jdbcType="BIGINT" property="locationId"/>
             <result column="location_no" jdbcType="CHAR" property="locationNo"/>
