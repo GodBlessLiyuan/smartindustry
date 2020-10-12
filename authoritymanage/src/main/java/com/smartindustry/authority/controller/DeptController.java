@@ -33,31 +33,31 @@ public class DeptController {
      * @return
      */
     @PostMapping("pageQuery")
-    @PreAuthorize("@ss.hasPermi('am:dept:query')")
+    @PreAuthorize("@ss.hasPermi('bm:am:dept:query')")
     public ResultVO pageQuery(@RequestBody Map<String, Object> reqData) {
         return deptService.pageQuery(reqData);
     }
 
     @PostMapping("status")
-    @PreAuthorize("@ss.hasAnyPermi('am:dept:disable,am:dept:enable')")
+    @PreAuthorize("@ss.hasAnyPermi('bm:am:dept:disable,bm:am:dept:enable')")
     public ResultVO status(@RequestBody List<OperateDTO> dtos) {
         return deptService.batchUpdate(dtos);
     }
 
     @PostMapping("insert")
-    @PreAuthorize("@ss.hasPermi('am:dept:insert')")
+    @PreAuthorize("@ss.hasPermi('bm:am:dept:insert')")
     public ResultVO insert(@RequestBody DeptDTO dto) {
         return deptService.insert(dto);
     }
 
     @PostMapping("update")
-    @PreAuthorize("@ss.hasPermi('am:dept:update')")
+    @PreAuthorize("@ss.hasPermi('bm:am:dept:update')")
     public ResultVO update(@RequestBody DeptDTO dto) {
         return deptService.update(dto);
     }
 
     @PostMapping("delete")
-    @PreAuthorize("@ss.hasPermi('am:dept:delete')")
+    @PreAuthorize("@ss.hasPermi('bm:am:dept:delete')")
     public ResultVO delete(@RequestBody List<Long> dids) {
         return deptService.delete(dids);
     }

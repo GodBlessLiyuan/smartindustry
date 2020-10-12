@@ -31,31 +31,31 @@ public class RoleController {
     private IRoleService roleService;
 
     @PostMapping("pageQuery")
-    @PreAuthorize("@ss.hasPermi('am:role:query')")
+    @PreAuthorize("@ss.hasPermi('bm:am:role:query')")
     public ResultVO pageQuery(@RequestBody Map<String, Object> reqData) {
         return roleService.pageQuery(reqData);
     }
 
     @PostMapping("status")
-    @PreAuthorize("@ss.hasAnyPermi('am:role:disable,am:role:enable')")
+    @PreAuthorize("@ss.hasAnyPermi('bm:am:role:disable,bm:am:role:enable')")
     public ResultVO status(@RequestBody List<OperateDTO> dtos) {
         return roleService.batchUpdate(dtos);
     }
 
     @PostMapping("insert")
-    @PreAuthorize("@ss.hasPermi('am:role:insert')")
+    @PreAuthorize("@ss.hasPermi('bm:am:role:insert')")
     public ResultVO insert(@RequestBody RoleDTO dto) {
         return roleService.insert(dto);
     }
 
     @PostMapping("update")
-    @PreAuthorize("@ss.hasPermi('am:role:update')")
+    @PreAuthorize("@ss.hasPermi('bm:am:role:update')")
     public ResultVO update(@RequestBody RoleDTO dto) {
         return roleService.update(dto);
     }
 
     @PostMapping("delete")
-    @PreAuthorize("@ss.hasPermi('am:role:delete')")
+    @PreAuthorize("@ss.hasPermi('bm:am:role:delete')")
     public ResultVO delete(@RequestBody List<Long> dtos) {
         return roleService.delete(dtos);
     }
@@ -66,7 +66,7 @@ public class RoleController {
     }
 
     @PostMapping("updatePerms")
-    @PreAuthorize("@ss.hasPermi('am:role:site')")
+    @PreAuthorize("@ss.hasPermi('bm:am:role:site')")
     public ResultVO updatePerms(@RequestBody OperateDTO dto) {
         return roleService.updatePerms(dto);
     }
