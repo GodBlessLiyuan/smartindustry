@@ -28,37 +28,37 @@ public class UserController {
     private IUserService userService;
 
     @PostMapping("pageQuery")
-    @PreAuthorize("@ss.hasPermi('am:user:query')")
+    @PreAuthorize("@ss.hasPermi('bm:am:user:query')")
     public ResultVO pageQuery(@RequestBody Map<String, Object> reqData) {
         return userService.pageQuery(reqData);
     }
 
     @PostMapping("status")
-    @PreAuthorize("@ss.hasAnyPermi('am:user:disable,am:user:enable')")
+    @PreAuthorize("@ss.hasAnyPermi('bm:am:user:disable,bm:am:user:enable')")
     public ResultVO status(@RequestBody List<OperateDTO> dtos) {
         return userService.batchUpdate(dtos);
     }
 
     @PostMapping("delete")
-    @PreAuthorize("@ss.hasPermi('am:user:delete')")
+    @PreAuthorize("@ss.hasPermi('bm:am:user:delete')")
     public ResultVO delete(@RequestBody List<Long> uids) {
         return userService.delete(uids);
     }
 
     @PostMapping("insert")
-    @PreAuthorize("@ss.hasPermi('am:user:insert')")
+    @PreAuthorize("@ss.hasPermi('bm:am:user:insert')")
     public ResultVO insert(@RequestBody UserDTO dto) {
         return userService.insert(dto);
     }
 
     @PostMapping("update")
-    @PreAuthorize("@ss.hasPermi('am:user:update')")
+    @PreAuthorize("@ss.hasPermi('bm:am:user:update')")
     public ResultVO update(@RequestBody UserDTO dto) {
         return userService.update(dto);
     }
 
     @PostMapping("updatePassword")
-    @PreAuthorize("@ss.hasPermi('am:user:password')")
+    @PreAuthorize("@ss.hasPermi('bm:am:user:password')")
     public ResultVO updatePassword(@RequestBody OperateDTO dto) {
         return userService.updatePassword(dto);
     }
@@ -79,7 +79,7 @@ public class UserController {
     }
 
     @PostMapping("editPassword")
-    @PreAuthorize("@ss.hasPermi('am:userinfo:password')")
+    @PreAuthorize("@ss.hasPermi('bm:am:userinfo:password')")
     public ResultVO editPassword(@RequestBody EditDTO dto) {
         return userService.editPassword(dto);
     }
@@ -90,7 +90,7 @@ public class UserController {
     }
 
     @PostMapping("updateUser")
-    @PreAuthorize("@ss.hasPermi('am:userinfo:update')")
+    @PreAuthorize("@ss.hasPermi('bm:am:userinfo:update')")
     public ResultVO updateUser(@RequestBody UserDTO dto) {
         return userService.updateUser(dto);
     }
