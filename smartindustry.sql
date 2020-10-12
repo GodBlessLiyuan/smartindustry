@@ -1005,7 +1005,8 @@ CREATE TABLE si_storage_label
 	storage_label_id bigint unsigned NOT NULL AUTO_INCREMENT,
 	print_label_id bigint unsigned NOT NULL,
 	material_id bigint unsigned NOT NULL,
-	location_id bigint unsigned NOT NULL,
+	warehouse_id bigint unsigned NOT NULL,
+	location_id bigint unsigned,
 	package_id char(32),
 	source_no char(128),
 	-- 1：PO单收料
@@ -2225,7 +2226,7 @@ ALTER TABLE si_supplier_record
 
 
 ALTER TABLE em_transfer_head
-	ADD FOREIGN KEY (storage_wid)
+	ADD FOREIGN KEY (outbound_wid)
 	REFERENCES si_warehouse (warehouse_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
@@ -2233,7 +2234,7 @@ ALTER TABLE em_transfer_head
 
 
 ALTER TABLE em_transfer_head
-	ADD FOREIGN KEY (outbound_wid)
+	ADD FOREIGN KEY (storage_wid)
 	REFERENCES si_warehouse (warehouse_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
@@ -2249,6 +2250,14 @@ ALTER TABLE si_location
 
 
 ALTER TABLE si_material_attribute
+	ADD FOREIGN KEY (warehouse_id)
+	REFERENCES si_warehouse (warehouse_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_storage_label
 	ADD FOREIGN KEY (warehouse_id)
 	REFERENCES si_warehouse (warehouse_id)
 	ON UPDATE RESTRICT

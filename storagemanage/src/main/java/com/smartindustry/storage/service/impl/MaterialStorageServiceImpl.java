@@ -272,7 +272,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
             num += bo.getNum();
             plIds.add(bo.getPrintLabelId());
         }
-        if  (!plIds.isEmpty()) {
+        if (!plIds.isEmpty()) {
             printLabelMapper.updateLidByIds(locationPO.getLocationId(), plIds);
         }
 
@@ -330,7 +330,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
                 po.setType(storagePO.getType());
                 po.setStorageNum(detailBO.getNum());
                 po.setStorageTime(storagePO.getStorageTime());
-                po.setStatus((byte)1);
+                po.setStatus((byte) 1);
                 if (!ReceiptConstant.STORAGE_TYPE_GOOD.equals(storagePO.getType())) {
                     // 不良锁定
                     po.setMaterialLockId(1L);
@@ -395,7 +395,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
                         num += bo.getNum();
                     }
                 }
-                Integer storedNum = num + (storageBO.getStoredNum()!= null?storageBO.getStoredNum():0);
+                Integer storedNum = num + (storageBO.getStoredNum() != null ? storageBO.getStoredNum() : 0);
                 storageBO.setStoredNum(storedNum);
                 storageBO.setStatus(ReceiptConstant.MATERIAL_STORAGE_BEING);
                 storageMapper.updateByPrimaryKey(storageBO);
@@ -410,7 +410,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         receiptBodyBO.setWarehouseId(storageBO.getStorageWid());
         StorageDetailVO detailVO = StorageDetailVO.convert(storageBO, receiptBodyBO, storageGroupBOs);
 
-        if (storageBO.getStorageWid()  != null &&detailVO.getWid()  == null) {
+        if (storageBO.getStorageWid() != null && detailVO.getWid() == null) {
             detailVO.setWid(storageBO.getStorageWid());
         }
         return ResultVO.ok().setData(detailVO);
@@ -498,7 +498,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
             for (StorageGroupDetailBO bo : groupMap.get(key)) {
                 details.addAll(bo.getDetail());
                 if (bo.getDetail() != null) {
-                    for (StorageDetailBO dbo1: bo.getDetail()) {
+                    for (StorageDetailBO dbo1 : bo.getDetail()) {
                         if (StringUtils.isEmpty(dbo1.getWarehouseName())) {
                             dbo1.setWarehouseName(wareHouseName);
                         }
@@ -780,6 +780,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         for (StorageGroupBO groupBO : storageGroupBOs) {
             for (StorageDetailBO detailBO : groupBO.getDetail()) {
                 StorageLabelPO po = new StorageLabelPO();
+                po.setWarehouseId(storageBO.getWarehouseId());
                 po.setLocationId(groupBO.getLocationId());
                 po.setPrintLabelId(detailBO.getPrintLabelId());
                 po.setMaterialId(detailBO.getMaterialId());
@@ -856,7 +857,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
                         sgId = sgPo.getStorageGroupId();
                     }
                     Integer num = 0;
-                    for (PrintLabelBO bo: labelBOS) {
+                    for (PrintLabelBO bo : labelBOS) {
                         List<StorageDetailPO> list = storageDetailMapper.queryByGidAndLid(sgId, bo.getPrintLabelId());
                         if (list == null || list.isEmpty()) {
                             StorageDetailPO sdpo = new StorageDetailPO();
@@ -866,12 +867,12 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
                             num += bo.getNum();
                         }
                     }
-                    Integer storedNum = num + (storageBO.getStoredNum()!= null?storageBO.getStoredNum():0);
+                    Integer storedNum = num + (storageBO.getStoredNum() != null ? storageBO.getStoredNum() : 0);
                     storageBO.setStoredNum(storedNum);
                     storageBO.setStatus(ReceiptConstant.MATERIAL_STORAGE_BEING);
                     storageMapper.updateByPrimaryKey(storageBO);
 
-                    Integer  stockNum = num + (receiptBodyBO.getStockNum()!= null? receiptBodyBO.getStockNum():0);
+                    Integer stockNum = num + (receiptBodyBO.getStockNum() != null ? receiptBodyBO.getStockNum() : 0);
                     receiptBodyBO.setStockNum(stockNum);
                     receiptBodyMapper.updateByPrimaryKeySelective(receiptBodyBO);
                 }
@@ -885,7 +886,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         String lno = null;
 
         if (storageGroupBOs != null && !storageGroupBOs.isEmpty()) {
-            StorageGroupBO bo  = storageGroupBOs.get(storageGroupBOs.size()-1);
+            StorageGroupBO bo = storageGroupBOs.get(storageGroupBOs.size() - 1);
             wid = bo.getWarehouseId();
             lno = bo.getLocationNo();
         }
@@ -894,10 +895,10 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
          * 当物料没有设置默认仓库并且已入库物料设定了仓库库位时，返回值设定仓库库位
          */
         StorageDetailVO detailVO = StorageDetailVO.convert(storageBO, receiptBodyBO, storageGroupBOs);
-        if ( wid != null) {
+        if (wid != null) {
             detailVO.setWid(wid);
         }
-        if ( lno != null) {
+        if (lno != null) {
             detailVO.setLno(lno);
         }
 

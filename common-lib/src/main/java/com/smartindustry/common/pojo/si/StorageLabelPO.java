@@ -51,5 +51,7 @@ public class StorageLabelPO implements Serializable {
      */
     private Byte status;
 
+    private Long warehouseId;
+
     private static final long serialVersionUID = 1L;
 }
