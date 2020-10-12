@@ -280,10 +280,10 @@
         <if test="rno != null and rno != ''">and rb.receipt_no like '%' #{rno,jdbcType=CHAR} '%'</if>
         <if test="qa and qaStatus != null and qaStatus != 0">and q.status = #{qaStatus,jdbcType=TINYINT}</if>
         <if test="qa">
-            order by rb.accept_date desc
+            order by rb.accept_date desc, rb.receipt_body_id desc
         </if>
         <if test="!qa">
-            order by rb.create_time desc
+            order by rb.create_time desc, rb.receipt_body_id desc
         </if>
     </select>
     <insert id="batchInsertBO" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="receiptBodyId">
