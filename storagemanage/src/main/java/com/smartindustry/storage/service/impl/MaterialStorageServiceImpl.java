@@ -403,16 +403,6 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         }
         List<StorageGroupBO> storageGroupBOs = storageGroupMapper.queryBySid(storageBO.getStorageId());
 
-
-        Long wid = null;
-        String lno = null;
-
-        if (storageGroupBOs != null && !storageGroupBOs.isEmpty()) {
-            StorageGroupBO bo  = storageGroupBOs.get(storageGroupBOs.size()-1);
-            wid = bo.getWarehouseId();
-            lno = bo.getLocationNo();
-        }
-
         /**
          * 当物料没有设置默认仓库并且已入库物料设定了仓库库位时，返回值设定仓库库位
          */
@@ -914,7 +904,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         //查询仓库是否包含库位
         if (detailVO.getWid() != null) {
             List<LocationPO> locations = locationMapper.queryLocation(detailVO.getWid());
-            detailVO.setFlag(locations.isEmpty()?false: true);
+            detailVO.setFlag(!locations.isEmpty());
         }
         return ResultVO.ok().setData(detailVO);
     }
