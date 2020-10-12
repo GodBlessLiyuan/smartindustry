@@ -18,7 +18,6 @@ import com.smartindustry.common.pojo.am.DeptRecordPO;
 import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.PageQueryUtil;
-import com.smartindustry.common.util.ServletUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
