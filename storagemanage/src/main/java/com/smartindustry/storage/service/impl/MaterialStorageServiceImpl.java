@@ -982,7 +982,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         }
         List<LocationPO> locationPOS = locationMapper.queryLocation(storageBO.getWarehouseId());
         WarehouseVO wvo = WarehouseVO.convert(warehouseMapper.selectByPrimaryKey(dto.getWhid()));
-        wvo.setFlag(locationPOS.isEmpty()?false: true);
+        wvo.setFlag(!locationPOS.isEmpty());
         return ResultVO.ok().setData(wvo);
     }
 
