@@ -384,6 +384,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
                     storageGroupMapper.insert(sgPo);
                     sgId = sgPo.getStorageGroupId();
                 }
+                Integer num = 0;
                 for (PrintLabelBO bo : labelBOS) {
                     List<StorageDetailPO> list = storageDetailMapper.queryByGidAndLid(sgId, bo.getPrintLabelId());
                     if (list == null || list.isEmpty()) {
@@ -391,8 +392,13 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
                         sdpo.setPrintLabelId(bo.getPrintLabelId());
                         sdpo.setStorageGroupId(sgId);
                         storageDetailMapper.insert(sdpo);
+                        num += bo.getNum();
                     }
                 }
+                Integer storedNum = num + (storageBO.getStoredNum()!= null?storageBO.getStoredNum():0);
+                storageBO.setStoredNum(storedNum);
+                storageBO.setStatus(ReceiptConstant.MATERIAL_STORAGE_BEING);
+                storageMapper.updateByPrimaryKey(storageBO);
             }
         }
         List<StorageGroupBO> storageGroupBOs = storageGroupMapper.queryBySid(storageBO.getStorageId());
@@ -872,6 +878,7 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
                     }
                     Integer storedNum = num + (storageBO.getStoredNum()!= null?storageBO.getStoredNum():0);
                     storageBO.setStoredNum(storedNum);
+                    storageBO.setStatus(ReceiptConstant.MATERIAL_STORAGE_BEING);
                     storageMapper.updateByPrimaryKey(storageBO);
                 }
             }
