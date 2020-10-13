@@ -44,21 +44,21 @@ public class WorkBenchConstant {
     /**
      * IQC待确认
      */
-    public static final Long WORK_IQC_WAIT_CHECK=1L;
+    public static final Byte WORK_IQC_WAIT_CHECK=1;
     /**
      * QE待确认
      */
-    public static final Long WORK_QE_WAIT_CHECK=2L;
+    public static final Byte WORK_QE_WAIT_CHECK=2;
 
     /**
      * QE待确认
      */
-    public static final Long WORK_QE_WAIT_CONFIRM=3L;
+    public static final Byte WORK_QE_WAIT_CONFIRM=3;
 
     /**
      * 待入库
      */
-    public static final Long WORK_WAIT_STORAGE=4L;
+    public static final Byte WORK_WAIT_STORAGE=4;
 
     /**
      * 待拣货
@@ -68,17 +68,17 @@ public class WorkBenchConstant {
     /**
      * OQC待确认
      */
-    public static final Long WORK_OQC_WAIT_CHECK=6L;
+    public static final Byte WORK_OQC_WAIT_CHECK=6;
 
     /**
      * 工单待审核
      */
-    public static final Long WORK_ORDER_WAIT_AUDIT=7L;
+    public static final Byte WORK_ORDER_WAIT_AUDIT=7;
 
     /**
      * 待出库
      */
-    public static final Long WORK_WAIT_OUTBOUND=8L;
+    public static final Byte WORK_WAIT_OUTBOUND=8;
 
 
     /**
