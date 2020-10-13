@@ -251,10 +251,11 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
                 pickHeadPO.setMaterialStatus(OutboundConstant.MATERIAL_STATUS_CONFIRM);
                 pickHeadMapper.updateByPrimaryKey(pickHeadPO);
             }
-
             return ResultVO.ok();
         }
-
+        // 更新出库单的出货时间
+        outboundPO.setShipTime(new Date());
+        outboundMapper.updateByPrimaryKeySelective(outboundPO);
         // 编辑保存
         LogisticsRecordPO recordPO = logisticsRecordMapper.selectByPrimaryKey(dto.getLid());
         if (null == recordPO) {
