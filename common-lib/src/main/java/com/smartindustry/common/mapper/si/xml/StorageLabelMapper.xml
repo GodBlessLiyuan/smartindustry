@@ -289,13 +289,15 @@
         insert into si_storage_label (storage_label_id, print_label_id, material_id,
         location_id, package_id, source_no,
         source_type, `type`, storage_num,
-        storage_time, material_lock_id, `status`)
+        storage_time, material_lock_id, `status`,
+        warehouse_id)
         values
         <foreach collection="list" separator="," item="po">
             (#{po.storageLabelId,jdbcType=BIGINT}, #{po.printLabelId,jdbcType=BIGINT}, #{po.materialId,jdbcType=BIGINT},
             #{po.locationId,jdbcType=BIGINT}, #{po.packageId,jdbcType=CHAR}, #{po.sourceNo,jdbcType=CHAR},
             #{po.sourceType,jdbcType=TINYINT}, #{po.type,jdbcType=TINYINT}, #{po.storageNum,jdbcType=INTEGER},
-            #{po.storageTime,jdbcType=TIMESTAMP}, #{po.materialLockId,jdbcType=BIGINT}, #{po.status,jdbcType=TINYINT})
+            #{po.storageTime,jdbcType=TIMESTAMP}, #{po.materialLockId,jdbcType=BIGINT}, #{po.status,jdbcType=TINYINT},
+            #{po.warehouseId,jdbcType=BIGINT})
         </foreach>
     </insert>
     <delete id="deleteByPlids" parameterType="java.util.List">
