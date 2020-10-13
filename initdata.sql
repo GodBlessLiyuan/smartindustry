@@ -211,11 +211,8 @@ INSERT INTO `si_config` VALUES (1, 'pid_relate', 'Y');
 INSERT INTO `si_config` VALUES (2, 'storage_quality', 'Y');
 INSERT INTO `si_config` VALUES (3, 'outbound_quality', 'Y');
 
-
-//工作台初始数据
-
-INSERT INTO wm_work_bench( authority_id, bench_name, bench_type, bench_module, icon_path, url_path,bench_node) VALUES ( 20, 'IQC待质检', 1, 2, '/industryfile/icon/iqc_check.png', '/warehousing/quality/IQCCheck', 1);
-INSERT INTO wm_work_bench( authority_id, bench_name, bench_type, bench_module, icon_path, url_path,bench_node) VALUES ( 22, 'QE待质检', 1, 2, '/industryfile/icon/qe_check.png', '/warehousing/quality/QECheck', 2);
+INSERT INTO wm_work_bench( authority_id, bench_name, bench_type, bench_module, icon_path, url_path,bench_node) VALUES ( 20, 'IQC待质检', 1, 1, '/industryfile/icon/iqc_check.png', '/warehousing/quality/IQCCheck', 1);
+INSERT INTO wm_work_bench( authority_id, bench_name, bench_type, bench_module, icon_path, url_path,bench_node) VALUES ( 22, 'QE待质检', 1, 1, '/industryfile/icon/qe_check.png', '/warehousing/quality/QECheck', 2);
 INSERT INTO wm_work_bench( authority_id, bench_name, bench_type, bench_module, icon_path, url_path,bench_node) VALUES ( 21, 'QE待确认', 1, 1, '/industryfile/icon/qe_confirm.png', '/warehousing/quality/IQCAbnormal', 3);
 INSERT INTO wm_work_bench( authority_id, bench_name, bench_type, bench_module, icon_path, url_path,bench_node) VALUES ( 12, '待入库', 1, 1, '/industryfile/icon/storage.png', '/warehousing/materialWarehousing/', 4);
 INSERT INTO wm_work_bench( authority_id, bench_name, bench_type, bench_module, icon_path, url_path,bench_node) VALUES ( 110, '待拣货', 1, 1, '/industryfile/icon/pickup.png', '/outbound/delivery/', 5);
