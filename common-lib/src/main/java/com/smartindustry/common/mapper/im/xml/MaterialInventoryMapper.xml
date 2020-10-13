@@ -168,9 +168,7 @@
             <if test="wid != null and wid != 0">
                 and mi.material_id in (
                 select sl.material_id from si_storage_label sl
-                left join si_location l on sl.location_id = l.location_id
-                left join si_warehouse w on l.warehouse_id = w.warehouse_id
-                where w.warehouse_id = #{wid,jdbcType=BIGINT}
+                where sl.warehouse_id = #{wid,jdbcType=BIGINT}
                 )
             </if>
         </where>
@@ -185,8 +183,7 @@
         left join si_supplier s on m.supplier_id = s.supplier_id
         left join im_safe_stock ss on mi.material_inventory_id = ss.material_inventory_id
         left join si_storage_label sl on mi.material_id = sl.material_id
-        left join si_location l on sl.location_id = l.location_id
-        left join si_warehouse w on l.warehouse_id = w.warehouse_id
+        left join si_warehouse w on sl.warehouse_id = w.warehouse_id
         where mi.material_inventory_id in
         <foreach collection="list" item="miid" separator="," open="(" close=")">
             #{miid,jdbcType=BIGINT}
