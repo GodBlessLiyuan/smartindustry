@@ -27,7 +27,7 @@
     delete from om_outbound
     where outbound_id = #{outboundId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.smartindustry.common.pojo.om.OutboundPO">
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.om.OutboundPO" useGeneratedKeys="true" keyProperty="outboundId">
     insert into om_outbound (outbound_id, pick_head_id, outbound_no, 
       source_no, source_type, outbound_time, 
       ship_time, `status`, create_time, 

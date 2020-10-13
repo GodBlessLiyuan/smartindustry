@@ -46,6 +46,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -137,20 +138,21 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
         Map<Long, Integer> materialInventoryMap = new HashMap<>();
         for (PickBodyBO bo : bos) {
             materialInventoryMap.put(bo.getMaterialId(), bo.getPickNum());
-            if (!bo.getDemandNum().equals(bo.getPickNum())) {
+            if (bo.getDemandNum() > bo.getPickNum()) {
                 ostatus = OutboundConstant.PICK_OUTBOUND_LACK;
                 break;
             }
         }
-        outboundPO.setOutboundTime(new Date());
+        Date date = new Date();
+        outboundPO.setOutboundTime(date);
         outboundPO.setStatus(OutboundConstant.OUTBOUND_STATUS_FINISH);
         headPO.setMaterialStatus(OutboundConstant.MATERIAL_STATUS_FINISH);
         headPO.setOutboundStatus(ostatus);
-        headPO.setOutboundTime(new Date());
+        headPO.setOutboundTime(date);
 
         LogisticsRecordPO logisticsRecordPO = logisticsRecordMapper.queryByOid(dto.getOid());
         if (null != logisticsRecordPO) {
-            outboundPO.setShipTime(new Date());
+            outboundPO.setShipTime(date);
             headPO.setMaterialStatus(OutboundConstant.MATERIAL_STATUS_CONFIRM);
         }
 
