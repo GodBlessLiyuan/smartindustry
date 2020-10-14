@@ -46,6 +46,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -137,20 +138,21 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
         Map<Long, Integer> materialInventoryMap = new HashMap<>();
         for (PickBodyBO bo : bos) {
             materialInventoryMap.put(bo.getMaterialId(), bo.getPickNum());
-            if (!bo.getDemandNum().equals(bo.getPickNum())) {
+            if (bo.getDemandNum() > bo.getPickNum()) {
                 ostatus = OutboundConstant.PICK_OUTBOUND_LACK;
                 break;
             }
         }
-        outboundPO.setOutboundTime(new Date());
+        Date date = new Date();
+        outboundPO.setOutboundTime(date);
         outboundPO.setStatus(OutboundConstant.OUTBOUND_STATUS_FINISH);
         headPO.setMaterialStatus(OutboundConstant.MATERIAL_STATUS_FINISH);
         headPO.setOutboundStatus(ostatus);
-        headPO.setOutboundTime(new Date());
+        headPO.setOutboundTime(date);
 
         LogisticsRecordPO logisticsRecordPO = logisticsRecordMapper.queryByOid(dto.getOid());
         if (null != logisticsRecordPO) {
-            outboundPO.setShipTime(new Date());
+            outboundPO.setShipTime(date);
             headPO.setMaterialStatus(OutboundConstant.MATERIAL_STATUS_CONFIRM);
         }
 
@@ -174,12 +176,15 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
                 materialInventoryMapper.updateByPrimaryKey(materialInventoryBO.updatePO(updateInventoryPO));
             }
         }
+        // 清除掉所有得标签推荐表得内容
+        labelRecommendMapper.deleteAll();
+
         outboundRecordMapper.insert(new OutboundRecordPO(headPO.getPickHeadId(), outboundPO.getOutboundId(), user.getUserId(), user.getName(), OutboundConstant.RECORD_CONFIRM_OUTBOUND, OutboundConstant.MATERIAL_STATUS_FINISH));
         //当销售，生产，采购强关联时，工单所扫码的PID来源必须是销售采购来源
         ConfigPO configPO = configMapper.queryByKey(OutboundConstant.K_PID_RELATE);
         boolean flag = (null != configPO && OutboundConstant.V_YES.equals(configPO.getConfigValue()));
         // 当出库时，重新刷新所有的推荐列表
-        List<PickHeadPO> notRecommendHeadPOs = new ArrayList<>();
+        List<PickHeadPO> notRecommendHeadPOs;
         if (flag) {
             notRecommendHeadPOs = pickHeadMapper.queryNotRecommodByOno(headPO.getSourceNo());
         }else {
@@ -248,11 +253,12 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
                 // 确认出货
                 pickHeadPO.setMaterialStatus(OutboundConstant.MATERIAL_STATUS_CONFIRM);
                 pickHeadMapper.updateByPrimaryKey(pickHeadPO);
+                // 更新出库单的出货时间
+                outboundPO.setShipTime(new Date());
+                outboundMapper.updateByPrimaryKeySelective(outboundPO);
             }
-
             return ResultVO.ok();
         }
-
         // 编辑保存
         LogisticsRecordPO recordPO = logisticsRecordMapper.selectByPrimaryKey(dto.getLid());
         if (null == recordPO) {
