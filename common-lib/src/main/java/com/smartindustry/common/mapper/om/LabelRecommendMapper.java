@@ -26,4 +26,9 @@ public interface LabelRecommendMapper extends BaseMapper<LabelRecommendPO, Long>
      * @return
      */
     List<Long> queryRecommedPlids(Long pickHeadId);
+
+    /**
+     * 清空标签推荐表
+     */
+    void deleteAll();
 }

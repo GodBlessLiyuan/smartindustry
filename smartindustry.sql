@@ -216,8 +216,7 @@ CREATE TABLE am_user_record
 	create_time datetime,
 	type char(255),
 	PRIMARY KEY (user_record_id),
-	UNIQUE (user_record_id),
-	UNIQUE (operate_id)
+	UNIQUE (user_record_id)
 );
 
 

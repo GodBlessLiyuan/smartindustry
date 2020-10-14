@@ -51,7 +51,7 @@ public class BusinessUtil {
                     }
                     return result;
                 });
-                int num = 0;
+                int num = bo.getPickNum();
                 for (StorageLabelBO storageLabelBO : storageLabelBOS) {
                     if (labelRecommendPOs.containsKey(storageLabelBO.getStorageLabelId())) {
                         continue;
