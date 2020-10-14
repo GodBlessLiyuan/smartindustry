@@ -586,7 +586,7 @@
         select
         <include refid="Base_Column_List"/>
         from om_pick_head ph
-        where ph.dr = 1 and ph.material_status = 1
+        where ph.dr = 1 and ph.material_status in (1,5,10)
         <if test="orderNo != null">
             and ph.source_no = #{orderNo,jdbcType=CHAR}
         </if>
