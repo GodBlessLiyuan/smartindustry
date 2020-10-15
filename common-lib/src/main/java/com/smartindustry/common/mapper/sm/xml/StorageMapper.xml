@@ -202,7 +202,7 @@
         left join si_location l on l.warehouse_id = w.warehouse_id
         where rb.dr = 1 and s.source_type = 1
         <if test="no != null and no != ''">and (s.storage_no like '%' #{no,jdbcType=CHAR} '%' or rb.receipt_no like '%'
-            #{no,jdbcType=CHAR} '%' or rb.source_no like '%' #{no,jdbcType=CHAR} '%')
+            #{no,jdbcTypageQuerype=CHAR} '%' or rb.source_no like '%' #{no,jdbcType=CHAR} '%')
         </if>
         <if test="status != null and status != 0">and s.`status` = #{status,jdbcType=TINYINT}</if>
         <if test="wid != null and wid != 0">and s.warehouse_id = #{wid,jdbcType=TINYINT}</if>

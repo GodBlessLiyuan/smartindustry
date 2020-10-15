@@ -66,6 +66,15 @@ public class UserDTO {
         return po;
     }
 
+    public static UserPO updatePO(UserPO po,UserDTO dto) {
+        po.setName(dto.getName());
+        po.setPhone(dto.getPhone());
+        po.setEmail(dto.getEmail());
+        po.setSex(dto.getSex());
+        return po;
+    }
+
+
     public static List<UserPO> updateList(List<OperateDTO> dtos){
         List<UserPO> pos = new ArrayList<>(dtos.size());
         for(OperateDTO dto:dtos) {
