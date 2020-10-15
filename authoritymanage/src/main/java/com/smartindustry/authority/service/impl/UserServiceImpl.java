@@ -160,9 +160,10 @@ public class UserServiceImpl implements IUserService {
         UserPO user = tokenService.getLoginUser();
         //从session中获取userId的值
         Long userId = user.getUserId();
-        UserPO po = UserDTO.createPO(dto);
+        UserPO userPO = userMapper.selectByPrimaryKey(userId);
+        UserPO po = UserDTO.updatePO(userPO,dto);
         po.setUserId(userId);
-        userMapper.updateByPrimaryKeySelective(po);
+        userMapper.updateByPrimaryKey(po);
         return ResultVO.ok();
     }
 
