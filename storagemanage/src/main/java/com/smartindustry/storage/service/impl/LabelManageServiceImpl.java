@@ -25,6 +25,8 @@ import com.smartindustry.storage.service.ILabelManageService;
 import com.smartindustry.storage.util.ReceiptNoUtil;
 import com.smartindustry.storage.vo.PrintLabelVO;
 import com.smartindustry.storage.vo.StorageSimpleDetailVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -48,6 +50,8 @@ import java.util.stream.Collectors;
 @EnableTransactionManagement
 @Service
 public class LabelManageServiceImpl implements ILabelManageService {
+    private static Logger logger = LoggerFactory.getLogger(LabelManageServiceImpl.class);
+
     @Autowired
     private PrintLabelMapper printLabelMapper;
     @Autowired
@@ -282,6 +286,7 @@ public class LabelManageServiceImpl implements ILabelManageService {
         storagePO.setType(ReceiptConstant.MATERIAL_TYPE_GOOD);
         storagePO.setCreateTime(new Date());
         storagePO.setDr((byte) 1);
+        logger.info("null"+attributePO.getWarehouseId());
         if(attributePO != null){
             storagePO.setWarehouseId(attributePO.getWarehouseId());
         }
