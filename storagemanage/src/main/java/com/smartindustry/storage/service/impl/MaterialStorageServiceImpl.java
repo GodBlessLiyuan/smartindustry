@@ -418,8 +418,6 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         if (detailVO.getWid() != null) {
             List<LocationPO> locations = locationMapper.queryLocation(detailVO.getWid());
             detailVO.setFlag(!locations.isEmpty());
-        } else {
-            detailVO.setFlag(true);
         }
         return ResultVO.ok().setData(detailVO);
 
@@ -914,8 +912,6 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         if (detailVO.getWid() != null) {
             List<LocationPO> locations = locationMapper.queryLocation(detailVO.getWid());
             detailVO.setFlag(!locations.isEmpty());
-        } else {
-            detailVO.setFlag(true);
         }
         return ResultVO.ok().setData(detailVO);
     }
