@@ -13,6 +13,8 @@ import com.smartindustry.outbound.constant.OutboundConstant;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -42,13 +44,8 @@ public class BusinessUtil {
                     storageLabelBOS = storageLabelMapper.queryNotRecommend(null, bo.getMaterialId());
                 }
                 //将库内标签表的PID按照时间先后排序
-                Collections.sort(storageLabelBOS, (bo1, bo2) -> {
-                    int result = 0;
-                    try {
-                        result = DateUtil.YMD.parse(bo1.getProduceDate()).compareTo(DateUtil.YMD.parse(bo2.getProduceDate()));
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                storageLabelBOS.sort((bo1, bo2) -> {
+                    int result = Objects.requireNonNull(DateUtil.parseDate(bo1.getProduceDate())).compareTo(Objects.requireNonNull(DateUtil.parseDate(bo2.getProduceDate())));
                     return result;
                 });
                 int num = bo.getPickNum();
@@ -56,7 +53,6 @@ public class BusinessUtil {
                     if (labelRecommendPOs.containsKey(storageLabelBO.getStorageLabelId())) {
                         continue;
                     }
-
                     LabelRecommendPO labelRecommendPO = new LabelRecommendPO();
                     labelRecommendPO.setPickBodyId(bo.getPickBodyId());
                     labelRecommendPO.setStorageLabelId(storageLabelBO.getStorageLabelId());
@@ -80,4 +76,5 @@ public class BusinessUtil {
     public void updateStorageLabel(List<Long> plids,Byte status,StorageLabelMapper storageLabelMapper){
         storageLabelMapper.updateStatusByPlid(plids,status);
     }
+
 }

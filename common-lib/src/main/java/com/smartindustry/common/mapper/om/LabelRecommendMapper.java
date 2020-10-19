@@ -31,4 +31,10 @@ public interface LabelRecommendMapper extends BaseMapper<LabelRecommendPO, Long>
      * 清空标签推荐表
      */
     void deleteAll();
+
+    /**
+     * 删除当前拣货单下得所有推荐pid
+     * @param pbids
+     */
+    void batchDelete(List<Long> pbids);
 }

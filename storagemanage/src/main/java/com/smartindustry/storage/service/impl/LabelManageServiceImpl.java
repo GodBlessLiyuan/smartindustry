@@ -50,7 +50,6 @@ import java.util.stream.Collectors;
 @EnableTransactionManagement
 @Service
 public class LabelManageServiceImpl implements ILabelManageService {
-    private static Logger logger = LoggerFactory.getLogger(LabelManageServiceImpl.class);
 
     @Autowired
     private PrintLabelMapper printLabelMapper;

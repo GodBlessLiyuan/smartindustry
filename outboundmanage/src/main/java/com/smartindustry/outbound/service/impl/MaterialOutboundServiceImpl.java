@@ -135,6 +135,7 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
 
         Byte ostatus = OutboundConstant.PICK_OUTBOUND_ALL;
         List<PickBodyBO> bos = pickBodyMapper.queryByHeadId(headPO.getPickHeadId());
+        List<Long> bodyIds = new ArrayList<>();
         Map<Long, Integer> materialInventoryMap = new HashMap<>();
         for (PickBodyBO bo : bos) {
             materialInventoryMap.put(bo.getMaterialId(), bo.getPickNum());
@@ -142,6 +143,7 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
                 ostatus = OutboundConstant.PICK_OUTBOUND_LACK;
                 break;
             }
+            bodyIds.add(bo.getPickBodyId());
         }
         Date date = new Date();
         outboundPO.setOutboundTime(date);
@@ -176,22 +178,25 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
                 materialInventoryMapper.updateByPrimaryKey(materialInventoryBO.updatePO(updateInventoryPO));
             }
         }
-        // 清除掉所有得标签推荐表得内容
-        labelRecommendMapper.deleteAll();
-
-        outboundRecordMapper.insert(new OutboundRecordPO(headPO.getPickHeadId(), outboundPO.getOutboundId(), user.getUserId(), user.getName(), OutboundConstant.RECORD_CONFIRM_OUTBOUND, OutboundConstant.MATERIAL_STATUS_FINISH));
-        //当销售，生产，采购强关联时，工单所扫码的PID来源必须是销售采购来源
-        ConfigPO configPO = configMapper.queryByKey(OutboundConstant.K_PID_RELATE);
-        boolean flag = (null != configPO && OutboundConstant.V_YES.equals(configPO.getConfigValue()));
-        // 当出库时，重新刷新所有的推荐列表
-        List<PickHeadPO> notRecommendHeadPOs;
-        if (flag) {
-            notRecommendHeadPOs = pickHeadMapper.queryNotRecommodByOno(headPO.getSourceNo());
-        }else {
-            notRecommendHeadPOs = pickHeadMapper.queryNotRecommodByOno(null);
+        // 查询出当前拣货单所有的推荐pid
+        List<Long> recommendIds = pickHeadMapper.queryRecommendByPhid(headPO.getPickHeadId());
+        // 当出库时,清除掉当前出库单相关拣货单所有的推荐
+        labelRecommendMapper.batchDelete(bodyIds);
+        //将其中推荐了但是未被使用的库内标签重置为在库可用   目前已被拣货(plIds) 推荐recommendIds
+        recommendIds.removeAll(plIds);
+        //查看当前未被使用的plid中是否有其他用途被使用，例如被其他拣货单使用
+        List<Long> haveUseIds = new ArrayList<>();
+        for (Long recommendId:recommendIds) {
+            PickLabelPO po = pickLabelMapper.queryPickLabel(recommendId);
+            if(null != po){
+                haveUseIds.add(recommendId);
+            }
         }
-        BusinessUtil businessUtil = new BusinessUtil();
-        businessUtil.recommend(notRecommendHeadPOs,flag,pickBodyMapper,pickHeadMapper,storageLabelMapper,labelRecommendMapper);
+        recommendIds.removeAll(haveUseIds);
+        //将未被使用的重新置为在库
+        if(!recommendIds.isEmpty()){
+            storageLabelMapper.updateStatusByPlid(recommendIds,OutboundConstant.TYPE_STORAGE_LABEL_STORK);
+        }
 
         //当出库是调拨出库时,会生成新得入库单
         OutboundBO po = outboundMapper.queryByOid(dto.getOid());

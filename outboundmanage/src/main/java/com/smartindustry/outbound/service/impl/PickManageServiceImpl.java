@@ -25,6 +25,7 @@ import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.outbound.constant.OutboundConstant;
 import com.smartindustry.outbound.dto.OperateDTO;
+import com.smartindustry.outbound.util.BusinessUtil;
 import com.smartindustry.outbound.util.OmNoUtil;
 import com.smartindustry.outbound.vo.*;
 import com.smartindustry.outbound.service.IPickManageService;
@@ -259,6 +260,25 @@ public class PickManageServiceImpl implements IPickManageService {
         Integer flagTwo = pickHeadMapper.judgeIsPick(pickHeadId);
         // 更新拣货状态为物料拣货
         int result = (flagTwo != null) ? pickHeadMapper.updateStatus(pickHeadId, OutboundConstant.MATERIAL_STATUS_PICK, new Date()) : 0;
+        //根据当前拣货扫码的类型进行库内标签表的状态切换
+        // 先推荐
+        List<Long> plIds = new ArrayList<>();
+        plIds.add(bo.getPrintLabelId());
+        BusinessUtil businessUtil = new BusinessUtil();
+        switch (po.getSourceType()){
+            case OutboundConstant.TYPE_OUT_WORK:
+                businessUtil.updateStorageLabel(plIds,OutboundConstant.TYPE_STORAGE_LABEL_PICK,storageLabelMapper);
+                break;
+            case OutboundConstant.TYPE_OUT_SHIP:
+                businessUtil.updateStorageLabel(plIds,OutboundConstant.TYPE_STORAGE_LABEL_SHIP,storageLabelMapper);
+                break;
+            case OutboundConstant.TYPE_OUT_OTHER:
+                businessUtil.updateStorageLabel(plIds,OutboundConstant.TYPE_STORAGE_LABEL_TRANSFER,storageLabelMapper);
+                break;
+            default:
+                break;
+        }
+
         return ResultVO.ok().setData(ScanOutVO.convert(bo));
     }
 
