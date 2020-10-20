@@ -413,6 +413,12 @@ public class MaterialStorageServiceImpl implements IMaterialStorageService {
         if (storageBO.getStorageWid() != null && detailVO.getWid() == null) {
             detailVO.setWid(storageBO.getStorageWid());
         }
+
+        //查询仓库是否包含库位
+        if (detailVO.getWid() != null) {
+            List<LocationPO> locations = locationMapper.queryLocation(detailVO.getWid());
+            detailVO.setFlag(!locations.isEmpty());
+        }
         return ResultVO.ok().setData(detailVO);
 
     }

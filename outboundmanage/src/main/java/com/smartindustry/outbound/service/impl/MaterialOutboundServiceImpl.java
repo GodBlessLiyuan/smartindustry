@@ -184,7 +184,7 @@ public class MaterialOutboundServiceImpl implements IMaterialOutboundService {
         labelRecommendMapper.batchDelete(bodyIds);
         //将其中推荐了但是未被使用的库内标签重置为在库可用   目前已被拣货(plIds) 推荐recommendIds
         recommendIds.removeAll(plIds);
-        //查看当前未被使用的plid中是否有其他用途被使用，例如被其他拣货单使用
+        //查看当前未被使用的plid中是否有其他用途被使用，例如被其他拣货单使用....
         List<Long> haveUseIds = new ArrayList<>();
         for (Long recommendId:recommendIds) {
             PickLabelPO po = pickLabelMapper.queryPickLabel(recommendId);

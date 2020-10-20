@@ -285,9 +285,16 @@ public class LabelManageServiceImpl implements ILabelManageService {
         storagePO.setType(ReceiptConstant.MATERIAL_TYPE_GOOD);
         storagePO.setCreateTime(new Date());
         storagePO.setDr((byte) 1);
+<<<<<<< HEAD
         if(attributePO != null){
             storagePO.setWarehouseId(attributePO.getWarehouseId());
         }
+=======
+        if (attributePO != null) {
+            storagePO.setWarehouseId(attributePO.getWarehouseId());
+        }
+
+>>>>>>> 8c81ceffe7030c1b34989c47e5cd06ba82cc71de
         storageMapper.insert(storagePO);
 
         // 操作记录
