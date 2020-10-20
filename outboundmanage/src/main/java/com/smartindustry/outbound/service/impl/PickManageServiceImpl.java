@@ -229,6 +229,10 @@ public class PickManageServiceImpl implements IPickManageService {
         if (pickLabelPO != null) {
             return new ResultVO(1018);
         }
+        StorageLabelPO po1 = storageLabelMapper.queryByPlid(bo.getPrintLabelId());
+        if(po1.getMaterialLockId()!= null){
+            return new ResultVO(1030);
+        }
         //当销售，生产，采购强关联时，工单所扫码的PID来源必须是销售采购来源
         ConfigPO configPO = configMapper.queryByKey(OutboundConstant.K_PID_RELATE);
         if (null != configPO && OutboundConstant.V_YES.equals(configPO.getConfigValue())) {
