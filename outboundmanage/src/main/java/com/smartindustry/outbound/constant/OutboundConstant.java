@@ -159,6 +159,11 @@ public class OutboundConstant {
      * 其他出库
      */
     public static final byte TYPE_OUT_OTHER= 3;
+
+    /**
+     * 库内标签状态--在库
+     */
+    public static final Byte TYPE_STORAGE_LABEL_STORK = 1;
     /**
      * 库内标签状态--工单出库
      */

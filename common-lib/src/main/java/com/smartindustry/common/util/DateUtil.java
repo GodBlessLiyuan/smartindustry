@@ -1,6 +1,7 @@
 package com.smartindustry.common.util;
 import java.lang.reflect.Method;
 import java.text.ParseException;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Function;
@@ -60,5 +61,32 @@ public class DateUtil{
         }
 
         return sdf.format(date);
+    }
+
+
+    /**
+     * @param inputDate 要解析的字符串
+     * @return 解析出来的日期，如果没有匹配的返回null
+     */
+    public static Date parseDate(String inputDate) {
+        //可能出现的时间格式,可自由添加
+        String[] patterns = {
+                "yyyy-MM-dd",
+                "yyyy/MM/dd",
+                "yyyyMMdd",
+                "yyyyMM",
+                "yyyy"
+        };
+        SimpleDateFormat df = new SimpleDateFormat();
+        for (String pattern : patterns) {
+            df.applyPattern(pattern);
+            df.setLenient(false);
+            ParsePosition pos = new ParsePosition(0);
+            Date date = df.parse(inputDate, pos);
+            if (date != null) {
+                return date;
+            }
+        }
+        return null;
     }
 }

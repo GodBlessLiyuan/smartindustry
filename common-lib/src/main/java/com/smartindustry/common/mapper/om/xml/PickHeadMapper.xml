@@ -608,4 +608,14 @@
              and ph.source_type=#{sourceType, jdbcType=TINYINT}
         </if>
     </select>
+
+<!--    根据拣货单id查询所有推荐的pid-->
+    <select id="queryRecommendByPhid" parameterType="java.lang.Long" resultType="java.lang.Long">
+        select sl.print_label_id
+        from om_pick_head ph
+        left join om_pick_body pb on ph.pick_head_id = pb.pick_head_id
+        left join om_label_recommend lr on pb.pick_body_id = lr.pick_body_id
+        left join si_storage_label sl on lr.storage_label_id = sl.storage_label_id
+        where ph.pick_head_id = #{pickHeadId} and ph.dr = 1
+    </select>
 </mapper>

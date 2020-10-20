@@ -106,4 +106,13 @@
     <delete id="deleteAll">
         delete from om_label_recommend
     </delete>
+
+    <delete id="batchDelete" parameterType="java.util.List">
+        delete
+        from om_label_recommend
+        where pick_body_id in
+        <foreach collection="list" item="pbid" open="(" separator="," close=")">
+            #{pbid,jdbcType=BIGINT}
+        </foreach>
+    </delete>
 </mapper>

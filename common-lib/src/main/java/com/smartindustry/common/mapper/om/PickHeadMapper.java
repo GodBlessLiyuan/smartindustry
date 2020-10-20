@@ -279,4 +279,11 @@ public interface PickHeadMapper extends BaseMapper<PickHeadPO, Long> {
      */
 
     Integer countHandleNum(@Param("status") Byte status, @Param("sourceType") Byte sourceType);
+
+    /**
+     *  根据拣货单id查询所有推荐的pid
+     * @param pickHeadId
+     * @return
+     */
+    List<Long> queryRecommendByPhid(@Param("pickHeadId") Long pickHeadId);
 }
