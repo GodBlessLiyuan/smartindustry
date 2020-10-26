@@ -290,7 +290,6 @@ public class LabelManageServiceImpl implements ILabelManageService {
             storagePO.setWarehouseId(attributePO.getWarehouseId());
         }
         storageMapper.insert(storagePO);
-
         // 操作记录
         recordMapper.insert(new StorageRecordPO(dto.getRbid(), storagePO.getStorageId(), user.getUserId(), user.getName(), ReceiptConstant.RECORD_TYPE_STORAGE_INVOICE, ReceiptConstant.RECEIPT_MATERIAL_STORAGE));
         recordMapper.insert(new StorageRecordPO(dto.getRbid(), user.getUserId(), user.getName(), ReceiptConstant.RECORD_TYPE_FINISH, ReceiptConstant.RECEIPT_ENTRY_LABEL));
