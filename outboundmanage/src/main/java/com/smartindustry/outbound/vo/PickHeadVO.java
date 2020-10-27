@@ -1,7 +1,6 @@
 package com.smartindustry.outbound.vo;
 
 import com.smartindustry.common.bo.om.PickHeadBO;
-import com.smartindustry.common.pojo.om.PickHeadPO;
 import com.smartindustry.common.util.DateUtil;
 import lombok.Data;
 

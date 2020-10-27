@@ -1,9 +1,6 @@
 package com.smartindustry.authority.vo;
 
 import com.smartindustry.common.bo.am.DeptBO;
-import com.smartindustry.common.pojo.am.DeptPO;
-import com.smartindustry.common.pojo.am.UserPO;
-import com.smartindustry.common.pojo.si.PrintLabelPO;
 import lombok.Data;
 
 import java.io.Serializable;

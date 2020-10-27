@@ -1,110 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.smartindustry.common.mapper.si.MaterialRecordMapper">
-    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.MaterialRecordPO">
-        <id column="material_record_id" jdbcType="BIGINT" property="materialRecordId"/>
-        <result column="material_id" jdbcType="BIGINT" property="materialId"/>
-        <result column="user_id" jdbcType="BIGINT" property="userId"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="type" jdbcType="CHAR" property="type"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-        material_record_id, material_id, user_id, create_time, `type`
-    </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from si_material_record
-        where material_record_id = #{materialRecordId,jdbcType=BIGINT}
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-        delete
-        from si_material_record
-        where material_record_id = #{materialRecordId,jdbcType=BIGINT}
-    </delete>
-    <insert id="insert" parameterType="com.smartindustry.common.pojo.si.MaterialRecordPO">
-        insert into si_material_record (material_record_id, material_id, user_id,
-                                        create_time, `type`)
-        values (#{materialRecordId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},
-                #{createTime,jdbcType=TIMESTAMP}, #{type,jdbcType=CHAR})
-    </insert>
-    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.MaterialRecordPO">
-        insert into si_material_record
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="materialRecordId != null">
-                material_record_id,
-            </if>
-            <if test="materialId != null">
-                material_id,
-            </if>
-            <if test="userId != null">
-                user_id,
-            </if>
-            <if test="createTime != null">
-                create_time,
-            </if>
-            <if test="type != null">
-                `type`,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="materialRecordId != null">
-                #{materialRecordId,jdbcType=BIGINT},
-            </if>
-            <if test="materialId != null">
-                #{materialId,jdbcType=BIGINT},
-            </if>
-            <if test="userId != null">
-                #{userId,jdbcType=BIGINT},
-            </if>
-            <if test="createTime != null">
-                #{createTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="type != null">
-                #{type,jdbcType=CHAR},
-            </if>
-        </trim>
-    </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.si.MaterialRecordPO">
-        update si_material_record
-        <set>
-            <if test="materialId != null">
-                material_id = #{materialId,jdbcType=BIGINT},
-            </if>
-            <if test="userId != null">
-                user_id = #{userId,jdbcType=BIGINT},
-            </if>
-            <if test="createTime != null">
-                create_time = #{createTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="type != null">
-                `type` = #{type,jdbcType=CHAR},
-            </if>
-        </set>
-        where material_record_id = #{materialRecordId,jdbcType=BIGINT}
-    </update>
-    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.MaterialRecordPO">
-        update si_material_record
-        set material_id = #{materialId,jdbcType=BIGINT},
-            user_id     = #{userId,jdbcType=BIGINT},
-            create_time = #{createTime,jdbcType=TIMESTAMP},
-            `type`      = #{type,jdbcType=CHAR}
-        where material_record_id = #{materialRecordId,jdbcType=BIGINT}
-    </update>
-
-    <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.MaterialRecordBO" extends="BaseResultMap">
-        <result column="name" jdbcType="CHAR" property="name"/>
-    </resultMap>
-    <select id="queryByMid" parameterType="java.lang.Long" resultMap="BOResultMap">
-        select mr.material_record_id,
-               mr.material_id,
-               mr.user_id,
-               mr.create_time,
-               mr.`type`,
-               u.name
-        from si_material_record mr
-                 left join am_user u on mr.user_id = u.user_id
-        where mr.material_id = #{mid,jdbcType=BIGINT}
-        order by mr.create_time desc
-    </select>
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.MaterialRecordPO">
+    <id column="material_record_id" jdbcType="BIGINT" property="materialRecordId" />
+    <result column="material_id" jdbcType="BIGINT" property="materialId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="operation_name" jdbcType="CHAR" property="operationName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    material_record_id, material_id, user_id, create_time, operation_name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from si_material_record
+    where material_record_id = #{materialRecordId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from si_material_record
+    where material_record_id = #{materialRecordId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.si.MaterialRecordPO">
+    insert into si_material_record (material_record_id, material_id, user_id, 
+      create_time, operation_name)
+    values (#{materialRecordId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{operationName,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.MaterialRecordPO">
+    insert into si_material_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="materialRecordId != null">
+        material_record_id,
+      </if>
+      <if test="materialId != null">
+        material_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="operationName != null">
+        operation_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="materialRecordId != null">
+        #{materialRecordId,jdbcType=BIGINT},
+      </if>
+      <if test="materialId != null">
+        #{materialId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operationName != null">
+        #{operationName,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.si.MaterialRecordPO">
+    update si_material_record
+    <set>
+      <if test="materialId != null">
+        material_id = #{materialId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operationName != null">
+        operation_name = #{operationName,jdbcType=CHAR},
+      </if>
+    </set>
+    where material_record_id = #{materialRecordId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.MaterialRecordPO">
+    update si_material_record
+    set material_id = #{materialId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      operation_name = #{operationName,jdbcType=CHAR}
+    where material_record_id = #{materialRecordId,jdbcType=BIGINT}
+  </update>
 </mapper>

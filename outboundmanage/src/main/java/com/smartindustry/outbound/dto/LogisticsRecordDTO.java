@@ -1,8 +1,6 @@
 package com.smartindustry.outbound.dto;
 
 import com.smartindustry.common.config.FilePathConfig;
-import com.smartindustry.common.pojo.om.LogisticsPicturePO;
-import com.smartindustry.common.pojo.om.LogisticsRecordPO;
 import lombok.Data;
 
 import java.io.Serializable;

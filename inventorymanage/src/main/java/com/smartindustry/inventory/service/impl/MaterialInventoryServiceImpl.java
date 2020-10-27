@@ -7,7 +7,6 @@ import com.smartindustry.common.mapper.im.SafeStockMapper;
 import com.smartindustry.common.mapper.si.MaterialAttributeMapper;
 import com.smartindustry.common.pojo.im.MaterialInventoryPO;
 import com.smartindustry.common.pojo.im.SafeStockPO;
-import com.smartindustry.common.pojo.si.MaterialAttributePO;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;

@@ -3,13 +3,12 @@
 <mapper namespace="com.smartindustry.common.mapper.si.BomRecordMapper">
   <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.BomRecordPO">
     <id column="bom_record_id" jdbcType="BIGINT" property="bomRecordId" />
-    <result column="bom_head_id" jdbcType="BIGINT" property="bomHeadId" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="type" jdbcType="CHAR" property="type" />
+    <result column="operation_name" jdbcType="CHAR" property="operationName" />
   </resultMap>
   <sql id="Base_Column_List">
-    bom_record_id, bom_head_id, user_id, create_time, `type`
+    bom_record_id, user_id, create_time, operation_name
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -22,10 +21,10 @@
     where bom_record_id = #{bomRecordId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.smartindustry.common.pojo.si.BomRecordPO">
-    insert into si_bom_record (bom_record_id, bom_head_id, user_id, 
-      create_time, `type`)
-    values (#{bomRecordId,jdbcType=BIGINT}, #{bomHeadId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{type,jdbcType=CHAR})
+    insert into si_bom_record (bom_record_id, user_id, create_time, 
+      operation_name)
+    values (#{bomRecordId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{operationName,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.BomRecordPO">
     insert into si_bom_record
@@ -33,25 +32,19 @@
       <if test="bomRecordId != null">
         bom_record_id,
       </if>
-      <if test="bomHeadId != null">
-        bom_head_id,
-      </if>
       <if test="userId != null">
         user_id,
       </if>
       <if test="createTime != null">
         create_time,
       </if>
-      <if test="type != null">
-        `type`,
+      <if test="operationName != null">
+        operation_name,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="bomRecordId != null">
         #{bomRecordId,jdbcType=BIGINT},
-      </if>
-      <if test="bomHeadId != null">
-        #{bomHeadId,jdbcType=BIGINT},
       </if>
       <if test="userId != null">
         #{userId,jdbcType=BIGINT},
@@ -59,44 +52,31 @@
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="type != null">
-        #{type,jdbcType=CHAR},
+      <if test="operationName != null">
+        #{operationName,jdbcType=CHAR},
       </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.si.BomRecordPO">
     update si_bom_record
     <set>
-      <if test="bomHeadId != null">
-        bom_head_id = #{bomHeadId,jdbcType=BIGINT},
-      </if>
       <if test="userId != null">
         user_id = #{userId,jdbcType=BIGINT},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="type != null">
-        `type` = #{type,jdbcType=CHAR},
+      <if test="operationName != null">
+        operation_name = #{operationName,jdbcType=CHAR},
       </if>
     </set>
     where bom_record_id = #{bomRecordId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.BomRecordPO">
     update si_bom_record
-    set bom_head_id = #{bomHeadId,jdbcType=BIGINT},
-      user_id = #{userId,jdbcType=BIGINT},
+    set user_id = #{userId,jdbcType=BIGINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      `type` = #{type,jdbcType=CHAR}
+      operation_name = #{operationName,jdbcType=CHAR}
     where bom_record_id = #{bomRecordId,jdbcType=BIGINT}
   </update>
-
-<!--  根据bhid查询BOM清单的操作记录-->
-  <select id="queryByBhid" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.si.BomRecordBO">
-    select u.`name` as name, br.create_time as createTime,br.`type` as type
-    from si_bom_record br
-    left join am_user u on br.user_id = u.user_id
-    where br.bom_head_id = #{bomHeadId,jdbcType=BIGINT}
-    order by br.create_time desc
-  </select>
 </mapper>

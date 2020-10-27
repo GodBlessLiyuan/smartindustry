@@ -12,7 +12,7 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+08
   datasource:
-    url: jdbc:mysql://39.97.253.38:3306/smart_work_station?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    url: jdbc:mysql://39.97.253.38:3306/yinghong_wms?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: root
     password: '!qaZXSw2'
     driver-class-name: com.mysql.cj.jdbc.Driver

@@ -3,52 +3,29 @@ package com.smartindustry.storage.dto;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
- * @author: xiahui
- * @date: Created in 2020/7/24 14:23
- * @description: 操作DTO
- * @version: 1.0
+ * @author: jiangzhaojie
+ * @date: Created in 10:11 2020/10/27
+ * @version: 1.0.0
+ * @description:
  */
 @Data
 public class OperateDTO implements Serializable {
     private static final long serialVersionUID = 1L;
+    /**
+     * 入库仓库id
+     */
+    private Long wid;
 
     /**
-     * 收料单ID
+     * 表体的批量删除
      */
-    private Long rbid;
-    /**
-     * 标签ID
-     */
-    private Long plid;
-    /**
-     * 入库单ID
-     */
-    private Long sid;
-    /**
-     *
-     */
-    private String pid;
-    /**
-     * 库位编号
-     */
-    private String lno;
-    private Integer num;
-    private Byte status;
-    /**
-        入库详情组ID
-     */
-    private Long sgid;
+    private List<Long> sbids;
 
     /**
-     * 库房ID
+     * 采购拣货单的表头id
      */
-    private Long whid;
-
-    /**
-     * 来源单号（调拨订单的调拨单编号）
-     */
-    private String sono;
-
+    private Long shid;
 }

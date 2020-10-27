@@ -1,7 +1,6 @@
 package com.smartindustry.basic.vo;
 
 import com.smartindustry.common.bo.si.WarehouseRecordBO;
-import com.smartindustry.common.pojo.si.WarehouseRecordPO;
 import lombok.Data;
 
 import java.io.Serializable;

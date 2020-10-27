@@ -4,8 +4,6 @@ import com.smartindustry.common.pojo.si.BomRecordPO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.Date;
-
 /**
  * @author: jiangzhaojie
  * @date: Created in 14:40 2020/8/20

@@ -3,31 +3,37 @@ package com.smartindustry.common.pojo.si;
 import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * si_client_record
  * @author 
  */
-@NoArgsConstructor
 @Data
 public class ClientRecordPO implements Serializable {
+    /**
+     * 操作记录ID
+     */
     private Long clientRecordId;
 
+    /**
+     * 客户id
+     */
     private Long clientId;
 
+    /**
+     * 用户ID
+     */
     private Long userId;
 
+    /**
+     * 操作时间
+     */
     private Date createTime;
 
-    private String type;
-
-    public ClientRecordPO(Long clientId,Long userId,String type){
-        this.clientId = clientId;
-        this.userId = userId;
-        this.createTime = new Date();
-        this.type = type;
-    }
+    /**
+     * 操作名称
+     */
+    private String operationName;
 
     private static final long serialVersionUID = 1L;
 }

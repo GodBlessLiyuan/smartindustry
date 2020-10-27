@@ -5,8 +5,6 @@ import com.smartindustry.common.bo.wm.WorkBenchBO;
 import com.smartindustry.common.config.FilePathConfig;
 import com.smartindustry.common.mapper.om.OutboundMapper;
 import com.smartindustry.common.mapper.om.PickHeadMapper;
-import com.smartindustry.common.mapper.sm.ReceiptBodyMapper;
-import com.smartindustry.common.mapper.sm.StorageMapper;
 import com.smartindustry.common.mapper.wm.WorkBenchMapper;
 import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.ServletUtil;

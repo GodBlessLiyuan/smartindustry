@@ -1,146 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.smartindustry.common.mapper.om.OutboundRecordMapper">
-    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.om.OutboundRecordPO">
-        <id column="record_id" jdbcType="BIGINT" property="recordId"/>
-        <result column="pick_head_id" jdbcType="BIGINT" property="pickHeadId"/>
-        <result column="outbound_id" jdbcType="BIGINT" property="outboundId"/>
-        <result column="user_id" jdbcType="BIGINT" property="userId"/>
-        <result column="name" jdbcType="CHAR" property="name"/>
-        <result column="type" jdbcType="CHAR" property="type"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="status" jdbcType="TINYINT" property="status"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-        record_id, pick_head_id, outbound_id, user_id, `name`, `type`, create_time, `status`
-    </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from om_outbound_record
-        where record_id = #{recordId,jdbcType=BIGINT}
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-        delete
-        from om_outbound_record
-        where record_id = #{recordId,jdbcType=BIGINT}
-    </delete>
-    <insert id="insert" parameterType="com.smartindustry.common.pojo.om.OutboundRecordPO">
-        insert into om_outbound_record (record_id, pick_head_id, outbound_id,
-                                        user_id, `name`, `type`, create_time,
-                                        `status`)
-        values (#{recordId,jdbcType=BIGINT}, #{pickHeadId,jdbcType=BIGINT}, #{outboundId,jdbcType=BIGINT},
-                #{userId,jdbcType=BIGINT}, #{name,jdbcType=CHAR}, #{type,jdbcType=CHAR},
-                #{createTime,jdbcType=TIMESTAMP},
-                #{status,jdbcType=TINYINT})
-    </insert>
-    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.om.OutboundRecordPO">
-        insert into om_outbound_record
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="recordId != null">
-                record_id,
-            </if>
-            <if test="pickHeadId != null">
-                pick_head_id,
-            </if>
-            <if test="outboundId != null">
-                outbound_id,
-            </if>
-            <if test="userId != null">
-                user_id,
-            </if>
-            <if test="name != null">
-                `name`,
-            </if>
-            <if test="type != null">
-                `type`,
-            </if>
-            <if test="createTime != null">
-                create_time,
-            </if>
-            <if test="status != null">
-                `status`,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="recordId != null">
-                #{recordId,jdbcType=BIGINT},
-            </if>
-            <if test="pickHeadId != null">
-                #{pickHeadId,jdbcType=BIGINT},
-            </if>
-            <if test="outboundId != null">
-                #{outboundId,jdbcType=BIGINT},
-            </if>
-            <if test="userId != null">
-                #{userId,jdbcType=BIGINT},
-            </if>
-            <if test="name != null">
-                #{name,jdbcType=CHAR},
-            </if>
-            <if test="type != null">
-                #{type,jdbcType=CHAR},
-            </if>
-            <if test="createTime != null">
-                #{createTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="status != null">
-                #{status,jdbcType=TINYINT},
-            </if>
-        </trim>
-    </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.om.OutboundRecordPO">
-        update om_outbound_record
-        <set>
-            <if test="pickHeadId != null">
-                pick_head_id = #{pickHeadId,jdbcType=BIGINT},
-            </if>
-            <if test="outboundId != null">
-                outbound_id = #{outboundId,jdbcType=BIGINT},
-            </if>
-            <if test="userId != null">
-                user_id = #{userId,jdbcType=BIGINT},
-            </if>
-            <if test="name != null">
-                `name` = #{name,jdbcType=CHAR},
-            </if>
-            <if test="type != null">
-                `type` = #{type,jdbcType=CHAR},
-            </if>
-            <if test="createTime != null">
-                create_time = #{createTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="status != null">
-                `status` = #{status,jdbcType=TINYINT},
-            </if>
-        </set>
-        where record_id = #{recordId,jdbcType=BIGINT}
-    </update>
-    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.om.OutboundRecordPO">
-        update om_outbound_record
-        set pick_head_id = #{pickHeadId,jdbcType=BIGINT},
-            outbound_id  = #{outboundId,jdbcType=BIGINT},
-            user_id      = #{userId,jdbcType=BIGINT},
-            `name`       = #{name,jdbcType=CHAR},
-            `type`       = #{type,jdbcType=CHAR},
-            create_time  = #{createTime,jdbcType=TIMESTAMP},
-            `status`     = #{status,jdbcType=TINYINT}
-        where record_id = #{recordId,jdbcType=BIGINT}
-    </update>
-
-    <select id="queryByOid" parameterType="java.lang.Long" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from om_outbound_record
-        where outbound_id = #{outboundId,jdbcType=BIGINT}
-        order by create_time desc
-    </select>
-
-    <select id="queryByPhid" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from om_outbound_record
-        where pick_head_id = #{pickHeadId} and `status` = #{status}
-        order by create_time desc
-    </select>
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.om.OutboundRecordPO">
+    <id column="record_id" jdbcType="BIGINT" property="recordId" />
+    <result column="outbound_head_id" jdbcType="BIGINT" property="outboundHeadId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="operation_name" jdbcType="CHAR" property="operationName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    record_id, outbound_head_id, user_id, operation_name, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from om_outbound_record
+    where record_id = #{recordId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from om_outbound_record
+    where record_id = #{recordId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.om.OutboundRecordPO">
+    insert into om_outbound_record (record_id, outbound_head_id, user_id, 
+      operation_name, create_time)
+    values (#{recordId,jdbcType=BIGINT}, #{outboundHeadId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
+      #{operationName,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.om.OutboundRecordPO">
+    insert into om_outbound_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="recordId != null">
+        record_id,
+      </if>
+      <if test="outboundHeadId != null">
+        outbound_head_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="operationName != null">
+        operation_name,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="recordId != null">
+        #{recordId,jdbcType=BIGINT},
+      </if>
+      <if test="outboundHeadId != null">
+        #{outboundHeadId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="operationName != null">
+        #{operationName,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.om.OutboundRecordPO">
+    update om_outbound_record
+    <set>
+      <if test="outboundHeadId != null">
+        outbound_head_id = #{outboundHeadId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="operationName != null">
+        operation_name = #{operationName,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where record_id = #{recordId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.om.OutboundRecordPO">
+    update om_outbound_record
+    set outbound_head_id = #{outboundHeadId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      operation_name = #{operationName,jdbcType=CHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where record_id = #{recordId,jdbcType=BIGINT}
+  </update>
 </mapper>

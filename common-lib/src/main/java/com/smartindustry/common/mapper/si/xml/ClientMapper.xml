@@ -34,7 +34,7 @@
     delete from si_client
     where client_id = #{clientId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.smartindustry.common.pojo.si.ClientPO" useGeneratedKeys="true" keyProperty="clientId">
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.si.ClientPO">
     insert into si_client (client_id, client_no, client_type_id, 
       client_name, contact, sex, 
       phone, email, fax, url, 
@@ -231,53 +231,4 @@
       dr = #{dr,jdbcType=TINYINT}
     where client_id = #{clientId,jdbcType=BIGINT}
   </update>
-
-  <resultMap id="BOBaseResult" type="com.smartindustry.common.bo.si.ClientBO" extends="BaseResultMap">
-    <result column="credit_level_name" jdbcType="CHAR" property="creditLevelName"/>
-    <result column="client_type_name" jdbcType="CHAR" property="clientTypeName"/>
-  </resultMap>
-  <sql id="BO_Column_List">
-    c.client_id, c.client_no, c.client_type_id, c.client_name, c.contact, c.sex, c.phone, c.email, c.fax,
-    c.url, c.credit_level_id, c.area, c.address, c.remark, c.create_time, c.update_time, c.dr,cl.credit_level_name,ct.client_type_name
-  </sql>
-  <!--  客户基础信息分页查询-->
-  <select id="pageQuery" parameterType="java.util.Map"  resultMap="BOBaseResult">
-    select
-    <include refid="BO_Column_List"/>
-    from si_client c
-    left join dd_credit_level cl on c.credit_level_id = cl.credit_level_id
-    left join dd_client_type ct on c.client_type_id = ct.client_type_id
-    where c.dr = 1
-    <if test="cno != null and cno != ''">
-      and c.client_no like concat('%',#{cno,jdbcType=VARCHAR},'%')
-    </if>
-    <if test="cname != null and cname != ''">
-      and c.client_name like concat('%',#{cname,jdbcType=VARCHAR},'%')
-    </if>
-    order by c.create_time desc
-  </select>
-
-  <update id="batchDelete" parameterType="java.util.List">
-    update si_client
-    set dr = 2 where client_id in
-    <foreach collection="list" item="cid" open="(" separator="," close=")">
-      #{cid,jdbcType=BIGINT}
-    </foreach>
-  </update>
-
-  <select id="queryNo" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from si_client
-    where client_no = #{clientNo,jdbcType=CHAR} and dr = 1
-  </select>
-
-  <select id="queryByCid" parameterType="java.lang.Long" resultMap="BOBaseResult">
-    select
-    <include refid="BO_Column_List"/>
-    from si_client c
-    left join dd_credit_level cl on c.credit_level_id = cl.credit_level_id
-    left join dd_client_type ct on c.client_type_id = ct.client_type_id
-    where c.dr = 1 and c.client_id = #{clientId,jdbcType=BIGINT}
-  </select>
 </mapper>
