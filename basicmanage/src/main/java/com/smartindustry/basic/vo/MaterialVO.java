@@ -2,8 +2,6 @@ package com.smartindustry.basic.vo;
 
 import com.smartindustry.common.bo.si.MaterialBO;
 import com.smartindustry.common.config.FilePathConfig;
-import com.smartindustry.common.pojo.si.MaterialPO;
-import com.smartindustry.common.pojo.si.MaterialSpecificationPO;
 import lombok.Data;
 
 import java.io.Serializable;

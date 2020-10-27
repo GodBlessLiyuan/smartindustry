@@ -1,7 +1,5 @@
 package com.smartindustry.outbound.vo;
 
-import com.smartindustry.common.bo.si.PrintLabelBO;
-import com.smartindustry.common.pojo.si.PrintLabelPO;
 import lombok.Data;
 
 import java.util.ArrayList;

@@ -1,6 +1,5 @@
 package com.smartindustry.storage.service.impl;
 
-import com.smartindustry.common.bo.si.PrintLabelBO;
 import com.smartindustry.common.bo.sm.ReceiptBodyBO;
 import com.smartindustry.common.constant.ConfigConstant;
 import com.smartindustry.common.constant.ModuleConstant;
@@ -10,11 +9,6 @@ import com.smartindustry.common.mapper.si.MaterialAttributeMapper;
 import com.smartindustry.common.mapper.si.PrintLabelMapper;
 import com.smartindustry.common.mapper.sm.*;
 import com.smartindustry.common.pojo.am.UserPO;
-import com.smartindustry.common.pojo.si.ConfigPO;
-import com.smartindustry.common.pojo.si.LabelRecordPO;
-import com.smartindustry.common.pojo.si.MaterialAttributePO;
-import com.smartindustry.common.pojo.si.PrintLabelPO;
-import com.smartindustry.common.pojo.sm.*;
 import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.ReceiptConstant;
@@ -25,8 +19,6 @@ import com.smartindustry.storage.service.ILabelManageService;
 import com.smartindustry.storage.util.ReceiptNoUtil;
 import com.smartindustry.storage.vo.PrintLabelVO;
 import com.smartindustry.storage.vo.StorageSimpleDetailVO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;

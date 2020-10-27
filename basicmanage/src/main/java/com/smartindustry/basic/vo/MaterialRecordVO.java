@@ -1,9 +1,6 @@
 package com.smartindustry.basic.vo;
 
 import com.smartindustry.common.bo.si.MaterialRecordBO;
-import com.smartindustry.common.pojo.am.UserPO;
-import com.smartindustry.common.pojo.si.MaterialRecordPO;
-import com.smartindustry.common.util.ServletUtil;
 import lombok.Data;
 
 import java.io.Serializable;

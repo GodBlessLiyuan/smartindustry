@@ -1,13 +1,10 @@
 package com.smartindustry.outbound.vo;
 
 import com.smartindustry.common.bo.om.PickBodyBO;
-import com.smartindustry.common.bo.si.PrintLabelBO;
 import lombok.Data;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author: xiahui

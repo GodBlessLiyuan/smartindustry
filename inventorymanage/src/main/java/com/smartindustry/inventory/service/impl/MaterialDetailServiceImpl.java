@@ -2,11 +2,9 @@ package com.smartindustry.inventory.service.impl;
 
 import com.github.pagehelper.Page;
 import com.smartindustry.common.bo.im.MaterialInventoryBO;
-import com.smartindustry.common.bo.si.StorageLabelBO;
 import com.smartindustry.common.mapper.im.MaterialInventoryMapper;
 import com.smartindustry.common.mapper.si.StorageLabelMapper;
 import com.smartindustry.common.pojo.im.MaterialInventoryPO;
-import com.smartindustry.common.pojo.si.StorageLabelPO;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;

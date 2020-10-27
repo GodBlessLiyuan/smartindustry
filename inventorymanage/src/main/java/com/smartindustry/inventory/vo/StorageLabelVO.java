@@ -1,6 +1,5 @@
 package com.smartindustry.inventory.vo;
 
-import com.smartindustry.common.bo.si.StorageLabelBO;
 import lombok.Data;
 
 import java.io.Serializable;

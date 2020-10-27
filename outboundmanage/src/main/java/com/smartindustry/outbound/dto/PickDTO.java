@@ -1,7 +1,5 @@
 package com.smartindustry.outbound.dto;
 
-import com.smartindustry.common.pojo.om.PickBodyPO;
-import com.smartindustry.common.pojo.om.PickHeadPO;
 import com.smartindustry.common.util.DateUtil;
 import com.smartindustry.outbound.constant.OutboundConstant;
 import lombok.Data;

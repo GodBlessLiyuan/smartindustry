@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.om.OutboundBodyMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.om.OutboundBodyPO">
+    <id column="outbound_body_id" jdbcType="BIGINT" property="outboundBodyId" />
+    <result column="outbound_head_id" jdbcType="BIGINT" property="outboundHeadId" />
+    <result column="material_id" jdbcType="BIGINT" property="materialId" />
+    <result column="plan_num" jdbcType="INTEGER" property="planNum" />
+    <result column="demand_num" jdbcType="INTEGER" property="demandNum" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="outbound_time" jdbcType="TIMESTAMP" property="outboundTime" />
+    <result column="dr" jdbcType="TINYINT" property="dr" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    outbound_body_id, outbound_head_id, material_id, plan_num, demand_num, create_time, 
+    outbound_time, dr
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from om_outbound_body
+    where outbound_body_id = #{outboundBodyId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from om_outbound_body
+    where outbound_body_id = #{outboundBodyId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.om.OutboundBodyPO">
+    insert into om_outbound_body (outbound_body_id, outbound_head_id, material_id, 
+      plan_num, demand_num, create_time, 
+      outbound_time, dr)
+    values (#{outboundBodyId,jdbcType=BIGINT}, #{outboundHeadId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT}, 
+      #{planNum,jdbcType=INTEGER}, #{demandNum,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{outboundTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.om.OutboundBodyPO">
+    insert into om_outbound_body
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="outboundBodyId != null">
+        outbound_body_id,
+      </if>
+      <if test="outboundHeadId != null">
+        outbound_head_id,
+      </if>
+      <if test="materialId != null">
+        material_id,
+      </if>
+      <if test="planNum != null">
+        plan_num,
+      </if>
+      <if test="demandNum != null">
+        demand_num,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="outboundTime != null">
+        outbound_time,
+      </if>
+      <if test="dr != null">
+        dr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="outboundBodyId != null">
+        #{outboundBodyId,jdbcType=BIGINT},
+      </if>
+      <if test="outboundHeadId != null">
+        #{outboundHeadId,jdbcType=BIGINT},
+      </if>
+      <if test="materialId != null">
+        #{materialId,jdbcType=BIGINT},
+      </if>
+      <if test="planNum != null">
+        #{planNum,jdbcType=INTEGER},
+      </if>
+      <if test="demandNum != null">
+        #{demandNum,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="outboundTime != null">
+        #{outboundTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dr != null">
+        #{dr,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.om.OutboundBodyPO">
+    update om_outbound_body
+    <set>
+      <if test="outboundHeadId != null">
+        outbound_head_id = #{outboundHeadId,jdbcType=BIGINT},
+      </if>
+      <if test="materialId != null">
+        material_id = #{materialId,jdbcType=BIGINT},
+      </if>
+      <if test="planNum != null">
+        plan_num = #{planNum,jdbcType=INTEGER},
+      </if>
+      <if test="demandNum != null">
+        demand_num = #{demandNum,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="outboundTime != null">
+        outbound_time = #{outboundTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dr != null">
+        dr = #{dr,jdbcType=TINYINT},
+      </if>
+    </set>
+    where outbound_body_id = #{outboundBodyId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.om.OutboundBodyPO">
+    update om_outbound_body
+    set outbound_head_id = #{outboundHeadId,jdbcType=BIGINT},
+      material_id = #{materialId,jdbcType=BIGINT},
+      plan_num = #{planNum,jdbcType=INTEGER},
+      demand_num = #{demandNum,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      outbound_time = #{outboundTime,jdbcType=TIMESTAMP},
+      dr = #{dr,jdbcType=TINYINT}
+    where outbound_body_id = #{outboundBodyId,jdbcType=BIGINT}
+  </update>
+</mapper>

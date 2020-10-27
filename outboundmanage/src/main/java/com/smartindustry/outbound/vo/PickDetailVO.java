@@ -1,6 +1,5 @@
 package com.smartindustry.outbound.vo;
 
-import com.smartindustry.common.pojo.om.PickHeadPO;
 import com.smartindustry.common.util.DateUtil;
 import lombok.Data;
 import org.springframework.util.StringUtils;

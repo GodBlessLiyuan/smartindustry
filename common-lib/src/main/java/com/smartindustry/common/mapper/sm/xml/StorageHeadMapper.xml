@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.sm.StorageHeadMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.sm.StorageHeadPO">
+    <id column="storage_head_id" jdbcType="BIGINT" property="storageHeadId" />
+    <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId" />
+    <result column="storage_no" jdbcType="CHAR" property="storageNo" />
+    <result column="storage_time" jdbcType="TIMESTAMP" property="storageTime" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="extra" jdbcType="CHAR" property="extra" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="dr" jdbcType="TINYINT" property="dr" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    storage_head_id, warehouse_id, storage_no, storage_time, `status`, extra, create_time, 
+    dr
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sm_storage_head
+    where storage_head_id = #{storageHeadId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sm_storage_head
+    where storage_head_id = #{storageHeadId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.StorageHeadPO" useGeneratedKeys="true" keyProperty="storageHeadId">
+    insert into sm_storage_head (storage_head_id, warehouse_id, storage_no, 
+      storage_time, `status`, extra, 
+      create_time, dr)
+    values (#{storageHeadId,jdbcType=BIGINT}, #{warehouseId,jdbcType=BIGINT}, #{storageNo,jdbcType=CHAR}, 
+      #{storageTime,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT}, #{extra,jdbcType=CHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.sm.StorageHeadPO">
+    insert into sm_storage_head
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="storageHeadId != null">
+        storage_head_id,
+      </if>
+      <if test="warehouseId != null">
+        warehouse_id,
+      </if>
+      <if test="storageNo != null">
+        storage_no,
+      </if>
+      <if test="storageTime != null">
+        storage_time,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="extra != null">
+        extra,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="dr != null">
+        dr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="storageHeadId != null">
+        #{storageHeadId,jdbcType=BIGINT},
+      </if>
+      <if test="warehouseId != null">
+        #{warehouseId,jdbcType=BIGINT},
+      </if>
+      <if test="storageNo != null">
+        #{storageNo,jdbcType=CHAR},
+      </if>
+      <if test="storageTime != null">
+        #{storageTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="extra != null">
+        #{extra,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dr != null">
+        #{dr,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.sm.StorageHeadPO">
+    update sm_storage_head
+    <set>
+      <if test="warehouseId != null">
+        warehouse_id = #{warehouseId,jdbcType=BIGINT},
+      </if>
+      <if test="storageNo != null">
+        storage_no = #{storageNo,jdbcType=CHAR},
+      </if>
+      <if test="storageTime != null">
+        storage_time = #{storageTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="extra != null">
+        extra = #{extra,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dr != null">
+        dr = #{dr,jdbcType=TINYINT},
+      </if>
+    </set>
+    where storage_head_id = #{storageHeadId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.sm.StorageHeadPO">
+    update sm_storage_head
+    set warehouse_id = #{warehouseId,jdbcType=BIGINT},
+      storage_no = #{storageNo,jdbcType=CHAR},
+      storage_time = #{storageTime,jdbcType=TIMESTAMP},
+      `status` = #{status,jdbcType=TINYINT},
+      extra = #{extra,jdbcType=CHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      dr = #{dr,jdbcType=TINYINT}
+    where storage_head_id = #{storageHeadId,jdbcType=BIGINT}
+  </update>
+
+
+  <resultMap id="BOResultMap" type="com.smartindustry.common.bo.sm.StorageHeadBO" extends="BaseResultMap">
+    <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
+  </resultMap>
+  <sql id="BO_Column_List">
+     sh.storage_head_id, sh.storage_no, sh.storage_time, sh.`status`, w.warehouse_name
+  </sql>
+  <select id="pageQuery" parameterType="java.util.Map" resultMap="BOResultMap">
+    select
+    <include refid="BO_Column_List" />
+    from sm_storage_head sh
+    left join si_warehouse w on sh.warehouse_id = w.warehouse_id
+    where sh.dr = 1
+    <if test="wid != null and wid != 0">
+      and w.warehouse_id = #{wid,jdbcType=TINYINT}
+    </if>
+    <if test="status != null and status != 0">
+      and sh.`status` = #{status,jdbcType=TINYINT}
+    </if>
+    <if test="stime != null and stime != ''">
+      and sh.storage_time = #{stime,jdbcType=TINYINT}
+    </if>
+    order by sh.create_time desc
+  </select>
+
+
+  <resultMap id="BOSResultMap" type="com.smartindustry.common.bo.sm.StorageHeadBO" extends="BaseResultMap">
+    <result column="storage_head_id" jdbcType="BIGINT" property="storageHeadId"/>
+    <result column="storage_no" jdbcType="CHAR" property="storageNo"/>
+    <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
+    <result column="extra" jdbcType="CHAR" property="extra"/>
+    <collection property="bos" ofType="com.smartindustry.common.bo.sm.StorageBodyBO">
+      <id column="storage_body_id" jdbcType="BIGINT" property="storageBodyId"/>
+      <result column="material_id" jdbcType="BIGINT" property="materialId"/>
+      <result column="material_name" jdbcType="CHAR" property="materialName"/>
+      <result column="material_model" jdbcType="CHAR" property="materialModel"/>
+      <result column="supplier_name" jdbcType="CHAR" property="supplierName"/>
+      <result column="location_no" jdbcType="CHAR" property="locationNo"/>
+      <result column="car_brand" jdbcType="CHAR" property="carBrand"/>
+      <result column="accept_num" jdbcType="INTEGER" property="acceptNum"/>
+      <result column="accept_time" jdbcType="TIMESTAMP" property="acceptTime"/>
+    </collection>
+  </resultMap>
+  <sql id="BOS_Column_List">
+      sh.storage_head_id, sh.storage_no, sh.extra, w.warehouse_name, sb.storage_body_id,sb.material_id,
+      m.material_name, m.material_model, su.supplier_name, l.location_no,sb.car_brand, sb.accept_num,sb.accept_time
+  </sql>
+  <select id="queryByShid" parameterType="java.lang.Long">
+    select
+    <include refid="BOS_Column_List" />
+    from sm_storage_head sh
+    left join si_warehouse w on sh.warehouse_id = w.warehouse_id
+    left join sm_storage_body sb on sh.storage_head_id = sb.storage_head_id
+    left join si_location l on sb.location_id = l.location_id
+    left join si_material m on sb.material_id = m.material_id
+    left join si_supplier su on m.supplier_id = su.supplier_id
+    where sh.dr = 1 and sh.storage_head_id = #{shid,jdbcType=BIGINT}
+  </select>
+</mapper>

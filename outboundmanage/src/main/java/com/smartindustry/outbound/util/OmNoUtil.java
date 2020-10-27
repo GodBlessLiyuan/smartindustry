@@ -2,10 +2,6 @@ package com.smartindustry.outbound.util;
 
 import com.smartindustry.common.mapper.om.OutboundMapper;
 import com.smartindustry.common.mapper.si.PrintLabelMapper;
-import com.smartindustry.common.mapper.sm.StorageMapper;
-import com.smartindustry.common.pojo.om.OutboundPO;
-import com.smartindustry.common.pojo.si.PrintLabelPO;
-import com.smartindustry.common.pojo.sm.StoragePO;
 import com.smartindustry.common.util.NoUtil;
 
 import java.util.Date;

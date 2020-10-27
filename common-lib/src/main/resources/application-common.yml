@@ -6,7 +6,7 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+08
   datasource:
-    url: jdbc:mysql://39.97.253.38:3306/smartindustry?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    url: jdbc:mysql://39.97.253.38:3306/yinghong_wms?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: root
     password: '!qaZXSw2'
   #    url: jdbc:mysql://192.168.10.3:3306/smartindustry?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
@@ -47,5 +47,5 @@ token:
   # 令牌密钥
   secret: abcdefghijklmnopqrstuvwxyz
   # 令牌有效期（默认30分钟）
-  expireTime: 30
+  expireTime: 3000000
 

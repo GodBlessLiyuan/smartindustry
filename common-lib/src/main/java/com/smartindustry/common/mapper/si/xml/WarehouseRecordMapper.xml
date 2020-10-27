@@ -1,110 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.smartindustry.common.mapper.si.WarehouseRecordMapper">
-    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.WarehouseRecordPO">
-        <id column="warehouse_record_id" jdbcType="BIGINT" property="warehouseRecordId"/>
-        <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId"/>
-        <result column="user_id" jdbcType="BIGINT" property="userId"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="type" jdbcType="CHAR" property="type"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-        warehouse_record_id, warehouse_id, user_id, create_time, `type`
-    </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from si_warehouse_record
-        where warehouse_record_id = #{warehouseRecordId,jdbcType=BIGINT}
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-        delete
-        from si_warehouse_record
-        where warehouse_record_id = #{warehouseRecordId,jdbcType=BIGINT}
-    </delete>
-    <insert id="insert" parameterType="com.smartindustry.common.pojo.si.WarehouseRecordPO">
-        insert into si_warehouse_record (warehouse_record_id, warehouse_id, user_id,
-                                         create_time, `type`)
-        values (#{warehouseRecordId,jdbcType=BIGINT}, #{warehouseId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},
-                #{createTime,jdbcType=TIMESTAMP}, #{type,jdbcType=CHAR})
-    </insert>
-    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.WarehouseRecordPO">
-        insert into si_warehouse_record
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="warehouseRecordId != null">
-                warehouse_record_id,
-            </if>
-            <if test="warehouseId != null">
-                warehouse_id,
-            </if>
-            <if test="userId != null">
-                user_id,
-            </if>
-            <if test="createTime != null">
-                create_time,
-            </if>
-            <if test="type != null">
-                `type`,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="warehouseRecordId != null">
-                #{warehouseRecordId,jdbcType=BIGINT},
-            </if>
-            <if test="warehouseId != null">
-                #{warehouseId,jdbcType=BIGINT},
-            </if>
-            <if test="userId != null">
-                #{userId,jdbcType=BIGINT},
-            </if>
-            <if test="createTime != null">
-                #{createTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="type != null">
-                #{type,jdbcType=CHAR},
-            </if>
-        </trim>
-    </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.si.WarehouseRecordPO">
-        update si_warehouse_record
-        <set>
-            <if test="warehouseId != null">
-                warehouse_id = #{warehouseId,jdbcType=BIGINT},
-            </if>
-            <if test="userId != null">
-                user_id = #{userId,jdbcType=BIGINT},
-            </if>
-            <if test="createTime != null">
-                create_time = #{createTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="type != null">
-                `type` = #{type,jdbcType=CHAR},
-            </if>
-        </set>
-        where warehouse_record_id = #{warehouseRecordId,jdbcType=BIGINT}
-    </update>
-    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.WarehouseRecordPO">
-        update si_warehouse_record
-        set warehouse_id = #{warehouseId,jdbcType=BIGINT},
-            user_id      = #{userId,jdbcType=BIGINT},
-            create_time  = #{createTime,jdbcType=TIMESTAMP},
-            `type`       = #{type,jdbcType=CHAR}
-        where warehouse_record_id = #{warehouseRecordId,jdbcType=BIGINT}
-    </update>
-
-    <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.WarehouseRecordBO" extends="BaseResultMap">
-        <result column="name" jdbcType="CHAR" property="name"/>
-    </resultMap>
-    <select id="queryByWid" parameterType="java.lang.Long" resultMap="BOResultMap">
-        select wr.warehouse_record_id,
-               wr.warehouse_id,
-               wr.user_id,
-               wr.create_time,
-               wr.`type`,
-               u.name
-        from si_warehouse_record wr
-                 left join am_user u on wr.user_id = u.user_id
-        where wr.warehouse_id = #{wid,jdbcType=BIGINT}
-        order by wr.create_time desc
-    </select>
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.WarehouseRecordPO">
+    <id column="warehouse_record_id" jdbcType="BIGINT" property="warehouseRecordId" />
+    <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="operation_name" jdbcType="CHAR" property="operationName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    warehouse_record_id, warehouse_id, user_id, create_time, operation_name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from si_warehouse_record
+    where warehouse_record_id = #{warehouseRecordId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from si_warehouse_record
+    where warehouse_record_id = #{warehouseRecordId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.si.WarehouseRecordPO">
+    insert into si_warehouse_record (warehouse_record_id, warehouse_id, user_id, 
+      create_time, operation_name)
+    values (#{warehouseRecordId,jdbcType=BIGINT}, #{warehouseId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{operationName,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.WarehouseRecordPO">
+    insert into si_warehouse_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="warehouseRecordId != null">
+        warehouse_record_id,
+      </if>
+      <if test="warehouseId != null">
+        warehouse_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="operationName != null">
+        operation_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="warehouseRecordId != null">
+        #{warehouseRecordId,jdbcType=BIGINT},
+      </if>
+      <if test="warehouseId != null">
+        #{warehouseId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operationName != null">
+        #{operationName,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.si.WarehouseRecordPO">
+    update si_warehouse_record
+    <set>
+      <if test="warehouseId != null">
+        warehouse_id = #{warehouseId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operationName != null">
+        operation_name = #{operationName,jdbcType=CHAR},
+      </if>
+    </set>
+    where warehouse_record_id = #{warehouseRecordId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.WarehouseRecordPO">
+    update si_warehouse_record
+    set warehouse_id = #{warehouseId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      operation_name = #{operationName,jdbcType=CHAR}
+    where warehouse_record_id = #{warehouseRecordId,jdbcType=BIGINT}
+  </update>
 </mapper>

@@ -9,27 +9,13 @@ DROP TABLE IF EXISTS am_authority;
 DROP TABLE IF EXISTS am_dept_record;
 DROP TABLE IF EXISTS am_role_record;
 DROP TABLE IF EXISTS am_user_record;
-DROP TABLE IF EXISTS im_safe_stock;
-DROP TABLE IF EXISTS im_material_inventory;
-DROP TABLE IF EXISTS om_label_recommend;
-DROP TABLE IF EXISTS om_pick_body;
-DROP TABLE IF EXISTS si_bom_body;
-DROP TABLE IF EXISTS si_bom_record;
-DROP TABLE IF EXISTS si_bom_head;
+DROP TABLE IF EXISTS si_forklift_record;
+DROP TABLE IF EXISTS si_forklift;
+DROP TABLE IF EXISTS om_outbound_body;
 DROP TABLE IF EXISTS si_material_attribute;
 DROP TABLE IF EXISTS si_material_record;
 DROP TABLE IF EXISTS si_material_specification;
-DROP TABLE IF EXISTS om_pick_label;
-DROP TABLE IF EXISTS si_label_record;
-DROP TABLE IF EXISTS si_storage_label;
-DROP TABLE IF EXISTS sm_receipt_label;
-DROP TABLE IF EXISTS sm_storage_detail;
-DROP TABLE IF EXISTS si_print_label;
-DROP TABLE IF EXISTS sm_iqc_detect;
-DROP TABLE IF EXISTS sm_qe_confirm;
-DROP TABLE IF EXISTS sm_qe_detect;
-DROP TABLE IF EXISTS sm_storage_record;
-DROP TABLE IF EXISTS sm_receipt_body;
+DROP TABLE IF EXISTS sm_storage_body;
 DROP TABLE IF EXISTS si_material;
 DROP TABLE IF EXISTS si_supplier_record;
 DROP TABLE IF EXISTS si_supplier;
@@ -42,7 +28,6 @@ DROP TABLE IF EXISTS dd_currency;
 DROP TABLE IF EXISTS dd_humidity_level;
 DROP TABLE IF EXISTS dd_life_cycle_state;
 DROP TABLE IF EXISTS si_location_record;
-DROP TABLE IF EXISTS sm_storage_group;
 DROP TABLE IF EXISTS si_location;
 DROP TABLE IF EXISTS dd_location_type;
 DROP TABLE IF EXISTS dd_material_level;
@@ -56,1313 +41,857 @@ DROP TABLE IF EXISTS dd_produce_loss_level;
 DROP TABLE IF EXISTS dd_settle_period;
 DROP TABLE IF EXISTS dd_supplier_group;
 DROP TABLE IF EXISTS dd_supplier_type;
-DROP TABLE IF EXISTS em_transfer_head;
 DROP TABLE IF EXISTS si_warehouse_record;
-DROP TABLE IF EXISTS sm_storage;
+DROP TABLE IF EXISTS sm_storage_record;
+DROP TABLE IF EXISTS sm_storage_head;
 DROP TABLE IF EXISTS si_warehouse;
 DROP TABLE IF EXISTS dd_warehouse_type;
 DROP TABLE IF EXISTS om_outbound_record;
+DROP TABLE IF EXISTS si_bom_record;
 DROP TABLE IF EXISTS am_user;
 DROP TABLE IF EXISTS am_dept;
 DROP TABLE IF EXISTS am_role;
-DROP TABLE IF EXISTS om_logistics_picture;
-DROP TABLE IF EXISTS om_logistics_record;
-DROP TABLE IF EXISTS om_outbound;
-DROP TABLE IF EXISTS om_pick_check;
-DROP TABLE IF EXISTS om_pick_head;
+DROP TABLE IF EXISTS om_outbound_head;
 DROP TABLE IF EXISTS si_config;
-DROP TABLE IF EXISTS sm_receipt_head;
 
 
 
 
 /* Create Tables */
 
+-- 权限表
 CREATE TABLE am_authority
 (
-	authority_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	authority_name char(255) NOT NULL,
-	authority_path char(255) NOT NULL,
+	authority_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '权限ID',
+	authority_name char(255) NOT NULL COMMENT '权限名称',
+	authority_path char(255) NOT NULL COMMENT '权限路径',
 	-- 1：菜单   2：按钮
-	type tinyint COMMENT '1：菜单   2：按钮',
-	parent_id bigint unsigned,
+	type tinyint COMMENT '类型 : 1：菜单   2：按钮',
+	parent_id bigint unsigned COMMENT '上级权限ID',
 	PRIMARY KEY (authority_id),
 	UNIQUE (authority_id),
 	UNIQUE (authority_path)
-);
+) COMMENT = '权限表';
 
 
+-- 部门表
 CREATE TABLE am_dept
 (
-	dept_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	parent_id bigint unsigned,
-	dept_name char(32) NOT NULL,
-	user_id bigint unsigned,
-	dept_desc char(255),
+	dept_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '部门id',
+	parent_id bigint unsigned COMMENT '上级部门id',
+	dept_name char(32) NOT NULL COMMENT '部门名称',
+	user_id bigint unsigned COMMENT '部门负责人',
+	dept_desc char(255) COMMENT '部门描述',
 	-- 1 启动
 	-- 2 禁用
-	status tinyint COMMENT '1 启动
+	status tinyint COMMENT '状态 : 1 启动
 2 禁用',
-	create_time datetime,
-	update_time datetime,
+	create_time datetime COMMENT '创建时间',
+	update_time datetime COMMENT '更新时间',
 	-- 1：未删除
 	-- 2：已删除
-	dr tinyint COMMENT '1：未删除
+	dr tinyint COMMENT '是否删除 : 1：未删除
 2：已删除',
 	PRIMARY KEY (dept_id),
 	UNIQUE (dept_id)
-);
+) COMMENT = '部门表';
 
 
+-- 部门记录表
 CREATE TABLE am_dept_record
 (
-	dept_record_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	dept_id bigint unsigned NOT NULL,
-	user_id bigint unsigned NOT NULL,
-	create_time datetime,
-	type char(255),
+	dept_record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '部门记录ID',
+	dept_id bigint unsigned NOT NULL COMMENT '部门id',
+	user_id bigint unsigned NOT NULL COMMENT '用户ID',
+	create_time datetime COMMENT '操作时间',
+	operation_name char(255) COMMENT '操作名称',
 	PRIMARY KEY (dept_record_id),
 	UNIQUE (dept_record_id)
-);
+) COMMENT = '部门记录表';
 
 
+-- 用户权限中间表
 CREATE TABLE am_m_user_authority
 (
-	user_authority_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	user_id bigint unsigned NOT NULL,
-	authority_id bigint unsigned NOT NULL,
+	user_authority_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '用户权限ID',
+	user_id bigint unsigned NOT NULL COMMENT '用户ID',
+	authority_id bigint unsigned NOT NULL COMMENT '权限ID',
 	PRIMARY KEY (user_authority_id),
 	UNIQUE (user_authority_id)
-);
+) COMMENT = '用户权限中间表';
 
 
+-- 角色表
 CREATE TABLE am_role
 (
-	role_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	role_name char(32) NOT NULL,
-	role_desc char(255),
+	role_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '角色ID',
+	role_name char(32) NOT NULL COMMENT '角色名称',
+	role_desc char(255) COMMENT '角色描述',
 	-- 1：启用
 	-- 2：禁用
-	status tinyint COMMENT '1：启用
+	status tinyint COMMENT '状态 : 1：启用
 2：禁用',
-	create_time datetime,
-	update_time datetime,
+	create_time datetime COMMENT '创建时间',
+	update_time datetime COMMENT '更新时间',
 	-- 1：未删除
 	-- 2：已删除
-	dr tinyint COMMENT '1：未删除
+	dr tinyint COMMENT '是否删除 : 1：未删除
 2：已删除',
 	PRIMARY KEY (role_id),
 	UNIQUE (role_id)
-);
+) COMMENT = '角色表';
 
 
+-- 角色权限表
 CREATE TABLE am_role_authority
 (
-	role_authority_id bigint NOT NULL AUTO_INCREMENT,
-	role_id bigint unsigned NOT NULL,
-	authority_id bigint unsigned NOT NULL,
+	role_authority_id bigint NOT NULL AUTO_INCREMENT COMMENT '角色菜单id',
+	role_id bigint unsigned NOT NULL COMMENT '角色ID',
+	authority_id bigint unsigned NOT NULL COMMENT '权限ID',
 	PRIMARY KEY (role_authority_id),
 	UNIQUE (role_authority_id)
-);
+) COMMENT = '角色权限表';
 
 
+-- 角色记录表
 CREATE TABLE am_role_record
 (
-	role_record_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	role_id bigint unsigned NOT NULL,
-	user_id bigint unsigned NOT NULL,
-	create_time datetime,
-	type char(255),
+	role_record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '角色记录ID',
+	role_id bigint unsigned NOT NULL COMMENT '角色ID',
+	user_id bigint unsigned NOT NULL COMMENT '用户ID',
+	create_time datetime COMMENT '操作时间',
+	operation_name char(255) COMMENT '操作名称',
 	PRIMARY KEY (role_record_id)
-);
+) COMMENT = '角色记录表';
 
 
+-- 用户表
 CREATE TABLE am_user
 (
-	user_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	name char(32) NOT NULL,
+	user_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '用户ID',
+	name char(32) NOT NULL COMMENT '用户姓名',
 	-- 1 男
 	-- 2 女
-	sex tinyint COMMENT '1 男
+	sex tinyint COMMENT '性别 : 1 男
 2 女',
-	dept_id bigint unsigned NOT NULL,
-	username char(32) NOT NULL,
-	password char(128) NOT NULL,
-	role_id bigint unsigned NOT NULL,
-	job char(16),
-	phone char(16),
-	email char(255),
+	dept_id bigint unsigned NOT NULL COMMENT '部门id',
+	username char(32) NOT NULL COMMENT '登录名',
+	password char(128) NOT NULL COMMENT '密码',
+	role_id bigint unsigned NOT NULL COMMENT '角色ID',
+	job char(16) COMMENT '所属岗位',
+	phone char(16) COMMENT '电话号码',
+	email char(255) COMMENT '用户邮箱',
 	-- 1 启用
 	-- 2 禁用
-	status tinyint COMMENT '1 启用
+	status tinyint COMMENT '状态 : 1 启用
 2 禁用',
-	remark char(255),
-	create_time datetime,
-	update_time datetime,
+	remark char(255) COMMENT '备注',
+	create_time datetime COMMENT '创建时间',
+	update_time datetime COMMENT '更新时间',
 	-- 1：未删除
 	-- 2：已删除
-	dr tinyint COMMENT '1：未删除
+	dr tinyint COMMENT '是否删除 : 1：未删除
 2：已删除',
 	PRIMARY KEY (user_id),
 	UNIQUE (user_id)
-);
+) COMMENT = '用户表';
 
 
+-- 用户操作记录表
 CREATE TABLE am_user_record
 (
-	user_record_id bigint NOT NULL AUTO_INCREMENT,
-	user_id bigint unsigned NOT NULL,
-	operate_id bigint unsigned NOT NULL,
-	create_time datetime,
-	type char(255),
+	user_record_id bigint NOT NULL AUTO_INCREMENT COMMENT '用户记录ID',
+	user_id bigint unsigned NOT NULL COMMENT '用户ID',
+	operate_id bigint unsigned NOT NULL COMMENT '操作人ID',
+	create_time datetime COMMENT '操作时间',
+	operation_name char(255) COMMENT '操作名称',
 	PRIMARY KEY (user_record_id),
-	UNIQUE (user_record_id)
-);
+	UNIQUE (user_record_id),
+	UNIQUE (operate_id)
+) COMMENT = '用户操作记录表';
 
 
+-- 认证状态表
 CREATE TABLE dd_cert_status
 (
-	cert_status_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	cert_status_name char(255) NOT NULL,
-	user_id bigint unsigned,
-	create_time datetime,
+	cert_status_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '认证状态ID',
+	cert_status_name char(255) NOT NULL COMMENT '认证状态名称',
+	user_id bigint unsigned COMMENT '创建人',
+	create_time datetime COMMENT '创建时间',
 	PRIMARY KEY (cert_status_id),
 	UNIQUE (cert_status_id)
-);
+) COMMENT = '认证状态表';
 
 
+-- 客户类型
 CREATE TABLE dd_client_type
 (
-	client_type_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	client_type_name char(255) NOT NULL,
-	user_id bigint unsigned,
-	create_time datetime,
+	client_type_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '客户类型ID',
+	client_type_name char(255) NOT NULL COMMENT '客户类型名称',
+	user_id bigint unsigned COMMENT '创建人',
+	create_time datetime COMMENT '创建时间',
 	PRIMARY KEY (client_type_id),
 	UNIQUE (client_type_id)
-);
+) COMMENT = '客户类型';
 
 
+-- 信用等级
 CREATE TABLE dd_credit_level
 (
-	credit_level_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	credit_level_name char(255),
-	user_id bigint unsigned,
-	create_time datetime,
+	credit_level_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '信用等级id',
+	credit_level_name char(255) COMMENT '信用等级名称',
+	user_id bigint unsigned COMMENT '创建人ID',
+	create_time datetime COMMENT '创建时间',
 	PRIMARY KEY (credit_level_id),
 	UNIQUE (credit_level_id)
-);
+) COMMENT = '信用等级';
 
 
+-- 币种
 CREATE TABLE dd_currency
 (
-	currency_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	currency_name char(255) NOT NULL,
-	user_id bigint unsigned,
-	create_time datetime,
+	currency_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '币种ID',
+	currency_name char(255) NOT NULL COMMENT '币种名称',
+	user_id bigint unsigned COMMENT '创建人',
+	create_time datetime COMMENT '创建时间',
 	PRIMARY KEY (currency_id),
 	UNIQUE (currency_id)
-);
+) COMMENT = '币种';
 
 
+-- 湿度等级
 CREATE TABLE dd_humidity_level
 (
-	humidity_level_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	humidity_level_name char(255) NOT NULL,
-	user_id bigint unsigned,
-	create_time datetime,
+	humidity_level_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '湿度等级ID',
+	humidity_level_name char(255) NOT NULL COMMENT '湿度等级名称',
+	user_id bigint unsigned COMMENT '创建人',
+	create_time datetime COMMENT '创建时间',
 	PRIMARY KEY (humidity_level_id),
 	UNIQUE (humidity_level_id)
-);
+) COMMENT = '湿度等级';
 
 
+-- 生命周期状态
 CREATE TABLE dd_life_cycle_state
 (
-	life_cycle_state_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	life_cycle_state_name char(255) NOT NULL,
-	user_id bigint unsigned,
-	create_time datetime,
+	life_cycle_state_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '生命周期状态ID',
+	life_cycle_state_name char(255) NOT NULL COMMENT '生命周期状态名称',
+	user_id bigint unsigned COMMENT '创建人',
+	create_time datetime COMMENT '创建时间',
 	PRIMARY KEY (life_cycle_state_id),
 	UNIQUE (life_cycle_state_id)
-);
+) COMMENT = '生命周期状态';
 
 
+-- 货位类型
 CREATE TABLE dd_location_type
 (
-	location_type_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	location_type_name char(255) NOT NULL,
-	user_id bigint unsigned,
-	create_time datetime,
+	location_type_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '货位类型ID',
+	location_type_name char(255) NOT NULL COMMENT '货位类型名称',
+	user_id bigint unsigned COMMENT '创建人',
+	create_time datetime COMMENT '创建时间',
 	PRIMARY KEY (location_type_id),
 	UNIQUE (location_type_id)
-);
+) COMMENT = '货位类型';
 
 
+-- 物料层级
 CREATE TABLE dd_material_level
 (
-	material_level_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	material_level_name char(255) NOT NULL,
-	user_id bigint unsigned,
-	create_time datetime,
+	material_level_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '物料层级ID',
+	material_level_name char(255) NOT NULL COMMENT '物料层级名称',
+	user_id bigint unsigned COMMENT '创建人',
+	create_time datetime COMMENT '创建时间',
 	PRIMARY KEY (material_level_id),
 	UNIQUE (material_level_id)
-);
+) COMMENT = '物料层级';
 
 
+-- 物料锁定
 CREATE TABLE dd_material_lock
 (
-	material_lock_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	material_lock_name char(255) NOT NULL,
-	user_id bigint unsigned,
-	create_time datetime,
+	material_lock_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '物料锁定ID',
+	material_lock_name char(255) NOT NULL COMMENT '物料锁定名称',
+	user_id bigint unsigned COMMENT '创建人',
+	create_time datetime COMMENT '创建时间',
 	PRIMARY KEY (material_lock_id),
 	UNIQUE (material_lock_id)
-);
+) COMMENT = '物料锁定';
 
 
+-- 物料属性
 CREATE TABLE dd_material_property
 (
-	material_property_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	material_property_name char(255) NOT NULL,
-	user_id bigint unsigned,
-	create_time datetime,
+	material_property_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '物料属性ID',
+	material_property_name char(255) NOT NULL COMMENT '物料属性名称',
+	user_id bigint unsigned COMMENT '创建人',
+	create_time datetime COMMENT '创建时间',
 	PRIMARY KEY (material_property_id),
 	UNIQUE (material_property_id)
-);
+) COMMENT = '物料属性';
 
 
+-- 物料类型表
 CREATE TABLE dd_material_type
 (
-	material_type_id bigint NOT NULL AUTO_INCREMENT,
-	material_type_name char(255) NOT NULL,
-	user_id bigint unsigned,
-	create_time datetime,
+	material_type_id bigint NOT NULL AUTO_INCREMENT COMMENT '物料类型ID',
+	material_type_name char(255) NOT NULL COMMENT '物料类型名称',
+	user_id bigint unsigned COMMENT '创建人',
+	create_time datetime COMMENT '创建时间',
 	PRIMARY KEY (material_type_id)
-);
+) COMMENT = '物料类型表';
 
 
+-- 物料版本
 CREATE TABLE dd_material_version
 (
-	material_version_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	material_version_name char(255) NOT NULL,
-	user_id bigint unsigned,
-	create_time datetime,
+	material_version_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '物料版本ID',
+	material_version_name char(255) NOT NULL COMMENT '物料版本名称',
+	user_id bigint unsigned COMMENT '创建人',
+	create_time datetime COMMENT '创建时间',
 	PRIMARY KEY (material_version_id),
 	UNIQUE (material_version_id)
-);
+) COMMENT = '物料版本';
 
 
+-- 计量单位
 CREATE TABLE dd_measure_unit
 (
-	measure_unit_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	measure_unit_name char(255) NOT NULL,
-	user_id bigint unsigned,
-	create_time datetime,
+	measure_unit_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '计量单位ID',
+	measure_unit_name char(255) NOT NULL COMMENT '计量单位名称',
+	user_id bigint unsigned COMMENT '创建人',
+	create_time datetime COMMENT '创建时间',
 	PRIMARY KEY (measure_unit_id),
 	UNIQUE (measure_unit_id)
-);
+) COMMENT = '计量单位';
 
 
+-- 工序
 CREATE TABLE dd_process
 (
-	process_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	process_name char(255) NOT NULL,
-	user_id bigint unsigned,
-	create_time datetime,
+	process_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '工序ID',
+	process_name char(255) NOT NULL COMMENT '工序名称',
+	user_id bigint unsigned COMMENT '创建人',
+	create_time datetime COMMENT '创建时间',
 	PRIMARY KEY (process_id),
 	UNIQUE (process_id)
-);
+) COMMENT = '工序';
 
 
+-- 生产损耗等级
 CREATE TABLE dd_produce_loss_level
 (
-	produce_loss_level_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	produce_loss_level_name char(255) NOT NULL,
-	user_id bigint unsigned,
-	create_time datetime,
+	produce_loss_level_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '生产损耗等级ID',
+	produce_loss_level_name char(255) NOT NULL COMMENT '生产损耗等级名称',
+	user_id bigint unsigned COMMENT '创建人',
+	create_time datetime COMMENT '创建时间',
 	PRIMARY KEY (produce_loss_level_id),
 	UNIQUE (produce_loss_level_id)
-);
+) COMMENT = '生产损耗等级';
 
 
+-- 结算期限表
 CREATE TABLE dd_settle_period
 (
-	settle_period_id bigint NOT NULL AUTO_INCREMENT,
-	settle_period_name char(255) NOT NULL,
-	user_id bigint unsigned,
-	create_time datetime,
+	settle_period_id bigint NOT NULL AUTO_INCREMENT COMMENT '结算期限ID',
+	settle_period_name char(255) NOT NULL COMMENT '结算期限名称',
+	user_id bigint unsigned COMMENT '创建人',
+	create_time datetime COMMENT '创建时间',
 	PRIMARY KEY (settle_period_id),
 	UNIQUE (settle_period_id)
-);
+) COMMENT = '结算期限表';
 
 
+-- 供应商组
 CREATE TABLE dd_supplier_group
 (
-	supplier_group_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	supplier_group_name char(255) NOT NULL,
-	user_id bigint unsigned,
-	create_time datetime,
+	supplier_group_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '供应商组ID',
+	supplier_group_name char(255) NOT NULL COMMENT '供应商组名称',
+	user_id bigint unsigned COMMENT '创建人',
+	create_time datetime COMMENT '创建时间',
 	PRIMARY KEY (supplier_group_id),
 	UNIQUE (supplier_group_id)
-);
+) COMMENT = '供应商组';
 
 
+-- 供应商类型
 CREATE TABLE dd_supplier_type
 (
-	supplier_type_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	supplier_type_name char(255) NOT NULL,
-	user_id bigint unsigned,
-	create_time datetime,
+	supplier_type_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '供应商类型ID',
+	supplier_type_name char(255) NOT NULL COMMENT '供应商类型名称',
+	user_id bigint unsigned COMMENT '创建人',
+	create_time datetime COMMENT '创建时间',
 	PRIMARY KEY (supplier_type_id),
 	UNIQUE (supplier_type_id)
-);
+) COMMENT = '供应商类型';
 
 
+-- 仓库类型表
 CREATE TABLE dd_warehouse_type
 (
-	warehouse_type_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	warehouse_type_name char(64) NOT NULL,
-	user_id bigint unsigned,
-	create_time datetime,
+	warehouse_type_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '仓库类型ID',
+	warehouse_type_name char(64) NOT NULL COMMENT '仓库类型名称',
+	user_id bigint unsigned COMMENT '创建人',
+	create_time datetime COMMENT '创建时间',
 	PRIMARY KEY (warehouse_type_id),
 	UNIQUE (warehouse_type_id)
-);
+) COMMENT = '仓库类型表';
 
 
-CREATE TABLE em_transfer_head
+-- 出库单表体
+CREATE TABLE om_outbound_body
 (
-	transfer_head_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	transfer_no char(128),
-	-- 1：工单调拨
-	-- 2：不良调拨
-	transfer_type tinyint COMMENT '1：工单调拨
-2：不良调拨',
-	outbound_wid bigint unsigned NOT NULL,
-	storage_wid bigint unsigned NOT NULL,
-	plan_time datetime,
-	-- 1：已入库
-	-- 2：入库中
-	-- 3：待入库
-	outbound_status tinyint COMMENT '1：已入库
-2：入库中
-3：待入库',
-	-- 1：已入库
-	-- 2：入库中
-	-- 3：待入库
-	storage_status tinyint COMMENT '1：已入库
-2：入库中
-3：待入库',
-	-- 1：已审核
-	-- 2：驳回
-	-- 3：待审核
-	status tinyint COMMENT '1：已审核
-2：驳回
-3：待审核',
-	create_time datetime,
-	-- 1：未删除
-	-- 2：已删除
-	dr tinyint COMMENT '1：未删除
-2：已删除',
-	PRIMARY KEY (transfer_head_id),
-	UNIQUE (transfer_head_id)
-);
-
-
-CREATE TABLE im_material_inventory
-(
-	material_inventory_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	material_id bigint unsigned NOT NULL,
-	way_num int,
-	status tinyint,
-	storage_num int,
-	lock_num int,
-	relate_num int,
-	available_num int,
-	PRIMARY KEY (material_inventory_id),
-	UNIQUE (material_inventory_id),
-	UNIQUE (material_id)
-);
-
-
-CREATE TABLE im_safe_stock
-(
-	safe_stock_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	material_inventory_id bigint unsigned NOT NULL,
-	lower_limit decimal(10,2),
-	-- 1：是
-	-- 2：否
-	way tinyint COMMENT '1：是
-2：否',
-	user_id bigint unsigned,
-	create_time datetime,
-	PRIMARY KEY (safe_stock_id),
-	UNIQUE (safe_stock_id),
-	UNIQUE (material_inventory_id)
-);
-
-
-CREATE TABLE om_label_recommend
-(
-	label_recommend_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	pick_body_id bigint unsigned NOT NULL,
-	storage_label_id bigint unsigned NOT NULL,
-	PRIMARY KEY (label_recommend_id),
-	UNIQUE (label_recommend_id)
-);
-
-
-CREATE TABLE om_logistics_picture
-(
-	logistics_picture_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	logistics_record_id bigint unsigned NOT NULL,
-	picture char(255) NOT NULL,
-	PRIMARY KEY (logistics_picture_id),
-	UNIQUE (logistics_picture_id)
-);
-
-
-CREATE TABLE om_logistics_record
-(
-	logistics_record_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	outbound_id bigint unsigned NOT NULL,
-	ship_date date,
-	logistics_no char(128),
-	-- 1：到付
-	-- 2：寄付
-	ship_way tinyint COMMENT '1：到付
-2：寄付',
-	remark char(255),
-	create_time datetime,
-	PRIMARY KEY (logistics_record_id),
-	UNIQUE (logistics_record_id),
-	UNIQUE (outbound_id)
-);
-
-
-CREATE TABLE om_outbound
-(
-	outbound_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	pick_head_id bigint unsigned NOT NULL,
-	outbound_no char(128) NOT NULL,
-	source_no char(128) NOT NULL,
-	-- 1 工单出库
-	-- 2 销售出库
-	-- 3 其他出库
-	source_type tinyint NOT NULL COMMENT '1 工单出库
-2 销售出库
-3 其他出库',
-	outbound_time datetime,
-	ship_time datetime,
-	-- 1：已出库
-	-- 3：待出库
-	status tinyint COMMENT '1：已出库
-3：待出库',
-	create_time datetime,
-	-- 1：未删除
-	-- 2：已删除
-	dr tinyint COMMENT '1：未删除
-2：已删除',
-	PRIMARY KEY (outbound_id),
-	UNIQUE (outbound_id),
-	UNIQUE (pick_head_id),
-	UNIQUE (outbound_no)
-);
-
-
-CREATE TABLE om_outbound_record
-(
-	record_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	pick_head_id bigint unsigned NOT NULL,
-	outbound_id bigint unsigned,
-	user_id bigint unsigned,
-	name char(255),
-	type char(255),
-	create_time datetime,
-	-- 1：未处理
-	-- 5：物料拣货
-	-- 10：工单审核|OQC检验
-	-- 15：等齐套发货
-	-- 20：取消发货，退货仓库
-	-- 25：物料出库
-	-- 30：完成出库
-	-- 35：确认出库
-	status tinyint COMMENT '1：未处理
-5：物料拣货
-10：工单审核|OQC检验
-15：等齐套发货
-20：取消发货，退货仓库
-25：物料出库
-30：完成出库
-35：确认出库',
-	PRIMARY KEY (record_id),
-	UNIQUE (record_id)
-);
-
-
-CREATE TABLE om_pick_body
-(
-	pick_body_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	pick_head_id bigint unsigned NOT NULL,
-	material_id bigint unsigned NOT NULL,
-	demand_num int,
-	pick_num int,
-	create_time datetime,
-	exception char(255),
-	-- 1：未删除
-	-- 2：已删除
-	dr tinyint COMMENT '1：未删除
-2：已删除',
-	PRIMARY KEY (pick_body_id),
-	UNIQUE (pick_body_id)
-);
-
-
-CREATE TABLE om_pick_check
-(
-	pick_head_id bigint unsigned NOT NULL,
-	remark char(255),
-	-- 1：同意
-	-- 2：驳回-取消发货，退回仓库
-	-- 3：待审核
-	-- 4：驳回-等齐套发货
-	status tinyint COMMENT '1：同意
-2：驳回-取消发货，退回仓库
-3：待审核
-4：驳回-等齐套发货',
-	PRIMARY KEY (pick_head_id),
-	UNIQUE (pick_head_id)
-);
-
-
-CREATE TABLE om_pick_head
-(
-	pick_head_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	pick_no char(128) NOT NULL,
-	source_no char(128) NOT NULL,
-	-- 1：工单
-	-- 2：销售
-	-- 3：调拨
-	source_type tinyint NOT NULL COMMENT '1：工单
-2：销售
-3：调拨',
-	-- 1：待推荐
-	-- 5：未处理
-	-- 10：物料拣货
-	-- 15：工单审核|OQC检验
-	-- 20：等齐套发货
-	-- 25：取消发货，退货仓库
-	-- 30：物料出库
-	-- 35：完成出库
-	-- 40：确认出库
-	material_status tinyint COMMENT '1：待推荐
-5：未处理
-10：物料拣货
-15：工单审核|OQC检验
-20：等齐套发货
-25：取消发货，退货仓库
-30：物料出库
-35：完成出库
-40：确认出库',
-	correspond_project char(255),
-	accept_customer char(255),
-	accept_address char(255),
-	plan_time datetime,
-	outbound_time datetime,
-	-- 1：全部出库
-	-- 2：欠料出库
-	-- 3：未出库
-	outbound_status tinyint COMMENT '1：全部出库
-2：欠料出库
-3：未出库',
-	create_time datetime,
-	update_time datetime,
-	-- 1：未删除
-	-- 2：已删除
-	dr tinyint COMMENT '1：未删除
-2：已删除',
-	PRIMARY KEY (pick_head_id),
-	UNIQUE (pick_head_id),
-	UNIQUE (pick_no)
-);
-
-
-CREATE TABLE om_pick_label
-(
-	pick_label_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	pick_head_id bigint unsigned NOT NULL,
-	print_label_id bigint unsigned NOT NULL,
-	-- 1：是
-	-- 2：否
-	recommend tinyint COMMENT '1：是
-2：否',
-	create_time datetime,
-	PRIMARY KEY (pick_label_id),
-	UNIQUE (pick_label_id)
-);
-
-
-CREATE TABLE si_bom_body
-(
-	bom_body_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	bom_head_id bigint unsigned NOT NULL,
-	material_id bigint unsigned NOT NULL,
-	material_property_id bigint unsigned NOT NULL,
-	material_demand float(5,2) NOT NULL,
-	-- 1：配比/比例
-	-- 2：计数
-	demand_type tinyint NOT NULL COMMENT '1：配比/比例
-2：计数',
-	material_loss float(5,2),
-	-- 1：配比/比例
-	-- 2：计数
-	loss_type tinyint COMMENT '1：配比/比例
-2：计数',
-	process_id bigint unsigned,
-	parent_id bigint unsigned,
-	user_id bigint unsigned,
-	level int NOT NULL,
-	create_time datetime,
-	update_time datetime,
-	-- 1：未删除
-	-- 2：已删除
-	dr tinyint COMMENT '1：未删除
-2：已删除',
-	PRIMARY KEY (bom_body_id),
-	UNIQUE (bom_body_id)
-);
-
-
-CREATE TABLE si_bom_head
-(
-	bom_head_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	material_id bigint unsigned NOT NULL,
-	relate_num int,
-	user_id bigint unsigned,
-	create_time datetime,
-	update_time datetime,
-	-- 1：未删除
-	-- 2：已删除
-	dr tinyint COMMENT '1：未删除
-2：已删除',
-	PRIMARY KEY (bom_head_id),
-	UNIQUE (bom_head_id)
-);
-
-
-CREATE TABLE si_bom_record
-(
-	bom_record_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	bom_head_id bigint unsigned NOT NULL,
-	user_id bigint unsigned NOT NULL,
-	create_time datetime,
-	type char(255),
-	PRIMARY KEY (bom_record_id),
-	UNIQUE (bom_record_id)
-);
-
-
-CREATE TABLE si_client
-(
-	client_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	client_no char(128) NOT NULL,
-	client_type_id bigint unsigned NOT NULL,
-	client_name char(64) NOT NULL,
-	contact char(64) NOT NULL,
-	-- 1：男
-	-- 2：女
-	sex tinyint COMMENT '1：男
-2：女',
-	phone char(16) NOT NULL,
-	email char(255),
-	fax char(16),
-	url char(64),
-	credit_level_id bigint unsigned,
-	area char(255),
-	address char(128),
-	remark char(255),
-	create_time datetime,
-	update_time datetime,
+	outbound_body_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '出库单表体id',
+	outbound_head_id bigint unsigned NOT NULL COMMENT '出库单表头ID',
+	material_id bigint unsigned NOT NULL COMMENT '物料ID',
+	plan_num int COMMENT '计划出库数量',
+	demand_num int COMMENT '出库数量',
+	create_time datetime COMMENT '创建时间',
+	outbound_time datetime COMMENT '出库时间',
 	-- 1 未删除
 	-- 2 已删除
-	dr tinyint COMMENT '1 未删除
+	dr tinyint COMMENT '是否删除 : 1 未删除
+2 已删除',
+	PRIMARY KEY (outbound_body_id),
+	UNIQUE (outbound_body_id)
+) COMMENT = '出库单表体';
+
+
+-- 出库单表头
+CREATE TABLE om_outbound_head
+(
+	outbound_head_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '出库单表头ID',
+	outbound_no char(128) NOT NULL COMMENT '出库单编码',
+	produce_no char(128) COMMENT '生产工单号',
+	plan_time datetime COMMENT '计划出库时间',
+	outbound_time datetime COMMENT '完成出库时间',
+	-- 1：已出库
+	-- 2：待出库
+	status tinyint COMMENT '状态 : 1：已出库
+2：待出库',
+	extra char(255) COMMENT '备注',
+	create_time datetime COMMENT '创建时间',
+	-- 1：未删除
+	-- 2：已删除
+	dr tinyint COMMENT '是否删除 : 1：未删除
+2：已删除',
+	PRIMARY KEY (outbound_head_id),
+	UNIQUE (outbound_head_id)
+) COMMENT = '出库单表头';
+
+
+-- 出库操作记录
+CREATE TABLE om_outbound_record
+(
+	record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '操作记录',
+	outbound_head_id bigint unsigned COMMENT '出库单表头ID',
+	user_id bigint unsigned COMMENT '操作人ID',
+	operation_name char(255) COMMENT '操作名称',
+	create_time datetime COMMENT '操作时间',
+	PRIMARY KEY (record_id),
+	UNIQUE (record_id)
+) COMMENT = '出库操作记录';
+
+
+-- BOM操作记录
+CREATE TABLE si_bom_record
+(
+	bom_record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '操作记录ID',
+	user_id bigint unsigned NOT NULL COMMENT '用户ID',
+	create_time datetime COMMENT '操作时间',
+	operation_name char(255) COMMENT '操作名称',
+	PRIMARY KEY (bom_record_id),
+	UNIQUE (bom_record_id)
+) COMMENT = 'BOM操作记录';
+
+
+-- 客户
+CREATE TABLE si_client
+(
+	client_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '客户id',
+	client_no char(128) NOT NULL COMMENT '客户代码',
+	client_type_id bigint unsigned NOT NULL COMMENT '客户类型ID',
+	client_name char(64) NOT NULL COMMENT '客户名称',
+	contact char(64) NOT NULL COMMENT '联系人',
+	-- 1：男
+	-- 2：女
+	sex tinyint COMMENT '联系人性别 : 1：男
+2：女',
+	phone char(16) NOT NULL COMMENT '联系电话',
+	email char(255) COMMENT '客户邮箱',
+	fax char(16) COMMENT '传真',
+	url char(64) COMMENT '网址',
+	credit_level_id bigint unsigned COMMENT '信用等级id',
+	area char(255) COMMENT '地区',
+	address char(128) COMMENT '详细地址',
+	remark char(255) COMMENT '备注',
+	create_time datetime COMMENT '创建时间',
+	update_time datetime COMMENT '更新时间',
+	-- 1 未删除
+	-- 2 已删除
+	dr tinyint COMMENT '是否删除 : 1 未删除
 2 已删除',
 	PRIMARY KEY (client_id),
 	UNIQUE (client_id)
-);
+) COMMENT = '客户';
 
 
+-- 客户操作记录表
 CREATE TABLE si_client_record
 (
-	client_record_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	client_id bigint unsigned NOT NULL,
-	user_id bigint unsigned NOT NULL,
-	create_time datetime,
-	type char(255),
+	client_record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '操作记录ID',
+	client_id bigint unsigned NOT NULL COMMENT '客户id',
+	user_id bigint unsigned NOT NULL COMMENT '用户ID',
+	create_time datetime COMMENT '操作时间',
+	operation_name char(255) COMMENT '操作名称',
 	PRIMARY KEY (client_record_id),
 	UNIQUE (client_record_id)
-);
+) COMMENT = '客户操作记录表';
 
 
+-- 配置表
 CREATE TABLE si_config
 (
-	config_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	config_key char(255) NOT NULL,
-	config_value char(255),
+	config_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '配置ID',
+	config_key char(255) NOT NULL COMMENT '配置名称',
+	config_value char(255) COMMENT '配置值',
 	PRIMARY KEY (config_id),
 	UNIQUE (config_id),
 	UNIQUE (config_key)
-);
+) COMMENT = '配置表';
 
 
-CREATE TABLE si_label_record
+-- 叉车信息
+CREATE TABLE si_forklift
 (
-	label_record_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	print_label_id bigint unsigned NOT NULL,
-	user_id bigint unsigned NOT NULL,
-	name char(255),
-	-- 1：入库管理
-	-- 2：出库管理
-	module tinyint COMMENT '1：入库管理
-2：出库管理',
-	create_time datetime,
-	-- 1：录入标签
-	-- 5：IQC检测
-	-- 10：QE检测
-	-- 15：QE确认
-	-- 20：物料入库
-	-- 25：入库完成
-	-- 30：退供应商
-	status tinyint COMMENT '1：录入标签
-5：IQC检测
-10：QE检测
-15：QE确认
-20：物料入库
-25：入库完成
-30：退供应商',
-	PRIMARY KEY (label_record_id),
-	UNIQUE (label_record_id)
-);
+	forklift_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '叉车id',
+	forklift_no char(128) COMMENT '叉车编号',
+	forklift_model char(255) COMMENT '叉车型号',
+	forklift_brand char(255) COMMENT '品牌',
+	supplier_id bigint unsigned NOT NULL COMMENT '供应商ID',
+	rfid boolean COMMENT '是否携带RFID设备',
+	iom boolean COMMENT '是否携带工业一体机',
+	work_area char(255) COMMENT '作业区域',
+	-- 1 未删除
+	-- 2 已删除
+	dr tinyint COMMENT '是否删除 : 1 未删除
+2 已删除',
+	PRIMARY KEY (forklift_id),
+	UNIQUE (forklift_id)
+) COMMENT = '叉车信息';
 
 
+-- 叉车操作记录表
+CREATE TABLE si_forklift_record
+(
+	record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '操作记录id',
+	forklift_id bigint unsigned NOT NULL COMMENT '叉车id',
+	operation_name char(255) COMMENT '操作名称',
+	create_time datetime COMMENT '操作时间',
+	PRIMARY KEY (record_id),
+	UNIQUE (record_id),
+	UNIQUE (forklift_id)
+) COMMENT = '叉车操作记录表';
+
+
+-- 库位表
 CREATE TABLE si_location
 (
-	location_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	location_no char(128) NOT NULL,
-	location_name char(255) NOT NULL,
-	location_type_id bigint unsigned NOT NULL,
-	warehouse_id bigint unsigned NOT NULL,
-	remark char(255),
-	user_id bigint unsigned,
-	create_time datetime,
-	update_time datetime,
+	location_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '库位ID',
+	location_no char(128) NOT NULL COMMENT '库位编号',
+	location_name char(255) NOT NULL COMMENT '库位名称',
+	hold_tray_num int COMMENT '可容纳托盘数',
+	location_type_id bigint unsigned NOT NULL COMMENT '货位类型ID',
+	warehouse_id bigint unsigned NOT NULL COMMENT '仓库ID',
+	remark char(255) COMMENT '备注',
+	user_id bigint unsigned COMMENT '创建人',
+	create_time datetime COMMENT '创建时间',
+	update_time datetime COMMENT '更新时间',
 	-- 1：未删除
 	-- 2：已删除
-	dr tinyint COMMENT '1：未删除
+	dr tinyint COMMENT '是否删除 : 1：未删除
 2：已删除',
 	PRIMARY KEY (location_id),
 	UNIQUE (location_id)
-);
+) COMMENT = '库位表';
 
 
+-- 库位记录表
 CREATE TABLE si_location_record
 (
-	location_record_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	location_id bigint unsigned NOT NULL,
-	user_id bigint unsigned NOT NULL,
-	create_time datetime,
-	type char(255),
+	location_record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '库位记录ID',
+	location_id bigint unsigned NOT NULL COMMENT '库位ID',
+	user_id bigint unsigned NOT NULL COMMENT '操作人',
+	create_time datetime COMMENT '操作时间',
+	operation_name char(255) COMMENT '操作名称',
 	PRIMARY KEY (location_record_id),
 	UNIQUE (location_record_id)
-);
+) COMMENT = '库位记录表';
 
 
+-- 物料表
 CREATE TABLE si_material
 (
-	material_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	material_no char(128) NOT NULL,
+	material_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '物料ID',
+	material_no char(128) NOT NULL COMMENT '物料编号',
 	-- 1：原材料
 	-- 2：半成品
 	-- 3：成品
-	material_type tinyint COMMENT '1：原材料
+	material_type tinyint COMMENT '一级物料类型 : 1：原材料
 2：半成品
 3：成品',
-	material_type_id bigint,
-	humidity_level_id bigint unsigned,
-	material_level_id bigint unsigned,
-	measure_unit_id bigint unsigned,
-	material_version_id bigint unsigned,
-	produce_loss_level_id bigint unsigned,
-	life_cycle_state_id bigint unsigned,
-	material_name char(64) NOT NULL,
-	delivery_days int NOT NULL,
-	moq char(32) NOT NULL,
-	material_model char(64),
-	material_draw char(64),
-	supplier_id bigint unsigned,
-	material_desc char(255),
-	test_type tinyint,
-	user_id bigint unsigned,
-	create_time datetime,
-	update_time datetime,
+	material_type_id bigint COMMENT '二级物料类型ID',
+	humidity_level_id bigint unsigned COMMENT '湿度等级ID',
+	material_level_id bigint unsigned COMMENT '物料层级ID',
+	measure_unit_id bigint unsigned COMMENT '计量单位ID',
+	material_version_id bigint unsigned COMMENT '物料版本ID',
+	produce_loss_level_id bigint unsigned COMMENT '生产损耗等级ID',
+	life_cycle_state_id bigint unsigned COMMENT '生命周期状态ID',
+	material_name char(64) NOT NULL COMMENT '物料名称',
+	delivery_days int NOT NULL COMMENT '交期天数',
+	moq char(32) NOT NULL COMMENT 'MOQ',
+	material_model char(64) COMMENT '规格型号',
+	material_draw char(64) COMMENT '物料图号',
+	supplier_id bigint unsigned COMMENT '供应商ID',
+	material_desc char(255) COMMENT '物料描述',
+	test_type tinyint COMMENT '检验类型',
+	user_id bigint unsigned COMMENT '创建人',
+	create_time datetime COMMENT '创建时间',
+	update_time datetime COMMENT '更新时间',
 	-- 1：未删除
 	-- 2：已删除
-	dr tinyint COMMENT '1：未删除
+	dr tinyint COMMENT '是否删除 : 1：未删除
 2：已删除',
 	PRIMARY KEY (material_id),
 	UNIQUE (material_id)
-);
+) COMMENT = '物料表';
 
 
+-- 物料属性
 CREATE TABLE si_material_attribute
 (
-	material_attribute_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	material_id bigint unsigned NOT NULL,
-	lower_limit decimal(10,2),
-	upper_limit decimal(10,2),
-	default_purchase decimal(10,2),
+	material_attribute_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '物料属性ID',
+	material_id bigint unsigned NOT NULL COMMENT '物料ID',
+	lower_limit decimal(10,2) COMMENT '库存下限',
+	upper_limit decimal(10,2) COMMENT '库存上限',
+	default_purchase decimal(10,2) COMMENT '默认采购',
 	-- 1：是
 	-- 2：否
-	way tinyint COMMENT '1：是
+	way tinyint COMMENT '是否在途 : 1：是
 2：否',
-	warehouse_id bigint unsigned,
-	location_id bigint unsigned,
+	warehouse_id bigint unsigned COMMENT '默认仓库',
+	location_id bigint unsigned COMMENT '默认库位',
 	-- 1：IQC检验
 	-- 2：QE检验
-	storage_inspect tinyint COMMENT '1：IQC检验
+	storage_inspect tinyint COMMENT '入库质量检验 : 1：IQC检验
 2：QE检验',
-	storage_inspect_type tinyint,
-	storage_sampling_plan tinyint,
+	storage_inspect_type tinyint COMMENT '入库质量检验类型',
+	storage_sampling_plan tinyint COMMENT '入库抽样计划',
 	-- 1：工单审核
 	-- 2：OQC检验
-	outbound_inspect tinyint COMMENT '1：工单审核
+	outbound_inspect tinyint COMMENT '出库质量检验 : 1：工单审核
 2：OQC检验',
 	-- 1：是
 	-- 2：否
-	pick_split tinyint COMMENT '1：是
+	pick_split tinyint COMMENT '拣货时不支持分料 : 1：是
 2：否',
 	PRIMARY KEY (material_attribute_id),
 	UNIQUE (material_attribute_id),
 	UNIQUE (material_id)
-);
+) COMMENT = '物料属性';
 
 
+-- 物料记录表
 CREATE TABLE si_material_record
 (
-	material_record_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	material_id bigint unsigned NOT NULL,
-	user_id bigint unsigned NOT NULL,
-	create_time datetime,
-	type char(255),
+	material_record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '物料记录ID',
+	material_id bigint unsigned NOT NULL COMMENT '物料ID',
+	user_id bigint unsigned NOT NULL COMMENT '操作人',
+	create_time datetime COMMENT '操作时间',
+	operation_name char(255) COMMENT '操作名称',
 	PRIMARY KEY (material_record_id),
 	UNIQUE (material_record_id)
-);
+) COMMENT = '物料记录表';
 
 
+-- 物料规格说明书表
 CREATE TABLE si_material_specification
 (
-	material_specification_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	material_id bigint unsigned NOT NULL,
-	file_name char(255) NOT NULL,
-	file_path char(255) NOT NULL,
-	create_time datetime,
+	material_specification_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '物料规格说明书表',
+	material_id bigint unsigned NOT NULL COMMENT '物料ID',
+	file_name char(255) NOT NULL COMMENT '文件名',
+	file_path char(255) NOT NULL COMMENT '文件路径',
+	create_time datetime COMMENT '创建时间',
 	PRIMARY KEY (material_specification_id),
 	UNIQUE (material_specification_id)
-);
+) COMMENT = '物料规格说明书表';
 
 
-CREATE TABLE si_print_label
-(
-	print_label_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	package_id char(32) NOT NULL,
-	produce_date char(32),
-	produce_batch char(32),
-	material_id bigint unsigned NOT NULL,
-	num int,
-	-- 1：良品
-	-- 2：非良品
-	type tinyint COMMENT '1：良品
-2：非良品',
-	-- 1：扫描
-	-- 2：打印
-	origin tinyint NOT NULL COMMENT '1：扫描
-2：打印',
-	location_id bigint unsigned,
-	relate_label_id bigint unsigned,
-	relate_package_id char(32),
-	create_time datetime,
-	-- 1：未废弃
-	-- 2：已废弃
-	dr tinyint COMMENT '1：未废弃
-2：已废弃',
-	PRIMARY KEY (print_label_id),
-	UNIQUE (print_label_id),
-	UNIQUE (package_id)
-);
-
-
-CREATE TABLE si_storage_label
-(
-	storage_label_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	print_label_id bigint unsigned NOT NULL,
-	material_id bigint unsigned NOT NULL,
-	warehouse_id bigint unsigned NOT NULL,
-	location_id bigint unsigned,
-	package_id char(32),
-	source_no char(128),
-	-- 1：PO单收料
-	-- 2：样品采购
-	-- 3：生产退料
-	source_type tinyint COMMENT '1：PO单收料
-2：样品采购
-3：生产退料',
-	-- 1：良品
-	-- 2：非良品
-	type tinyint COMMENT '1：良品
-2：非良品',
-	storage_num int,
-	storage_time datetime,
-	material_lock_id bigint unsigned,
-	-- 1：在库
-	-- 11：调拨入库
-	-- 14：生产入库
-	-- 20：工单出库
-	-- 21：调拨出库
-	-- 23：销售出库
-	status tinyint COMMENT '1：在库
-11：调拨入库
-14：生产入库
-20：工单出库
-21：调拨出库
-23：销售出库',
-	PRIMARY KEY (storage_label_id),
-	UNIQUE (storage_label_id),
-	UNIQUE (print_label_id)
-);
-
-
+-- 供应商表
 CREATE TABLE si_supplier
 (
-	supplier_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	supplier_no char(64) NOT NULL,
-	supplier_group_id bigint unsigned,
-	cert_status_id bigint unsigned,
-	supplier_type_id bigint unsigned,
-	settle_period_id bigint,
-	currency_id bigint unsigned,
-	supplier_name char(64) NOT NULL,
-	contact_name char(64),
-	phone char(16),
-	fax char(16),
-	site char(64),
-	mail char(64),
-	area char(64),
-	address char(128),
-	remark char(255),
-	user_id bigint unsigned,
-	create_time datetime,
-	update_time datetime,
+	supplier_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '供应商ID',
+	supplier_no char(64) NOT NULL COMMENT '供应商编码',
+	supplier_group_id bigint unsigned COMMENT '供应商组ID',
+	cert_status_id bigint unsigned COMMENT '认证状态ID',
+	supplier_type_id bigint unsigned COMMENT '供应商类型ID',
+	settle_period_id bigint COMMENT '结算期限ID',
+	currency_id bigint unsigned COMMENT '币种ID',
+	supplier_name char(64) NOT NULL COMMENT '供应商名称',
+	contact_name char(64) COMMENT '联系人名称',
+	phone char(16) COMMENT '联系电话',
+	fax char(16) COMMENT '传真',
+	site char(64) COMMENT '网址',
+	mail char(64) COMMENT '邮箱',
+	area char(64) COMMENT '地区',
+	address char(128) COMMENT '详细地址',
+	remark char(255) COMMENT '备注',
+	user_id bigint unsigned COMMENT '创建人',
+	create_time datetime COMMENT '创建时间',
+	update_time datetime COMMENT '更新时间',
 	-- 1：未删除
 	-- 2：已删除
-	dr tinyint COMMENT '1：未删除
+	dr tinyint COMMENT '是否删除 : 1：未删除
 2：已删除',
 	PRIMARY KEY (supplier_id),
 	UNIQUE (supplier_id)
-);
+) COMMENT = '供应商表';
 
 
+-- 供应商记录表
 CREATE TABLE si_supplier_record
 (
-	supplier_record_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	supplier_id bigint unsigned NOT NULL,
-	user_id bigint unsigned NOT NULL,
-	create_time datetime,
-	type char(255),
+	supplier_record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '供应商记录ID',
+	supplier_id bigint unsigned NOT NULL COMMENT '供应商ID',
+	user_id bigint unsigned NOT NULL COMMENT '操作人',
+	create_time datetime COMMENT '操作时间',
+	operation_name char(255) COMMENT '操作名称',
 	PRIMARY KEY (supplier_record_id),
 	UNIQUE (supplier_record_id)
-);
+) COMMENT = '供应商记录表';
 
 
+-- 仓库表
 CREATE TABLE si_warehouse
 (
-	warehouse_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	warehouse_no char(128) NOT NULL,
-	warehouse_name char(64) NOT NULL,
-	warehouse_type_id bigint unsigned NOT NULL,
-	principal char(32),
-	phone char(16),
-	area char(64),
-	address char(128),
-	remark char(255),
-	user_id bigint unsigned,
-	create_time datetime,
-	update_time datetime,
+	warehouse_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '仓库ID',
+	warehouse_no char(128) NOT NULL COMMENT '仓库编号',
+	warehouse_name char(64) NOT NULL COMMENT '仓库名称',
+	warehouse_type_id bigint unsigned NOT NULL COMMENT '仓库类型ID',
+	principal char(32) COMMENT '负责人',
+	phone char(16) COMMENT '联系电话',
+	area char(64) COMMENT '地区',
+	address char(128) COMMENT '详细地址',
+	remark char(255) COMMENT '备注',
+	user_id bigint unsigned COMMENT '创建人',
+	create_time datetime COMMENT '创建时间',
+	update_time datetime COMMENT '更新时间',
 	-- 1：未删除
 	-- 2：已删除
-	dr tinyint COMMENT '1：未删除
+	dr tinyint COMMENT '是否删除 : 1：未删除
 2：已删除',
 	PRIMARY KEY (warehouse_id),
 	UNIQUE (warehouse_id)
-);
+) COMMENT = '仓库表';
 
 
+-- 仓库记录表
 CREATE TABLE si_warehouse_record
 (
-	warehouse_record_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	warehouse_id bigint unsigned NOT NULL,
-	user_id bigint unsigned NOT NULL,
-	create_time datetime,
-	type char(255),
+	warehouse_record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '仓库记录表',
+	warehouse_id bigint unsigned NOT NULL COMMENT '仓库ID',
+	user_id bigint unsigned NOT NULL COMMENT '操作人',
+	create_time datetime COMMENT '操作时间',
+	operation_name char(255) COMMENT '操作名称',
 	PRIMARY KEY (warehouse_record_id),
 	UNIQUE (warehouse_record_id)
-);
+) COMMENT = '仓库记录表';
 
 
-CREATE TABLE sm_iqc_detect
+-- 采购入库单表体
+CREATE TABLE sm_storage_body
 (
-	receipt_body_id bigint unsigned NOT NULL,
-	remark char(255),
-	-- 1：允许良品
-	-- 2：QE驳回重检验
-	-- 3：未检验
-	status tinyint COMMENT '1：允许良品
-2：QE驳回重检验
-3：未检验',
-	PRIMARY KEY (receipt_body_id),
-	UNIQUE (receipt_body_id)
-);
-
-
-CREATE TABLE sm_qe_confirm
-(
-	receipt_body_id bigint unsigned NOT NULL,
-	remark char(255),
-	-- 1：允许
-	-- 3：不良，待确认
-	-- 4：特采
-	-- 5：退供应商
-	status tinyint COMMENT '1：允许
-3：不良，待确认
-4：特采
-5：退供应商',
-	PRIMARY KEY (receipt_body_id),
-	UNIQUE (receipt_body_id)
-);
-
-
-CREATE TABLE sm_qe_detect
-(
-	receipt_body_id bigint unsigned NOT NULL,
-	remark char(255),
-	-- 1：允许良品
-	-- 3：未检验
-	-- 4：特采
-	-- 5：退供应商
-	status tinyint COMMENT '1：允许良品
-3：未检验
-4：特采
-5：退供应商',
-	PRIMARY KEY (receipt_body_id),
-	UNIQUE (receipt_body_id)
-);
-
-
-CREATE TABLE sm_receipt_body
-(
-	receipt_body_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	receipt_head_id bigint unsigned NOT NULL,
-	material_id bigint unsigned NOT NULL,
-	receipt_no char(128) NOT NULL,
-	source_no char(128),
-	-- 1：PO单收料
-	-- 2：样品采购
-	-- 3：生产退料
-	source_type tinyint COMMENT '1：PO单收料
-2：样品采购
-3：生产退料',
-	order_total int,
-	accept_num int,
-	accept_date datetime,
-	good_num int,
-	bad_num int,
-	stock_num int,
-	-- 1：录入标签
-	-- 5：IQC检测
-	-- 10：QE检测
-	-- 15：QE确认
-	-- 20：物料入库
-	-- 25：入库完成
-	-- 30：退供应商
-	status tinyint COMMENT '1：录入标签
-5：IQC检测
-10：QE检测
-15：QE确认
-20：物料入库
-25：入库完成
-30：退供应商',
-	create_time datetime,
+	storage_body_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '入库单表体ID',
+	storage_head_id bigint unsigned NOT NULL COMMENT '入库单表头ID',
+	material_id bigint unsigned NOT NULL COMMENT '物料ID',
+	location_id bigint unsigned NOT NULL COMMENT '库位ID',
+	car_brand  char(255) COMMENT '车牌信息',
+	accept_num int COMMENT '接受数量',
+	accept_time datetime COMMENT '接受日期',
+	create_time datetime COMMENT '创建时间',
 	-- 1：未删除
 	-- 2：已删除
-	dr tinyint COMMENT '1：未删除
+	dr tinyint COMMENT '是否删除 : 1：未删除
 2：已删除',
-	PRIMARY KEY (receipt_body_id),
-	UNIQUE (receipt_body_id),
-	UNIQUE (receipt_no)
-);
+	PRIMARY KEY (storage_body_id),
+	UNIQUE (storage_body_id)
+) COMMENT = '采购入库单表体';
 
 
-CREATE TABLE sm_receipt_head
+-- 采购入库单表头
+CREATE TABLE sm_storage_head
 (
-	receipt_head_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	source_no char(128) NOT NULL,
-	-- 1：PO单收料
-	-- 2：样品采购
-	-- 3：生产退料
-	source_type tinyint NOT NULL COMMENT '1：PO单收料
-2：样品采购
-3：生产退料',
-	order_date date,
-	supplier char(128),
-	buyer char(128),
-	plan_date date,
-	logistics_company char(128),
-	logistics_no char(128),
-	-- 1：到付
-	-- 2：寄付
-	receipt_way tinyint COMMENT '1：到付
-2：寄付',
-	remark char(255),
-	create_time datetime,
-	update_time datetime,
-	-- 1：未删除
-	-- 2：已删除
-	dr tinyint COMMENT '1：未删除
-2：已删除',
-	PRIMARY KEY (receipt_head_id),
-	UNIQUE (receipt_head_id)
-);
-
-
-CREATE TABLE sm_receipt_label
-(
-	receipt_label_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	print_label_id bigint unsigned NOT NULL,
-	receipt_body_id bigint unsigned NOT NULL,
-	storage_id bigint unsigned,
-	PRIMARY KEY (receipt_label_id),
-	UNIQUE (receipt_label_id)
-);
-
-
-CREATE TABLE sm_storage
-(
-	storage_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	storage_no char(128) NOT NULL,
-	source_no char(128) NOT NULL,
-	-- 1：收料单
-	-- 2：其他入库单
-	source_type tinyint NOT NULL COMMENT '1：收料单
-2：其他入库单',
-	pending_num int,
-	stored_num int,
-	storage_time datetime,
+	storage_head_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '入库单表头ID',
+	warehouse_id bigint unsigned NOT NULL COMMENT '仓库ID',
+	storage_no char(128) NOT NULL COMMENT '入库单编号',
+	storage_time datetime COMMENT '入库时间',
 	-- 1：已入库
-	-- 2：入库中
-	-- 3：待入库
-	-- 
-	-- 
-	status tinyint COMMENT '1：已入库
-2：入库中
-3：待入库
+	-- 2：待入库
+	--
+	--
+	status tinyint COMMENT '入库状态 : 1：已入库
+2：待入库
 
 ',
-	-- 1：良品
-	-- 2：非良品
-	type tinyint COMMENT '1：良品
-2：非良品',
-	create_time datetime,
+	extra char(255) COMMENT '备注',
+	create_time datetime COMMENT '创建时间',
 	-- 1：未删除
 	-- 2：已删除
-	dr tinyint COMMENT '1：未删除
+	dr tinyint COMMENT '是否删除 : 1：未删除
 2：已删除',
-	warehouse_id bigint unsigned,
-	PRIMARY KEY (storage_id),
-	UNIQUE (storage_id),
-	UNIQUE (storage_no)
-);
+	PRIMARY KEY (storage_head_id),
+	UNIQUE (storage_head_id)
+) COMMENT = '采购入库单表头';
 
 
-CREATE TABLE sm_storage_detail
-(
-	storage_detail_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	storage_group_id bigint unsigned NOT NULL,
-	print_label_id bigint unsigned NOT NULL,
-	PRIMARY KEY (storage_detail_id),
-	UNIQUE (storage_detail_id),
-	UNIQUE (print_label_id)
-);
-
-
-CREATE TABLE sm_storage_group
-(
-	storage_group_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	storage_id bigint unsigned NOT NULL,
-	location_id bigint unsigned,
-	PRIMARY KEY (storage_group_id),
-	UNIQUE (storage_group_id)
-);
-
-
+-- 入库操作记录表
 CREATE TABLE sm_storage_record
 (
-	record_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	receipt_body_id bigint unsigned,
-	storage_id bigint unsigned,
-	user_id bigint unsigned,
-	name char(255),
-	type char(255),
-	create_time datetime,
-	-- 1：录入标签
-	-- 5：IQC检测
-	-- 10：QE检测
-	-- 15：QE确认
-	-- 20：物料入库
-	-- 25：入库完成
-	-- 30：退供应商
-	status tinyint COMMENT '1：录入标签
-5：IQC检测
-10：QE检测
-15：QE确认
-20：物料入库
-25：入库完成
-30：退供应商',
+	record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '操作记录',
+	storage_head_id bigint unsigned COMMENT '入库单表头ID',
+	user_id bigint unsigned COMMENT '操作人ID',
+	operation_name char(255) COMMENT '操作名称',
+	create_time datetime COMMENT '操作时间',
 	PRIMARY KEY (record_id),
 	UNIQUE (record_id)
-);
+) COMMENT = '入库操作记录表';
 
 
+-- 工作台权限模块
 CREATE TABLE wm_work_bench
 (
-	work_bench_id bigint unsigned NOT NULL AUTO_INCREMENT,
-	authority_id bigint unsigned NOT NULL,
-	bench_name char(64),
+	work_bench_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '工作台权限ID',
+	authority_id bigint unsigned NOT NULL COMMENT '权限ID',
+	bench_name char(64) COMMENT '工作台权限模块名称',
 	-- 1. 待办工作
 	-- 2. 快捷入口
-	bench_type tinyint COMMENT '1. 待办工作
+	bench_type tinyint COMMENT '权限类型 : 1. 待办工作
 2. 快捷入口',
 	-- 1. WMS
 	-- 2. MES
 	-- 3. ERP
 	-- 4. MDM
-	bench_module tinyint COMMENT '1. WMS
+	bench_module tinyint COMMENT '权限模块 : 1. WMS
 2. MES
 3. ERP
 4. MDM',
-	icon_path char(255),
-	url_path char(255),
-	background_color char(12),
-	bench_node tinyint NOT NULL,
+	icon_path char(255) COMMENT '图标路径',
+	url_path char(255) COMMENT '访问路径',
+	background_color char(12) COMMENT '背景色',
+	bench_node tinyint NOT NULL COMMENT '工作台节点',
 	PRIMARY KEY (work_bench_id),
 	UNIQUE (work_bench_id)
-);
+) COMMENT = '工作台权限模块';
 
 
 
@@ -1473,7 +1002,7 @@ ALTER TABLE am_role_record
 
 
 ALTER TABLE am_user_record
-	ADD FOREIGN KEY (operate_id)
+	ADD FOREIGN KEY (user_id)
 	REFERENCES am_user (user_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
@@ -1481,7 +1010,7 @@ ALTER TABLE am_user_record
 
 
 ALTER TABLE am_user_record
-	ADD FOREIGN KEY (user_id)
+	ADD FOREIGN KEY (operate_id)
 	REFERENCES am_user (user_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
@@ -1640,31 +1169,7 @@ ALTER TABLE dd_warehouse_type
 ;
 
 
-ALTER TABLE im_safe_stock
-	ADD FOREIGN KEY (user_id)
-	REFERENCES am_user (user_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
 ALTER TABLE om_outbound_record
-	ADD FOREIGN KEY (user_id)
-	REFERENCES am_user (user_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE si_bom_body
-	ADD FOREIGN KEY (user_id)
-	REFERENCES am_user (user_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE si_bom_head
 	ADD FOREIGN KEY (user_id)
 	REFERENCES am_user (user_id)
 	ON UPDATE RESTRICT
@@ -1681,14 +1186,6 @@ ALTER TABLE si_bom_record
 
 
 ALTER TABLE si_client_record
-	ADD FOREIGN KEY (user_id)
-	REFERENCES am_user (user_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE si_label_record
 	ADD FOREIGN KEY (user_id)
 	REFERENCES am_user (user_id)
 	ON UPDATE RESTRICT
@@ -1832,22 +1329,6 @@ ALTER TABLE si_material
 ;
 
 
-ALTER TABLE si_storage_label
-	ADD FOREIGN KEY (material_lock_id)
-	REFERENCES dd_material_lock (material_lock_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE si_bom_body
-	ADD FOREIGN KEY (material_property_id)
-	REFERENCES dd_material_property (material_property_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
 ALTER TABLE si_material
 	ADD FOREIGN KEY (material_type_id)
 	REFERENCES dd_material_type (material_type_id)
@@ -1867,14 +1348,6 @@ ALTER TABLE si_material
 ALTER TABLE si_material
 	ADD FOREIGN KEY (measure_unit_id)
 	REFERENCES dd_measure_unit (measure_unit_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE si_bom_body
-	ADD FOREIGN KEY (process_id)
-	REFERENCES dd_process (process_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
 ;
@@ -1920,105 +1393,17 @@ ALTER TABLE si_warehouse
 ;
 
 
-ALTER TABLE im_safe_stock
-	ADD FOREIGN KEY (material_inventory_id)
-	REFERENCES im_material_inventory (material_inventory_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE om_logistics_picture
-	ADD FOREIGN KEY (logistics_record_id)
-	REFERENCES om_logistics_record (logistics_record_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE om_logistics_record
-	ADD FOREIGN KEY (outbound_id)
-	REFERENCES om_outbound (outbound_id)
+ALTER TABLE om_outbound_body
+	ADD FOREIGN KEY (outbound_head_id)
+	REFERENCES om_outbound_head (outbound_head_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
 ;
 
 
 ALTER TABLE om_outbound_record
-	ADD FOREIGN KEY (outbound_id)
-	REFERENCES om_outbound (outbound_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE om_label_recommend
-	ADD FOREIGN KEY (pick_body_id)
-	REFERENCES om_pick_body (pick_body_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE om_outbound
-	ADD FOREIGN KEY (pick_head_id)
-	REFERENCES om_pick_head (pick_head_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE om_outbound_record
-	ADD FOREIGN KEY (pick_head_id)
-	REFERENCES om_pick_head (pick_head_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE om_pick_body
-	ADD FOREIGN KEY (pick_head_id)
-	REFERENCES om_pick_head (pick_head_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE om_pick_check
-	ADD FOREIGN KEY (pick_head_id)
-	REFERENCES om_pick_head (pick_head_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE om_pick_label
-	ADD FOREIGN KEY (pick_head_id)
-	REFERENCES om_pick_head (pick_head_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE si_bom_body
-	ADD FOREIGN KEY (parent_id)
-	REFERENCES si_bom_body (bom_body_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE si_bom_body
-	ADD FOREIGN KEY (bom_head_id)
-	REFERENCES si_bom_head (bom_head_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE si_bom_record
-	ADD FOREIGN KEY (bom_head_id)
-	REFERENCES si_bom_head (bom_head_id)
+	ADD FOREIGN KEY (outbound_head_id)
+	REFERENCES om_outbound_head (outbound_head_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
 ;
@@ -2027,6 +1412,14 @@ ALTER TABLE si_bom_record
 ALTER TABLE si_client_record
 	ADD FOREIGN KEY (client_id)
 	REFERENCES si_client (client_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_forklift_record
+	ADD FOREIGN KEY (forklift_id)
+	REFERENCES si_forklift (forklift_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
 ;
@@ -2048,7 +1441,7 @@ ALTER TABLE si_material_attribute
 ;
 
 
-ALTER TABLE si_print_label
+ALTER TABLE sm_storage_body
 	ADD FOREIGN KEY (location_id)
 	REFERENCES si_location (location_id)
 	ON UPDATE RESTRICT
@@ -2056,47 +1449,7 @@ ALTER TABLE si_print_label
 ;
 
 
-ALTER TABLE si_storage_label
-	ADD FOREIGN KEY (location_id)
-	REFERENCES si_location (location_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE sm_storage_group
-	ADD FOREIGN KEY (location_id)
-	REFERENCES si_location (location_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE im_material_inventory
-	ADD FOREIGN KEY (material_id)
-	REFERENCES si_material (material_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE om_pick_body
-	ADD FOREIGN KEY (material_id)
-	REFERENCES si_material (material_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE si_bom_body
-	ADD FOREIGN KEY (material_id)
-	REFERENCES si_material (material_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE si_bom_head
+ALTER TABLE om_outbound_body
 	ADD FOREIGN KEY (material_id)
 	REFERENCES si_material (material_id)
 	ON UPDATE RESTRICT
@@ -2128,7 +1481,7 @@ ALTER TABLE si_material_specification
 ;
 
 
-ALTER TABLE si_print_label
+ALTER TABLE sm_storage_body
 	ADD FOREIGN KEY (material_id)
 	REFERENCES si_material (material_id)
 	ON UPDATE RESTRICT
@@ -2136,73 +1489,9 @@ ALTER TABLE si_print_label
 ;
 
 
-ALTER TABLE si_storage_label
-	ADD FOREIGN KEY (material_id)
-	REFERENCES si_material (material_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE sm_receipt_body
-	ADD FOREIGN KEY (material_id)
-	REFERENCES si_material (material_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE om_pick_label
-	ADD FOREIGN KEY (print_label_id)
-	REFERENCES si_print_label (print_label_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE si_label_record
-	ADD FOREIGN KEY (print_label_id)
-	REFERENCES si_print_label (print_label_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE si_print_label
-	ADD FOREIGN KEY (relate_label_id)
-	REFERENCES si_print_label (print_label_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE si_storage_label
-	ADD FOREIGN KEY (print_label_id)
-	REFERENCES si_print_label (print_label_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE sm_receipt_label
-	ADD FOREIGN KEY (print_label_id)
-	REFERENCES si_print_label (print_label_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE sm_storage_detail
-	ADD FOREIGN KEY (print_label_id)
-	REFERENCES si_print_label (print_label_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE om_label_recommend
-	ADD FOREIGN KEY (storage_label_id)
-	REFERENCES si_storage_label (storage_label_id)
+ALTER TABLE si_forklift
+	ADD FOREIGN KEY (supplier_id)
+	REFERENCES si_supplier (supplier_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
 ;
@@ -2224,22 +1513,6 @@ ALTER TABLE si_supplier_record
 ;
 
 
-ALTER TABLE em_transfer_head
-	ADD FOREIGN KEY (outbound_wid)
-	REFERENCES si_warehouse (warehouse_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE em_transfer_head
-	ADD FOREIGN KEY (storage_wid)
-	REFERENCES si_warehouse (warehouse_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
 ALTER TABLE si_location
 	ADD FOREIGN KEY (warehouse_id)
 	REFERENCES si_warehouse (warehouse_id)
@@ -2256,14 +1529,6 @@ ALTER TABLE si_material_attribute
 ;
 
 
-ALTER TABLE si_storage_label
-	ADD FOREIGN KEY (warehouse_id)
-	REFERENCES si_warehouse (warehouse_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
 ALTER TABLE si_warehouse_record
 	ADD FOREIGN KEY (warehouse_id)
 	REFERENCES si_warehouse (warehouse_id)
@@ -2272,7 +1537,7 @@ ALTER TABLE si_warehouse_record
 ;
 
 
-ALTER TABLE sm_storage
+ALTER TABLE sm_storage_head
 	ADD FOREIGN KEY (warehouse_id)
 	REFERENCES si_warehouse (warehouse_id)
 	ON UPDATE RESTRICT
@@ -2280,81 +1545,17 @@ ALTER TABLE sm_storage
 ;
 
 
-ALTER TABLE sm_iqc_detect
-	ADD FOREIGN KEY (receipt_body_id)
-	REFERENCES sm_receipt_body (receipt_body_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE sm_qe_confirm
-	ADD FOREIGN KEY (receipt_body_id)
-	REFERENCES sm_receipt_body (receipt_body_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE sm_qe_detect
-	ADD FOREIGN KEY (receipt_body_id)
-	REFERENCES sm_receipt_body (receipt_body_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE sm_receipt_label
-	ADD FOREIGN KEY (receipt_body_id)
-	REFERENCES sm_receipt_body (receipt_body_id)
+ALTER TABLE sm_storage_body
+	ADD FOREIGN KEY (storage_head_id)
+	REFERENCES sm_storage_head (storage_head_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
 ;
 
 
 ALTER TABLE sm_storage_record
-	ADD FOREIGN KEY (receipt_body_id)
-	REFERENCES sm_receipt_body (receipt_body_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE sm_receipt_body
-	ADD FOREIGN KEY (receipt_head_id)
-	REFERENCES sm_receipt_head (receipt_head_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE sm_receipt_label
-	ADD FOREIGN KEY (storage_id)
-	REFERENCES sm_storage (storage_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE sm_storage_group
-	ADD FOREIGN KEY (storage_id)
-	REFERENCES sm_storage (storage_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE sm_storage_record
-	ADD FOREIGN KEY (storage_id)
-	REFERENCES sm_storage (storage_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE sm_storage_detail
-	ADD FOREIGN KEY (storage_group_id)
-	REFERENCES sm_storage_group (storage_group_id)
+	ADD FOREIGN KEY (storage_head_id)
+	REFERENCES sm_storage_head (storage_head_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
 ;

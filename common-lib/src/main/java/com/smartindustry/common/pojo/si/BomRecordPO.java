@@ -10,23 +10,25 @@ import lombok.Data;
  */
 @Data
 public class BomRecordPO implements Serializable {
+    /**
+     * 操作记录ID
+     */
     private Long bomRecordId;
 
-    private Long bomHeadId;
-
+    /**
+     * 用户ID
+     */
     private Long userId;
 
+    /**
+     * 操作时间
+     */
     private Date createTime;
 
-    private String type;
-
-    public BomRecordPO(Long bomHeadId, Long userId, String type) {
-        this.bomHeadId = bomHeadId;
-        this.userId = userId;
-        this.createTime = new Date();
-        this.type = type;
-    }
-    public BomRecordPO(){}
+    /**
+     * 操作名称
+     */
+    private String operationName;
 
     private static final long serialVersionUID = 1L;
 }
