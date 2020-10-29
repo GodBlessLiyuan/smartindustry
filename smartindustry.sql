@@ -10,7 +10,9 @@ DROP TABLE IF EXISTS am_role_record;
 DROP TABLE IF EXISTS am_user_record;
 DROP TABLE IF EXISTS om_mix_body;
 DROP TABLE IF EXISTS om_outbound_body;
+DROP TABLE IF EXISTS si_location_record;
 DROP TABLE IF EXISTS sm_storage_body;
+DROP TABLE IF EXISTS si_location;
 DROP TABLE IF EXISTS si_material;
 DROP TABLE IF EXISTS dd_measure_unit;
 DROP TABLE IF EXISTS si_forklift_record;
@@ -19,8 +21,6 @@ DROP TABLE IF EXISTS si_supplier_record;
 DROP TABLE IF EXISTS si_supplier;
 DROP TABLE IF EXISTS dd_supplier_group;
 DROP TABLE IF EXISTS dd_supplier_type;
-DROP TABLE IF EXISTS si_location_record;
-DROP TABLE IF EXISTS si_location;
 DROP TABLE IF EXISTS si_warehouse_record;
 DROP TABLE IF EXISTS sm_storage_record;
 DROP TABLE IF EXISTS sm_storage_head;
@@ -301,7 +301,7 @@ CREATE TABLE om_outbound_head
 	-- 2 生产
 	source_type tinyint COMMENT '来源类型 : 1 混料
 2 生产',
-	plan_time datetime COMMENT '计划出库时间',
+	plan_time date COMMENT '计划出库时间',
 	outbound_time datetime COMMENT '完成出库时间',
 	-- 1：已出库
 	-- 2：出库中
@@ -342,11 +342,17 @@ CREATE TABLE si_forklift
 	forklift_brand char(255) COMMENT '品牌',
 	supplier_id bigint unsigned NOT NULL COMMENT '供应商ID',
 	imei_no char(255) COMMENT '工业一体机号',
-	work_area tinyint COMMENT '作业区域',
+	-- 1 原材料区
+	-- 2 生产产区
+	-- 3 成品区
+	work_area tinyint COMMENT '作业区域 : 1 原材料区
+2 生产产区
+3 成品区',
 	-- 1 忙碌中
 	-- 2 空闲中
 	status tinyint COMMENT '当前状态 : 1 忙碌中
 2 空闲中',
+	create_time datetime COMMENT '创建时间',
 	-- 1 未删除
 	-- 2 已删除
 	dr tinyint COMMENT '是否删除 : 1 未删除
@@ -377,6 +383,7 @@ CREATE TABLE si_location
 	location_name char(255) NOT NULL COMMENT '库位名称',
 	hold_tray_num int COMMENT '可容纳托盘数',
 	warehouse_id bigint unsigned NOT NULL COMMENT '仓库ID',
+	material_id bigint unsigned COMMENT '物料ID',
 	remark char(255) COMMENT '备注',
 	user_id bigint unsigned COMMENT '创建人',
 	create_time datetime COMMENT '创建时间',
@@ -883,6 +890,14 @@ ALTER TABLE om_mix_body
 
 
 ALTER TABLE om_outbound_body
+	ADD FOREIGN KEY (material_id)
+	REFERENCES si_material (material_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_location
 	ADD FOREIGN KEY (material_id)
 	REFERENCES si_material (material_id)
 	ON UPDATE RESTRICT

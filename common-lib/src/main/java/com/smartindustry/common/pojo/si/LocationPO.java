@@ -31,14 +31,14 @@ public class LocationPO implements Serializable {
     private Integer holdTrayNum;
 
     /**
-     * 货位类型ID
-     */
-    private Long locationTypeId;
-
-    /**
      * 仓库ID
      */
     private Long warehouseId;
+
+    /**
+     * 物料ID
+     */
+    private Long materialId;
 
     /**
      * 备注

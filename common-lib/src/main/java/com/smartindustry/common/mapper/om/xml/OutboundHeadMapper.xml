@@ -158,16 +158,16 @@
     from om_outbound_head oh
     where oh.dr = 1
     <if test="mixno != null and mixno != ''">
-      and oh.source_no = #{mixno,jdbcType=CHAR}
+      and oh.source_no like concat('%',#{mixno,jdbcType=CHAR},'%')
     </if>
     <if test="pno != null and pno != ''">
-      and oh.source_no = #{pno,jdbcType=CHAR}
+      and oh.source_no like concat('%',#{pno,jdbcType=CHAR},'%')
     </if>
     <if test="status != null and status != 0">
       and oh.`status` = #{status,jdbcType=TINYINT}
     </if>
     <if test="otime != null and otime != ''">
-      and oh.outbound_time = #{otime,jdbcType=TINYINT}
+      and oh.outbound_time like concat('%',#{otime,jdbcType=CHAR},'%')
     </if>
     order by oh.create_time desc
   </select>
@@ -187,13 +187,13 @@
       <result column="material_name" jdbcType="CHAR" property="materialName"/>
       <result column="material_model" jdbcType="CHAR" property="materialModel"/>
       <result column="plan_num" jdbcType="DECIMAL" property="planNum"/>
-      <result column="demand_num" jdbcType="DECIMAL" property="demandNum"/>
+      <result column="outbound_num" jdbcType="DECIMAL" property="outboundNum"/>
       <result column="outbound_time" jdbcType="DATE" property="outboundTime"/>
     </collection>
   </resultMap>
   <sql id="BOS_Column_List">
       oh.outbound_head_id, oh.outbound_no, mh.mix_head_id, mh.mix_no, mh.plan_time, oh.extra, ob.outbound_body_id,
-      ob.material_id, m.material_no, m.material_name, m.material_model, mb.plan_num, ob.demand_num, ob.outbound_time
+      ob.material_id, m.material_no, m.material_name, m.material_model, mb.plan_num, ob.outbound_num, ob.outbound_time
   </sql>
   <select id="queryByOhid" parameterType="java.lang.Long" resultMap="BOSResultMap">
     select

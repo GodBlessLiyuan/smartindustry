@@ -16,7 +16,6 @@ import org.springframework.context.annotation.ComponentScan;
 @MapperScan("com.smartindustry.common.mapper")
 @ComponentScan({"com.smartindustry.common.security","com.smartindustry.outbound"})
 @SpringBootApplication
-@EnableConfigurationProperties({FilePathConfig.class})
 public class OutboundApplication {
     public static void main(String[] args) {
         SpringApplication.run(OutboundApplication.class, args);
