@@ -28,4 +28,9 @@ public class OperateDTO implements Serializable {
      * 采购拣货单的表头id
      */
     private Long shid;
+
+    /**
+     * 出库id
+     */
+    private Long ohid;
 }

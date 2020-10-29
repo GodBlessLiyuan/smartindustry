@@ -11,14 +11,14 @@
     <modules>
         <module>common-lib</module>
         <module>storagemanage</module>
-        <module>outboundmanage</module>
-        <module>industryeureka</module>
-        <module>industryzuul</module>
+<!--        <module>outboundmanage</module>-->
+<!--        <module>industryeureka</module>-->
+<!--        <module>industryzuul</module>-->
         <module>authoritymanage</module>
-        <module>basicmanage</module>
-        <module>inventorymanage</module>
-        <module>workbenchmanage</module>
-        <module>bigdatamanage</module>
+<!--        <module>basicmanage</module>-->
+<!--        <module>inventorymanage</module>-->
+<!--        <module>workbenchmanage</module>-->
+<!--        <module>bigdatamanage</module>-->
     </modules>
 
     <name>smartindustry</name>

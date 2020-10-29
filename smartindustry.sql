@@ -11,6 +11,7 @@ DROP TABLE IF EXISTS am_role_record;
 DROP TABLE IF EXISTS am_user_record;
 DROP TABLE IF EXISTS si_forklift_record;
 DROP TABLE IF EXISTS si_forklift;
+DROP TABLE IF EXISTS om_mix_body;
 DROP TABLE IF EXISTS om_outbound_body;
 DROP TABLE IF EXISTS si_material_attribute;
 DROP TABLE IF EXISTS si_material_record;
@@ -51,6 +52,7 @@ DROP TABLE IF EXISTS si_bom_record;
 DROP TABLE IF EXISTS am_user;
 DROP TABLE IF EXISTS am_dept;
 DROP TABLE IF EXISTS am_role;
+DROP TABLE IF EXISTS om_mix_head;
 DROP TABLE IF EXISTS om_outbound_head;
 DROP TABLE IF EXISTS si_config;
 
@@ -438,14 +440,47 @@ CREATE TABLE dd_warehouse_type
 ) COMMENT = '仓库类型表';
 
 
+-- 混料单表体
+CREATE TABLE om_mix_body
+(
+	mix_body_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '混料单表体id',
+	mix_head_id bigint unsigned NOT NULL COMMENT '混料单表头id',
+	material_id bigint unsigned COMMENT '物料ID',
+	plan_num decimal(10,2) COMMENT '计划出库数量',
+	create_time datetime COMMENT '创建时间',
+	-- 1 未删除
+	-- 2 已删除
+	dr tinyint COMMENT '是否删除 : 1 未删除
+2 已删除',
+	PRIMARY KEY (mix_body_id),
+	UNIQUE (mix_body_id),
+	UNIQUE (mix_head_id)
+) COMMENT = '混料单表体';
+
+
+-- 混料单表头
+CREATE TABLE om_mix_head
+(
+	mix_head_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '混料单表头id',
+	mix_no char(128) NOT NULL COMMENT '混料单编码',
+	plan_time date COMMENT '计划出库时间',
+	create_time datetime COMMENT '创建时间',
+	-- 1 未删除
+	-- 2 已删除
+	dr tinyint COMMENT '是否删除 : 1 未删除
+2 已删除',
+	PRIMARY KEY (mix_head_id),
+	UNIQUE (mix_head_id)
+) COMMENT = '混料单表头';
+
+
 -- 出库单表体
 CREATE TABLE om_outbound_body
 (
 	outbound_body_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '出库单表体id',
 	outbound_head_id bigint unsigned NOT NULL COMMENT '出库单表头ID',
 	material_id bigint unsigned NOT NULL COMMENT '物料ID',
-	plan_num int COMMENT '计划出库数量',
-	demand_num int COMMENT '出库数量',
+	demand_num decimal(10,2) COMMENT '出库数量',
 	create_time datetime COMMENT '创建时间',
 	outbound_time datetime COMMENT '出库时间',
 	-- 1 未删除
@@ -462,13 +497,19 @@ CREATE TABLE om_outbound_head
 (
 	outbound_head_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '出库单表头ID',
 	outbound_no char(128) NOT NULL COMMENT '出库单编码',
-	produce_no char(128) COMMENT '生产工单号',
+	source_no char(128) COMMENT '来源单号',
+	-- 1 混料
+	-- 2 生产
+	source_type tinyint COMMENT '来源类型 : 1 混料
+2 生产',
 	plan_time datetime COMMENT '计划出库时间',
 	outbound_time datetime COMMENT '完成出库时间',
 	-- 1：已出库
-	-- 2：待出库
+	-- 2：出库中
+	-- 3：待出库
 	status tinyint COMMENT '状态 : 1：已出库
-2：待出库',
+2：出库中
+3：待出库',
 	extra char(255) COMMENT '备注',
 	create_time datetime COMMENT '创建时间',
 	-- 1：未删除
@@ -813,8 +854,8 @@ CREATE TABLE sm_storage_body
 (
 	storage_body_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '入库单表体ID',
 	storage_head_id bigint unsigned NOT NULL COMMENT '入库单表头ID',
-	material_id bigint unsigned NOT NULL COMMENT '物料ID',
-	location_id bigint unsigned NOT NULL COMMENT '库位ID',
+	material_id bigint unsigned COMMENT '物料ID',
+	location_id bigint unsigned COMMENT '库位ID',
 	car_brand  char(255) COMMENT '车牌信息',
 	accept_num int COMMENT '接受数量',
 	accept_time datetime COMMENT '接受日期',
@@ -836,11 +877,13 @@ CREATE TABLE sm_storage_head
 	storage_no char(128) NOT NULL COMMENT '入库单编号',
 	storage_time datetime COMMENT '入库时间',
 	-- 1：已入库
-	-- 2：待入库
+	-- 2：入库中
+	-- 3：待入库
 	--
 	--
 	status tinyint COMMENT '入库状态 : 1：已入库
-2：待入库
+2：入库中
+3：待入库
 
 ',
 	extra char(255) COMMENT '备注',
@@ -1393,6 +1436,14 @@ ALTER TABLE si_warehouse
 ;
 
 
+ALTER TABLE om_mix_body
+	ADD FOREIGN KEY (mix_head_id)
+	REFERENCES om_mix_head (mix_head_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
 ALTER TABLE om_outbound_body
 	ADD FOREIGN KEY (outbound_head_id)
 	REFERENCES om_outbound_head (outbound_head_id)
@@ -1444,6 +1495,14 @@ ALTER TABLE si_material_attribute
 ALTER TABLE sm_storage_body
 	ADD FOREIGN KEY (location_id)
 	REFERENCES si_location (location_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
+ALTER TABLE om_mix_body
+	ADD FOREIGN KEY (material_id)
+	REFERENCES si_material (material_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
 ;

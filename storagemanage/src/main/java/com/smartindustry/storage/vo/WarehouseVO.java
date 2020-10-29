@@ -20,34 +20,27 @@ public class WarehouseVO implements Serializable {
     /**
      * 仓库id
      */
-    private Long wid;
-    /**
-     * 仓库编号
-     */
-    private String wno;
+    private Long value;
+
     /**
      * 仓库名称
      */
-    private String wname;
+    private String label;
     /**
      * 当前仓库所包含的所有库位信息
      */
-    private List<LocationVO> vos;
+    private List<LocationVO> children;
 
     @Data
     public static class LocationVO {
         /**
          * 储位id
          */
-        private Long lid;
-        /**
-         * 储位编号
-         */
-        private String lno;
+        private Long value;
         /**
          * 储位名称
          */
-        private String lname;
+        private String label;
     }
 
     public static List<WarehouseVO> convert(List<WarehouseBO> bos) {
@@ -60,19 +53,17 @@ public class WarehouseVO implements Serializable {
 
     public static WarehouseVO convert(WarehouseBO bo) {
         WarehouseVO vo = new WarehouseVO();
-        vo.setWid(bo.getWarehouseId());
-        vo.setWno(bo.getWarehouseNo());
-        vo.setWname(bo.getWarehouseName());
+        vo.setValue(bo.getWarehouseId());
+        vo.setLabel(bo.getWarehouseName());
         if (null != bo.getPos() && bo.getPos().size() > 0) {
             List<LocationVO> vos = new ArrayList<>(bo.getPos().size());
             for (LocationPO po : bo.getPos()) {
                 LocationVO locationVO = new LocationVO();
-                locationVO.setLid(po.getLocationId());
-                locationVO.setLno(po.getLocationNo());
-                locationVO.setLname(po.getLocationName());
+                locationVO.setValue(po.getLocationId());
+                locationVO.setLabel(po.getLocationNo());
                 vos.add(locationVO);
             }
-            vo.setVos(vos);
+            vo.setChildren(vos);
         }
         return vo;
     }

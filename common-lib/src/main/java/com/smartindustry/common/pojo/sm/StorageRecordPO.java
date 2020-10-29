@@ -36,4 +36,16 @@ public class StorageRecordPO implements Serializable {
     private Date createTime;
 
     private static final long serialVersionUID = 1L;
+
+
+    public StorageRecordPO(Long storageHeadId, Long userId, String operationName) {
+        this.storageHeadId = storageHeadId;
+        this.userId = userId;
+        this.createTime = new Date();
+        this.operationName = operationName;
+    }
+
+    public StorageRecordPO(){
+
+    }
 }

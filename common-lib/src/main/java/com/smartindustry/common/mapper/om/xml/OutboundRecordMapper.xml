@@ -90,4 +90,11 @@
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where record_id = #{recordId,jdbcType=BIGINT}
   </update>
+
+  <select id="queryByOhid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from om_outbound_record
+    where outbound_head_id = #{ohid,jdbcType=BIGINT}
+  </select>
 </mapper>

@@ -3,7 +3,6 @@ package com.smartindustry.outbound.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.outbound.vo.OutboundDetailVO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
