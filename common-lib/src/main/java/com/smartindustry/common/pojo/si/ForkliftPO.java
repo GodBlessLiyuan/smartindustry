@@ -1,6 +1,7 @@
 package com.smartindustry.common.pojo.si;
 
 import java.io.Serializable;
+import java.util.Date;
 import lombok.Data;
 
 /**
@@ -49,6 +50,11 @@ public class ForkliftPO implements Serializable {
 2 空闲中
      */
     private Byte status;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime;
 
     /**
      * 是否删除 : 1 未删除

@@ -147,7 +147,7 @@
       and sh.`status` = #{status,jdbcType=TINYINT}
     </if>
     <if test="stime != null and stime != ''">
-      and sh.storage_time = #{stime,jdbcType=TINYINT}
+      and sh.storage_time like concat('%',#{stime,jdbcType=CHAR},'%')
     </if>
     order by sh.create_time desc
   </select>
