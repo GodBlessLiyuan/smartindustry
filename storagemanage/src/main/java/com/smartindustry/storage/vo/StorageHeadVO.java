@@ -5,6 +5,7 @@ import com.smartindustry.common.bo.sm.StorageHeadBO;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -78,7 +79,7 @@ public class StorageHeadVO implements Serializable {
         /**
          * 接受数量
          */
-        private Integer anum;
+        private BigDecimal anum;
         /**
          * 接受时间
          */

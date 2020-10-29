@@ -5,6 +5,7 @@ import com.smartindustry.common.pojo.sm.StorageHeadPO;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -51,7 +52,7 @@ public class StorageHeadDTO implements Serializable {
         /**
          * 接收数量
          */
-        private Integer anum;
+        private BigDecimal anum;
         /**
          * 车牌信息
          */

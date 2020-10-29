@@ -1,4 +1,4 @@
-package com.smartindustry.storage.vo;
+package com.smartindustry.outbound.vo;
 
 import com.smartindustry.common.pojo.om.OutboundRecordPO;
 import lombok.Data;

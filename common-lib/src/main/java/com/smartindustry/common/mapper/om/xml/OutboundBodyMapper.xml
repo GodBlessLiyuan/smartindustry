@@ -5,14 +5,15 @@
     <id column="outbound_body_id" jdbcType="BIGINT" property="outboundBodyId" />
     <result column="outbound_head_id" jdbcType="BIGINT" property="outboundHeadId" />
     <result column="material_id" jdbcType="BIGINT" property="materialId" />
-    <result column="demand_num" jdbcType="DECIMAL" property="demandNum" />
+    <result column="outbound_num" jdbcType="DECIMAL" property="outboundNum" />
+    <result column="outing_num" jdbcType="DECIMAL" property="outingNum" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="outbound_time" jdbcType="TIMESTAMP" property="outboundTime" />
     <result column="dr" jdbcType="TINYINT" property="dr" />
   </resultMap>
   <sql id="Base_Column_List">
-    outbound_body_id, outbound_head_id, material_id, demand_num, create_time, outbound_time, 
-    dr
+    outbound_body_id, outbound_head_id, material_id, outbound_num, outing_num, create_time, 
+    outbound_time, dr
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -26,11 +27,11 @@
   </delete>
   <insert id="insert" parameterType="com.smartindustry.common.pojo.om.OutboundBodyPO">
     insert into om_outbound_body (outbound_body_id, outbound_head_id, material_id, 
-      demand_num, create_time, outbound_time, 
-      dr)
+      outbound_num, outing_num, create_time, 
+      outbound_time, dr)
     values (#{outboundBodyId,jdbcType=BIGINT}, #{outboundHeadId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT}, 
-      #{demandNum,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, #{outboundTime,jdbcType=TIMESTAMP}, 
-      #{dr,jdbcType=TINYINT})
+      #{outboundNum,jdbcType=DECIMAL}, #{outingNum,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{outboundTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.om.OutboundBodyPO">
     insert into om_outbound_body
@@ -44,8 +45,11 @@
       <if test="materialId != null">
         material_id,
       </if>
-      <if test="demandNum != null">
-        demand_num,
+      <if test="outboundNum != null">
+        outbound_num,
+      </if>
+      <if test="outingNum != null">
+        outing_num,
       </if>
       <if test="createTime != null">
         create_time,
@@ -67,8 +71,11 @@
       <if test="materialId != null">
         #{materialId,jdbcType=BIGINT},
       </if>
-      <if test="demandNum != null">
-        #{demandNum,jdbcType=DECIMAL},
+      <if test="outboundNum != null">
+        #{outboundNum,jdbcType=DECIMAL},
+      </if>
+      <if test="outingNum != null">
+        #{outingNum,jdbcType=DECIMAL},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -90,8 +97,11 @@
       <if test="materialId != null">
         material_id = #{materialId,jdbcType=BIGINT},
       </if>
-      <if test="demandNum != null">
-        demand_num = #{demandNum,jdbcType=DECIMAL},
+      <if test="outboundNum != null">
+        outbound_num = #{outboundNum,jdbcType=DECIMAL},
+      </if>
+      <if test="outingNum != null">
+        outing_num = #{outingNum,jdbcType=DECIMAL},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -109,7 +119,8 @@
     update om_outbound_body
     set outbound_head_id = #{outboundHeadId,jdbcType=BIGINT},
       material_id = #{materialId,jdbcType=BIGINT},
-      demand_num = #{demandNum,jdbcType=DECIMAL},
+      outbound_num = #{outboundNum,jdbcType=DECIMAL},
+      outing_num = #{outingNum,jdbcType=DECIMAL},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       outbound_time = #{outboundTime,jdbcType=TIMESTAMP},
       dr = #{dr,jdbcType=TINYINT}
