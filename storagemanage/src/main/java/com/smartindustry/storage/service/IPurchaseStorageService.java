@@ -55,4 +55,11 @@ public interface IPurchaseStorageService {
      * @return
      */
     ResultVO detail(OperateDTO dto);
+
+    /**
+     * 根据操作人查询出库操作记录
+     * @param dto
+     * @return
+     */
+    ResultVO queryStorageRecord(OperateDTO dto);
 }
