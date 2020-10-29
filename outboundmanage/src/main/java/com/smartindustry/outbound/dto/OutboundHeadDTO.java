@@ -1,8 +1,10 @@
-package com.smartindustry.storage.dto;
+package com.smartindustry.outbound.dto;
+
+
 
 import com.smartindustry.common.pojo.om.OutboundBodyPO;
 import com.smartindustry.common.pojo.om.OutboundHeadPO;
-import com.smartindustry.storage.constant.StorageConstant;
+import com.smartindustry.outbound.constant.OutboundConstant;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -78,7 +80,7 @@ public class OutboundHeadDTO implements Serializable {
 
     public static OutboundHeadPO buildPO(OutboundHeadPO po, OutboundHeadDTO dto) {
         po.setSourceNo(dto.getSno());
-        po.setSourceType(StorageConstant.TYPE_INSERT_BY_OURS);
+        po.setSourceType(OutboundConstant.TYPE_INSERT_BY_OURS);
         po.setPlanTime(dto.getPtime());
         po.setExtra(dto.getExtra());
         return po;
@@ -93,7 +95,7 @@ public class OutboundHeadDTO implements Serializable {
     }
 
 
-    public static OutboundBodyPO createPO(OutboundHeadPO headPO,OutboundBodyDTO dto) {
+    public static OutboundBodyPO createPO(OutboundHeadPO headPO, OutboundBodyDTO dto) {
         OutboundBodyPO po = new OutboundBodyPO();
         po.setOutboundHeadId(headPO.getOutboundHeadId());
         po.setCreateTime(new Date());
@@ -103,7 +105,7 @@ public class OutboundHeadDTO implements Serializable {
 
     public static OutboundBodyPO buildPO(OutboundBodyPO bodyPO, OutboundBodyDTO dto) {
         bodyPO.setMaterialId(dto.getMid());
-        bodyPO.setDemandNum(dto.getOnum());
+        bodyPO.setOutboundNum(dto.getOnum());
         bodyPO.setOutboundTime(dto.getOtime());
         return bodyPO;
     }

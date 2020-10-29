@@ -17,7 +17,6 @@ import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.StorageConstant;
 import com.smartindustry.storage.constant.StorageExceptionEnums;
-import com.smartindustry.storage.dto.MaterialDTO;
 import com.smartindustry.storage.dto.OperateDTO;
 import com.smartindustry.storage.dto.StorageHeadDTO;
 import com.smartindustry.storage.service.IPurchaseStorageService;
@@ -27,7 +26,6 @@ import com.smartindustry.storage.vo.StorageHeadVO;
 import com.smartindustry.storage.vo.StorageRecordVO;
 import com.smartindustry.storage.vo.WarehouseVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,8 +33,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import static java.util.stream.Collectors.toList;
 
 /**
  * @author: jiangzhaojie

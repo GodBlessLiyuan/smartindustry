@@ -1,8 +1,10 @@
-package com.smartindustry.storage.service;
+package com.smartindustry.outbound.service;
+
+
 
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.storage.dto.OperateDTO;
-import com.smartindustry.storage.dto.OutboundHeadDTO;
+import com.smartindustry.outbound.dto.OperateDTO;
+import com.smartindustry.outbound.dto.OutboundHeadDTO;
 
 import java.util.Map;
 

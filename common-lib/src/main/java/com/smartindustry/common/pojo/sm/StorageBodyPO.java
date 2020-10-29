@@ -1,6 +1,7 @@
 package com.smartindustry.common.pojo.sm;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import lombok.Data;
 
@@ -38,7 +39,12 @@ public class StorageBodyPO implements Serializable {
     /**
      * 接受数量
      */
-    private Integer acceptNum;
+    private BigDecimal acceptNum;
+
+    /**
+     * 待入库数量
+     */
+    private BigDecimal pendingNum;
 
     /**
      * 接受日期

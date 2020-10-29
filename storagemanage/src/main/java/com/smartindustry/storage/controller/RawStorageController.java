@@ -24,7 +24,7 @@ import java.util.Map;
  */
 @RequestMapping("storage")
 @RestController
-public class PurchaseStorageController {
+public class RawStorageController {
     @Autowired
     private IPurchaseStorageService purchaseStorageService;
 
