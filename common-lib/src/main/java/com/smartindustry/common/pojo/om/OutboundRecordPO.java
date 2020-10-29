@@ -36,4 +36,15 @@ public class OutboundRecordPO implements Serializable {
     private Date createTime;
 
     private static final long serialVersionUID = 1L;
+
+    public OutboundRecordPO(Long outboundHeadId, Long userId, String operationName) {
+        this.outboundHeadId = outboundHeadId;
+        this.userId = userId;
+        this.createTime = new Date();
+        this.operationName = operationName;
+    }
+
+    public OutboundRecordPO(){
+
+    }
 }

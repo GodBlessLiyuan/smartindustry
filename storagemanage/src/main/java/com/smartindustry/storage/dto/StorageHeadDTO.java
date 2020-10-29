@@ -31,7 +31,7 @@ public class StorageHeadDTO implements Serializable {
      */
     private String extra;
 
-    private List<StorageHeadBodyDTO> body;
+    private List<StorageBodyDTO> body;
 
     /**
      * 标识位：用来标识是确认入库还是暂存， true为确认入库，false为暂存
@@ -39,11 +39,11 @@ public class StorageHeadDTO implements Serializable {
     private Boolean flag;
 
     @Data
-    public static class StorageHeadBodyDTO {
+    public static class StorageBodyDTO {
         /**
          * 表体id
          */
-        private Long sbid;
+        private String sbid;
         /**
          * 物料ID
          */
@@ -79,16 +79,16 @@ public class StorageHeadDTO implements Serializable {
         return po;
     }
 
-    public static List<StorageBodyPO> convert(StorageHeadPO po, List<StorageHeadBodyDTO> dtos) {
+    public static List<StorageBodyPO> convert(StorageHeadPO po, List<StorageBodyDTO> dtos) {
         List<StorageBodyPO> bodyPOs = new ArrayList<>();
-        for (StorageHeadBodyDTO dto : dtos) {
+        for (StorageBodyDTO dto : dtos) {
             bodyPOs.add(createPO(po, dto));
         }
         return bodyPOs;
     }
 
 
-    public static StorageBodyPO createPO(StorageHeadPO headPO,StorageHeadBodyDTO dto) {
+    public static StorageBodyPO createPO(StorageHeadPO headPO,StorageBodyDTO dto) {
         StorageBodyPO po = new StorageBodyPO();
         po.setStorageHeadId(headPO.getStorageHeadId());
         po.setCreateTime(new Date());
@@ -96,7 +96,7 @@ public class StorageHeadDTO implements Serializable {
         return buildPO(po, dto);
     }
 
-    public static StorageBodyPO buildPO(StorageBodyPO bodyPO, StorageHeadBodyDTO dto) {
+    public static StorageBodyPO buildPO(StorageBodyPO bodyPO, StorageBodyDTO dto) {
         bodyPO.setMaterialId(dto.getMid());
         bodyPO.setLocationId(dto.getLid());
         bodyPO.setCarBrand(dto.getCbrand());

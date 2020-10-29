@@ -27,6 +27,10 @@ public class StorageHeadVO implements Serializable {
      */
     private String sno;
     /**
+     * 入库仓库id
+     */
+    private Long wid;
+    /**
      * 入库仓库
      */
     private String wname;
@@ -80,6 +84,10 @@ public class StorageHeadVO implements Serializable {
          */
         private Date atime;
         /**
+         * 储位id
+         */
+        private Long lid;
+        /**
          * 入库储位
          */
         private String lno;
@@ -109,6 +117,7 @@ public class StorageHeadVO implements Serializable {
         vo.setSno(bo.getStorageNo());
         vo.setStatus(bo.getStatus());
         vo.setStime(bo.getStorageTime());
+        vo.setWid(bo.getWarehouseId());
         vo.setWname(bo.getWarehouseName());
         vo.setExtra(bo.getExtra());
         List<StorageBodyVO> vos = new ArrayList<>();
@@ -122,6 +131,7 @@ public class StorageHeadVO implements Serializable {
             bodyVO.setCbrand(bodyBO.getCarBrand());
             bodyVO.setAnum(bodyBO.getAcceptNum());
             bodyVO.setAtime(bodyBO.getAcceptTime());
+            bodyVO.setLid(bodyBO.getLocationId());
             bodyVO.setLno(bodyBO.getLocationNo());
             vos.add(bodyVO);
         }

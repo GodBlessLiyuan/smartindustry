@@ -147,14 +147,14 @@
     )
     values
     <foreach collection="list" separator="," item="po">
-      (#{storageBodyId,jdbcType=BIGINT}, #{storageHeadId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT},
-      #{locationId,jdbcType=BIGINT}, #{carBrand,jdbcType=CHAR}, #{acceptNum,jdbcType=INTEGER},
-      #{acceptTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
+      (#{po.storageBodyId,jdbcType=BIGINT}, #{po.storageHeadId,jdbcType=BIGINT}, #{po.materialId,jdbcType=BIGINT},
+      #{po.locationId,jdbcType=BIGINT}, #{po.carBrand,jdbcType=CHAR}, #{po.acceptNum,jdbcType=INTEGER},
+      #{po.acceptTime,jdbcType=TIMESTAMP}, #{po.createTime,jdbcType=TIMESTAMP}, #{po.dr,jdbcType=TINYINT})
     </foreach>
   </insert>
 
   <update id="batchUpdate" parameterType="java.util.List">
-    update si_print_label
+    update sm_storage_body
     set material_id = case storage_body_id
     <foreach collection="list" item="po">
       when #{po.storageBodyId,jdbcType=BIGINT} then #{po.materialId,jdbcType=BIGINT}
@@ -172,7 +172,7 @@
   </update>
 
   <update id="deleteBatch" parameterType="java.util.List">
-    update si_print_label
+    update sm_storage_body
     set dr = case storage_body_id
     <foreach collection="list" item="sbid">
       when #{sbid,jdbcType=BIGINT} then 2

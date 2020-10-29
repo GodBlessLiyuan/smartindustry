@@ -88,6 +88,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
     protected void configure(HttpSecurity httpSecurity) throws Exception
     {
         httpSecurity
+
                 // CRSF禁用，因为不使用session
                 .csrf().disable()
                 // 认证失败处理类
@@ -97,7 +98,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 // 过滤请求
                 .authorizeRequests()
                 // 对于登录login 验证码captchaImage 允许匿名访问
-//                .antMatchers("/**").anonymous()
+                .antMatchers("/**").anonymous()
                 .antMatchers("/login/login", "/login/getCode").anonymous()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated()
