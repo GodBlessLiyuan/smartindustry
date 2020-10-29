@@ -15,8 +15,8 @@ import java.util.Date;
  * @version: 1.0
  */
 public class OutboundNoUtil {
-    public static final String RECEIPT_HEAD_YP = "PORK";
     public static final String OUTBOUND_HEAD_YP = "GDCH";
+    public static final String OUTBOUND_HEAD_XS = "XSCH";
     private static final int NUM_LEN = 5;
 
     private static NoUtil<StorageHeadPO, Long> storageUtil = new NoUtil<>();
