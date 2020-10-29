@@ -8,8 +8,10 @@ import com.smartindustry.common.mapper.si.MaterialMapper;
 import com.smartindustry.common.mapper.si.WarehouseMapper;
 import com.smartindustry.common.mapper.sm.StorageBodyMapper;
 import com.smartindustry.common.mapper.sm.StorageHeadMapper;
+import com.smartindustry.common.mapper.sm.StorageRecordMapper;
 import com.smartindustry.common.pojo.sm.StorageBodyPO;
 import com.smartindustry.common.pojo.sm.StorageHeadPO;
+import com.smartindustry.common.pojo.sm.StorageRecordPO;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
@@ -27,6 +29,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +54,8 @@ public class PurchaseStorageServiceImpl implements IPurchaseStorageService {
     private WarehouseMapper warehouseMapper;
     @Autowired
     private MaterialMapper materialMapper;
+    @Autowired
+    private StorageRecordMapper storageRecordMapper;
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData){
@@ -69,6 +75,7 @@ public class PurchaseStorageServiceImpl implements IPurchaseStorageService {
         return ResultVO.ok().setData(StorageHeadVO.convertVO(bo));
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO edit(StorageHeadDTO dto){
         if (null == dto.getShid()) {
@@ -77,37 +84,47 @@ public class PurchaseStorageServiceImpl implements IPurchaseStorageService {
             po.setStorageNo(StorageNoUtil.genStorageHeadNo(storageHeadMapper,StorageNoUtil.RECEIPT_HEAD_YP,new Date()));
             if(dto.getFlag()){
                 po.setStatus(StorageConstant.STATUS_STORED);
+                po.setStorageTime(new Date());
             }else {
                 po.setStatus(StorageConstant.STATUS_STOREING);
             }
             storageHeadMapper.insert(po);
-            // 采购入库单表体
-            List<StorageBodyPO> pos = StorageHeadDTO.convert(po,dto.getBody());
-            storageBodyMapper.batchInsert(pos);
+            if(!dto.getBody().isEmpty()){
+                // 采购入库单表体
+                List<StorageBodyPO> pos = StorageHeadDTO.convert(po,dto.getBody());
+                storageBodyMapper.batchInsert(pos);
+            }
+            if(dto.getFlag()){
+                storageRecordMapper.insert(new StorageRecordPO(po.getStorageHeadId(),1L,StorageConstant.OPERATE_NAME_AGREE));
+            }else {
+                storageRecordMapper.insert(new StorageRecordPO(po.getStorageHeadId(),1L,StorageConstant.OPERATE_NAME_INSERT));
+            }
             return ResultVO.ok();
         }
         StorageHeadPO po = storageHeadMapper.selectByPrimaryKey(dto.getShid());
         if (null == po) {
-            // 采购单表体不存在
+            // 采购单表头不存在
             return new ResultVO(StorageExceptionEnums.NO_EXIST.getCode());
         }
         if(dto.getFlag()){
             po.setStatus(StorageConstant.STATUS_STORED);
+            po.setStorageTime(new Date());
         }else {
             po.setStatus(StorageConstant.STATUS_STOREING);
         }
         StorageHeadPO headPO = StorageHeadDTO.buildPO(po,dto);
         storageHeadMapper.updateByPrimaryKeySelective(headPO);
-        // 首先先删除采购入库单所有的表体
-        List<Long> sbids = storageBodyMapper.querySbids(dto.getShid());
-        storageBodyMapper.deleteBatch(sbids);
-        // 得到更新后的表体列表
+        if(!dto.getBody().isEmpty()){
+            // 首先先删除采购入库单所有的表体
+            List<Long> sbids = storageBodyMapper.querySbids(dto.getShid());
+            storageBodyMapper.deleteBatch(sbids);
+            // 得到更新后的表体列表
 //        List<StorageBodyPO> pos = dto.getBody().stream().map(bodyDTO -> StorageHeadDTO.buildPO(
 //                storageBodyMapper.selectByPrimaryKey(bodyDTO.getSbid()),bodyDTO)).collect(toList());
-        // 采购入库单表体
-        List<StorageBodyPO> pos = StorageHeadDTO.convert(po,dto.getBody());
-        storageBodyMapper.batchInsert(pos);
-
+            // 采购入库单表体
+            List<StorageBodyPO> pos = StorageHeadDTO.convert(po,dto.getBody());
+            storageBodyMapper.batchInsert(pos);
+        }
         return ResultVO.ok();
     }
 
@@ -125,8 +142,8 @@ public class PurchaseStorageServiceImpl implements IPurchaseStorageService {
     }
 
     @Override
-    public ResultVO deleteBody(OperateDTO dto){
-        storageBodyMapper.deleteBatch(dto.getSbids());
+    public ResultVO deleteBody(List<Long> sbids){
+        storageBodyMapper.deleteBatch(sbids);
         return ResultVO.ok();
     }
 

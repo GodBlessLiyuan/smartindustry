@@ -21,9 +21,15 @@ public class OutboundHeadPO implements Serializable {
     private String outboundNo;
 
     /**
-     * 生产工单号
+     * 来源单号
      */
-    private String produceNo;
+    private String sourceNo;
+
+    /**
+     * 来源类型 : 1 自己新增-没有生产工单号
+2 浇注形成的出库单，没有混料
+     */
+    private Byte sourceType;
 
     /**
      * 计划出库时间
@@ -37,7 +43,8 @@ public class OutboundHeadPO implements Serializable {
 
     /**
      * 状态 : 1：已出库
-2：待出库
+2：出库中
+3：待出库
      */
     private Byte status;
 

@@ -6,20 +6,20 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * om_outbound_body
+ * om_mix_body
  * @author 
  */
 @Data
-public class OutboundBodyPO implements Serializable {
+public class MixBodyPO implements Serializable {
     /**
-     * 出库单表体id
+     * 混料单表体id
      */
-    private Long outboundBodyId;
+    private Long mixBodyId;
 
     /**
-     * 出库单表头ID
+     * 混料单表头id
      */
-    private Long outboundHeadId;
+    private Long mixHeadId;
 
     /**
      * 物料ID
@@ -27,19 +27,14 @@ public class OutboundBodyPO implements Serializable {
     private Long materialId;
 
     /**
-     * 出库数量
+     * 计划出库数量
      */
-    private BigDecimal demandNum;
+    private BigDecimal planNum;
 
     /**
      * 创建时间
      */
     private Date createTime;
-
-    /**
-     * 出库时间
-     */
-    private Date outboundTime;
 
     /**
      * 是否删除 : 1 未删除

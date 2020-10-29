@@ -4,7 +4,8 @@
   <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.om.OutboundHeadPO">
     <id column="outbound_head_id" jdbcType="BIGINT" property="outboundHeadId" />
     <result column="outbound_no" jdbcType="CHAR" property="outboundNo" />
-    <result column="produce_no" jdbcType="CHAR" property="produceNo" />
+    <result column="source_no" jdbcType="CHAR" property="sourceNo" />
+    <result column="source_type" jdbcType="TINYINT" property="sourceType" />
     <result column="plan_time" jdbcType="TIMESTAMP" property="planTime" />
     <result column="outbound_time" jdbcType="TIMESTAMP" property="outboundTime" />
     <result column="status" jdbcType="TINYINT" property="status" />
@@ -13,8 +14,8 @@
     <result column="dr" jdbcType="TINYINT" property="dr" />
   </resultMap>
   <sql id="Base_Column_List">
-    outbound_head_id, outbound_no, produce_no, plan_time, outbound_time, `status`, extra, 
-    create_time, dr
+    outbound_head_id, outbound_no, source_no, source_type, plan_time, outbound_time, 
+    `status`, extra, create_time, dr
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -26,15 +27,15 @@
     delete from om_outbound_head
     where outbound_head_id = #{outboundHeadId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.smartindustry.common.pojo.om.OutboundHeadPO">
-    insert into om_outbound_head (outbound_head_id, outbound_no, produce_no, 
-      plan_time, outbound_time, `status`, 
-      extra, create_time, dr
-      )
-    values (#{outboundHeadId,jdbcType=BIGINT}, #{outboundNo,jdbcType=CHAR}, #{produceNo,jdbcType=CHAR}, 
-      #{planTime,jdbcType=TIMESTAMP}, #{outboundTime,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT}, 
-      #{extra,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT}
-      )
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.om.OutboundHeadPO" keyProperty="outboundHeadId" useGeneratedKeys="true">
+    insert into om_outbound_head (outbound_head_id, outbound_no, source_no, 
+      source_type, plan_time, outbound_time, 
+      `status`, extra, create_time, 
+      dr)
+    values (#{outboundHeadId,jdbcType=BIGINT}, #{outboundNo,jdbcType=CHAR}, #{sourceNo,jdbcType=CHAR}, 
+      #{sourceType,jdbcType=TINYINT}, #{planTime,jdbcType=TIMESTAMP}, #{outboundTime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=TINYINT}, #{extra,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{dr,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.om.OutboundHeadPO">
     insert into om_outbound_head
@@ -45,8 +46,11 @@
       <if test="outboundNo != null">
         outbound_no,
       </if>
-      <if test="produceNo != null">
-        produce_no,
+      <if test="sourceNo != null">
+        source_no,
+      </if>
+      <if test="sourceType != null">
+        source_type,
       </if>
       <if test="planTime != null">
         plan_time,
@@ -74,8 +78,11 @@
       <if test="outboundNo != null">
         #{outboundNo,jdbcType=CHAR},
       </if>
-      <if test="produceNo != null">
-        #{produceNo,jdbcType=CHAR},
+      <if test="sourceNo != null">
+        #{sourceNo,jdbcType=CHAR},
+      </if>
+      <if test="sourceType != null">
+        #{sourceType,jdbcType=TINYINT},
       </if>
       <if test="planTime != null">
         #{planTime,jdbcType=TIMESTAMP},
@@ -103,8 +110,11 @@
       <if test="outboundNo != null">
         outbound_no = #{outboundNo,jdbcType=CHAR},
       </if>
-      <if test="produceNo != null">
-        produce_no = #{produceNo,jdbcType=CHAR},
+      <if test="sourceNo != null">
+        source_no = #{sourceNo,jdbcType=CHAR},
+      </if>
+      <if test="sourceType != null">
+        source_type = #{sourceType,jdbcType=TINYINT},
       </if>
       <if test="planTime != null">
         plan_time = #{planTime,jdbcType=TIMESTAMP},
@@ -130,7 +140,8 @@
   <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.om.OutboundHeadPO">
     update om_outbound_head
     set outbound_no = #{outboundNo,jdbcType=CHAR},
-      produce_no = #{produceNo,jdbcType=CHAR},
+      source_no = #{sourceNo,jdbcType=CHAR},
+      source_type = #{sourceType,jdbcType=TINYINT},
       plan_time = #{planTime,jdbcType=TIMESTAMP},
       outbound_time = #{outboundTime,jdbcType=TIMESTAMP},
       `status` = #{status,jdbcType=TINYINT},
@@ -139,4 +150,67 @@
       dr = #{dr,jdbcType=TINYINT}
     where outbound_head_id = #{outboundHeadId,jdbcType=BIGINT}
   </update>
+
+
+  <select id="pageQuery" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from om_outbound_head oh
+    where oh.dr = 1
+    <if test="mixno != null and mixno != ''">
+      and oh.source_no = #{mixno,jdbcType=CHAR}
+    </if>
+    <if test="pno != null and pno != ''">
+      and oh.source_no = #{pno,jdbcType=CHAR}
+    </if>
+    <if test="status != null and status != 0">
+      and oh.`status` = #{status,jdbcType=TINYINT}
+    </if>
+    <if test="otime != null and otime != ''">
+      and oh.outbound_time = #{otime,jdbcType=TINYINT}
+    </if>
+    order by oh.create_time desc
+  </select>
+
+  <resultMap id="BOSResultMap" type="com.smartindustry.common.bo.om.OutboundHeadBO" extends="BaseResultMap">
+    <result column="outbound_head_id" jdbcType="BIGINT" property="outboundHeadId"/>
+    <result column="mix_head_id" jdbcType="BIGINT" property="mixHeadId"/>
+    <result column="outbound_no" jdbcType="CHAR" property="outboundNo"/>
+    <result column="mix_head_id" jdbcType="BIGINT" property="mixHeadId"/>
+    <result column="mix_no" jdbcType="CHAR" property="mixNo"/>
+    <result column="plan_time" jdbcType="DATE" property="planTime"/>
+    <result column="extra" jdbcType="CHAR" property="extra"/>
+    <collection property="bos" ofType="com.smartindustry.common.bo.om.OutboundBodyBO">
+      <id column="outbound_body_id" jdbcType="BIGINT" property="outboundBodyId"/>
+      <result column="material_id" jdbcType="BIGINT" property="materialId"/>
+      <result column="material_no" jdbcType="CHAR" property="materialNo"/>
+      <result column="material_name" jdbcType="CHAR" property="materialName"/>
+      <result column="material_model" jdbcType="CHAR" property="materialModel"/>
+      <result column="plan_num" jdbcType="DECIMAL" property="planNum"/>
+      <result column="demand_num" jdbcType="DECIMAL" property="demandNum"/>
+      <result column="outbound_time" jdbcType="DATE" property="outboundTime"/>
+    </collection>
+  </resultMap>
+  <sql id="BOS_Column_List">
+      oh.outbound_head_id, oh.outbound_no, mh.mix_head_id, mh.mix_no, mh.plan_time, oh.extra, ob.outbound_body_id,
+      ob.material_id, m.material_no, m.material_name, m.material_model, mb.plan_num, ob.demand_num, ob.outbound_time
+  </sql>
+  <select id="queryByOhid" parameterType="java.lang.Long" resultMap="BOSResultMap">
+    select
+    <include refid="BOS_Column_List" />
+    from om_outbound_head oh
+    left join om_outbound_body ob on oh.outbound_head_id = ob.outbound_head_id
+    left join om_mix_head mh on oh.source_no = mh.mix_no
+    left join om_mix_body mb on mh.mix_head_id = mb.mix_head_id
+    left join si_material m on ob.material_id = m.material_id
+    where oh.dr = 1 and ob.material_id = mb.material_id and oh.outbound_head_id = #{ohid,jdbcType=BIGINT}
+  </select>
+
+  <select id="queryNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from om_outbound_head
+    where outbound_no like #{no,jdbcType=CHAR} '%'
+    order by outbound_head_id desc limit 1
+  </select>
 </mapper>

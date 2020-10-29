@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.om.MixHeadMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.om.MixHeadPO">
+    <id column="mix_head_id" jdbcType="BIGINT" property="mixHeadId" />
+    <result column="mix_no" jdbcType="CHAR" property="mixNo" />
+    <result column="plan_time" jdbcType="DATE" property="planTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="dr" jdbcType="TINYINT" property="dr" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    mix_head_id, mix_no, plan_time, create_time, dr
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from om_mix_head
+    where mix_head_id = #{mixHeadId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from om_mix_head
+    where mix_head_id = #{mixHeadId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.om.MixHeadPO">
+    insert into om_mix_head (mix_head_id, mix_no, plan_time, 
+      create_time, dr)
+    values (#{mixHeadId,jdbcType=BIGINT}, #{mixNo,jdbcType=CHAR}, #{planTime,jdbcType=DATE}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.om.MixHeadPO">
+    insert into om_mix_head
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="mixHeadId != null">
+        mix_head_id,
+      </if>
+      <if test="mixNo != null">
+        mix_no,
+      </if>
+      <if test="planTime != null">
+        plan_time,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="dr != null">
+        dr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="mixHeadId != null">
+        #{mixHeadId,jdbcType=BIGINT},
+      </if>
+      <if test="mixNo != null">
+        #{mixNo,jdbcType=CHAR},
+      </if>
+      <if test="planTime != null">
+        #{planTime,jdbcType=DATE},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dr != null">
+        #{dr,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.om.MixHeadPO">
+    update om_mix_head
+    <set>
+      <if test="mixNo != null">
+        mix_no = #{mixNo,jdbcType=CHAR},
+      </if>
+      <if test="planTime != null">
+        plan_time = #{planTime,jdbcType=DATE},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dr != null">
+        dr = #{dr,jdbcType=TINYINT},
+      </if>
+    </set>
+    where mix_head_id = #{mixHeadId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.om.MixHeadPO">
+    update om_mix_head
+    set mix_no = #{mixNo,jdbcType=CHAR},
+      plan_time = #{planTime,jdbcType=DATE},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      dr = #{dr,jdbcType=TINYINT}
+    where mix_head_id = #{mixHeadId,jdbcType=BIGINT}
+  </update>
+
+  <resultMap id="BOSResultMap" type="com.smartindustry.common.bo.om.MixHeadBO" extends="BaseResultMap">
+    <result column="mix_head_id" jdbcType="BIGINT" property="mixHeadId"/>
+    <result column="mix_no" jdbcType="CHAR" property="mixNo"/>
+    <result column="plan_time" jdbcType="DATE" property="planTime"/>
+    <collection property="bos" ofType="com.smartindustry.common.bo.om.MixBodyBO">
+      <id column="mix_body_id" jdbcType="BIGINT" property="mixBodyId"/>
+      <result column="material_id" jdbcType="BIGINT" property="materialId"/>
+      <result column="material_no" jdbcType="CHAR" property="materialNo"/>
+      <result column="material_name" jdbcType="CHAR" property="materialName"/>
+      <result column="material_model" jdbcType="CHAR" property="materialModel"/>
+      <result column="plan_num" jdbcType="DECIMAL" property="planNum"/>
+    </collection>
+  </resultMap>
+  <sql id="BOS_Column_List">
+     mh.mix_head_id, mh.mix_no,mh.plan_time, mb.mix_body_id, mb.material_id, mb.plan_num, m.material_no, m.material_name, m.material_model
+  </sql>
+  <select id="queryMix" resultMap="BOSResultMap">
+    select
+    <include refid="BOS_Column_List" />
+    from om_mix_head mh
+    left join om_mix_body mb on mh.mix_head_id = mb.mix_head_id
+    left join si_material m on mb.material_id = m.material_id
+    where mh.dr = 1 and date(mh.create_time) = curdate();
+  </select>
+
+</mapper>

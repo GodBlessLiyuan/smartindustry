@@ -5,6 +5,7 @@ import com.smartindustry.storage.dto.MaterialDTO;
 import com.smartindustry.storage.dto.OperateDTO;
 import com.smartindustry.storage.dto.StorageHeadDTO;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -43,10 +44,10 @@ public interface IPurchaseStorageService {
 
     /**
      * 采购单表体的批量删除
-     * @param dto
+     * @param sbids
      * @return
      */
-    ResultVO deleteBody(OperateDTO dto);
+    ResultVO deleteBody(List<Long> sbids);
 
     /**
      * 查询采购拣货单的信息通过shid
