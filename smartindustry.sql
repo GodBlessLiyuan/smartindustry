@@ -279,7 +279,7 @@ CREATE TABLE om_outbound_body
 	outbound_head_id bigint unsigned NOT NULL COMMENT '出库单表头ID',
 	material_id bigint unsigned NOT NULL COMMENT '物料ID',
 	outbound_num decimal(10,2) COMMENT '出库数量',
-	outing_num int COMMENT '待出库数量',
+	outing_num decimal(10,2) COMMENT '待出库数量',
 	create_time datetime COMMENT '创建时间',
 	outbound_time datetime COMMENT '出库时间',
 	-- 1 未删除
@@ -341,9 +341,12 @@ CREATE TABLE si_forklift
 	forklift_model char(255) COMMENT '叉车型号',
 	forklift_brand char(255) COMMENT '品牌',
 	supplier_id bigint unsigned NOT NULL COMMENT '供应商ID',
-	rfid boolean COMMENT '是否携带RFID设备',
-	iom boolean COMMENT '是否携带工业一体机',
-	work_area char(255) COMMENT '作业区域',
+	imei_no char(255) COMMENT '工业一体机号',
+	work_area tinyint COMMENT '作业区域',
+	-- 1 忙碌中
+	-- 2 空闲中
+	status tinyint COMMENT '当前状态 : 1 忙碌中
+2 空闲中',
 	-- 1 未删除
 	-- 2 已删除
 	dr tinyint COMMENT '是否删除 : 1 未删除
@@ -518,8 +521,8 @@ CREATE TABLE sm_storage_body
 	material_id bigint unsigned COMMENT '物料ID',
 	location_id bigint unsigned COMMENT '库位ID',
 	car_brand  char(255) COMMENT '车牌信息',
-	accept_num int COMMENT '接受数量',
-	pending_num int COMMENT '待入库数量',
+	accept_num decimal(10,2) COMMENT '接受数量',
+	pending_num decimal(10,2) COMMENT '待入库数量',
 	accept_time datetime COMMENT '接受日期',
 	create_time datetime COMMENT '创建时间',
 	-- 1：未删除

@@ -1,11 +1,12 @@
-package com.smartindustry.storage.vo;
+package com.smartindustry.outbound.vo;
+
+
 
 import com.smartindustry.common.bo.om.OutboundBodyBO;
 import com.smartindustry.common.bo.om.OutboundHeadBO;
 import com.smartindustry.common.pojo.om.OutboundHeadPO;
-import com.smartindustry.storage.constant.StorageConstant;
+import com.smartindustry.outbound.constant.OutboundConstant;
 import lombok.Data;
-import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -103,7 +104,7 @@ public class OutboundHeadVO implements Serializable {
         OutboundHeadVO vo = new OutboundHeadVO();
         vo.setOhid(po.getOutboundHeadId());
         vo.setOno(po.getOutboundNo());
-        if(po.getSourceType().equals(StorageConstant.TYPE_INSERT_BY_OURS)){
+        if(po.getSourceType().equals(OutboundConstant.TYPE_INSERT_BY_OURS)){
             vo.setMixno(po.getSourceNo());
         }else {
             vo.setPno(po.getSourceNo());
@@ -140,7 +141,7 @@ public class OutboundHeadVO implements Serializable {
             bodyVO.setMname(bodyBO.getMaterialName());
             bodyVO.setMmodel(bodyBO.getMaterialModel());
             bodyVO.setPnum(bodyBO.getPlanNum());
-            bodyVO.setOnum(bodyBO.getDemandNum());
+            bodyVO.setOnum(bodyBO.getOutboundNum());
             bodyVO.setOtime(bodyBO.getOutboundTime());
             vos.add(bodyVO);
         }

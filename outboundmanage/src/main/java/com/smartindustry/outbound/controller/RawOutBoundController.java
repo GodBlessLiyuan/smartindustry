@@ -1,14 +1,16 @@
-package com.smartindustry.storage.controller;
+package com.smartindustry.outbound.controller;
+
 
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.storage.dto.OperateDTO;
-import com.smartindustry.storage.dto.OutboundHeadDTO;
-import com.smartindustry.storage.service.IOutBoundService;
+import com.smartindustry.outbound.dto.OperateDTO;
+import com.smartindustry.outbound.dto.OutboundHeadDTO;
+import com.smartindustry.outbound.service.IOutBoundService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 
 import java.util.Map;
 
@@ -20,7 +22,7 @@ import java.util.Map;
  */
 @RequestMapping("outbound")
 @RestController
-public class OutBoundController {
+public class RawOutBoundController {
     @Autowired
     private IOutBoundService outBoundService;
 

@@ -1,8 +1,10 @@
-package com.smartindustry.storage.service.impl;
+package com.smartindustry.outbound.service.impl;
+
 
 import com.github.pagehelper.Page;
 import com.smartindustry.common.bo.om.MixHeadBO;
 import com.smartindustry.common.bo.om.OutboundHeadBO;
+import com.smartindustry.common.constant.ExceptionEnums;
 import com.smartindustry.common.mapper.om.MixHeadMapper;
 import com.smartindustry.common.mapper.om.OutboundBodyMapper;
 import com.smartindustry.common.mapper.om.OutboundHeadMapper;
@@ -13,15 +15,14 @@ import com.smartindustry.common.pojo.om.OutboundRecordPO;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.storage.constant.StorageConstant;
-import com.smartindustry.storage.constant.StorageExceptionEnums;
-import com.smartindustry.storage.dto.OperateDTO;
-import com.smartindustry.storage.dto.OutboundHeadDTO;
-import com.smartindustry.storage.service.IOutBoundService;
-import com.smartindustry.storage.util.StorageNoUtil;
-import com.smartindustry.storage.vo.MixHeadVO;
-import com.smartindustry.storage.vo.OutboundHeadVO;
-import com.smartindustry.storage.vo.OutboundRecordVO;
+import com.smartindustry.outbound.constant.OutboundConstant;
+import com.smartindustry.outbound.dto.OperateDTO;
+import com.smartindustry.outbound.dto.OutboundHeadDTO;
+import com.smartindustry.outbound.service.IOutBoundService;
+import com.smartindustry.outbound.util.OutboundNoUtil;
+import com.smartindustry.outbound.vo.MixHeadVO;
+import com.smartindustry.outbound.vo.OutboundHeadVO;
+import com.smartindustry.outbound.vo.OutboundRecordVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -71,12 +72,12 @@ public class OutBoundServiceImpl implements IOutBoundService {
         // 新增
         if (null == dto.getOhid()) {
             OutboundHeadPO po = OutboundHeadDTO.createPO(dto);
-            po.setOutboundNo(StorageNoUtil.genOutboundHeadNo(outboundHeadMapper,StorageNoUtil.OUTBOUND_HEAD_YP,new Date()));
+            po.setOutboundNo(OutboundNoUtil.genOutboundHeadNo(outboundHeadMapper,OutboundNoUtil.OUTBOUND_HEAD_YP,new Date()));
             if(dto.getFlag()){
-                po.setStatus(StorageConstant.STATUS_OUTED);
+                po.setStatus(OutboundConstant.STATUS_OUTED);
                 po.setOutboundTime(new Date());
             }else {
-                po.setStatus(StorageConstant.STATUS_OUTING);
+                po.setStatus(OutboundConstant.STATUS_OUTING);
             }
             outboundHeadMapper.insert(po);
             if(!dto.getBody().isEmpty()){
@@ -85,22 +86,22 @@ public class OutBoundServiceImpl implements IOutBoundService {
                 outboundBodyMapper.batchInsert(pos);
             }
             if(dto.getFlag()){
-                outboundRecordMapper.insert(new OutboundRecordPO(po.getOutboundHeadId(),1L,StorageConstant.OPERATE_NAME_AGREE_OUT));
+                outboundRecordMapper.insert(new OutboundRecordPO(po.getOutboundHeadId(),1L,OutboundConstant.OPERATE_NAME_AGREE_OUT));
             }else {
-                outboundRecordMapper.insert(new OutboundRecordPO(po.getOutboundHeadId(),1L,StorageConstant.OPERATE_NAME_INSERT_OUT));
+                outboundRecordMapper.insert(new OutboundRecordPO(po.getOutboundHeadId(),1L,OutboundConstant.OPERATE_NAME_INSERT_OUT));
             }
             return ResultVO.ok();
         }
         OutboundHeadPO po = outboundHeadMapper.selectByPrimaryKey(dto.getOhid());
         if (null == po) {
             // 采购单表体不存在
-            return new ResultVO(StorageExceptionEnums.NO_EXIST.getCode());
+            return new ResultVO(ExceptionEnums.NO_EXIST.getCode());
         }
         if(dto.getFlag()){
-            po.setStatus(StorageConstant.STATUS_OUTED);
+            po.setStatus(OutboundConstant.STATUS_OUTED);
             po.setOutboundTime(new Date());
         }else {
-            po.setStatus(StorageConstant.STATUS_OUTING);
+            po.setStatus(OutboundConstant.STATUS_OUTING);
         }
         OutboundHeadPO headPO = OutboundHeadDTO.buildPO(po,dto);
         outboundHeadMapper.updateByPrimaryKeySelective(headPO);
@@ -117,7 +118,7 @@ public class OutBoundServiceImpl implements IOutBoundService {
         OutboundHeadBO bo = outboundHeadMapper.queryByOhid(dto.getOhid());
         if(null == bo){
             // 出库单表体不存在
-            return new ResultVO(StorageExceptionEnums.NO_EXIST.getCode());
+            return new ResultVO(ExceptionEnums.NO_EXIST.getCode());
         }
         return ResultVO.ok().setData(OutboundHeadVO.convert(bo));
     }

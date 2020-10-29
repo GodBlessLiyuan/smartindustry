@@ -7,14 +7,15 @@
     <result column="material_id" jdbcType="BIGINT" property="materialId" />
     <result column="location_id" jdbcType="BIGINT" property="locationId" />
     <result column="car_brand" jdbcType="CHAR" property="carBrand" />
-    <result column="accept_num" jdbcType="INTEGER" property="acceptNum" />
+    <result column="accept_num" jdbcType="DECIMAL" property="acceptNum" />
+    <result column="pending_num" jdbcType="DECIMAL" property="pendingNum" />
     <result column="accept_time" jdbcType="TIMESTAMP" property="acceptTime" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="dr" jdbcType="TINYINT" property="dr" />
   </resultMap>
   <sql id="Base_Column_List">
     storage_body_id, storage_head_id, material_id, location_id, car_brand, accept_num, 
-    accept_time, create_time, dr
+    pending_num, accept_time, create_time, dr
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -29,12 +30,12 @@
   <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.StorageBodyPO">
     insert into sm_storage_body (storage_body_id, storage_head_id, material_id, 
       location_id, car_brand, accept_num, 
-      accept_time, create_time, dr
-      )
+      pending_num, accept_time, create_time, 
+      dr)
     values (#{storageBodyId,jdbcType=BIGINT}, #{storageHeadId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT}, 
-      #{locationId,jdbcType=BIGINT}, #{carBrand,jdbcType=CHAR}, #{acceptNum,jdbcType=INTEGER}, 
-      #{acceptTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT}
-      )
+      #{locationId,jdbcType=BIGINT}, #{carBrand,jdbcType=CHAR}, #{acceptNum,jdbcType=DECIMAL}, 
+      #{pendingNum,jdbcType=DECIMAL}, #{acceptTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{dr,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.sm.StorageBodyPO">
     insert into sm_storage_body
@@ -56,6 +57,9 @@
       </if>
       <if test="acceptNum != null">
         accept_num,
+      </if>
+      <if test="pendingNum != null">
+        pending_num,
       </if>
       <if test="acceptTime != null">
         accept_time,
@@ -84,7 +88,10 @@
         #{carBrand,jdbcType=CHAR},
       </if>
       <if test="acceptNum != null">
-        #{acceptNum,jdbcType=INTEGER},
+        #{acceptNum,jdbcType=DECIMAL},
+      </if>
+      <if test="pendingNum != null">
+        #{pendingNum,jdbcType=DECIMAL},
       </if>
       <if test="acceptTime != null">
         #{acceptTime,jdbcType=TIMESTAMP},
@@ -113,7 +120,10 @@
         car_brand = #{carBrand,jdbcType=CHAR},
       </if>
       <if test="acceptNum != null">
-        accept_num = #{acceptNum,jdbcType=INTEGER},
+        accept_num = #{acceptNum,jdbcType=DECIMAL},
+      </if>
+      <if test="pendingNum != null">
+        pending_num = #{pendingNum,jdbcType=DECIMAL},
       </if>
       <if test="acceptTime != null">
         accept_time = #{acceptTime,jdbcType=TIMESTAMP},
@@ -133,7 +143,8 @@
       material_id = #{materialId,jdbcType=BIGINT},
       location_id = #{locationId,jdbcType=BIGINT},
       car_brand = #{carBrand,jdbcType=CHAR},
-      accept_num = #{acceptNum,jdbcType=INTEGER},
+      accept_num = #{acceptNum,jdbcType=DECIMAL},
+      pending_num = #{pendingNum,jdbcType=DECIMAL},
       accept_time = #{acceptTime,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       dr = #{dr,jdbcType=TINYINT}
@@ -143,13 +154,15 @@
   <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="storageBodyId">
     insert into sm_storage_body (storage_body_id, storage_head_id, material_id,
     location_id, car_brand, accept_num,
-    accept_time, create_time, dr
+    pending_num, accept_time, create_time,
+    dr
     )
     values
     <foreach collection="list" separator="," item="po">
-      (#{po.storageBodyId,jdbcType=BIGINT}, #{po.storageHeadId,jdbcType=BIGINT}, #{po.materialId,jdbcType=BIGINT},
-      #{po.locationId,jdbcType=BIGINT}, #{po.carBrand,jdbcType=CHAR}, #{po.acceptNum,jdbcType=INTEGER},
-      #{po.acceptTime,jdbcType=TIMESTAMP}, #{po.createTime,jdbcType=TIMESTAMP}, #{po.dr,jdbcType=TINYINT})
+      (#{storageBodyId,jdbcType=BIGINT}, #{storageHeadId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT},
+      #{locationId,jdbcType=BIGINT}, #{carBrand,jdbcType=CHAR}, #{acceptNum,jdbcType=DECIMAL},
+      #{pendingNum,jdbcType=DECIMAL}, #{acceptTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP},
+      #{dr,jdbcType=TINYINT})
     </foreach>
   </insert>
 
