@@ -127,5 +127,4 @@ public class OutBoundServiceImpl implements IOutBoundService {
         List<OutboundRecordPO> pos = outboundRecordMapper.queryByOhid(dto.getOhid());
         return ResultVO.ok().setData(OutboundRecordVO.convert(pos));
     }
-
 }
