@@ -90,4 +90,11 @@
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where record_id = #{recordId,jdbcType=BIGINT}
   </update>
+
+  <select id="queryByShid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sm_storage_record
+    where storage_head_id = #{shid,jdbcType=BIGINT}
+  </select>
 </mapper>

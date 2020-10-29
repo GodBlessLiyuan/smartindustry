@@ -71,5 +71,10 @@ public class PurchaseStorageController {
     public ResultVO deleteBody(@RequestBody List<Long> sbids){
         return purchaseStorageService.deleteBody(sbids);
     }
+
+    @PostMapping("queryStorageRecord")
+    public ResultVO queryOutboundRecord(@RequestBody OperateDTO dto) {
+        return purchaseStorageService.queryStorageRecord(dto);
+    }
     
 }

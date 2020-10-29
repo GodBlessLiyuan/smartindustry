@@ -24,6 +24,7 @@ import com.smartindustry.storage.service.IPurchaseStorageService;
 import com.smartindustry.storage.util.StorageNoUtil;
 import com.smartindustry.storage.vo.MaterialVO;
 import com.smartindustry.storage.vo.StorageHeadVO;
+import com.smartindustry.storage.vo.StorageRecordVO;
 import com.smartindustry.storage.vo.WarehouseVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
@@ -145,6 +146,12 @@ public class PurchaseStorageServiceImpl implements IPurchaseStorageService {
     public ResultVO deleteBody(List<Long> sbids){
         storageBodyMapper.deleteBatch(sbids);
         return ResultVO.ok();
+    }
+
+    @Override
+    public ResultVO queryStorageRecord(OperateDTO dto){
+        List<StorageRecordPO> pos = storageRecordMapper.queryByShid(dto.getOhid());
+        return ResultVO.ok().setData(StorageRecordVO.convert(pos));
     }
 
 }
