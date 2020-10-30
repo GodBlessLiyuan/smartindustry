@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
  * @version: 1.0
  */
 @RestController
-@RequestMapping("pda-outbound")
+@RequestMapping("outbound")
 public class FinishOutboundController {
     @Autowired
     private IFinishOutboundService finishOutboundService;
