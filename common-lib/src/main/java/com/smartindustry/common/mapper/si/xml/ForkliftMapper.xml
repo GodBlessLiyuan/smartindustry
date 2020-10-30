@@ -1,142 +1,148 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.smartindustry.common.mapper.si.ForkliftMapper">
-  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.ForkliftPO">
-    <id column="forklift_id" jdbcType="BIGINT" property="forkliftId" />
-    <result column="forklift_no" jdbcType="CHAR" property="forkliftNo" />
-    <result column="forklift_model" jdbcType="CHAR" property="forkliftModel" />
-    <result column="forklift_brand" jdbcType="CHAR" property="forkliftBrand" />
-    <result column="supplier_id" jdbcType="BIGINT" property="supplierId" />
-    <result column="imei_no" jdbcType="CHAR" property="imeiNo" />
-    <result column="work_area" jdbcType="TINYINT" property="workArea" />
-    <result column="status" jdbcType="TINYINT" property="status" />
-    <result column="dr" jdbcType="TINYINT" property="dr" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    forklift_id, forklift_no, forklift_model, forklift_brand, supplier_id, imei_no, work_area, 
+    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.ForkliftPO">
+        <id column="forklift_id" jdbcType="BIGINT" property="forkliftId"/>
+        <result column="forklift_no" jdbcType="CHAR" property="forkliftNo"/>
+        <result column="forklift_model" jdbcType="CHAR" property="forkliftModel"/>
+        <result column="forklift_brand" jdbcType="CHAR" property="forkliftBrand"/>
+        <result column="supplier_id" jdbcType="BIGINT" property="supplierId"/>
+        <result column="imei_no" jdbcType="CHAR" property="imeiNo"/>
+        <result column="work_area" jdbcType="TINYINT" property="workArea"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="dr" jdbcType="TINYINT" property="dr"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        forklift_id, forklift_no, forklift_model, forklift_brand, supplier_id, imei_no, work_area,
     `status`, dr
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from si_forklift
-    where forklift_id = #{forkliftId,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from si_forklift
-    where forklift_id = #{forkliftId,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.smartindustry.common.pojo.si.ForkliftPO">
-    insert into si_forklift (forklift_id, forklift_no, forklift_model, 
-      forklift_brand, supplier_id, imei_no, 
-      work_area, `status`, dr
-      )
-    values (#{forkliftId,jdbcType=BIGINT}, #{forkliftNo,jdbcType=CHAR}, #{forkliftModel,jdbcType=CHAR}, 
-      #{forkliftBrand,jdbcType=CHAR}, #{supplierId,jdbcType=BIGINT}, #{imeiNo,jdbcType=CHAR}, 
-      #{workArea,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{dr,jdbcType=TINYINT}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.ForkliftPO">
-    insert into si_forklift
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="forkliftId != null">
-        forklift_id,
-      </if>
-      <if test="forkliftNo != null">
-        forklift_no,
-      </if>
-      <if test="forkliftModel != null">
-        forklift_model,
-      </if>
-      <if test="forkliftBrand != null">
-        forklift_brand,
-      </if>
-      <if test="supplierId != null">
-        supplier_id,
-      </if>
-      <if test="imeiNo != null">
-        imei_no,
-      </if>
-      <if test="workArea != null">
-        work_area,
-      </if>
-      <if test="status != null">
-        `status`,
-      </if>
-      <if test="dr != null">
-        dr,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="forkliftId != null">
-        #{forkliftId,jdbcType=BIGINT},
-      </if>
-      <if test="forkliftNo != null">
-        #{forkliftNo,jdbcType=CHAR},
-      </if>
-      <if test="forkliftModel != null">
-        #{forkliftModel,jdbcType=CHAR},
-      </if>
-      <if test="forkliftBrand != null">
-        #{forkliftBrand,jdbcType=CHAR},
-      </if>
-      <if test="supplierId != null">
-        #{supplierId,jdbcType=BIGINT},
-      </if>
-      <if test="imeiNo != null">
-        #{imeiNo,jdbcType=CHAR},
-      </if>
-      <if test="workArea != null">
-        #{workArea,jdbcType=TINYINT},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=TINYINT},
-      </if>
-      <if test="dr != null">
-        #{dr,jdbcType=TINYINT},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.si.ForkliftPO">
-    update si_forklift
-    <set>
-      <if test="forkliftNo != null">
-        forklift_no = #{forkliftNo,jdbcType=CHAR},
-      </if>
-      <if test="forkliftModel != null">
-        forklift_model = #{forkliftModel,jdbcType=CHAR},
-      </if>
-      <if test="forkliftBrand != null">
-        forklift_brand = #{forkliftBrand,jdbcType=CHAR},
-      </if>
-      <if test="supplierId != null">
-        supplier_id = #{supplierId,jdbcType=BIGINT},
-      </if>
-      <if test="imeiNo != null">
-        imei_no = #{imeiNo,jdbcType=CHAR},
-      </if>
-      <if test="workArea != null">
-        work_area = #{workArea,jdbcType=TINYINT},
-      </if>
-      <if test="status != null">
-        `status` = #{status,jdbcType=TINYINT},
-      </if>
-      <if test="dr != null">
-        dr = #{dr,jdbcType=TINYINT},
-      </if>
-    </set>
-    where forklift_id = #{forkliftId,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.ForkliftPO">
-    update si_forklift
-    set forklift_no = #{forkliftNo,jdbcType=CHAR},
-      forklift_model = #{forkliftModel,jdbcType=CHAR},
-      forklift_brand = #{forkliftBrand,jdbcType=CHAR},
-      supplier_id = #{supplierId,jdbcType=BIGINT},
-      imei_no = #{imeiNo,jdbcType=CHAR},
-      work_area = #{workArea,jdbcType=TINYINT},
-      `status` = #{status,jdbcType=TINYINT},
-      dr = #{dr,jdbcType=TINYINT}
-    where forklift_id = #{forkliftId,jdbcType=BIGINT}
-  </update>
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_forklift
+        where forklift_id = #{forkliftId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from si_forklift
+        where forklift_id = #{forkliftId,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.si.ForkliftPO">
+        insert into si_forklift (forklift_id, forklift_no, forklift_model,
+                                 forklift_brand, supplier_id, imei_no,
+                                 work_area, `status`, dr)
+        values (#{forkliftId,jdbcType=BIGINT}, #{forkliftNo,jdbcType=CHAR}, #{forkliftModel,jdbcType=CHAR},
+                #{forkliftBrand,jdbcType=CHAR}, #{supplierId,jdbcType=BIGINT}, #{imeiNo,jdbcType=CHAR},
+                #{workArea,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{dr,jdbcType=TINYINT})
+    </insert>
+    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.ForkliftPO">
+        insert into si_forklift
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="forkliftId != null">
+                forklift_id,
+            </if>
+            <if test="forkliftNo != null">
+                forklift_no,
+            </if>
+            <if test="forkliftModel != null">
+                forklift_model,
+            </if>
+            <if test="forkliftBrand != null">
+                forklift_brand,
+            </if>
+            <if test="supplierId != null">
+                supplier_id,
+            </if>
+            <if test="imeiNo != null">
+                imei_no,
+            </if>
+            <if test="workArea != null">
+                work_area,
+            </if>
+            <if test="status != null">
+                `status`,
+            </if>
+            <if test="dr != null">
+                dr,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="forkliftId != null">
+                #{forkliftId,jdbcType=BIGINT},
+            </if>
+            <if test="forkliftNo != null">
+                #{forkliftNo,jdbcType=CHAR},
+            </if>
+            <if test="forkliftModel != null">
+                #{forkliftModel,jdbcType=CHAR},
+            </if>
+            <if test="forkliftBrand != null">
+                #{forkliftBrand,jdbcType=CHAR},
+            </if>
+            <if test="supplierId != null">
+                #{supplierId,jdbcType=BIGINT},
+            </if>
+            <if test="imeiNo != null">
+                #{imeiNo,jdbcType=CHAR},
+            </if>
+            <if test="workArea != null">
+                #{workArea,jdbcType=TINYINT},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="dr != null">
+                #{dr,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.si.ForkliftPO">
+        update si_forklift
+        <set>
+            <if test="forkliftNo != null">
+                forklift_no = #{forkliftNo,jdbcType=CHAR},
+            </if>
+            <if test="forkliftModel != null">
+                forklift_model = #{forkliftModel,jdbcType=CHAR},
+            </if>
+            <if test="forkliftBrand != null">
+                forklift_brand = #{forkliftBrand,jdbcType=CHAR},
+            </if>
+            <if test="supplierId != null">
+                supplier_id = #{supplierId,jdbcType=BIGINT},
+            </if>
+            <if test="imeiNo != null">
+                imei_no = #{imeiNo,jdbcType=CHAR},
+            </if>
+            <if test="workArea != null">
+                work_area = #{workArea,jdbcType=TINYINT},
+            </if>
+            <if test="status != null">
+                `status` = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="dr != null">
+                dr = #{dr,jdbcType=TINYINT},
+            </if>
+        </set>
+        where forklift_id = #{forkliftId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.ForkliftPO">
+        update si_forklift
+        set forklift_no    = #{forkliftNo,jdbcType=CHAR},
+            forklift_model = #{forkliftModel,jdbcType=CHAR},
+            forklift_brand = #{forkliftBrand,jdbcType=CHAR},
+            supplier_id    = #{supplierId,jdbcType=BIGINT},
+            imei_no        = #{imeiNo,jdbcType=CHAR},
+            work_area      = #{workArea,jdbcType=TINYINT},
+            `status`       = #{status,jdbcType=TINYINT},
+            dr             = #{dr,jdbcType=TINYINT}
+        where forklift_id = #{forkliftId,jdbcType=BIGINT}
+    </update>
+
+    <select id="queryByImei" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_forklift
+        where imei_no = #{imeiNo,jdbcType=CHAR} and dr = 1 limit 1
+    </select>
 </mapper>

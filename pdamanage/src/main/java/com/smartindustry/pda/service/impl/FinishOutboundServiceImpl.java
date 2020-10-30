@@ -2,14 +2,18 @@ package com.smartindustry.pda.service.impl;
 
 import com.smartindustry.common.mapper.om.OutboundBodyMapper;
 import com.smartindustry.common.mapper.om.OutboundHeadMapper;
+import com.smartindustry.common.mapper.si.ForkliftMapper;
 import com.smartindustry.common.pojo.om.OutboundBodyPO;
 import com.smartindustry.common.pojo.om.OutboundHeadPO;
+import com.smartindustry.common.pojo.si.ForkliftPO;
 import com.smartindustry.common.util.DateUtil;
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.pda.FinishOutboundDTO;
 import com.smartindustry.pda.service.IFinishOutboundService;
 import com.smartindustry.pda.util.OutboundNoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -26,6 +30,8 @@ public class FinishOutboundServiceImpl implements IFinishOutboundService {
     private OutboundHeadMapper outboundHeadMapper;
     @Autowired
     private OutboundBodyMapper outboundBodyMapper;
+    @Autowired
+    private ForkliftMapper forkliftMapper;
 
     /**
      * ERP 生成 出库单
@@ -60,5 +66,19 @@ public class FinishOutboundServiceImpl implements IFinishOutboundService {
         outboundBodyMapper.insert(bodyPO2);
 
         return ResultVO.ok();
+    }
+
+    @Override
+    public ResultVO online(FinishOutboundDTO dto) {
+        if (StringUtils.isEmpty(dto.getImei())) {
+            return new ResultVO(1001);
+        }
+
+        ForkliftPO forkliftPO = forkliftMapper.queryByImei(dto.getImei());
+        if (null == forkliftPO) {
+            return new ResultVO(1002);
+        }
+
+        return ResultVO.ok().setData(forkliftPO.getForkliftNo());
     }
 }

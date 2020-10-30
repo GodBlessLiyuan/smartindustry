@@ -1,6 +1,7 @@
 package com.smartindustry.pda.service;
 
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.pda.FinishOutboundDTO;
 
 /**
  * @author: xiahui
@@ -10,4 +11,6 @@ import com.smartindustry.common.vo.ResultVO;
  */
 public interface IFinishOutboundService {
     ResultVO erp();
+
+    ResultVO online(FinishOutboundDTO dto);
 }

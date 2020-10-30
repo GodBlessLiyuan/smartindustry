@@ -18,4 +18,11 @@ public interface ForkliftMapper extends BaseMapper<ForkliftPO, Long> {
      * @return
      */
     List<ForkliftPO> pageQuery(Map<String, Object> reqData);
+
+    /**
+     * 根据
+     * @param imei
+     * @return
+     */
+    ForkliftPO queryByImei(String imei);
 }
