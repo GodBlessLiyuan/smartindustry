@@ -1,6 +1,7 @@
 package com.smartindustry.storage.controller;
 
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.storage.dto.ForkLiftDTO;
 import com.smartindustry.storage.service.IForkLiftService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,5 +31,15 @@ public class ForkLiftController {
     @PostMapping("pageQuery")
     public ResultVO pageQuery(@RequestBody Map<String, Object> reqData) {
         return forkLiftService.pageQuery(reqData);
+    }
+
+    /**
+     * 采购入库单编辑
+     * @param dto
+     * @return
+     */
+    @PostMapping("edit")
+    public ResultVO edit(@RequestBody ForkLiftDTO dto){
+        return forkLiftService.edit(dto);
     }
 }

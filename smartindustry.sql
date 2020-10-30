@@ -30,6 +30,7 @@ DROP TABLE IF EXISTS si_supplier;
 DROP TABLE IF EXISTS am_user;
 DROP TABLE IF EXISTS am_dept;
 DROP TABLE IF EXISTS am_role;
+DROP TABLE IF EXISTS dd_location_type;
 DROP TABLE IF EXISTS om_mix_head;
 DROP TABLE IF EXISTS om_outbound_head;
 DROP TABLE IF EXISTS si_client;
@@ -189,6 +190,18 @@ CREATE TABLE am_user_record
 	UNIQUE (user_record_id),
 	UNIQUE (operate_id)
 ) COMMENT = '用户操作记录表';
+
+
+-- 货位类型
+CREATE TABLE dd_location_type
+(
+	location_type_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '货位类型ID',
+	location_type_name char(255) NOT NULL COMMENT '货位类型名称',
+	user_id bigint unsigned COMMENT '创建人',
+	create_time datetime COMMENT '创建时间',
+	PRIMARY KEY (location_type_id),
+	UNIQUE (location_type_id)
+) COMMENT = '货位类型';
 
 
 -- 计量单位
@@ -411,6 +424,7 @@ CREATE TABLE si_location
 	hold_tray_num int COMMENT '可容纳托盘数',
 	warehouse_id bigint unsigned NOT NULL COMMENT '仓库ID',
 	material_id bigint unsigned COMMENT '物料ID',
+	location_type_id bigint unsigned NOT NULL COMMENT '货位类型ID',
 	remark char(255) COMMENT '备注',
 	user_id bigint unsigned COMMENT '创建人',
 	create_time datetime COMMENT '创建时间',
@@ -420,7 +434,8 @@ CREATE TABLE si_location
 	dr tinyint COMMENT '是否删除 : 1：未删除
 2：已删除',
 	PRIMARY KEY (location_id),
-	UNIQUE (location_id)
+	UNIQUE (location_id),
+	UNIQUE (location_type_id)
 ) COMMENT = '库位表';
 
 
@@ -840,6 +855,14 @@ ALTER TABLE si_warehouse_record
 ALTER TABLE sm_storage_record
 	ADD FOREIGN KEY (user_id)
 	REFERENCES am_user (user_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_location
+	ADD FOREIGN KEY (location_type_id)
+	REFERENCES dd_location_type (location_type_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
 ;

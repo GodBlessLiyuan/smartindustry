@@ -21,4 +21,6 @@ public class StorageBodyBO extends StorageBodyPO {
     private String supplierName;
 
     private String locationNo;
+
+    private String measureUnitName;
 }

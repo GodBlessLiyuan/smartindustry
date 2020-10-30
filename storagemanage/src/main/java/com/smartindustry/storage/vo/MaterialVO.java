@@ -36,6 +36,10 @@ public class MaterialVO implements Serializable {
      * 供应商
      */
     private String sname;
+    /**
+     * 物料计量单位
+     */
+    private String muname;
 
     public static List<MaterialVO> convert(List<MaterialBO> bos) {
         List<MaterialVO> vos = new ArrayList<>(bos.size());
@@ -52,6 +56,7 @@ public class MaterialVO implements Serializable {
         vo.setMname(bo.getMaterialName());
         vo.setMmodel(bo.getMaterialModel());
         vo.setSname(bo.getSupplierName());
+        vo.setMuname(bo.getMeasureUnitName());
         return vo;
     }
 }

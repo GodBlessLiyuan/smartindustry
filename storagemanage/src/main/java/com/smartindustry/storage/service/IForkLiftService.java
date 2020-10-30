@@ -1,6 +1,7 @@
 package com.smartindustry.storage.service;
 
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.storage.dto.ForkLiftDTO;
 
 import java.util.Map;
 
@@ -17,4 +18,11 @@ public interface IForkLiftService {
      * @return
      */
     ResultVO pageQuery(Map<String, Object> reqData);
+
+    /**
+     * 叉车的新增/编辑
+     * @param dto
+     * @return
+     */
+    ResultVO edit(ForkLiftDTO dto);
 }
