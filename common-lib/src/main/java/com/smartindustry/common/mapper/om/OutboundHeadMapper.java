@@ -15,6 +15,7 @@ import java.util.Map;
 public interface OutboundHeadMapper extends BaseMapper<OutboundHeadPO, Long> {
     /**
      * 采购入库单的分页查询
+     *
      * @param reqData
      * @return
      */
@@ -22,6 +23,7 @@ public interface OutboundHeadMapper extends BaseMapper<OutboundHeadPO, Long> {
 
     /**
      * 根据出库单id查询所有得信息详情
+     *
      * @param ohid
      * @return
      */

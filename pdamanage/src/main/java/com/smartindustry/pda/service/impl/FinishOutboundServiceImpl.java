@@ -107,7 +107,7 @@ public class FinishOutboundServiceImpl implements IFinishOutboundService {
             return new ResultVO(1001);
         }
 
-        List<OutboundHeadBO> bos = outboundHeadMapper.queryByPdaStatus(dto.getType());
+//        List<OutboundHeadBO> bos = outboundHeadMapper.queryByPdaStatus(dto.getType());
 
         ForkliftPO forkliftPO = forkliftMapper.queryByImei((String) session.getAttribute("imei"));
         if (null == forkliftPO) {
