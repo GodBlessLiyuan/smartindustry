@@ -15,4 +15,6 @@ public interface IFinishOutboundService {
     ResultVO erp();
 
     ResultVO online(HttpSession session, FinishOutboundDTO dto);
+
+    ResultVO list(HttpSession session, FinishOutboundDTO dto);
 }

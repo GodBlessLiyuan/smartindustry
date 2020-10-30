@@ -1,5 +1,6 @@
 package com.smartindustry.pda.service.impl;
 
+import com.smartindustry.common.bo.om.OutboundHeadBO;
 import com.smartindustry.common.mapper.om.OutboundBodyMapper;
 import com.smartindustry.common.mapper.om.OutboundHeadMapper;
 import com.smartindustry.common.mapper.si.ForkliftMapper;
@@ -16,9 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpSession;
-import javax.websocket.Session;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author: xiahui
@@ -70,6 +71,13 @@ public class FinishOutboundServiceImpl implements IFinishOutboundService {
         return ResultVO.ok();
     }
 
+    /**
+     * 上线
+     *
+     * @param session
+     * @param dto
+     * @return
+     */
     @Override
     public ResultVO online(HttpSession session, FinishOutboundDTO dto) {
         if (StringUtils.isEmpty(dto.getImei())) {
@@ -81,6 +89,34 @@ public class FinishOutboundServiceImpl implements IFinishOutboundService {
             return new ResultVO(1002);
         }
 
+        session.setAttribute("imei", dto.getImei());
+
         return ResultVO.ok().setData(forkliftPO.getForkliftNo());
+    }
+
+    /**
+     * 列表区域
+     *
+     * @param session
+     * @param dto
+     * @return
+     */
+    @Override
+    public ResultVO list(HttpSession session, FinishOutboundDTO dto) {
+        if (null == dto.getType()) {
+            return new ResultVO(1001);
+        }
+
+        List<OutboundHeadBO> bos = outboundHeadMapper.queryByPdaStatus(dto.getType());
+
+        ForkliftPO forkliftPO = forkliftMapper.queryByImei((String) session.getAttribute("imei"));
+        if (null == forkliftPO) {
+            return new ResultVO(1002);
+        }
+
+
+
+
+        return null;
     }
 }

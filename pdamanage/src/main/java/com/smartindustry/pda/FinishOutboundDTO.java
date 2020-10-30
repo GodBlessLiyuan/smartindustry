@@ -15,4 +15,5 @@ public class FinishOutboundDTO implements Serializable {
     private static final long SerialVersionUID = 1L;
 
     private String imei;
+    private Byte type;
 }

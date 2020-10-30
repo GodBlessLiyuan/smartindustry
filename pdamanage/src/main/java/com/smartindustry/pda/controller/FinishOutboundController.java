@@ -32,4 +32,9 @@ public class FinishOutboundController {
     public ResultVO online(HttpSession session, @RequestBody FinishOutboundDTO dto) {
         return finishOutboundService.online(session, dto);
     }
+
+    @PostMapping("list")
+    public ResultVO list(HttpSession session, @RequestBody FinishOutboundDTO dto) {
+        return finishOutboundService.list(session, dto);
+    }
 }
