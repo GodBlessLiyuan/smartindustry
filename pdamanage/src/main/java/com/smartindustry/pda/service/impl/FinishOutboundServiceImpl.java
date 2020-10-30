@@ -1,4 +1,4 @@
-package com.smartindustry.outbound.service.impl;
+package com.smartindustry.pda.service.impl;
 
 import com.smartindustry.common.mapper.om.OutboundBodyMapper;
 import com.smartindustry.common.mapper.om.OutboundHeadMapper;
@@ -6,8 +6,8 @@ import com.smartindustry.common.pojo.om.OutboundBodyPO;
 import com.smartindustry.common.pojo.om.OutboundHeadPO;
 import com.smartindustry.common.util.DateUtil;
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.outbound.service.IFinishOutboundService;
-import com.smartindustry.outbound.util.OutboundNoUtil;
+import com.smartindustry.pda.service.IFinishOutboundService;
+import com.smartindustry.pda.util.OutboundNoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

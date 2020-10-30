@@ -1,4 +1,4 @@
-package com.smartindustry.outbound.service;
+package com.smartindustry.pda.service;
 
 import com.smartindustry.common.vo.ResultVO;
 

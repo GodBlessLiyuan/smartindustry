@@ -1,4 +1,4 @@
-package com.smartindustry.outbound.util;
+package com.smartindustry.pda.util;
 
 import com.smartindustry.common.mapper.om.OutboundHeadMapper;
 import com.smartindustry.common.mapper.sm.StorageHeadMapper;

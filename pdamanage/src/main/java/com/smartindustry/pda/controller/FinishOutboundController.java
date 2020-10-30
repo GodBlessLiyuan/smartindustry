@@ -1,7 +1,7 @@
-package com.smartindustry.outbound.controller;
+package com.smartindustry.pda.controller;
 
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.outbound.service.IFinishOutboundService;
+import com.smartindustry.pda.service.IFinishOutboundService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
