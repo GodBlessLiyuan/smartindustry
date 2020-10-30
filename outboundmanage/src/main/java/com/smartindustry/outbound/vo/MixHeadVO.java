@@ -58,6 +58,10 @@ public class MixHeadVO implements Serializable {
          * 计划出库数量
          */
         private BigDecimal pnum;
+        /**
+         * 物料的计量单位
+         */
+        private String muname;
     }
 
     public static List<MixHeadVO> convert(List<MixHeadBO> bos) {
@@ -82,6 +86,7 @@ public class MixHeadVO implements Serializable {
             bodyVO.setMmodel(bodyBO.getMaterialModel());
             bodyVO.setMname(bodyBO.getMaterialName());
             bodyVO.setPnum(bodyBO.getPlanNum());
+            bodyVO.setMuname(bodyBO.getMeasureUnitName());
             vos.add(bodyVO);
         }
         vo.setVos(vos);

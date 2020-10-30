@@ -90,6 +90,10 @@ public class OutboundHeadVO implements Serializable {
          * 出库时间
          */
         private Date otime;
+        /**
+         * 物料计量单位
+         */
+        private String muname;
     }
 
     public static List<OutboundHeadVO> convert(List<OutboundHeadPO> pos) {
@@ -143,6 +147,7 @@ public class OutboundHeadVO implements Serializable {
             bodyVO.setPnum(bodyBO.getPlanNum());
             bodyVO.setOnum(bodyBO.getOutboundNum());
             bodyVO.setOtime(bodyBO.getOutboundTime());
+            bodyVO.setMuname(bodyBO.getMeasureUnitName());
             vos.add(bodyVO);
         }
         vo.setVos(vos);

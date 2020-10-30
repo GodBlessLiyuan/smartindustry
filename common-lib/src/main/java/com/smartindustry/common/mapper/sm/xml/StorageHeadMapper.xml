@@ -172,11 +172,12 @@
       <result column="car_brand" jdbcType="CHAR" property="carBrand"/>
       <result column="accept_num" jdbcType="INTEGER" property="acceptNum"/>
       <result column="accept_time" jdbcType="TIMESTAMP" property="acceptTime"/>
+      <result column="measure_unit_name" jdbcType="CHAR" property="measureUnitName"/>
     </collection>
   </resultMap>
   <sql id="BOS_Column_List">
       sh.storage_head_id, sh.storage_no,sh.status, sh.extra,w.warehouse_id, w.warehouse_name, sb.storage_body_id,sb.material_id, m.material_no,
-      m.material_name, m.material_model, su.supplier_name, l.location_id,l.location_no,sb.car_brand, sb.accept_num,sb.accept_time
+      m.material_name, m.material_model, su.supplier_name, l.location_id,l.location_no,sb.car_brand, sb.accept_num,sb.accept_time,mu.measure_unit_name
   </sql>
   <select id="queryByShid" parameterType="java.lang.Long" resultMap="BOSResultMap">
     select
@@ -187,6 +188,7 @@
     left join si_location l on sb.location_id = l.location_id
     left join si_material m on sb.material_id = m.material_id
     left join si_supplier su on m.supplier_id = su.supplier_id
+    left join dd_measure_unit mu on m.measure_unit_id = mu.measure_unit_id
     where sh.dr = 1 and sh.storage_head_id = #{shid,jdbcType=BIGINT}
   </select>
 

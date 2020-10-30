@@ -6,6 +6,7 @@ import com.smartindustry.common.mapper.si.ForkliftMapper;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.storage.dto.ForkLiftDTO;
 import com.smartindustry.storage.service.IForkLiftService;
 import com.smartindustry.storage.vo.ForkliftVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,5 +31,10 @@ public class ForkLiftServiceImpl implements IForkLiftService {
         Page<ForkliftBO> page = PageQueryUtil.startPage(reqData);
         List<ForkliftBO> bos = forkliftMapper.pageQuery(reqData);
         return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), ForkliftVO.convert(bos)));
+    }
+
+    @Override
+    public ResultVO edit(ForkLiftDTO dto){
+        return ResultVO.ok();
     }
 }
