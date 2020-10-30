@@ -92,6 +92,10 @@ public class StorageHeadVO implements Serializable {
          * 入库储位
          */
         private String lno;
+        /**
+         * 物料计量单位
+         */
+        private String muname;
     }
 
     public static List<StorageHeadVO> convert(List<StorageHeadBO> bos) {
@@ -134,6 +138,7 @@ public class StorageHeadVO implements Serializable {
             bodyVO.setAtime(bodyBO.getAcceptTime());
             bodyVO.setLid(bodyBO.getLocationId());
             bodyVO.setLno(bodyBO.getLocationNo());
+            bodyVO.setMuname(bodyBO.getMeasureUnitName());
             vos.add(bodyVO);
         }
         vo.setVos(vos);

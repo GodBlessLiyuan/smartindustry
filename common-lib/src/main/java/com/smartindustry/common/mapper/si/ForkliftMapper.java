@@ -1,5 +1,6 @@
 package com.smartindustry.common.mapper.si;
 
+import com.smartindustry.common.bo.si.ForkliftBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.si.ForkliftPO;
 import org.apache.ibatis.annotations.Mapper;
@@ -17,6 +18,7 @@ public interface ForkliftMapper extends BaseMapper<ForkliftPO, Long> {
      * @param reqData
      * @return
      */
+<<<<<<< HEAD
     List<ForkliftPO> pageQuery(Map<String, Object> reqData);
 
     /**
@@ -25,4 +27,7 @@ public interface ForkliftMapper extends BaseMapper<ForkliftPO, Long> {
      * @return
      */
     ForkliftPO queryByImei(String imei);
+=======
+    List<ForkliftBO> pageQuery(Map<String, Object> reqData);
+>>>>>>> origin/yinghong-01
 }

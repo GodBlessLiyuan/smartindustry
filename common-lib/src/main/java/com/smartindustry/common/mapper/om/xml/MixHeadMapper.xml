@@ -102,10 +102,11 @@
       <result column="material_name" jdbcType="CHAR" property="materialName"/>
       <result column="material_model" jdbcType="CHAR" property="materialModel"/>
       <result column="plan_num" jdbcType="DECIMAL" property="planNum"/>
+      <result column="measure_unit_name" jdbcType="CHAR" property="measureUnitName"/>
     </collection>
   </resultMap>
   <sql id="BOS_Column_List">
-     mh.mix_head_id, mh.mix_no,mh.plan_time, mb.mix_body_id, mb.material_id, mb.plan_num, m.material_no, m.material_name, m.material_model
+     mh.mix_head_id, mh.mix_no,mh.plan_time, mb.mix_body_id, mb.material_id, mb.plan_num, m.material_no, m.material_name, m.material_model,mu.measure_unit_name
   </sql>
   <select id="queryMix" resultMap="BOSResultMap">
     select
@@ -113,6 +114,7 @@
     from om_mix_head mh
     left join om_mix_body mb on mh.mix_head_id = mb.mix_head_id
     left join si_material m on mb.material_id = m.material_id
+    left join dd_measure_unit mu on m.measure_unit_id = mu.measure_unit_id
     where mh.dr = 1 and date(mh.create_time) = curdate();
   </select>
 
