@@ -9,7 +9,7 @@ import com.smartindustry.common.pojo.om.OutboundHeadPO;
 import com.smartindustry.common.pojo.si.ForkliftPO;
 import com.smartindustry.common.util.DateUtil;
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.pda.FinishOutboundDTO;
+import com.smartindustry.pda.dto.FinishOutboundDTO;
 import com.smartindustry.pda.service.IFinishOutboundService;
 import com.smartindustry.pda.util.OutboundNoUtil;
 import org.springframework.beans.factory.annotation.Autowired;

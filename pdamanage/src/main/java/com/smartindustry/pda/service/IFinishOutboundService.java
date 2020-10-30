@@ -1,7 +1,7 @@
 package com.smartindustry.pda.service;
 
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.pda.FinishOutboundDTO;
+import com.smartindustry.pda.dto.FinishOutboundDTO;
 
 import javax.servlet.http.HttpSession;
 
