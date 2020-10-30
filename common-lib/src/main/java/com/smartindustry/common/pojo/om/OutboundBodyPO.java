@@ -29,7 +29,12 @@ public class OutboundBodyPO implements Serializable {
     /**
      * 出库数量
      */
-    private BigDecimal demandNum;
+    private BigDecimal outboundNum;
+
+    /**
+     * 待出库数量
+     */
+    private BigDecimal outingNum;
 
     /**
      * 创建时间

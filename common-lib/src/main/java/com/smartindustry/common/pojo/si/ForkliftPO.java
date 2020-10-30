@@ -35,19 +35,20 @@ public class ForkliftPO implements Serializable {
     private Long supplierId;
 
     /**
-     * 是否携带RFID设备
+     * 工业一体机号
      */
-    private Boolean rfid;
-
-    /**
-     * 是否携带工业一体机
-     */
-    private Boolean iom;
+    private String imeiNo;
 
     /**
      * 作业区域
      */
-    private String workArea;
+    private Byte workArea;
+
+    /**
+     * 当前状态 : 1 忙碌中
+2 空闲中
+     */
+    private Byte status;
 
     /**
      * 是否删除 : 1 未删除
