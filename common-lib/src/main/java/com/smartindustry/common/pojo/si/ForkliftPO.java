@@ -31,9 +31,9 @@ public class ForkliftPO implements Serializable {
     private String forkliftBrand;
 
     /**
-     * 供应商ID
+     * 供应商
      */
-    private Long supplierId;
+    private String supplierName;
 
     /**
      * 联系人

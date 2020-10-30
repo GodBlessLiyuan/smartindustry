@@ -67,9 +67,17 @@ public class ForkLiftDTO implements Serializable {
         return buildPO(po, dto);
     }
 
-    public static ForkliftPO buildPO(ForkliftPO po, ForkLiftDTO dto) {
-//        po
-        po.setExtra(dto.getExtra());
-        return po;
+    public static ForkliftPO buildPO(ForkliftPO forkliftPO, ForkLiftDTO dto) {
+        forkliftPO.setForkliftNo(dto.getFno());
+        forkliftPO.setForkliftModel(dto.getFmodel());
+        forkliftPO.setForkliftBrand(dto.getFbrand());
+        forkliftPO.setSupplierName(dto.getSname());
+        forkliftPO.setContact(dto.getCname());
+        forkliftPO.setContactPhone(dto.getCphone());
+        forkliftPO.setImeiNo(dto.getImeino());
+        forkliftPO.setWorkArea(dto.getWarea());
+        forkliftPO.setStatus(dto.getStatus());
+        forkliftPO.setExtra(dto.getExtra());
+        return forkliftPO;
     }
 }

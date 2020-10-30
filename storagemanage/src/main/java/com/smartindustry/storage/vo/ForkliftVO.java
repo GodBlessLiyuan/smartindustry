@@ -1,6 +1,6 @@
 package com.smartindustry.storage.vo;
 
-import com.smartindustry.common.bo.si.ForkliftBO;
+import com.smartindustry.common.pojo.si.ForkliftPO;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -47,15 +47,15 @@ public class ForkliftVO {
      */
     private Byte status;
 
-    public static List<ForkliftVO> convert(List<ForkliftBO> bos) {
+    public static List<ForkliftVO> convert(List<ForkliftPO> bos) {
         List<ForkliftVO> vos = new ArrayList<>(bos.size());
-        for (ForkliftBO bo : bos) {
+        for (ForkliftPO bo : bos) {
             vos.add(convert(bo));
         }
         return vos;
     }
 
-    public static ForkliftVO convert(ForkliftBO bo) {
+    public static ForkliftVO convert(ForkliftPO bo) {
         ForkliftVO vo = new ForkliftVO();
         vo.setFid(bo.getForkliftId());
         vo.setFno(bo.getForkliftNo());
