@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
+
 /**
  * @author: xiahui
  * @date: Created in 2020/10/29 9:24
@@ -27,7 +29,7 @@ public class FinishOutboundController {
     }
 
     @PostMapping("online")
-    public ResultVO online(@RequestBody FinishOutboundDTO dto) {
-        return finishOutboundService.online(dto);
+    public ResultVO online(HttpSession session, @RequestBody FinishOutboundDTO dto) {
+        return finishOutboundService.online(session, dto);
     }
 }

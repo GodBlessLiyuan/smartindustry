@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpSession;
+import javax.websocket.Session;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -69,7 +71,7 @@ public class FinishOutboundServiceImpl implements IFinishOutboundService {
     }
 
     @Override
-    public ResultVO online(FinishOutboundDTO dto) {
+    public ResultVO online(HttpSession session, FinishOutboundDTO dto) {
         if (StringUtils.isEmpty(dto.getImei())) {
             return new ResultVO(1001);
         }

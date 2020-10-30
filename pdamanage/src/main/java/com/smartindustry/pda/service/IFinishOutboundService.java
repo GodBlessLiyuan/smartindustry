@@ -3,6 +3,8 @@ package com.smartindustry.pda.service;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.pda.FinishOutboundDTO;
 
+import javax.servlet.http.HttpSession;
+
 /**
  * @author: xiahui
  * @date: Created in 2020/10/29 9:27
@@ -12,5 +14,5 @@ import com.smartindustry.pda.FinishOutboundDTO;
 public interface IFinishOutboundService {
     ResultVO erp();
 
-    ResultVO online(FinishOutboundDTO dto);
+    ResultVO online(HttpSession session, FinishOutboundDTO dto);
 }
