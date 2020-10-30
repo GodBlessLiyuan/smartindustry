@@ -20,4 +20,6 @@ public class OutboundBodyBO extends OutboundBodyPO {
     private String materialModel;
 
     private BigDecimal planNum;
+
+    private String measureUnitName;
 }

@@ -10,28 +10,30 @@ DROP TABLE IF EXISTS am_role_record;
 DROP TABLE IF EXISTS am_user_record;
 DROP TABLE IF EXISTS om_mix_body;
 DROP TABLE IF EXISTS om_outbound_body;
+DROP TABLE IF EXISTS si_location_record;
 DROP TABLE IF EXISTS sm_storage_body;
+DROP TABLE IF EXISTS si_location;
+DROP TABLE IF EXISTS si_material_record;
 DROP TABLE IF EXISTS si_material;
 DROP TABLE IF EXISTS dd_measure_unit;
-DROP TABLE IF EXISTS si_forklift_record;
-DROP TABLE IF EXISTS si_forklift;
-DROP TABLE IF EXISTS si_supplier_record;
-DROP TABLE IF EXISTS si_supplier;
-DROP TABLE IF EXISTS dd_supplier_group;
-DROP TABLE IF EXISTS dd_supplier_type;
-DROP TABLE IF EXISTS si_location_record;
-DROP TABLE IF EXISTS si_location;
 DROP TABLE IF EXISTS si_warehouse_record;
 DROP TABLE IF EXISTS sm_storage_record;
 DROP TABLE IF EXISTS sm_storage_head;
 DROP TABLE IF EXISTS si_warehouse;
 DROP TABLE IF EXISTS dd_warehouse_type;
 DROP TABLE IF EXISTS om_outbound_record;
+DROP TABLE IF EXISTS si_client_record;
+DROP TABLE IF EXISTS si_forklift_record;
+DROP TABLE IF EXISTS si_forklift;
+DROP TABLE IF EXISTS si_supplier_record;
+DROP TABLE IF EXISTS si_supplier;
 DROP TABLE IF EXISTS am_user;
 DROP TABLE IF EXISTS am_dept;
 DROP TABLE IF EXISTS am_role;
+DROP TABLE IF EXISTS dd_location_type;
 DROP TABLE IF EXISTS om_mix_head;
 DROP TABLE IF EXISTS om_outbound_head;
+DROP TABLE IF EXISTS si_client;
 
 
 
@@ -190,6 +192,18 @@ CREATE TABLE am_user_record
 ) COMMENT = '用户操作记录表';
 
 
+-- 货位类型
+CREATE TABLE dd_location_type
+(
+	location_type_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '货位类型ID',
+	location_type_name char(255) NOT NULL COMMENT '货位类型名称',
+	user_id bigint unsigned COMMENT '创建人',
+	create_time datetime COMMENT '创建时间',
+	PRIMARY KEY (location_type_id),
+	UNIQUE (location_type_id)
+) COMMENT = '货位类型';
+
+
 -- 计量单位
 CREATE TABLE dd_measure_unit
 (
@@ -200,30 +214,6 @@ CREATE TABLE dd_measure_unit
 	PRIMARY KEY (measure_unit_id),
 	UNIQUE (measure_unit_id)
 ) COMMENT = '计量单位';
-
-
--- 供应商组
-CREATE TABLE dd_supplier_group
-(
-	supplier_group_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '供应商组ID',
-	supplier_group_name char(255) NOT NULL COMMENT '供应商组名称',
-	user_id bigint unsigned COMMENT '创建人',
-	create_time datetime COMMENT '创建时间',
-	PRIMARY KEY (supplier_group_id),
-	UNIQUE (supplier_group_id)
-) COMMENT = '供应商组';
-
-
--- 供应商类型
-CREATE TABLE dd_supplier_type
-(
-	supplier_type_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '供应商类型ID',
-	supplier_type_name char(255) NOT NULL COMMENT '供应商类型名称',
-	user_id bigint unsigned COMMENT '创建人',
-	create_time datetime COMMENT '创建时间',
-	PRIMARY KEY (supplier_type_id),
-	UNIQUE (supplier_type_id)
-) COMMENT = '供应商类型';
 
 
 -- 仓库类型表
@@ -301,7 +291,7 @@ CREATE TABLE om_outbound_head
 	-- 2 生产
 	source_type tinyint COMMENT '来源类型 : 1 混料
 2 生产',
-	plan_time datetime COMMENT '计划出库时间',
+	plan_time date COMMENT '计划出库时间',
 	outbound_time datetime COMMENT '完成出库时间',
 	-- 1：已出库
 	-- 2：出库中
@@ -333,6 +323,51 @@ CREATE TABLE om_outbound_record
 ) COMMENT = '出库操作记录';
 
 
+-- 客户
+CREATE TABLE si_client
+(
+	client_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '客户id',
+	client_no char(128) NOT NULL COMMENT '客户代码',
+	client_type_id bigint unsigned NOT NULL COMMENT '客户类型ID',
+	client_name char(64) NOT NULL COMMENT '客户名称',
+	contact char(64) NOT NULL COMMENT '联系人',
+	-- 1：男
+	-- 2：女
+	sex tinyint COMMENT '联系人性别 : 1：男
+2：女',
+	phone char(16) NOT NULL COMMENT '联系电话',
+	email char(255) COMMENT '客户邮箱',
+	fax char(16) COMMENT '传真',
+	url char(64) COMMENT '网址',
+	credit_level_id bigint unsigned COMMENT '信用等级id',
+	area char(255) COMMENT '地区',
+	address char(128) COMMENT '详细地址',
+	remark char(255) COMMENT '备注',
+	create_time datetime COMMENT '创建时间',
+	update_time datetime COMMENT '更新时间',
+	-- 1 未删除
+	-- 2 已删除
+	dr tinyint COMMENT '是否删除 : 1 未删除
+2 已删除',
+	PRIMARY KEY (client_id),
+	UNIQUE (client_id)
+) COMMENT = '客户';
+
+
+-- 客户操作记录表
+CREATE TABLE si_client_record
+(
+	client_record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '操作记录ID',
+	client_id bigint unsigned NOT NULL COMMENT '客户id',
+	user_id bigint unsigned NOT NULL COMMENT '用户ID',
+	create_time datetime COMMENT '操作时间',
+	type char(255) COMMENT '操作类型',
+	PRIMARY KEY (client_record_id),
+	UNIQUE (client_record_id),
+	UNIQUE (user_id)
+) COMMENT = '客户操作记录表';
+
+
 -- 叉车信息
 CREATE TABLE si_forklift
 (
@@ -341,12 +376,21 @@ CREATE TABLE si_forklift
 	forklift_model char(255) COMMENT '叉车型号',
 	forklift_brand char(255) COMMENT '品牌',
 	supplier_id bigint unsigned NOT NULL COMMENT '供应商ID',
+	contact char(64) COMMENT '联系人',
+	contact_phone char(16) COMMENT '联系电话',
 	imei_no char(255) COMMENT '工业一体机号',
-	work_area tinyint COMMENT '作业区域',
+	-- 1 原材料区
+	-- 2 生产产区
+	-- 3 成品区
+	work_area tinyint COMMENT '作业区域 : 1 原材料区
+2 生产产区
+3 成品区',
 	-- 1 忙碌中
 	-- 2 空闲中
 	status tinyint COMMENT '当前状态 : 1 忙碌中
 2 空闲中',
+	extra char(255) COMMENT '备注',
+	create_time datetime COMMENT '创建时间',
 	-- 1 未删除
 	-- 2 已删除
 	dr tinyint COMMENT '是否删除 : 1 未删除
@@ -361,11 +405,13 @@ CREATE TABLE si_forklift_record
 (
 	record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '操作记录id',
 	forklift_id bigint unsigned NOT NULL COMMENT '叉车id',
+	user_id bigint unsigned NOT NULL COMMENT '操作人ID',
 	operation_name char(255) COMMENT '操作名称',
 	create_time datetime COMMENT '操作时间',
 	PRIMARY KEY (record_id),
 	UNIQUE (record_id),
-	UNIQUE (forklift_id)
+	UNIQUE (forklift_id),
+	UNIQUE (user_id)
 ) COMMENT = '叉车操作记录表';
 
 
@@ -377,6 +423,8 @@ CREATE TABLE si_location
 	location_name char(255) NOT NULL COMMENT '库位名称',
 	hold_tray_num int COMMENT '可容纳托盘数',
 	warehouse_id bigint unsigned NOT NULL COMMENT '仓库ID',
+	material_id bigint unsigned COMMENT '物料ID',
+	location_type_id bigint unsigned NOT NULL COMMENT '货位类型ID',
 	remark char(255) COMMENT '备注',
 	user_id bigint unsigned COMMENT '创建人',
 	create_time datetime COMMENT '创建时间',
@@ -386,7 +434,8 @@ CREATE TABLE si_location
 	dr tinyint COMMENT '是否删除 : 1：未删除
 2：已删除',
 	PRIMARY KEY (location_id),
-	UNIQUE (location_id)
+	UNIQUE (location_id),
+	UNIQUE (location_type_id)
 ) COMMENT = '库位表';
 
 
@@ -409,20 +458,16 @@ CREATE TABLE si_material
 	material_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '物料ID',
 	material_no char(128) NOT NULL COMMENT '物料编号',
 	-- 1：原材料
-	-- 2：半成品
-	-- 3：成品
-	material_type tinyint COMMENT '一级物料类型 : 1：原材料
-2：半成品
-3：成品',
-	measure_unit_id bigint unsigned COMMENT '计量单位ID',
+	-- 2：成品
+	material_type tinyint COMMENT '物料类型 : 1：原材料
+2：成品',
 	material_name char(64) NOT NULL COMMENT '物料名称',
-	delivery_days int NOT NULL COMMENT '交期天数',
-	moq char(32) NOT NULL COMMENT 'MOQ',
+	material_level char(64) COMMENT '物料等级',
 	material_model char(64) COMMENT '规格型号',
-	material_draw char(64) COMMENT '物料图号',
+	measure_unit_id bigint unsigned COMMENT '计量单位ID',
+	package_volume decimal(10,2) COMMENT '包装体积',
 	supplier_id bigint unsigned COMMENT '供应商ID',
 	material_desc char(255) COMMENT '物料描述',
-	test_type tinyint COMMENT '检验类型',
 	user_id bigint unsigned COMMENT '创建人',
 	create_time datetime COMMENT '创建时间',
 	update_time datetime COMMENT '更新时间',
@@ -435,13 +480,26 @@ CREATE TABLE si_material
 ) COMMENT = '物料表';
 
 
+-- 物料记录表
+CREATE TABLE si_material_record
+(
+	material_record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '物料记录ID',
+	material_id bigint unsigned NOT NULL COMMENT '物料ID',
+	user_id bigint unsigned NOT NULL COMMENT '操作人ID',
+	create_time datetime COMMENT '操作时间',
+	type char(255) COMMENT '操作类型',
+	PRIMARY KEY (material_record_id),
+	UNIQUE (material_record_id),
+	UNIQUE (material_id),
+	UNIQUE (user_id)
+) COMMENT = '物料记录表';
+
+
 -- 供应商表
 CREATE TABLE si_supplier
 (
 	supplier_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '供应商ID',
 	supplier_no char(64) NOT NULL COMMENT '供应商编码',
-	supplier_group_id bigint unsigned COMMENT '供应商组ID',
-	supplier_type_id bigint unsigned COMMENT '供应商类型ID',
 	supplier_name char(64) NOT NULL COMMENT '供应商名称',
 	contact_name char(64) COMMENT '联系人名称',
 	phone char(16) COMMENT '联系电话',
@@ -698,22 +756,6 @@ ALTER TABLE dd_measure_unit
 ;
 
 
-ALTER TABLE dd_supplier_group
-	ADD FOREIGN KEY (user_id)
-	REFERENCES am_user (user_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE dd_supplier_type
-	ADD FOREIGN KEY (user_id)
-	REFERENCES am_user (user_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
 ALTER TABLE dd_warehouse_type
 	ADD FOREIGN KEY (user_id)
 	REFERENCES am_user (user_id)
@@ -723,6 +765,22 @@ ALTER TABLE dd_warehouse_type
 
 
 ALTER TABLE om_outbound_record
+	ADD FOREIGN KEY (user_id)
+	REFERENCES am_user (user_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_client_record
+	ADD FOREIGN KEY (user_id)
+	REFERENCES am_user (user_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_forklift_record
 	ADD FOREIGN KEY (user_id)
 	REFERENCES am_user (user_id)
 	ON UPDATE RESTRICT
@@ -747,6 +805,14 @@ ALTER TABLE si_location_record
 
 
 ALTER TABLE si_material
+	ADD FOREIGN KEY (user_id)
+	REFERENCES am_user (user_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_material_record
 	ADD FOREIGN KEY (user_id)
 	REFERENCES am_user (user_id)
 	ON UPDATE RESTRICT
@@ -794,25 +860,17 @@ ALTER TABLE sm_storage_record
 ;
 
 
+ALTER TABLE si_location
+	ADD FOREIGN KEY (location_type_id)
+	REFERENCES dd_location_type (location_type_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
 ALTER TABLE si_material
 	ADD FOREIGN KEY (measure_unit_id)
 	REFERENCES dd_measure_unit (measure_unit_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE si_supplier
-	ADD FOREIGN KEY (supplier_group_id)
-	REFERENCES dd_supplier_group (supplier_group_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE si_supplier
-	ADD FOREIGN KEY (supplier_type_id)
-	REFERENCES dd_supplier_type (supplier_type_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
 ;
@@ -845,6 +903,14 @@ ALTER TABLE om_outbound_body
 ALTER TABLE om_outbound_record
 	ADD FOREIGN KEY (outbound_head_id)
 	REFERENCES om_outbound_head (outbound_head_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_client_record
+	ADD FOREIGN KEY (client_id)
+	REFERENCES si_client (client_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
 ;
@@ -883,6 +949,22 @@ ALTER TABLE om_mix_body
 
 
 ALTER TABLE om_outbound_body
+	ADD FOREIGN KEY (material_id)
+	REFERENCES si_material (material_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_location
+	ADD FOREIGN KEY (material_id)
+	REFERENCES si_material (material_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_material_record
 	ADD FOREIGN KEY (material_id)
 	REFERENCES si_material (material_id)
 	ON UPDATE RESTRICT

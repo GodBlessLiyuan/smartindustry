@@ -6,8 +6,8 @@
     <result column="location_no" jdbcType="CHAR" property="locationNo" />
     <result column="location_name" jdbcType="CHAR" property="locationName" />
     <result column="hold_tray_num" jdbcType="INTEGER" property="holdTrayNum" />
-    <result column="location_type_id" jdbcType="BIGINT" property="locationTypeId" />
     <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId" />
+    <result column="material_id" jdbcType="BIGINT" property="materialId" />
     <result column="remark" jdbcType="CHAR" property="remark" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -15,11 +15,11 @@
     <result column="dr" jdbcType="TINYINT" property="dr" />
   </resultMap>
   <sql id="Base_Column_List">
-    location_id, location_no, location_name, hold_tray_num, location_type_id, warehouse_id,
+    location_id, location_no, location_name, hold_tray_num, warehouse_id, material_id, 
     remark, user_id, create_time, update_time, dr
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select
+    select 
     <include refid="Base_Column_List" />
     from si_location
     where location_id = #{locationId,jdbcType=BIGINT}
@@ -29,13 +29,13 @@
     where location_id = #{locationId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.smartindustry.common.pojo.si.LocationPO">
-    insert into si_location (location_id, location_no, location_name,
-      hold_tray_num, location_type_id, warehouse_id,
-      remark, user_id, create_time,
+    insert into si_location (location_id, location_no, location_name, 
+      hold_tray_num, warehouse_id, material_id, 
+      remark, user_id, create_time, 
       update_time, dr)
-    values (#{locationId,jdbcType=BIGINT}, #{locationNo,jdbcType=CHAR}, #{locationName,jdbcType=CHAR},
-      #{holdTrayNum,jdbcType=INTEGER}, #{locationTypeId,jdbcType=BIGINT}, #{warehouseId,jdbcType=BIGINT},
-      #{remark,jdbcType=CHAR}, #{userId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP},
+    values (#{locationId,jdbcType=BIGINT}, #{locationNo,jdbcType=CHAR}, #{locationName,jdbcType=CHAR}, 
+      #{holdTrayNum,jdbcType=INTEGER}, #{warehouseId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT}, 
+      #{remark,jdbcType=CHAR}, #{userId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.LocationPO">
@@ -53,11 +53,11 @@
       <if test="holdTrayNum != null">
         hold_tray_num,
       </if>
-      <if test="locationTypeId != null">
-        location_type_id,
-      </if>
       <if test="warehouseId != null">
         warehouse_id,
+      </if>
+      <if test="materialId != null">
+        material_id,
       </if>
       <if test="remark != null">
         remark,
@@ -88,11 +88,11 @@
       <if test="holdTrayNum != null">
         #{holdTrayNum,jdbcType=INTEGER},
       </if>
-      <if test="locationTypeId != null">
-        #{locationTypeId,jdbcType=BIGINT},
-      </if>
       <if test="warehouseId != null">
         #{warehouseId,jdbcType=BIGINT},
+      </if>
+      <if test="materialId != null">
+        #{materialId,jdbcType=BIGINT},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=CHAR},
@@ -123,11 +123,11 @@
       <if test="holdTrayNum != null">
         hold_tray_num = #{holdTrayNum,jdbcType=INTEGER},
       </if>
-      <if test="locationTypeId != null">
-        location_type_id = #{locationTypeId,jdbcType=BIGINT},
-      </if>
       <if test="warehouseId != null">
         warehouse_id = #{warehouseId,jdbcType=BIGINT},
+      </if>
+      <if test="materialId != null">
+        material_id = #{materialId,jdbcType=BIGINT},
       </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=CHAR},
@@ -152,8 +152,8 @@
     set location_no = #{locationNo,jdbcType=CHAR},
       location_name = #{locationName,jdbcType=CHAR},
       hold_tray_num = #{holdTrayNum,jdbcType=INTEGER},
-      location_type_id = #{locationTypeId,jdbcType=BIGINT},
       warehouse_id = #{warehouseId,jdbcType=BIGINT},
+      material_id = #{materialId,jdbcType=BIGINT},
       remark = #{remark,jdbcType=CHAR},
       user_id = #{userId,jdbcType=BIGINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},

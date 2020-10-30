@@ -17,4 +17,6 @@ public class MixBodyBO extends MixBodyPO {
     private String materialName;
 
     private String materialModel;
+
+    private String measureUnitName;
 }

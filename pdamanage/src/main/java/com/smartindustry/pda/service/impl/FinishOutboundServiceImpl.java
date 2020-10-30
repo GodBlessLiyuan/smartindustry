@@ -1,15 +1,12 @@
 package com.smartindustry.pda.service.impl;
 
-import com.smartindustry.common.bo.om.OutboundHeadBO;
 import com.smartindustry.common.mapper.om.OutboundBodyMapper;
 import com.smartindustry.common.mapper.om.OutboundHeadMapper;
-import com.smartindustry.common.mapper.si.ForkliftMapper;
 import com.smartindustry.common.pojo.om.OutboundBodyPO;
 import com.smartindustry.common.pojo.om.OutboundHeadPO;
-import com.smartindustry.common.pojo.si.ForkliftPO;
 import com.smartindustry.common.util.DateUtil;
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.pda.FinishOutboundDTO;
+import com.smartindustry.pda.dto.FinishOutboundDTO;
 import com.smartindustry.pda.service.IFinishOutboundService;
 import com.smartindustry.pda.util.OutboundNoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +16,6 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author: xiahui
@@ -107,7 +103,7 @@ public class FinishOutboundServiceImpl implements IFinishOutboundService {
             return new ResultVO(1001);
         }
 
-        List<OutboundHeadBO> bos = outboundHeadMapper.queryByPdaStatus(dto.getType());
+//        List<OutboundHeadBO> bos = outboundHeadMapper.queryByPdaStatus(dto.getType());
 
         ForkliftPO forkliftPO = forkliftMapper.queryByImei((String) session.getAttribute("imei"));
         if (null == forkliftPO) {
