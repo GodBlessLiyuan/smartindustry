@@ -138,7 +138,7 @@ public class OutboundHeadVO implements Serializable {
         vo.setPtime(bo.getPlanTime());
         vo.setExtra(bo.getExtra());
         List<OutboundBodyVO> vos = new ArrayList<>();
-        for (OutboundBodyBO bodyBO : bo.getBos()){
+        for (OutboundBodyBO bodyBO : bo.getBodyBOs()){
             OutboundBodyVO bodyVO = new OutboundBodyVO();
             bodyVO.setObid(bodyBO.getOutboundBodyId());
             bodyVO.setMno(bodyBO.getMaterialNo());

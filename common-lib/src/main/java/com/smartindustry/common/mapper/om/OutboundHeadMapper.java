@@ -28,4 +28,12 @@ public interface OutboundHeadMapper extends BaseMapper<OutboundHeadPO, Long> {
      * @return
      */
     OutboundHeadBO queryByOhid(Long ohid);
+
+    /**
+     * 根据 pda 类型 查询
+     *
+     * @param type
+     * @return
+     */
+    List<OutboundHeadBO> queryPdaByType(Byte type);
 }
