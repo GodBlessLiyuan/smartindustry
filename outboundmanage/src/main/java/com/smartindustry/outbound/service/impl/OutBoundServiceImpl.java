@@ -5,10 +5,8 @@ import com.github.pagehelper.Page;
 import com.smartindustry.common.bo.om.MixHeadBO;
 import com.smartindustry.common.bo.om.OutboundHeadBO;
 import com.smartindustry.common.constant.ExceptionEnums;
-import com.smartindustry.common.mapper.om.MixHeadMapper;
-import com.smartindustry.common.mapper.om.OutboundBodyMapper;
-import com.smartindustry.common.mapper.om.OutboundHeadMapper;
-import com.smartindustry.common.mapper.om.OutboundRecordMapper;
+import com.smartindustry.common.mapper.om.*;
+import com.smartindustry.common.pojo.om.MixBodyPO;
 import com.smartindustry.common.pojo.om.OutboundBodyPO;
 import com.smartindustry.common.pojo.om.OutboundHeadPO;
 import com.smartindustry.common.pojo.om.OutboundRecordPO;
@@ -28,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +48,8 @@ public class OutBoundServiceImpl implements IOutBoundService {
     private MixHeadMapper mixHeadMapper;
     @Autowired
     private OutboundRecordMapper outboundRecordMapper;
-
+    @Autowired
+    private MixBodyMapper mixBodyMapper;
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData){
@@ -86,6 +86,19 @@ public class OutBoundServiceImpl implements IOutBoundService {
                 outboundBodyMapper.batchInsert(pos);
             }
             if(dto.getFlag()){
+                // 混料单将使用掉得物料减去，若当前使用得剩余小于出库数量，则提示物料不足
+                for(OutboundHeadDTO.OutboundBodyDTO bodyDTO : dto.getBody()){
+                    BigDecimal num = mixHeadMapper.queryByMhid(dto.getMixno(),bodyDTO.getMid());
+                    if(num.compareTo(bodyDTO.getOnum()) == -1){
+                        return new ResultVO(ExceptionEnums.MATERIAL_MISS.getCode());
+                    }else{
+                        BigDecimal curNum = num.subtract(bodyDTO.getOnum());
+                        MixBodyPO mixBodyPO = new MixBodyPO();
+                        mixBodyPO.setPlanNum(curNum);
+                        mixBodyPO.setMixBodyId(bodyDTO.getMbid());
+                        mixBodyMapper.updateByPrimaryKeySelective(mixBodyPO);
+                    }
+                }
                 outboundRecordMapper.insert(new OutboundRecordPO(po.getOutboundHeadId(),1L,OutboundConstant.OPERATE_NAME_AGREE_OUT));
             }else {
                 outboundRecordMapper.insert(new OutboundRecordPO(po.getOutboundHeadId(),1L,OutboundConstant.OPERATE_NAME_INSERT_OUT));
@@ -98,6 +111,19 @@ public class OutBoundServiceImpl implements IOutBoundService {
             return new ResultVO(ExceptionEnums.NO_EXIST.getCode());
         }
         if(dto.getFlag()){
+            // 混料单将使用掉得物料减去，若当前使用得剩余小于出库数量，则提示物料不足
+            for(OutboundHeadDTO.OutboundBodyDTO bodyDTO : dto.getBody()){
+                BigDecimal num = mixHeadMapper.queryByMhid(dto.getMixno(),bodyDTO.getMid());
+                if(num.compareTo(bodyDTO.getOnum()) == -1){
+                    return new ResultVO(ExceptionEnums.MATERIAL_MISS.getCode());
+                }else{
+                    BigDecimal curNum = num.subtract(bodyDTO.getOnum());
+                    MixBodyPO mixBodyPO = new MixBodyPO();
+                    mixBodyPO.setPlanNum(curNum);
+                    mixBodyPO.setMixBodyId(bodyDTO.getMbid());
+                    mixBodyMapper.updateByPrimaryKeySelective(mixBodyPO);
+                }
+            }
             po.setStatus(OutboundConstant.STATUS_OUTED);
             po.setOutboundTime(new Date());
         }else {

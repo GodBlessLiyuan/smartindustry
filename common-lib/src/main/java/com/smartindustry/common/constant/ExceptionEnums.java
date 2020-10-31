@@ -9,7 +9,8 @@ package com.smartindustry.common.constant;
 public enum ExceptionEnums {
 
     OK(1000,"正常"),
-    NO_EXIST(1002,"数据不存在或已被删除");
+    NO_EXIST(1002,"数据不存在或已被删除"),
+    MATERIAL_MISS(1003,"混料单缺少当前物料，无法出库");
 
     private String msg;
     private int code;
