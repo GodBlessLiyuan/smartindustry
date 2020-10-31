@@ -9,4 +9,9 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface OutboundForkliftMapper extends BaseMapper<OutboundForkliftPO, Long> {
+    /**
+     * 根据 叉车ID 删除
+     * @param forkliftId
+     */
+    void deleteByFid(Long forkliftId);
 }

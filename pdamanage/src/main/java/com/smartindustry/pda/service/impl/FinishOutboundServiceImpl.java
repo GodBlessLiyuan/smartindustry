@@ -3,9 +3,11 @@ package com.smartindustry.pda.service.impl;
 import com.smartindustry.common.bo.om.OutboundHeadBO;
 import com.smartindustry.common.mapper.om.OutboundBodyMapper;
 import com.smartindustry.common.mapper.om.OutboundHeadMapper;
+import com.smartindustry.common.mapper.pda.OutboundForkliftMapper;
 import com.smartindustry.common.mapper.si.ForkliftMapper;
 import com.smartindustry.common.pojo.om.OutboundBodyPO;
 import com.smartindustry.common.pojo.om.OutboundHeadPO;
+import com.smartindustry.common.pojo.pda.OutboundForkliftPO;
 import com.smartindustry.common.pojo.si.ForkliftPO;
 import com.smartindustry.common.util.DateUtil;
 import com.smartindustry.common.vo.ResultVO;
@@ -36,6 +38,8 @@ public class FinishOutboundServiceImpl implements IFinishOutboundService {
     private OutboundBodyMapper outboundBodyMapper;
     @Autowired
     private ForkliftMapper forkliftMapper;
+    @Autowired
+    private OutboundForkliftMapper outboundForkliftMapper;
 
     /**
      * ERP 生成 出库单
@@ -180,14 +184,37 @@ public class FinishOutboundServiceImpl implements IFinishOutboundService {
      * @return
      */
     @Override
-    public ResultVO execute(HttpSession session, FinishOutboundDTO dto) {
-        if (null == dto.getOhid() || null == dto.getType()) {
-            return new ResultVO(1001);
+    public ResultVO execute(HttpSession session) {
+        String imei = (String) session.getAttribute("imei");
+        Long ohid = (Long) session.getAttribute("ohid");
+        ForkliftPO fPO = forkliftMapper.queryByImei(imei);
+
+        List<ForkliftPO> pos = forkliftMapper.queryByOhid(ohid);
+        if (null == pos || pos.size() == 0) {
+            // 开始任务
+            OutboundForkliftPO ofPO = new OutboundForkliftPO();
+            ofPO.setForkliftId(fPO.getForkliftId());
+            ofPO.setOutboundHeadId(ohid);
+            outboundForkliftMapper.insert(ofPO);
+
+            return ResultVO.ok();
         }
 
-        
+        for (ForkliftPO po : pos) {
+            if (imei.equals(po.getImeiNo())) {
+                // 关闭
+                outboundForkliftMapper.deleteByFid(po.getForkliftId());
 
+                return ResultVO.ok();
+            }
+        }
 
-        return null;
+        // 辅助任务
+        OutboundForkliftPO ofPO = new OutboundForkliftPO();
+        ofPO.setForkliftId(fPO.getForkliftId());
+        ofPO.setOutboundHeadId(ohid);
+        outboundForkliftMapper.insert(ofPO);
+
+        return ResultVO.ok();
     }
 }
