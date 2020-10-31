@@ -37,4 +37,14 @@ public class FinishOutboundController {
     public ResultVO list(HttpSession session, @RequestBody FinishOutboundDTO dto) {
         return finishOutboundService.list(session, dto);
     }
+
+    @PostMapping("detail")
+    public ResultVO detail(HttpSession session, @RequestBody FinishOutboundDTO dto) {
+        return finishOutboundService.detail(session, dto);
+    }
+
+    @PostMapping("execute")
+    public ResultVO execute(HttpSession session) {
+        return finishOutboundService.execute(session);
+    }
 }

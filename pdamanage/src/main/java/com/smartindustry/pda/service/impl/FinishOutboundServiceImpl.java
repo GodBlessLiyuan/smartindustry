@@ -12,6 +12,7 @@ import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.pda.dto.FinishOutboundDTO;
 import com.smartindustry.pda.service.IFinishOutboundService;
 import com.smartindustry.pda.util.OutboundNoUtil;
+import com.smartindustry.pda.vo.OutboundDetailVO;
 import com.smartindustry.pda.vo.OutboundListVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,8 +20,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author: xiahui
@@ -44,6 +44,7 @@ public class FinishOutboundServiceImpl implements IFinishOutboundService {
      */
     @Override
     public ResultVO erp() {
+        // 出库表头
         OutboundHeadPO headPO = new OutboundHeadPO();
         headPO.setOutboundNo(OutboundNoUtil.genOutboundHeadNo(outboundHeadMapper, OutboundNoUtil.OUTBOUND_HEAD_XS, new Date()));
         headPO.setSourceNo("XS" + DateUtil.date2Str(new Date(), DateUtil.YMDHMS));
@@ -53,6 +54,7 @@ public class FinishOutboundServiceImpl implements IFinishOutboundService {
         headPO.setDr((byte) 1);
         outboundHeadMapper.insert(headPO);
 
+        // 出库表体
         OutboundBodyPO bodyPO1 = new OutboundBodyPO();
         bodyPO1.setOutboundHeadId(headPO.getOutboundHeadId());
         bodyPO1.setMaterialId(1L);
@@ -85,12 +87,14 @@ public class FinishOutboundServiceImpl implements IFinishOutboundService {
             return new ResultVO(1001);
         }
 
+        // 叉车信息
         ForkliftPO forkliftPO = forkliftMapper.queryByImei(dto.getImei());
         if (null == forkliftPO) {
             return new ResultVO(1002);
         }
 
         session.setAttribute("imei", dto.getImei());
+        session.setAttribute("fno", forkliftPO.getForkliftNo());
 
         return ResultVO.ok().setData(forkliftPO.getForkliftNo());
     }
@@ -108,6 +112,7 @@ public class FinishOutboundServiceImpl implements IFinishOutboundService {
             return new ResultVO(1001);
         }
 
+        // 叉车信息
         ForkliftPO forkliftPO = forkliftMapper.queryByImei((String) session.getAttribute("imei"));
         if (null == forkliftPO) {
             return new ResultVO(1002);
@@ -115,6 +120,62 @@ public class FinishOutboundServiceImpl implements IFinishOutboundService {
 
         List<OutboundHeadBO> headBOs = outboundHeadMapper.queryPdaByType(dto.getType());
 
+        // session 存储
+        Set<Long> ohids = new HashSet<>();
+        for (OutboundHeadBO headBO : headBOs) {
+            ohids.add(headBO.getOutboundHeadId());
+        }
+        session.setAttribute("ohids", ohids);
+
         return ResultVO.ok().setData(OutboundListVO.convert(headBOs));
+    }
+
+    /**
+     * 详情
+     *
+     * @param session
+     * @param dto
+     * @return
+     */
+    @Override
+    public ResultVO detail(HttpSession session, FinishOutboundDTO dto) {
+        if (null == dto.getOhid()) {
+            return new ResultVO(1001);
+        }
+
+        // 出库信息
+        OutboundHeadBO headBO = outboundHeadMapper.queryByOhid(dto.getOhid());
+        if (null == headBO) {
+            return new ResultVO(1002);
+        }
+        OutboundDetailVO vo = OutboundDetailVO.convert(headBO);
+
+        // 叉车信息
+        List<ForkliftPO> pos = forkliftMapper.queryByOhid(dto.getOhid());
+        if (null != pos && pos.size() > 0) {
+            List<String> fnos = new ArrayList<>(pos.size());
+            for (ForkliftPO po : pos) {
+                fnos.add(po.getForkliftNo());
+            }
+            vo.setFnos(fnos);
+            vo.setStatus(fnos.contains(session.getAttribute("fno")) ? "关闭" : "辅助执行");
+        } else {
+            vo.setStatus("开始执行");
+        }
+
+        session.setAttribute("ohid", dto.getOhid());
+
+        return ResultVO.ok().setData(vo);
+    }
+
+    /**
+     * 执行
+     *
+     * @param session
+     * @return
+     */
+    @Override
+    public ResultVO execute(HttpSession session) {
+        return null;
     }
 }

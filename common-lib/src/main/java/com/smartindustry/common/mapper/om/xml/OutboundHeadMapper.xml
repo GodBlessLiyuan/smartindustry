@@ -182,7 +182,7 @@
         <result column="mix_no" jdbcType="CHAR" property="mixNo"/>
         <result column="plan_time" jdbcType="DATE" property="planTime"/>
         <result column="extra" jdbcType="CHAR" property="extra"/>
-        <collection property="bos" ofType="com.smartindustry.common.bo.om.OutboundBodyBO">
+        <collection property="bodyBOs" ofType="com.smartindustry.common.bo.om.OutboundBodyBO">
             <id column="outbound_body_id" jdbcType="BIGINT" property="outboundBodyId"/>
             <result column="material_id" jdbcType="BIGINT" property="materialId"/>
             <result column="material_no" jdbcType="CHAR" property="materialNo"/>
@@ -224,7 +224,7 @@
     </sql>
     <resultMap id="PdaResultMap" type="com.smartindustry.common.bo.om.OutboundHeadBO" extends="BaseResultMap">
         <result column="outbound_head_id" jdbcType="BIGINT" property="outboundHeadId"/>
-        <collection property="bos" ofType="com.smartindustry.common.bo.om.OutboundBodyBO">
+        <collection property="bodyBOs" ofType="com.smartindustry.common.bo.om.OutboundBodyBO">
             <id column="outbound_body_id" jdbcType="BIGINT" property="outboundBodyId"/>
             <result column="material_id" jdbcType="BIGINT" property="materialId"/>
             <result column="material_no" jdbcType="CHAR" property="materialNo"/>
@@ -240,10 +240,11 @@
         left join si_material m on ob.material_id = m.material_id
         where oh.source_type = 3 and dr = 1
         <if test="type == 1">
-            and oh.outbound_head_id not in (select outbound_head_id from pda_outbound_forklift)
+            and oh.status != 1 and oh.outbound_head_id not in (select distinct outbound_head_id from
+            pda_outbound_forklift)
         </if>
         <if test="type == 2">
-            and oh.outbound_head_id in (select outbound_head_id from pda_outbound_forklift)
+            and oh.status != 1 and oh.outbound_head_id in (select distinct outbound_head_id from pda_outbound_forklift)
         </if>
         <if test="type == 3">
             and oh.status = 1

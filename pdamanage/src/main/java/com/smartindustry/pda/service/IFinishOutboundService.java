@@ -17,4 +17,8 @@ public interface IFinishOutboundService {
     ResultVO online(HttpSession session, FinishOutboundDTO dto);
 
     ResultVO list(HttpSession session, FinishOutboundDTO dto);
+
+    ResultVO detail(HttpSession session, FinishOutboundDTO dto);
+
+    ResultVO execute(HttpSession session);
 }

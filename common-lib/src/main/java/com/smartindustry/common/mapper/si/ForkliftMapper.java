@@ -14,15 +14,25 @@ import java.util.Map;
 public interface ForkliftMapper extends BaseMapper<ForkliftPO, Long> {
     /**
      * 叉车的分页查询
+     *
      * @param reqData
      * @return
      */
     List<ForkliftPO> pageQuery(Map<String, Object> reqData);
 
     /**
-     * 根据
+     * 根据 IMEI 查询
+     *
      * @param imei
      * @return
      */
     ForkliftPO queryByImei(String imei);
+
+    /**
+     * 根据 出库表头ID 查询
+     *
+     * @param ohid
+     * @return
+     */
+    List<ForkliftPO> queryByOhid(Long ohid);
 }
