@@ -186,15 +186,9 @@
     where forklift_id = #{forkliftId,jdbcType=BIGINT}
   </update>
 
-  <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.ForkliftBO" extends="BaseResultMap">
-    <result column="supplier_name" jdbcType="CHAR" property="supplierName"/>
-  </resultMap>
-  <sql id="BO_Column_List">
-        f.forklift_id, f.forklift_no, f.forklift_model, f.forklift_brand, s.supplier_name, f.imei_no, f.work_area, f.`status`
-    </sql>
-  <select id="pageQuery" parameterType="java.util.Map" resultMap="BOResultMap">
+  <select id="pageQuery" parameterType="java.util.Map" resultMap="BaseResultMap">
     select
-    <include refid="BO_Column_List"/>
+    <include refid="Base_Column_List"/>
     from si_forklift f
     left join si_supplier s on f.supplier_id = s.supplier_id
     where f.dr = 1

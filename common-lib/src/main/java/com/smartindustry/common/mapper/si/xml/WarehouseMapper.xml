@@ -201,6 +201,6 @@
     <include refid="BO_Column_List"/>
     from si_warehouse w
     left join si_location l on w.warehouse_id = l.warehouse_id
-    where w.dr = 1 and l.dr = 1 and l.location_id is not null
+    where w.dr = 1
   </select>
 </mapper>

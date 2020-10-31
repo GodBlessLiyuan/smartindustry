@@ -189,7 +189,7 @@
     left join si_material m on sb.material_id = m.material_id
     left join si_supplier su on m.supplier_id = su.supplier_id
     left join dd_measure_unit mu on m.measure_unit_id = mu.measure_unit_id
-    where sh.dr = 1 and sh.storage_head_id = #{shid,jdbcType=BIGINT}
+    where sh.dr = 1 and sb.dr = 1 and sh.storage_head_id = #{shid,jdbcType=BIGINT}
   </select>
 
   <select id="queryNo" parameterType="java.lang.String" resultMap="BaseResultMap">

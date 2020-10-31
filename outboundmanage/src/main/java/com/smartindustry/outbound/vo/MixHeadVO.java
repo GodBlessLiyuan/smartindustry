@@ -1,5 +1,6 @@
 package com.smartindustry.outbound.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.smartindustry.common.bo.om.MixBodyBO;
 import com.smartindustry.common.bo.om.MixHeadBO;
 import lombok.Data;

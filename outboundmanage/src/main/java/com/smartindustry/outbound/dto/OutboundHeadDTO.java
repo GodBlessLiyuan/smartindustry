@@ -33,7 +33,7 @@ public class OutboundHeadDTO implements Serializable {
     /**
      * 来源工单号/混料工单号
      */
-    private String sno;
+    private String mixno;
     /**
      * 计划出货时间
      */
@@ -79,7 +79,7 @@ public class OutboundHeadDTO implements Serializable {
     }
 
     public static OutboundHeadPO buildPO(OutboundHeadPO po, OutboundHeadDTO dto) {
-        po.setSourceNo(dto.getSno());
+        po.setSourceNo(dto.getMixno());
         po.setSourceType(OutboundConstant.TYPE_INSERT_BY_OURS);
         po.setPlanTime(dto.getPtime());
         po.setExtra(dto.getExtra());

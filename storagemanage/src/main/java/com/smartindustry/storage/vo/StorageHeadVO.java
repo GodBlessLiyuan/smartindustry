@@ -57,6 +57,10 @@ public class StorageHeadVO implements Serializable {
          */
         private Long sbid;
         /**
+         * 物料id
+         */
+        private Long mid;
+        /**
          * 物料编号
          */
         private String mno;
@@ -129,6 +133,7 @@ public class StorageHeadVO implements Serializable {
         for (StorageBodyBO bodyBO : bo.getBos()){
             StorageBodyVO bodyVO = new StorageBodyVO();
             bodyVO.setSbid(bodyBO.getStorageBodyId());
+            bodyVO.setMid(bodyBO.getMaterialId());
             bodyVO.setMno(bodyBO.getMaterialNo());
             bodyVO.setMname(bodyBO.getMaterialName());
             bodyVO.setMmodel(bodyBO.getMaterialModel());
