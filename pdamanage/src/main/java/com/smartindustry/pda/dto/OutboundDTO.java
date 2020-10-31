@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @version: 1.0
  */
 @Data
-public class FinishOutboundDTO implements Serializable {
+public class OutboundDTO implements Serializable {
     private static final long SerialVersionUID = 1L;
 
     /**
@@ -26,4 +26,12 @@ public class FinishOutboundDTO implements Serializable {
      * 出库单表头ID
      */
     private Long ohid;
+    /**
+     * 物料砧板RFID
+     */
+    private String mrfid;
+    /**
+     * 库位RFID
+     */
+    private String lrfid;
 }

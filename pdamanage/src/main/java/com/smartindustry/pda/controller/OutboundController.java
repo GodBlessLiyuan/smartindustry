@@ -1,8 +1,8 @@
 package com.smartindustry.pda.controller;
 
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.pda.dto.FinishOutboundDTO;
-import com.smartindustry.pda.service.IFinishOutboundService;
+import com.smartindustry.pda.dto.OutboundDTO;
+import com.smartindustry.pda.service.IOutboundService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,9 +19,9 @@ import javax.servlet.http.HttpSession;
  */
 @RestController
 @RequestMapping("outbound")
-public class FinishOutboundController {
+public class OutboundController {
     @Autowired
-    private IFinishOutboundService finishOutboundService;
+    private IOutboundService finishOutboundService;
 
     @PostMapping("erp")
     public ResultVO erp() {
@@ -29,22 +29,27 @@ public class FinishOutboundController {
     }
 
     @PostMapping("online")
-    public ResultVO online(HttpSession session, @RequestBody FinishOutboundDTO dto) {
+    public ResultVO online(HttpSession session, @RequestBody OutboundDTO dto) {
         return finishOutboundService.online(session, dto);
     }
 
     @PostMapping("list")
-    public ResultVO list(HttpSession session, @RequestBody FinishOutboundDTO dto) {
+    public ResultVO list(HttpSession session, @RequestBody OutboundDTO dto) {
         return finishOutboundService.list(session, dto);
     }
 
     @PostMapping("detail")
-    public ResultVO detail(HttpSession session, @RequestBody FinishOutboundDTO dto) {
+    public ResultVO detail(HttpSession session, @RequestBody OutboundDTO dto) {
         return finishOutboundService.detail(session, dto);
     }
 
     @PostMapping("execute")
     public ResultVO execute(HttpSession session) {
         return finishOutboundService.execute(session);
+    }
+
+    @PostMapping("outbound")
+    public ResultVO outbound(HttpSession session, @RequestBody OutboundDTO dto) {
+        return finishOutboundService.outbound(session, dto);
     }
 }

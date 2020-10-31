@@ -11,8 +11,9 @@ import com.smartindustry.common.pojo.pda.OutboundForkliftPO;
 import com.smartindustry.common.pojo.si.ForkliftPO;
 import com.smartindustry.common.util.DateUtil;
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.pda.dto.FinishOutboundDTO;
-import com.smartindustry.pda.service.IFinishOutboundService;
+import com.smartindustry.pda.constant.OutboundConstant;
+import com.smartindustry.pda.dto.OutboundDTO;
+import com.smartindustry.pda.service.IOutboundService;
 import com.smartindustry.pda.util.OutboundNoUtil;
 import com.smartindustry.pda.vo.OutboundDetailVO;
 import com.smartindustry.pda.vo.OutboundListVO;
@@ -31,7 +32,7 @@ import java.util.*;
  * @version: 1.0
  */
 @Service
-public class FinishOutboundServiceImpl implements IFinishOutboundService {
+public class OutboundServiceImpl implements IOutboundService {
     @Autowired
     private OutboundHeadMapper outboundHeadMapper;
     @Autowired
@@ -86,7 +87,7 @@ public class FinishOutboundServiceImpl implements IFinishOutboundService {
      * @return
      */
     @Override
-    public ResultVO online(HttpSession session, FinishOutboundDTO dto) {
+    public ResultVO online(HttpSession session, OutboundDTO dto) {
         if (StringUtils.isEmpty(dto.getImei())) {
             return new ResultVO(1001);
         }
@@ -97,7 +98,7 @@ public class FinishOutboundServiceImpl implements IFinishOutboundService {
             return new ResultVO(1002);
         }
 
-        session.setAttribute("imei", dto.getImei());
+        session.setAttribute(OutboundConstant.SESSION_IMEI, dto.getImei());
         session.setMaxInactiveInterval(30 * 24 * 60 * 60);
 
         return ResultVO.ok().setData(forkliftPO.getForkliftNo());
@@ -111,7 +112,7 @@ public class FinishOutboundServiceImpl implements IFinishOutboundService {
      * @return
      */
     @Override
-    public ResultVO list(HttpSession session, FinishOutboundDTO dto) {
+    public ResultVO list(HttpSession session, OutboundDTO dto) {
         if (null == dto.getType()) {
             return new ResultVO(1001);
         }
@@ -129,7 +130,7 @@ public class FinishOutboundServiceImpl implements IFinishOutboundService {
         for (OutboundHeadBO headBO : headBOs) {
             ohids.add(headBO.getOutboundHeadId());
         }
-        session.setAttribute("ohids", ohids);
+        session.setAttribute(OutboundConstant.SESSION_OHIDS, ohids);
 
         return ResultVO.ok().setData(OutboundListVO.convert(headBOs));
     }
@@ -142,7 +143,7 @@ public class FinishOutboundServiceImpl implements IFinishOutboundService {
      * @return
      */
     @Override
-    public ResultVO detail(HttpSession session, FinishOutboundDTO dto) {
+    public ResultVO detail(HttpSession session, OutboundDTO dto) {
         if (null == dto.getOhid()) {
             return new ResultVO(1001);
         }
@@ -157,7 +158,7 @@ public class FinishOutboundServiceImpl implements IFinishOutboundService {
         // 叉车信息
         List<ForkliftPO> pos = forkliftMapper.queryByOhid(dto.getOhid());
         if (null != pos && pos.size() > 0) {
-            String imei = (String) session.getAttribute("imei");
+            String imei = (String) session.getAttribute(OutboundConstant.SESSION_IMEI);
             vo.setStatus("辅助执行");
 
             List<String> fnos = new ArrayList<>(pos.size());
@@ -172,7 +173,7 @@ public class FinishOutboundServiceImpl implements IFinishOutboundService {
             vo.setStatus("开始执行");
         }
 
-        session.setAttribute("ohid", dto.getOhid());
+        session.setAttribute(OutboundConstant.SESSION_OHID, dto.getOhid());
 
         return ResultVO.ok().setData(vo);
     }
@@ -185,8 +186,8 @@ public class FinishOutboundServiceImpl implements IFinishOutboundService {
      */
     @Override
     public ResultVO execute(HttpSession session) {
-        String imei = (String) session.getAttribute("imei");
-        Long ohid = (Long) session.getAttribute("ohid");
+        String imei = (String) session.getAttribute(OutboundConstant.SESSION_IMEI);
+        Long ohid = (Long) session.getAttribute(OutboundConstant.SESSION_OHID);
         ForkliftPO fPO = forkliftMapper.queryByImei(imei);
 
         List<ForkliftPO> pos = forkliftMapper.queryByOhid(ohid);
@@ -197,6 +198,8 @@ public class FinishOutboundServiceImpl implements IFinishOutboundService {
             ofPO.setOutboundHeadId(ohid);
             outboundForkliftMapper.insert(ofPO);
 
+            session.setAttribute(OutboundConstant.SESSION_OHID, ohid);
+
             return ResultVO.ok();
         }
 
@@ -204,7 +207,7 @@ public class FinishOutboundServiceImpl implements IFinishOutboundService {
             if (imei.equals(po.getImeiNo())) {
                 // 关闭
                 outboundForkliftMapper.deleteByFid(po.getForkliftId());
-
+                session.removeAttribute(OutboundConstant.SESSION_OHID);
                 return ResultVO.ok();
             }
         }
@@ -214,6 +217,34 @@ public class FinishOutboundServiceImpl implements IFinishOutboundService {
         ofPO.setForkliftId(fPO.getForkliftId());
         ofPO.setOutboundHeadId(ohid);
         outboundForkliftMapper.insert(ofPO);
+
+        session.setAttribute(OutboundConstant.SESSION_OHID, ohid);
+
+        return ResultVO.ok();
+    }
+
+    /**
+     * 出库
+     *
+     * @param session
+     * @param dto
+     * @return
+     */
+    @Override
+    public ResultVO outbound(HttpSession session, OutboundDTO dto) {
+        if (null == dto.getMrfid() && null == dto.getLrfid()) {
+            return new ResultVO(1001);
+        }
+
+        ForkliftPO fPO = forkliftMapper.queryByImei((String) session.getAttribute(OutboundConstant.SESSION_IMEI));
+
+
+        if (null == dto.getLrfid()) {
+            // 叉起砧板
+
+        } else {
+            // 砧板入库
+        }
 
         return ResultVO.ok();
     }

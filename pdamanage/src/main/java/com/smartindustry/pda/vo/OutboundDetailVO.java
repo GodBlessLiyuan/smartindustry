@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @author: xiahui
  * @date: Created in 2020/10/31 14:39
- * @description: TODO
+ * @description: 成品出库
  * @version: 1.0
  */
 @Data
@@ -43,7 +43,7 @@ public class OutboundDetailVO implements Serializable {
      */
     private List<String> fnos;
     /**
-     * 状态：1-开始执行；2-辅助执行；3-关闭
+     * 状态：开始执行；辅助执行；关闭
      */
     private String status;
 
