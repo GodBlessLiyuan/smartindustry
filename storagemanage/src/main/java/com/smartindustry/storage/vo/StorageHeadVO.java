@@ -139,7 +139,7 @@ public class StorageHeadVO implements Serializable {
             bodyVO.setMmodel(bodyBO.getMaterialModel());
             bodyVO.setSname(bodyBO.getSupplierName());
             bodyVO.setCbrand(bodyBO.getCarBrand());
-            bodyVO.setAnum(bodyBO.getAcceptNum());
+            bodyVO.setAnum(bodyBO.getStorageNum());
             bodyVO.setAtime(bodyBO.getAcceptTime());
             bodyVO.setLid(bodyBO.getLocationId());
             bodyVO.setLno(bodyBO.getLocationNo());

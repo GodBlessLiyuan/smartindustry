@@ -101,7 +101,7 @@ public class StorageHeadDTO implements Serializable {
         bodyPO.setMaterialId(dto.getMid());
         bodyPO.setLocationId(dto.getLid());
         bodyPO.setCarBrand(dto.getCbrand());
-        bodyPO.setAcceptNum(dto.getAnum());
+        bodyPO.setStorageNum(dto.getAnum());
         bodyPO.setAcceptTime(dto.getAtime());
         return bodyPO;
     }

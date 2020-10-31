@@ -27,4 +27,11 @@ public interface MixHeadMapper extends BaseMapper<MixHeadPO, Long> {
      * @return
      */
     BigDecimal queryByMhid(@Param("mixno") String mixno,@Param("mid") Long mid);
+
+    /**
+     * 查看当前混料单所有的期望总数
+     * @param mixno
+     * @return
+     */
+    BigDecimal queryTotal(@Param("mixno") String mixno);
 }
