@@ -94,7 +94,7 @@ public class FinishOutboundServiceImpl implements IFinishOutboundService {
         }
 
         session.setAttribute("imei", dto.getImei());
-        session.setAttribute("fno", forkliftPO.getForkliftNo());
+        session.setMaxInactiveInterval(30 * 24 * 60 * 60);
 
         return ResultVO.ok().setData(forkliftPO.getForkliftNo());
     }
@@ -153,14 +153,19 @@ public class FinishOutboundServiceImpl implements IFinishOutboundService {
         // 叉车信息
         List<ForkliftPO> pos = forkliftMapper.queryByOhid(dto.getOhid());
         if (null != pos && pos.size() > 0) {
+            String imei = (String) session.getAttribute("imei");
+            vo.setStatus((byte) 2);
+
             List<String> fnos = new ArrayList<>(pos.size());
             for (ForkliftPO po : pos) {
                 fnos.add(po.getForkliftNo());
+                if (imei.equals(po.getImeiNo())) {
+                    vo.setStatus((byte) 3);
+                }
             }
             vo.setFnos(fnos);
-            vo.setStatus(fnos.contains(session.getAttribute("fno")) ? "关闭" : "辅助执行");
         } else {
-            vo.setStatus("开始执行");
+            vo.setStatus((byte) 1);
         }
 
         session.setAttribute("ohid", dto.getOhid());
@@ -175,7 +180,14 @@ public class FinishOutboundServiceImpl implements IFinishOutboundService {
      * @return
      */
     @Override
-    public ResultVO execute(HttpSession session) {
+    public ResultVO execute(HttpSession session, FinishOutboundDTO dto) {
+        if (null == dto.getOhid() || null == dto.getType()) {
+            return new ResultVO(1001);
+        }
+
+        
+
+
         return null;
     }
 }

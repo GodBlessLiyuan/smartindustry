@@ -43,9 +43,9 @@ public class OutboundDetailVO implements Serializable {
      */
     private List<String> fnos;
     /**
-     * 状态：开始执行；辅助执行；关闭
+     * 状态：1-开始执行；2-辅助执行；3-关闭
      */
-    private String status;
+    private Byte status;
 
     public static OutboundDetailVO convert(OutboundHeadBO bo) {
         OutboundDetailVO vo = new OutboundDetailVO();

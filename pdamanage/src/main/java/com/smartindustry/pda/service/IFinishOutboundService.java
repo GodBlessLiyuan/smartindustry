@@ -20,5 +20,5 @@ public interface IFinishOutboundService {
 
     ResultVO detail(HttpSession session, FinishOutboundDTO dto);
 
-    ResultVO execute(HttpSession session);
+    ResultVO execute(HttpSession session, FinishOutboundDTO dto);
 }
