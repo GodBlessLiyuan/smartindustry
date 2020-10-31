@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.smartindustry.common.mapper.pda.StorageDetailMapper">
-  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.pda.StorageDetailPO">
+<mapper namespace="com.smartindustry.common.mapper.sm.StorageDetailMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.sm.StorageDetailPO">
     <id column="storage_id" jdbcType="BIGINT" property="storageId" />
     <result column="storage_body_id" jdbcType="BIGINT" property="storageBodyId" />
     <result column="location_id" jdbcType="BIGINT" property="locationId" />
@@ -22,7 +22,7 @@
     delete from sm_storage_detail
     where storage_id = #{storageId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.smartindustry.common.pojo.pda.StorageDetailPO">
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.StorageDetailPO">
     insert into sm_storage_detail (storage_id, storage_body_id, location_id, 
       storage_num, storage_time, rfid
       )
@@ -30,7 +30,7 @@
       #{storageNum,jdbcType=DECIMAL}, #{storageTime,jdbcType=TIMESTAMP}, #{rfid,jdbcType=CHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.pda.StorageDetailPO">
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.sm.StorageDetailPO">
     insert into sm_storage_detail
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="storageId != null">
@@ -73,7 +73,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.pda.StorageDetailPO">
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.sm.StorageDetailPO">
     update sm_storage_detail
     <set>
       <if test="storageBodyId != null">
@@ -94,7 +94,7 @@
     </set>
     where storage_id = #{storageId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.pda.StorageDetailPO">
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.sm.StorageDetailPO">
     update sm_storage_detail
     set storage_body_id = #{storageBodyId,jdbcType=BIGINT},
       location_id = #{locationId,jdbcType=BIGINT},

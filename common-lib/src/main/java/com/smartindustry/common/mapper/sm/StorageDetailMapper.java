@@ -1,7 +1,7 @@
-package com.smartindustry.common.mapper.pda;
+package com.smartindustry.common.mapper.sm;
 
 import com.smartindustry.common.mapper.BaseMapper;
-import com.smartindustry.common.pojo.pda.StorageDetailPO;
+import com.smartindustry.common.pojo.sm.StorageDetailPO;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

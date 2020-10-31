@@ -1,4 +1,4 @@
-package com.smartindustry.common.pojo.pda;
+package com.smartindustry.common.pojo.sm;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
