@@ -158,18 +158,18 @@ public class FinishOutboundServiceImpl implements IFinishOutboundService {
         List<ForkliftPO> pos = forkliftMapper.queryByOhid(dto.getOhid());
         if (null != pos && pos.size() > 0) {
             String imei = (String) session.getAttribute("imei");
-            vo.setStatus((byte) 2);
+            vo.setStatus("辅助执行");
 
             List<String> fnos = new ArrayList<>(pos.size());
             for (ForkliftPO po : pos) {
                 fnos.add(po.getForkliftNo());
                 if (imei.equals(po.getImeiNo())) {
-                    vo.setStatus((byte) 3);
+                    vo.setStatus("关闭");
                 }
             }
             vo.setFnos(fnos);
         } else {
-            vo.setStatus((byte) 1);
+            vo.setStatus("开始执行");
         }
 
         session.setAttribute("ohid", dto.getOhid());
