@@ -1,9 +1,11 @@
 package com.smartindustry.outbound.vo;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.smartindustry.common.bo.om.MixBodyBO;
 import com.smartindustry.common.bo.om.MixHeadBO;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -29,6 +31,7 @@ public class MixHeadVO implements Serializable {
      */
     private String mixno;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date ptime;
 
     private List<MixBodyVO> vos;
