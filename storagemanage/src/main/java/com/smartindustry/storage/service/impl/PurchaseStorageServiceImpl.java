@@ -65,6 +65,7 @@ public class PurchaseStorageServiceImpl implements IPurchaseStorageService {
     @Override
     public ResultVO detail(OperateDTO dto){
         StorageHeadBO bo = storageHeadMapper.queryByShid(dto.getShid());
+        System.out.println(bo);
         if(null == bo){
             // 采购单表体不存在
             return new ResultVO(StorageExceptionEnums.NO_EXIST.getCode());
@@ -111,13 +112,10 @@ public class PurchaseStorageServiceImpl implements IPurchaseStorageService {
         }
         StorageHeadPO headPO = StorageHeadDTO.buildPO(po,dto);
         storageHeadMapper.updateByPrimaryKeySelective(headPO);
+        // 首先先删除采购入库单所有的表体
+        List<Long> sbids = storageBodyMapper.querySbids(dto.getShid());
+        storageBodyMapper.deleteBatch(sbids);
         if(!dto.getBody().isEmpty()){
-            // 首先先删除采购入库单所有的表体
-            List<Long> sbids = storageBodyMapper.querySbids(dto.getShid());
-            storageBodyMapper.deleteBatch(sbids);
-            // 得到更新后的表体列表
-//        List<StorageBodyPO> pos = dto.getBody().stream().map(bodyDTO -> StorageHeadDTO.buildPO(
-//                storageBodyMapper.selectByPrimaryKey(bodyDTO.getSbid()),bodyDTO)).collect(toList());
             // 采购入库单表体
             List<StorageBodyPO> pos = StorageHeadDTO.convert(po,dto.getBody());
             storageBodyMapper.batchInsert(pos);
@@ -146,7 +144,7 @@ public class PurchaseStorageServiceImpl implements IPurchaseStorageService {
 
     @Override
     public ResultVO queryStorageRecord(OperateDTO dto){
-        List<StorageRecordPO> pos = storageRecordMapper.queryByShid(dto.getOhid());
+        List<StorageRecordPO> pos = storageRecordMapper.queryByShid(dto.getShid());
         return ResultVO.ok().setData(StorageRecordVO.convert(pos));
     }
 

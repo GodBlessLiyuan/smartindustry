@@ -159,10 +159,10 @@
     )
     values
     <foreach collection="list" separator="," item="po">
-      (#{storageBodyId,jdbcType=BIGINT}, #{storageHeadId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT},
-      #{locationId,jdbcType=BIGINT}, #{carBrand,jdbcType=CHAR}, #{acceptNum,jdbcType=DECIMAL},
-      #{pendingNum,jdbcType=DECIMAL}, #{acceptTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP},
-      #{dr,jdbcType=TINYINT})
+      (#{po.storageBodyId,jdbcType=BIGINT}, #{po.storageHeadId,jdbcType=BIGINT}, #{po.materialId,jdbcType=BIGINT},
+      #{po.locationId,jdbcType=BIGINT}, #{po.carBrand,jdbcType=CHAR}, #{po.acceptNum,jdbcType=DECIMAL},
+      #{po.pendingNum,jdbcType=DECIMAL}, #{po.acceptTime,jdbcType=TIMESTAMP}, #{po.createTime,jdbcType=TIMESTAMP},
+      #{po.dr,jdbcType=TINYINT})
     </foreach>
   </insert>
 
