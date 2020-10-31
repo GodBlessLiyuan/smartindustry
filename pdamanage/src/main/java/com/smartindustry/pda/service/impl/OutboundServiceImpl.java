@@ -14,6 +14,7 @@ import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.pda.constant.OutboundConstant;
 import com.smartindustry.pda.dto.OutboundDTO;
 import com.smartindustry.pda.service.IOutboundService;
+import com.smartindustry.pda.socket.WebSocketServer;
 import com.smartindustry.pda.util.OutboundNoUtil;
 import com.smartindustry.pda.vo.OutboundDetailVO;
 import com.smartindustry.pda.vo.OutboundListVO;
@@ -236,8 +237,15 @@ public class OutboundServiceImpl implements IOutboundService {
             return new ResultVO(1001);
         }
 
-        ForkliftPO fPO = forkliftMapper.queryByImei((String) session.getAttribute(OutboundConstant.SESSION_IMEI));
-
+        // 当前叉车信息
+        String imei = (String) session.getAttribute(OutboundConstant.SESSION_IMEI);
+        ForkliftPO fPO = forkliftMapper.queryByImei(imei);
+        OutboundForkliftPO ofPO = outboundForkliftMapper.queryByFid(fPO.getForkliftId());
+        if (null == ofPO) {
+            // 尚未开始任务
+            WebSocketServer.sendMsg(imei, "请先开始任务！");
+            return new ResultVO(1003);
+        }
 
         if (null == dto.getLrfid()) {
             // 叉起砧板

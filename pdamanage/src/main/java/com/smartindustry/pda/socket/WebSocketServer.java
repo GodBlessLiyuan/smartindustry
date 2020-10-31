@@ -1,4 +1,4 @@
-package com.smartindustry.pda.service.impl;
+package com.smartindustry.pda.socket;
 
 import org.springframework.stereotype.Component;
 

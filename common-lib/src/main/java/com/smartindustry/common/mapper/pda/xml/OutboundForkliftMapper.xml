@@ -86,4 +86,10 @@
         from pda_outbound_forklift
         where forklift_id = #{forkliftId,jdbcType=BIGINT}
     </delete>
+    <select id="queryByFid" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from pda_outbound_forklift
+        where forklift_id = #{forkliftId,jdbcType=BIGINT}
+    </select>
 </mapper>
