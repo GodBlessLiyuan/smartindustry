@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.pda.OutboundForkliftMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.pda.OutboundForkliftPO">
+    <id column="outbound_forklift_id" jdbcType="BIGINT" property="outboundForkliftId" />
+    <result column="outbound_head_id" jdbcType="BIGINT" property="outboundHeadId" />
+    <result column="forklift_id" jdbcType="BIGINT" property="forkliftId" />
+    <result column="rfid" jdbcType="CHAR" property="rfid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    outbound_forklift_id, outbound_head_id, forklift_id, rfid
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from pda_outbound_forklift
+    where outbound_forklift_id = #{outboundForkliftId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from pda_outbound_forklift
+    where outbound_forklift_id = #{outboundForkliftId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.pda.OutboundForkliftPO">
+    insert into pda_outbound_forklift (outbound_forklift_id, outbound_head_id, 
+      forklift_id, rfid)
+    values (#{outboundForkliftId,jdbcType=BIGINT}, #{outboundHeadId,jdbcType=BIGINT}, 
+      #{forkliftId,jdbcType=BIGINT}, #{rfid,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.pda.OutboundForkliftPO">
+    insert into pda_outbound_forklift
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="outboundForkliftId != null">
+        outbound_forklift_id,
+      </if>
+      <if test="outboundHeadId != null">
+        outbound_head_id,
+      </if>
+      <if test="forkliftId != null">
+        forklift_id,
+      </if>
+      <if test="rfid != null">
+        rfid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="outboundForkliftId != null">
+        #{outboundForkliftId,jdbcType=BIGINT},
+      </if>
+      <if test="outboundHeadId != null">
+        #{outboundHeadId,jdbcType=BIGINT},
+      </if>
+      <if test="forkliftId != null">
+        #{forkliftId,jdbcType=BIGINT},
+      </if>
+      <if test="rfid != null">
+        #{rfid,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.pda.OutboundForkliftPO">
+    update pda_outbound_forklift
+    <set>
+      <if test="outboundHeadId != null">
+        outbound_head_id = #{outboundHeadId,jdbcType=BIGINT},
+      </if>
+      <if test="forkliftId != null">
+        forklift_id = #{forkliftId,jdbcType=BIGINT},
+      </if>
+      <if test="rfid != null">
+        rfid = #{rfid,jdbcType=CHAR},
+      </if>
+    </set>
+    where outbound_forklift_id = #{outboundForkliftId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.pda.OutboundForkliftPO">
+    update pda_outbound_forklift
+    set outbound_head_id = #{outboundHeadId,jdbcType=BIGINT},
+      forklift_id = #{forkliftId,jdbcType=BIGINT},
+      rfid = #{rfid,jdbcType=CHAR}
+    where outbound_forklift_id = #{outboundForkliftId,jdbcType=BIGINT}
+  </update>
+</mapper>
