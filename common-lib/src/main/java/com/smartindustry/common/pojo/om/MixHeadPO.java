@@ -1,10 +1,11 @@
 package com.smartindustry.common.pojo.om;
 
-import java.io.Serializable;
-import java.util.Date;
-
+import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * om_mix_head
@@ -39,4 +40,5 @@ public class MixHeadPO implements Serializable {
     private Byte dr;
 
     private static final long serialVersionUID = 1L;
+
 }

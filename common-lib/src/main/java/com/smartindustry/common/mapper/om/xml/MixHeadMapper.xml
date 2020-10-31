@@ -118,4 +118,11 @@
     where mh.dr = 1 and date(mh.create_time) = curdate();
   </select>
 
+  <select id="queryByMhid" resultType="java.math.BigDecimal">
+    select mb.plan_num
+    from om_mix_head mh
+    left join om_mix_body mb on mh.mix_head_id = mb.mix_head_id
+    where mh.mix_no = #{mixno,jdbcType=CHAR} and mb.material_id = #{mid,jdbcType=BIGINT}
+  </select>
+
 </mapper>

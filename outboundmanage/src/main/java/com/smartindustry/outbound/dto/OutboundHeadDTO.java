@@ -2,6 +2,7 @@ package com.smartindustry.outbound.dto;
 
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.smartindustry.common.pojo.om.OutboundBodyPO;
 import com.smartindustry.common.pojo.om.OutboundHeadPO;
 import com.smartindustry.outbound.constant.OutboundConstant;
@@ -37,6 +38,7 @@ public class OutboundHeadDTO implements Serializable {
     /**
      * 计划出货时间
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date ptime;
     /**
      * 备注
@@ -57,9 +59,17 @@ public class OutboundHeadDTO implements Serializable {
          */
         private String obid;
         /**
+         * 混料表体id
+         */
+        private Long mbid;
+        /**
          * 出库数量
          */
         private BigDecimal onum;
+        /**
+         * 待出库数量
+         */
+        private BigDecimal rnum;
         /**
          * 出库时间
          */
@@ -107,6 +117,7 @@ public class OutboundHeadDTO implements Serializable {
         bodyPO.setMaterialId(dto.getMid());
         bodyPO.setOutboundNum(dto.getOnum());
         bodyPO.setOutboundTime(dto.getOtime());
+        bodyPO.setOutingNum(dto.getRnum());
         return bodyPO;
     }
 }
