@@ -1,7 +1,7 @@
-package com.smartindustry.common.mapper.pda;
+package com.smartindustry.common.mapper.om;
 
 import com.smartindustry.common.mapper.BaseMapper;
-import com.smartindustry.common.pojo.pda.OutboundForkliftPO;
+import com.smartindustry.common.pojo.om.OutboundForkliftPO;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
