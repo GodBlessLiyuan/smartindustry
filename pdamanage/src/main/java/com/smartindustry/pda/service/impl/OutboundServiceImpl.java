@@ -64,7 +64,7 @@ public class OutboundServiceImpl implements IOutboundService {
         OutboundBodyPO bodyPO1 = new OutboundBodyPO();
         bodyPO1.setOutboundHeadId(headPO.getOutboundHeadId());
         bodyPO1.setMaterialId(1L);
-        bodyPO1.setOutingNum(new BigDecimal(6));
+        bodyPO1.setExpectNum(new BigDecimal(6));
         bodyPO1.setCreateTime(new Date());
         bodyPO1.setDr((byte) 1);
         outboundBodyMapper.insert(bodyPO1);
@@ -72,7 +72,7 @@ public class OutboundServiceImpl implements IOutboundService {
         OutboundBodyPO bodyPO2 = new OutboundBodyPO();
         bodyPO2.setOutboundHeadId(headPO.getOutboundHeadId());
         bodyPO2.setMaterialId(2L);
-        bodyPO2.setOutingNum(new BigDecimal(12));
+        bodyPO2.setExpectNum(new BigDecimal(12));
         bodyPO2.setCreateTime(new Date());
         bodyPO2.setDr((byte) 1);
         outboundBodyMapper.insert(bodyPO2);
