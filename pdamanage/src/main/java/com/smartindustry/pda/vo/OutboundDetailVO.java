@@ -44,7 +44,7 @@ public class OutboundDetailVO implements Serializable {
     /**
      * 叉车
      */
-    private List<String> fnos;
+    private List<String> fnames;
     /**
      * 状态：开始执行；辅助执行；关闭
      */

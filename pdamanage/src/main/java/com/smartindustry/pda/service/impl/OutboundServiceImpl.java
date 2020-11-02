@@ -111,7 +111,7 @@ public class OutboundServiceImpl implements IOutboundService {
         session.setAttribute(OutboundConstant.SESSION_IMEI, dto.getImei());
         session.setMaxInactiveInterval(30 * 24 * 60 * 60);
 
-        return ResultVO.ok().setData(forkliftPO.getForkliftNo());
+        return ResultVO.ok().setData(forkliftPO.getForkliftName());
     }
 
     /**
@@ -196,14 +196,14 @@ public class OutboundServiceImpl implements IOutboundService {
             String imei = (String) session.getAttribute(OutboundConstant.SESSION_IMEI);
             vo.setStatus("辅助执行");
 
-            List<String> fnos = new ArrayList<>(pos.size());
+            List<String> fnames = new ArrayList<>(pos.size());
             for (ForkliftPO po : pos) {
-                fnos.add(po.getForkliftNo());
+                fnames.add(po.getForkliftNo());
                 if (imei.equals(po.getImeiNo())) {
                     vo.setStatus("关闭");
                 }
             }
-            vo.setFnos(fnos);
+            vo.setFnames(fnames);
         } else {
             vo.setStatus("开始执行");
         }
