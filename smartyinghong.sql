@@ -26,8 +26,6 @@ DROP TABLE IF EXISTS dd_warehouse_type;
 DROP TABLE IF EXISTS om_outbound_record;
 DROP TABLE IF EXISTS si_client_record;
 DROP TABLE IF EXISTS si_forklift_record;
-DROP TABLE IF EXISTS om_outbound_forklift;
-DROP TABLE IF EXISTS si_forklift;
 DROP TABLE IF EXISTS si_supplier_record;
 DROP TABLE IF EXISTS si_supplier;
 DROP TABLE IF EXISTS am_user;
@@ -35,8 +33,10 @@ DROP TABLE IF EXISTS am_dept;
 DROP TABLE IF EXISTS am_role;
 DROP TABLE IF EXISTS dd_location_type;
 DROP TABLE IF EXISTS om_mix_head;
+DROP TABLE IF EXISTS om_outbound_forklift;
 DROP TABLE IF EXISTS om_outbound_head;
 DROP TABLE IF EXISTS si_client;
+DROP TABLE IF EXISTS si_forklift;
 
 
 
@@ -287,14 +287,12 @@ CREATE TABLE om_outbound_body
 -- 出库叉车表
 CREATE TABLE om_outbound_forklift
 (
-	outbound_forklift_id bigint NOT NULL COMMENT '出库叉车id',
+	outbound_forklift_id bigint NOT NULL AUTO_INCREMENT COMMENT '出库叉车id',
 	outbound_head_id bigint unsigned NOT NULL COMMENT '出库单表头ID',
 	forklift_id bigint unsigned NOT NULL COMMENT '叉车id',
 	rfid char(128) COMMENT 'RFID',
 	PRIMARY KEY (outbound_forklift_id),
-	UNIQUE (outbound_forklift_id),
-	UNIQUE (outbound_head_id),
-	UNIQUE (forklift_id)
+	UNIQUE (outbound_forklift_id)
 ) COMMENT = '出库叉车表';
 
 
@@ -304,8 +302,12 @@ CREATE TABLE om_outbound_head
 	outbound_head_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '出库单表头ID',
 	outbound_no char(128) NOT NULL COMMENT '出库单编码',
 	source_no char(128) COMMENT '来源单号',
-	--
-	source_type tinyint COMMENT '来源类型 :  ',
+	-- 1 原材料出库
+	-- 2 销售出库
+	-- 3 备料区出库
+	source_type tinyint COMMENT '来源类型 : 1 原材料出库
+2 销售出库
+3 备料区出库',
 	plan_time date COMMENT '计划出库时间',
 	outbound_time datetime COMMENT '完成出库时间',
 	expect_num decimal(10,2) COMMENT '期望出库数',
@@ -392,7 +394,6 @@ CREATE TABLE si_forklift
 	forklift_no char(128) COMMENT '叉车编号',
 	forklift_model char(255) COMMENT '叉车型号',
 	forklift_brand char(255) COMMENT '品牌',
-	supplier_id bigint unsigned NOT NULL COMMENT '供应商ID',
 	contact char(64) COMMENT '联系人',
 	contact_phone char(16) COMMENT '联系电话',
 	imei_no char(255) COMMENT '工业一体机号',
@@ -402,6 +403,7 @@ CREATE TABLE si_forklift
 	work_area tinyint COMMENT '作业区域 : 1 原材料区
 2 生产产区
 3 成品区',
+	supplier_name char(64) COMMENT '供应商名称',
 	-- 1 忙碌中
 	-- 2 空闲中
 	-- 3 不在线
@@ -629,14 +631,12 @@ CREATE TABLE sm_storage_detail
 -- 入库叉车表
 CREATE TABLE sm_storage_forklift
 (
-	storage_forklift_id bigint NOT NULL COMMENT '入库叉车id',
+	storage_forklift_id bigint NOT NULL AUTO_INCREMENT COMMENT '入库叉车id',
 	storage_head_id bigint unsigned NOT NULL COMMENT '入库单表头ID',
 	forklift_id bigint unsigned NOT NULL COMMENT '叉车id',
 	rfid char(128) COMMENT '当前运作的RFID',
 	PRIMARY KEY (storage_forklift_id),
-	UNIQUE (storage_forklift_id),
-	UNIQUE (storage_head_id),
-	UNIQUE (forklift_id)
+	UNIQUE (storage_forklift_id)
 ) COMMENT = '入库叉车表';
 
 
@@ -647,15 +647,15 @@ CREATE TABLE sm_storage_head
 	warehouse_id bigint unsigned NOT NULL COMMENT '仓库ID',
 	storage_no char(128) NOT NULL COMMENT '入库单编号',
 	source_no char(128) COMMENT '来源单号',
-	--
-	source_type tinyint COMMENT '来源类型 :  ',
+	-- 1 原材料入库
+	-- 2 生产入库
+	-- 3 备料区入库
+	source_type tinyint COMMENT '来源类型 : 1 原材料入库
+2 生产入库
+3 备料区入库',
 	storage_time datetime COMMENT '入库时间',
 	expect_num decimal(10,2) COMMENT '期望入库数',
 	storage_num decimal(10,2) COMMENT '已入库数量',
-	-- 1 生产入库
-	-- 2 备料入库
-	storage_type tinyint COMMENT '入库类型 : 1 生产入库
-2 备料入库',
 	extra char(255) COMMENT '备注',
 	-- 1：已入库
 	-- 2：入库中
@@ -1064,14 +1064,6 @@ ALTER TABLE si_material_record
 ALTER TABLE sm_storage_body
 	ADD FOREIGN KEY (material_id)
 	REFERENCES si_material (material_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE si_forklift
-	ADD FOREIGN KEY (supplier_id)
-	REFERENCES si_supplier (supplier_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
 ;
