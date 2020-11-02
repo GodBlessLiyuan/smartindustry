@@ -22,8 +22,8 @@ public class OutboundDTO implements Serializable {
      * 类别类型：1-待执行，2-执行中，3-已执行
      */
     private Byte type;
-    /**
-     * 出库单表头ID
+    /**出库单表头ID
+     *
      */
     private Long ohid;
     /**

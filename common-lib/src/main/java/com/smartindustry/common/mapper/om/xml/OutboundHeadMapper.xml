@@ -272,4 +272,12 @@
             and oh.status = 1
         </if>
     </select>
+    <select id="queryByOhid" parameterType="java.lang.Long" resultMap="PdaResultMap">
+        select
+        <include refid="Pda_Column_List"/>
+        from om_outbound_head oh
+        left join om_outbound_body ob on oh.outbound_head_id = ob.outbound_head_id
+        left join si_material m on ob.material_id = m.material_id
+        where oh.source_type = 3 and oh.dr = 1 and oh.outbound_head_id = #{outboundHeadId,jdbcType=BIGINT}
+    </select>
 </mapper>
