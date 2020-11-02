@@ -260,13 +260,13 @@
         from om_outbound_head oh
         left join om_outbound_body ob on oh.outbound_head_id = ob.outbound_head_id
         left join si_material m on ob.material_id = m.material_id
-        where oh.source_type = 3 and dr = 1
+        where oh.source_type = 3 and oh.dr = 1
         <if test="type == 1">
             and oh.status != 1 and oh.outbound_head_id not in (select distinct outbound_head_id from
-            pda_outbound_forklift)
+            om_outbound_forklift)
         </if>
         <if test="type == 2">
-            and oh.status != 1 and oh.outbound_head_id in (select distinct outbound_head_id from pda_outbound_forklift)
+            and oh.status != 1 and oh.outbound_head_id in (select distinct outbound_head_id from om_outbound_forklift)
         </if>
         <if test="type == 3">
             and oh.status = 1

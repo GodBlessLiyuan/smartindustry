@@ -55,6 +55,8 @@ public class OutboundServiceImpl implements IOutboundService {
         headPO.setOutboundNo(OutboundNoUtil.genOutboundHeadNo(outboundHeadMapper, OutboundNoUtil.OUTBOUND_HEAD_XS, new Date()));
         headPO.setSourceNo("XS" + DateUtil.date2Str(new Date(), DateUtil.YMDHMS));
         headPO.setSourceType((byte) 3);
+        headPO.setExpectNum(new BigDecimal(18));
+        headPO.setOutboundNum(BigDecimal.ZERO);
         headPO.setStatus((byte) 3);
         headPO.setCreateTime(new Date());
         headPO.setDr((byte) 1);
