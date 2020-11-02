@@ -20,9 +20,9 @@ public class PdaListVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 状态：2-入库在前，3-出库在前
+     * 类型：2-入库在前，3-出库在前
      */
-    private Byte status;
+    private Byte type;
     /**
      * 入库
      */

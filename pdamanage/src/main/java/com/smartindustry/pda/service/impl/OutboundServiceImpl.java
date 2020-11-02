@@ -127,7 +127,7 @@ public class OutboundServiceImpl implements IOutboundService {
         }
 
         PdaListVO vo = new PdaListVO();
-        vo.setStatus(forkliftPO.getStatus());
+        vo.setType(forkliftPO.getStatus());
 
         List<OutboundHeadBO> headBOs = outboundHeadMapper.queryPdaByType(dto.getType());
 
