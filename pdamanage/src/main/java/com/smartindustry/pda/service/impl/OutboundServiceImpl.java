@@ -1,14 +1,18 @@
 package com.smartindustry.pda.service.impl;
 
+import com.smartindustry.common.bo.om.OutboundBodyBO;
 import com.smartindustry.common.bo.om.OutboundHeadBO;
+import com.smartindustry.common.bo.si.LocationBO;
 import com.smartindustry.common.mapper.om.OutboundBodyMapper;
 import com.smartindustry.common.mapper.om.OutboundForkliftMapper;
 import com.smartindustry.common.mapper.om.OutboundHeadMapper;
 import com.smartindustry.common.mapper.si.ForkliftMapper;
+import com.smartindustry.common.mapper.si.LocationMapper;
 import com.smartindustry.common.pojo.om.OutboundBodyPO;
 import com.smartindustry.common.pojo.om.OutboundForkliftPO;
 import com.smartindustry.common.pojo.om.OutboundHeadPO;
 import com.smartindustry.common.pojo.si.ForkliftPO;
+import com.smartindustry.common.pojo.si.LocationPO;
 import com.smartindustry.common.util.DateUtil;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.pda.constant.OutboundConstant;
@@ -42,6 +46,9 @@ public class OutboundServiceImpl implements IOutboundService {
     private ForkliftMapper forkliftMapper;
     @Autowired
     private OutboundForkliftMapper outboundForkliftMapper;
+    @Autowired
+    private LocationMapper locationMapper;
+
 
     /**
      * ERP 生成 出库单
@@ -167,6 +174,21 @@ public class OutboundServiceImpl implements IOutboundService {
             return new ResultVO(1002);
         }
         OutboundDetailVO vo = OutboundDetailVO.convert(headBO);
+
+        // 储位图
+        Map<Long, OutboundDetailVO.LocationVO> lvos = new HashMap<>();
+        for (OutboundBodyBO bo : headBO.getBodyBOs()) {
+            OutboundDetailVO.LocationVO lvo = new OutboundDetailVO.LocationVO();
+            lvo.setColor(OutboundDetailVO.COLORS[lvos.size()]);
+            lvo.setMinfo(bo.getMaterialName() + " " + bo.getMaterialModel());
+            lvos.put(bo.getMaterialId(), lvo);
+        }
+        List<LocationPO> locationPOs = locationMapper.queryByMids(new ArrayList<>(lvos.keySet()));
+        for (LocationPO locationPO : locationPOs) {
+            OutboundDetailVO.LocationVO lvo = lvos.get(locationPO.getMaterialId());
+            lvo.getLrfids().add(locationPO.getLocationNo());
+        }
+        vo.setLvos(new ArrayList<>(lvos.values()));
 
         // 叉车信息
         List<ForkliftPO> pos = forkliftMapper.queryByOhid(dto.getOhid());

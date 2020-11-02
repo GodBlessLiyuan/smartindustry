@@ -175,113 +175,123 @@
     where location_id = #{locationId,jdbcType=BIGINT}
   </update>
 
-  <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.LocationBO" extends="BaseResultMap">
-    <result column="location_type_name" jdbcType="CHAR" property="locationTypeName"/>
-    <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
-  </resultMap>
-  <sql id="BO_Column_List">
+    <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.LocationBO" extends="BaseResultMap">
+        <result column="location_type_name" jdbcType="CHAR" property="locationTypeName"/>
+        <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
+    </resultMap>
+    <sql id="BO_Column_List">
         l.location_id, l.location_no, l.location_name, l.location_type_id, l.warehouse_id, l.remark, l.user_id, l.create_time,
     l.update_time, l.dr,
     lt.location_type_name, w.warehouse_name
     </sql>
-  <select id="pageQuery" parameterType="java.util.Map" resultMap="BOResultMap">
-    select
-    <include refid="BO_Column_List"/>
-    from si_location l
-    left join dd_location_type lt on l.location_type_id = lt.location_type_id
-    left join si_warehouse w on l.warehouse_id = w.warehouse_id
-    where l.dr = 1
-    <if test="lno != null and lno != ''">
-      and location_no like '%' #{lno,jdbcType=CHAR} '%'
-    </if>
-    <if test="lname != null and lname != ''">
-      and location_name like '%' #{lname,jdbcType=CHAR} '%'
-    </if>
-    <if test="wid != null and wid != 0">
-      and w.warehouse_id = #{wid,jdbcType=BIGINT}
-    </if>
-    order by l.create_time desc
-  </select>
-  <select id="queryByLno" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List"/>
-    from si_location
-    where location_no = #{locationNo,jdbcType=CHAR} and dr = 1
-  </select>
-  <select id="queryByWids" parameterType="java.util.List" resultMap="BOResultMap">
-    select
-    <include refid="BO_Column_List"/>
-    from si_location l
-    left join dd_location_type lt on l.location_type_id = lt.location_type_id
-    left join si_warehouse w on l.warehouse_id = w.warehouse_id
-    where l.dr = 1 and w.dr = 1 and l.warehouse_id in
-    <foreach collection="list" item="wid" separator="," open="(" close=")">
-      #{wid,jdbcType=BIGINT}
-    </foreach>
-  </select>
-  <select id="queryById" parameterType="java.lang.Long" resultMap="BOResultMap">
-    select
-    <include refid="BO_Column_List"/>
-    from si_location l
-    left join dd_location_type lt on l.location_type_id = lt.location_type_id
-    left join si_warehouse w on l.warehouse_id = w.warehouse_id
-    where l.dr = 1 and w.dr = 1 and location_id = #{lid,jdbcType=BIGINT}
-  </select>
-  <update id="batchDelete" parameterType="java.util.List">
-    update si_location
-    set dr = 2 where location_id in
-    <foreach collection="list" item="lid" open="(" separator="," close=")">
-      #{lid,jdbcType=BIGINT}
-    </foreach>
-  </update>
-  <select id="queryByLtid" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List"/>
-    from si_location
-    where dr = 1 and location_type_id = #{ltid,jdbcType=BIGINT}
-  </select>
-  <select id="queryAll" resultType="java.util.Map">
+    <select id="pageQuery" parameterType="java.util.Map" resultMap="BOResultMap">
+        select
+        <include refid="BO_Column_List"/>
+        from si_location l
+        left join dd_location_type lt on l.location_type_id = lt.location_type_id
+        left join si_warehouse w on l.warehouse_id = w.warehouse_id
+        where l.dr = 1
+        <if test="lno != null and lno != ''">
+            and location_no like '%' #{lno,jdbcType=CHAR} '%'
+        </if>
+        <if test="lname != null and lname != ''">
+            and location_name like '%' #{lname,jdbcType=CHAR} '%'
+        </if>
+        <if test="wid != null and wid != 0">
+            and w.warehouse_id = #{wid,jdbcType=BIGINT}
+        </if>
+        order by l.create_time desc
+    </select>
+    <select id="queryByLno" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_location
+        where location_no = #{locationNo,jdbcType=CHAR} and dr = 1
+    </select>
+    <select id="queryByWids" parameterType="java.util.List" resultMap="BOResultMap">
+        select
+        <include refid="BO_Column_List"/>
+        from si_location l
+        left join dd_location_type lt on l.location_type_id = lt.location_type_id
+        left join si_warehouse w on l.warehouse_id = w.warehouse_id
+        where l.dr = 1 and w.dr = 1 and l.warehouse_id in
+        <foreach collection="list" item="wid" separator="," open="(" close=")">
+            #{wid,jdbcType=BIGINT}
+        </foreach>
+    </select>
+    <select id="queryById" parameterType="java.lang.Long" resultMap="BOResultMap">
+        select
+        <include refid="BO_Column_List"/>
+        from si_location l
+        left join dd_location_type lt on l.location_type_id = lt.location_type_id
+        left join si_warehouse w on l.warehouse_id = w.warehouse_id
+        where l.dr = 1 and w.dr = 1 and location_id = #{lid,jdbcType=BIGINT}
+    </select>
+    <update id="batchDelete" parameterType="java.util.List">
+        update si_location
+        set dr = 2 where location_id in
+        <foreach collection="list" item="lid" open="(" separator="," close=")">
+            #{lid,jdbcType=BIGINT}
+        </foreach>
+    </update>
+    <select id="queryByLtid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_location
+        where dr = 1 and location_type_id = #{ltid,jdbcType=BIGINT}
+    </select>
+    <select id="queryAll" resultType="java.util.Map">
         select location_id as lid, location_name as lname
         from si_location
         where dr = 1
-   </select>
-  <select id="queryKvByWid" parameterType="java.lang.Long" resultType="java.util.Map">
+    </select>
+    <select id="queryKvByWid" parameterType="java.lang.Long" resultType="java.util.Map">
         select location_id as lid, location_name as lname
         from si_location
         where dr = 1
           and warehouse_id = #{wid,jdbcType=BIGINT}
     </select>
 
-  <!--    查看当前的入库调拨单的调入仓库是否有库位存在-->
-  <select id="queryLocation" parameterType="java.lang.Long" resultType="com.smartindustry.common.pojo.si.LocationPO">
+    <!--    查看当前的入库调拨单的调入仓库是否有库位存在-->
+    <select id="queryLocation" parameterType="java.lang.Long" resultType="com.smartindustry.common.pojo.si.LocationPO">
         select l.location_id as locationId, l.location_no as locationNo, l.location_name as locationName
         from si_location l
         where l.dr = 1
           and l.warehouse_id = #{wid,jdbcType=BIGINT}
     </select>
 
-  <select id="queryLocBySid" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List"/>
-    left join sm_storage s
-    left join om_outbound o on o.outbound_no = s.source_no
-    left join om_pick_head ph on ph.pick_head_id = o.pick_head_id
-    left join em_transfer_head th on ph.source_no = th.transfer_no
-    left join si_warehouse w on th.storage_wid = w.warehouse_id
-    left join si_location l on w.warehouse_id = l.warehouse_id
-    where wh.dr = 1 and s.storage_id = #{sid,jdbcType=BIGINT}
-  </select>
+    <select id="queryLocBySid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        left join sm_storage s
+        left join om_outbound o on o.outbound_no = s.source_no
+        left join om_pick_head ph on ph.pick_head_id = o.pick_head_id
+        left join em_transfer_head th on ph.source_no = th.transfer_no
+        left join si_warehouse w on th.storage_wid = w.warehouse_id
+        left join si_location l on w.warehouse_id = l.warehouse_id
+        where wh.dr = 1 and s.storage_id = #{sid,jdbcType=BIGINT}
+    </select>
 
+    <select id="queryByLnoAndWhid" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_location
+        where location_no = #{locationNo,jdbcType=CHAR} and dr = 1
+        <if test="warehouseId != null">
+            and warehouse_id = #{warehouseId, jdbcType=BIGINT}
+        </if>
+    </select>
 
-  <select id="queryByLnoAndWhid" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List"/>
-    from si_location
-    where location_no = #{locationNo,jdbcType=CHAR} and dr = 1
-    <if test="warehouseId != null">
-      and warehouse_id = #{warehouseId, jdbcType=BIGINT}
-    </if>
-  </select>
+    <select id="queryByMids" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_location
+        where dr = 1 and material_id in (
+        <foreach collection="list" item="mid" separator=",">
+            #{mid,jdbcType=BIGINT}
+        </foreach>
+        )
+    </select>
 
   <select id="queryByRfid" parameterType="java.lang.String" resultMap="BOResultMap">
     select
