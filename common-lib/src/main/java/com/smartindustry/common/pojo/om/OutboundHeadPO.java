@@ -11,38 +11,65 @@ import lombok.Data;
  */
 @Data
 public class OutboundHeadPO implements Serializable {
+    /**
+     * 出库单表头ID
+     */
     private Long outboundHeadId;
 
+    /**
+     * 出库单编码
+     */
     private String outboundNo;
 
+    /**
+     * 来源单号
+     */
     private String sourceNo;
 
     /**
-     *  
+     * 来源类型 :  
      */
     private Byte sourceType;
 
+    /**
+     * 计划出库时间
+     */
     private Date planTime;
 
+    /**
+     * 完成出库时间
+     */
     private Date outboundTime;
 
+    /**
+     * 期望出库数
+     */
     private BigDecimal expectNum;
 
+    /**
+     * 已经出库数量
+     */
     private BigDecimal outboundNum;
 
+    /**
+     * 备注
+     */
     private String extra;
 
     /**
-     * 1：已出库
+     * 状态 : 1：已出库
 2：出库中
 3：待出库
      */
     private Byte status;
 
+    /**
+     * 创建时间
+     */
     private Date createTime;
 
     /**
-     * 1：未删除
+     * 是否删除 : 1：未删除
 2：已删除
      */
     private Byte dr;
