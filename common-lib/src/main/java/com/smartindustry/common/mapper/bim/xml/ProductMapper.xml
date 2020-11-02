@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.bim.ProductMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.bim.ProductPO">
+    <id column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="product_no" jdbcType="CHAR" property="productNo" />
+    <result column="product_name" jdbcType="CHAR" property="productName" />
+    <result column="product_model" jdbcType="CHAR" property="productModel" />
+    <result column="product_standard" jdbcType="CHAR" property="productStandard" />
+    <result column="product_desc" jdbcType="CHAR" property="productDesc" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    product_id, product_no, product_name, product_model, product_standard, product_desc, 
+    create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from bim_product
+    where product_id = #{productId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from bim_product
+    where product_id = #{productId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.bim.ProductPO">
+    insert into bim_product (product_id, product_no, product_name, 
+      product_model, product_standard, product_desc, 
+      create_time)
+    values (#{productId,jdbcType=BIGINT}, #{productNo,jdbcType=CHAR}, #{productName,jdbcType=CHAR}, 
+      #{productModel,jdbcType=CHAR}, #{productStandard,jdbcType=CHAR}, #{productDesc,jdbcType=CHAR}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.bim.ProductPO">
+    insert into bim_product
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="productNo != null">
+        product_no,
+      </if>
+      <if test="productName != null">
+        product_name,
+      </if>
+      <if test="productModel != null">
+        product_model,
+      </if>
+      <if test="productStandard != null">
+        product_standard,
+      </if>
+      <if test="productDesc != null">
+        product_desc,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="productId != null">
+        #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="productNo != null">
+        #{productNo,jdbcType=CHAR},
+      </if>
+      <if test="productName != null">
+        #{productName,jdbcType=CHAR},
+      </if>
+      <if test="productModel != null">
+        #{productModel,jdbcType=CHAR},
+      </if>
+      <if test="productStandard != null">
+        #{productStandard,jdbcType=CHAR},
+      </if>
+      <if test="productDesc != null">
+        #{productDesc,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.bim.ProductPO">
+    update bim_product
+    <set>
+      <if test="productNo != null">
+        product_no = #{productNo,jdbcType=CHAR},
+      </if>
+      <if test="productName != null">
+        product_name = #{productName,jdbcType=CHAR},
+      </if>
+      <if test="productModel != null">
+        product_model = #{productModel,jdbcType=CHAR},
+      </if>
+      <if test="productStandard != null">
+        product_standard = #{productStandard,jdbcType=CHAR},
+      </if>
+      <if test="productDesc != null">
+        product_desc = #{productDesc,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where product_id = #{productId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.bim.ProductPO">
+    update bim_product
+    set product_no = #{productNo,jdbcType=CHAR},
+      product_name = #{productName,jdbcType=CHAR},
+      product_model = #{productModel,jdbcType=CHAR},
+      product_standard = #{productStandard,jdbcType=CHAR},
+      product_desc = #{productDesc,jdbcType=CHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where product_id = #{productId,jdbcType=BIGINT}
+  </update>
+</mapper>
