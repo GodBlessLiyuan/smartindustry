@@ -126,6 +126,9 @@ public class OutboundServiceImpl implements IOutboundService {
             return new ResultVO(1002);
         }
 
+        PdaListVO vo = new PdaListVO();
+        vo.setStatus(forkliftPO.getStatus());
+
         List<OutboundHeadBO> headBOs = outboundHeadMapper.queryPdaByType(dto.getType());
 
         // session 存储
@@ -135,7 +138,9 @@ public class OutboundServiceImpl implements IOutboundService {
         }
         session.setAttribute(OutboundConstant.SESSION_OHIDS, ohids);
 
-        return ResultVO.ok().setData(PdaListVO.convert(headBOs));
+        vo.setOlist(headBOs);
+
+        return ResultVO.ok().setData(vo);
     }
 
     /**

@@ -20,40 +20,28 @@ public class PdaListVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 出/入库单ID
+     * 状态：2-入库在前，3-出库在前
      */
-    private Long hid;
+    private Byte status;
     /**
-     * 单号
+     * 入库
      */
-    private String sno;
+    private List<ListVO> slist;
     /**
-     * 出库物料
+     * 出库
      */
-    private String mname;
-    /**
-     * 规格参数
-     */
-    private String mmodel;
-    /**
-     * 需出/入库量
-     */
-    private BigDecimal dnum;
-    /**
-     * 出/入库数
-     */
-    private BigDecimal snum;
+    private List<ListVO> olist;
 
-    public static List<PdaListVO> convert(List<OutboundHeadBO> bos) {
-        List<PdaListVO> vos = new ArrayList<>(bos.size());
+    public void setOlist(List<OutboundHeadBO> bos) {
+        List<ListVO> vos = new ArrayList<>(bos.size());
         for (OutboundHeadBO bo : bos) {
             vos.add(convert(bo));
         }
-        return vos;
+        olist = vos;
     }
 
-    private static PdaListVO convert(OutboundHeadBO bo) {
-        PdaListVO vo = new PdaListVO();
+    private static ListVO convert(OutboundHeadBO bo) {
+        ListVO vo = new ListVO();
         vo.setHid(bo.getOutboundHeadId());
         vo.setSno(bo.getSourceNo());
         vo.setDnum(bo.getExpectNum());
@@ -66,5 +54,34 @@ public class PdaListVO implements Serializable {
         }
 
         return vo;
+    }
+
+
+    @Data
+    private static class ListVO {
+        /**
+         * 出/入库单ID
+         */
+        private Long hid;
+        /**
+         * 单号
+         */
+        private String sno;
+        /**
+         * 出库物料
+         */
+        private String mname;
+        /**
+         * 规格参数
+         */
+        private String mmodel;
+        /**
+         * 需出/入库量
+         */
+        private BigDecimal dnum;
+        /**
+         * 出/入库数
+         */
+        private BigDecimal snum;
     }
 }
