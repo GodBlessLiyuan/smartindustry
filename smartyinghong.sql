@@ -287,7 +287,7 @@ CREATE TABLE om_outbound_body
 -- 出库叉车表
 CREATE TABLE om_outbound_forklift
 (
-	outbound_forklift_id bigint NOT NULL AUTO_INCREMENT COMMENT '出库叉车id',
+	outbound_forklift_id bigint NOT NULL COMMENT '出库叉车id',
 	outbound_head_id bigint unsigned NOT NULL COMMENT '出库单表头ID',
 	forklift_id bigint unsigned NOT NULL COMMENT '叉车id',
 	rfid char(128) COMMENT 'RFID',
@@ -392,24 +392,25 @@ CREATE TABLE si_forklift
 (
 	forklift_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '叉车id',
 	forklift_no char(128) COMMENT '叉车编号',
+	forklift_name char(64) COMMENT '叉车名称',
 	forklift_model char(255) COMMENT '叉车型号',
 	forklift_brand char(255) COMMENT '品牌',
 	contact char(64) COMMENT '联系人',
 	contact_phone char(16) COMMENT '联系电话',
 	imei_no char(255) COMMENT '工业一体机号',
 	-- 1 原材料区
-	-- 2 生产产区
-	-- 3 成品区
+	-- 2 成品入库区
+	-- 3 成品出库区
 	work_area tinyint COMMENT '作业区域 : 1 原材料区
-2 生产产区
-3 成品区',
+2 成品入库区
+3 成品出库区',
 	supplier_name char(64) COMMENT '供应商名称',
 	-- 1 忙碌中
 	-- 2 空闲中
-	-- 3 不在线
+	--
 	status tinyint COMMENT '当前状态 : 1 忙碌中
 2 空闲中
-3 不在线',
+ ',
 	extra char(255) COMMENT '备注',
 	create_time datetime COMMENT '创建时间',
 	-- 1 未删除
@@ -631,7 +632,7 @@ CREATE TABLE sm_storage_detail
 -- 入库叉车表
 CREATE TABLE sm_storage_forklift
 (
-	storage_forklift_id bigint NOT NULL AUTO_INCREMENT COMMENT '入库叉车id',
+	storage_forklift_id bigint NOT NULL COMMENT '入库叉车id',
 	storage_head_id bigint unsigned NOT NULL COMMENT '入库单表头ID',
 	forklift_id bigint unsigned NOT NULL COMMENT '叉车id',
 	rfid char(128) COMMENT '当前运作的RFID',
@@ -790,7 +791,7 @@ ALTER TABLE am_role_record
 
 
 ALTER TABLE am_user_record
-	ADD FOREIGN KEY (operate_id)
+	ADD FOREIGN KEY (user_id)
 	REFERENCES am_user (user_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
@@ -798,7 +799,7 @@ ALTER TABLE am_user_record
 
 
 ALTER TABLE am_user_record
-	ADD FOREIGN KEY (user_id)
+	ADD FOREIGN KEY (operate_id)
 	REFERENCES am_user (user_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT

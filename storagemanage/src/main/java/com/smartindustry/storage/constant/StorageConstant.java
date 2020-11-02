@@ -12,6 +12,10 @@ public class StorageConstant {
      */
     public static final Byte STATUS_STORED = 1;
     /**
+     * 入库中
+     */
+    public static final Byte STATUS_INSTORAGE = 2;
+    /**
      * 采购入库单待入库
      */
     public static final Byte STATUS_STOREING = 3;
@@ -39,4 +43,23 @@ public class StorageConstant {
 
     public static final String OPERATE_NAME_AGREE_OUT = "确认出库";
     public static final String OPERATE_NAME_INSERT_OUT = "创建出库单";
+
+    /**
+     * 直接生产工单成品入库
+     */
+    public static final Byte TYPE_PRODUCT_STORAGE = 2;
+    /**
+     * 备料区入库
+     */
+    public static final Byte TYPE_PRE_STORAGE = 3;
+
+
+    /**
+     * 成品区的储位类型
+     */
+    public static final Long TYPE_FINISHED_AREA = 1L;
+    /**
+     * 备料区的储位类型
+     */
+    public static final Long TYPE_PREPARATION_AREA = 2L;
 }
