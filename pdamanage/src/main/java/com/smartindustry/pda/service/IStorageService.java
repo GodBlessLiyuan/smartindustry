@@ -1,6 +1,7 @@
-package com.smartindustry.storage.service;
+package com.smartindustry.pda.service;
 
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.pda.dto.OperateDTO;
 
 import java.util.Map;
 
@@ -11,13 +12,13 @@ import java.util.Map;
  * @ Modified By：
  * @ Version:     1.0
  */
-public interface IEndProductService {
+public interface IStorageService {
     /**
      * mes系统构建生产订单后，调用wms接口生成入库单
-     * @param reqData
+     * @param dto
      * @return
      */
-    ResultVO GenerateStockbill(Map<String, Object> reqData);
+    ResultVO GenerateStockbill(OperateDTO dto);
 
     /**
      * 叉车叉起货物调用接口

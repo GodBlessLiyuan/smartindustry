@@ -1,10 +1,13 @@
 package com.smartindustry.pda.service.impl;
 
 import com.smartindustry.common.bo.om.OutboundHeadBO;
+import com.smartindustry.common.bo.sm.StorageHeadBO;
 import com.smartindustry.common.mapper.om.OutboundBodyMapper;
 import com.smartindustry.common.mapper.om.OutboundForkliftMapper;
 import com.smartindustry.common.mapper.om.OutboundHeadMapper;
 import com.smartindustry.common.mapper.si.ForkliftMapper;
+import com.smartindustry.common.mapper.sm.StorageBodyMapper;
+import com.smartindustry.common.mapper.sm.StorageHeadMapper;
 import com.smartindustry.common.pojo.om.OutboundBodyPO;
 import com.smartindustry.common.pojo.om.OutboundForkliftPO;
 import com.smartindustry.common.pojo.om.OutboundHeadPO;
@@ -12,6 +15,7 @@ import com.smartindustry.common.pojo.si.ForkliftPO;
 import com.smartindustry.common.util.DateUtil;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.pda.constant.OutboundConstant;
+import com.smartindustry.pda.constant.StorageConstant;
 import com.smartindustry.pda.dto.OutboundDTO;
 import com.smartindustry.pda.service.IOutboundService;
 import com.smartindustry.pda.socket.WebSocketServer;
@@ -38,6 +42,10 @@ public class OutboundServiceImpl implements IOutboundService {
     private OutboundHeadMapper outboundHeadMapper;
     @Autowired
     private OutboundBodyMapper outboundBodyMapper;
+    @Autowired
+    private StorageHeadMapper storageHeadMapper;
+    @Autowired
+    private StorageBodyMapper storageBodyMapper;
     @Autowired
     private ForkliftMapper forkliftMapper;
     @Autowired
@@ -121,13 +129,14 @@ public class OutboundServiceImpl implements IOutboundService {
         }
 
         // 叉车信息
+        session.setAttribute("imei","866445030970800");
         ForkliftPO forkliftPO = forkliftMapper.queryByImei((String) session.getAttribute("imei"));
         if (null == forkliftPO) {
             return new ResultVO(1002);
         }
 
         PdaListVO vo = new PdaListVO();
-        vo.setType(forkliftPO.getStatus());
+        vo.setType(forkliftPO.getWorkArea());
 
         if (type != (byte) 4) {
             // 出库信息
@@ -143,7 +152,15 @@ public class OutboundServiceImpl implements IOutboundService {
         }
 
         // 入库信息
-        vo.setSlist(null);
+        // 出库信息
+        List<StorageHeadBO> storageHeadBOS = storageHeadMapper.queryPdaByType(type);
+
+        Set<Long> shids = new HashSet<>();
+        for (StorageHeadBO storageHeadBO : storageHeadBOS) {
+            shids.add(storageHeadBO.getStorageHeadId());
+        }
+        session.setAttribute(StorageConstant.SESSION_SHIDS, shids);
+        vo.setSlist(storageHeadBOS);
 
         return ResultVO.ok().setData(vo);
     }

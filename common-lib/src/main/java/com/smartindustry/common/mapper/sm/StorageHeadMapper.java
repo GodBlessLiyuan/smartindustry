@@ -1,5 +1,6 @@
 package com.smartindustry.common.mapper.sm;
 
+import com.smartindustry.common.bo.om.OutboundHeadBO;
 import com.smartindustry.common.bo.sm.StorageHeadBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.sm.StorageHeadPO;
@@ -27,4 +28,11 @@ public interface StorageHeadMapper extends BaseMapper<StorageHeadPO, Long> {
      * @return
      */
     StorageHeadBO queryByShid(Long shid);
+    /**
+     * 根据 pda 类型 查询
+     *
+     * @param type
+     * @return
+     */
+    List<StorageHeadBO> queryPdaByType(Byte type);
 }

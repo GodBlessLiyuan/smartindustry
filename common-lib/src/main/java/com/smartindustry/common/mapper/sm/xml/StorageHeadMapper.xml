@@ -218,14 +218,14 @@
       <result column="location_id" jdbcType="BIGINT" property="locationId"/>
       <result column="location_no" jdbcType="CHAR" property="locationNo"/>
       <result column="car_brand" jdbcType="CHAR" property="carBrand"/>
-      <result column="accept_num" jdbcType="INTEGER" property="acceptNum"/>
+      <result column="storage_num" jdbcType="INTEGER" property="storageNum"/>
       <result column="accept_time" jdbcType="TIMESTAMP" property="acceptTime"/>
       <result column="measure_unit_name" jdbcType="CHAR" property="measureUnitName"/>
     </collection>
   </resultMap>
   <sql id="BOS_Column_List">
       sh.storage_head_id, sh.storage_no,sh.status, sh.extra,w.warehouse_id, w.warehouse_name, sb.storage_body_id,sb.material_id, m.material_no,
-      m.material_name, m.material_model, su.supplier_name, l.location_id,l.location_no,sb.car_brand, sb.accept_num,sb.accept_time,mu.measure_unit_name
+      m.material_name, m.material_model, su.supplier_name, l.location_id,l.location_no,sb.car_brand, sb.storage_num,sb.accept_time,mu.measure_unit_name
   </sql>
   <select id="queryByShid" parameterType="java.lang.Long" resultMap="BOSResultMap">
     select
@@ -246,5 +246,40 @@
     from sm_storage_head
     where storage_no like #{no,jdbcType=CHAR} '%'
     order by storage_head_id desc limit 1
+  </select>
+
+  <sql id="Pda_Column_List">
+        sh.storage_head_id, sh.source_no, sh.expect_num, sh.storage_num,
+        m.material_name, m.material_model
+    </sql>
+  <resultMap id="PdaResultMap" type="com.smartindustry.common.bo.sm.StorageHeadBO" extends="BaseResultMap">
+    <result column="storage_head_id" jdbcType="BIGINT" property="StorageHeadId"/>
+    <collection property="bos" ofType="com.smartindustry.common.bo.sm.StorageBodyBO">
+      <id column="storage_body_id" jdbcType="BIGINT" property="StorageBodyId"/>
+      <result column="material_id" jdbcType="BIGINT" property="materialId"/>
+      <result column="material_no" jdbcType="CHAR" property="materialNo"/>
+      <result column="material_name" jdbcType="CHAR" property="materialName"/>
+      <result column="material_model" jdbcType="CHAR" property="materialModel"/>
+    </collection>
+  </resultMap>
+  <select id="queryPdaByType" parameterType="java.lang.Byte" resultMap="PdaResultMap">
+    select
+    <include refid="Pda_Column_List"/>
+    from sm_storage_head sh
+    left join sm_storage_body sb on sh.storage_head_id = sb.storage_head_id
+    left join si_material m on sb.material_id = m.material_id
+    where sh.source_type = 2 and sh.dr = 1
+    <if test="type == 1">
+      and sh.status != 1 and sh.storage_head_id not in (select distinct storage_head_id from sm_storage_forklift)
+    </if>
+    <if test="type == 2">
+      and sh.status != 1 and sh.storage_head_id in (select distinct storage_head_id from sm_storage_forklift)
+    </if>
+    <if test="type == 3">
+      and sh.status = 1
+    </if>
+    <if test="type == 4">
+      and sh.status = 3 and sh.source_no not in (select distinct produce_order_id from wo_package)
+    </if>
   </select>
 </mapper>
