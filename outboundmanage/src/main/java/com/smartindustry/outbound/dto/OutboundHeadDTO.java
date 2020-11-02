@@ -117,7 +117,7 @@ public class OutboundHeadDTO implements Serializable {
         bodyPO.setMaterialId(dto.getMid());
         bodyPO.setOutboundNum(dto.getOnum());
         bodyPO.setOutboundTime(dto.getOtime());
-        bodyPO.setOutingNum(dto.getRnum());
+        bodyPO.setExpectNum(dto.getRnum());
         return bodyPO;
     }
 }

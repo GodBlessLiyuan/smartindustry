@@ -125,4 +125,11 @@
     where mh.mix_no = #{mixno,jdbcType=CHAR} and mb.material_id = #{mid,jdbcType=BIGINT}
   </select>
 
+  <select id="queryTotal" parameterType="java.lang.String" resultType="java.math.BigDecimal">
+    select sum(mb.plan_num)
+    from om_mix_head mh
+    left join om_mix_body mb on mh.mix_head_id = mb.mix_head_id
+    where mh.mix_no = #{mixno,jdbcType=CHAR}
+  </select>
+
 </mapper>

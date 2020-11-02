@@ -11,43 +11,22 @@ import lombok.Data;
  */
 @Data
 public class OutboundBodyPO implements Serializable {
-    /**
-     * 出库单表体id
-     */
     private Long outboundBodyId;
 
-    /**
-     * 出库单表头ID
-     */
     private Long outboundHeadId;
 
-    /**
-     * 物料ID
-     */
     private Long materialId;
 
-    /**
-     * 出库数量
-     */
+    private BigDecimal expectNum;
+
     private BigDecimal outboundNum;
 
-    /**
-     * 待出库数量
-     */
-    private BigDecimal outingNum;
-
-    /**
-     * 创建时间
-     */
     private Date createTime;
 
-    /**
-     * 出库时间
-     */
     private Date outboundTime;
 
     /**
-     * 是否删除 : 1 未删除
+     * 1 未删除
 2 已删除
      */
     private Byte dr;

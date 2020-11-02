@@ -6,16 +6,18 @@
     <result column="outbound_no" jdbcType="CHAR" property="outboundNo" />
     <result column="source_no" jdbcType="CHAR" property="sourceNo" />
     <result column="source_type" jdbcType="TINYINT" property="sourceType" />
-    <result column="plan_time" jdbcType="DATE" property="planTime" />
+    <result column="plan_time" jdbcType="TIMESTAMP" property="planTime" />
     <result column="outbound_time" jdbcType="TIMESTAMP" property="outboundTime" />
-    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="expect_num" jdbcType="DECIMAL" property="expectNum" />
+    <result column="outbound_num" jdbcType="DECIMAL" property="outboundNum" />
     <result column="extra" jdbcType="CHAR" property="extra" />
+    <result column="status" jdbcType="TINYINT" property="status" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="dr" jdbcType="TINYINT" property="dr" />
   </resultMap>
   <sql id="Base_Column_List">
     outbound_head_id, outbound_no, source_no, source_type, plan_time, outbound_time, 
-    `status`, extra, create_time, dr
+    expect_num, outbound_num, extra, `status`, create_time, dr
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -27,15 +29,17 @@
     delete from om_outbound_head
     where outbound_head_id = #{outboundHeadId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.smartindustry.common.pojo.om.OutboundHeadPO" keyProperty="outboundHeadId" useGeneratedKeys="true">
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.om.OutboundHeadPO" useGeneratedKeys="true" keyProperty="outboundHeadId">
     insert into om_outbound_head (outbound_head_id, outbound_no, source_no, 
       source_type, plan_time, outbound_time, 
-      `status`, extra, create_time, 
-      dr)
+      expect_num, outbound_num, extra, 
+      `status`, create_time, dr
+      )
     values (#{outboundHeadId,jdbcType=BIGINT}, #{outboundNo,jdbcType=CHAR}, #{sourceNo,jdbcType=CHAR}, 
-      #{sourceType,jdbcType=TINYINT}, #{planTime,jdbcType=DATE}, #{outboundTime,jdbcType=TIMESTAMP}, 
-      #{status,jdbcType=TINYINT}, #{extra,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{dr,jdbcType=TINYINT})
+      #{sourceType,jdbcType=TINYINT}, #{planTime,jdbcType=TIMESTAMP}, #{outboundTime,jdbcType=TIMESTAMP}, 
+      #{expectNum,jdbcType=DECIMAL}, #{outboundNum,jdbcType=DECIMAL}, #{extra,jdbcType=CHAR}, 
+      #{status,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.om.OutboundHeadPO">
     insert into om_outbound_head
@@ -58,11 +62,17 @@
       <if test="outboundTime != null">
         outbound_time,
       </if>
-      <if test="status != null">
-        `status`,
+      <if test="expectNum != null">
+        expect_num,
+      </if>
+      <if test="outboundNum != null">
+        outbound_num,
       </if>
       <if test="extra != null">
         extra,
+      </if>
+      <if test="status != null">
+        `status`,
       </if>
       <if test="createTime != null">
         create_time,
@@ -85,16 +95,22 @@
         #{sourceType,jdbcType=TINYINT},
       </if>
       <if test="planTime != null">
-        #{planTime,jdbcType=DATE},
+        #{planTime,jdbcType=TIMESTAMP},
       </if>
       <if test="outboundTime != null">
         #{outboundTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="status != null">
-        #{status,jdbcType=TINYINT},
+      <if test="expectNum != null">
+        #{expectNum,jdbcType=DECIMAL},
+      </if>
+      <if test="outboundNum != null">
+        #{outboundNum,jdbcType=DECIMAL},
       </if>
       <if test="extra != null">
         #{extra,jdbcType=CHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -117,16 +133,22 @@
         source_type = #{sourceType,jdbcType=TINYINT},
       </if>
       <if test="planTime != null">
-        plan_time = #{planTime,jdbcType=DATE},
+        plan_time = #{planTime,jdbcType=TIMESTAMP},
       </if>
       <if test="outboundTime != null">
         outbound_time = #{outboundTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="status != null">
-        `status` = #{status,jdbcType=TINYINT},
+      <if test="expectNum != null">
+        expect_num = #{expectNum,jdbcType=DECIMAL},
+      </if>
+      <if test="outboundNum != null">
+        outbound_num = #{outboundNum,jdbcType=DECIMAL},
       </if>
       <if test="extra != null">
         extra = #{extra,jdbcType=CHAR},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=TINYINT},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -142,10 +164,12 @@
     set outbound_no = #{outboundNo,jdbcType=CHAR},
       source_no = #{sourceNo,jdbcType=CHAR},
       source_type = #{sourceType,jdbcType=TINYINT},
-      plan_time = #{planTime,jdbcType=DATE},
+      plan_time = #{planTime,jdbcType=TIMESTAMP},
       outbound_time = #{outboundTime,jdbcType=TIMESTAMP},
-      `status` = #{status,jdbcType=TINYINT},
+      expect_num = #{expectNum,jdbcType=DECIMAL},
+      outbound_num = #{outboundNum,jdbcType=DECIMAL},
       extra = #{extra,jdbcType=CHAR},
+      `status` = #{status,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       dr = #{dr,jdbcType=TINYINT}
     where outbound_head_id = #{outboundHeadId,jdbcType=BIGINT}

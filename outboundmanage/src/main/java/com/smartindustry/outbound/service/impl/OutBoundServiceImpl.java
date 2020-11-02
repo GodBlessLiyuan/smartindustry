@@ -74,6 +74,7 @@ public class OutBoundServiceImpl implements IOutBoundService {
             OutboundHeadPO po = OutboundHeadDTO.createPO(dto);
             po.setOutboundNo(OutboundNoUtil.genOutboundHeadNo(outboundHeadMapper,OutboundNoUtil.OUTBOUND_HEAD_YP,new Date()));
             if(dto.getFlag()){
+                po.setOutboundNum(dto.getBody().stream().map(x -> x.getOnum()).reduce(BigDecimal.ZERO,BigDecimal::add));
                 po.setStatus(OutboundConstant.STATUS_OUTED);
                 po.setOutboundTime(new Date());
             }else {
@@ -126,6 +127,7 @@ public class OutBoundServiceImpl implements IOutBoundService {
             }
             po.setStatus(OutboundConstant.STATUS_OUTED);
             po.setOutboundTime(new Date());
+            po.setOutboundNum(dto.getBody().stream().map(x -> x.getOnum()).reduce(BigDecimal.ZERO,BigDecimal::add));
         }else {
             po.setStatus(OutboundConstant.STATUS_OUTING);
         }

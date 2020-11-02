@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -81,6 +82,7 @@ public class PurchaseStorageServiceImpl implements IPurchaseStorageService {
             StorageHeadPO po = StorageHeadDTO.createPO(dto);
             po.setStorageNo(StorageNoUtil.genStorageHeadNo(storageHeadMapper,StorageNoUtil.RECEIPT_HEAD_YP,new Date()));
             if(dto.getFlag()){
+                po.setStorageNum(dto.getBody().stream().map(x -> x.getAnum()).reduce(BigDecimal.ZERO,BigDecimal::add));
                 po.setStatus(StorageConstant.STATUS_STORED);
                 po.setStorageTime(new Date());
             }else {
@@ -105,6 +107,7 @@ public class PurchaseStorageServiceImpl implements IPurchaseStorageService {
             return new ResultVO(StorageExceptionEnums.NO_EXIST.getCode());
         }
         if(dto.getFlag()){
+            po.setStorageNum(dto.getBody().stream().map(x -> x.getAnum()).reduce(BigDecimal.ZERO,BigDecimal::add));
             po.setStatus(StorageConstant.STATUS_STORED);
             po.setStorageTime(new Date());
         }else {

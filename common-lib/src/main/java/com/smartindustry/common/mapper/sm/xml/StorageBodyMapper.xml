@@ -7,15 +7,15 @@
     <result column="material_id" jdbcType="BIGINT" property="materialId" />
     <result column="location_id" jdbcType="BIGINT" property="locationId" />
     <result column="car_brand" jdbcType="CHAR" property="carBrand" />
-    <result column="accept_num" jdbcType="DECIMAL" property="acceptNum" />
-    <result column="pending_num" jdbcType="DECIMAL" property="pendingNum" />
+    <result column="expect_num" jdbcType="DECIMAL" property="expectNum" />
+    <result column="storage_num" jdbcType="DECIMAL" property="storageNum" />
     <result column="accept_time" jdbcType="TIMESTAMP" property="acceptTime" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="dr" jdbcType="TINYINT" property="dr" />
   </resultMap>
   <sql id="Base_Column_List">
-    storage_body_id, storage_head_id, material_id, location_id, car_brand, accept_num, 
-    pending_num, accept_time, create_time, dr
+    storage_body_id, storage_head_id, material_id, location_id, car_brand, expect_num, 
+    storage_num, accept_time, create_time, dr
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -29,12 +29,12 @@
   </delete>
   <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.StorageBodyPO">
     insert into sm_storage_body (storage_body_id, storage_head_id, material_id, 
-      location_id, car_brand, accept_num, 
-      pending_num, accept_time, create_time, 
+      location_id, car_brand, expect_num, 
+      storage_num, accept_time, create_time, 
       dr)
     values (#{storageBodyId,jdbcType=BIGINT}, #{storageHeadId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT}, 
-      #{locationId,jdbcType=BIGINT}, #{carBrand,jdbcType=CHAR}, #{acceptNum,jdbcType=DECIMAL}, 
-      #{pendingNum,jdbcType=DECIMAL}, #{acceptTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{locationId,jdbcType=BIGINT}, #{carBrand,jdbcType=CHAR}, #{expectNum,jdbcType=DECIMAL}, 
+      #{storageNum,jdbcType=DECIMAL}, #{acceptTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
       #{dr,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.sm.StorageBodyPO">
@@ -55,11 +55,11 @@
       <if test="carBrand != null">
         car_brand,
       </if>
-      <if test="acceptNum != null">
-        accept_num,
+      <if test="expectNum != null">
+        expect_num,
       </if>
-      <if test="pendingNum != null">
-        pending_num,
+      <if test="storageNum != null">
+        storage_num,
       </if>
       <if test="acceptTime != null">
         accept_time,
@@ -87,11 +87,11 @@
       <if test="carBrand != null">
         #{carBrand,jdbcType=CHAR},
       </if>
-      <if test="acceptNum != null">
-        #{acceptNum,jdbcType=DECIMAL},
+      <if test="expectNum != null">
+        #{expectNum,jdbcType=DECIMAL},
       </if>
-      <if test="pendingNum != null">
-        #{pendingNum,jdbcType=DECIMAL},
+      <if test="storageNum != null">
+        #{storageNum,jdbcType=DECIMAL},
       </if>
       <if test="acceptTime != null">
         #{acceptTime,jdbcType=TIMESTAMP},
@@ -119,11 +119,11 @@
       <if test="carBrand != null">
         car_brand = #{carBrand,jdbcType=CHAR},
       </if>
-      <if test="acceptNum != null">
-        accept_num = #{acceptNum,jdbcType=DECIMAL},
+      <if test="expectNum != null">
+        expect_num = #{expectNum,jdbcType=DECIMAL},
       </if>
-      <if test="pendingNum != null">
-        pending_num = #{pendingNum,jdbcType=DECIMAL},
+      <if test="storageNum != null">
+        storage_num = #{storageNum,jdbcType=DECIMAL},
       </if>
       <if test="acceptTime != null">
         accept_time = #{acceptTime,jdbcType=TIMESTAMP},
@@ -143,8 +143,8 @@
       material_id = #{materialId,jdbcType=BIGINT},
       location_id = #{locationId,jdbcType=BIGINT},
       car_brand = #{carBrand,jdbcType=CHAR},
-      accept_num = #{acceptNum,jdbcType=DECIMAL},
-      pending_num = #{pendingNum,jdbcType=DECIMAL},
+      expect_num = #{expectNum,jdbcType=DECIMAL},
+      storage_num = #{storageNum,jdbcType=DECIMAL},
       accept_time = #{acceptTime,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       dr = #{dr,jdbcType=TINYINT}

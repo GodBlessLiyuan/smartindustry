@@ -5,15 +5,19 @@
     <id column="storage_head_id" jdbcType="BIGINT" property="storageHeadId" />
     <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId" />
     <result column="storage_no" jdbcType="CHAR" property="storageNo" />
+    <result column="source_no" jdbcType="CHAR" property="sourceNo" />
+    <result column="source_type" jdbcType="TINYINT" property="sourceType" />
     <result column="storage_time" jdbcType="TIMESTAMP" property="storageTime" />
-    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="expect_num" jdbcType="DECIMAL" property="expectNum" />
+    <result column="storage_num" jdbcType="DECIMAL" property="storageNum" />
     <result column="extra" jdbcType="CHAR" property="extra" />
+    <result column="status" jdbcType="TINYINT" property="status" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="dr" jdbcType="TINYINT" property="dr" />
   </resultMap>
   <sql id="Base_Column_List">
-    storage_head_id, warehouse_id, storage_no, storage_time, `status`, extra, create_time, 
-    dr
+    storage_head_id, warehouse_id, storage_no, source_no, source_type, storage_time, 
+    expect_num, storage_num, extra, `status`, create_time, dr
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -25,13 +29,17 @@
     delete from sm_storage_head
     where storage_head_id = #{storageHeadId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.StorageHeadPO" useGeneratedKeys="true" keyProperty="storageHeadId">
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.StorageHeadPO" keyProperty="storageHeadId" useGeneratedKeys="true">
     insert into sm_storage_head (storage_head_id, warehouse_id, storage_no, 
-      storage_time, `status`, extra, 
-      create_time, dr)
+      source_no, source_type, storage_time, 
+      expect_num, storage_num, extra, 
+      `status`, create_time, dr
+      )
     values (#{storageHeadId,jdbcType=BIGINT}, #{warehouseId,jdbcType=BIGINT}, #{storageNo,jdbcType=CHAR}, 
-      #{storageTime,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT}, #{extra,jdbcType=CHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
+      #{sourceNo,jdbcType=CHAR}, #{sourceType,jdbcType=TINYINT}, #{storageTime,jdbcType=TIMESTAMP}, 
+      #{expectNum,jdbcType=DECIMAL}, #{storageNum,jdbcType=DECIMAL}, #{extra,jdbcType=CHAR}, 
+      #{status,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.sm.StorageHeadPO">
     insert into sm_storage_head
@@ -45,14 +53,26 @@
       <if test="storageNo != null">
         storage_no,
       </if>
+      <if test="sourceNo != null">
+        source_no,
+      </if>
+      <if test="sourceType != null">
+        source_type,
+      </if>
       <if test="storageTime != null">
         storage_time,
       </if>
-      <if test="status != null">
-        `status`,
+      <if test="expectNum != null">
+        expect_num,
+      </if>
+      <if test="storageNum != null">
+        storage_num,
       </if>
       <if test="extra != null">
         extra,
+      </if>
+      <if test="status != null">
+        `status`,
       </if>
       <if test="createTime != null">
         create_time,
@@ -71,14 +91,26 @@
       <if test="storageNo != null">
         #{storageNo,jdbcType=CHAR},
       </if>
+      <if test="sourceNo != null">
+        #{sourceNo,jdbcType=CHAR},
+      </if>
+      <if test="sourceType != null">
+        #{sourceType,jdbcType=TINYINT},
+      </if>
       <if test="storageTime != null">
         #{storageTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="status != null">
-        #{status,jdbcType=TINYINT},
+      <if test="expectNum != null">
+        #{expectNum,jdbcType=DECIMAL},
+      </if>
+      <if test="storageNum != null">
+        #{storageNum,jdbcType=DECIMAL},
       </if>
       <if test="extra != null">
         #{extra,jdbcType=CHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -97,14 +129,26 @@
       <if test="storageNo != null">
         storage_no = #{storageNo,jdbcType=CHAR},
       </if>
+      <if test="sourceNo != null">
+        source_no = #{sourceNo,jdbcType=CHAR},
+      </if>
+      <if test="sourceType != null">
+        source_type = #{sourceType,jdbcType=TINYINT},
+      </if>
       <if test="storageTime != null">
         storage_time = #{storageTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="status != null">
-        `status` = #{status,jdbcType=TINYINT},
+      <if test="expectNum != null">
+        expect_num = #{expectNum,jdbcType=DECIMAL},
+      </if>
+      <if test="storageNum != null">
+        storage_num = #{storageNum,jdbcType=DECIMAL},
       </if>
       <if test="extra != null">
         extra = #{extra,jdbcType=CHAR},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=TINYINT},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -119,9 +163,13 @@
     update sm_storage_head
     set warehouse_id = #{warehouseId,jdbcType=BIGINT},
       storage_no = #{storageNo,jdbcType=CHAR},
+      source_no = #{sourceNo,jdbcType=CHAR},
+      source_type = #{sourceType,jdbcType=TINYINT},
       storage_time = #{storageTime,jdbcType=TIMESTAMP},
-      `status` = #{status,jdbcType=TINYINT},
+      expect_num = #{expectNum,jdbcType=DECIMAL},
+      storage_num = #{storageNum,jdbcType=DECIMAL},
       extra = #{extra,jdbcType=CHAR},
+      `status` = #{status,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       dr = #{dr,jdbcType=TINYINT}
     where storage_head_id = #{storageHeadId,jdbcType=BIGINT}
