@@ -17,7 +17,7 @@ import com.smartindustry.pda.service.IOutboundService;
 import com.smartindustry.pda.socket.WebSocketServer;
 import com.smartindustry.pda.util.OutboundNoUtil;
 import com.smartindustry.pda.vo.OutboundDetailVO;
-import com.smartindustry.pda.vo.OutboundListVO;
+import com.smartindustry.pda.vo.PdaListVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -133,7 +133,7 @@ public class OutboundServiceImpl implements IOutboundService {
         }
         session.setAttribute(OutboundConstant.SESSION_OHIDS, ohids);
 
-        return ResultVO.ok().setData(OutboundListVO.convert(headBOs));
+        return ResultVO.ok().setData(PdaListVO.convert(headBOs));
     }
 
     /**

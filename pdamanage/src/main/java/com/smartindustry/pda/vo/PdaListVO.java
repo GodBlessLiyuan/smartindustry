@@ -12,17 +12,17 @@ import java.util.List;
 /**
  * @author: xiahui
  * @date: Created in 2020/10/31 11:34
- * @description: TODO
+ * @description: 列表区数据
  * @version: 1.0
  */
 @Data
-public class OutboundListVO implements Serializable {
+public class PdaListVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 出库单ID
+     * 出/入库单ID
      */
-    private Long ohid;
+    private Long hid;
     /**
      * 单号
      */
@@ -36,28 +36,28 @@ public class OutboundListVO implements Serializable {
      */
     private String mmodel;
     /**
-     * 需出库量
+     * 需出/入库量
      */
     private BigDecimal dnum;
     /**
-     * 入库数
+     * 出/入库数
      */
-    private BigDecimal onum;
+    private BigDecimal snum;
 
-    public static List<OutboundListVO> convert(List<OutboundHeadBO> bos) {
-        List<OutboundListVO> vos = new ArrayList<>(bos.size());
+    public static List<PdaListVO> convert(List<OutboundHeadBO> bos) {
+        List<PdaListVO> vos = new ArrayList<>(bos.size());
         for (OutboundHeadBO bo : bos) {
             vos.add(convert(bo));
         }
         return vos;
     }
 
-    private static OutboundListVO convert(OutboundHeadBO bo) {
-        OutboundListVO vo = new OutboundListVO();
-        vo.setOhid(bo.getOutboundHeadId());
+    private static PdaListVO convert(OutboundHeadBO bo) {
+        PdaListVO vo = new PdaListVO();
+        vo.setHid(bo.getOutboundHeadId());
         vo.setSno(bo.getSourceNo());
         vo.setDnum(bo.getExpectNum());
-        vo.setOnum(null);
+        vo.setSnum(null);
 
         if (null != bo.getBodyBOs() && bo.getBodyBOs().size() > 0) {
             OutboundBodyBO bodyBO = bo.getBodyBOs().get(0);
