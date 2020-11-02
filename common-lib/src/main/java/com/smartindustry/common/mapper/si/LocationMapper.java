@@ -102,5 +102,10 @@ public interface LocationMapper extends BaseMapper<LocationPO, Long> {
      */
     List<Map<String, Object>> queryKvByWid(Long wid);
 
-
+    /**
+     * 根据储位rfid进行储位信息查询
+     * @param rfid
+     * @return
+     */
+    LocationBO queryByRfid(String rfid);
 }

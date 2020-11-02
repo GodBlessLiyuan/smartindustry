@@ -3,6 +3,8 @@ package com.smartindustry.common.pojo.sm;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -24,4 +26,5 @@ public class StorageDetailPO implements Serializable {
     private String rfid;
 
     private static final long serialVersionUID = 1L;
+
 }

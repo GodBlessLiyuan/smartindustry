@@ -8,6 +8,7 @@
     <result column="hold_tray_num" jdbcType="INTEGER" property="holdTrayNum" />
     <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId" />
     <result column="material_id" jdbcType="BIGINT" property="materialId" />
+    <result column="location_type_id" jdbcType="BIGINT" property="locationTypeId" />
     <result column="remark" jdbcType="CHAR" property="remark" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -16,7 +17,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     location_id, location_no, location_name, hold_tray_num, warehouse_id, material_id, 
-    remark, user_id, create_time, update_time, dr
+    location_type_id, remark, user_id, create_time, update_time, dr
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -31,12 +32,14 @@
   <insert id="insert" parameterType="com.smartindustry.common.pojo.si.LocationPO">
     insert into si_location (location_id, location_no, location_name, 
       hold_tray_num, warehouse_id, material_id, 
-      remark, user_id, create_time, 
-      update_time, dr)
+      location_type_id, remark, user_id, 
+      create_time, update_time, dr
+      )
     values (#{locationId,jdbcType=BIGINT}, #{locationNo,jdbcType=CHAR}, #{locationName,jdbcType=CHAR}, 
       #{holdTrayNum,jdbcType=INTEGER}, #{warehouseId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT}, 
-      #{remark,jdbcType=CHAR}, #{userId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
+      #{locationTypeId,jdbcType=BIGINT}, #{remark,jdbcType=CHAR}, #{userId,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.LocationPO">
     insert into si_location
@@ -58,6 +61,9 @@
       </if>
       <if test="materialId != null">
         material_id,
+      </if>
+      <if test="locationTypeId != null">
+        location_type_id,
       </if>
       <if test="remark != null">
         remark,
@@ -94,6 +100,9 @@
       <if test="materialId != null">
         #{materialId,jdbcType=BIGINT},
       </if>
+      <if test="locationTypeId != null">
+        #{locationTypeId,jdbcType=BIGINT},
+      </if>
       <if test="remark != null">
         #{remark,jdbcType=CHAR},
       </if>
@@ -129,6 +138,9 @@
       <if test="materialId != null">
         material_id = #{materialId,jdbcType=BIGINT},
       </if>
+      <if test="locationTypeId != null">
+        location_type_id = #{locationTypeId,jdbcType=BIGINT},
+      </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=CHAR},
       </if>
@@ -154,6 +166,7 @@
       hold_tray_num = #{holdTrayNum,jdbcType=INTEGER},
       warehouse_id = #{warehouseId,jdbcType=BIGINT},
       material_id = #{materialId,jdbcType=BIGINT},
+      location_type_id = #{locationTypeId,jdbcType=BIGINT},
       remark = #{remark,jdbcType=CHAR},
       user_id = #{userId,jdbcType=BIGINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -270,4 +283,12 @@
     </if>
   </select>
 
+  <select id="queryByRfid" parameterType="java.lang.String" resultMap="BOResultMap">
+    select
+    <include refid="BO_Column_List"/>
+    from si_location l
+    left join dd_location_type lt on l.location_type_id = lt.location_type_id
+    left join si_warehouse w on l.warehouse_id = w.warehouse_id
+    where l.dr = 1 and l.location_no = #{rfid,jdbcType=CHAR}
+  </select>
 </mapper>

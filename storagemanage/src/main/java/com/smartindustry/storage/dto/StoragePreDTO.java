@@ -3,6 +3,7 @@ package com.smartindustry.storage.dto;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * @author: jiangzhaojie
@@ -25,6 +26,18 @@ public class StoragePreDTO implements Serializable {
      * 储位RFID
      */
     private String lrfid;
+    /**
+     * 物料id
+     */
+    private Long mid;
+    /**
+     * 入库单id
+     */
+    private Long sid;
+    /**
+     * 当前栈板入库数 1栈板为一单位
+     */
+    private BigDecimal num;
     /**
      * 操作行为：1 直接成品入库 2 入备料区 3 备料区入成品区
      */

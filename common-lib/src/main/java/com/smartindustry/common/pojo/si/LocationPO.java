@@ -41,6 +41,11 @@ public class LocationPO implements Serializable {
     private Long materialId;
 
     /**
+     * 货位类型ID
+     */
+    private Long locationTypeId;
+
+    /**
      * 备注
      */
     private String remark;

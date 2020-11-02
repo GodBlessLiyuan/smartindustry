@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.smartindustry.common.bo.si.MaterialBO;
 import com.smartindustry.common.bo.si.WarehouseBO;
 import com.smartindustry.common.bo.sm.StorageHeadBO;
+import com.smartindustry.common.constant.ExceptionEnums;
 import com.smartindustry.common.mapper.si.MaterialMapper;
 import com.smartindustry.common.mapper.si.WarehouseMapper;
 import com.smartindustry.common.mapper.sm.StorageBodyMapper;
@@ -16,7 +17,6 @@ import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.StorageConstant;
-import com.smartindustry.storage.constant.StorageExceptionEnums;
 import com.smartindustry.storage.dto.OperateDTO;
 import com.smartindustry.storage.dto.StorageHeadDTO;
 import com.smartindustry.storage.service.IPurchaseStorageService;
@@ -69,7 +69,7 @@ public class PurchaseStorageServiceImpl implements IPurchaseStorageService {
         System.out.println(bo);
         if(null == bo){
             // 采购单表体不存在
-            return new ResultVO(StorageExceptionEnums.NO_EXIST.getCode());
+            return new ResultVO(ExceptionEnums.NO_EXIST.getCode());
         }
         return ResultVO.ok().setData(StorageHeadVO.convertVO(bo));
     }
@@ -104,7 +104,7 @@ public class PurchaseStorageServiceImpl implements IPurchaseStorageService {
         StorageHeadPO po = storageHeadMapper.selectByPrimaryKey(dto.getShid());
         if (null == po) {
             // 采购单表头不存在
-            return new ResultVO(StorageExceptionEnums.NO_EXIST.getCode());
+            return new ResultVO(ExceptionEnums.NO_EXIST.getCode());
         }
         if(dto.getFlag()){
             po.setStorageNum(dto.getBody().stream().map(x -> x.getAnum()).reduce(BigDecimal.ZERO,BigDecimal::add));

@@ -7,18 +7,14 @@ import com.smartindustry.common.mapper.sm.StorageBodyMapper;
 import com.smartindustry.common.mapper.sm.StorageHeadMapper;
 import com.smartindustry.common.mapper.sm.StorageRecordMapper;
 import com.smartindustry.common.mapper.wo.ProduceOrderMapper;
-import com.smartindustry.common.pojo.bim.ProductPO;
 import com.smartindustry.common.pojo.sm.StorageBodyPO;
 import com.smartindustry.common.pojo.sm.StorageHeadPO;
 import com.smartindustry.common.pojo.sm.StorageRecordPO;
 import com.smartindustry.common.pojo.wo.ProduceOrderPO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.StorageConstant;
-import com.smartindustry.storage.constant.StorageExceptionEnums;
-import com.smartindustry.storage.dto.StorageHeadDTO;
 import com.smartindustry.storage.service.IEndProductService;
 import com.smartindustry.storage.util.StorageNoUtil;
-import org.apache.poi.hpsf.Decimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
