@@ -217,7 +217,7 @@
         select
         <include refid="Base_Column_List"/>
         from si_forklift f
-        right join pda_outbound_forklift pof on f.forklift_id = pof.forklift_id
+        right join om_outbound_forklift pof on f.forklift_id = pof.forklift_id
         where outbound_head_id = #{ohid,jdbcType=BIGINT} and f.dr = 1
     </select>
 </mapper>

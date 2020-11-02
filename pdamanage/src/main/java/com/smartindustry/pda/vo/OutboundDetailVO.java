@@ -5,6 +5,7 @@ import com.smartindustry.common.bo.om.OutboundHeadBO;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,11 +34,11 @@ public class OutboundDetailVO implements Serializable {
     /**
      * 需出库量
      */
-    private String dnum;
+    private BigDecimal dnum;
     /**
      * 入库数
      */
-    private String onum;
+    private BigDecimal onum;
     /**
      * 叉车
      */
@@ -51,8 +52,8 @@ public class OutboundDetailVO implements Serializable {
         OutboundDetailVO vo = new OutboundDetailVO();
         vo.setOhid(bo.getOutboundHeadId());
         vo.setSno(bo.getSourceNo());
-        vo.setDnum(null);
-        vo.setOnum(null);
+        vo.setDnum(bo.getExpectNum());
+        vo.setOnum(bo.getOutboundNum());
         if (null != bo.getBodyBOs() && bo.getBodyBOs().size() > 0) {
             List<MaterialVO> mvos = new ArrayList<>(bo.getBodyBOs().size());
             for (OutboundBodyBO bodyBO : bo.getBodyBOs()) {

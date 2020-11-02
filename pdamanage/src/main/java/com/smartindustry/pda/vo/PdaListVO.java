@@ -57,7 +57,7 @@ public class PdaListVO implements Serializable {
         vo.setHid(bo.getOutboundHeadId());
         vo.setSno(bo.getSourceNo());
         vo.setDnum(bo.getExpectNum());
-        vo.setSnum(null);
+        vo.setSnum(bo.getOutboundNum());
 
         if (null != bo.getBodyBOs() && bo.getBodyBOs().size() > 0) {
             OutboundBodyBO bodyBO = bo.getBodyBOs().get(0);
