@@ -16,7 +16,7 @@ public interface IOutboundService {
 
     ResultVO online(HttpSession session, OutboundDTO dto);
 
-    ResultVO list(HttpSession session, OutboundDTO dto);
+    ResultVO list(HttpSession session, Byte type);
 
     ResultVO detail(HttpSession session, OutboundDTO dto);
 

@@ -111,12 +111,12 @@ public class OutboundServiceImpl implements IOutboundService {
      * 列表区域
      *
      * @param session
-     * @param dto
+     * @param type
      * @return
      */
     @Override
-    public ResultVO list(HttpSession session, OutboundDTO dto) {
-        if (null == dto.getType()) {
+    public ResultVO list(HttpSession session, Byte type) {
+        if (null == type) {
             return new ResultVO(1001);
         }
 
@@ -129,16 +129,21 @@ public class OutboundServiceImpl implements IOutboundService {
         PdaListVO vo = new PdaListVO();
         vo.setType(forkliftPO.getStatus());
 
-        List<OutboundHeadBO> headBOs = outboundHeadMapper.queryPdaByType(dto.getType());
+        if (type != (byte) 4) {
+            // 出库信息
+            List<OutboundHeadBO> headBOs = outboundHeadMapper.queryPdaByType(type);
 
-        // session 存储
-        Set<Long> ohids = new HashSet<>();
-        for (OutboundHeadBO headBO : headBOs) {
-            ohids.add(headBO.getOutboundHeadId());
+            Set<Long> ohids = new HashSet<>();
+            for (OutboundHeadBO headBO : headBOs) {
+                ohids.add(headBO.getOutboundHeadId());
+            }
+            session.setAttribute(OutboundConstant.SESSION_OHIDS, ohids);
+
+            vo.setOlist(headBOs);
         }
-        session.setAttribute(OutboundConstant.SESSION_OHIDS, ohids);
 
-        vo.setOlist(headBOs);
+        // 入库信息
+        vo.setSlist(null);
 
         return ResultVO.ok().setData(vo);
     }

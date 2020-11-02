@@ -35,7 +35,7 @@ public class OutboundController {
 
     @PostMapping("list")
     public ResultVO list(HttpSession session, @RequestBody OutboundDTO dto) {
-        return finishOutboundService.list(session, dto);
+        return finishOutboundService.list(session, dto.getType());
     }
 
     @PostMapping("detail")
