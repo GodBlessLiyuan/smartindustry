@@ -150,7 +150,7 @@ public class OutboundServiceImpl implements IOutboundService {
         }
 
         // 出库信息
-        OutboundHeadBO headBO = outboundHeadMapper.queryByOhid(dto.getOhid());
+        OutboundHeadBO headBO = outboundHeadMapper.queryMixByOhid(dto.getOhid());
         if (null == headBO) {
             return new ResultVO(1002);
         }
