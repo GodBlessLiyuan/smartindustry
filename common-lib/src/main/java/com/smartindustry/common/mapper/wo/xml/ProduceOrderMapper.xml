@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.wo.ProduceOrderMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.wo.ProduceOrderPO">
+    <id column="produce_order_id" jdbcType="BIGINT" property="produceOrderId" />
+    <result column="produce_no" jdbcType="CHAR" property="produceNo" />
+    <result column="plan_date" jdbcType="DATE" property="planDate" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="finish_time" jdbcType="TIMESTAMP" property="finishTime" />
+    <result column="creator" jdbcType="BIGINT" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="material_id1" jdbcType="BIGINT" property="materialId1" />
+    <result column="material_id2" jdbcType="BIGINT" property="materialId2" />
+    <result column="produce_num" jdbcType="INTEGER" property="produceNum" />
+    <result column="slurry" jdbcType="DECIMAL" property="slurry" />
+    <result column="concrete" jdbcType="DECIMAL" property="concrete" />
+    <result column="maintain_flour" jdbcType="DECIMAL" property="maintainFlour" />
+    <result column="admixture" jdbcType="DECIMAL" property="admixture" />
+    <result column="aluminite_powder" jdbcType="DECIMAL" property="aluminitePowder" />
+    <result column="teem_temporature" jdbcType="DECIMAL" property="teemTemporature" />
+    <result column="teem_dense" jdbcType="DECIMAL" property="teemDense" />
+    <result column="additional_water" jdbcType="DECIMAL" property="additionalWater" />
+    <result column="remark" jdbcType="CHAR" property="remark" />
+    <result column="dr" jdbcType="TINYINT" property="dr" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    produce_order_id, produce_no, plan_date, `status`, finish_time, creator, create_time, 
+    begin_time, update_time, material_id1, material_id2, produce_num, slurry, concrete, 
+    maintain_flour, admixture, aluminite_powder, teem_temporature, teem_dense, additional_water, 
+    remark, dr
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from wo_produce_order
+    where produce_order_id = #{produceOrderId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from wo_produce_order
+    where produce_order_id = #{produceOrderId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.wo.ProduceOrderPO">
+    insert into wo_produce_order (produce_order_id, produce_no, plan_date, 
+      `status`, finish_time, creator, 
+      create_time, begin_time, update_time, 
+      material_id1, material_id2, produce_num, 
+      slurry, concrete, maintain_flour, 
+      admixture, aluminite_powder, teem_temporature, 
+      teem_dense, additional_water, remark, 
+      dr)
+    values (#{produceOrderId,jdbcType=BIGINT}, #{produceNo,jdbcType=CHAR}, #{planDate,jdbcType=DATE}, 
+      #{status,jdbcType=TINYINT}, #{finishTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{beginTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{materialId1,jdbcType=BIGINT}, #{materialId2,jdbcType=BIGINT}, #{produceNum,jdbcType=INTEGER}, 
+      #{slurry,jdbcType=DECIMAL}, #{concrete,jdbcType=DECIMAL}, #{maintainFlour,jdbcType=DECIMAL}, 
+      #{admixture,jdbcType=DECIMAL}, #{aluminitePowder,jdbcType=DECIMAL}, #{teemTemporature,jdbcType=DECIMAL}, 
+      #{teemDense,jdbcType=DECIMAL}, #{additionalWater,jdbcType=DECIMAL}, #{remark,jdbcType=CHAR}, 
+      #{dr,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.wo.ProduceOrderPO">
+    insert into wo_produce_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="produceOrderId != null">
+        produce_order_id,
+      </if>
+      <if test="produceNo != null">
+        produce_no,
+      </if>
+      <if test="planDate != null">
+        plan_date,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="finishTime != null">
+        finish_time,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="beginTime != null">
+        begin_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="materialId1 != null">
+        material_id1,
+      </if>
+      <if test="materialId2 != null">
+        material_id2,
+      </if>
+      <if test="produceNum != null">
+        produce_num,
+      </if>
+      <if test="slurry != null">
+        slurry,
+      </if>
+      <if test="concrete != null">
+        concrete,
+      </if>
+      <if test="maintainFlour != null">
+        maintain_flour,
+      </if>
+      <if test="admixture != null">
+        admixture,
+      </if>
+      <if test="aluminitePowder != null">
+        aluminite_powder,
+      </if>
+      <if test="teemTemporature != null">
+        teem_temporature,
+      </if>
+      <if test="teemDense != null">
+        teem_dense,
+      </if>
+      <if test="additionalWater != null">
+        additional_water,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="dr != null">
+        dr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="produceOrderId != null">
+        #{produceOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="produceNo != null">
+        #{produceNo,jdbcType=CHAR},
+      </if>
+      <if test="planDate != null">
+        #{planDate,jdbcType=DATE},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="finishTime != null">
+        #{finishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="beginTime != null">
+        #{beginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="materialId1 != null">
+        #{materialId1,jdbcType=BIGINT},
+      </if>
+      <if test="materialId2 != null">
+        #{materialId2,jdbcType=BIGINT},
+      </if>
+      <if test="produceNum != null">
+        #{produceNum,jdbcType=INTEGER},
+      </if>
+      <if test="slurry != null">
+        #{slurry,jdbcType=DECIMAL},
+      </if>
+      <if test="concrete != null">
+        #{concrete,jdbcType=DECIMAL},
+      </if>
+      <if test="maintainFlour != null">
+        #{maintainFlour,jdbcType=DECIMAL},
+      </if>
+      <if test="admixture != null">
+        #{admixture,jdbcType=DECIMAL},
+      </if>
+      <if test="aluminitePowder != null">
+        #{aluminitePowder,jdbcType=DECIMAL},
+      </if>
+      <if test="teemTemporature != null">
+        #{teemTemporature,jdbcType=DECIMAL},
+      </if>
+      <if test="teemDense != null">
+        #{teemDense,jdbcType=DECIMAL},
+      </if>
+      <if test="additionalWater != null">
+        #{additionalWater,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=CHAR},
+      </if>
+      <if test="dr != null">
+        #{dr,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.wo.ProduceOrderPO">
+    update wo_produce_order
+    <set>
+      <if test="produceNo != null">
+        produce_no = #{produceNo,jdbcType=CHAR},
+      </if>
+      <if test="planDate != null">
+        plan_date = #{planDate,jdbcType=DATE},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="finishTime != null">
+        finish_time = #{finishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="beginTime != null">
+        begin_time = #{beginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="materialId1 != null">
+        material_id1 = #{materialId1,jdbcType=BIGINT},
+      </if>
+      <if test="materialId2 != null">
+        material_id2 = #{materialId2,jdbcType=BIGINT},
+      </if>
+      <if test="produceNum != null">
+        produce_num = #{produceNum,jdbcType=INTEGER},
+      </if>
+      <if test="slurry != null">
+        slurry = #{slurry,jdbcType=DECIMAL},
+      </if>
+      <if test="concrete != null">
+        concrete = #{concrete,jdbcType=DECIMAL},
+      </if>
+      <if test="maintainFlour != null">
+        maintain_flour = #{maintainFlour,jdbcType=DECIMAL},
+      </if>
+      <if test="admixture != null">
+        admixture = #{admixture,jdbcType=DECIMAL},
+      </if>
+      <if test="aluminitePowder != null">
+        aluminite_powder = #{aluminitePowder,jdbcType=DECIMAL},
+      </if>
+      <if test="teemTemporature != null">
+        teem_temporature = #{teemTemporature,jdbcType=DECIMAL},
+      </if>
+      <if test="teemDense != null">
+        teem_dense = #{teemDense,jdbcType=DECIMAL},
+      </if>
+      <if test="additionalWater != null">
+        additional_water = #{additionalWater,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=CHAR},
+      </if>
+      <if test="dr != null">
+        dr = #{dr,jdbcType=TINYINT},
+      </if>
+    </set>
+    where produce_order_id = #{produceOrderId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.wo.ProduceOrderPO">
+    update wo_produce_order
+    set produce_no = #{produceNo,jdbcType=CHAR},
+      plan_date = #{planDate,jdbcType=DATE},
+      `status` = #{status,jdbcType=TINYINT},
+      finish_time = #{finishTime,jdbcType=TIMESTAMP},
+      creator = #{creator,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      begin_time = #{beginTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      material_id1 = #{materialId1,jdbcType=BIGINT},
+      material_id2 = #{materialId2,jdbcType=BIGINT},
+      produce_num = #{produceNum,jdbcType=INTEGER},
+      slurry = #{slurry,jdbcType=DECIMAL},
+      concrete = #{concrete,jdbcType=DECIMAL},
+      maintain_flour = #{maintainFlour,jdbcType=DECIMAL},
+      admixture = #{admixture,jdbcType=DECIMAL},
+      aluminite_powder = #{aluminitePowder,jdbcType=DECIMAL},
+      teem_temporature = #{teemTemporature,jdbcType=DECIMAL},
+      teem_dense = #{teemDense,jdbcType=DECIMAL},
+      additional_water = #{additionalWater,jdbcType=DECIMAL},
+      remark = #{remark,jdbcType=CHAR},
+      dr = #{dr,jdbcType=TINYINT}
+    where produce_order_id = #{produceOrderId,jdbcType=BIGINT}
+  </update>
+</mapper>

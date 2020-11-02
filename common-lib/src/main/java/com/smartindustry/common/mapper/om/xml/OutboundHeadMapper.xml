@@ -220,7 +220,7 @@
         oh.outbound_head_id, oh.outbound_no, mh.mix_head_id, mh.mix_no, mh.plan_time, oh.extra, ob.outbound_body_id,
       ob.material_id, m.material_no, m.material_name, m.material_model, mb.plan_num, ob.outbound_num, ob.outbound_time, mu.measure_unit_name
     </sql>
-    <select id="queryByOhid" parameterType="java.lang.Long" resultMap="BOSResultMap">
+    <select id="queryMixByOhid" parameterType="java.lang.Long" resultMap="BOSResultMap">
         select
         <include refid="BOS_Column_List"/>
         from om_outbound_head oh
