@@ -2,12 +2,12 @@ package com.smartindustry.pda.service.impl;
 
 import com.smartindustry.common.bo.om.OutboundHeadBO;
 import com.smartindustry.common.mapper.om.OutboundBodyMapper;
+import com.smartindustry.common.mapper.om.OutboundForkliftMapper;
 import com.smartindustry.common.mapper.om.OutboundHeadMapper;
-import com.smartindustry.common.mapper.pda.OutboundForkliftMapper;
 import com.smartindustry.common.mapper.si.ForkliftMapper;
 import com.smartindustry.common.pojo.om.OutboundBodyPO;
+import com.smartindustry.common.pojo.om.OutboundForkliftPO;
 import com.smartindustry.common.pojo.om.OutboundHeadPO;
-import com.smartindustry.common.pojo.pda.OutboundForkliftPO;
 import com.smartindustry.common.pojo.si.ForkliftPO;
 import com.smartindustry.common.util.DateUtil;
 import com.smartindustry.common.vo.ResultVO;
@@ -195,7 +195,13 @@ public class OutboundServiceImpl implements IOutboundService {
     @Override
     public ResultVO execute(HttpSession session) {
         String imei = (String) session.getAttribute(OutboundConstant.SESSION_IMEI);
+        if (null == imei) {
+            return new ResultVO(1002);
+        }
         Long ohid = (Long) session.getAttribute(OutboundConstant.SESSION_OHID);
+        if (null == ohid) {
+            return new ResultVO(1002);
+        }
         ForkliftPO fPO = forkliftMapper.queryByImei(imei);
 
         List<ForkliftPO> pos = forkliftMapper.queryByOhid(ohid);
@@ -246,7 +252,15 @@ public class OutboundServiceImpl implements IOutboundService {
 
         // 当前叉车信息
         String imei = (String) session.getAttribute(OutboundConstant.SESSION_IMEI);
+        if (null == imei) {
+            return new ResultVO(1002);
+        }
+
         ForkliftPO fPO = forkliftMapper.queryByImei(imei);
+        if (null == fPO) {
+            return new ResultVO(1002);
+        }
+
         OutboundForkliftPO ofPO = outboundForkliftMapper.queryByFid(fPO.getForkliftId());
         if (null == ofPO) {
             // 尚未开始任务
