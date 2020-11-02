@@ -5,6 +5,7 @@ import com.smartindustry.common.bo.om.OutboundHeadBO;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
  */
 @Data
 public class OutboundListVO implements Serializable {
-    private static final long SerialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     /**
      * 出库单ID
@@ -37,11 +38,11 @@ public class OutboundListVO implements Serializable {
     /**
      * 需出库量
      */
-    private String dnum;
+    private BigDecimal dnum;
     /**
      * 入库数
      */
-    private String onum;
+    private BigDecimal onum;
 
     public static List<OutboundListVO> convert(List<OutboundHeadBO> bos) {
         List<OutboundListVO> vos = new ArrayList<>(bos.size());
@@ -55,7 +56,7 @@ public class OutboundListVO implements Serializable {
         OutboundListVO vo = new OutboundListVO();
         vo.setOhid(bo.getOutboundHeadId());
         vo.setSno(bo.getSourceNo());
-        vo.setDnum(null);
+        vo.setDnum(bo.getExpectNum());
         vo.setOnum(null);
 
         if (null != bo.getBodyBOs() && bo.getBodyBOs().size() > 0) {
