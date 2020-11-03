@@ -1,21 +1,27 @@
 package com.smartindustry.storage.service.impl;
 
 import com.smartindustry.common.bo.si.LocationBO;
+import com.smartindustry.common.mapper.si.ForkliftMapper;
 import com.smartindustry.common.mapper.si.LocationMapper;
 import com.smartindustry.common.mapper.sm.StorageBodyMapper;
 import com.smartindustry.common.mapper.sm.StorageHeadMapper;
+import com.smartindustry.common.pojo.si.ForkliftPO;
 import com.smartindustry.common.pojo.sm.StorageBodyPO;
 import com.smartindustry.common.pojo.sm.StorageDetailPO;
 import com.smartindustry.common.pojo.sm.StorageHeadPO;
+import com.smartindustry.common.util.DateUtil;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.constant.StorageConstant;
 import com.smartindustry.storage.dto.StoragePreDTO;
 import com.smartindustry.storage.service.ISpareAreaService;
+import com.smartindustry.storage.util.StorageNoUtil;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * @author: jiangzhaojie
@@ -31,20 +37,27 @@ public class SpareAreaServiceImpl implements ISpareAreaService {
     private StorageHeadMapper storageHeadMapper;
     @Autowired
     private StorageBodyMapper storageBodyMapper;
-
+    @Autowired
+    private ForkliftMapper forkliftMapper;
     @Override
     public ResultVO enterSpare(StoragePreDTO dto){
+        // 根据imei查询出叉车id
+        ForkliftPO forkliftPO = forkliftMapper.queryByImei(dto.getImei());
+        // 根据栈板rfid查询入库单
+        StorageHeadPO storageHeadPO = storageHeadMapper.queryByRfid(dto.getPrfid());
         // 查询当前储位的基本信息
+        Date date = new Date();
         LocationBO bo = locationMapper.queryByRfid(dto.getLrfid());
-        StorageHeadPO headPO = storageHeadMapper.selectByPrimaryKey(dto.getSid());
-        StorageBodyPO bodyPO = storageBodyMapper.queryByShidAndMid(dto.getSid(),dto.getMid());
-        // 当前储位为成品区并且订单类型是成品入库
-        if(bo.getLocationTypeId().equals(StorageConstant.TYPE_FINISHED_AREA) && headPO.getSourceType().equals(StorageConstant.TYPE_PRODUCT_STORAGE)){
+        // 当前入库表体
+        StorageBodyPO bodyPO = storageBodyMapper.queryByShidAndLid(storageHeadPO.getStorageHeadId(),bo.getLocationId());
+
+        // 当前储位为成品区并且来源订单类型是生产入库
+        if(bo.getLocationTypeId().equals(StorageConstant.TYPE_FINISHED_AREA) && storageHeadPO.getSourceType().equals(StorageConstant.TYPE_PRODUCT_STORAGE)){
             //1. 新增入库详情表
             StorageDetailPO detailPO = new StorageDetailPO();
             detailPO.setStorageBodyId(bodyPO.getStorageBodyId());
             detailPO.setLocationId(bo.getLocationId());
-            detailPO.setStorageTime(new Date());
+            detailPO.setStorageTime(date);
             detailPO.setRfid(dto.getPrfid());
             //2. 入库单表体已入库数量+1
             if(null != bodyPO){
@@ -52,30 +65,55 @@ public class SpareAreaServiceImpl implements ISpareAreaService {
                 storageBodyMapper.updateByPrimaryKeySelective(bodyPO);
             }else {
                 bodyPO.setStorageNum(new BigDecimal(1));
-                bodyPO.setStorageHeadId(dto.getSid());
-                bodyPO.setMaterialId(dto.getMid());
+                bodyPO.setStorageHeadId(storageHeadPO.getStorageHeadId());
                 bodyPO.setLocationId(bo.getLocationId());
-                Date date = new Date();
-                bodyPO.setAcceptTime(date);
                 bodyPO.setCreateTime(date);
                 bodyPO.setDr((byte) 1);
                 storageBodyMapper.insert(bodyPO);
             }
-            headPO.setStorageNum(bodyPO.getStorageNum().add(new BigDecimal(1)));
+            storageHeadPO.setStorageNum(bodyPO.getStorageNum().add(new BigDecimal(1)));
             //判断入库单的状态
-            if(headPO.getStorageNum().add(new BigDecimal(1)).compareTo(headPO.getExpectNum()) == -1){
-                headPO.setStatus(StorageConstant.STATUS_INSTORAGE);
+            if(storageHeadPO.getStorageNum().add(new BigDecimal(1)).compareTo(storageHeadPO.getExpectNum()) == -1){
+                storageHeadPO.setStatus(StorageConstant.STATUS_INSTORAGE);
             }else {
-                headPO.setStatus(StorageConstant.STATUS_STORED);
-                headPO.setStorageTime(new Date());
+                storageHeadPO.setStatus(StorageConstant.STATUS_STORED);
+                storageHeadPO.setStorageTime(date);
             }
-            storageHeadMapper.updateByPrimaryKeySelective(headPO);
+            storageHeadMapper.updateByPrimaryKeySelective(storageHeadPO);
         }
-        //进入备货区
+
+        // 叉车运送到备货区
         if(bo.getLocationTypeId().equals(StorageConstant.TYPE_PREPARATION_AREA)){
-            //当前栈板和入库单解绑
 
         }
+
+        // 备货区运送到成品区
+//        StorageDetailPO detailPO =
+//        if(){
+            //当前栈板和入库单解绑
+
+            // 如果当前时间段没有备料入库单，那么就新增一条备料入库单
+            Map<String,Date> map = DateUtil.belongCalendar(date);
+            StorageHeadPO po = storageHeadMapper.queryPrepareNo(new Date(),map.get("start"),map.get("end"));
+//            StorageBodyPO bodyPO1 = storageBodyMapper
+            if(null == po){
+                // 生成备料区入库单
+                StorageHeadPO headPO1 = new StorageHeadPO();
+                headPO1.setStorageNo(StorageNoUtil.genStorageHeadNo(storageHeadMapper,StorageNoUtil.RECEIPT_HEAD_YP,new Date()));
+//                headPO1.setStorageNo(headPO.getStorageNo());
+                headPO1.setSourceType(StorageConstant.TYPE_PRE_STORAGE);
+                headPO1.setStorageNum(new BigDecimal(1));
+                headPO1.setStatus(StorageConstant.STATUS_INSTORAGE);
+                headPO1.setCreateTime(date);
+                headPO1.setDr((byte)1);
+                storageHeadMapper.insert(headPO1);
+
+                StorageBodyPO bodyPO2 = new StorageBodyPO();
+
+            }else {
+                po.setStorageNum(po.getStorageNum().add(new BigDecimal(1)));
+            }
+
         return ResultVO.ok();
     }
 }
