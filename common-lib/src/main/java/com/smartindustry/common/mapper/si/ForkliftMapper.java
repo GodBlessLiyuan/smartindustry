@@ -35,4 +35,11 @@ public interface ForkliftMapper extends BaseMapper<ForkliftPO, Long> {
      * @return
      */
     List<ForkliftPO> queryByOhid(Long ohid);
+    /**
+     * 根据 入库表头ID 查询
+     *
+     * @param shid
+     * @return
+     */
+    List<ForkliftPO> queryByShid(Long shid);
 }

@@ -27,6 +27,11 @@ public class StorageDetailPO implements Serializable {
     private Long locationId;
 
     /**
+     * 物料ID
+     */
+    private Long materialId;
+
+    /**
      * 入库数
      */
     private BigDecimal storageNum;
