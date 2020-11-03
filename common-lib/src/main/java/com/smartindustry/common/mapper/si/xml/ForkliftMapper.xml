@@ -242,4 +242,23 @@
         where outbound_head_id = #{ohid,jdbcType=BIGINT}
           and f.dr = 1
     </select>
+  <select id="queryByShid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select f.forklift_id,
+               f.forklift_no,
+               f.forklift_model,
+               f.forklift_brand,
+               f.supplier_name,
+               f.contact,
+               f.contact_phone,
+               f.imei_no,
+               f.work_area,
+               f.`status`,
+               f.extra,
+               f.create_time,
+               f.dr
+        from si_forklift f
+                 right join sm_storage_forklift sf on f.forklift_id = sf.forklift_id
+        where storage_head_id = #{shid,jdbcType=BIGINT}
+          and f.dr = 1
+    </select>
 </mapper>

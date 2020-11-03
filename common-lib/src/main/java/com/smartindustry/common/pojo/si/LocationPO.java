@@ -16,21 +16,6 @@ public class LocationPO implements Serializable {
     private Long locationId;
 
     /**
-     * 库位编号
-     */
-    private String locationNo;
-
-    /**
-     * 库位名称
-     */
-    private String locationName;
-
-    /**
-     * 可容纳托盘数
-     */
-    private Integer holdTrayNum;
-
-    /**
      * 仓库ID
      */
     private Long warehouseId;
@@ -46,14 +31,34 @@ public class LocationPO implements Serializable {
     private Long locationTypeId;
 
     /**
-     * 备注
-     */
-    private String remark;
-
-    /**
      * 创建人
      */
     private Long userId;
+
+    /**
+     * 库位编号
+     */
+    private String locationNo;
+
+    /**
+     * 库位名称
+     */
+    private String locationName;
+
+    /**
+     * 可容纳托盘数
+     */
+    private Integer holdTrayNum;
+
+    /**
+     * 现存数量 : 现存数量
+     */
+    private Integer existNum;
+
+    /**
+     * 备注
+     */
+    private String remark;
 
     /**
      * 创建时间

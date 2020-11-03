@@ -1,12 +1,15 @@
 package com.smartindustry.pda.service.impl;
 
-import com.smartindustry.common.mapper.bim.ProductMapper;
-import com.smartindustry.common.mapper.si.MaterialMapper;
-import com.smartindustry.common.mapper.si.WarehouseMapper;
+import com.smartindustry.common.bo.sm.StorageBodyBO;
+import com.smartindustry.common.bo.sm.StorageHeadBO;
+import com.smartindustry.common.mapper.si.ForkliftMapper;
+import com.smartindustry.common.mapper.si.LocationMapper;
 import com.smartindustry.common.mapper.sm.StorageBodyMapper;
 import com.smartindustry.common.mapper.sm.StorageHeadMapper;
 import com.smartindustry.common.mapper.sm.StorageRecordMapper;
 import com.smartindustry.common.mapper.wo.ProduceOrderMapper;
+import com.smartindustry.common.pojo.si.ForkliftPO;
+import com.smartindustry.common.pojo.si.LocationPO;
 import com.smartindustry.common.pojo.sm.StorageBodyPO;
 import com.smartindustry.common.pojo.sm.StorageHeadPO;
 import com.smartindustry.common.pojo.sm.StorageRecordPO;
@@ -14,17 +17,17 @@ import com.smartindustry.common.pojo.wo.ProduceOrderPO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.pda.constant.StorageConstant;
 import com.smartindustry.pda.dto.OperateDTO;
+import com.smartindustry.pda.dto.StorageDTO;
 import com.smartindustry.pda.service.IStorageService;
 import com.smartindustry.pda.util.StorageNoUtil;
+import com.smartindustry.pda.vo.StorageDetailVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @ Author     ：AnHongxu.
@@ -40,15 +43,13 @@ public class StorageServiceImpl implements IStorageService {
     @Autowired
     private StorageBodyMapper storageBodyMapper;
     @Autowired
-    private WarehouseMapper warehouseMapper;
-    @Autowired
-    private MaterialMapper materialMapper;
-    @Autowired
     private StorageRecordMapper storageRecordMapper;
     @Autowired
     private ProduceOrderMapper produceOderMapper;
     @Autowired
-    private ProductMapper productMapper;
+    private ForkliftMapper forkliftMapper;
+    @Autowired
+    private LocationMapper locationMapper;
 
     /**
      * @Description 生成入库单
@@ -60,7 +61,7 @@ public class StorageServiceImpl implements IStorageService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ResultVO GenerateStockbill(OperateDTO dto) {
+    public ResultVO generateStockbill(OperateDTO dto) {
         /*查询成品工单详细信息生成入库单表头和标体*/
         //查询成品工单详细信息
         ProduceOrderPO produceOrderPO = produceOderMapper.selectByPrimaryKey(dto.getPoid());
@@ -74,7 +75,7 @@ public class StorageServiceImpl implements IStorageService {
         storageHeadPO.setSourceNo(produceOrderPO.getProduceNo());
         //来源类型：2.成品入库
         storageHeadPO.setSourceType((byte) 2);
-        storageHeadPO.setExpectNum(BigDecimal.valueOf(produceOrderPO.getProduceNum()*36));
+        storageHeadPO.setExpectNum(BigDecimal.valueOf(produceOrderPO.getProduceNum() * StorageConstant.F2Z));
         //入库状态：3.待入库
         storageHeadPO.setStatus(StorageConstant.STATUS_PRESTORED);
         storageHeadPO.setCreateTime(new Date());
@@ -83,7 +84,7 @@ public class StorageServiceImpl implements IStorageService {
         storageHeadMapper.insert(storageHeadPO);
 
         // 如果只有一个产品只生成一个入库单表体，如果有两个就生成两个
-        if (produceOrderPO.getMaterialId2() == null||"".equals(produceOrderPO.getMaterialId2())) {
+        if (produceOrderPO.getMaterialId2() == null || "".equals(produceOrderPO.getMaterialId2())) {
             // 只生成一个入库单表体
             StorageBodyPO storageBodyPO = new StorageBodyPO();
             storageBodyPO.setStorageHeadId(storageHeadPO.getStorageHeadId());
@@ -111,9 +112,64 @@ public class StorageServiceImpl implements IStorageService {
         return ResultVO.ok();
     }
 
+    /**
+     * 详情
+     *
+     * @param session
+     * @param dto
+     * @return
+     */
+    @Override
+    public ResultVO detail(HttpSession session, StorageDTO dto) {
+        if (null == dto.getShid()) {
+            //没有有传入入库单表头
+            return new ResultVO(1001);
+        }
+
+        // 入库信息
+        StorageHeadBO storageHeadBO = storageHeadMapper.queryPdaDetailByShid(dto.getShid());
+        if (null == storageHeadBO) {
+            //没有该入库单
+            return new ResultVO(1002);
+        }
+        StorageDetailVO vo = StorageDetailVO.convert(storageHeadBO);
+
+        // 储位图
+        Map<Long, StorageDetailVO.LocationVO> lvos = new HashMap<>();
+        int colorIndex = 0;
+        for (StorageBodyBO bo : storageHeadBO.getBos()) {
+            StorageDetailVO.LocationVO lvo = new StorageDetailVO.LocationVO();
+            lvo.setColor(StorageDetailVO.COLORS[colorIndex]);
+            lvo.setMinfo(bo.getMaterialName() + " " + bo.getMaterialModel());
+            lvos.put(bo.getMaterialId(), lvo);
+            colorIndex += colorIndex;
+        }
+        List<LocationPO> locationPOs = locationMapper.queryByMids(new ArrayList<>(lvos.keySet()));
+        for (LocationPO locationPO : locationPOs) {
+            StorageDetailVO.LocationVO lvo = lvos.get(locationPO.getMaterialId());
+            lvo.getLrfids().add(locationPO.getLocationNo());
+        }
+        vo.setLvos(new ArrayList<>(lvos.values()));
+
+        // 叉车信息
+        List<ForkliftPO> pos = forkliftMapper.queryByShid(dto.getShid());
+        if (null != pos && pos.size() > 0) {
+            String imei = (String) session.getAttribute(StorageConstant.SESSION_IMEI);
+            List<String> fnames = new ArrayList<>(pos.size());
+            for (ForkliftPO po : pos) {
+                fnames.add(po.getForkliftNo());
+            }
+            vo.setFnames(fnames);
+        }
+
+        session.setAttribute(StorageConstant.SESSION_SHID, dto.getShid());
+
+        return ResultVO.ok().setData(vo);
+    }
+
 
     @Override
-    public ResultVO ForkliftLift(Map<String, Object> reqData) {
+    public ResultVO forkliftLift(Map<String, Object> reqData) {
         return null;
     }
 }

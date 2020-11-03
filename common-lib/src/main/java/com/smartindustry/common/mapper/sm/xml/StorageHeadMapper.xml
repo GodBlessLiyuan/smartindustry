@@ -306,4 +306,12 @@
     left join sm_storage_head sh on po.produce_no = sh.produce_no
     where sh.dr = 1 and p.rfid = #{rfid,jdbcType=CHAR}
   </select>
+  <select id="queryPdaDetailByShid" parameterType="java.lang.Long" resultMap="PdaResultMap">
+    select
+    <include refid="Pda_Column_List"/>
+    from sm_storage_head sh
+    left join sm_storage_body sb on sh.storage_head_id = sb.storage_head_id
+    left join si_material m on sb.material_id = m.material_id
+    where sh.source_type = 2 and sh.dr = 1 and sh.storage_head_id = #{storageHeadId,jdbcType=BIGINT}
+  </select>
 </mapper>

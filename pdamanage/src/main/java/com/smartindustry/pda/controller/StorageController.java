@@ -35,8 +35,8 @@ public class StorageController {
      * @return
      */
     @PostMapping("generate_stockbill")
-    public ResultVO GenerateStockbill(@RequestBody OperateDTO dto) {
-        return storageService.GenerateStockbill(dto);
+    public ResultVO generateStockbill(@RequestBody OperateDTO dto) {
+        return storageService.generateStockbill(dto);
     }
 
     /**
@@ -50,12 +50,22 @@ public class StorageController {
     }
 
     /**
+     * 详细查询
+     *
+     * @return
+     */
+    @PostMapping("detail")
+    public ResultVO detail(HttpSession session, @RequestBody StorageDTO dto) {
+        return storageService.detail(session, dto);
+    }
+
+    /**
      * 叉车叉货时叉起调用接口
      *
      * @return
      */
-   /* @PostMapping("forklift_lift")
-    public ResultVO ForkliftLift(@RequestBody Map<String, Object> reqData) {
-        return storageService.GenerateStockbill(reqData);
+  /*  @PostMapping("execute")
+    public ResultVO forkliftLift(HttpSession session, @RequestBody StorageDTO dto) {
+        return storageService.forkliftLift(session, dto);
     }*/
 }
