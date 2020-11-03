@@ -47,7 +47,7 @@ public class PdaListVO implements Serializable {
         vo.setHid(bo.getStorageHeadId());
         vo.setSno(bo.getSourceNo());
         vo.setDnum(bo.getExpectNum());
-        vo.setSnum(bo.getStorageNum());
+        vo.setCnum(bo.getStorageNum());
         vo.setStatus((byte) 1);
 
         if (null != bo.getBos() && bo.getBos().size() > 0) {
@@ -72,7 +72,7 @@ public class PdaListVO implements Serializable {
         vo.setHid(bo.getOutboundHeadId());
         vo.setSno(bo.getSourceNo());
         vo.setDnum(bo.getExpectNum());
-        vo.setSnum(bo.getOutboundNum());
+        vo.setCnum(bo.getOutboundNum());
         vo.setStatus((byte) 2);
 
         if (null != bo.getBodyBOs() && bo.getBodyBOs().size() > 0) {
@@ -108,9 +108,9 @@ public class PdaListVO implements Serializable {
          */
         private BigDecimal dnum;
         /**
-         * 出/入库数
+         * 当前出库排位
          */
-        private BigDecimal snum;
+        private BigDecimal cnum;
         /**
          * 状态：1-入库；2-出库
          */

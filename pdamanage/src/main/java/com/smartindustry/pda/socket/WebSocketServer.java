@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * @author: xiahui
  * @date: Created in 2020/10/30 10:33
- * @description: TODO
+ * @description: WebSocket
  * @version: 1.0
  */
 @ServerEndpoint("/websocket/{imei}")
@@ -59,18 +59,6 @@ public class WebSocketServer {
         sendMsg(imei, "断开连接成功");
         sessionPools.remove(imei);
         num.decrementAndGet();
-    }
-
-    /**
-     * 批量发送
-     *
-     * @param imeis
-     * @param message
-     */
-    public static void sendMsg(List<String> imeis, String message) {
-        for (String imei : imeis) {
-            sendMsg(imei, message);
-        }
     }
 
     /**

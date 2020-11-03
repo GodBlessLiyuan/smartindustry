@@ -9,12 +9,14 @@ import com.smartindustry.common.mapper.om.OutboundHeadMapper;
 import com.smartindustry.common.mapper.si.ForkliftMapper;
 import com.smartindustry.common.mapper.si.LocationMapper;
 import com.smartindustry.common.mapper.sm.StorageBodyMapper;
+import com.smartindustry.common.mapper.sm.StorageDetailMapper;
 import com.smartindustry.common.mapper.sm.StorageHeadMapper;
 import com.smartindustry.common.pojo.om.OutboundBodyPO;
 import com.smartindustry.common.pojo.om.OutboundForkliftPO;
 import com.smartindustry.common.pojo.om.OutboundHeadPO;
 import com.smartindustry.common.pojo.si.ForkliftPO;
 import com.smartindustry.common.pojo.si.LocationPO;
+import com.smartindustry.common.pojo.sm.StorageDetailPO;
 import com.smartindustry.common.util.DateUtil;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.pda.constant.OutboundConstant;
@@ -28,6 +30,8 @@ import com.smartindustry.pda.vo.PdaListVO;
 import com.smartindustry.pda.vo.WebSocketVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpSession;
@@ -40,6 +44,7 @@ import java.util.*;
  * @description: 成品出库
  * @version: 1.0
  */
+@EnableTransactionManagement
 @Service
 public class OutboundServiceImpl implements IOutboundService {
     @Autowired
@@ -50,6 +55,8 @@ public class OutboundServiceImpl implements IOutboundService {
     private StorageHeadMapper storageHeadMapper;
     @Autowired
     private StorageBodyMapper storageBodyMapper;
+    @Autowired
+    private StorageDetailMapper storageDetailMapper;
     @Autowired
     private ForkliftMapper forkliftMapper;
     @Autowired
@@ -134,7 +141,7 @@ public class OutboundServiceImpl implements IOutboundService {
             return new ResultVO(1001);
         }
 
-        String imei = (String) session.getAttribute("imei");
+        String imei = (String) session.getAttribute(OutboundConstant.SESSION_IMEI);
         if (null == imei) {
             return new ResultVO(1111);
         }
@@ -304,27 +311,13 @@ public class OutboundServiceImpl implements IOutboundService {
     }
 
     /**
-     * WebSocket 发送信息
-     */
-    private void sendOutboundMsg(Long ohid, List<String> fnames) {
-        WebSocketVO vo = new WebSocketVO();
-        WebSocketVO.OutboundVO ovo = new WebSocketVO.OutboundVO();
-        OutboundHeadPO headPO = outboundHeadMapper.selectByPrimaryKey(ohid);
-        ovo.setId(ohid);
-        ovo.setSnum(headPO.getOutboundNum());
-        ovo.setFnames(fnames);
-        ovo.setCnum(headPO.getOutboundNum().add(BigDecimal.valueOf(fnames.size())));
-        vo.setOvo(ovo);
-        WebSocketServer.sendAllMsg(vo);
-    }
-
-    /**
      * 出库
      *
      * @param session
      * @param dto
      * @return
      */
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO outbound(HttpSession session, OutboundDTO dto) {
         if (null == dto.getMrfid() && null == dto.getLrfid()) {
@@ -349,13 +342,38 @@ public class OutboundServiceImpl implements IOutboundService {
             return new ResultVO(1003);
         }
 
-        if (null == dto.getLrfid()) {
-            // 叉起砧板
-
+        StorageDetailPO detailPO = storageDetailMapper.queryByRfidAndStatus(dto.getMrfid(), (byte) 1);
+        if (null == detailPO) {
+            // 入库
         } else {
-            // 砧板入库
+            // 出库
+            if (null == ofPO.getRfid()) {
+                // 叉起砧板
+                ofPO.setRfid(dto.getMrfid());
+                outboundForkliftMapper.updateByPrimaryKey(ofPO);
+            } else {
+                // 砧板入库
+                OutboundHeadPO headPO = outboundHeadMapper.selectByPrimaryKey(ofPO.getOutboundHeadId());
+
+            }
         }
 
         return ResultVO.ok();
+    }
+
+
+    /**
+     * WebSocket 发送信息
+     */
+    private void sendOutboundMsg(Long ohid, List<String> fnames) {
+        WebSocketVO vo = new WebSocketVO();
+        WebSocketVO.OutboundVO ovo = new WebSocketVO.OutboundVO();
+        OutboundHeadPO headPO = outboundHeadMapper.selectByPrimaryKey(ohid);
+        ovo.setId(ohid);
+        ovo.setSnum(headPO.getOutboundNum());
+        ovo.setFnames(fnames);
+        ovo.setCnum(headPO.getOutboundNum().add(BigDecimal.valueOf(fnames.size())));
+        vo.setOvo(ovo);
+        WebSocketServer.sendAllMsg(vo);
     }
 }
