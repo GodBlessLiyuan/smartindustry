@@ -5,13 +5,15 @@
     <id column="storage_id" jdbcType="BIGINT" property="storageId" />
     <result column="storage_body_id" jdbcType="BIGINT" property="storageBodyId" />
     <result column="location_id" jdbcType="BIGINT" property="locationId" />
+    <result column="material_id" jdbcType="BIGINT" property="materialId" />
     <result column="storage_num" jdbcType="DECIMAL" property="storageNum" />
     <result column="storage_time" jdbcType="TIMESTAMP" property="storageTime" />
     <result column="rfid" jdbcType="CHAR" property="rfid" />
     <result column="storage_status" jdbcType="TINYINT" property="storageStatus" />
   </resultMap>
   <sql id="Base_Column_List">
-    storage_id, storage_body_id, location_id, storage_num, storage_time, rfid, storage_status
+    storage_id, storage_body_id, location_id, material_id, storage_num, storage_time, 
+    rfid, storage_status
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -25,11 +27,11 @@
   </delete>
   <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.StorageDetailPO">
     insert into sm_storage_detail (storage_id, storage_body_id, location_id, 
-      storage_num, storage_time, rfid, 
-      storage_status)
+      material_id, storage_num, storage_time, 
+      rfid, storage_status)
     values (#{storageId,jdbcType=BIGINT}, #{storageBodyId,jdbcType=BIGINT}, #{locationId,jdbcType=BIGINT}, 
-      #{storageNum,jdbcType=DECIMAL}, #{storageTime,jdbcType=TIMESTAMP}, #{rfid,jdbcType=CHAR}, 
-      #{storageStatus,jdbcType=TINYINT})
+      #{materialId,jdbcType=BIGINT}, #{storageNum,jdbcType=DECIMAL}, #{storageTime,jdbcType=TIMESTAMP}, 
+      #{rfid,jdbcType=CHAR}, #{storageStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.sm.StorageDetailPO">
     insert into sm_storage_detail
@@ -42,6 +44,9 @@
       </if>
       <if test="locationId != null">
         location_id,
+      </if>
+      <if test="materialId != null">
+        material_id,
       </if>
       <if test="storageNum != null">
         storage_num,
@@ -66,6 +71,9 @@
       <if test="locationId != null">
         #{locationId,jdbcType=BIGINT},
       </if>
+      <if test="materialId != null">
+        #{materialId,jdbcType=BIGINT},
+      </if>
       <if test="storageNum != null">
         #{storageNum,jdbcType=DECIMAL},
       </if>
@@ -89,6 +97,9 @@
       <if test="locationId != null">
         location_id = #{locationId,jdbcType=BIGINT},
       </if>
+      <if test="materialId != null">
+        material_id = #{materialId,jdbcType=BIGINT},
+      </if>
       <if test="storageNum != null">
         storage_num = #{storageNum,jdbcType=DECIMAL},
       </if>
@@ -108,6 +119,7 @@
     update sm_storage_detail
     set storage_body_id = #{storageBodyId,jdbcType=BIGINT},
       location_id = #{locationId,jdbcType=BIGINT},
+      material_id = #{materialId,jdbcType=BIGINT},
       storage_num = #{storageNum,jdbcType=DECIMAL},
       storage_time = #{storageTime,jdbcType=TIMESTAMP},
       rfid = #{rfid,jdbcType=CHAR},
