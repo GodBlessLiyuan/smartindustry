@@ -133,8 +133,13 @@ public class OutboundServiceImpl implements IOutboundService {
             return new ResultVO(1001);
         }
 
+        String imei = (String) session.getAttribute("imei");
+        if (null == imei) {
+            return new ResultVO(1111);
+        }
+
         // 叉车信息
-        ForkliftPO forkliftPO = forkliftMapper.queryByImei((String) session.getAttribute("imei"));
+        ForkliftPO forkliftPO = forkliftMapper.queryByImei(imei);
         if (null == forkliftPO) {
             return new ResultVO(1002);
         }
@@ -181,6 +186,11 @@ public class OutboundServiceImpl implements IOutboundService {
             return new ResultVO(1001);
         }
 
+        String imei = (String) session.getAttribute(OutboundConstant.SESSION_IMEI);
+        if (null == imei) {
+            return new ResultVO(1111);
+        }
+
         // 出库信息
         OutboundHeadBO headBO = outboundHeadMapper.queryByOhid(dto.getOhid());
         if (null == headBO) {
@@ -206,7 +216,6 @@ public class OutboundServiceImpl implements IOutboundService {
         // 叉车信息
         List<ForkliftPO> pos = forkliftMapper.queryByOhid(dto.getOhid());
         if (null != pos && pos.size() > 0) {
-            String imei = (String) session.getAttribute(OutboundConstant.SESSION_IMEI);
             vo.setStatus("辅助执行");
 
             List<String> fnames = new ArrayList<>(pos.size());
@@ -236,7 +245,7 @@ public class OutboundServiceImpl implements IOutboundService {
     public ResultVO execute(HttpSession session) {
         String imei = (String) session.getAttribute(OutboundConstant.SESSION_IMEI);
         if (null == imei) {
-            return new ResultVO(1002);
+            return new ResultVO(1111);
         }
         Long ohid = (Long) session.getAttribute(OutboundConstant.SESSION_OHID);
         if (null == ohid) {
@@ -293,7 +302,7 @@ public class OutboundServiceImpl implements IOutboundService {
         // 当前叉车信息
         String imei = (String) session.getAttribute(OutboundConstant.SESSION_IMEI);
         if (null == imei) {
-            return new ResultVO(1002);
+            return new ResultVO(1111);
         }
 
         ForkliftPO fPO = forkliftMapper.queryByImei(imei);
