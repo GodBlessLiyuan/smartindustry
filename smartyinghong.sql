@@ -441,14 +441,16 @@ CREATE TABLE si_forklift_record
 CREATE TABLE si_location
 (
 	location_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '库位ID',
-	location_no char(128) NOT NULL COMMENT '库位编号',
-	location_name char(255) NOT NULL COMMENT '库位名称',
-	hold_tray_num int COMMENT '可容纳托盘数',
 	warehouse_id bigint unsigned NOT NULL COMMENT '仓库ID',
 	material_id bigint unsigned COMMENT '物料ID',
 	location_type_id bigint unsigned NOT NULL COMMENT '货位类型ID',
-	remark char(255) COMMENT '备注',
 	user_id bigint unsigned COMMENT '创建人',
+	location_no char(128) NOT NULL COMMENT '库位编号',
+	location_name char(255) NOT NULL COMMENT '库位名称',
+	hold_tray_num int COMMENT '可容纳托盘数',
+	-- 现存数量
+	exist_num int COMMENT '现存数量 : 现存数量',
+	remark char(255) COMMENT '备注',
 	create_time datetime COMMENT '创建时间',
 	update_time datetime COMMENT '更新时间',
 	-- 1：未删除
@@ -620,6 +622,7 @@ CREATE TABLE sm_storage_detail
 	storage_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '入库单ID',
 	storage_body_id bigint unsigned NOT NULL COMMENT '入库单表体ID',
 	location_id bigint unsigned NOT NULL COMMENT '库位ID',
+	material_id bigint unsigned NOT NULL COMMENT '物料ID',
 	storage_num decimal(10,2) COMMENT '入库数',
 	storage_time datetime COMMENT '入库时间',
 	rfid char(128) NOT NULL COMMENT '栈板RFID',
@@ -627,6 +630,7 @@ CREATE TABLE sm_storage_detail
 	storage_status tinyint COMMENT '入库状态 : 入库状态：1.已入库  2.已出库',
 	PRIMARY KEY (storage_id),
 	UNIQUE (storage_id),
+	UNIQUE (material_id),
 	UNIQUE (rfid)
 ) COMMENT = '入库详细表';
 
@@ -793,7 +797,7 @@ ALTER TABLE am_role_record
 
 
 ALTER TABLE am_user_record
-	ADD FOREIGN KEY (user_id)
+	ADD FOREIGN KEY (operate_id)
 	REFERENCES am_user (user_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
@@ -801,7 +805,7 @@ ALTER TABLE am_user_record
 
 
 ALTER TABLE am_user_record
-	ADD FOREIGN KEY (operate_id)
+	ADD FOREIGN KEY (user_id)
 	REFERENCES am_user (user_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
@@ -1065,6 +1069,14 @@ ALTER TABLE si_material_record
 
 
 ALTER TABLE sm_storage_body
+	ADD FOREIGN KEY (material_id)
+	REFERENCES si_material (material_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
+ALTER TABLE sm_storage_detail
 	ADD FOREIGN KEY (material_id)
 	REFERENCES si_material (material_id)
 	ON UPDATE RESTRICT
