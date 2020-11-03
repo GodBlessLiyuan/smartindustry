@@ -353,8 +353,21 @@ public class OutboundServiceImpl implements IOutboundService {
                 outboundForkliftMapper.updateByPrimaryKey(ofPO);
             } else {
                 // 砧板入库
-                OutboundHeadPO headPO = outboundHeadMapper.selectByPrimaryKey(ofPO.getOutboundHeadId());
+                ofPO.setRfid(null);
+                outboundForkliftMapper.updateByPrimaryKey(ofPO);
 
+                detailPO.setStorageStatus((byte) 2);
+                storageDetailMapper.updateByPrimaryKey(detailPO);
+
+                OutboundHeadPO headPO = outboundHeadMapper.selectByPrimaryKey(ofPO.getOutboundHeadId());
+                headPO.setOutboundNum(headPO.getOutboundNum().add(BigDecimal.ONE));
+                if(headPO.getExpectNum().equals(headPO.getOutboundNum())) {
+                    // 入库完成
+                }
+                outboundHeadMapper.updateByPrimaryKey(headPO);
+                OutboundBodyPO bodyPO = outboundBodyMapper.queryByOhidAndMid(ofPO.getOutboundHeadId(), detailPO.getMaterialId());
+                bodyPO.setOutboundNum(bodyPO.getOutboundNum().add(BigDecimal.ONE));
+                outboundBodyMapper.updateByPrimaryKey(bodyPO);
             }
         }
 

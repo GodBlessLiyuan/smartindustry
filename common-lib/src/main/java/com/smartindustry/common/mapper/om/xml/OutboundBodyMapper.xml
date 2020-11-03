@@ -1,161 +1,169 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.smartindustry.common.mapper.om.OutboundBodyMapper">
-  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.om.OutboundBodyPO">
-    <id column="outbound_body_id" jdbcType="BIGINT" property="outboundBodyId" />
-    <result column="outbound_head_id" jdbcType="BIGINT" property="outboundHeadId" />
-    <result column="material_id" jdbcType="BIGINT" property="materialId" />
-    <result column="expect_num" jdbcType="DECIMAL" property="expectNum" />
-    <result column="outbound_num" jdbcType="DECIMAL" property="outboundNum" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="outbound_time" jdbcType="TIMESTAMP" property="outboundTime" />
-    <result column="dr" jdbcType="TINYINT" property="dr" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    outbound_body_id, outbound_head_id, material_id, expect_num, outbound_num, create_time, 
+    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.om.OutboundBodyPO">
+        <id column="outbound_body_id" jdbcType="BIGINT" property="outboundBodyId"/>
+        <result column="outbound_head_id" jdbcType="BIGINT" property="outboundHeadId"/>
+        <result column="material_id" jdbcType="BIGINT" property="materialId"/>
+        <result column="expect_num" jdbcType="DECIMAL" property="expectNum"/>
+        <result column="outbound_num" jdbcType="DECIMAL" property="outboundNum"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="outbound_time" jdbcType="TIMESTAMP" property="outboundTime"/>
+        <result column="dr" jdbcType="TINYINT" property="dr"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        outbound_body_id, outbound_head_id, material_id, expect_num, outbound_num, create_time,
     outbound_time, dr
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from om_outbound_body
-    where outbound_body_id = #{outboundBodyId,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from om_outbound_body
-    where outbound_body_id = #{outboundBodyId,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.smartindustry.common.pojo.om.OutboundBodyPO">
-    insert into om_outbound_body (outbound_body_id, outbound_head_id, material_id, 
-      expect_num, outbound_num, create_time, 
-      outbound_time, dr)
-    values (#{outboundBodyId,jdbcType=BIGINT}, #{outboundHeadId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT}, 
-      #{expectNum,jdbcType=DECIMAL}, #{outboundNum,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{outboundTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
-  </insert>
-  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.om.OutboundBodyPO">
-    insert into om_outbound_body
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="outboundBodyId != null">
-        outbound_body_id,
-      </if>
-      <if test="outboundHeadId != null">
-        outbound_head_id,
-      </if>
-      <if test="materialId != null">
-        material_id,
-      </if>
-      <if test="expectNum != null">
-        expect_num,
-      </if>
-      <if test="outboundNum != null">
-        outbound_num,
-      </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
-      <if test="outboundTime != null">
-        outbound_time,
-      </if>
-      <if test="dr != null">
-        dr,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="outboundBodyId != null">
-        #{outboundBodyId,jdbcType=BIGINT},
-      </if>
-      <if test="outboundHeadId != null">
-        #{outboundHeadId,jdbcType=BIGINT},
-      </if>
-      <if test="materialId != null">
-        #{materialId,jdbcType=BIGINT},
-      </if>
-      <if test="expectNum != null">
-        #{expectNum,jdbcType=DECIMAL},
-      </if>
-      <if test="outboundNum != null">
-        #{outboundNum,jdbcType=DECIMAL},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="outboundTime != null">
-        #{outboundTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="dr != null">
-        #{dr,jdbcType=TINYINT},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.om.OutboundBodyPO">
-    update om_outbound_body
-    <set>
-      <if test="outboundHeadId != null">
-        outbound_head_id = #{outboundHeadId,jdbcType=BIGINT},
-      </if>
-      <if test="materialId != null">
-        material_id = #{materialId,jdbcType=BIGINT},
-      </if>
-      <if test="expectNum != null">
-        expect_num = #{expectNum,jdbcType=DECIMAL},
-      </if>
-      <if test="outboundNum != null">
-        outbound_num = #{outboundNum,jdbcType=DECIMAL},
-      </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="outboundTime != null">
-        outbound_time = #{outboundTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="dr != null">
-        dr = #{dr,jdbcType=TINYINT},
-      </if>
-    </set>
-    where outbound_body_id = #{outboundBodyId,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.om.OutboundBodyPO">
-    update om_outbound_body
-    set outbound_head_id = #{outboundHeadId,jdbcType=BIGINT},
-      material_id = #{materialId,jdbcType=BIGINT},
-      expect_num = #{expectNum,jdbcType=DECIMAL},
-      outbound_num = #{outboundNum,jdbcType=DECIMAL},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      outbound_time = #{outboundTime,jdbcType=TIMESTAMP},
-      dr = #{dr,jdbcType=TINYINT}
-    where outbound_body_id = #{outboundBodyId,jdbcType=BIGINT}
-  </update>
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from om_outbound_body
+        where outbound_body_id = #{outboundBodyId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from om_outbound_body
+        where outbound_body_id = #{outboundBodyId,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.om.OutboundBodyPO">
+        insert into om_outbound_body (outbound_body_id, outbound_head_id, material_id,
+                                      expect_num, outbound_num, create_time,
+                                      outbound_time, dr)
+        values (#{outboundBodyId,jdbcType=BIGINT}, #{outboundHeadId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT},
+                #{expectNum,jdbcType=DECIMAL}, #{outboundNum,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP},
+                #{outboundTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
+    </insert>
+    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.om.OutboundBodyPO">
+        insert into om_outbound_body
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="outboundBodyId != null">
+                outbound_body_id,
+            </if>
+            <if test="outboundHeadId != null">
+                outbound_head_id,
+            </if>
+            <if test="materialId != null">
+                material_id,
+            </if>
+            <if test="expectNum != null">
+                expect_num,
+            </if>
+            <if test="outboundNum != null">
+                outbound_num,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="outboundTime != null">
+                outbound_time,
+            </if>
+            <if test="dr != null">
+                dr,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="outboundBodyId != null">
+                #{outboundBodyId,jdbcType=BIGINT},
+            </if>
+            <if test="outboundHeadId != null">
+                #{outboundHeadId,jdbcType=BIGINT},
+            </if>
+            <if test="materialId != null">
+                #{materialId,jdbcType=BIGINT},
+            </if>
+            <if test="expectNum != null">
+                #{expectNum,jdbcType=DECIMAL},
+            </if>
+            <if test="outboundNum != null">
+                #{outboundNum,jdbcType=DECIMAL},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="outboundTime != null">
+                #{outboundTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dr != null">
+                #{dr,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.om.OutboundBodyPO">
+        update om_outbound_body
+        <set>
+            <if test="outboundHeadId != null">
+                outbound_head_id = #{outboundHeadId,jdbcType=BIGINT},
+            </if>
+            <if test="materialId != null">
+                material_id = #{materialId,jdbcType=BIGINT},
+            </if>
+            <if test="expectNum != null">
+                expect_num = #{expectNum,jdbcType=DECIMAL},
+            </if>
+            <if test="outboundNum != null">
+                outbound_num = #{outboundNum,jdbcType=DECIMAL},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="outboundTime != null">
+                outbound_time = #{outboundTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dr != null">
+                dr = #{dr,jdbcType=TINYINT},
+            </if>
+        </set>
+        where outbound_body_id = #{outboundBodyId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.om.OutboundBodyPO">
+        update om_outbound_body
+        set outbound_head_id = #{outboundHeadId,jdbcType=BIGINT},
+            material_id      = #{materialId,jdbcType=BIGINT},
+            expect_num       = #{expectNum,jdbcType=DECIMAL},
+            outbound_num     = #{outboundNum,jdbcType=DECIMAL},
+            create_time      = #{createTime,jdbcType=TIMESTAMP},
+            outbound_time    = #{outboundTime,jdbcType=TIMESTAMP},
+            dr               = #{dr,jdbcType=TINYINT}
+        where outbound_body_id = #{outboundBodyId,jdbcType=BIGINT}
+    </update>
 
-  <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="outboundBodyId">
-    insert into om_outbound_body (outbound_body_id, outbound_head_id, material_id,
-    outbound_num, outing_num, create_time,
-    outbound_time, dr
-    )
-    values
-    <foreach collection="list" separator="," item="po">
-      (#{po.outboundBodyId,jdbcType=BIGINT}, #{po.outboundHeadId,jdbcType=BIGINT}, #{po.materialId,jdbcType=BIGINT},
-      #{po.outboundNum,jdbcType=DECIMAL}, #{po.outingNum,jdbcType=DECIMAL}, #{po.createTime,jdbcType=TIMESTAMP},
-      #{po.outboundTime,jdbcType=TIMESTAMP}, #{po.dr,jdbcType=TINYINT})
-    </foreach>
-  </insert>
+    <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="outboundBodyId">
+        insert into om_outbound_body (outbound_body_id, outbound_head_id, material_id,
+        outbound_num, outing_num, create_time,
+        outbound_time, dr
+        )
+        values
+        <foreach collection="list" separator="," item="po">
+            (#{po.outboundBodyId,jdbcType=BIGINT}, #{po.outboundHeadId,jdbcType=BIGINT},
+            #{po.materialId,jdbcType=BIGINT},
+            #{po.outboundNum,jdbcType=DECIMAL}, #{po.outingNum,jdbcType=DECIMAL}, #{po.createTime,jdbcType=TIMESTAMP},
+            #{po.outboundTime,jdbcType=TIMESTAMP}, #{po.dr,jdbcType=TINYINT})
+        </foreach>
+    </insert>
 
-  <update id="batchUpdate" parameterType="java.util.List">
-    update om_outbound_body
-    set
-    outbound_num = case outbound_body_id
-    <foreach collection="list" item="po">
-      when #{po.outboundBodyId,jdbcType=BIGINT} then #{po.outboundNum,jdbcType=DECIMAL}
-    </foreach>
-    end,
-    outbound_time = case outbound_body_id
-    <foreach collection="list" item="po">
-      when #{po.outboundBodyId,jdbcType=BIGINT} then #{po.outboundTime,jdbcType=DATE}
-    </foreach>
-    end
-    where outbound_body_id in
-    <foreach collection="list" item="po" open="(" separator="," close=")">
-      #{po.outboundBodyId,jdbcType=BIGINT}
-    </foreach>
-  </update>
+    <update id="batchUpdate" parameterType="java.util.List">
+        update om_outbound_body
+        set
+        outbound_num = case outbound_body_id
+        <foreach collection="list" item="po">
+            when #{po.outboundBodyId,jdbcType=BIGINT} then #{po.outboundNum,jdbcType=DECIMAL}
+        </foreach>
+        end,
+        outbound_time = case outbound_body_id
+        <foreach collection="list" item="po">
+            when #{po.outboundBodyId,jdbcType=BIGINT} then #{po.outboundTime,jdbcType=DATE}
+        </foreach>
+        end
+        where outbound_body_id in
+        <foreach collection="list" item="po" open="(" separator="," close=")">
+            #{po.outboundBodyId,jdbcType=BIGINT}
+        </foreach>
+    </update>
+    <select id="queryByOhidAndMid" resultType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from om_outbound_body
+        where outbound_head_id = #{ohid,jdbcType=BIGINT} and material_id = #{mid,jdbcType=BIGINT}and dr = 1
+    </select>
 </mapper>

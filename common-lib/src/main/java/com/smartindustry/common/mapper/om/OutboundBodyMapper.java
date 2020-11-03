@@ -13,7 +13,17 @@ import java.util.List;
 public interface OutboundBodyMapper extends BaseMapper<OutboundBodyPO, Long> {
     /**
      * 批量更新
+     *
      * @param pos
      */
     void batchUpdate(List<OutboundBodyPO> pos);
+
+    /**
+     * 根据表头ID进行查询
+     *
+     * @param ohid
+     * @param mid
+     * @return
+     */
+    OutboundBodyPO queryByOhidAndMid(Long ohid, Long mid);
 }
