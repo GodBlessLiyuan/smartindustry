@@ -25,6 +25,7 @@ import com.smartindustry.pda.socket.WebSocketServer;
 import com.smartindustry.pda.util.OutboundNoUtil;
 import com.smartindustry.pda.vo.OutboundDetailVO;
 import com.smartindustry.pda.vo.PdaListVO;
+import com.smartindustry.pda.vo.WebSocketVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -286,6 +287,14 @@ public class OutboundServiceImpl implements IOutboundService {
         session.setAttribute(OutboundConstant.SESSION_OHID, ohid);
 
         return ResultVO.ok();
+    }
+
+    private void sendOutboundMsg(Long ohid, List<String> num) {
+        WebSocketVO.OutboundVO ovo = new WebSocketVO.OutboundVO();
+        OutboundHeadPO headPO = outboundHeadMapper.selectByPrimaryKey(ohid);
+        ovo.setId(ohid);
+        ovo.setSnum(headPO.getOutboundNum());
+        ovo.setFname();
     }
 
     /**
