@@ -12,3 +12,7 @@ logging:
         common:
           mapper: debug
   config: classpath:logback-spring-test.xml
+
+schedule:
+  storage:
+    trigger:  0 30 07,19 * * ?
