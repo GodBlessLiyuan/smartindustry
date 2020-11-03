@@ -1,5 +1,7 @@
 package com.smartindustry.pda.socket;
 
+import com.alibaba.fastjson.JSON;
+import com.smartindustry.pda.vo.WebSocketVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -27,6 +29,22 @@ public class WebSocketServer {
 
     private static AtomicInteger num = new AtomicInteger();
     private static ConcurrentHashMap<String, Session> sessionPools = new ConcurrentHashMap<>();
+
+    /**
+     * 发送所有信息
+     *
+     * @param vo
+     */
+    public static void sendAllMsg(WebSocketVO vo) {
+        String message = JSON.toJSONString(vo);
+        for (Session session : sessionPools.values()) {
+            try {
+                session.getBasicRemote().sendText(message);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     @OnOpen
     public void onOpen(Session session, @PathParam("imei") String imei) {

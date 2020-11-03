@@ -39,7 +39,7 @@ public class WebSocketVO implements Serializable {
         /**
          * 叉车
          */
-        private List<String> fname;
+        private List<String> fnames;
     }
 
     /**
