@@ -30,7 +30,7 @@ public interface LocationMapper extends BaseMapper<LocationPO, Long> {
      * @param warehouseId
      * @return
      */
-    List<LocationPO> queryByLnoAndWhid(@Param("locationNo") String locationNo,@Param("warehouseId") Long warehouseId);
+    List<LocationPO> queryByLnoAndWhid(@Param("locationNo") String locationNo, @Param("warehouseId") Long warehouseId);
 
     /**
      * 根据仓库ID查询
@@ -102,5 +102,17 @@ public interface LocationMapper extends BaseMapper<LocationPO, Long> {
      */
     List<Map<String, Object>> queryKvByWid(Long wid);
 
+    /**
+     * 根据储位rfid进行储位信息查询
+     * @param rfid
+     * @return
+     */
+    LocationBO queryByRfid(String rfid);
 
+    /**
+     * 根据物料id 查询
+     * @param mids
+     * @return
+     */
+    List<LocationPO> queryByMids(List<Long> mids);
 }

@@ -202,4 +202,12 @@
     from sm_storage_body
     where storage_head_id = #{shid,jdbcType=BIGINT}
   </select>
+
+  <select id="queryByShidAndMid" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sm_storage_head sh
+    left join sm_storage_body sb on sh.storage_head_id = sb.storage_head_id
+    where sb.dr = 1 and sh.storage_head_id = #{shid,jdbcType=BIGINT} and sb.material_id = #{mid,jdbcType=BIGINT}
+  </select>
 </mapper>

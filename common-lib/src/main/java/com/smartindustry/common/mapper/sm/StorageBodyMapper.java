@@ -29,4 +29,12 @@ public interface StorageBodyMapper extends BaseMapper<StorageBodyPO, Long> {
      * @return
      */
     List<Long> querySbids(Long shid);
+
+    /**
+     * 根据入库单id和物料id
+     * @param shid
+     * @param mid
+     * @return
+     */
+    StorageBodyPO queryByShidAndMid(Long shid,Long mid);
 }

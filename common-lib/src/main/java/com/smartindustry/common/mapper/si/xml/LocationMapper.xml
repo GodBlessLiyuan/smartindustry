@@ -1,273 +1,303 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.smartindustry.common.mapper.si.LocationMapper">
-  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.LocationPO">
-    <id column="location_id" jdbcType="BIGINT" property="locationId" />
-    <result column="location_no" jdbcType="CHAR" property="locationNo" />
-    <result column="location_name" jdbcType="CHAR" property="locationName" />
-    <result column="hold_tray_num" jdbcType="INTEGER" property="holdTrayNum" />
-    <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId" />
-    <result column="material_id" jdbcType="BIGINT" property="materialId" />
-    <result column="remark" jdbcType="CHAR" property="remark" />
-    <result column="user_id" jdbcType="BIGINT" property="userId" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="dr" jdbcType="TINYINT" property="dr" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    location_id, location_no, location_name, hold_tray_num, warehouse_id, material_id, 
-    remark, user_id, create_time, update_time, dr
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from si_location
-    where location_id = #{locationId,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from si_location
-    where location_id = #{locationId,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.smartindustry.common.pojo.si.LocationPO">
-    insert into si_location (location_id, location_no, location_name, 
-      hold_tray_num, warehouse_id, material_id, 
-      remark, user_id, create_time, 
-      update_time, dr)
-    values (#{locationId,jdbcType=BIGINT}, #{locationNo,jdbcType=CHAR}, #{locationName,jdbcType=CHAR}, 
-      #{holdTrayNum,jdbcType=INTEGER}, #{warehouseId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT}, 
-      #{remark,jdbcType=CHAR}, #{userId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
-  </insert>
-  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.LocationPO">
-    insert into si_location
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="locationId != null">
-        location_id,
-      </if>
-      <if test="locationNo != null">
-        location_no,
-      </if>
-      <if test="locationName != null">
-        location_name,
-      </if>
-      <if test="holdTrayNum != null">
-        hold_tray_num,
-      </if>
-      <if test="warehouseId != null">
-        warehouse_id,
-      </if>
-      <if test="materialId != null">
-        material_id,
-      </if>
-      <if test="remark != null">
-        remark,
-      </if>
-      <if test="userId != null">
-        user_id,
-      </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
-      <if test="updateTime != null">
-        update_time,
-      </if>
-      <if test="dr != null">
-        dr,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="locationId != null">
-        #{locationId,jdbcType=BIGINT},
-      </if>
-      <if test="locationNo != null">
-        #{locationNo,jdbcType=CHAR},
-      </if>
-      <if test="locationName != null">
-        #{locationName,jdbcType=CHAR},
-      </if>
-      <if test="holdTrayNum != null">
-        #{holdTrayNum,jdbcType=INTEGER},
-      </if>
-      <if test="warehouseId != null">
-        #{warehouseId,jdbcType=BIGINT},
-      </if>
-      <if test="materialId != null">
-        #{materialId,jdbcType=BIGINT},
-      </if>
-      <if test="remark != null">
-        #{remark,jdbcType=CHAR},
-      </if>
-      <if test="userId != null">
-        #{userId,jdbcType=BIGINT},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="dr != null">
-        #{dr,jdbcType=TINYINT},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.si.LocationPO">
-    update si_location
-    <set>
-      <if test="locationNo != null">
-        location_no = #{locationNo,jdbcType=CHAR},
-      </if>
-      <if test="locationName != null">
-        location_name = #{locationName,jdbcType=CHAR},
-      </if>
-      <if test="holdTrayNum != null">
-        hold_tray_num = #{holdTrayNum,jdbcType=INTEGER},
-      </if>
-      <if test="warehouseId != null">
-        warehouse_id = #{warehouseId,jdbcType=BIGINT},
-      </if>
-      <if test="materialId != null">
-        material_id = #{materialId,jdbcType=BIGINT},
-      </if>
-      <if test="remark != null">
-        remark = #{remark,jdbcType=CHAR},
-      </if>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=BIGINT},
-      </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="dr != null">
-        dr = #{dr,jdbcType=TINYINT},
-      </if>
-    </set>
-    where location_id = #{locationId,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.LocationPO">
-    update si_location
-    set location_no = #{locationNo,jdbcType=CHAR},
-      location_name = #{locationName,jdbcType=CHAR},
-      hold_tray_num = #{holdTrayNum,jdbcType=INTEGER},
-      warehouse_id = #{warehouseId,jdbcType=BIGINT},
-      material_id = #{materialId,jdbcType=BIGINT},
-      remark = #{remark,jdbcType=CHAR},
-      user_id = #{userId,jdbcType=BIGINT},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
-      dr = #{dr,jdbcType=TINYINT}
-    where location_id = #{locationId,jdbcType=BIGINT}
-  </update>
+    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.LocationPO">
+        <id column="location_id" jdbcType="BIGINT" property="locationId"/>
+        <result column="location_no" jdbcType="CHAR" property="locationNo"/>
+        <result column="location_name" jdbcType="CHAR" property="locationName"/>
+        <result column="hold_tray_num" jdbcType="INTEGER" property="holdTrayNum"/>
+        <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId"/>
+        <result column="material_id" jdbcType="BIGINT" property="materialId"/>
+        <result column="location_type_id" jdbcType="BIGINT" property="locationTypeId"/>
+        <result column="remark" jdbcType="CHAR" property="remark"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="dr" jdbcType="TINYINT" property="dr"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        location_id, location_no, location_name, hold_tray_num, warehouse_id, material_id,
+    location_type_id, remark, user_id, create_time, update_time, dr
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_location
+        where location_id = #{locationId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from si_location
+        where location_id = #{locationId,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.si.LocationPO">
+        insert into si_location (location_id, location_no, location_name,
+                                 hold_tray_num, warehouse_id, material_id,
+                                 location_type_id, remark, user_id,
+                                 create_time, update_time, dr)
+        values (#{locationId,jdbcType=BIGINT}, #{locationNo,jdbcType=CHAR}, #{locationName,jdbcType=CHAR},
+                #{holdTrayNum,jdbcType=INTEGER}, #{warehouseId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT},
+                #{locationTypeId,jdbcType=BIGINT}, #{remark,jdbcType=CHAR}, #{userId,jdbcType=BIGINT},
+                #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
+    </insert>
+    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.LocationPO">
+        insert into si_location
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="locationId != null">
+                location_id,
+            </if>
+            <if test="locationNo != null">
+                location_no,
+            </if>
+            <if test="locationName != null">
+                location_name,
+            </if>
+            <if test="holdTrayNum != null">
+                hold_tray_num,
+            </if>
+            <if test="warehouseId != null">
+                warehouse_id,
+            </if>
+            <if test="materialId != null">
+                material_id,
+            </if>
+            <if test="locationTypeId != null">
+                location_type_id,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="dr != null">
+                dr,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="locationId != null">
+                #{locationId,jdbcType=BIGINT},
+            </if>
+            <if test="locationNo != null">
+                #{locationNo,jdbcType=CHAR},
+            </if>
+            <if test="locationName != null">
+                #{locationName,jdbcType=CHAR},
+            </if>
+            <if test="holdTrayNum != null">
+                #{holdTrayNum,jdbcType=INTEGER},
+            </if>
+            <if test="warehouseId != null">
+                #{warehouseId,jdbcType=BIGINT},
+            </if>
+            <if test="materialId != null">
+                #{materialId,jdbcType=BIGINT},
+            </if>
+            <if test="locationTypeId != null">
+                #{locationTypeId,jdbcType=BIGINT},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=CHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dr != null">
+                #{dr,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.si.LocationPO">
+        update si_location
+        <set>
+            <if test="locationNo != null">
+                location_no = #{locationNo,jdbcType=CHAR},
+            </if>
+            <if test="locationName != null">
+                location_name = #{locationName,jdbcType=CHAR},
+            </if>
+            <if test="holdTrayNum != null">
+                hold_tray_num = #{holdTrayNum,jdbcType=INTEGER},
+            </if>
+            <if test="warehouseId != null">
+                warehouse_id = #{warehouseId,jdbcType=BIGINT},
+            </if>
+            <if test="materialId != null">
+                material_id = #{materialId,jdbcType=BIGINT},
+            </if>
+            <if test="locationTypeId != null">
+                location_type_id = #{locationTypeId,jdbcType=BIGINT},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=CHAR},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dr != null">
+                dr = #{dr,jdbcType=TINYINT},
+            </if>
+        </set>
+        where location_id = #{locationId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.LocationPO">
+        update si_location
+        set location_no      = #{locationNo,jdbcType=CHAR},
+            location_name    = #{locationName,jdbcType=CHAR},
+            hold_tray_num    = #{holdTrayNum,jdbcType=INTEGER},
+            warehouse_id     = #{warehouseId,jdbcType=BIGINT},
+            material_id      = #{materialId,jdbcType=BIGINT},
+            location_type_id = #{locationTypeId,jdbcType=BIGINT},
+            remark           = #{remark,jdbcType=CHAR},
+            user_id          = #{userId,jdbcType=BIGINT},
+            create_time      = #{createTime,jdbcType=TIMESTAMP},
+            update_time      = #{updateTime,jdbcType=TIMESTAMP},
+            dr               = #{dr,jdbcType=TINYINT}
+        where location_id = #{locationId,jdbcType=BIGINT}
+    </update>
 
-  <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.LocationBO" extends="BaseResultMap">
-    <result column="location_type_name" jdbcType="CHAR" property="locationTypeName"/>
-    <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
-  </resultMap>
-  <sql id="BO_Column_List">
+    <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.LocationBO" extends="BaseResultMap">
+        <result column="location_type_name" jdbcType="CHAR" property="locationTypeName"/>
+        <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
+    </resultMap>
+    <sql id="BO_Column_List">
         l.location_id, l.location_no, l.location_name, l.location_type_id, l.warehouse_id, l.remark, l.user_id, l.create_time,
     l.update_time, l.dr,
     lt.location_type_name, w.warehouse_name
     </sql>
-  <select id="pageQuery" parameterType="java.util.Map" resultMap="BOResultMap">
-    select
-    <include refid="BO_Column_List"/>
-    from si_location l
-    left join dd_location_type lt on l.location_type_id = lt.location_type_id
-    left join si_warehouse w on l.warehouse_id = w.warehouse_id
-    where l.dr = 1
-    <if test="lno != null and lno != ''">
-      and location_no like '%' #{lno,jdbcType=CHAR} '%'
-    </if>
-    <if test="lname != null and lname != ''">
-      and location_name like '%' #{lname,jdbcType=CHAR} '%'
-    </if>
-    <if test="wid != null and wid != 0">
-      and w.warehouse_id = #{wid,jdbcType=BIGINT}
-    </if>
-    order by l.create_time desc
-  </select>
-  <select id="queryByLno" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List"/>
-    from si_location
-    where location_no = #{locationNo,jdbcType=CHAR} and dr = 1
-  </select>
-  <select id="queryByWids" parameterType="java.util.List" resultMap="BOResultMap">
-    select
-    <include refid="BO_Column_List"/>
-    from si_location l
-    left join dd_location_type lt on l.location_type_id = lt.location_type_id
-    left join si_warehouse w on l.warehouse_id = w.warehouse_id
-    where l.dr = 1 and w.dr = 1 and l.warehouse_id in
-    <foreach collection="list" item="wid" separator="," open="(" close=")">
-      #{wid,jdbcType=BIGINT}
-    </foreach>
-  </select>
-  <select id="queryById" parameterType="java.lang.Long" resultMap="BOResultMap">
-    select
-    <include refid="BO_Column_List"/>
-    from si_location l
-    left join dd_location_type lt on l.location_type_id = lt.location_type_id
-    left join si_warehouse w on l.warehouse_id = w.warehouse_id
-    where l.dr = 1 and w.dr = 1 and location_id = #{lid,jdbcType=BIGINT}
-  </select>
-  <update id="batchDelete" parameterType="java.util.List">
-    update si_location
-    set dr = 2 where location_id in
-    <foreach collection="list" item="lid" open="(" separator="," close=")">
-      #{lid,jdbcType=BIGINT}
-    </foreach>
-  </update>
-  <select id="queryByLtid" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List"/>
-    from si_location
-    where dr = 1 and location_type_id = #{ltid,jdbcType=BIGINT}
-  </select>
-  <select id="queryAll" resultType="java.util.Map">
+    <select id="pageQuery" parameterType="java.util.Map" resultMap="BOResultMap">
+        select
+        <include refid="BO_Column_List"/>
+        from si_location l
+        left join dd_location_type lt on l.location_type_id = lt.location_type_id
+        left join si_warehouse w on l.warehouse_id = w.warehouse_id
+        where l.dr = 1
+        <if test="lno != null and lno != ''">
+            and location_no like '%' #{lno,jdbcType=CHAR} '%'
+        </if>
+        <if test="lname != null and lname != ''">
+            and location_name like '%' #{lname,jdbcType=CHAR} '%'
+        </if>
+        <if test="wid != null and wid != 0">
+            and w.warehouse_id = #{wid,jdbcType=BIGINT}
+        </if>
+        order by l.create_time desc
+    </select>
+    <select id="queryByLno" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_location
+        where location_no = #{locationNo,jdbcType=CHAR} and dr = 1
+    </select>
+    <select id="queryByWids" parameterType="java.util.List" resultMap="BOResultMap">
+        select
+        <include refid="BO_Column_List"/>
+        from si_location l
+        left join dd_location_type lt on l.location_type_id = lt.location_type_id
+        left join si_warehouse w on l.warehouse_id = w.warehouse_id
+        where l.dr = 1 and w.dr = 1 and l.warehouse_id in
+        <foreach collection="list" item="wid" separator="," open="(" close=")">
+            #{wid,jdbcType=BIGINT}
+        </foreach>
+    </select>
+    <select id="queryById" parameterType="java.lang.Long" resultMap="BOResultMap">
+        select
+        <include refid="BO_Column_List"/>
+        from si_location l
+        left join dd_location_type lt on l.location_type_id = lt.location_type_id
+        left join si_warehouse w on l.warehouse_id = w.warehouse_id
+        where l.dr = 1 and w.dr = 1 and location_id = #{lid,jdbcType=BIGINT}
+    </select>
+    <update id="batchDelete" parameterType="java.util.List">
+        update si_location
+        set dr = 2 where location_id in
+        <foreach collection="list" item="lid" open="(" separator="," close=")">
+            #{lid,jdbcType=BIGINT}
+        </foreach>
+    </update>
+    <select id="queryByLtid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_location
+        where dr = 1 and location_type_id = #{ltid,jdbcType=BIGINT}
+    </select>
+    <select id="queryAll" resultType="java.util.Map">
         select location_id as lid, location_name as lname
         from si_location
         where dr = 1
-   </select>
-  <select id="queryKvByWid" parameterType="java.lang.Long" resultType="java.util.Map">
+    </select>
+    <select id="queryKvByWid" parameterType="java.lang.Long" resultType="java.util.Map">
         select location_id as lid, location_name as lname
         from si_location
         where dr = 1
           and warehouse_id = #{wid,jdbcType=BIGINT}
     </select>
 
-  <!--    查看当前的入库调拨单的调入仓库是否有库位存在-->
-  <select id="queryLocation" parameterType="java.lang.Long" resultType="com.smartindustry.common.pojo.si.LocationPO">
+    <!--    查看当前的入库调拨单的调入仓库是否有库位存在-->
+    <select id="queryLocation" parameterType="java.lang.Long" resultType="com.smartindustry.common.pojo.si.LocationPO">
         select l.location_id as locationId, l.location_no as locationNo, l.location_name as locationName
         from si_location l
         where l.dr = 1
           and l.warehouse_id = #{wid,jdbcType=BIGINT}
     </select>
 
-  <select id="queryLocBySid" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List"/>
-    left join sm_storage s
-    left join om_outbound o on o.outbound_no = s.source_no
-    left join om_pick_head ph on ph.pick_head_id = o.pick_head_id
-    left join em_transfer_head th on ph.source_no = th.transfer_no
-    left join si_warehouse w on th.storage_wid = w.warehouse_id
-    left join si_location l on w.warehouse_id = l.warehouse_id
-    where wh.dr = 1 and s.storage_id = #{sid,jdbcType=BIGINT}
-  </select>
+    <select id="queryLocBySid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        left join sm_storage s
+        left join om_outbound o on o.outbound_no = s.source_no
+        left join om_pick_head ph on ph.pick_head_id = o.pick_head_id
+        left join em_transfer_head th on ph.source_no = th.transfer_no
+        left join si_warehouse w on th.storage_wid = w.warehouse_id
+        left join si_location l on w.warehouse_id = l.warehouse_id
+        where wh.dr = 1 and s.storage_id = #{sid,jdbcType=BIGINT}
+    </select>
 
+    <select id="queryByLnoAndWhid" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_location
+        where location_no = #{locationNo,jdbcType=CHAR} and dr = 1
+        <if test="warehouseId != null">
+            and warehouse_id = #{warehouseId, jdbcType=BIGINT}
+        </if>
+    </select>
 
-  <select id="queryByLnoAndWhid" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List"/>
-    from si_location
-    where location_no = #{locationNo,jdbcType=CHAR} and dr = 1
-    <if test="warehouseId != null">
-      and warehouse_id = #{warehouseId, jdbcType=BIGINT}
-    </if>
-  </select>
+    <select id="queryByMids" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_location
+        where dr = 1 and material_id in (
+        <foreach collection="list" item="mid" separator=",">
+            #{mid,jdbcType=BIGINT}
+        </foreach>
+        )
+    </select>
 
+    <select id="queryByRfid" parameterType="java.lang.String" resultMap="BOResultMap">
+        select
+        <include refid="BO_Column_List"/>
+        from si_location l
+        left join dd_location_type lt on l.location_type_id = lt.location_type_id
+        left join si_warehouse w on l.warehouse_id = w.warehouse_id
+        where l.dr = 1 and l.location_no = #{rfid,jdbcType=CHAR}
+    </select>
 </mapper>

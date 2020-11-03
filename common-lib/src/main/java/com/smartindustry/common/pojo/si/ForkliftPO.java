@@ -21,6 +21,11 @@ public class ForkliftPO implements Serializable {
     private String forkliftNo;
 
     /**
+     * 叉车名称
+     */
+    private String forkliftName;
+
+    /**
      * 叉车型号
      */
     private String forkliftModel;
@@ -31,7 +36,7 @@ public class ForkliftPO implements Serializable {
     private String forkliftBrand;
 
     /**
-     * 供应商
+     * 供应商名称
      */
     private String supplierName;
 

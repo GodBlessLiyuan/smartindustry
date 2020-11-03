@@ -19,6 +19,8 @@ import java.util.List;
 public class OutboundDetailVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    public static final String[] COLORS = new String[]{"#FFFF00", "#FFFAFA", "#FF0000", "#00FF00"};
+
     /**
      * 出库单ID
      */
@@ -42,11 +44,15 @@ public class OutboundDetailVO implements Serializable {
     /**
      * 叉车
      */
-    private List<String> fnos;
+    private List<String> fnames;
     /**
      * 状态：开始执行；辅助执行；关闭
      */
     private String status;
+    /**
+     * 储位图
+     */
+    private List<LocationVO> lvos;
 
     public static OutboundDetailVO convert(OutboundHeadBO bo) {
         OutboundDetailVO vo = new OutboundDetailVO();
@@ -77,5 +83,21 @@ public class OutboundDetailVO implements Serializable {
          * 规格参数
          */
         private String mmodel;
+    }
+
+    @Data
+    public static class LocationVO {
+        /**
+         * 物料信息： 物料编码 + 物料规格
+         */
+        private String minfo;
+        /**
+         * 颜色
+         */
+        private String color;
+        /**
+         * 储位RFID
+         */
+        private List<String> lrfids = new ArrayList<>();
     }
 }

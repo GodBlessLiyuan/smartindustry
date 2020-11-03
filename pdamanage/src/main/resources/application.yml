@@ -33,3 +33,9 @@ eureka:
   client:
     service-url:
       defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@localhost:8030/eureka/
+logging:
+  level:
+    com:
+      smartindustry:
+        common:
+          mapper: debug
