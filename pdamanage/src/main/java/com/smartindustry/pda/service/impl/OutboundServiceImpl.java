@@ -257,6 +257,7 @@ public class OutboundServiceImpl implements IOutboundService {
         ForkliftPO fPO = forkliftMapper.queryByImei(imei);
 
         List<ForkliftPO> pos = forkliftMapper.queryByOhid(ohid);
+        List<String> fnames = new ArrayList<>();
         if (null == pos || pos.size() == 0) {
             // 开始任务
             OutboundForkliftPO ofPO = new OutboundForkliftPO();
@@ -266,35 +267,55 @@ public class OutboundServiceImpl implements IOutboundService {
 
             session.setAttribute(OutboundConstant.SESSION_OHID, ohid);
 
+            // 发送 websocket
+            fnames.add(fPO.getForkliftName());
+            sendOutboundMsg(ohid, fnames);
+
             return ResultVO.ok();
         }
 
+        boolean close = false;
         for (ForkliftPO po : pos) {
             if (imei.equals(po.getImeiNo())) {
                 // 关闭
                 outboundForkliftMapper.deleteByFid(po.getForkliftId());
                 session.removeAttribute(OutboundConstant.SESSION_OHID);
-                return ResultVO.ok();
+                close = true;
+            } else {
+                fnames.add(po.getForkliftName());
             }
         }
 
-        // 辅助任务
-        OutboundForkliftPO ofPO = new OutboundForkliftPO();
-        ofPO.setForkliftId(fPO.getForkliftId());
-        ofPO.setOutboundHeadId(ohid);
-        outboundForkliftMapper.insert(ofPO);
+        if (!close) {
+            // 辅助任务
+            OutboundForkliftPO ofPO = new OutboundForkliftPO();
+            ofPO.setForkliftId(fPO.getForkliftId());
+            ofPO.setOutboundHeadId(ohid);
+            outboundForkliftMapper.insert(ofPO);
 
-        session.setAttribute(OutboundConstant.SESSION_OHID, ohid);
+            fnames.add(fPO.getForkliftName());
+
+            session.setAttribute(OutboundConstant.SESSION_OHID, ohid);
+        }
+
+        sendOutboundMsg(ohid, fnames);
 
         return ResultVO.ok();
     }
 
-    private void sendOutboundMsg(Long ohid, List<String> num) {
+    /**
+     * WebSocket 发送信息
+     */
+    private void sendOutboundMsg(Long ohid, List<String> fnames) {
+        WebSocketVO vo = new WebSocketVO();
         WebSocketVO.OutboundVO ovo = new WebSocketVO.OutboundVO();
         OutboundHeadPO headPO = outboundHeadMapper.selectByPrimaryKey(ohid);
         ovo.setId(ohid);
         ovo.setSnum(headPO.getOutboundNum());
-        ovo.setFname();
+        ovo.setFnames(fnames);
+        ovo.setCnum(headPO.getOutboundNum().add(BigDecimal.valueOf(fnames.size())));
+        vo.setOvo(ovo);
+        WebSocketServer.sendAllMsg(vo);
     }
 
     /**
