@@ -53,6 +53,10 @@ public class OutboundDetailVO implements Serializable {
      * 储位图
      */
     private List<LocationVO> lvos;
+    /**
+     * 当前排位
+     */
+    private BigDecimal cnum;
 
     public static OutboundDetailVO convert(OutboundHeadBO bo) {
         OutboundDetailVO vo = new OutboundDetailVO();

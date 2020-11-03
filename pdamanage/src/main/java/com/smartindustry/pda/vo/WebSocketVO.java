@@ -16,30 +16,18 @@ import java.util.List;
 public class WebSocketVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private List<ListVO> list;
-    private DetailVO detail;
+    private List<OutboundVO> ovos;
     private TitleVO title;
 
     /**
      * 列表区
      */
     @Data
-    private static class ListVO {
+    private static class OutboundVO {
         /**
          * 出/入库 ID
          */
         private Long id;
-        /**
-         * 当前数量
-         */
-        private BigDecimal cnum;
-    }
-
-    /**
-     * 详情区
-     */
-    @Data
-    private static class DetailVO {
         /**
          * 当前数量
          */

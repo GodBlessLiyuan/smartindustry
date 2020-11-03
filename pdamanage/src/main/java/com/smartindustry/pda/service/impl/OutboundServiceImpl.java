@@ -229,6 +229,7 @@ public class OutboundServiceImpl implements IOutboundService {
         } else {
             vo.setStatus("开始执行");
         }
+        vo.setCnum(headBO.getOutboundNum().add(BigDecimal.valueOf(null == pos ? 0 : pos.size())));
 
         session.setAttribute(OutboundConstant.SESSION_OHID, dto.getOhid());
 
@@ -247,6 +248,7 @@ public class OutboundServiceImpl implements IOutboundService {
         if (null == imei) {
             return new ResultVO(1111);
         }
+
         Long ohid = (Long) session.getAttribute(OutboundConstant.SESSION_OHID);
         if (null == ohid) {
             return new ResultVO(1002);
