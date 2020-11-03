@@ -1,21 +1,21 @@
 package com.smartindustry.pda.service.impl;
 
-import com.smartindustry.common.bo.om.OutboundBodyBO;
 import com.smartindustry.common.bo.om.OutboundHeadBO;
-import com.smartindustry.common.bo.si.LocationBO;
+import com.smartindustry.common.bo.sm.StorageHeadBO;
 import com.smartindustry.common.mapper.om.OutboundBodyMapper;
 import com.smartindustry.common.mapper.om.OutboundForkliftMapper;
 import com.smartindustry.common.mapper.om.OutboundHeadMapper;
 import com.smartindustry.common.mapper.si.ForkliftMapper;
-import com.smartindustry.common.mapper.si.LocationMapper;
+import com.smartindustry.common.mapper.sm.StorageBodyMapper;
+import com.smartindustry.common.mapper.sm.StorageHeadMapper;
 import com.smartindustry.common.pojo.om.OutboundBodyPO;
 import com.smartindustry.common.pojo.om.OutboundForkliftPO;
 import com.smartindustry.common.pojo.om.OutboundHeadPO;
 import com.smartindustry.common.pojo.si.ForkliftPO;
-import com.smartindustry.common.pojo.si.LocationPO;
 import com.smartindustry.common.util.DateUtil;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.pda.constant.OutboundConstant;
+import com.smartindustry.pda.constant.StorageConstant;
 import com.smartindustry.pda.dto.OutboundDTO;
 import com.smartindustry.pda.service.IOutboundService;
 import com.smartindustry.pda.socket.WebSocketServer;
@@ -43,12 +43,13 @@ public class OutboundServiceImpl implements IOutboundService {
     @Autowired
     private OutboundBodyMapper outboundBodyMapper;
     @Autowired
+    private StorageHeadMapper storageHeadMapper;
+    @Autowired
+    private StorageBodyMapper storageBodyMapper;
+    @Autowired
     private ForkliftMapper forkliftMapper;
     @Autowired
     private OutboundForkliftMapper outboundForkliftMapper;
-    @Autowired
-    private LocationMapper locationMapper;
-
 
     /**
      * ERP 生成 出库单
@@ -111,7 +112,7 @@ public class OutboundServiceImpl implements IOutboundService {
         session.setAttribute(OutboundConstant.SESSION_IMEI, dto.getImei());
         session.setMaxInactiveInterval(30 * 24 * 60 * 60);
 
-        return ResultVO.ok().setData(forkliftPO.getForkliftName());
+        return ResultVO.ok().setData(forkliftPO.getForkliftNo());
     }
 
     /**
@@ -128,13 +129,14 @@ public class OutboundServiceImpl implements IOutboundService {
         }
 
         // 叉车信息
+        session.setAttribute("imei","866445030970800");
         ForkliftPO forkliftPO = forkliftMapper.queryByImei((String) session.getAttribute("imei"));
         if (null == forkliftPO) {
             return new ResultVO(1002);
         }
 
         PdaListVO vo = new PdaListVO();
-        vo.setType(forkliftPO.getStatus());
+        vo.setType(forkliftPO.getWorkArea());
 
         if (type != (byte) 4) {
             // 出库信息
@@ -150,7 +152,15 @@ public class OutboundServiceImpl implements IOutboundService {
         }
 
         // 入库信息
-        vo.setSlist(null);
+        // 出库信息
+        List<StorageHeadBO> storageHeadBOS = storageHeadMapper.queryPdaByType(type);
+
+        Set<Long> shids = new HashSet<>();
+        for (StorageHeadBO storageHeadBO : storageHeadBOS) {
+            shids.add(storageHeadBO.getStorageHeadId());
+        }
+        session.setAttribute(StorageConstant.SESSION_SHIDS, shids);
+        vo.setSlist(storageHeadBOS);
 
         return ResultVO.ok().setData(vo);
     }
@@ -175,35 +185,20 @@ public class OutboundServiceImpl implements IOutboundService {
         }
         OutboundDetailVO vo = OutboundDetailVO.convert(headBO);
 
-        // 储位图
-        Map<Long, OutboundDetailVO.LocationVO> lvos = new HashMap<>();
-        for (OutboundBodyBO bo : headBO.getBodyBOs()) {
-            OutboundDetailVO.LocationVO lvo = new OutboundDetailVO.LocationVO();
-            lvo.setColor(OutboundDetailVO.COLORS[lvos.size()]);
-            lvo.setMinfo(bo.getMaterialName() + " " + bo.getMaterialModel());
-            lvos.put(bo.getMaterialId(), lvo);
-        }
-        List<LocationPO> locationPOs = locationMapper.queryByMids(new ArrayList<>(lvos.keySet()));
-        for (LocationPO locationPO : locationPOs) {
-            OutboundDetailVO.LocationVO lvo = lvos.get(locationPO.getMaterialId());
-            lvo.getLrfids().add(locationPO.getLocationNo());
-        }
-        vo.setLvos(new ArrayList<>(lvos.values()));
-
         // 叉车信息
         List<ForkliftPO> pos = forkliftMapper.queryByOhid(dto.getOhid());
         if (null != pos && pos.size() > 0) {
             String imei = (String) session.getAttribute(OutboundConstant.SESSION_IMEI);
             vo.setStatus("辅助执行");
 
-            List<String> fnames = new ArrayList<>(pos.size());
+            List<String> fnos = new ArrayList<>(pos.size());
             for (ForkliftPO po : pos) {
-                fnames.add(po.getForkliftNo());
+                fnos.add(po.getForkliftNo());
                 if (imei.equals(po.getImeiNo())) {
                     vo.setStatus("关闭");
                 }
             }
-            vo.setFnames(fnames);
+            vo.setFnos(fnos);
         } else {
             vo.setStatus("开始执行");
         }

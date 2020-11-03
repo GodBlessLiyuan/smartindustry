@@ -2,6 +2,8 @@ package com.smartindustry.pda.vo;
 
 import com.smartindustry.common.bo.om.OutboundBodyBO;
 import com.smartindustry.common.bo.om.OutboundHeadBO;
+import com.smartindustry.common.bo.sm.StorageBodyBO;
+import com.smartindustry.common.bo.sm.StorageHeadBO;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -31,6 +33,30 @@ public class PdaListVO implements Serializable {
      * 出库
      */
     private List<ListVO> olist;
+
+    public void setSlist(List<StorageHeadBO> bos) {
+        List<ListVO> vos = new ArrayList<>(bos.size());
+        for (StorageHeadBO bo : bos) {
+            vos.add(convert(bo));
+        }
+        slist = vos;
+    }
+
+    private static ListVO convert(StorageHeadBO bo) {
+        ListVO vo = new ListVO();
+        vo.setHid(bo.getStorageHeadId());
+        vo.setSno(bo.getSourceNo());
+        vo.setDnum(bo.getExpectNum());
+        vo.setSnum(bo.getStorageNum());
+
+        if (null != bo.getBos() && bo.getBos().size() > 0) {
+            StorageBodyBO bodyBO = bo.getBos().get(0);
+            vo.setMname(bodyBO.getMaterialName());
+            vo.setMmodel(bodyBO.getMaterialModel());
+        }
+        return vo;
+    }
+
 
     public void setOlist(List<OutboundHeadBO> bos) {
         List<ListVO> vos = new ArrayList<>(bos.size());
