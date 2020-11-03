@@ -5,6 +5,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * @author: xiahui
@@ -13,6 +14,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
  * @version: 1.0
  */
 @MapperScan("com.smartindustry.common.mapper")
+@ComponentScan({"com.smartindustry.common.security", "com.smartindustry.basic"})
 @SpringBootApplication
 @EnableConfigurationProperties({FilePathConfig.class})
 public class BasicApplication {

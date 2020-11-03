@@ -26,37 +26,38 @@ public class DeptController {
     @Autowired
     private IDeptService deptService;
 
+
     /**
      * 对部门信息进行分页模糊查询
      * @param reqData
      * @return
      */
-    @PreAuthorize("@ss.hasPermi('am:dept:query')")
     @PostMapping("pageQuery")
+    @PreAuthorize("@ss.hasPermi('bm:am:dept:query')")
     public ResultVO pageQuery(@RequestBody Map<String, Object> reqData) {
         return deptService.pageQuery(reqData);
     }
 
     @PostMapping("status")
-    @PreAuthorize("@ss.hasPermi('am:dept:disable')")
+    @PreAuthorize("@ss.hasAnyPermi('bm:am:dept:disable,bm:am:dept:enable')")
     public ResultVO status(@RequestBody List<OperateDTO> dtos) {
         return deptService.batchUpdate(dtos);
     }
 
-    @PreAuthorize("@ss.hasPermi('am:dept:insert')")
     @PostMapping("insert")
+    @PreAuthorize("@ss.hasPermi('bm:am:dept:insert')")
     public ResultVO insert(@RequestBody DeptDTO dto) {
         return deptService.insert(dto);
     }
 
     @PostMapping("update")
-    @PreAuthorize("@ss.hasPermi('am:dept:update')")
+    @PreAuthorize("@ss.hasPermi('bm:am:dept:update')")
     public ResultVO update(@RequestBody DeptDTO dto) {
         return deptService.update(dto);
     }
 
-    @PreAuthorize("@ss.hasPermi('am:dept:delete')")
     @PostMapping("delete")
+    @PreAuthorize("@ss.hasPermi('bm:am:dept:delete')")
     public ResultVO delete(@RequestBody List<Long> dids) {
         return deptService.delete(dids);
     }

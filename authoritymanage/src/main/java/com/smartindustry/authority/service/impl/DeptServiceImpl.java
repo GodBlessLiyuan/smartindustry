@@ -16,6 +16,7 @@ import com.smartindustry.common.mapper.am.UserMapper;
 import com.smartindustry.common.pojo.am.DeptPO;
 import com.smartindustry.common.pojo.am.DeptRecordPO;
 import com.smartindustry.common.pojo.am.UserPO;
+import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
@@ -23,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.*;
 
 /**
@@ -36,11 +36,13 @@ import java.util.*;
 @Service
 public class DeptServiceImpl implements IDeptService {
     @Autowired
-    DeptMapper deptMapper;
+    private DeptMapper deptMapper;
     @Autowired
-    UserMapper userMapper;
+    private UserMapper userMapper;
     @Autowired
-    DeptRecordMapper deptRecordMapper;
+    private DeptRecordMapper deptRecordMapper;
+    @Autowired
+    TokenService tokenService;
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData){
         Page<DeptBO> page = PageQueryUtil.startPage(reqData);
@@ -57,13 +59,14 @@ public class DeptServiceImpl implements IDeptService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO batchUpdate(List<OperateDTO> dtos){
+        UserPO user = tokenService.getLoginUser();
         List<DeptPO> pos = DeptDTO.updateList(dtos);
         deptMapper.updateBatch(pos);
         for(OperateDTO dto:dtos){
             if(dto.getStatus().equals(AuthorityConstant.STATUS_DISABLE)){
-                deptRecordMapper.insert(new DeptRecordPO(dto.getDid(),1L,new Date(), AuthorityConstant.DISABLERECORD));
+                deptRecordMapper.insert(new DeptRecordPO(dto.getDid(),user.getUserId(), AuthorityConstant.RECORD_DISABLE));
             }else {
-                deptRecordMapper.insert(new DeptRecordPO(dto.getDid(),1L,new Date(), AuthorityConstant.USERECORD));
+                deptRecordMapper.insert(new DeptRecordPO(dto.getDid(),user.getUserId(), AuthorityConstant.RECORD_USE));
             }
         }
         return ResultVO.ok();
@@ -72,19 +75,21 @@ public class DeptServiceImpl implements IDeptService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO insert(DeptDTO dto){
+        UserPO user = tokenService.getLoginUser();
         Integer result = deptMapper.judgeRepeatName(dto.getDname(),dto.getDid());
         if(result.equals(1)){
             return new ResultVO(1004);
         }
         DeptPO po = DeptDTO.createPO(dto);
         deptMapper.insert(po);
-        deptRecordMapper.insert(new DeptRecordPO(po.getDeptId(),1L,new Date(), AuthorityConstant.INSERTRECORD));
+        deptRecordMapper.insert(new DeptRecordPO(po.getDeptId(),user.getUserId(), AuthorityConstant.RECORD_INSERT));
         return ResultVO.ok();
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO update(DeptDTO dto){
+        UserPO user = tokenService.getLoginUser();
         Integer result = deptMapper.judgeRepeatName(dto.getDname(),dto.getDid());
         if(result.equals(1)){
             return new ResultVO(1004);
@@ -93,18 +98,19 @@ public class DeptServiceImpl implements IDeptService {
             return new ResultVO(1005);
         }
         DeptPO po1 = deptMapper.selectByPrimaryKey(dto.getPid());
-        if(po1.getParentId().equals(dto.getDid())){
+        if(po1.getParentId()!=null && po1.getParentId().equals(dto.getDid())){
             return new ResultVO(1008);
         }
         DeptPO po = DeptDTO.createPO(dto);
         deptMapper.updateByPrimaryKeySelective(po);
-        deptRecordMapper.insert(new DeptRecordPO(dto.getDid(),1L,new Date(), AuthorityConstant.UPDATERECORD));
+        deptRecordMapper.insert(new DeptRecordPO(dto.getDid(),user.getUserId(), AuthorityConstant.RECORD_UPDATE));
         return ResultVO.ok();
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO delete(List<Long> dids){
+        UserPO user = tokenService.getLoginUser();
         if (dids.contains(1L)){
             dids.remove(1L);
         }
@@ -112,11 +118,12 @@ public class DeptServiceImpl implements IDeptService {
             List<DeptPO> pos = deptMapper.queryByParent(did);
             if(pos!=null && pos.size()!=0){
                return new ResultVO(1009);
-            }else {
-                deptMapper.deleteByPrimaryKey(did);
             }
-            deleteDept(did);
-            deptRecordMapper.insert(new DeptRecordPO(did,1L,new Date(), AuthorityConstant.DELETERECORD));
+        }
+        deleteDept(dids);
+        deptMapper.deleteBatch(dids);
+        for(Long did:dids){
+            deptRecordMapper.insert(new DeptRecordPO(did,user.getUserId(), AuthorityConstant.RECORD_DELETE));
         }
         return ResultVO.ok();
     }
@@ -166,12 +173,12 @@ public class DeptServiceImpl implements IDeptService {
 
     /**
      * 若禁用或者删除某个部门id,那么相关联的部门的上级部门置为null,用户的关联部门置为null
-     * @param deptId
+     * @param dids
      */
     @Transactional(rollbackFor = Exception.class)
-    public void deleteDept(Long deptId){
-        deptMapper.updateParentId(deptId);
-        userMapper.updateDeptId(deptId);
+    public void deleteDept(List<Long> dids){
+        deptMapper.updateParentId(dids);
+        userMapper.updateDeptId(dids);
     }
 
     @Override

@@ -79,4 +79,20 @@
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where material_property_id = #{materialPropertyId,jdbcType=BIGINT}
   </update>
+
+
+  <!--  给出所有物料属性列表，模糊查询-->
+  <select id="queryAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from dd_material_property mp
+  </select>
+
+<!--  根据物料属性名查询是否已存在-->
+  <select id="isExist" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from dd_material_property mp
+    where mp.material_property_name = #{materialPropertyName,jdbcType=CHAR}
+  </select>
 </mapper>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.bd.GoodsFundsMapper">
+    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.bd.GoodsFundsPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="dates" jdbcType="DATE" property="dates"/>
+        <result column="goods_funds" jdbcType="DECIMAL" property="goodsFunds"/>
+        <result column="same_rate" jdbcType="DECIMAL" property="sameRate"/>
+        <result column="circle_rate" jdbcType="DECIMAL" property="circleRate"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, dates, goods_funds, same_rate, circle_rate
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_goods_funds
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from t_goods_funds
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.bd.GoodsFundsPO">
+        insert into t_goods_funds (id, dates, goods_funds,
+                                   same_rate, circle_rate)
+        values (#{id,jdbcType=BIGINT}, #{dates,jdbcType=DATE}, #{goodsFunds,jdbcType=DECIMAL},
+                #{sameRate,jdbcType=DECIMAL}, #{circleRate,jdbcType=DECIMAL})
+    </insert>
+    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.bd.GoodsFundsPO">
+        insert into t_goods_funds
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="dates != null">
+                dates,
+            </if>
+            <if test="goodsFunds != null">
+                goods_funds,
+            </if>
+            <if test="sameRate != null">
+                same_rate,
+            </if>
+            <if test="circleRate != null">
+                circle_rate,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="dates != null">
+                #{dates,jdbcType=DATE},
+            </if>
+            <if test="goodsFunds != null">
+                #{goodsFunds,jdbcType=DECIMAL},
+            </if>
+            <if test="sameRate != null">
+                #{sameRate,jdbcType=DECIMAL},
+            </if>
+            <if test="circleRate != null">
+                #{circleRate,jdbcType=DECIMAL},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.bd.GoodsFundsPO">
+        update t_goods_funds
+        <set>
+            <if test="dates != null">
+                dates = #{dates,jdbcType=DATE},
+            </if>
+            <if test="goodsFunds != null">
+                goods_funds = #{goodsFunds,jdbcType=DECIMAL},
+            </if>
+            <if test="sameRate != null">
+                same_rate = #{sameRate,jdbcType=DECIMAL},
+            </if>
+            <if test="circleRate != null">
+                circle_rate = #{circleRate,jdbcType=DECIMAL},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.bd.GoodsFundsPO">
+        update t_goods_funds
+        set dates       = #{dates,jdbcType=DATE},
+            goods_funds = #{goodsFunds,jdbcType=DECIMAL},
+            same_rate   = #{sameRate,jdbcType=DECIMAL},
+            circle_rate = #{circleRate,jdbcType=DECIMAL}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="queryLastDay" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_goods_funds
+        order by dates desc limit 1;
+    </select>
+</mapper>

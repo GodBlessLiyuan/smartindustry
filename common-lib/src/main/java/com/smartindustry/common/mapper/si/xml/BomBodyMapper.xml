@@ -6,7 +6,6 @@
     <result column="bom_head_id" jdbcType="BIGINT" property="bomHeadId" />
     <result column="material_id" jdbcType="BIGINT" property="materialId" />
     <result column="material_property_id" jdbcType="BIGINT" property="materialPropertyId" />
-    <result column="material_unit_id" jdbcType="BIGINT" property="materialUnitId" />
     <result column="material_demand" jdbcType="REAL" property="materialDemand" />
     <result column="demand_type" jdbcType="TINYINT" property="demandType" />
     <result column="material_loss" jdbcType="REAL" property="materialLoss" />
@@ -14,14 +13,15 @@
     <result column="process_id" jdbcType="BIGINT" property="processId" />
     <result column="parent_id" jdbcType="BIGINT" property="parentId" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="level" jdbcType="INTEGER" property="level" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="dr" jdbcType="TINYINT" property="dr" />
   </resultMap>
   <sql id="Base_Column_List">
-    bom_body_id, bom_head_id, material_id, material_property_id, material_unit_id, material_demand, 
-    demand_type, material_loss, loss_type, process_id, parent_id, user_id, create_time, 
-    update_time, dr
+    bom_body_id, bom_head_id, material_id, material_property_id, material_demand, demand_type, 
+    material_loss, loss_type, process_id, parent_id, user_id, `level`, create_time, update_time, 
+    dr
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -35,15 +35,15 @@
   </delete>
   <insert id="insert" parameterType="com.smartindustry.common.pojo.si.BomBodyPO">
     insert into si_bom_body (bom_body_id, bom_head_id, material_id, 
-      material_property_id, material_unit_id, material_demand, 
-      demand_type, material_loss, loss_type, 
-      process_id, parent_id, user_id, 
+      material_property_id, material_demand, demand_type, 
+      material_loss, loss_type, process_id, 
+      parent_id, user_id, `level`, 
       create_time, update_time, dr
       )
     values (#{bomBodyId,jdbcType=BIGINT}, #{bomHeadId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT}, 
-      #{materialPropertyId,jdbcType=BIGINT}, #{materialUnitId,jdbcType=BIGINT}, #{materialDemand,jdbcType=REAL}, 
-      #{demandType,jdbcType=TINYINT}, #{materialLoss,jdbcType=REAL}, #{lossType,jdbcType=TINYINT}, 
-      #{processId,jdbcType=BIGINT}, #{parentId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
+      #{materialPropertyId,jdbcType=BIGINT}, #{materialDemand,jdbcType=REAL}, #{demandType,jdbcType=TINYINT}, 
+      #{materialLoss,jdbcType=REAL}, #{lossType,jdbcType=TINYINT}, #{processId,jdbcType=BIGINT}, 
+      #{parentId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{level,jdbcType=INTEGER}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT}
       )
   </insert>
@@ -61,9 +61,6 @@
       </if>
       <if test="materialPropertyId != null">
         material_property_id,
-      </if>
-      <if test="materialUnitId != null">
-        material_unit_id,
       </if>
       <if test="materialDemand != null">
         material_demand,
@@ -85,6 +82,9 @@
       </if>
       <if test="userId != null">
         user_id,
+      </if>
+      <if test="level != null">
+        `level`,
       </if>
       <if test="createTime != null">
         create_time,
@@ -109,9 +109,6 @@
       <if test="materialPropertyId != null">
         #{materialPropertyId,jdbcType=BIGINT},
       </if>
-      <if test="materialUnitId != null">
-        #{materialUnitId,jdbcType=BIGINT},
-      </if>
       <if test="materialDemand != null">
         #{materialDemand,jdbcType=REAL},
       </if>
@@ -132,6 +129,9 @@
       </if>
       <if test="userId != null">
         #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="level != null">
+        #{level,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -156,9 +156,6 @@
       <if test="materialPropertyId != null">
         material_property_id = #{materialPropertyId,jdbcType=BIGINT},
       </if>
-      <if test="materialUnitId != null">
-        material_unit_id = #{materialUnitId,jdbcType=BIGINT},
-      </if>
       <if test="materialDemand != null">
         material_demand = #{materialDemand,jdbcType=REAL},
       </if>
@@ -180,6 +177,9 @@
       <if test="userId != null">
         user_id = #{userId,jdbcType=BIGINT},
       </if>
+      <if test="level != null">
+        `level` = #{level,jdbcType=INTEGER},
+      </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -197,7 +197,6 @@
     set bom_head_id = #{bomHeadId,jdbcType=BIGINT},
       material_id = #{materialId,jdbcType=BIGINT},
       material_property_id = #{materialPropertyId,jdbcType=BIGINT},
-      material_unit_id = #{materialUnitId,jdbcType=BIGINT},
       material_demand = #{materialDemand,jdbcType=REAL},
       demand_type = #{demandType,jdbcType=TINYINT},
       material_loss = #{materialLoss,jdbcType=REAL},
@@ -205,6 +204,7 @@
       process_id = #{processId,jdbcType=BIGINT},
       parent_id = #{parentId,jdbcType=BIGINT},
       user_id = #{userId,jdbcType=BIGINT},
+      `level` = #{level,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       dr = #{dr,jdbcType=TINYINT}

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.bd.OrderGoodsNumMapper">
+    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.bd.OrderGoodsNumPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="dates" jdbcType="DATE" property="dates"/>
+        <result column="order_goods_num" jdbcType="DECIMAL" property="orderGoodsNum"/>
+        <result column="goods_num_day" jdbcType="DECIMAL" property="goodsNumDay"/>
+        <result column="same_rate" jdbcType="DECIMAL" property="sameRate"/>
+        <result column="circle_rate" jdbcType="DECIMAL" property="circleRate"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, dates, order_goods_num, goods_num_day, same_rate, circle_rate
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_order_goods_num
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from t_order_goods_num
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.bd.OrderGoodsNumPO">
+        insert into t_order_goods_num (id, dates, order_goods_num,
+                                       goods_num_day, same_rate, circle_rate)
+        values (#{id,jdbcType=BIGINT}, #{dates,jdbcType=DATE}, #{orderGoodsNum,jdbcType=DECIMAL},
+                #{goodsNumDay,jdbcType=DECIMAL}, #{sameRate,jdbcType=DECIMAL}, #{circleRate,jdbcType=DECIMAL})
+    </insert>
+    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.bd.OrderGoodsNumPO">
+        insert into t_order_goods_num
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="dates != null">
+                dates,
+            </if>
+            <if test="orderGoodsNum != null">
+                order_goods_num,
+            </if>
+            <if test="goodsNumDay != null">
+                goods_num_day,
+            </if>
+            <if test="sameRate != null">
+                same_rate,
+            </if>
+            <if test="circleRate != null">
+                circle_rate,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="dates != null">
+                #{dates,jdbcType=DATE},
+            </if>
+            <if test="orderGoodsNum != null">
+                #{orderGoodsNum,jdbcType=DECIMAL},
+            </if>
+            <if test="goodsNumDay != null">
+                #{goodsNumDay,jdbcType=DECIMAL},
+            </if>
+            <if test="sameRate != null">
+                #{sameRate,jdbcType=DECIMAL},
+            </if>
+            <if test="circleRate != null">
+                #{circleRate,jdbcType=DECIMAL},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.bd.OrderGoodsNumPO">
+        update t_order_goods_num
+        <set>
+            <if test="dates != null">
+                dates = #{dates,jdbcType=DATE},
+            </if>
+            <if test="orderGoodsNum != null">
+                order_goods_num = #{orderGoodsNum,jdbcType=DECIMAL},
+            </if>
+            <if test="goodsNumDay != null">
+                goods_num_day = #{goodsNumDay,jdbcType=DECIMAL},
+            </if>
+            <if test="sameRate != null">
+                same_rate = #{sameRate,jdbcType=DECIMAL},
+            </if>
+            <if test="circleRate != null">
+                circle_rate = #{circleRate,jdbcType=DECIMAL},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.bd.OrderGoodsNumPO">
+        update t_order_goods_num
+        set dates           = #{dates,jdbcType=DATE},
+            order_goods_num = #{orderGoodsNum,jdbcType=DECIMAL},
+            goods_num_day   = #{goodsNumDay,jdbcType=DECIMAL},
+            same_rate       = #{sameRate,jdbcType=DECIMAL},
+            circle_rate     = #{circleRate,jdbcType=DECIMAL}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="queryLastDay" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_order_goods_num
+        order by dates desc limit 1;
+    </select>
+</mapper>

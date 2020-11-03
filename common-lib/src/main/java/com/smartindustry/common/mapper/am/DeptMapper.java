@@ -61,17 +61,17 @@ public interface DeptMapper extends BaseMapper<DeptPO, Long> {
 
     /**
      * 将上级部门为当前输入的部门id的置空
-     * @param deptId
+     * @param dids
      * @return
      */
-    Integer updateParentId(@Param("deptId") Long deptId);
+    Integer updateParentId(List<Long> dids);
 
     /**
      * 将负责人id的置空
-     * @param userId
+     * @param uids
      * @return
      */
-    Integer updateBossId(@Param("userId") Long userId);
+    Integer updateBossId(List<Long> uids);
 
     /**
      * 根据父节点找到子节点列表

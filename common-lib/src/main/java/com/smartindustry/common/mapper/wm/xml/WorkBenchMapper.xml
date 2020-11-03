@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.wm.WorkBenchMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.wm.WorkBenchPO">
+    <id column="work_bench_id" jdbcType="BIGINT" property="workBenchId" />
+    <result column="authority_id" jdbcType="BIGINT" property="authorityId" />
+    <result column="bench_name" jdbcType="CHAR" property="benchName" />
+    <result column="bench_type" jdbcType="TINYINT" property="benchType" />
+    <result column="bench_module" jdbcType="TINYINT" property="benchModule" />
+    <result column="icon_path" jdbcType="CHAR" property="iconPath" />
+    <result column="url_path" jdbcType="CHAR" property="urlPath" />
+    <result column="background_color" jdbcType="CHAR" property="backgroundColor" />
+    <result column="bench_node" jdbcType="TINYINT" property="benchNode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+     work_bench_id, authority_id, bench_name, bench_type, bench_module, icon_path, url_path,
+    background_color, bench_node
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from wm_work_bench
+    where work_bench_id = #{workBenchId,jdbcType=BIGINT}
+  </select>
+
+  <resultMap id="BOResultMap" type="com.smartindustry.common.bo.wm.WorkBenchBO" extends="BaseResultMap">
+    <result column="authority_name" jdbcType="CHAR" property="authorityName"/>
+  </resultMap>
+  <sql id="BO_Column_List">
+        wb.work_bench_id, wb.authority_id, wb.bench_name, wb.bench_type, wb.bench_module, wb.icon_path, wb.url_path,wb.background_color,wb.bench_node, au.authority_name
+  </sql>
+  <select id="queryByModuleId" resultMap="BOResultMap">
+    select
+    <include refid="BO_Column_List"/>
+    from wm_work_bench wb left join am_authority au on au.authority_id = wb.authority_id
+    where wb.bench_type = #{benchType, jdbcType=TINYINT}
+    <if test="benchModule != null">
+      and wb.bench_module = #{benchModule, jdbcType=TINYINT}
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from wm_work_bench
+    where work_bench_id = #{workBenchId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.wm.WorkBenchPO">
+    insert into wm_work_bench (work_bench_id, authority_id, bench_name, 
+      bench_type, bench_module, icon_path, 
+      url_path, background_color, bench_node
+      )
+    values (#{workBenchId,jdbcType=BIGINT}, #{authorityId,jdbcType=BIGINT}, #{benchName,jdbcType=CHAR},
+      #{benchType,jdbcType=TINYINT}, #{benchModule,jdbcType=TINYINT}, #{iconPath,jdbcType=CHAR},
+      #{urlPath,jdbcType=CHAR}, #{backgroundColor,jdbcType=CHAR}, #{benchNode,jdbcType=TINYINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.wm.WorkBenchPO">
+    insert into wm_work_bench
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="workBenchId != null">
+        work_bench_id,
+      </if>
+      <if test="authorityId != null">
+        authority_id,
+      </if>
+      <if test="benchName != null">
+        bench_name,
+      </if>
+      <if test="benchType != null">
+        bench_type,
+      </if>
+      <if test="benchModule != null">
+        bench_module,
+      </if>
+      <if test="iconPath != null">
+        icon_path,
+      </if>
+      <if test="urlPath != null">
+        url_path,
+      </if>
+      <if test="backgroundColor != null">
+        background_color,
+      </if>
+      <if test="benchNode != null">
+        bench_node,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="workBenchId != null">
+        #{workBenchId,jdbcType=BIGINT},
+      </if>
+      <if test="authorityId != null">
+        #{authorityId,jdbcType=BIGINT},
+      </if>
+      <if test="benchName != null">
+        #{benchName,jdbcType=CHAR},
+      </if>
+      <if test="benchType != null">
+        #{benchType,jdbcType=TINYINT},
+      </if>
+      <if test="benchModule != null">
+        #{benchModule,jdbcType=TINYINT},
+      </if>
+      <if test="iconPath != null">
+        #{iconPath,jdbcType=CHAR},
+      </if>
+      <if test="urlPath != null">
+        #{urlPath,jdbcType=CHAR},
+      </if>
+      <if test="backgroundColor != null">
+        #{backgroundColor,jdbcType=CHAR},
+      </if>
+      <if test="benchNode != null">
+        #{benchNode,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.wm.WorkBenchPO">
+    update wm_work_bench
+    <set>
+      <if test="authorityId != null">
+        authority_id = #{authorityId,jdbcType=BIGINT},
+      </if>
+      <if test="benchName != null">
+        bench_name = #{benchName,jdbcType=CHAR},
+      </if>
+      <if test="benchType != null">
+        bench_type = #{benchType,jdbcType=TINYINT},
+      </if>
+      <if test="benchModule != null">
+        bench_module = #{benchModule,jdbcType=TINYINT},
+      </if>
+      <if test="iconPath != null">
+        icon_path = #{iconPath,jdbcType=CHAR},
+      </if>
+      <if test="urlPath != null">
+        url_path = #{urlPath,jdbcType=CHAR},
+      </if>
+      <if test="backgroundColor != null">
+        background_color = #{backgroundColor,jdbcType=CHAR},
+      </if>
+      <if test="benchNode != null">
+        bench_node = #{benchNode,jdbcType=TINYINT},
+      </if>
+    </set>
+    where work_bench_id = #{workBenchId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.wm.WorkBenchPO">
+    update wm_work_bench
+    set authority_id = #{authorityId,jdbcType=BIGINT},
+      bench_name = #{benchName,jdbcType=CHAR},
+      bench_type = #{benchType,jdbcType=TINYINT},
+      bench_module = #{benchModule,jdbcType=TINYINT},
+      icon_path = #{iconPath,jdbcType=CHAR},
+      url_path = #{urlPath,jdbcType=CHAR},
+      background_color = #{backgroundColor,jdbcType=CHAR},
+      bench_node = #{benchNode,jdbcType=TINYINT}
+    where work_bench_id = #{workBenchId,jdbcType=BIGINT}
+  </update>
+</mapper>

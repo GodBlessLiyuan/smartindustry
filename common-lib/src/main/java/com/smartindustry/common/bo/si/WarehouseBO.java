@@ -1,7 +1,10 @@
 package com.smartindustry.common.bo.si;
 
+import com.smartindustry.common.pojo.si.LocationPO;
 import com.smartindustry.common.pojo.si.WarehousePO;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * @author: xiahui
@@ -12,4 +15,6 @@ import lombok.Data;
 @Data
 public class WarehouseBO extends WarehousePO {
     private String warehouseTypeName;
+
+    List<LocationPO> pos;
 }

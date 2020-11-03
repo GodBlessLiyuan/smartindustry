@@ -2,53 +2,49 @@ package com.smartindustry.common.pojo.om;
 
 import java.io.Serializable;
 import java.util.Date;
-
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
  * om_outbound_record
- *
- * @author
+ * @author 
  */
-@AllArgsConstructor
 @Data
 public class OutboundRecordPO implements Serializable {
+    /**
+     * 操作记录
+     */
     private Long recordId;
 
-    private Long pickHeadId;
-
-    private Long outboundId;
-
-    private Long userId;
-
-    private String name;
-
-    private String type;
-
-    private Date createTime;
+    /**
+     * 出库单表头ID
+     */
+    private Long outboundHeadId;
 
     /**
-     * 1：未处理
-     * 5：物料拣货
-     * 10：工单审核|OQC检验
-     * 15：等齐套发货
-     * 20：取消发货，退货仓库
-     * 25：物料出库
-     * 30：完成出库
-     * 35：确认出库
+     * 操作人ID
      */
-    private Byte status;
+    private Long userId;
+
+    /**
+     * 操作名称
+     */
+    private String operationName;
+
+    /**
+     * 操作时间
+     */
+    private Date createTime;
 
     private static final long serialVersionUID = 1L;
 
-    public OutboundRecordPO(Long pickHeadId, Long outboundId, Long userId, String name, String type, Byte status) {
-        this.pickHeadId = pickHeadId;
-        this.outboundId = outboundId;
+    public OutboundRecordPO(Long outboundHeadId, Long userId, String operationName) {
+        this.outboundHeadId = outboundHeadId;
         this.userId = userId;
-        this.name = name;
-        this.type = type;
         this.createTime = new Date();
-        this.status = status;
+        this.operationName = operationName;
+    }
+
+    public OutboundRecordPO(){
+
     }
 }

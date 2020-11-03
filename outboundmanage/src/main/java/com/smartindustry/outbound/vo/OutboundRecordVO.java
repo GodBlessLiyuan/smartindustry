@@ -9,34 +9,27 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @author: xiahui
- * @date: Created in 2020/7/17 8:59
- * @description: 操作记录
- * @version: 1.0
+ * @author: jiangzhaojie
+ * @date: Created in 21:32 2020/10/28
+ * @version: 1.0.0
+ * @description:
  */
 @Data
 public class OutboundRecordVO implements Serializable {
     private static final long SerialVersionUID = 1L;
-
     /**
-     * 操作人
+     * 用户姓名
      */
     private String name;
     /**
-     * 操作类型
-     */
-    private String type;
-    /**
-     * 操作日期
+     * 创建时间
      */
     private Date ctime;
-
     /**
-     * pos 转 vos
-     *
-     * @param pos
-     * @return
+     * 操作名称
      */
+    private String type;
+
     public static List<OutboundRecordVO> convert(List<OutboundRecordPO> pos) {
         List<OutboundRecordVO> vos = new ArrayList<>(pos.size());
         for (OutboundRecordPO po : pos) {
@@ -45,17 +38,11 @@ public class OutboundRecordVO implements Serializable {
         return vos;
     }
 
-    /**
-     * po 转 vo
-     *
-     * @param po
-     * @return
-     */
     public static OutboundRecordVO convert(OutboundRecordPO po) {
         OutboundRecordVO vo = new OutboundRecordVO();
-        vo.setName(po.getName());
-        vo.setType(po.getType());
+        vo.setName("admin");
         vo.setCtime(po.getCreateTime());
+        vo.setType(po.getOperationName());
         return vo;
     }
 }

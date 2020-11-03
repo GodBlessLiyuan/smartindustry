@@ -18,8 +18,6 @@ public class BomBodyPO implements Serializable {
 
     private Long materialPropertyId;
 
-    private Long materialUnitId;
-
     private Float materialDemand;
 
     /**
@@ -41,6 +39,8 @@ public class BomBodyPO implements Serializable {
     private Long parentId;
 
     private Long userId;
+
+    private Integer level;
 
     private Date createTime;
 

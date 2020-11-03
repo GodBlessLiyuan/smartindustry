@@ -1,0 +1,15 @@
+server:
+  port: 8035
+spring:
+  profiles:
+    include: common
+  application:
+    name: inventorymanage
+logging:
+  level:
+    com:
+      smartindustry:
+        common:
+          mapper: debug
+  config: classpath:logback-spring-test.xml
+

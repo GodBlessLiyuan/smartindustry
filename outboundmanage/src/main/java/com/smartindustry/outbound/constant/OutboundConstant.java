@@ -1,104 +1,42 @@
 package com.smartindustry.outbound.constant;
 
 /**
- * @author: xiahui
- * @date: Created in 2020/7/15 15:58
- * @description: 出库常量
- * @version: 1.0
+ * @author: jiangzhaojie
+ * @date: Created in 9:16 2020/10/27
+ * @version: 1.0.0
+ * @description:
  */
 public class OutboundConstant {
-    public static final String FILE_LOGISTICS = "logistics";
+    /**
+     * 采购入库单已入库
+     */
+    public static final Byte STATUS_STORED = 1;
+    /**
+     * 采购入库单待入库
+     */
+    public static final Byte STATUS_STOREING = 3;
 
     /**
-     * 待推荐
+     * 采购出库单已出库
      */
-    public static final Byte MATERIAL_STATUS_NOT_RECOMMEND = 1;
+    public static final Byte STATUS_OUTED = 1;
     /**
-     * 未处理
+     * 采购出库单待出库
      */
-    public static final Byte MATERIAL_STATUS_UNPROCESSED = 5;
-    /**
-     * 物料拣货
-     */
-    public static final Byte MATERIAL_STATUS_PICK = 10;
-    /**
-     * 工单审核|OQC检验
-     */
-    public static final Byte MATERIAL_STATUS_CHECK = 15;
-    /**
-     * 等齐套发货
-     */
-    public static final Byte MATERIAL_STATUS_WAIT = 20;
-    /**
-     * 取消发货，退货仓库
-     */
-    public static final Byte MATERIAL_STATUS_RETURN = 25;
-    /**
-     * 物料出库
-     */
-    public static final Byte MATERIAL_STATUS_STORAGE = 30;
-    /**
-     * 完成出库
-     */
-    public static final Byte MATERIAL_STATUS_FINISH = 35;
-    /**
-     * 确认出库
-     */
-    public static final Byte MATERIAL_STATUS_CONFIRM = 40;
+    public static final Byte STATUS_OUTING = 3;
 
     /**
-     * 全部出库
+     * 由自己新增的出库单
      */
-    public static final Byte PICK_OUTBOUND_ALL = 1;
+    public static final Byte TYPE_INSERT_BY_OURS = 1;
     /**
-     * 欠料出库
+     * 浇注而成自动生成的出库单
      */
-    public static final Byte PICK_OUTBOUND_LACK = 2;
-    /**
-     * 未出库
-     */
-    public static final Byte PICK_OUTBOUND_WAIT = 3;
+    public static final Byte TYPE_INSERT_BY_AUTO = 2;
 
-    /**
-     * 已出库
-     */
-    public static final Byte OUTBOUND_STATUS_FINISH = 1;
-    /**
-     * 未出库
-     */
-    public static final Byte OUTBOUND_STATUS_WAIT = 3;
+    public static final String OPERATE_NAME_AGREE = "确认入库";
+    public static final String OPERATE_NAME_INSERT = "创建入库单";
 
-    /**
-     * 操作人的操作文案
-     */
-    public static final String RECORD_CANCEL_DELIVERY = "取消发货,退回仓库";
-    public static final String RECORD_WAIT_DELIVERY = "等齐套发货";
-    public static final String RECORD_AGREE = "审核-同意";
-    public static final String RECORD_ADD = "新增";
-    public static final String RECORD_SUBMIT = "提交";
-    public static final String RECORD_CONFIRM_OUTBOUND = "确认出库";
-    public static final String RECORD_DISAGREE = "审核-驳回";
-    public static final String RECORD_OUTBOUND_ORDER = "形成审核单";
-    public static final String RECORD_AGREE_OUT = "同意出库";
-    public static final String RECORD_OQC = "OQC检测";
-
-    /**
-     * OQC审核的同意
-     */
-    public static final Byte AGREE = 1;
-    /**
-     * OQC审核的驳回-取消发货，退回仓库
-     */
-    public static final Byte TURN_DOWN_CANCEL = 2;
-    /**
-     * OQC审核的待审核
-     */
-    public static final Byte PENDING = 3;
-    /**
-     * OQC审核的驳回，等齐套发货
-     */
-    public static final Byte PENDING_WAIT = 4;
-
-
-
+    public static final String OPERATE_NAME_AGREE_OUT = "确认出库";
+    public static final String OPERATE_NAME_INSERT_OUT = "创建出库单";
 }

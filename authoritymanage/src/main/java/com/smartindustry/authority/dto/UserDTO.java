@@ -1,8 +1,8 @@
 package com.smartindustry.authority.dto;
 
-import com.smartindustry.authority.util.SecurityUtils;
-import com.smartindustry.common.pojo.am.DeptPO;
+import com.smartindustry.authority.constant.AuthorityConstant;
 import com.smartindustry.common.pojo.am.UserPO;
+import com.smartindustry.common.util.SecurityUtil;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -36,7 +36,9 @@ public class UserDTO {
         po.setDeptId(dto.getDid());
         po.setStatus(dto.getStatus());
         po.setUpdateTime(new Date());
-        po.setPassword(dto.getPassword());
+        if(dto.getPassword()!=null){
+            po.setPassword(SecurityUtil.encryptPassword(dto.getPassword()));
+        }
         po.setUserId(dto.getUid());
         return po;
     }
@@ -51,7 +53,7 @@ public class UserDTO {
         po.setUserId(dto.getUid());
         po.setEmail(dto.getEmail());
         if(dto.getPassword()!=null){
-            po.setPassword(SecurityUtils.encryptPassword(dto.getPassword()));
+            po.setPassword(SecurityUtil.encryptPassword(dto.getPassword()));
         }
         po.setJob(dto.getJob());
         po.setCreateTime(new Date());
@@ -63,6 +65,15 @@ public class UserDTO {
         po.setRemark(dto.getRemark());
         return po;
     }
+
+    public static UserPO updatePO(UserPO po,UserDTO dto) {
+        po.setName(dto.getName());
+        po.setPhone(dto.getPhone());
+        po.setEmail(dto.getEmail());
+        po.setSex(dto.getSex());
+        return po;
+    }
+
 
     public static List<UserPO> updateList(List<OperateDTO> dtos){
         List<UserPO> pos = new ArrayList<>(dtos.size());

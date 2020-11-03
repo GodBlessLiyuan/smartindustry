@@ -4,6 +4,7 @@ import com.smartindustry.common.bo.si.LocationBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.si.LocationPO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,16 @@ public interface LocationMapper extends BaseMapper<LocationPO, Long> {
      * @return
      */
     LocationPO queryByLno(String locationNo);
+
+
+    /**
+     * 根据库位编号和仓库ID查询
+     *
+     * @param locationNo
+     * @param warehouseId
+     * @return
+     */
+    List<LocationPO> queryByLnoAndWhid(@Param("locationNo") String locationNo, @Param("warehouseId") Long warehouseId);
 
     /**
      * 根据仓库ID查询
@@ -59,4 +70,49 @@ public interface LocationMapper extends BaseMapper<LocationPO, Long> {
      * @return
      */
     List<LocationPO> queryByLtid(Long ltid);
+
+    /**
+     * 查询所有
+     *
+     * @return
+     */
+    List<Map<String, Object>> queryAll();
+
+    /**
+     * 查看当前的入库调拨单的调入仓库是否有库位存在
+     *
+     * @param wid
+     * @return
+     */
+    List<LocationPO> queryLocation(Long wid);
+
+    /**
+     * 根据sid入库单查看是否存在库位
+     *
+     * @param sid
+     * @return
+     */
+    List<LocationPO> queryLocBySid(Long sid);
+
+    /**
+     * 根据 wid 查询 KV 组合
+     *
+     * @param wid
+     * @return
+     */
+    List<Map<String, Object>> queryKvByWid(Long wid);
+
+    /**
+     * 根据储位rfid进行储位信息查询
+     * @param rfid
+     * @return
+     */
+    LocationBO queryByRfid(String rfid);
+
+    /**
+     * 根据物料id 查询
+     * @param mids
+     * @return
+     */
+    List<LocationPO> queryByMids(List<Long> mids);
 }

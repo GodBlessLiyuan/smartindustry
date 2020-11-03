@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.em.TransferHeadMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.em.TransferHeadPO">
+    <id column="transfer_head_id" jdbcType="BIGINT" property="transferHeadId" />
+    <result column="transfer_no" jdbcType="CHAR" property="transferNo" />
+    <result column="transfer_type" jdbcType="TINYINT" property="transferType" />
+    <result column="outbound_wid" jdbcType="BIGINT" property="outboundWid" />
+    <result column="storage_wid" jdbcType="BIGINT" property="storageWid" />
+    <result column="plan_time" jdbcType="TIMESTAMP" property="planTime" />
+    <result column="outbound_status" jdbcType="TINYINT" property="outboundStatus" />
+    <result column="storage_status" jdbcType="TINYINT" property="storageStatus" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="dr" jdbcType="TINYINT" property="dr" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    transfer_head_id, transfer_no, transfer_type, outbound_wid, storage_wid, plan_time, 
+    outbound_status, storage_status, `status`, create_time, dr
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from em_transfer_head
+    where transfer_head_id = #{transferHeadId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from em_transfer_head
+    where transfer_head_id = #{transferHeadId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.em.TransferHeadPO">
+    insert into em_transfer_head (transfer_head_id, transfer_no, transfer_type, 
+      outbound_wid, storage_wid, plan_time, 
+      outbound_status, storage_status, `status`, 
+      create_time, dr)
+    values (#{transferHeadId,jdbcType=BIGINT}, #{transferNo,jdbcType=CHAR}, #{transferType,jdbcType=TINYINT}, 
+      #{outboundWid,jdbcType=BIGINT}, #{storageWid,jdbcType=BIGINT}, #{planTime,jdbcType=TIMESTAMP}, 
+      #{outboundStatus,jdbcType=TINYINT}, #{storageStatus,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.em.TransferHeadPO">
+    insert into em_transfer_head
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="transferHeadId != null">
+        transfer_head_id,
+      </if>
+      <if test="transferNo != null">
+        transfer_no,
+      </if>
+      <if test="transferType != null">
+        transfer_type,
+      </if>
+      <if test="outboundWid != null">
+        outbound_wid,
+      </if>
+      <if test="storageWid != null">
+        storage_wid,
+      </if>
+      <if test="planTime != null">
+        plan_time,
+      </if>
+      <if test="outboundStatus != null">
+        outbound_status,
+      </if>
+      <if test="storageStatus != null">
+        storage_status,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="dr != null">
+        dr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="transferHeadId != null">
+        #{transferHeadId,jdbcType=BIGINT},
+      </if>
+      <if test="transferNo != null">
+        #{transferNo,jdbcType=CHAR},
+      </if>
+      <if test="transferType != null">
+        #{transferType,jdbcType=TINYINT},
+      </if>
+      <if test="outboundWid != null">
+        #{outboundWid,jdbcType=BIGINT},
+      </if>
+      <if test="storageWid != null">
+        #{storageWid,jdbcType=BIGINT},
+      </if>
+      <if test="planTime != null">
+        #{planTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="outboundStatus != null">
+        #{outboundStatus,jdbcType=TINYINT},
+      </if>
+      <if test="storageStatus != null">
+        #{storageStatus,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dr != null">
+        #{dr,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.em.TransferHeadPO">
+    update em_transfer_head
+    <set>
+      <if test="transferNo != null">
+        transfer_no = #{transferNo,jdbcType=CHAR},
+      </if>
+      <if test="transferType != null">
+        transfer_type = #{transferType,jdbcType=TINYINT},
+      </if>
+      <if test="outboundWid != null">
+        outbound_wid = #{outboundWid,jdbcType=BIGINT},
+      </if>
+      <if test="storageWid != null">
+        storage_wid = #{storageWid,jdbcType=BIGINT},
+      </if>
+      <if test="planTime != null">
+        plan_time = #{planTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="outboundStatus != null">
+        outbound_status = #{outboundStatus,jdbcType=TINYINT},
+      </if>
+      <if test="storageStatus != null">
+        storage_status = #{storageStatus,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dr != null">
+        dr = #{dr,jdbcType=TINYINT},
+      </if>
+    </set>
+    where transfer_head_id = #{transferHeadId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.em.TransferHeadPO">
+    update em_transfer_head
+    set transfer_no = #{transferNo,jdbcType=CHAR},
+      transfer_type = #{transferType,jdbcType=TINYINT},
+      outbound_wid = #{outboundWid,jdbcType=BIGINT},
+      storage_wid = #{storageWid,jdbcType=BIGINT},
+      plan_time = #{planTime,jdbcType=TIMESTAMP},
+      outbound_status = #{outboundStatus,jdbcType=TINYINT},
+      storage_status = #{storageStatus,jdbcType=TINYINT},
+      `status` = #{status,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      dr = #{dr,jdbcType=TINYINT}
+    where transfer_head_id = #{transferHeadId,jdbcType=BIGINT}
+  </update>
+
+<!--  查看调拨信息-->
+  <select id="queryBySid" parameterType="java.lang.Long" resultType="com.smartindustry.common.pojo.em.TransferHeadPO">
+    select th.transfer_head_id as transferHeadId,th.transfer_no as transferNo,th.transfer_type as transferType
+    from sm_storage s
+    left join om_outbound ob on ob.outbound_no = s.source_no
+    left join om_pick_head ph on ph.pick_head_id = ob.pick_head_id
+    left join em_transfer_head th on th.transfer_no = ph.source_no
+    where s.dr = 1 and s.storage_id = #{storageId,jdbcType=BIGINT}
+  </select>
+
+<!--  根据调拨订单编号查询明细-->
+  <select id="queryNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from em_transfer_head
+    where transfer_no = #{transferNo,jdbcType=CHAR}
+  </select>
+</mapper>

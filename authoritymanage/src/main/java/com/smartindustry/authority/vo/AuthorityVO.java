@@ -4,7 +4,6 @@ import com.smartindustry.common.bo.am.AuthorityBO;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,12 +14,11 @@ import java.util.List;
  * @description:
  */
 @Data
-public class AuthorityVO implements Cloneable {
+public class AuthorityVO implements Cloneable,Serializable{
     private static final long SerialVersionUID = 1L;
 
     private Long aid;
     private String aname;
-    private String apath;
     private Byte type;
     /**
      * 子权限列表
@@ -40,7 +38,6 @@ public class AuthorityVO implements Cloneable {
         vo.setAid(bo.getAuthorityId());
         vo.setAname(bo.getAuthorityName());
         vo.setType(bo.getType());
-        vo.setApath(bo.getAuthorityPath());
         return vo;
     }
 

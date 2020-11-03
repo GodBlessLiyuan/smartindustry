@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.dd.CreditLevelMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.dd.CreditLevelPO">
+    <id column="credit_level_id" jdbcType="BIGINT" property="creditLevelId" />
+    <result column="credit_level_name" jdbcType="CHAR" property="creditLevelName" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    credit_level_id, credit_level_name, user_id, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from dd_credit_level
+    where credit_level_id = #{creditLevelId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from dd_credit_level
+    where credit_level_id = #{creditLevelId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.dd.CreditLevelPO">
+    insert into dd_credit_level (credit_level_id, credit_level_name, user_id, 
+      create_time)
+    values (#{creditLevelId,jdbcType=BIGINT}, #{creditLevelName,jdbcType=CHAR}, #{userId,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.dd.CreditLevelPO">
+    insert into dd_credit_level
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="creditLevelId != null">
+        credit_level_id,
+      </if>
+      <if test="creditLevelName != null">
+        credit_level_name,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="creditLevelId != null">
+        #{creditLevelId,jdbcType=BIGINT},
+      </if>
+      <if test="creditLevelName != null">
+        #{creditLevelName,jdbcType=CHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.dd.CreditLevelPO">
+    update dd_credit_level
+    <set>
+      <if test="creditLevelName != null">
+        credit_level_name = #{creditLevelName,jdbcType=CHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where credit_level_id = #{creditLevelId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.dd.CreditLevelPO">
+    update dd_credit_level
+    set credit_level_name = #{creditLevelName,jdbcType=CHAR},
+      user_id = #{userId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where credit_level_id = #{creditLevelId,jdbcType=BIGINT}
+  </update>
+
+
+  <select id="queryByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from dd_credit_level
+    where credit_level_name = #{name,jdbcType=CHAR}
+  </select>
+
+  <select id="queryAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from dd_credit_level
+  </select>
+</mapper>

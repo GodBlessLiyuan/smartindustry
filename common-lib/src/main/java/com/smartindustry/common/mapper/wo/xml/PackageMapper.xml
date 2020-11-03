@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.wo.PackageMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.wo.PackagePO">
+    <id column="package_id" jdbcType="BIGINT" property="packageId" />
+    <result column="produce_order_id" jdbcType="BIGINT" property="produceOrderId" />
+    <result column="rfid" jdbcType="CHAR" property="rfid" />
+    <result column="package_time" jdbcType="TIMESTAMP" property="packageTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    package_id, produce_order_id, rfid, package_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from wo_package
+    where package_id = #{packageId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from wo_package
+    where package_id = #{packageId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.wo.PackagePO">
+    insert into wo_package (package_id, produce_order_id, rfid, 
+      package_time)
+    values (#{packageId,jdbcType=BIGINT}, #{produceOrderId,jdbcType=BIGINT}, #{rfid,jdbcType=CHAR}, 
+      #{packageTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.wo.PackagePO">
+    insert into wo_package
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="packageId != null">
+        package_id,
+      </if>
+      <if test="produceOrderId != null">
+        produce_order_id,
+      </if>
+      <if test="rfid != null">
+        rfid,
+      </if>
+      <if test="packageTime != null">
+        package_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="packageId != null">
+        #{packageId,jdbcType=BIGINT},
+      </if>
+      <if test="produceOrderId != null">
+        #{produceOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="rfid != null">
+        #{rfid,jdbcType=CHAR},
+      </if>
+      <if test="packageTime != null">
+        #{packageTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.wo.PackagePO">
+    update wo_package
+    <set>
+      <if test="produceOrderId != null">
+        produce_order_id = #{produceOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="rfid != null">
+        rfid = #{rfid,jdbcType=CHAR},
+      </if>
+      <if test="packageTime != null">
+        package_time = #{packageTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where package_id = #{packageId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.wo.PackagePO">
+    update wo_package
+    set produce_order_id = #{produceOrderId,jdbcType=BIGINT},
+      rfid = #{rfid,jdbcType=CHAR},
+      package_time = #{packageTime,jdbcType=TIMESTAMP}
+    where package_id = #{packageId,jdbcType=BIGINT}
+  </update>
+</mapper>

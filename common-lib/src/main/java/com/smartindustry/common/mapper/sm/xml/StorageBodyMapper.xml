@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.sm.StorageBodyMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.sm.StorageBodyPO">
+    <id column="storage_body_id" jdbcType="BIGINT" property="storageBodyId" />
+    <result column="storage_head_id" jdbcType="BIGINT" property="storageHeadId" />
+    <result column="material_id" jdbcType="BIGINT" property="materialId" />
+    <result column="location_id" jdbcType="BIGINT" property="locationId" />
+    <result column="car_brand" jdbcType="CHAR" property="carBrand" />
+    <result column="expect_num" jdbcType="DECIMAL" property="expectNum" />
+    <result column="storage_num" jdbcType="DECIMAL" property="storageNum" />
+    <result column="accept_time" jdbcType="TIMESTAMP" property="acceptTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="dr" jdbcType="TINYINT" property="dr" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    storage_body_id, storage_head_id, material_id, location_id, car_brand, expect_num, 
+    storage_num, accept_time, create_time, dr
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sm_storage_body
+    where storage_body_id = #{storageBodyId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sm_storage_body
+    where storage_body_id = #{storageBodyId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.StorageBodyPO">
+    insert into sm_storage_body (storage_body_id, storage_head_id, material_id, 
+      location_id, car_brand, expect_num, 
+      storage_num, accept_time, create_time, 
+      dr)
+    values (#{storageBodyId,jdbcType=BIGINT}, #{storageHeadId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT}, 
+      #{locationId,jdbcType=BIGINT}, #{carBrand,jdbcType=CHAR}, #{expectNum,jdbcType=DECIMAL}, 
+      #{storageNum,jdbcType=DECIMAL}, #{acceptTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{dr,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.sm.StorageBodyPO">
+    insert into sm_storage_body
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="storageBodyId != null">
+        storage_body_id,
+      </if>
+      <if test="storageHeadId != null">
+        storage_head_id,
+      </if>
+      <if test="materialId != null">
+        material_id,
+      </if>
+      <if test="locationId != null">
+        location_id,
+      </if>
+      <if test="carBrand != null">
+        car_brand,
+      </if>
+      <if test="expectNum != null">
+        expect_num,
+      </if>
+      <if test="storageNum != null">
+        storage_num,
+      </if>
+      <if test="acceptTime != null">
+        accept_time,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="dr != null">
+        dr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="storageBodyId != null">
+        #{storageBodyId,jdbcType=BIGINT},
+      </if>
+      <if test="storageHeadId != null">
+        #{storageHeadId,jdbcType=BIGINT},
+      </if>
+      <if test="materialId != null">
+        #{materialId,jdbcType=BIGINT},
+      </if>
+      <if test="locationId != null">
+        #{locationId,jdbcType=BIGINT},
+      </if>
+      <if test="carBrand != null">
+        #{carBrand,jdbcType=CHAR},
+      </if>
+      <if test="expectNum != null">
+        #{expectNum,jdbcType=DECIMAL},
+      </if>
+      <if test="storageNum != null">
+        #{storageNum,jdbcType=DECIMAL},
+      </if>
+      <if test="acceptTime != null">
+        #{acceptTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dr != null">
+        #{dr,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.sm.StorageBodyPO">
+    update sm_storage_body
+    <set>
+      <if test="storageHeadId != null">
+        storage_head_id = #{storageHeadId,jdbcType=BIGINT},
+      </if>
+      <if test="materialId != null">
+        material_id = #{materialId,jdbcType=BIGINT},
+      </if>
+      <if test="locationId != null">
+        location_id = #{locationId,jdbcType=BIGINT},
+      </if>
+      <if test="carBrand != null">
+        car_brand = #{carBrand,jdbcType=CHAR},
+      </if>
+      <if test="expectNum != null">
+        expect_num = #{expectNum,jdbcType=DECIMAL},
+      </if>
+      <if test="storageNum != null">
+        storage_num = #{storageNum,jdbcType=DECIMAL},
+      </if>
+      <if test="acceptTime != null">
+        accept_time = #{acceptTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dr != null">
+        dr = #{dr,jdbcType=TINYINT},
+      </if>
+    </set>
+    where storage_body_id = #{storageBodyId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.sm.StorageBodyPO">
+    update sm_storage_body
+    set storage_head_id = #{storageHeadId,jdbcType=BIGINT},
+      material_id = #{materialId,jdbcType=BIGINT},
+      location_id = #{locationId,jdbcType=BIGINT},
+      car_brand = #{carBrand,jdbcType=CHAR},
+      expect_num = #{expectNum,jdbcType=DECIMAL},
+      storage_num = #{storageNum,jdbcType=DECIMAL},
+      accept_time = #{acceptTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      dr = #{dr,jdbcType=TINYINT}
+    where storage_body_id = #{storageBodyId,jdbcType=BIGINT}
+  </update>
+
+  <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="storageBodyId">
+    insert into sm_storage_body (storage_body_id, storage_head_id, material_id,
+    location_id, car_brand, storage_num,
+    expect_num, accept_time, create_time,
+    dr
+    )
+    values
+    <foreach collection="list" separator="," item="po">
+      (#{po.storageBodyId,jdbcType=BIGINT}, #{po.storageHeadId,jdbcType=BIGINT}, #{po.materialId,jdbcType=BIGINT},
+      #{po.locationId,jdbcType=BIGINT}, #{po.carBrand,jdbcType=CHAR}, #{po.storageNum,jdbcType=DECIMAL},
+      #{po.expectNum,jdbcType=DECIMAL}, #{po.acceptTime,jdbcType=TIMESTAMP}, #{po.createTime,jdbcType=TIMESTAMP},
+      #{po.dr,jdbcType=TINYINT})
+    </foreach>
+  </insert>
+
+  <update id="batchUpdate" parameterType="java.util.List">
+    update sm_storage_body
+    set material_id = case storage_body_id
+    <foreach collection="list" item="po">
+      when #{po.storageBodyId,jdbcType=BIGINT} then #{po.materialId,jdbcType=BIGINT}
+    </foreach>
+    end,
+    locationId = case storage_body_id
+    <foreach collection="list" item="po">
+      when #{po.storageBodyId,jdbcType=BIGINT} then #{po.locationId,jdbcType=BIGINT}
+    </foreach>
+    end
+    where storage_body_id in
+    <foreach collection="list" item="po" open="(" separator="," close=")">
+      #{po.storageBodyId,jdbcType=BIGINT}
+    </foreach>
+  </update>
+
+  <update id="deleteBatch" parameterType="java.util.List">
+    update sm_storage_body
+    set dr = case storage_body_id
+    <foreach collection="list" item="sbid">
+      when #{sbid,jdbcType=BIGINT} then 2
+    </foreach>
+    end
+    where storage_body_id in
+    <foreach collection="list" item="sbid" open="(" separator="," close=")">
+      #{sbid,jdbcType=BIGINT}
+    </foreach>
+  </update>
+
+  <select id="querySbids" parameterType="java.lang.Long" resultType="java.lang.Long">
+    select storage_body_id
+    from sm_storage_body
+    where storage_head_id = #{shid,jdbcType=BIGINT}
+  </select>
+
+  <select id="queryByShidAndMid" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sm_storage_head sh
+    left join sm_storage_body sb on sh.storage_head_id = sb.storage_head_id
+    where sb.dr = 1 and sh.storage_head_id = #{shid,jdbcType=BIGINT} and sb.material_id = #{mid,jdbcType=BIGINT}
+  </select>
+</mapper>

@@ -15,7 +15,11 @@
         <module>industryeureka</module>
         <module>industryzuul</module>
         <module>authoritymanage</module>
+        <module>pdamanage</module>
         <module>basicmanage</module>
+        <module>inventorymanage</module>
+        <module>workbenchmanage</module>
+        <module>bigdatamanage</module>
     </modules>
 
     <name>smartindustry</name>

@@ -3,6 +3,9 @@ package com.smartindustry.authority.controller;
 import com.smartindustry.authority.dto.OperateDTO;
 import com.smartindustry.authority.dto.RoleDTO;
 import com.smartindustry.authority.service.IRoleService;
+import com.smartindustry.common.mapper.am.AuthorityMapper;
+import com.smartindustry.common.mapper.am.MUserAuthorityMapper;
+import com.smartindustry.common.mapper.am.RoleAuthorityMapper;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -24,49 +28,45 @@ import java.util.Map;
 @RestController
 public class RoleController {
     @Autowired
-    IRoleService roleService;
+    private IRoleService roleService;
 
     @PostMapping("pageQuery")
-    @PreAuthorize("@ss.hasPermi('am:role:query')")
+    @PreAuthorize("@ss.hasPermi('bm:am:role:query')")
     public ResultVO pageQuery(@RequestBody Map<String, Object> reqData) {
         return roleService.pageQuery(reqData);
     }
 
     @PostMapping("status")
-    @PreAuthorize("@ss.hasPermi('am:role:disable')")
+    @PreAuthorize("@ss.hasAnyPermi('bm:am:role:disable,bm:am:role:enable')")
     public ResultVO status(@RequestBody List<OperateDTO> dtos) {
         return roleService.batchUpdate(dtos);
     }
 
-    @PreAuthorize("@ss.hasPermi('am:role:insert')")
     @PostMapping("insert")
+    @PreAuthorize("@ss.hasPermi('bm:am:role:insert')")
     public ResultVO insert(@RequestBody RoleDTO dto) {
         return roleService.insert(dto);
     }
 
     @PostMapping("update")
-    @PreAuthorize("@ss.hasPermi('am:role:update')")
+    @PreAuthorize("@ss.hasPermi('bm:am:role:update')")
     public ResultVO update(@RequestBody RoleDTO dto) {
         return roleService.update(dto);
     }
 
-    @PreAuthorize("@ss.hasPermi('am:role:delete')")
     @PostMapping("delete")
+    @PreAuthorize("@ss.hasPermi('bm:am:role:delete')")
     public ResultVO delete(@RequestBody List<Long> dtos) {
         return roleService.delete(dtos);
     }
 
-    @PostMapping("queryAllMenu")
-    public ResultVO queryAllMenu() {
-        return roleService.queryAllMenu();
-    }
-
-    @PostMapping("queryAllButton")
-    public ResultVO queryAllButton() {
-        return roleService.queryAllButton();
+    @PostMapping("queryAuthority")
+    public ResultVO queryAuthority() {
+        return roleService.queryAuthority();
     }
 
     @PostMapping("updatePerms")
+    @PreAuthorize("@ss.hasPermi('bm:am:role:site')")
     public ResultVO updatePerms(@RequestBody OperateDTO dto) {
         return roleService.updatePerms(dto);
     }
@@ -80,5 +80,4 @@ public class RoleController {
     public ResultVO queryRoleRecord(@RequestBody Map<String, Object> reqData) {
         return roleService.queryRoleRecord(reqData);
     }
-
 }

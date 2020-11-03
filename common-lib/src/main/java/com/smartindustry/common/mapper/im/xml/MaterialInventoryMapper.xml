@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.im.MaterialInventoryMapper">
+    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.im.MaterialInventoryPO">
+        <id column="material_inventory_id" jdbcType="BIGINT" property="materialInventoryId"/>
+        <result column="material_id" jdbcType="BIGINT" property="materialId"/>
+        <result column="way_num" jdbcType="INTEGER" property="wayNum"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="storage_num" jdbcType="INTEGER" property="storageNum"/>
+        <result column="lock_num" jdbcType="INTEGER" property="lockNum"/>
+        <result column="relate_num" jdbcType="INTEGER" property="relateNum"/>
+        <result column="available_num" jdbcType="INTEGER" property="availableNum"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        material_inventory_id, material_id, way_num, `status`, storage_num, lock_num, relate_num,
+    available_num
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from im_material_inventory
+        where material_inventory_id = #{materialInventoryId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from im_material_inventory
+        where material_inventory_id = #{materialInventoryId,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.im.MaterialInventoryPO" useGeneratedKeys="true"
+            keyProperty="materialInventoryId">
+        insert into im_material_inventory (material_inventory_id, material_id, way_num,
+                                           `status`, storage_num, lock_num,
+                                           relate_num, available_num)
+        values (#{materialInventoryId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT}, #{wayNum,jdbcType=INTEGER},
+                #{status,jdbcType=TINYINT}, #{storageNum,jdbcType=INTEGER}, #{lockNum,jdbcType=INTEGER},
+                #{relateNum,jdbcType=INTEGER}, #{availableNum,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.im.MaterialInventoryPO">
+        insert into im_material_inventory
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="materialInventoryId != null">
+                material_inventory_id,
+            </if>
+            <if test="materialId != null">
+                material_id,
+            </if>
+            <if test="wayNum != null">
+                way_num,
+            </if>
+            <if test="status != null">
+                `status`,
+            </if>
+            <if test="storageNum != null">
+                storage_num,
+            </if>
+            <if test="lockNum != null">
+                lock_num,
+            </if>
+            <if test="relateNum != null">
+                relate_num,
+            </if>
+            <if test="availableNum != null">
+                available_num,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="materialInventoryId != null">
+                #{materialInventoryId,jdbcType=BIGINT},
+            </if>
+            <if test="materialId != null">
+                #{materialId,jdbcType=BIGINT},
+            </if>
+            <if test="wayNum != null">
+                #{wayNum,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="storageNum != null">
+                #{storageNum,jdbcType=INTEGER},
+            </if>
+            <if test="lockNum != null">
+                #{lockNum,jdbcType=INTEGER},
+            </if>
+            <if test="relateNum != null">
+                #{relateNum,jdbcType=INTEGER},
+            </if>
+            <if test="availableNum != null">
+                #{availableNum,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.im.MaterialInventoryPO">
+        update im_material_inventory
+        <set>
+            <if test="materialId != null">
+                material_id = #{materialId,jdbcType=BIGINT},
+            </if>
+            <if test="wayNum != null">
+                way_num = #{wayNum,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                `status` = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="storageNum != null">
+                storage_num = #{storageNum,jdbcType=INTEGER},
+            </if>
+            <if test="lockNum != null">
+                lock_num = #{lockNum,jdbcType=INTEGER},
+            </if>
+            <if test="relateNum != null">
+                relate_num = #{relateNum,jdbcType=INTEGER},
+            </if>
+            <if test="availableNum != null">
+                available_num = #{availableNum,jdbcType=INTEGER},
+            </if>
+        </set>
+        where material_inventory_id = #{materialInventoryId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.im.MaterialInventoryPO">
+        update im_material_inventory
+        set material_id   = #{materialId,jdbcType=BIGINT},
+            way_num       = #{wayNum,jdbcType=INTEGER},
+            `status`      = #{status,jdbcType=TINYINT},
+            storage_num   = #{storageNum,jdbcType=INTEGER},
+            lock_num      = #{lockNum,jdbcType=INTEGER},
+            relate_num    = #{relateNum,jdbcType=INTEGER},
+            available_num = #{availableNum,jdbcType=INTEGER}
+        where material_inventory_id = #{materialInventoryId,jdbcType=BIGINT}
+    </update>
+
+    <update id="batchDelete" parameterType="java.util.List">
+        delete
+        from im_material_inventory
+        where material_id in
+        <foreach collection="list" item="mid" open="(" separator="," close=")">
+            #{mid,jdbcType=BIGINT}
+        </foreach>
+    </update>
+</mapper>

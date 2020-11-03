@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.si.ClientRecordMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.ClientRecordPO">
+    <id column="client_record_id" jdbcType="BIGINT" property="clientRecordId" />
+    <result column="client_id" jdbcType="BIGINT" property="clientId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="operation_name" jdbcType="CHAR" property="operationName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    client_record_id, client_id, user_id, create_time, operation_name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from si_client_record
+    where client_record_id = #{clientRecordId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from si_client_record
+    where client_record_id = #{clientRecordId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.si.ClientRecordPO">
+    insert into si_client_record (client_record_id, client_id, user_id, 
+      create_time, operation_name)
+    values (#{clientRecordId,jdbcType=BIGINT}, #{clientId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{operationName,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.ClientRecordPO">
+    insert into si_client_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="clientRecordId != null">
+        client_record_id,
+      </if>
+      <if test="clientId != null">
+        client_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="operationName != null">
+        operation_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="clientRecordId != null">
+        #{clientRecordId,jdbcType=BIGINT},
+      </if>
+      <if test="clientId != null">
+        #{clientId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operationName != null">
+        #{operationName,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.si.ClientRecordPO">
+    update si_client_record
+    <set>
+      <if test="clientId != null">
+        client_id = #{clientId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operationName != null">
+        operation_name = #{operationName,jdbcType=CHAR},
+      </if>
+    </set>
+    where client_record_id = #{clientRecordId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.ClientRecordPO">
+    update si_client_record
+    set client_id = #{clientId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      operation_name = #{operationName,jdbcType=CHAR}
+    where client_record_id = #{clientRecordId,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -54,6 +54,7 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.62</version>
         </dependency>
+
         <dependency>
             <groupId>com.smartindustry</groupId>
             <artifactId>common-lib</artifactId>
@@ -107,6 +108,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
+            <version>2.3.1.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>

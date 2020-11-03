@@ -7,77 +7,55 @@ package com.smartindustry.authority.constant;
  */
 public class AuthorityConstant {
     /**
-     * 令牌前缀
-     */
-    public static final String TOKEN_PREFIX = "Bearer ";
-
-    /**
-     * 登录用户 redis key
-     */
-    public static final String LOGIN_TOKEN_KEY = "login_tokens:";
-    /**
-     * 令牌前缀
-     */
-    public static final String LOGIN_USER_KEY = "login_user_key";
-
-    /**
-     * 用户的状态 1 启用2  禁用
-     */
-    public static final String USER_OK = "1";
-    public static final String USER_DISABLE = "2";
-    /**
-     * 用户是否被删除
-     */
-    public static final String USER_NOTDELETE = "1";
-    public static final String USER_DELETE = "2";
-
-    /**
      * 状态值， 1 启用 2 禁用
      */
     public static final Byte STATUS_OK = 1;
     public static final Byte STATUS_DISABLE = 2;
 
-
-    /**
-     * 资源映射路径 前缀
-     */
-    public static final String RESOURCE_PREFIX = "/profile";
-
-    /**
-     * 验证码 redis key
-     */
-    public static final String CAPTCHA_CODE_KEY = "captcha_codes:";
-
-    /**
-     * 验证码有效期（分钟）
-     */
-    public static final Integer CAPTCHA_EXPIRATION = 2;
-
     /**
      * 菜单标识
      */
-    public static final Byte MENUTYPE = 1;
+    public static final Byte TYPE_MENU = 1;
 
     /**
      * 按钮标识
      */
-    public static final Byte BUTTONTYPE = 2;
+    public static final Byte TYPE_BUTTON = 2;
 
+    /**
+     * 系统标识
+     */
+    public static final Byte TYPE_SYS = 3;
 
     /**
      * 操作记录
      */
-    public static final String INSERTRECORD = "新增";
-    public static final String UPDATERECORD = "修改";
-    public static final String USERECORD = "启用";
-    public static final String DISABLERECORD = "禁用";
-    public static final String DELETERECORD = "删除";
-
+    public static final String RECORD_INSERT = "新增";
+    public static final String RECORD_UPDATE = "编辑";
+    public static final String RECORD_USE = "启用";
+    public static final String RECORD_DISABLE = "禁用";
+    public static final String RECORD_DELETE = "删除";
 
     /**
-     * 未授权
+     * 权限类型名称
      */
-    public static final int UNAUTHORIZED = 1020;
+    public static final String NAME_MENU= "menu";
+    public static final String NAME_BUTTON= "button";
+    public static final String NAME_SYS= "sys";
+    public static final String NAME_SYS_AUTH= "auth";
+
+
+    public static final Integer FLAG_EXIST= 1;
+    /**
+     * 所有菜单按钮权限列表的过期时间
+     */
+    public static final Long EXPIRE_TIME = 30L;
+
+    /**
+     * 假的密码标识
+     */
+    public static final String FLAG_FAKE_PASSWORD = "******";
+
 
 
 }

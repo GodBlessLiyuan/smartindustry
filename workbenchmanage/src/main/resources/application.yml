@@ -1,0 +1,14 @@
+server:
+  port: 8036
+spring:
+  profiles:
+    include: common
+  application:
+    name: workbenchmanage
+logging:
+  level:
+    com:
+      smartindustry:
+        common:
+          mapper: debug
+  config: classpath:logback-spring-test.xml

@@ -9,5 +9,4 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface MaterialSpecificationMapper extends BaseMapper<MaterialSpecificationPO, Long> {
-    void deleteByMid(Long mid);
 }

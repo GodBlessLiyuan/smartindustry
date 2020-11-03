@@ -1,6 +1,6 @@
 package com.smartindustry.basic.vo;
 
-import com.smartindustry.common.pojo.si.MaterialRecordPO;
+import com.smartindustry.common.bo.si.MaterialRecordBO;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -22,19 +22,19 @@ public class MaterialRecordVO implements Serializable {
     private Date ctime;
     private String type;
 
-    public static List<MaterialRecordVO> convert(List<MaterialRecordPO> pos) {
-        List<MaterialRecordVO> vos = new ArrayList<>(pos.size());
-        for (MaterialRecordPO po : pos) {
+    public static List<MaterialRecordVO> convert(List<MaterialRecordBO> bos) {
+        List<MaterialRecordVO> vos = new ArrayList<>(bos.size());
+        for (MaterialRecordBO po : bos) {
             vos.add(convert(po));
         }
         return vos;
     }
 
-    public static MaterialRecordVO convert(MaterialRecordPO po) {
+    public static MaterialRecordVO convert(MaterialRecordBO bo) {
         MaterialRecordVO vo = new MaterialRecordVO();
-        vo.setName("夏慧");
-        vo.setCtime(po.getCreateTime());
-        vo.setType(po.getType());
+        vo.setName(bo.getName());
+        vo.setCtime(bo.getCreateTime());
+        vo.setType(bo.getType());
         return vo;
     }
 }

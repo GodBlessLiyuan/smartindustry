@@ -75,17 +75,10 @@ public interface UserMapper extends BaseMapper<UserPO, Long> {
 
     /**
      * 将用户列表的 部门置空
-     * @param deptId
+     * @param dids
      * @return
      */
-    Integer updateDeptId(@Param("deptId") Long deptId);
-
-    /**
-     * 将用户列表的 角色置空
-     * @param roleId
-     * @return
-     */
-    Integer updateRoleId(@Param("roleId") Long roleId);
+    Integer updateDeptId(List<Long> dids);
 
     /**
      * 更新用户密码
@@ -101,4 +94,11 @@ public interface UserMapper extends BaseMapper<UserPO, Long> {
      * @return
      */
     UserBO queryUserMsg(@Param("userId") Long userId);
+
+    /**
+     *  查询当前即将删除的角色是否被用户所拥有，若拥有则无法删除
+     * @param roleId
+     * @return
+     */
+    List<UserPO> queryUserRole(@Param("roleId") Long roleId);
 }

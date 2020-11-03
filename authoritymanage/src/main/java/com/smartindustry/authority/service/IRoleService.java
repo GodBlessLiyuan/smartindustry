@@ -53,16 +53,10 @@ public interface IRoleService {
     ResultVO update(RoleDTO dto);
 
     /**
-     * 查询所有的菜单结构
+     * 查询所有系统的所有权限
      * @return
      */
-    ResultVO queryAllMenu();
-
-    /**
-     * 查询所有的按钮权限结构
-     * @return
-     */
-    ResultVO queryAllButton();
+    ResultVO queryAuthority();
 
     /**
      * 根据roleid和权限id列表更新角色权限表
@@ -84,4 +78,5 @@ public interface IRoleService {
      * @return
      */
     ResultVO queryRoleRecord(Map<String, Object> reqData);
+
 }

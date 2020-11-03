@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.sm.StorageForkliftMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.sm.StorageForkliftPO">
+    <id column="storage_forklift_id" jdbcType="BIGINT" property="storageForkliftId" />
+    <result column="storage_head_id" jdbcType="BIGINT" property="storageHeadId" />
+    <result column="forklift_id" jdbcType="BIGINT" property="forkliftId" />
+    <result column="rfid" jdbcType="CHAR" property="rfid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    storage_forklift_id, storage_head_id, forklift_id, rfid
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sm_storage_forklift
+    where storage_forklift_id = #{storageForkliftId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sm_storage_forklift
+    where storage_forklift_id = #{storageForkliftId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.StorageForkliftPO">
+    insert into sm_storage_forklift (storage_forklift_id, storage_head_id, forklift_id, 
+      rfid)
+    values (#{storageForkliftId,jdbcType=BIGINT}, #{storageHeadId,jdbcType=BIGINT}, #{forkliftId,jdbcType=BIGINT}, 
+      #{rfid,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.sm.StorageForkliftPO">
+    insert into sm_storage_forklift
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="storageForkliftId != null">
+        storage_forklift_id,
+      </if>
+      <if test="storageHeadId != null">
+        storage_head_id,
+      </if>
+      <if test="forkliftId != null">
+        forklift_id,
+      </if>
+      <if test="rfid != null">
+        rfid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="storageForkliftId != null">
+        #{storageForkliftId,jdbcType=BIGINT},
+      </if>
+      <if test="storageHeadId != null">
+        #{storageHeadId,jdbcType=BIGINT},
+      </if>
+      <if test="forkliftId != null">
+        #{forkliftId,jdbcType=BIGINT},
+      </if>
+      <if test="rfid != null">
+        #{rfid,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.sm.StorageForkliftPO">
+    update sm_storage_forklift
+    <set>
+      <if test="storageHeadId != null">
+        storage_head_id = #{storageHeadId,jdbcType=BIGINT},
+      </if>
+      <if test="forkliftId != null">
+        forklift_id = #{forkliftId,jdbcType=BIGINT},
+      </if>
+      <if test="rfid != null">
+        rfid = #{rfid,jdbcType=CHAR},
+      </if>
+    </set>
+    where storage_forklift_id = #{storageForkliftId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.sm.StorageForkliftPO">
+    update sm_storage_forklift
+    set storage_head_id = #{storageHeadId,jdbcType=BIGINT},
+      forklift_id = #{forkliftId,jdbcType=BIGINT},
+      rfid = #{rfid,jdbcType=CHAR}
+    where storage_forklift_id = #{storageForkliftId,jdbcType=BIGINT}
+  </update>
+</mapper>

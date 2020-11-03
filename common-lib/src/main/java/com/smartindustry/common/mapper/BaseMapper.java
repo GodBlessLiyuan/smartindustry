@@ -36,4 +36,6 @@ public interface BaseMapper<Model, PK extends Serializable> {
      * @param pos
      */
     void batchInsert(List<Model> pos);
+
+    Model queryLastDay();
 }

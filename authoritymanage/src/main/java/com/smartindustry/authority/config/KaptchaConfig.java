@@ -40,7 +40,7 @@ public class KaptchaConfig {
         // session date，默认KAPTCHA_SESSION_DATE
 //        properties.setProperty("kaptcha.session.date", "KAPTCHA_SESSION_DATE");
         // 验证码长度，默认5
-        properties.setProperty("kaptcha.textproducer.char.length", "5");
+        properties.setProperty("kaptcha.textproducer.char.length", "4");
         // 文字间隔，默认2
 //        properties.setProperty("kaptcha.textproducer.char.space", "2");
         // 干扰 颜色，合法值： r,g,b 或者 white,black,blue.默认black

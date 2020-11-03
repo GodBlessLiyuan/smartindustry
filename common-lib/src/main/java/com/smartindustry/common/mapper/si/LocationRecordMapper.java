@@ -4,18 +4,9 @@ import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.si.LocationRecordPO;
 import org.apache.ibatis.annotations.Mapper;
 
-import java.util.List;
-
 /**
  * LocationRecordMapper继承基类
  */
 @Mapper
 public interface LocationRecordMapper extends BaseMapper<LocationRecordPO, Long> {
-    /**
-     * 根据库位ID查询
-     *
-     * @param lid
-     * @return
-     */
-    List<LocationRecordPO> queryByLid(Long lid);
 }

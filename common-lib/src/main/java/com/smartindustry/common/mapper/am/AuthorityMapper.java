@@ -40,12 +40,14 @@ public interface AuthorityMapper extends BaseMapper<AuthorityPO, Long> {
      */
     List<String> queryAllPerm();
 
+    List<Long> selectAllId();
+
     /**
      * 判断当前节点是否有父节点，没有那么其本身作为子节点
      * @param parentId
      * @return
      */
-    Integer judgeExist(@Param("parentId") Long parentId,@Param("type") Byte type);
+    Integer judgeExist(@Param("parentId") Long parentId);
 
     /**
      * 查看当前节点的子节点列表
@@ -59,8 +61,8 @@ public interface AuthorityMapper extends BaseMapper<AuthorityPO, Long> {
     /**
      * 查看当前节点的子节点列表,不限角色限制，全权限
      * @param parentId
-     * @param type
      * @return
      */
-    List<AuthorityBO> queryChild(@Param("parentId") Long parentId,@Param("type") Byte type);
+    List<AuthorityBO> queryChild(@Param("parentId") Long parentId);
+
 }
