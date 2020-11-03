@@ -57,4 +57,10 @@ public interface StorageHeadMapper extends BaseMapper<StorageHeadPO, Long> {
      * @return
      */
     StorageHeadPO queryByRfid(String rfid);
+    /**
+     * 通过入库单表头id 查询所有详细信息
+     * @param shid
+     * @return
+     */
+    StorageHeadBO queryPdaDetailByShid(Long shid);
 }
