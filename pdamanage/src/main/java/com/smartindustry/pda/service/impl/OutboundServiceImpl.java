@@ -319,7 +319,7 @@ public class OutboundServiceImpl implements IOutboundService {
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public ResultVO outbound(HttpSession session, OutboundDTO dto) {
+    public ResultVO rfid(HttpSession session, OutboundDTO dto) {
         if (null == dto.getMrfid() && null == dto.getLrfid()) {
             return new ResultVO(1001);
         }
