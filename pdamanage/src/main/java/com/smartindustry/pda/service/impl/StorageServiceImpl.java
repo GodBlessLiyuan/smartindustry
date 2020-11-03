@@ -74,7 +74,7 @@ public class StorageServiceImpl implements IStorageService {
         storageHeadPO.setSourceNo(produceOrderPO.getProduceNo());
         //来源类型：2.成品入库
         storageHeadPO.setSourceType((byte) 2);
-        storageHeadPO.setExpectNum(BigDecimal.valueOf(produceOrderPO.getProduceNum()));
+        storageHeadPO.setExpectNum(BigDecimal.valueOf(produceOrderPO.getProduceNum()*36));
         //入库状态：3.待入库
         storageHeadPO.setStatus(StorageConstant.STATUS_PRESTORED);
         storageHeadPO.setCreateTime(new Date());

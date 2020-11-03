@@ -253,7 +253,7 @@
         m.material_name, m.material_model
     </sql>
   <resultMap id="PdaResultMap" type="com.smartindustry.common.bo.sm.StorageHeadBO" extends="BaseResultMap">
-    <result column="storage_head_id" jdbcType="BIGINT" property="StorageHeadId"/>
+    <result column="storage_head_id" jdbcType="BIGINT" property="storageHeadId"/>
     <collection property="bos" ofType="com.smartindustry.common.bo.sm.StorageBodyBO">
       <id column="storage_body_id" jdbcType="BIGINT" property="StorageBodyId"/>
       <result column="material_id" jdbcType="BIGINT" property="materialId"/>
