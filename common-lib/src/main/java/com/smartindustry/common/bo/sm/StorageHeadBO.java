@@ -14,8 +14,6 @@ import java.util.List;
 @Data
 public class StorageHeadBO extends StorageHeadPO {
 
-    private Long StorageHeadId;
-
     private String warehouseName;
 
     List<StorageBodyBO> bos;
