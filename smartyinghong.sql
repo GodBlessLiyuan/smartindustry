@@ -43,658 +43,658 @@ DROP TABLE IF EXISTS si_forklift;
 
 /* Create Tables */
 
--- È¨ÏŞ±í
+-- æƒé™è¡¨
 CREATE TABLE am_authority
 (
-	authority_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'È¨ÏŞID',
-	authority_name char(255) NOT NULL COMMENT 'È¨ÏŞÃû³Æ',
-	authority_path char(255) NOT NULL COMMENT 'È¨ÏŞÂ·¾¶',
-	-- 1£º²Ëµ¥   2£º°´Å¥
-	type tinyint COMMENT 'ÀàĞÍ : 1£º²Ëµ¥   2£º°´Å¥',
-	parent_id bigint unsigned COMMENT 'ÉÏ¼¶È¨ÏŞID',
+	authority_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'æƒé™ID',
+	authority_name char(255) NOT NULL COMMENT 'æƒé™åç§°',
+	authority_path char(255) NOT NULL COMMENT 'æƒé™è·¯å¾„',
+	-- 1ï¼šèœå•   2ï¼šæŒ‰é’®
+	type tinyint COMMENT 'ç±»å‹ : 1ï¼šèœå•   2ï¼šæŒ‰é’®',
+	parent_id bigint unsigned COMMENT 'ä¸Šçº§æƒé™ID',
 	PRIMARY KEY (authority_id),
 	UNIQUE (authority_id),
 	UNIQUE (authority_path)
-) COMMENT = 'È¨ÏŞ±í';
+) COMMENT = 'æƒé™è¡¨';
 
 
--- ²¿ÃÅ±í
+-- éƒ¨é—¨è¡¨
 CREATE TABLE am_dept
 (
-	dept_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '²¿ÃÅid',
-	parent_id bigint unsigned COMMENT 'ÉÏ¼¶²¿ÃÅid',
-	dept_name char(32) NOT NULL COMMENT '²¿ÃÅÃû³Æ',
-	user_id bigint unsigned COMMENT '²¿ÃÅ¸ºÔğÈË',
-	dept_desc char(255) COMMENT '²¿ÃÅÃèÊö',
-	-- 1 Æô¶¯
-	-- 2 ½ûÓÃ
-	status tinyint COMMENT '×´Ì¬ : 1 Æô¶¯
-2 ½ûÓÃ',
-	create_time datetime COMMENT '´´½¨Ê±¼ä',
-	update_time datetime COMMENT '¸üĞÂÊ±¼ä',
-	-- 1£ºÎ´É¾³ı
-	-- 2£ºÒÑÉ¾³ı
-	dr tinyint COMMENT 'ÊÇ·ñÉ¾³ı : 1£ºÎ´É¾³ı
-2£ºÒÑÉ¾³ı',
+	dept_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'éƒ¨é—¨id',
+	parent_id bigint unsigned COMMENT 'ä¸Šçº§éƒ¨é—¨id',
+	dept_name char(32) NOT NULL COMMENT 'éƒ¨é—¨åç§°',
+	user_id bigint unsigned COMMENT 'éƒ¨é—¨è´Ÿè´£äºº',
+	dept_desc char(255) COMMENT 'éƒ¨é—¨æè¿°',
+	-- 1 å¯åŠ¨
+	-- 2 ç¦ç”¨
+	status tinyint COMMENT 'çŠ¶æ€ : 1 å¯åŠ¨
+2 ç¦ç”¨',
+	create_time datetime COMMENT 'åˆ›å»ºæ—¶é—´',
+	update_time datetime COMMENT 'æ›´æ–°æ—¶é—´',
+	-- 1ï¼šæœªåˆ é™¤
+	-- 2ï¼šå·²åˆ é™¤
+	dr tinyint COMMENT 'æ˜¯å¦åˆ é™¤ : 1ï¼šæœªåˆ é™¤
+2ï¼šå·²åˆ é™¤',
 	PRIMARY KEY (dept_id),
 	UNIQUE (dept_id)
-) COMMENT = '²¿ÃÅ±í';
+) COMMENT = 'éƒ¨é—¨è¡¨';
 
 
--- ²¿ÃÅ¼ÇÂ¼±í
+-- éƒ¨é—¨è®°å½•è¡¨
 CREATE TABLE am_dept_record
 (
-	dept_record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '²¿ÃÅ¼ÇÂ¼ID',
-	dept_id bigint unsigned NOT NULL COMMENT '²¿ÃÅid',
-	user_id bigint unsigned NOT NULL COMMENT 'ÓÃ»§ID',
-	create_time datetime COMMENT '²Ù×÷Ê±¼ä',
-	operation_name char(255) COMMENT '²Ù×÷Ãû³Æ',
+	dept_record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'éƒ¨é—¨è®°å½•ID',
+	dept_id bigint unsigned NOT NULL COMMENT 'éƒ¨é—¨id',
+	user_id bigint unsigned NOT NULL COMMENT 'ç”¨æˆ·ID',
+	create_time datetime COMMENT 'æ“ä½œæ—¶é—´',
+	operation_name char(255) COMMENT 'æ“ä½œåç§°',
 	PRIMARY KEY (dept_record_id),
 	UNIQUE (dept_record_id)
-) COMMENT = '²¿ÃÅ¼ÇÂ¼±í';
+) COMMENT = 'éƒ¨é—¨è®°å½•è¡¨';
 
 
--- ÓÃ»§È¨ÏŞÖĞ¼ä±í
+-- ç”¨æˆ·æƒé™ä¸­é—´è¡¨
 CREATE TABLE am_m_user_authority
 (
-	user_authority_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'ÓÃ»§È¨ÏŞID',
-	user_id bigint unsigned NOT NULL COMMENT 'ÓÃ»§ID',
-	authority_id bigint unsigned NOT NULL COMMENT 'È¨ÏŞID',
+	user_authority_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'ç”¨æˆ·æƒé™ID',
+	user_id bigint unsigned NOT NULL COMMENT 'ç”¨æˆ·ID',
+	authority_id bigint unsigned NOT NULL COMMENT 'æƒé™ID',
 	PRIMARY KEY (user_authority_id),
 	UNIQUE (user_authority_id)
-) COMMENT = 'ÓÃ»§È¨ÏŞÖĞ¼ä±í';
+) COMMENT = 'ç”¨æˆ·æƒé™ä¸­é—´è¡¨';
 
 
--- ½ÇÉ«±í
+-- è§’è‰²è¡¨
 CREATE TABLE am_role
 (
-	role_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '½ÇÉ«ID',
-	role_name char(32) NOT NULL COMMENT '½ÇÉ«Ãû³Æ',
-	role_desc char(255) COMMENT '½ÇÉ«ÃèÊö',
-	-- 1£ºÆôÓÃ
-	-- 2£º½ûÓÃ
-	status tinyint COMMENT '×´Ì¬ : 1£ºÆôÓÃ
-2£º½ûÓÃ',
-	create_time datetime COMMENT '´´½¨Ê±¼ä',
-	update_time datetime COMMENT '¸üĞÂÊ±¼ä',
-	-- 1£ºÎ´É¾³ı
-	-- 2£ºÒÑÉ¾³ı
-	dr tinyint COMMENT 'ÊÇ·ñÉ¾³ı : 1£ºÎ´É¾³ı
-2£ºÒÑÉ¾³ı',
+	role_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'è§’è‰²ID',
+	role_name char(32) NOT NULL COMMENT 'è§’è‰²åç§°',
+	role_desc char(255) COMMENT 'è§’è‰²æè¿°',
+	-- 1ï¼šå¯ç”¨
+	-- 2ï¼šç¦ç”¨
+	status tinyint COMMENT 'çŠ¶æ€ : 1ï¼šå¯ç”¨
+2ï¼šç¦ç”¨',
+	create_time datetime COMMENT 'åˆ›å»ºæ—¶é—´',
+	update_time datetime COMMENT 'æ›´æ–°æ—¶é—´',
+	-- 1ï¼šæœªåˆ é™¤
+	-- 2ï¼šå·²åˆ é™¤
+	dr tinyint COMMENT 'æ˜¯å¦åˆ é™¤ : 1ï¼šæœªåˆ é™¤
+2ï¼šå·²åˆ é™¤',
 	PRIMARY KEY (role_id),
 	UNIQUE (role_id)
-) COMMENT = '½ÇÉ«±í';
+) COMMENT = 'è§’è‰²è¡¨';
 
 
--- ½ÇÉ«È¨ÏŞ±í
+-- è§’è‰²æƒé™è¡¨
 CREATE TABLE am_role_authority
 (
-	role_authority_id bigint NOT NULL AUTO_INCREMENT COMMENT '½ÇÉ«²Ëµ¥id',
-	role_id bigint unsigned NOT NULL COMMENT '½ÇÉ«ID',
-	authority_id bigint unsigned NOT NULL COMMENT 'È¨ÏŞID',
+	role_authority_id bigint NOT NULL AUTO_INCREMENT COMMENT 'è§’è‰²èœå•id',
+	role_id bigint unsigned NOT NULL COMMENT 'è§’è‰²ID',
+	authority_id bigint unsigned NOT NULL COMMENT 'æƒé™ID',
 	PRIMARY KEY (role_authority_id),
 	UNIQUE (role_authority_id)
-) COMMENT = '½ÇÉ«È¨ÏŞ±í';
+) COMMENT = 'è§’è‰²æƒé™è¡¨';
 
 
--- ½ÇÉ«¼ÇÂ¼±í
+-- è§’è‰²è®°å½•è¡¨
 CREATE TABLE am_role_record
 (
-	role_record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '½ÇÉ«¼ÇÂ¼ID',
-	role_id bigint unsigned NOT NULL COMMENT '½ÇÉ«ID',
-	user_id bigint unsigned NOT NULL COMMENT 'ÓÃ»§ID',
-	create_time datetime COMMENT '²Ù×÷Ê±¼ä',
-	operation_name char(255) COMMENT '²Ù×÷Ãû³Æ',
+	role_record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'è§’è‰²è®°å½•ID',
+	role_id bigint unsigned NOT NULL COMMENT 'è§’è‰²ID',
+	user_id bigint unsigned NOT NULL COMMENT 'ç”¨æˆ·ID',
+	create_time datetime COMMENT 'æ“ä½œæ—¶é—´',
+	operation_name char(255) COMMENT 'æ“ä½œåç§°',
 	PRIMARY KEY (role_record_id)
-) COMMENT = '½ÇÉ«¼ÇÂ¼±í';
+) COMMENT = 'è§’è‰²è®°å½•è¡¨';
 
 
--- ÓÃ»§±í
+-- ç”¨æˆ·è¡¨
 CREATE TABLE am_user
 (
-	user_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'ÓÃ»§ID',
-	name char(32) NOT NULL COMMENT 'ÓÃ»§ĞÕÃû',
-	-- 1 ÄĞ
-	-- 2 Å®
-	sex tinyint COMMENT 'ĞÔ±ğ : 1 ÄĞ
-2 Å®',
-	dept_id bigint unsigned NOT NULL COMMENT '²¿ÃÅid',
-	username char(32) NOT NULL COMMENT 'µÇÂ¼Ãû',
-	password char(128) NOT NULL COMMENT 'ÃÜÂë',
-	role_id bigint unsigned NOT NULL COMMENT '½ÇÉ«ID',
-	job char(16) COMMENT 'ËùÊô¸ÚÎ»',
-	phone char(16) COMMENT 'µç»°ºÅÂë',
-	email char(255) COMMENT 'ÓÃ»§ÓÊÏä',
-	-- 1 ÆôÓÃ
-	-- 2 ½ûÓÃ
-	status tinyint COMMENT '×´Ì¬ : 1 ÆôÓÃ
-2 ½ûÓÃ',
-	remark char(255) COMMENT '±¸×¢',
-	create_time datetime COMMENT '´´½¨Ê±¼ä',
-	update_time datetime COMMENT '¸üĞÂÊ±¼ä',
-	-- 1£ºÎ´É¾³ı
-	-- 2£ºÒÑÉ¾³ı
-	dr tinyint COMMENT 'ÊÇ·ñÉ¾³ı : 1£ºÎ´É¾³ı
-2£ºÒÑÉ¾³ı',
+	user_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'ç”¨æˆ·ID',
+	name char(32) NOT NULL COMMENT 'ç”¨æˆ·å§“å',
+	-- 1 ç”·
+	-- 2 å¥³
+	sex tinyint COMMENT 'æ€§åˆ« : 1 ç”·
+2 å¥³',
+	dept_id bigint unsigned NOT NULL COMMENT 'éƒ¨é—¨id',
+	username char(32) NOT NULL COMMENT 'ç™»å½•å',
+	password char(128) NOT NULL COMMENT 'å¯†ç ',
+	role_id bigint unsigned NOT NULL COMMENT 'è§’è‰²ID',
+	job char(16) COMMENT 'æ‰€å±å²—ä½',
+	phone char(16) COMMENT 'ç”µè¯å·ç ',
+	email char(255) COMMENT 'ç”¨æˆ·é‚®ç®±',
+	-- 1 å¯ç”¨
+	-- 2 ç¦ç”¨
+	status tinyint COMMENT 'çŠ¶æ€ : 1 å¯ç”¨
+2 ç¦ç”¨',
+	remark char(255) COMMENT 'å¤‡æ³¨',
+	create_time datetime COMMENT 'åˆ›å»ºæ—¶é—´',
+	update_time datetime COMMENT 'æ›´æ–°æ—¶é—´',
+	-- 1ï¼šæœªåˆ é™¤
+	-- 2ï¼šå·²åˆ é™¤
+	dr tinyint COMMENT 'æ˜¯å¦åˆ é™¤ : 1ï¼šæœªåˆ é™¤
+2ï¼šå·²åˆ é™¤',
 	PRIMARY KEY (user_id),
 	UNIQUE (user_id)
-) COMMENT = 'ÓÃ»§±í';
+) COMMENT = 'ç”¨æˆ·è¡¨';
 
 
--- ÓÃ»§²Ù×÷¼ÇÂ¼±í
+-- ç”¨æˆ·æ“ä½œè®°å½•è¡¨
 CREATE TABLE am_user_record
 (
-	user_record_id bigint NOT NULL AUTO_INCREMENT COMMENT 'ÓÃ»§¼ÇÂ¼ID',
-	user_id bigint unsigned NOT NULL COMMENT 'ÓÃ»§ID',
-	operate_id bigint unsigned NOT NULL COMMENT '²Ù×÷ÈËID',
-	create_time datetime COMMENT '²Ù×÷Ê±¼ä',
-	operation_name char(255) COMMENT '²Ù×÷Ãû³Æ',
+	user_record_id bigint NOT NULL AUTO_INCREMENT COMMENT 'ç”¨æˆ·è®°å½•ID',
+	user_id bigint unsigned NOT NULL COMMENT 'ç”¨æˆ·ID',
+	operate_id bigint unsigned NOT NULL COMMENT 'æ“ä½œäººID',
+	create_time datetime COMMENT 'æ“ä½œæ—¶é—´',
+	operation_name char(255) COMMENT 'æ“ä½œåç§°',
 	PRIMARY KEY (user_record_id),
 	UNIQUE (user_record_id),
 	UNIQUE (operate_id)
-) COMMENT = 'ÓÃ»§²Ù×÷¼ÇÂ¼±í';
+) COMMENT = 'ç”¨æˆ·æ“ä½œè®°å½•è¡¨';
 
 
--- »õÎ»ÀàĞÍ
+-- è´§ä½ç±»å‹
 CREATE TABLE dd_location_type
 (
-	location_type_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '»õÎ»ÀàĞÍID',
-	location_type_name char(255) NOT NULL COMMENT '»õÎ»ÀàĞÍÃû³Æ',
-	user_id bigint unsigned COMMENT '´´½¨ÈË',
-	create_time datetime COMMENT '´´½¨Ê±¼ä',
+	location_type_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'è´§ä½ç±»å‹ID',
+	location_type_name char(255) NOT NULL COMMENT 'è´§ä½ç±»å‹åç§°',
+	user_id bigint unsigned COMMENT 'åˆ›å»ºäºº',
+	create_time datetime COMMENT 'åˆ›å»ºæ—¶é—´',
 	PRIMARY KEY (location_type_id),
 	UNIQUE (location_type_id)
-) COMMENT = '»õÎ»ÀàĞÍ';
+) COMMENT = 'è´§ä½ç±»å‹';
 
 
--- ¼ÆÁ¿µ¥Î»
+-- è®¡é‡å•ä½
 CREATE TABLE dd_measure_unit
 (
-	measure_unit_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '¼ÆÁ¿µ¥Î»ID',
-	measure_unit_name char(255) NOT NULL COMMENT '¼ÆÁ¿µ¥Î»Ãû³Æ',
-	user_id bigint unsigned COMMENT '´´½¨ÈË',
-	create_time datetime COMMENT '´´½¨Ê±¼ä',
+	measure_unit_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'è®¡é‡å•ä½ID',
+	measure_unit_name char(255) NOT NULL COMMENT 'è®¡é‡å•ä½åç§°',
+	user_id bigint unsigned COMMENT 'åˆ›å»ºäºº',
+	create_time datetime COMMENT 'åˆ›å»ºæ—¶é—´',
 	PRIMARY KEY (measure_unit_id),
 	UNIQUE (measure_unit_id)
-) COMMENT = '¼ÆÁ¿µ¥Î»';
+) COMMENT = 'è®¡é‡å•ä½';
 
 
--- ²Ö¿âÀàĞÍ±í
+-- ä»“åº“ç±»å‹è¡¨
 CREATE TABLE dd_warehouse_type
 (
-	warehouse_type_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '²Ö¿âÀàĞÍID',
-	warehouse_type_name char(64) NOT NULL COMMENT '²Ö¿âÀàĞÍÃû³Æ',
-	user_id bigint unsigned COMMENT '´´½¨ÈË',
-	create_time datetime COMMENT '´´½¨Ê±¼ä',
+	warehouse_type_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'ä»“åº“ç±»å‹ID',
+	warehouse_type_name char(64) NOT NULL COMMENT 'ä»“åº“ç±»å‹åç§°',
+	user_id bigint unsigned COMMENT 'åˆ›å»ºäºº',
+	create_time datetime COMMENT 'åˆ›å»ºæ—¶é—´',
 	PRIMARY KEY (warehouse_type_id),
 	UNIQUE (warehouse_type_id)
-) COMMENT = '²Ö¿âÀàĞÍ±í';
+) COMMENT = 'ä»“åº“ç±»å‹è¡¨';
 
 
--- »ìÁÏµ¥±íÌå
+-- æ··æ–™å•è¡¨ä½“
 CREATE TABLE om_mix_body
 (
-	mix_body_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '»ìÁÏµ¥±íÌåid',
-	mix_head_id bigint unsigned NOT NULL COMMENT '»ìÁÏµ¥±íÍ·id',
-	material_id bigint unsigned COMMENT 'ÎïÁÏID',
-	plan_num decimal(10,2) COMMENT '¼Æ»®³ö¿âÊıÁ¿',
-	create_time datetime COMMENT '´´½¨Ê±¼ä',
-	-- 1 Î´É¾³ı
-	-- 2 ÒÑÉ¾³ı
-	dr tinyint COMMENT 'ÊÇ·ñÉ¾³ı : 1 Î´É¾³ı
-2 ÒÑÉ¾³ı',
+	mix_body_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'æ··æ–™å•è¡¨ä½“id',
+	mix_head_id bigint unsigned NOT NULL COMMENT 'æ··æ–™å•è¡¨å¤´id',
+	material_id bigint unsigned COMMENT 'ç‰©æ–™ID',
+	plan_num decimal(10,2) COMMENT 'è®¡åˆ’å‡ºåº“æ•°é‡',
+	create_time datetime COMMENT 'åˆ›å»ºæ—¶é—´',
+	-- 1 æœªåˆ é™¤
+	-- 2 å·²åˆ é™¤
+	dr tinyint COMMENT 'æ˜¯å¦åˆ é™¤ : 1 æœªåˆ é™¤
+2 å·²åˆ é™¤',
 	PRIMARY KEY (mix_body_id),
 	UNIQUE (mix_body_id),
 	UNIQUE (mix_head_id)
-) COMMENT = '»ìÁÏµ¥±íÌå';
+) COMMENT = 'æ··æ–™å•è¡¨ä½“';
 
 
--- »ìÁÏµ¥±íÍ·
+-- æ··æ–™å•è¡¨å¤´
 CREATE TABLE om_mix_head
 (
-	mix_head_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '»ìÁÏµ¥±íÍ·id',
-	mix_no char(128) NOT NULL COMMENT '»ìÁÏµ¥±àÂë',
-	plan_time date COMMENT '¼Æ»®³ö¿âÊ±¼ä',
-	create_time datetime COMMENT '´´½¨Ê±¼ä',
-	-- 1 Î´É¾³ı
-	-- 2 ÒÑÉ¾³ı
-	dr tinyint COMMENT 'ÊÇ·ñÉ¾³ı : 1 Î´É¾³ı
-2 ÒÑÉ¾³ı',
+	mix_head_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'æ··æ–™å•è¡¨å¤´id',
+	mix_no char(128) NOT NULL COMMENT 'æ··æ–™å•ç¼–ç ',
+	plan_time date COMMENT 'è®¡åˆ’å‡ºåº“æ—¶é—´',
+	create_time datetime COMMENT 'åˆ›å»ºæ—¶é—´',
+	-- 1 æœªåˆ é™¤
+	-- 2 å·²åˆ é™¤
+	dr tinyint COMMENT 'æ˜¯å¦åˆ é™¤ : 1 æœªåˆ é™¤
+2 å·²åˆ é™¤',
 	PRIMARY KEY (mix_head_id),
 	UNIQUE (mix_head_id)
-) COMMENT = '»ìÁÏµ¥±íÍ·';
+) COMMENT = 'æ··æ–™å•è¡¨å¤´';
 
 
--- ³ö¿âµ¥±íÌå
+-- å‡ºåº“å•è¡¨ä½“
 CREATE TABLE om_outbound_body
 (
-	outbound_body_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '³ö¿âµ¥±íÌåid',
-	outbound_head_id bigint unsigned NOT NULL COMMENT '³ö¿âµ¥±íÍ·ID',
-	material_id bigint unsigned NOT NULL COMMENT 'ÎïÁÏID',
-	expect_num decimal(10,2) COMMENT 'ÆÚÍû³ö¿âÊıÁ¿',
-	outbound_num decimal(10,2) COMMENT 'ÒÑ³ö¿âÊıÁ¿',
-	create_time datetime COMMENT '´´½¨Ê±¼ä',
-	outbound_time datetime COMMENT '³ö¿âÊ±¼ä',
-	-- 1 Î´É¾³ı
-	-- 2 ÒÑÉ¾³ı
-	dr tinyint COMMENT 'ÊÇ·ñÉ¾³ı : 1 Î´É¾³ı
-2 ÒÑÉ¾³ı',
+	outbound_body_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'å‡ºåº“å•è¡¨ä½“id',
+	outbound_head_id bigint unsigned NOT NULL COMMENT 'å‡ºåº“å•è¡¨å¤´ID',
+	material_id bigint unsigned NOT NULL COMMENT 'ç‰©æ–™ID',
+	expect_num decimal(10,2) COMMENT 'æœŸæœ›å‡ºåº“æ•°é‡',
+	outbound_num decimal(10,2) COMMENT 'å·²å‡ºåº“æ•°é‡',
+	create_time datetime COMMENT 'åˆ›å»ºæ—¶é—´',
+	outbound_time datetime COMMENT 'å‡ºåº“æ—¶é—´',
+	-- 1 æœªåˆ é™¤
+	-- 2 å·²åˆ é™¤
+	dr tinyint COMMENT 'æ˜¯å¦åˆ é™¤ : 1 æœªåˆ é™¤
+2 å·²åˆ é™¤',
 	PRIMARY KEY (outbound_body_id),
 	UNIQUE (outbound_body_id)
-) COMMENT = '³ö¿âµ¥±íÌå';
+) COMMENT = 'å‡ºåº“å•è¡¨ä½“';
 
 
--- ³ö¿â²æ³µ±í
+-- å‡ºåº“å‰è½¦è¡¨
 CREATE TABLE om_outbound_forklift
 (
-	outbound_forklift_id bigint NOT NULL COMMENT '³ö¿â²æ³µid',
-	outbound_head_id bigint unsigned NOT NULL COMMENT '³ö¿âµ¥±íÍ·ID',
-	forklift_id bigint unsigned NOT NULL COMMENT '²æ³µid',
+	outbound_forklift_id bigint NOT NULL COMMENT 'å‡ºåº“å‰è½¦id',
+	outbound_head_id bigint unsigned NOT NULL COMMENT 'å‡ºåº“å•è¡¨å¤´ID',
+	forklift_id bigint unsigned NOT NULL COMMENT 'å‰è½¦id',
 	rfid char(128) COMMENT 'RFID',
 	PRIMARY KEY (outbound_forklift_id),
 	UNIQUE (outbound_forklift_id)
-) COMMENT = '³ö¿â²æ³µ±í';
+) COMMENT = 'å‡ºåº“å‰è½¦è¡¨';
 
 
--- ³ö¿âµ¥±íÍ·
+-- å‡ºåº“å•è¡¨å¤´
 CREATE TABLE om_outbound_head
 (
-	outbound_head_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '³ö¿âµ¥±íÍ·ID',
-	outbound_no char(128) NOT NULL COMMENT '³ö¿âµ¥±àÂë',
-	source_no char(128) COMMENT 'À´Ô´µ¥ºÅ',
-	-- 1 Ô­²ÄÁÏ³ö¿â
-	-- 2 ÏúÊÛ³ö¿â
-	-- 3 ±¸ÁÏÇø³ö¿â
-	source_type tinyint COMMENT 'À´Ô´ÀàĞÍ : 1 Ô­²ÄÁÏ³ö¿â
-2 ÏúÊÛ³ö¿â
-3 ±¸ÁÏÇø³ö¿â',
-	plan_time date COMMENT '¼Æ»®³ö¿âÊ±¼ä',
-	outbound_time datetime COMMENT 'Íê³É³ö¿âÊ±¼ä',
-	expect_num decimal(10,2) COMMENT 'ÆÚÍû³ö¿âÊı',
-	outbound_num decimal(10,2) COMMENT 'ÒÑ¾­³ö¿âÊıÁ¿',
-	extra char(255) COMMENT '±¸×¢',
-	-- 1£ºÒÑ³ö¿â
-	-- 2£º³ö¿âÖĞ
-	-- 3£º´ı³ö¿â
-	status tinyint COMMENT '×´Ì¬ : 1£ºÒÑ³ö¿â
-2£º³ö¿âÖĞ
-3£º´ı³ö¿â',
-	create_time datetime COMMENT '´´½¨Ê±¼ä',
-	-- 1£ºÎ´É¾³ı
-	-- 2£ºÒÑÉ¾³ı
-	dr tinyint COMMENT 'ÊÇ·ñÉ¾³ı : 1£ºÎ´É¾³ı
-2£ºÒÑÉ¾³ı',
+	outbound_head_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'å‡ºåº“å•è¡¨å¤´ID',
+	outbound_no char(128) NOT NULL COMMENT 'å‡ºåº“å•ç¼–ç ',
+	source_no char(128) COMMENT 'æ¥æºå•å·',
+	-- 1 åŸææ–™å‡ºåº“
+	-- 2 é”€å”®å‡ºåº“
+	-- 3 å¤‡æ–™åŒºå‡ºåº“
+	source_type tinyint COMMENT 'æ¥æºç±»å‹ : 1 åŸææ–™å‡ºåº“
+2 é”€å”®å‡ºåº“
+3 å¤‡æ–™åŒºå‡ºåº“',
+	plan_time date COMMENT 'è®¡åˆ’å‡ºåº“æ—¶é—´',
+	outbound_time datetime COMMENT 'å®Œæˆå‡ºåº“æ—¶é—´',
+	expect_num decimal(10,2) COMMENT 'æœŸæœ›å‡ºåº“æ•°',
+	outbound_num decimal(10,2) COMMENT 'å·²ç»å‡ºåº“æ•°é‡',
+	extra char(255) COMMENT 'å¤‡æ³¨',
+	-- 1ï¼šå·²å‡ºåº“
+	-- 2ï¼šå‡ºåº“ä¸­
+	-- 3ï¼šå¾…å‡ºåº“
+	status tinyint COMMENT 'çŠ¶æ€ : 1ï¼šå·²å‡ºåº“
+2ï¼šå‡ºåº“ä¸­
+3ï¼šå¾…å‡ºåº“',
+	create_time datetime COMMENT 'åˆ›å»ºæ—¶é—´',
+	-- 1ï¼šæœªåˆ é™¤
+	-- 2ï¼šå·²åˆ é™¤
+	dr tinyint COMMENT 'æ˜¯å¦åˆ é™¤ : 1ï¼šæœªåˆ é™¤
+2ï¼šå·²åˆ é™¤',
 	PRIMARY KEY (outbound_head_id),
 	UNIQUE (outbound_head_id)
-) COMMENT = '³ö¿âµ¥±íÍ·';
+) COMMENT = 'å‡ºåº“å•è¡¨å¤´';
 
 
--- ³ö¿â²Ù×÷¼ÇÂ¼
+-- å‡ºåº“æ“ä½œè®°å½•
 CREATE TABLE om_outbound_record
 (
-	record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '²Ù×÷¼ÇÂ¼',
-	outbound_head_id bigint unsigned COMMENT '³ö¿âµ¥±íÍ·ID',
-	user_id bigint unsigned COMMENT '²Ù×÷ÈËID',
-	operation_name char(255) COMMENT '²Ù×÷Ãû³Æ',
-	create_time datetime COMMENT '²Ù×÷Ê±¼ä',
+	record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'æ“ä½œè®°å½•',
+	outbound_head_id bigint unsigned COMMENT 'å‡ºåº“å•è¡¨å¤´ID',
+	user_id bigint unsigned COMMENT 'æ“ä½œäººID',
+	operation_name char(255) COMMENT 'æ“ä½œåç§°',
+	create_time datetime COMMENT 'æ“ä½œæ—¶é—´',
 	PRIMARY KEY (record_id),
 	UNIQUE (record_id)
-) COMMENT = '³ö¿â²Ù×÷¼ÇÂ¼';
+) COMMENT = 'å‡ºåº“æ“ä½œè®°å½•';
 
 
--- ¿Í»§
+-- å®¢æˆ·
 CREATE TABLE si_client
 (
-	client_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '¿Í»§id',
-	client_no char(128) NOT NULL COMMENT '¿Í»§´úÂë',
-	client_type_id bigint unsigned NOT NULL COMMENT '¿Í»§ÀàĞÍID',
-	client_name char(64) NOT NULL COMMENT '¿Í»§Ãû³Æ',
-	contact char(64) NOT NULL COMMENT 'ÁªÏµÈË',
-	-- 1£ºÄĞ
-	-- 2£ºÅ®
-	sex tinyint COMMENT 'ÁªÏµÈËĞÔ±ğ : 1£ºÄĞ
-2£ºÅ®',
-	phone char(16) NOT NULL COMMENT 'ÁªÏµµç»°',
-	email char(255) COMMENT '¿Í»§ÓÊÏä',
-	fax char(16) COMMENT '´«Õæ',
-	url char(64) COMMENT 'ÍøÖ·',
-	credit_level_id bigint unsigned COMMENT 'ĞÅÓÃµÈ¼¶id',
-	area char(255) COMMENT 'µØÇø',
-	address char(128) COMMENT 'ÏêÏ¸µØÖ·',
-	remark char(255) COMMENT '±¸×¢',
-	create_time datetime COMMENT '´´½¨Ê±¼ä',
-	update_time datetime COMMENT '¸üĞÂÊ±¼ä',
-	-- 1 Î´É¾³ı
-	-- 2 ÒÑÉ¾³ı
-	dr tinyint COMMENT 'ÊÇ·ñÉ¾³ı : 1 Î´É¾³ı
-2 ÒÑÉ¾³ı',
+	client_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'å®¢æˆ·id',
+	client_no char(128) NOT NULL COMMENT 'å®¢æˆ·ä»£ç ',
+	client_type_id bigint unsigned NOT NULL COMMENT 'å®¢æˆ·ç±»å‹ID',
+	client_name char(64) NOT NULL COMMENT 'å®¢æˆ·åç§°',
+	contact char(64) NOT NULL COMMENT 'è”ç³»äºº',
+	-- 1ï¼šç”·
+	-- 2ï¼šå¥³
+	sex tinyint COMMENT 'è”ç³»äººæ€§åˆ« : 1ï¼šç”·
+2ï¼šå¥³',
+	phone char(16) NOT NULL COMMENT 'è”ç³»ç”µè¯',
+	email char(255) COMMENT 'å®¢æˆ·é‚®ç®±',
+	fax char(16) COMMENT 'ä¼ çœŸ',
+	url char(64) COMMENT 'ç½‘å€',
+	credit_level_id bigint unsigned COMMENT 'ä¿¡ç”¨ç­‰çº§id',
+	area char(255) COMMENT 'åœ°åŒº',
+	address char(128) COMMENT 'è¯¦ç»†åœ°å€',
+	remark char(255) COMMENT 'å¤‡æ³¨',
+	create_time datetime COMMENT 'åˆ›å»ºæ—¶é—´',
+	update_time datetime COMMENT 'æ›´æ–°æ—¶é—´',
+	-- 1 æœªåˆ é™¤
+	-- 2 å·²åˆ é™¤
+	dr tinyint COMMENT 'æ˜¯å¦åˆ é™¤ : 1 æœªåˆ é™¤
+2 å·²åˆ é™¤',
 	PRIMARY KEY (client_id),
 	UNIQUE (client_id)
-) COMMENT = '¿Í»§';
+) COMMENT = 'å®¢æˆ·';
 
 
--- ¿Í»§²Ù×÷¼ÇÂ¼±í
+-- å®¢æˆ·æ“ä½œè®°å½•è¡¨
 CREATE TABLE si_client_record
 (
-	client_record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '²Ù×÷¼ÇÂ¼ID',
-	client_id bigint unsigned NOT NULL COMMENT '¿Í»§id',
-	user_id bigint unsigned NOT NULL COMMENT 'ÓÃ»§ID',
-	create_time datetime COMMENT '²Ù×÷Ê±¼ä',
-	type char(255) COMMENT '²Ù×÷ÀàĞÍ',
+	client_record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'æ“ä½œè®°å½•ID',
+	client_id bigint unsigned NOT NULL COMMENT 'å®¢æˆ·id',
+	user_id bigint unsigned NOT NULL COMMENT 'ç”¨æˆ·ID',
+	create_time datetime COMMENT 'æ“ä½œæ—¶é—´',
+	type char(255) COMMENT 'æ“ä½œç±»å‹',
 	PRIMARY KEY (client_record_id),
 	UNIQUE (client_record_id),
 	UNIQUE (user_id)
-) COMMENT = '¿Í»§²Ù×÷¼ÇÂ¼±í';
+) COMMENT = 'å®¢æˆ·æ“ä½œè®°å½•è¡¨';
 
 
--- ²æ³µĞÅÏ¢
+-- å‰è½¦ä¿¡æ¯
 CREATE TABLE si_forklift
 (
-	forklift_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '²æ³µid',
-	forklift_no char(128) COMMENT '²æ³µ±àºÅ',
-	forklift_name char(64) COMMENT '²æ³µÃû³Æ',
-	forklift_model char(255) COMMENT '²æ³µĞÍºÅ',
-	forklift_brand char(255) COMMENT 'Æ·ÅÆ',
-	contact char(64) COMMENT 'ÁªÏµÈË',
-	contact_phone char(16) COMMENT 'ÁªÏµµç»°',
-	imei_no char(255) COMMENT '¹¤ÒµÒ»Ìå»úºÅ',
-	-- 1 Ô­²ÄÁÏÇø
-	-- 2 ³ÉÆ·Èë¿âÇø
-	-- 3 ³ÉÆ·³ö¿âÇø
-	work_area tinyint COMMENT '×÷ÒµÇøÓò : 1 Ô­²ÄÁÏÇø
-2 ³ÉÆ·Èë¿âÇø
-3 ³ÉÆ·³ö¿âÇø',
-	supplier_name char(64) COMMENT '¹©Ó¦ÉÌÃû³Æ',
-	-- 1 Ã¦ÂµÖĞ
-	-- 2 ¿ÕÏĞÖĞ
+	forklift_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'å‰è½¦id',
+	forklift_no char(128) COMMENT 'å‰è½¦ç¼–å·',
+	forklift_name char(64) COMMENT 'å‰è½¦åç§°',
+	forklift_model char(255) COMMENT 'å‰è½¦å‹å·',
+	forklift_brand char(255) COMMENT 'å“ç‰Œ',
+	contact char(64) COMMENT 'è”ç³»äºº',
+	contact_phone char(16) COMMENT 'è”ç³»ç”µè¯',
+	imei_no char(255) COMMENT 'å·¥ä¸šä¸€ä½“æœºå·',
+	-- 1 åŸææ–™åŒº
+	-- 2 æˆå“å…¥åº“åŒº
+	-- 3 æˆå“å‡ºåº“åŒº
+	work_area tinyint COMMENT 'ä½œä¸šåŒºåŸŸ : 1 åŸææ–™åŒº
+2 æˆå“å…¥åº“åŒº
+3 æˆå“å‡ºåº“åŒº',
+	supplier_name char(64) COMMENT 'ä¾›åº”å•†åç§°',
+	-- 1 å¿™ç¢Œä¸­
+	-- 2 ç©ºé—²ä¸­
 	--  
-	status tinyint COMMENT 'µ±Ç°×´Ì¬ : 1 Ã¦ÂµÖĞ
-2 ¿ÕÏĞÖĞ
+	status tinyint COMMENT 'å½“å‰çŠ¶æ€ : 1 å¿™ç¢Œä¸­
+2 ç©ºé—²ä¸­
  ',
-	extra char(255) COMMENT '±¸×¢',
-	create_time datetime COMMENT '´´½¨Ê±¼ä',
-	-- 1 Î´É¾³ı
-	-- 2 ÒÑÉ¾³ı
-	dr tinyint COMMENT 'ÊÇ·ñÉ¾³ı : 1 Î´É¾³ı
-2 ÒÑÉ¾³ı',
+	extra char(255) COMMENT 'å¤‡æ³¨',
+	create_time datetime COMMENT 'åˆ›å»ºæ—¶é—´',
+	-- 1 æœªåˆ é™¤
+	-- 2 å·²åˆ é™¤
+	dr tinyint COMMENT 'æ˜¯å¦åˆ é™¤ : 1 æœªåˆ é™¤
+2 å·²åˆ é™¤',
 	PRIMARY KEY (forklift_id),
 	UNIQUE (forklift_id)
-) COMMENT = '²æ³µĞÅÏ¢';
+) COMMENT = 'å‰è½¦ä¿¡æ¯';
 
 
--- ²æ³µ²Ù×÷¼ÇÂ¼±í
+-- å‰è½¦æ“ä½œè®°å½•è¡¨
 CREATE TABLE si_forklift_record
 (
-	record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '²Ù×÷¼ÇÂ¼id',
-	forklift_id bigint unsigned NOT NULL COMMENT '²æ³µid',
-	user_id bigint unsigned NOT NULL COMMENT '²Ù×÷ÈËID',
-	operation_name char(255) COMMENT '²Ù×÷Ãû³Æ',
-	create_time datetime COMMENT '²Ù×÷Ê±¼ä',
+	record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'æ“ä½œè®°å½•id',
+	forklift_id bigint unsigned NOT NULL COMMENT 'å‰è½¦id',
+	user_id bigint unsigned NOT NULL COMMENT 'æ“ä½œäººID',
+	operation_name char(255) COMMENT 'æ“ä½œåç§°',
+	create_time datetime COMMENT 'æ“ä½œæ—¶é—´',
 	PRIMARY KEY (record_id),
 	UNIQUE (record_id),
 	UNIQUE (forklift_id),
 	UNIQUE (user_id)
-) COMMENT = '²æ³µ²Ù×÷¼ÇÂ¼±í';
+) COMMENT = 'å‰è½¦æ“ä½œè®°å½•è¡¨';
 
 
--- ¿âÎ»±í
+-- åº“ä½è¡¨
 CREATE TABLE si_location
 (
-	location_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '¿âÎ»ID',
-	warehouse_id bigint unsigned NOT NULL COMMENT '²Ö¿âID',
-	material_id bigint unsigned COMMENT 'ÎïÁÏID',
-	location_type_id bigint unsigned NOT NULL COMMENT '»õÎ»ÀàĞÍID',
-	user_id bigint unsigned COMMENT '´´½¨ÈË',
-	location_no char(128) NOT NULL COMMENT '¿âÎ»±àºÅ',
-	location_name char(255) NOT NULL COMMENT '¿âÎ»Ãû³Æ',
-	hold_tray_num int COMMENT '¿ÉÈİÄÉÍĞÅÌÊı',
-	-- ÏÖ´æÊıÁ¿
-	exist_num int COMMENT 'ÏÖ´æÊıÁ¿ : ÏÖ´æÊıÁ¿',
-	remark char(255) COMMENT '±¸×¢',
-	create_time datetime COMMENT '´´½¨Ê±¼ä',
-	update_time datetime COMMENT '¸üĞÂÊ±¼ä',
-	-- 1£ºÎ´É¾³ı
-	-- 2£ºÒÑÉ¾³ı
-	dr tinyint COMMENT 'ÊÇ·ñÉ¾³ı : 1£ºÎ´É¾³ı
-2£ºÒÑÉ¾³ı',
+	location_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'åº“ä½ID',
+	warehouse_id bigint unsigned NOT NULL COMMENT 'ä»“åº“ID',
+	material_id bigint unsigned COMMENT 'ç‰©æ–™ID',
+	location_type_id bigint unsigned NOT NULL COMMENT 'è´§ä½ç±»å‹ID',
+	user_id bigint unsigned COMMENT 'åˆ›å»ºäºº',
+	location_no char(128) NOT NULL COMMENT 'åº“ä½ç¼–å·',
+	location_name char(255) NOT NULL COMMENT 'åº“ä½åç§°',
+	hold_tray_num decimal(10,2) COMMENT 'å¯å®¹çº³æ‰˜ç›˜æ•°',
+	-- ç°å­˜æ•°é‡
+	exist_num decimal(10,2) COMMENT 'ç°å­˜æ•°é‡ : ç°å­˜æ•°é‡',
+	remark char(255) COMMENT 'å¤‡æ³¨',
+	create_time datetime COMMENT 'åˆ›å»ºæ—¶é—´',
+	update_time datetime COMMENT 'æ›´æ–°æ—¶é—´',
+	-- 1ï¼šæœªåˆ é™¤
+	-- 2ï¼šå·²åˆ é™¤
+	dr tinyint COMMENT 'æ˜¯å¦åˆ é™¤ : 1ï¼šæœªåˆ é™¤
+2ï¼šå·²åˆ é™¤',
 	PRIMARY KEY (location_id),
 	UNIQUE (location_id),
 	UNIQUE (location_type_id)
-) COMMENT = '¿âÎ»±í';
+) COMMENT = 'åº“ä½è¡¨';
 
 
--- ¿âÎ»¼ÇÂ¼±í
+-- åº“ä½è®°å½•è¡¨
 CREATE TABLE si_location_record
 (
-	location_record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '¿âÎ»¼ÇÂ¼ID',
-	location_id bigint unsigned NOT NULL COMMENT '¿âÎ»ID',
-	user_id bigint unsigned NOT NULL COMMENT '²Ù×÷ÈË',
-	create_time datetime COMMENT '²Ù×÷Ê±¼ä',
-	operation_name char(255) COMMENT '²Ù×÷Ãû³Æ',
+	location_record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'åº“ä½è®°å½•ID',
+	location_id bigint unsigned NOT NULL COMMENT 'åº“ä½ID',
+	user_id bigint unsigned NOT NULL COMMENT 'æ“ä½œäºº',
+	create_time datetime COMMENT 'æ“ä½œæ—¶é—´',
+	operation_name char(255) COMMENT 'æ“ä½œåç§°',
 	PRIMARY KEY (location_record_id),
 	UNIQUE (location_record_id)
-) COMMENT = '¿âÎ»¼ÇÂ¼±í';
+) COMMENT = 'åº“ä½è®°å½•è¡¨';
 
 
--- ÎïÁÏ±í
+-- ç‰©æ–™è¡¨
 CREATE TABLE si_material
 (
-	material_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'ÎïÁÏID',
-	material_no char(128) NOT NULL COMMENT 'ÎïÁÏ±àºÅ',
-	-- 1£ºÔ­²ÄÁÏ
-	-- 2£º³ÉÆ·
-	material_type tinyint COMMENT 'ÎïÁÏÀàĞÍ : 1£ºÔ­²ÄÁÏ
-2£º³ÉÆ·',
-	material_name char(64) NOT NULL COMMENT 'ÎïÁÏÃû³Æ',
-	material_level char(64) COMMENT 'ÎïÁÏµÈ¼¶',
-	material_model char(64) COMMENT '¹æ¸ñĞÍºÅ',
-	measure_unit_id bigint unsigned COMMENT '¼ÆÁ¿µ¥Î»ID',
-	package_volume decimal(10,2) COMMENT '°ü×°Ìå»ı',
-	supplier_id bigint unsigned COMMENT '¹©Ó¦ÉÌID',
-	material_desc char(255) COMMENT 'ÎïÁÏÃèÊö',
-	user_id bigint unsigned COMMENT '´´½¨ÈË',
-	create_time datetime COMMENT '´´½¨Ê±¼ä',
-	update_time datetime COMMENT '¸üĞÂÊ±¼ä',
-	-- 1£ºÎ´É¾³ı
-	-- 2£ºÒÑÉ¾³ı
-	dr tinyint COMMENT 'ÊÇ·ñÉ¾³ı : 1£ºÎ´É¾³ı
-2£ºÒÑÉ¾³ı',
+	material_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'ç‰©æ–™ID',
+	material_no char(128) NOT NULL COMMENT 'ç‰©æ–™ç¼–å·',
+	-- 1ï¼šåŸææ–™
+	-- 2ï¼šæˆå“
+	material_type tinyint COMMENT 'ç‰©æ–™ç±»å‹ : 1ï¼šåŸææ–™
+2ï¼šæˆå“',
+	material_name char(64) NOT NULL COMMENT 'ç‰©æ–™åç§°',
+	material_level char(64) COMMENT 'ç‰©æ–™ç­‰çº§',
+	material_model char(64) COMMENT 'è§„æ ¼å‹å·',
+	measure_unit_id bigint unsigned COMMENT 'è®¡é‡å•ä½ID',
+	package_volume decimal(10,2) COMMENT 'åŒ…è£…ä½“ç§¯',
+	supplier_id bigint unsigned COMMENT 'ä¾›åº”å•†ID',
+	material_desc char(255) COMMENT 'ç‰©æ–™æè¿°',
+	user_id bigint unsigned COMMENT 'åˆ›å»ºäºº',
+	create_time datetime COMMENT 'åˆ›å»ºæ—¶é—´',
+	update_time datetime COMMENT 'æ›´æ–°æ—¶é—´',
+	-- 1ï¼šæœªåˆ é™¤
+	-- 2ï¼šå·²åˆ é™¤
+	dr tinyint COMMENT 'æ˜¯å¦åˆ é™¤ : 1ï¼šæœªåˆ é™¤
+2ï¼šå·²åˆ é™¤',
 	PRIMARY KEY (material_id),
 	UNIQUE (material_id)
-) COMMENT = 'ÎïÁÏ±í';
+) COMMENT = 'ç‰©æ–™è¡¨';
 
 
--- ÎïÁÏ¼ÇÂ¼±í
+-- ç‰©æ–™è®°å½•è¡¨
 CREATE TABLE si_material_record
 (
-	material_record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'ÎïÁÏ¼ÇÂ¼ID',
-	material_id bigint unsigned NOT NULL COMMENT 'ÎïÁÏID',
-	user_id bigint unsigned NOT NULL COMMENT '²Ù×÷ÈËID',
-	create_time datetime COMMENT '²Ù×÷Ê±¼ä',
-	type char(255) COMMENT '²Ù×÷ÀàĞÍ',
+	material_record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'ç‰©æ–™è®°å½•ID',
+	material_id bigint unsigned NOT NULL COMMENT 'ç‰©æ–™ID',
+	user_id bigint unsigned NOT NULL COMMENT 'æ“ä½œäººID',
+	create_time datetime COMMENT 'æ“ä½œæ—¶é—´',
+	type char(255) COMMENT 'æ“ä½œç±»å‹',
 	PRIMARY KEY (material_record_id),
 	UNIQUE (material_record_id),
 	UNIQUE (material_id),
 	UNIQUE (user_id)
-) COMMENT = 'ÎïÁÏ¼ÇÂ¼±í';
+) COMMENT = 'ç‰©æ–™è®°å½•è¡¨';
 
 
--- ¹©Ó¦ÉÌ±í
+-- ä¾›åº”å•†è¡¨
 CREATE TABLE si_supplier
 (
-	supplier_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '¹©Ó¦ÉÌID',
-	supplier_no char(64) NOT NULL COMMENT '¹©Ó¦ÉÌ±àÂë',
-	supplier_name char(64) NOT NULL COMMENT '¹©Ó¦ÉÌÃû³Æ',
-	contact_name char(64) COMMENT 'ÁªÏµÈËÃû³Æ',
-	phone char(16) COMMENT 'ÁªÏµµç»°',
-	fax char(16) COMMENT '´«Õæ',
-	site char(64) COMMENT 'ÍøÖ·',
-	mail char(64) COMMENT 'ÓÊÏä',
-	area char(64) COMMENT 'µØÇø',
-	address char(128) COMMENT 'ÏêÏ¸µØÖ·',
-	remark char(255) COMMENT '±¸×¢',
-	user_id bigint unsigned COMMENT '´´½¨ÈË',
-	create_time datetime COMMENT '´´½¨Ê±¼ä',
-	update_time datetime COMMENT '¸üĞÂÊ±¼ä',
-	-- 1£ºÎ´É¾³ı
-	-- 2£ºÒÑÉ¾³ı
-	dr tinyint COMMENT 'ÊÇ·ñÉ¾³ı : 1£ºÎ´É¾³ı
-2£ºÒÑÉ¾³ı',
+	supplier_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'ä¾›åº”å•†ID',
+	supplier_no char(64) NOT NULL COMMENT 'ä¾›åº”å•†ç¼–ç ',
+	supplier_name char(64) NOT NULL COMMENT 'ä¾›åº”å•†åç§°',
+	contact_name char(64) COMMENT 'è”ç³»äººåç§°',
+	phone char(16) COMMENT 'è”ç³»ç”µè¯',
+	fax char(16) COMMENT 'ä¼ çœŸ',
+	site char(64) COMMENT 'ç½‘å€',
+	mail char(64) COMMENT 'é‚®ç®±',
+	area char(64) COMMENT 'åœ°åŒº',
+	address char(128) COMMENT 'è¯¦ç»†åœ°å€',
+	remark char(255) COMMENT 'å¤‡æ³¨',
+	user_id bigint unsigned COMMENT 'åˆ›å»ºäºº',
+	create_time datetime COMMENT 'åˆ›å»ºæ—¶é—´',
+	update_time datetime COMMENT 'æ›´æ–°æ—¶é—´',
+	-- 1ï¼šæœªåˆ é™¤
+	-- 2ï¼šå·²åˆ é™¤
+	dr tinyint COMMENT 'æ˜¯å¦åˆ é™¤ : 1ï¼šæœªåˆ é™¤
+2ï¼šå·²åˆ é™¤',
 	PRIMARY KEY (supplier_id),
 	UNIQUE (supplier_id)
-) COMMENT = '¹©Ó¦ÉÌ±í';
+) COMMENT = 'ä¾›åº”å•†è¡¨';
 
 
--- ¹©Ó¦ÉÌ¼ÇÂ¼±í
+-- ä¾›åº”å•†è®°å½•è¡¨
 CREATE TABLE si_supplier_record
 (
-	supplier_record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '¹©Ó¦ÉÌ¼ÇÂ¼ID',
-	supplier_id bigint unsigned NOT NULL COMMENT '¹©Ó¦ÉÌID',
-	user_id bigint unsigned NOT NULL COMMENT '²Ù×÷ÈË',
-	create_time datetime COMMENT '²Ù×÷Ê±¼ä',
-	operation_name char(255) COMMENT '²Ù×÷Ãû³Æ',
+	supplier_record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'ä¾›åº”å•†è®°å½•ID',
+	supplier_id bigint unsigned NOT NULL COMMENT 'ä¾›åº”å•†ID',
+	user_id bigint unsigned NOT NULL COMMENT 'æ“ä½œäºº',
+	create_time datetime COMMENT 'æ“ä½œæ—¶é—´',
+	operation_name char(255) COMMENT 'æ“ä½œåç§°',
 	PRIMARY KEY (supplier_record_id),
 	UNIQUE (supplier_record_id)
-) COMMENT = '¹©Ó¦ÉÌ¼ÇÂ¼±í';
+) COMMENT = 'ä¾›åº”å•†è®°å½•è¡¨';
 
 
--- ²Ö¿â±í
+-- ä»“åº“è¡¨
 CREATE TABLE si_warehouse
 (
-	warehouse_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '²Ö¿âID',
-	warehouse_no char(128) NOT NULL COMMENT '²Ö¿â±àºÅ',
-	warehouse_name char(64) NOT NULL COMMENT '²Ö¿âÃû³Æ',
-	warehouse_type_id bigint unsigned NOT NULL COMMENT '²Ö¿âÀàĞÍID',
-	principal char(32) COMMENT '¸ºÔğÈË',
-	phone char(16) COMMENT 'ÁªÏµµç»°',
-	area char(64) COMMENT 'µØÇø',
-	address char(128) COMMENT 'ÏêÏ¸µØÖ·',
-	remark char(255) COMMENT '±¸×¢',
-	user_id bigint unsigned COMMENT '´´½¨ÈË',
-	create_time datetime COMMENT '´´½¨Ê±¼ä',
-	update_time datetime COMMENT '¸üĞÂÊ±¼ä',
-	-- 1£ºÎ´É¾³ı
-	-- 2£ºÒÑÉ¾³ı
-	dr tinyint COMMENT 'ÊÇ·ñÉ¾³ı : 1£ºÎ´É¾³ı
-2£ºÒÑÉ¾³ı',
+	warehouse_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'ä»“åº“ID',
+	warehouse_no char(128) NOT NULL COMMENT 'ä»“åº“ç¼–å·',
+	warehouse_name char(64) NOT NULL COMMENT 'ä»“åº“åç§°',
+	warehouse_type_id bigint unsigned NOT NULL COMMENT 'ä»“åº“ç±»å‹ID',
+	principal char(32) COMMENT 'è´Ÿè´£äºº',
+	phone char(16) COMMENT 'è”ç³»ç”µè¯',
+	area char(64) COMMENT 'åœ°åŒº',
+	address char(128) COMMENT 'è¯¦ç»†åœ°å€',
+	remark char(255) COMMENT 'å¤‡æ³¨',
+	user_id bigint unsigned COMMENT 'åˆ›å»ºäºº',
+	create_time datetime COMMENT 'åˆ›å»ºæ—¶é—´',
+	update_time datetime COMMENT 'æ›´æ–°æ—¶é—´',
+	-- 1ï¼šæœªåˆ é™¤
+	-- 2ï¼šå·²åˆ é™¤
+	dr tinyint COMMENT 'æ˜¯å¦åˆ é™¤ : 1ï¼šæœªåˆ é™¤
+2ï¼šå·²åˆ é™¤',
 	PRIMARY KEY (warehouse_id),
 	UNIQUE (warehouse_id)
-) COMMENT = '²Ö¿â±í';
+) COMMENT = 'ä»“åº“è¡¨';
 
 
--- ²Ö¿â¼ÇÂ¼±í
+-- ä»“åº“è®°å½•è¡¨
 CREATE TABLE si_warehouse_record
 (
-	warehouse_record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '²Ö¿â¼ÇÂ¼±í',
-	warehouse_id bigint unsigned NOT NULL COMMENT '²Ö¿âID',
-	user_id bigint unsigned NOT NULL COMMENT '²Ù×÷ÈË',
-	create_time datetime COMMENT '²Ù×÷Ê±¼ä',
-	operation_name char(255) COMMENT '²Ù×÷Ãû³Æ',
+	warehouse_record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'ä»“åº“è®°å½•è¡¨',
+	warehouse_id bigint unsigned NOT NULL COMMENT 'ä»“åº“ID',
+	user_id bigint unsigned NOT NULL COMMENT 'æ“ä½œäºº',
+	create_time datetime COMMENT 'æ“ä½œæ—¶é—´',
+	operation_name char(255) COMMENT 'æ“ä½œåç§°',
 	PRIMARY KEY (warehouse_record_id),
 	UNIQUE (warehouse_record_id)
-) COMMENT = '²Ö¿â¼ÇÂ¼±í';
+) COMMENT = 'ä»“åº“è®°å½•è¡¨';
 
 
--- Èë¿âµ¥±íÌå
+-- å…¥åº“å•è¡¨ä½“
 CREATE TABLE sm_storage_body
 (
-	storage_body_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'Èë¿âµ¥±íÌåID',
-	storage_head_id bigint unsigned NOT NULL COMMENT 'Èë¿âµ¥±íÍ·ID',
-	material_id bigint unsigned COMMENT 'ÎïÁÏID',
-	location_id bigint unsigned COMMENT '¿âÎ»ID',
-	car_brand  char(255) COMMENT '³µÅÆĞÅÏ¢',
-	expect_num decimal(10,2) COMMENT 'ÆÚÍûÈë¿âÊıÁ¿',
-	storage_num decimal(10,2) COMMENT 'ÒÑ¾­Èë¿âÊıÁ¿',
-	accept_time datetime COMMENT '½ÓÊÜÈÕÆÚ',
-	create_time datetime COMMENT '´´½¨Ê±¼ä',
-	-- 1£ºÎ´É¾³ı
-	-- 2£ºÒÑÉ¾³ı
-	dr tinyint COMMENT 'ÊÇ·ñÉ¾³ı : 1£ºÎ´É¾³ı
-2£ºÒÑÉ¾³ı',
+	storage_body_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'å…¥åº“å•è¡¨ä½“ID',
+	storage_head_id bigint unsigned NOT NULL COMMENT 'å…¥åº“å•è¡¨å¤´ID',
+	material_id bigint unsigned COMMENT 'ç‰©æ–™ID',
+	location_id bigint unsigned COMMENT 'åº“ä½ID',
+	car_brand  char(255) COMMENT 'è½¦ç‰Œä¿¡æ¯',
+	expect_num decimal(10,2) COMMENT 'æœŸæœ›å…¥åº“æ•°é‡',
+	storage_num decimal(10,2) COMMENT 'å·²ç»å…¥åº“æ•°é‡',
+	accept_time datetime COMMENT 'æ¥å—æ—¥æœŸ',
+	create_time datetime COMMENT 'åˆ›å»ºæ—¶é—´',
+	-- 1ï¼šæœªåˆ é™¤
+	-- 2ï¼šå·²åˆ é™¤
+	dr tinyint COMMENT 'æ˜¯å¦åˆ é™¤ : 1ï¼šæœªåˆ é™¤
+2ï¼šå·²åˆ é™¤',
 	PRIMARY KEY (storage_body_id),
 	UNIQUE (storage_body_id)
-) COMMENT = 'Èë¿âµ¥±íÌå';
+) COMMENT = 'å…¥åº“å•è¡¨ä½“';
 
 
--- Èë¿âÏêÏ¸±í
+-- å…¥åº“è¯¦ç»†è¡¨
 CREATE TABLE sm_storage_detail
 (
-	storage_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'Èë¿âµ¥ID',
-	storage_body_id bigint unsigned NOT NULL COMMENT 'Èë¿âµ¥±íÌåID',
-	location_id bigint unsigned NOT NULL COMMENT '¿âÎ»ID',
-	material_id bigint unsigned NOT NULL COMMENT 'ÎïÁÏID',
-	storage_num decimal(10,2) COMMENT 'Èë¿âÊı',
-	storage_time datetime COMMENT 'Èë¿âÊ±¼ä',
-	rfid char(128) NOT NULL COMMENT 'Õ»°åRFID',
-	-- Èë¿â×´Ì¬£º1.ÒÑÈë¿â  2.ÒÑ³ö¿â
-	storage_status tinyint COMMENT 'Èë¿â×´Ì¬ : Èë¿â×´Ì¬£º1.ÒÑÈë¿â  2.ÒÑ³ö¿â',
+	storage_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'å…¥åº“å•ID',
+	storage_body_id bigint unsigned NOT NULL COMMENT 'å…¥åº“å•è¡¨ä½“ID',
+	location_id bigint unsigned NOT NULL COMMENT 'åº“ä½ID',
+	material_id bigint unsigned NOT NULL COMMENT 'ç‰©æ–™ID',
+	storage_num decimal(10,2) COMMENT 'å…¥åº“æ•°',
+	storage_time datetime COMMENT 'å…¥åº“æ—¶é—´',
+	rfid char(128) NOT NULL COMMENT 'æ ˆæ¿RFID',
+	-- å…¥åº“çŠ¶æ€ï¼š1.å·²å…¥åº“  2.å·²å‡ºåº“
+	storage_status tinyint COMMENT 'å…¥åº“çŠ¶æ€ : å…¥åº“çŠ¶æ€ï¼š1.å·²å…¥åº“  2.å·²å‡ºåº“',
 	PRIMARY KEY (storage_id),
 	UNIQUE (storage_id),
 	UNIQUE (material_id),
 	UNIQUE (rfid)
-) COMMENT = 'Èë¿âÏêÏ¸±í';
+) COMMENT = 'å…¥åº“è¯¦ç»†è¡¨';
 
 
--- Èë¿â²æ³µ±í
+-- å…¥åº“å‰è½¦è¡¨
 CREATE TABLE sm_storage_forklift
 (
-	storage_forklift_id bigint NOT NULL COMMENT 'Èë¿â²æ³µid',
-	storage_head_id bigint unsigned NOT NULL COMMENT 'Èë¿âµ¥±íÍ·ID',
-	forklift_id bigint unsigned NOT NULL COMMENT '²æ³µid',
-	rfid char(128) COMMENT 'µ±Ç°ÔË×÷µÄRFID',
+	storage_forklift_id bigint NOT NULL COMMENT 'å…¥åº“å‰è½¦id',
+	storage_head_id bigint unsigned NOT NULL COMMENT 'å…¥åº“å•è¡¨å¤´ID',
+	forklift_id bigint unsigned NOT NULL COMMENT 'å‰è½¦id',
+	rfid char(128) COMMENT 'å½“å‰è¿ä½œçš„RFID',
 	PRIMARY KEY (storage_forklift_id),
 	UNIQUE (storage_forklift_id)
-) COMMENT = 'Èë¿â²æ³µ±í';
+) COMMENT = 'å…¥åº“å‰è½¦è¡¨';
 
 
--- Èë¿âµ¥±íÍ·
+-- å…¥åº“å•è¡¨å¤´
 CREATE TABLE sm_storage_head
 (
-	storage_head_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'Èë¿âµ¥±íÍ·ID',
-	warehouse_id bigint unsigned NOT NULL COMMENT '²Ö¿âID',
-	storage_no char(128) NOT NULL COMMENT 'Èë¿âµ¥±àºÅ',
-	source_no char(128) COMMENT 'À´Ô´µ¥ºÅ',
-	-- 1 Ô­²ÄÁÏÈë¿â
-	-- 2 Éú²úÈë¿â
-	-- 3 ±¸ÁÏÇøÈë¿â
-	source_type tinyint COMMENT 'À´Ô´ÀàĞÍ : 1 Ô­²ÄÁÏÈë¿â
-2 Éú²úÈë¿â
-3 ±¸ÁÏÇøÈë¿â',
-	storage_time datetime COMMENT 'Èë¿âÊ±¼ä',
-	expect_num decimal(10,2) COMMENT 'ÆÚÍûÈë¿âÊı',
-	storage_num decimal(10,2) COMMENT 'ÒÑÈë¿âÊıÁ¿',
-	extra char(255) COMMENT '±¸×¢',
-	-- 1£ºÒÑÈë¿â
-	-- 2£ºÈë¿âÖĞ
-	-- 3£º´ıÈë¿â
+	storage_head_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'å…¥åº“å•è¡¨å¤´ID',
+	warehouse_id bigint unsigned NOT NULL COMMENT 'ä»“åº“ID',
+	storage_no char(128) NOT NULL COMMENT 'å…¥åº“å•ç¼–å·',
+	source_no char(128) COMMENT 'æ¥æºå•å·',
+	-- 1 åŸææ–™å…¥åº“
+	-- 2 ç”Ÿäº§å…¥åº“
+	-- 3 å¤‡æ–™åŒºå…¥åº“
+	source_type tinyint COMMENT 'æ¥æºç±»å‹ : 1 åŸææ–™å…¥åº“
+2 ç”Ÿäº§å…¥åº“
+3 å¤‡æ–™åŒºå…¥åº“',
+	storage_time datetime COMMENT 'å…¥åº“æ—¶é—´',
+	expect_num decimal(10,2) COMMENT 'æœŸæœ›å…¥åº“æ•°',
+	storage_num decimal(10,2) COMMENT 'å·²å…¥åº“æ•°é‡',
+	extra char(255) COMMENT 'å¤‡æ³¨',
+	-- 1ï¼šå·²å…¥åº“
+	-- 2ï¼šå…¥åº“ä¸­
+	-- 3ï¼šå¾…å…¥åº“
 	-- 
 	-- 
-	status tinyint COMMENT 'Èë¿â×´Ì¬ : 1£ºÒÑÈë¿â
-2£ºÈë¿âÖĞ
-3£º´ıÈë¿â
+	status tinyint COMMENT 'å…¥åº“çŠ¶æ€ : 1ï¼šå·²å…¥åº“
+2ï¼šå…¥åº“ä¸­
+3ï¼šå¾…å…¥åº“
 
 ',
-	create_time datetime COMMENT '´´½¨Ê±¼ä',
-	-- 1£ºÎ´É¾³ı
-	-- 2£ºÒÑÉ¾³ı
-	dr tinyint COMMENT 'ÊÇ·ñÉ¾³ı : 1£ºÎ´É¾³ı
-2£ºÒÑÉ¾³ı',
+	create_time datetime COMMENT 'åˆ›å»ºæ—¶é—´',
+	-- 1ï¼šæœªåˆ é™¤
+	-- 2ï¼šå·²åˆ é™¤
+	dr tinyint COMMENT 'æ˜¯å¦åˆ é™¤ : 1ï¼šæœªåˆ é™¤
+2ï¼šå·²åˆ é™¤',
 	PRIMARY KEY (storage_head_id),
 	UNIQUE (storage_head_id)
-) COMMENT = 'Èë¿âµ¥±íÍ·';
+) COMMENT = 'å…¥åº“å•è¡¨å¤´';
 
 
--- Èë¿â²Ù×÷¼ÇÂ¼±í
+-- å…¥åº“æ“ä½œè®°å½•è¡¨
 CREATE TABLE sm_storage_record
 (
-	record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '²Ù×÷¼ÇÂ¼',
-	storage_head_id bigint unsigned COMMENT 'Èë¿âµ¥±íÍ·ID',
-	user_id bigint unsigned COMMENT '²Ù×÷ÈËID',
-	operation_name char(255) COMMENT '²Ù×÷Ãû³Æ',
-	create_time datetime COMMENT '²Ù×÷Ê±¼ä',
+	record_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'æ“ä½œè®°å½•',
+	storage_head_id bigint unsigned COMMENT 'å…¥åº“å•è¡¨å¤´ID',
+	user_id bigint unsigned COMMENT 'æ“ä½œäººID',
+	operation_name char(255) COMMENT 'æ“ä½œåç§°',
+	create_time datetime COMMENT 'æ“ä½œæ—¶é—´',
 	PRIMARY KEY (record_id),
 	UNIQUE (record_id)
-) COMMENT = 'Èë¿â²Ù×÷¼ÇÂ¼±í';
+) COMMENT = 'å…¥åº“æ“ä½œè®°å½•è¡¨';
 
 
 

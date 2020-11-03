@@ -1,6 +1,7 @@
 package com.smartindustry.common.pojo.si;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import lombok.Data;
 
@@ -48,12 +49,12 @@ public class LocationPO implements Serializable {
     /**
      * 可容纳托盘数
      */
-    private Integer holdTrayNum;
+    private BigDecimal holdTrayNum;
 
     /**
      * 现存数量 : 现存数量
      */
-    private Integer existNum;
+    private BigDecimal existNum;
 
     /**
      * 备注
