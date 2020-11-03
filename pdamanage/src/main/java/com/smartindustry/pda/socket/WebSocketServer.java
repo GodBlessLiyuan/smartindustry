@@ -1,5 +1,7 @@
 package com.smartindustry.pda.socket;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.OnClose;
@@ -21,6 +23,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 @ServerEndpoint("/websocket/{imei}")
 @Component
 public class WebSocketServer {
+    private static final Logger logger = LoggerFactory.getLogger(WebSocketServer.class);
+
     private static AtomicInteger num = new AtomicInteger();
     private static ConcurrentHashMap<String, Session> sessionPools = new ConcurrentHashMap<>();
 
@@ -28,10 +32,13 @@ public class WebSocketServer {
     public void onOpen(Session session, @PathParam("imei") String imei) {
         sessionPools.put(imei, session);
         num.incrementAndGet();
+        logger.info(imei);
+        sendMsg(imei, "连接成功");
     }
 
     @OnClose
     public void onClose(@PathParam("imei") String imei) {
+        sendMsg(imei, "断开连接成功");
         sessionPools.remove(imei);
         num.decrementAndGet();
     }

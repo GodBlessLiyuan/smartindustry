@@ -82,7 +82,7 @@
 
   <delete id="deleteByFid" parameterType="java.lang.Long">
         delete
-        from pda_outbound_forklift
+        from om_outbound_forklift
         where forklift_id = #{forkliftId,jdbcType=BIGINT}
     </delete>
   <select id="queryByFid" parameterType="java.lang.Long">
