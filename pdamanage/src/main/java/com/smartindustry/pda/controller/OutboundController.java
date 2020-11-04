@@ -48,8 +48,8 @@ public class OutboundController {
         return finishOutboundService.execute(session);
     }
 
-    @PostMapping("outbound")
-    public ResultVO outbound(HttpSession session, @RequestBody OutboundDTO dto) {
-        return finishOutboundService.outbound(session, dto);
+    @PostMapping("rfid")
+    public ResultVO rfid(HttpSession session, @RequestBody OutboundDTO dto) {
+        return finishOutboundService.rfid(session, dto);
     }
 }

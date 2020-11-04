@@ -39,4 +39,9 @@ public class StorageConstant {
     public static final String OPERATE_NAME_AGREE = "确认入库";
     public static final String OPERATE_NAME_INSERT = "创建入库单";
 
+    /**
+     * 釜到栈运算
+     */
+    public static final Integer F2Z = 36;
+
 }

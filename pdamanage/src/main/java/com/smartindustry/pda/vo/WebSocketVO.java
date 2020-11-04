@@ -16,14 +16,14 @@ import java.util.List;
 public class WebSocketVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private List<OutboundVO> ovos;
+    private OutboundVO ovo;
     private TitleVO title;
 
     /**
      * 列表区
      */
     @Data
-    private static class OutboundVO {
+    public static class OutboundVO {
         /**
          * 出/入库 ID
          */
@@ -39,14 +39,14 @@ public class WebSocketVO implements Serializable {
         /**
          * 叉车
          */
-        private List<String> fno;
+        private List<String> fnames;
     }
 
     /**
      * 提示区
      */
     @Data
-    private static class TitleVO {
+    public static class TitleVO {
         /**
          * 提示文案
          */

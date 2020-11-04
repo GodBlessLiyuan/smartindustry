@@ -1,6 +1,7 @@
 package com.smartindustry.pda.service.impl;
 
 import com.smartindustry.common.bo.om.OutboundBodyBO;
+import com.smartindustry.common.bo.om.OutboundForkliftBO;
 import com.smartindustry.common.bo.om.OutboundHeadBO;
 import com.smartindustry.common.bo.sm.StorageHeadBO;
 import com.smartindustry.common.mapper.om.OutboundBodyMapper;
@@ -9,12 +10,14 @@ import com.smartindustry.common.mapper.om.OutboundHeadMapper;
 import com.smartindustry.common.mapper.si.ForkliftMapper;
 import com.smartindustry.common.mapper.si.LocationMapper;
 import com.smartindustry.common.mapper.sm.StorageBodyMapper;
+import com.smartindustry.common.mapper.sm.StorageDetailMapper;
 import com.smartindustry.common.mapper.sm.StorageHeadMapper;
 import com.smartindustry.common.pojo.om.OutboundBodyPO;
 import com.smartindustry.common.pojo.om.OutboundForkliftPO;
 import com.smartindustry.common.pojo.om.OutboundHeadPO;
 import com.smartindustry.common.pojo.si.ForkliftPO;
 import com.smartindustry.common.pojo.si.LocationPO;
+import com.smartindustry.common.pojo.sm.StorageDetailPO;
 import com.smartindustry.common.util.DateUtil;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.pda.constant.OutboundConstant;
@@ -25,8 +28,11 @@ import com.smartindustry.pda.socket.WebSocketServer;
 import com.smartindustry.pda.util.OutboundNoUtil;
 import com.smartindustry.pda.vo.OutboundDetailVO;
 import com.smartindustry.pda.vo.PdaListVO;
+import com.smartindustry.pda.vo.WebSocketVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpSession;
@@ -39,6 +45,7 @@ import java.util.*;
  * @description: 成品出库
  * @version: 1.0
  */
+@EnableTransactionManagement
 @Service
 public class OutboundServiceImpl implements IOutboundService {
     @Autowired
@@ -49,6 +56,8 @@ public class OutboundServiceImpl implements IOutboundService {
     private StorageHeadMapper storageHeadMapper;
     @Autowired
     private StorageBodyMapper storageBodyMapper;
+    @Autowired
+    private StorageDetailMapper storageDetailMapper;
     @Autowired
     private ForkliftMapper forkliftMapper;
     @Autowired
@@ -133,7 +142,7 @@ public class OutboundServiceImpl implements IOutboundService {
             return new ResultVO(1001);
         }
 
-        String imei = (String) session.getAttribute("imei");
+        String imei = (String) session.getAttribute(OutboundConstant.SESSION_IMEI);
         if (null == imei) {
             return new ResultVO(1111);
         }
@@ -256,6 +265,7 @@ public class OutboundServiceImpl implements IOutboundService {
         ForkliftPO fPO = forkliftMapper.queryByImei(imei);
 
         List<ForkliftPO> pos = forkliftMapper.queryByOhid(ohid);
+        List<String> fnames = new ArrayList<>();
         if (null == pos || pos.size() == 0) {
             // 开始任务
             OutboundForkliftPO ofPO = new OutboundForkliftPO();
@@ -265,25 +275,38 @@ public class OutboundServiceImpl implements IOutboundService {
 
             session.setAttribute(OutboundConstant.SESSION_OHID, ohid);
 
+            // 发送 websocket
+            fnames.add(fPO.getForkliftName());
+            sendOutboundMsg(ohid, fnames);
+
             return ResultVO.ok();
         }
 
+        boolean close = false;
         for (ForkliftPO po : pos) {
             if (imei.equals(po.getImeiNo())) {
                 // 关闭
                 outboundForkliftMapper.deleteByFid(po.getForkliftId());
                 session.removeAttribute(OutboundConstant.SESSION_OHID);
-                return ResultVO.ok();
+                close = true;
+            } else {
+                fnames.add(po.getForkliftName());
             }
         }
 
-        // 辅助任务
-        OutboundForkliftPO ofPO = new OutboundForkliftPO();
-        ofPO.setForkliftId(fPO.getForkliftId());
-        ofPO.setOutboundHeadId(ohid);
-        outboundForkliftMapper.insert(ofPO);
+        if (!close) {
+            // 辅助任务
+            OutboundForkliftPO ofPO = new OutboundForkliftPO();
+            ofPO.setForkliftId(fPO.getForkliftId());
+            ofPO.setOutboundHeadId(ohid);
+            outboundForkliftMapper.insert(ofPO);
 
-        session.setAttribute(OutboundConstant.SESSION_OHID, ohid);
+            fnames.add(fPO.getForkliftName());
+
+            session.setAttribute(OutboundConstant.SESSION_OHID, ohid);
+        }
+
+        sendOutboundMsg(ohid, fnames);
 
         return ResultVO.ok();
     }
@@ -295,8 +318,9 @@ public class OutboundServiceImpl implements IOutboundService {
      * @param dto
      * @return
      */
+    @Transactional(rollbackFor = Exception.class)
     @Override
-    public ResultVO outbound(HttpSession session, OutboundDTO dto) {
+    public ResultVO rfid(HttpSession session, OutboundDTO dto) {
         if (null == dto.getMrfid() && null == dto.getLrfid()) {
             return new ResultVO(1001);
         }
@@ -319,13 +343,64 @@ public class OutboundServiceImpl implements IOutboundService {
             return new ResultVO(1003);
         }
 
-        if (null == dto.getLrfid()) {
-            // 叉起砧板
-
+        StorageDetailPO detailPO = storageDetailMapper.queryByRfidAndStatus(dto.getMrfid(), (byte) 1);
+        if (null == detailPO) {
+            // 入库
         } else {
-            // 砧板入库
+            // 出库
+            if (null == ofPO.getRfid()) {
+                // 叉起砧板
+                ofPO.setRfid(dto.getMrfid());
+                outboundForkliftMapper.updateByPrimaryKey(ofPO);
+            } else {
+                // 砧板出库
+                ofPO.setRfid(null);
+                outboundForkliftMapper.updateByPrimaryKey(ofPO);
+
+                detailPO.setStorageStatus((byte) 2);
+                storageDetailMapper.updateByPrimaryKey(detailPO);
+
+                OutboundHeadPO headPO = outboundHeadMapper.selectByPrimaryKey(ofPO.getOutboundHeadId());
+                headPO.setOutboundNum(headPO.getOutboundNum().add(BigDecimal.ONE));
+                if (headPO.getExpectNum().equals(headPO.getOutboundNum())) {
+                    // 出库完成
+                    headPO.setStatus((byte) 1);
+                    // 发送消息
+                    List<OutboundForkliftBO> ofBOs = outboundForkliftMapper.queryByOhid(headPO.getOutboundHeadId());
+                    List<String> imeis = new ArrayList<>();
+                    for (OutboundForkliftBO ofBO : ofBOs) {
+                        if (!imei.equals(ofBO.getImeiNo())) {
+                            imeis.add(ofBO.getImeiNo());
+                        }
+                    }
+                    WebSocketVO vo = new WebSocketVO();
+                    WebSocketVO.TitleVO titleVO = new WebSocketVO.TitleVO();
+                    titleVO.setMsg("当前订单已完成");
+                    WebSocketServer.sendMsg(imeis, vo);
+                }
+                outboundHeadMapper.updateByPrimaryKey(headPO);
+                OutboundBodyPO bodyPO = outboundBodyMapper.queryByOhidAndMid(ofPO.getOutboundHeadId(), detailPO.getMaterialId());
+                bodyPO.setOutboundNum(bodyPO.getOutboundNum().add(BigDecimal.ONE));
+                outboundBodyMapper.updateByPrimaryKey(bodyPO);
+            }
         }
 
         return ResultVO.ok();
+    }
+
+
+    /**
+     * WebSocket 发送信息
+     */
+    private void sendOutboundMsg(Long ohid, List<String> fnames) {
+        WebSocketVO vo = new WebSocketVO();
+        WebSocketVO.OutboundVO ovo = new WebSocketVO.OutboundVO();
+        OutboundHeadPO headPO = outboundHeadMapper.selectByPrimaryKey(ohid);
+        ovo.setId(ohid);
+        ovo.setSnum(headPO.getOutboundNum());
+        ovo.setFnames(fnames);
+        ovo.setCnum(headPO.getOutboundNum().add(BigDecimal.valueOf(fnames.size())));
+        vo.setOvo(ovo);
+        WebSocketServer.sendAllMsg(vo);
     }
 }

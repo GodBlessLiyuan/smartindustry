@@ -1,4 +1,6 @@
 package com.smartindustry.common.util;
+import com.smartindustry.common.constant.ConfigConstant;
+
 import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.ParsePosition;
@@ -16,6 +18,7 @@ public class DateUtil{
     public static final SimpleDateFormat YMD = new SimpleDateFormat("yyyyMMdd");
     public static final SimpleDateFormat YMDHMS = new SimpleDateFormat("yyyyMMddHHmmss");
     public static final SimpleDateFormat Y_M_D = new SimpleDateFormat("yyyy-MM-dd");
+    public static final SimpleDateFormat Y_M_D_T = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public static final Function<String,Date> STRING2DATE = i -> {
         Date date = null;
@@ -89,4 +92,38 @@ public class DateUtil{
         }
         return null;
     }
+
+    /**
+     * 判断时间是否在时间段内
+     *
+     * @param now
+     * @return
+     */
+    public static Map belongCalendar(Date now) {
+        Map<String,Date> map = new HashMap<>();
+        SimpleDateFormat ds = new SimpleDateFormat("yyyy-MM-dd ");
+        Date beginTime = null;
+        Date endTime = null;
+        try {
+            beginTime = Y_M_D_T.parse(ds.format(now) + ConfigConstant.TIME_BOUNDARY_ONE);
+            endTime = Y_M_D_T.parse(ds.format(now) + ConfigConstant.TIME_BOUNDARY_TWO);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Calendar date = Calendar.getInstance();
+        date.setTime(now);
+        Calendar begin = Calendar.getInstance();
+        begin.setTime(beginTime);
+        Calendar end = Calendar.getInstance();
+        end.setTime(endTime);
+        if (date.after(begin) && date.before(end)) {
+            map.put("start",beginTime);
+            map.put("end",endTime);
+        } else {
+            map.put("start",endTime);
+            map.put("end",beginTime);
+        }
+        return map;
+    }
+
 }

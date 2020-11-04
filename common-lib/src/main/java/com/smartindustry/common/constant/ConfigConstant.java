@@ -1,5 +1,7 @@
 package com.smartindustry.common.constant;
 
+import java.util.Date;
+
 /**
  * @author: xiahui
  * @date: Created in 2020/8/10 18:37
@@ -30,4 +32,10 @@ public class ConfigConstant {
      * 否
      */
     public static final String V_NO = "N";
+
+    /**
+     * 自动生成备料区入库单的时间边界
+     */
+    public static final String TIME_BOUNDARY_ONE = "07:30:00";
+    public static final String TIME_BOUNDARY_TWO = "19:30:00";
 }

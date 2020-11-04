@@ -17,7 +17,7 @@ public class StoragePreDTO implements Serializable {
     /**
      * 叉车id
      */
-    private Long fid;
+    private String imei;
     /**
      * 成品RFID
      */
@@ -26,14 +26,9 @@ public class StoragePreDTO implements Serializable {
      * 储位RFID
      */
     private String lrfid;
-    /**
-     * 物料id
-     */
-    private Long mid;
-    /**
-     * 入库单id
-     */
-    private Long sid;
+
+
+
     /**
      * 当前栈板入库数 1栈板为一单位
      */
