@@ -1,6 +1,7 @@
 package com.smartindustry.common.mapper.sm;
 
 import com.smartindustry.common.mapper.BaseMapper;
+import com.smartindustry.common.pojo.si.MaterialPO;
 import com.smartindustry.common.pojo.sm.StorageBodyPO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -37,4 +38,11 @@ public interface StorageBodyMapper extends BaseMapper<StorageBodyPO, Long> {
      * @return
      */
     StorageBodyPO queryByShidAndLid(Long shid,Long lid);
+
+    /**
+     * 查看当前入库单下所有的物料类型
+     * @param shid
+     * @return
+     */
+    List<MaterialPO> queryMaterial(Long shid);
 }

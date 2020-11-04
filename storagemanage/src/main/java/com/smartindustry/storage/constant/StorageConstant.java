@@ -62,4 +62,9 @@ public class StorageConstant {
      * 备料区的储位类型
      */
     public static final Long TYPE_PREPARATION_AREA = 2L;
+
+    /**
+     * session imei
+     */
+    public final static String SESSION_IMEI = "imei";
 }

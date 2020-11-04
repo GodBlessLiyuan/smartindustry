@@ -122,4 +122,15 @@
         from sm_storage_detail
         where rfid = #{rfid,jdbcType=CHAR} and storage_status = #{status,jdbcType=TINYINT} limit 1
     </select>
+
+    <delete id="deleteDetail">
+    delete from sm_storage_detail
+    where location_id = #{lid,jdbcType=BIGINT} and rfid = #{rfid,jdbcType=CHAR}
+  </delete>
+
+    <select id="queryStored" parameterType="java.lang.Long" resultType="java.math.BigDecimal">
+    select count(rfid)
+    from sm_storage_detail
+    where location_id = #{lid,jdbcType=BIGINT} and storage_status = 1
+  </select>
 </mapper>

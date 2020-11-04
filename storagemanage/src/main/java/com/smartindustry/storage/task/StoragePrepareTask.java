@@ -30,7 +30,7 @@ public class StoragePrepareTask {
     private StorageHeadMapper storageHeadMapper;
 
     @Scheduled(cron = "${schedule.storage.trigger}")
-    public void StoragePrepareStatus () {
+    public void storagePrepareStatus () {
         logger.info("StoragePrepare time, the current time is : [{}]", DateUtil.date2Str(Calendar.getInstance().getTime(), DateUtil.Y_M_D_T));
         Date date = new Date();
         //将备料入库单的状态更改为已入库

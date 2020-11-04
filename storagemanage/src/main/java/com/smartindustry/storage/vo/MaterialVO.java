@@ -1,6 +1,7 @@
 package com.smartindustry.storage.vo;
 
 import com.smartindustry.common.bo.si.MaterialBO;
+import com.smartindustry.common.pojo.si.MaterialPO;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -57,6 +58,24 @@ public class MaterialVO implements Serializable {
         vo.setMmodel(bo.getMaterialModel());
         vo.setSname(bo.getSupplierName());
         vo.setMuname(bo.getMeasureUnitName());
+        return vo;
+    }
+
+
+    public static List<MaterialVO> convertPO(List<MaterialPO> pos) {
+        List<MaterialVO> vos = new ArrayList<>(pos.size());
+        for (MaterialPO po : pos) {
+            vos.add(convert(po));
+        }
+        return vos;
+    }
+
+    public static MaterialVO convert(MaterialPO po) {
+        MaterialVO vo = new MaterialVO();
+        vo.setMid(po.getMaterialId());
+        vo.setMno(po.getMaterialNo());
+        vo.setMname(po.getMaterialName());
+        vo.setMmodel(po.getMaterialModel());
         return vo;
     }
 }
