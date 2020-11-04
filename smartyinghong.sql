@@ -302,12 +302,14 @@ CREATE TABLE om_outbound_head
 	outbound_head_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '出库单表头ID',
 	outbound_no char(128) NOT NULL COMMENT '出库单编码',
 	source_no char(128) COMMENT '来源单号',
-	-- 1 原材料出库
-	-- 2 销售出库
-	-- 3 备料区出库
-	source_type tinyint COMMENT '来源类型 : 1 原材料出库
-2 销售出库
-3 备料区出库',
+	-- 1-混料出库
+	-- 2-生产出库
+	-- 3-销售出库
+	-- 4-备料区出库
+	source_type tinyint COMMENT '来源类型 : 1-混料出库
+2-生产出库
+3-销售出库
+4-备料区出库',
 	plan_time date COMMENT '计划出库时间',
 	outbound_time datetime COMMENT '完成出库时间',
 	expect_num decimal(10,2) COMMENT '期望出库数',
@@ -405,12 +407,12 @@ CREATE TABLE si_forklift
 2 成品入库区
 3 成品出库区',
 	supplier_name char(64) COMMENT '供应商名称',
-	-- 1 忙碌中
-	-- 2 空闲中
-	--
-	status tinyint COMMENT '当前状态 : 1 忙碌中
-2 空闲中
- ',
+	-- 1-空闲中
+	-- 2-忙碌中
+	-- 3-不在线
+	status tinyint COMMENT '当前状态 : 1-空闲中
+2-忙碌中
+3-不在线 ',
 	extra char(255) COMMENT '备注',
 	create_time datetime COMMENT '创建时间',
 	-- 1 未删除
@@ -458,7 +460,8 @@ CREATE TABLE si_location
 	dr tinyint COMMENT '是否删除 : 1：未删除
 2：已删除',
 	PRIMARY KEY (location_id),
-	UNIQUE (location_id)
+	UNIQUE (location_id),
+	UNIQUE (location_type_id)
 ) COMMENT = '库位表';
 
 
@@ -798,7 +801,7 @@ ALTER TABLE am_role_record
 
 
 ALTER TABLE am_user_record
-	ADD FOREIGN KEY (user_id)
+	ADD FOREIGN KEY (operate_id)
 	REFERENCES am_user (user_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
@@ -806,7 +809,7 @@ ALTER TABLE am_user_record
 
 
 ALTER TABLE am_user_record
-	ADD FOREIGN KEY (operate_id)
+	ADD FOREIGN KEY (user_id)
 	REFERENCES am_user (user_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
