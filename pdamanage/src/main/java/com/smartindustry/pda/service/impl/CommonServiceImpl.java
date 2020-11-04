@@ -229,7 +229,7 @@ public class CommonServiceImpl implements ICommonService {
                 return STATUS_RFID_NONE;
             }
 
-            storageDetailMapper.queryByRfidAndStatus(dto.getMrfid(), (byte) 1);
+            StorageDetailPO detailPO = storageDetailMapper.queryByRfidAndStatus(dto.getMrfid(), (byte) 1);
         }
         if (CommonConstant.STATUS_FORKLIFT_WORK_STORAGE.equals(status)) {
             // 入库
