@@ -28,8 +28,6 @@ public class CommonController {
         return commonService.online(session, dto);
     }
 
-
-
     @PostMapping("list")
     public ResultVO list(HttpSession session, @RequestBody CommonDTO dto) {
         return commonService.list(session, dto);

@@ -16,7 +16,7 @@ public class CommonConstant {
      */
     public final static String SESSION_OHID = "ohid";
     /**
-     * session 库位RFID
+     * session 库位RFID状态：1-入库；2-出库；3-备料
      */
     public final static String SESSION_STATUS_FORKLIFT = "forklift_status";
     /**
@@ -70,13 +70,13 @@ public class CommonConstant {
     /**
      * 叉车-入库
      */
-    public final static Byte STATUS_FORKLIFT_STORAGE = 1;
+    public final static Byte STATUS_FORKLIFT_WORK_STORAGE = 1;
     /**
      * 叉车-出库
      */
-    public final static Byte STATUS_FORKLIFT_OUTBOUND = 2;
+    public final static Byte STATUS_FORKLIFT_WORK_OUTBOUND = 2;
     /**
      * 叉车-备料
      */
-    public final static Byte STATUS_FORKLIFT_PREPARE = 3;
+    public final static Byte STATUS_FORKLIFT_WORK_PREPARE = 3;
 }

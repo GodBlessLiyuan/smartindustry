@@ -18,7 +18,6 @@ import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.pda.constant.CommonConstant;
 import com.smartindustry.pda.constant.StorageConstant;
 import com.smartindustry.pda.dto.CommonDTO;
-import com.smartindustry.pda.dto.OutboundDTO;
 import com.smartindustry.pda.service.ICommonService;
 import com.smartindustry.pda.socket.WebSocketServer;
 import com.smartindustry.pda.vo.PdaListVO;
@@ -82,7 +81,7 @@ public class CommonServiceImpl implements ICommonService {
      * 出入库列表区域
      *
      * @param session
-     * @param dto    列表类型：1-待执行；2-执行中；3-已执行；4-未完成生产
+     * @param dto     列表类型：1-待执行；2-执行中；3-已执行；4-未完成生产
      * @return
      */
     @Override
@@ -137,7 +136,7 @@ public class CommonServiceImpl implements ICommonService {
     }
 
     /**
-     * 数采
+     * 数采 RFID
      *
      * @param session
      * @param dto
@@ -146,9 +145,8 @@ public class CommonServiceImpl implements ICommonService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO rfid(HttpSession session, CommonDTO dto) {
-        if (this.checkRfids(session, dto)) {
-            return ResultVO.ok();
-        }
+        Byte status = this.checkRfids(session, dto);
+
 
         // 当前叉车信息
         String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
@@ -213,6 +211,8 @@ public class CommonServiceImpl implements ICommonService {
         return ResultVO.ok();
     }
 
+    private static final Byte STATUS_RFID_NONE = 0;
+
     /**
      * 验证 Rfids, true : 数据一样
      *
@@ -220,26 +220,27 @@ public class CommonServiceImpl implements ICommonService {
      * @param dto
      * @return
      */
-    private boolean checkRfids(HttpSession session, CommonDTO dto) {
-        String mrfid = (String) session.getAttribute(CommonConstant.SESSION_MRFID);
-        String lrfid = (String) session.getAttribute(CommonConstant.SESSION_LRFID);
-        session.setAttribute(CommonConstant.SESSION_MRFID, dto.getMrfid());
-        session.setAttribute(CommonConstant.SESSION_LRFID, dto.getLrfid());
+    private Byte checkRfids(HttpSession session, CommonDTO dto) {
+        Byte status = (Byte) session.getAttribute(CommonConstant.SESSION_STATUS_FORKLIFT);
 
-        if (null == dto.getMrfid()) {
-            if (null != mrfid) {
-                return true;
+        if (null == status) {
+            // 无状态
+            if (null == dto.getMrfid()) {
+                return STATUS_RFID_NONE;
             }
-        } else {
-            if (!dto.getMrfid().equals(mrfid)) {
-                return true;
-            }
+
+            storageDetailMapper.queryByRfidAndStatus(dto.getMrfid(), (byte) 1);
+        }
+        if (CommonConstant.STATUS_FORKLIFT_WORK_STORAGE.equals(status)) {
+            // 入库
+        }
+        if (CommonConstant.STATUS_FORKLIFT_WORK_OUTBOUND.equals(status)) {
+            // 出库
+        }
+        if (CommonConstant.STATUS_FORKLIFT_WORK_PREPARE.equals(status)) {
+            // 备料
         }
 
-        if (null == dto.getLrfid()) {
-            return null != lrfid;
-        } else {
-            return !dto.getLrfid().equals(lrfid);
-        }
+        return 1;
     }
 }

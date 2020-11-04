@@ -628,12 +628,12 @@ CREATE TABLE sm_storage_detail
 	storage_num decimal(10,2) COMMENT '入库数',
 	storage_time datetime COMMENT '入库时间',
 	rfid char(128) COMMENT '栈板RFID',
-	-- 1 待入库
-	-- 2 已入库
-	-- 3 已出库
-	storage_status tinyint COMMENT '入库状态 : 1 待入库
-2 已入库
-3 已出库',
+	-- 1 已入库
+	-- 2 已出库
+	-- 3 待入库
+	storage_status tinyint COMMENT '入库状态 : 1 已入库
+2 已出库
+3 待入库',
 	PRIMARY KEY (storage_id),
 	UNIQUE (storage_id)
 ) COMMENT = '入库详细表';

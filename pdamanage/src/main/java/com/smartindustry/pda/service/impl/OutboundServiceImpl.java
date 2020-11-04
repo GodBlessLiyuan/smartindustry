@@ -231,7 +231,7 @@ public class OutboundServiceImpl implements IOutboundService {
         forkliftMapper.updateByPrimaryKey(curForkliftPO);
 
         // 叉车工作类型 - 出库
-        session.setAttribute(CommonConstant.SESSION_STATUS_FORKLIFT, CommonConstant.STATUS_FORKLIFT_OUTBOUND);
+        session.setAttribute(CommonConstant.SESSION_STATUS_FORKLIFT, CommonConstant.STATUS_FORKLIFT_WORK_OUTBOUND);
 
         // websocket
         fnames.add(curForkliftPO.getForkliftName());
