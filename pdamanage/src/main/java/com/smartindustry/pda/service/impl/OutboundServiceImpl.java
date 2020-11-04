@@ -369,7 +369,9 @@ public class OutboundServiceImpl implements IOutboundService {
                     List<OutboundForkliftBO> ofBOs = outboundForkliftMapper.queryByOhid(headPO.getOutboundHeadId());
                     List<String> imeis = new ArrayList<>();
                     for (OutboundForkliftBO ofBO : ofBOs) {
-                        imeis.add(ofBO.getImeiNo());
+                        if (!imei.equals(ofBO.getImeiNo())) {
+                            imeis.add(ofBO.getImeiNo());
+                        }
                     }
                     WebSocketVO vo = new WebSocketVO();
                     WebSocketVO.TitleVO titleVO = new WebSocketVO.TitleVO();
