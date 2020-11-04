@@ -64,7 +64,6 @@ public class SpareAreaServiceImpl implements ISpareAreaService {
         if(locationBO.getLocationTypeId().equals(StorageConstant.TYPE_FINISHED_AREA) && storageHeadPO.getSourceType().equals(StorageConstant.TYPE_PRODUCT_STORAGE)){
             //1. 新增入库详情表
             StorageDetailPO detailPO = new StorageDetailPO();
-            detailPO.setStorageBodyId(bodyPO.getStorageBodyId());
             detailPO.setLocationId(locationBO.getLocationId());
             detailPO.setStorageTime(date);
             detailPO.setRfid(dto.getPrfid());
