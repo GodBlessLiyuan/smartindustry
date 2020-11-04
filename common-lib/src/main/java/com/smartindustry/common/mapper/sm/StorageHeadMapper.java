@@ -24,6 +24,13 @@ public interface StorageHeadMapper extends BaseMapper<StorageHeadPO, Long> {
     List<StorageHeadBO> pageQuery(Map<String, Object> reqData);
 
     /**
+     * 生产入库单的分页查询
+     * @param reqData
+     * @return
+     */
+    List<StorageHeadBO> pageQueryPro(Map<String, Object> reqData);
+
+    /**
      * 通过采购表头id 查询所有信息
      * @param shid
      * @return
