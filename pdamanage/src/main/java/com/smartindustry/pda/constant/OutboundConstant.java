@@ -20,4 +20,12 @@ public class OutboundConstant {
      * session 出库表头ID
      */
     public final static String SESSION_OHID = "ohid";
+    /**
+     * session 物料RFID
+     */
+    public final static String SESSION_MRFID = "mrfid";
+    /**
+     * session 库位RFID
+     */
+    public final static String SESSION_LRFID = "lrfid";
 }
