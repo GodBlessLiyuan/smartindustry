@@ -11,8 +11,8 @@ DROP TABLE IF EXISTS am_user_record;
 DROP TABLE IF EXISTS om_mix_body;
 DROP TABLE IF EXISTS om_outbound_body;
 DROP TABLE IF EXISTS si_location_record;
-DROP TABLE IF EXISTS sm_storage_detail;
 DROP TABLE IF EXISTS sm_storage_body;
+DROP TABLE IF EXISTS sm_storage_detail;
 DROP TABLE IF EXISTS si_location;
 DROP TABLE IF EXISTS si_material_record;
 DROP TABLE IF EXISTS si_material;
@@ -407,7 +407,7 @@ CREATE TABLE si_forklift
 	supplier_name char(64) COMMENT '供应商名称',
 	-- 1 忙碌中
 	-- 2 空闲中
-	--  
+	--
 	status tinyint COMMENT '当前状态 : 1 忙碌中
 2 空闲中
  ',
@@ -458,8 +458,7 @@ CREATE TABLE si_location
 	dr tinyint COMMENT '是否删除 : 1：未删除
 2：已删除',
 	PRIMARY KEY (location_id),
-	UNIQUE (location_id),
-	UNIQUE (location_type_id)
+	UNIQUE (location_id)
 ) COMMENT = '库位表';
 
 
@@ -620,18 +619,20 @@ CREATE TABLE sm_storage_body
 CREATE TABLE sm_storage_detail
 (
 	storage_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '入库单ID',
-	storage_body_id bigint unsigned NOT NULL COMMENT '入库单表体ID',
-	location_id bigint unsigned NOT NULL COMMENT '库位ID',
-	material_id bigint unsigned NOT NULL COMMENT '物料ID',
+	storage_head_id bigint unsigned COMMENT '入库单表头ID',
+	location_id bigint unsigned COMMENT '库位ID',
+	material_id bigint unsigned COMMENT '物料ID',
 	storage_num decimal(10,2) COMMENT '入库数',
 	storage_time datetime COMMENT '入库时间',
-	rfid char(128) NOT NULL COMMENT '栈板RFID',
-	-- 入库状态：1.已入库  2.已出库
-	storage_status tinyint COMMENT '入库状态 : 入库状态：1.已入库  2.已出库',
+	rfid char(128) COMMENT '栈板RFID',
+	-- 1 待入库
+	-- 2 已入库
+	-- 3 已出库
+	storage_status tinyint COMMENT '入库状态 : 1 待入库
+2 已入库
+3 已出库',
 	PRIMARY KEY (storage_id),
-	UNIQUE (storage_id),
-	UNIQUE (material_id),
-	UNIQUE (rfid)
+	UNIQUE (storage_id)
 ) COMMENT = '入库详细表';
 
 
@@ -639,19 +640,20 @@ CREATE TABLE sm_storage_detail
 CREATE TABLE sm_storage_forklift
 (
 	storage_forklift_id bigint NOT NULL COMMENT '入库叉车id',
-	storage_head_id bigint unsigned NOT NULL COMMENT '入库单表头ID',
-	forklift_id bigint unsigned NOT NULL COMMENT '叉车id',
+	storage_head_id bigint unsigned COMMENT '入库单表头ID',
+	forklift_id bigint unsigned COMMENT '叉车id',
 	rfid char(128) COMMENT '当前运作的RFID',
 	PRIMARY KEY (storage_forklift_id),
 	UNIQUE (storage_forklift_id)
 ) COMMENT = '入库叉车表';
 
+
 -- 入库单表头
 CREATE TABLE sm_storage_head
 (
 	storage_head_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '入库单表头ID',
-	warehouse_id bigint unsigned NOT NULL COMMENT '仓库ID',
-	storage_no char(128) NOT NULL COMMENT '入库单编号',
+	warehouse_id bigint unsigned COMMENT '仓库ID',
+	storage_no char(128) COMMENT '入库单编号',
 	source_no char(128) COMMENT '来源单号',
 	-- 1 原材料入库
 	-- 2 生产入库
@@ -666,8 +668,8 @@ CREATE TABLE sm_storage_head
 	-- 1：已入库
 	-- 2：入库中
 	-- 3：待入库
-	-- 
-	-- 
+	--
+	--
 	status tinyint COMMENT '入库状态 : 1：已入库
 2：入库中
 3：待入库
@@ -796,7 +798,7 @@ ALTER TABLE am_role_record
 
 
 ALTER TABLE am_user_record
-	ADD FOREIGN KEY (operate_id)
+	ADD FOREIGN KEY (user_id)
 	REFERENCES am_user (user_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
@@ -804,7 +806,7 @@ ALTER TABLE am_user_record
 
 
 ALTER TABLE am_user_record
-	ADD FOREIGN KEY (user_id)
+	ADD FOREIGN KEY (operate_id)
 	REFERENCES am_user (user_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
@@ -1123,15 +1125,15 @@ ALTER TABLE sm_storage_head
 ;
 
 
-ALTER TABLE sm_storage_detail
-	ADD FOREIGN KEY (storage_body_id)
-	REFERENCES sm_storage_body (storage_body_id)
+ALTER TABLE sm_storage_body
+	ADD FOREIGN KEY (storage_head_id)
+	REFERENCES sm_storage_head (storage_head_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
 ;
 
 
-ALTER TABLE sm_storage_body
+ALTER TABLE sm_storage_detail
 	ADD FOREIGN KEY (storage_head_id)
 	REFERENCES sm_storage_head (storage_head_id)
 	ON UPDATE RESTRICT

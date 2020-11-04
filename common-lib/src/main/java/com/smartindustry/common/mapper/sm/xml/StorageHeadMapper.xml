@@ -200,6 +200,22 @@
     order by sh.create_time desc
   </select>
 
+  <select id="pageQueryPro" parameterType="java.util.Map" resultMap="BOResultMap">
+    select
+    <include refid="BO_Column_List" />
+    from sm_storage_head sh
+    left join si_warehouse w on sh.warehouse_id = w.warehouse_id
+    where sh.dr = 1
+    <if test="no != null and no != ''">
+      and sh.storage_no = #{no,jdbcType=CHAR}
+    </if>
+    <if test="status != null and status != 0">
+      and sh.`status` = #{status,jdbcType=TINYINT}
+    </if>
+    <if test="stime != null and stime != ''">
+      and sh.storage_time like concat('%',#{stime,jdbcType=CHAR},'%')
+    </if>
+  </select>
 
   <resultMap id="BOSResultMap" type="com.smartindustry.common.bo.sm.StorageHeadBO" extends="BaseResultMap">
     <result column="storage_head_id" jdbcType="BIGINT" property="storageHeadId"/>
@@ -301,9 +317,8 @@
   <select id="queryByRfid" parameterType="java.lang.String" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
-    from wo_package p
-    left join wo_priduce_order po on p.produce_order_id = po.produce_order_id
-    left join sm_storage_head sh on po.produce_no = sh.produce_no
+    from sm_storage_detail sd
+    left join sm_storage_head sh on sd.storage_head_id = sh.storage_head_id
     where sh.dr = 1 and p.rfid = #{rfid,jdbcType=CHAR}
   </select>
   <select id="queryPdaDetailByShid" parameterType="java.lang.Long" resultMap="PdaResultMap">

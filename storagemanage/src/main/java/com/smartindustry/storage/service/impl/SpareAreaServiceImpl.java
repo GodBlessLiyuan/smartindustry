@@ -3,6 +3,7 @@ package com.smartindustry.storage.service.impl;
 import com.smartindustry.common.bo.si.LocationBO;
 import com.smartindustry.common.mapper.si.ForkliftMapper;
 import com.smartindustry.common.mapper.si.LocationMapper;
+import com.smartindustry.common.mapper.si.MaterialMapper;
 import com.smartindustry.common.mapper.sm.StorageBodyMapper;
 import com.smartindustry.common.mapper.sm.StorageDetailMapper;
 import com.smartindustry.common.mapper.sm.StorageHeadMapper;
@@ -18,6 +19,7 @@ import com.smartindustry.storage.dto.StoragePreDTO;
 import com.smartindustry.storage.service.ISpareAreaService;
 import com.smartindustry.storage.util.StorageNoUtil;
 import com.smartindustry.storage.vo.MaterialVO;
+import com.smartindustry.storage.vo.SpareMaterialVO;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,6 +48,8 @@ public class SpareAreaServiceImpl implements ISpareAreaService {
     private ForkliftMapper forkliftMapper;
     @Autowired
     private StorageDetailMapper storageDetailMapper;
+    @Autowired
+    private MaterialMapper materialMapper;
     @Override
     public ResultVO enterSpare(StoragePreDTO dto, HttpSession session){
         // 当前叉车信息
@@ -57,6 +61,7 @@ public class SpareAreaServiceImpl implements ISpareAreaService {
         // 查询当前储位的基本信息
         Date date = new Date();
         LocationBO locationBO = locationMapper.queryByRfid(dto.getLrfid());
+
         // 当前入库表体
         StorageBodyPO bodyPO = storageBodyMapper.queryByShidAndLid(storageHeadPO.getStorageHeadId(),locationBO.getLocationId());
 
@@ -105,9 +110,8 @@ public class SpareAreaServiceImpl implements ISpareAreaService {
             detailPO.setRfid(dto.getPrfid());
             detailPO.setMaterialId(dto.getMid());
             storageDetailMapper.insert(detailPO);
-            // 解绑,就是将入库单的来源单号给置空
-
-
+            // 解绑,就是将入库单的来源单号给置空,根据入库单表头id和rfid删除
+            storageDetailMapper.deleteByShidAndRfid(storageHeadPO.getStorageHeadId(),dto.getPrfid());
             // 判断储位是否已满
             if(!judgeFull(locationBO.getLocationId())){
                 // 储位已满
@@ -151,7 +155,6 @@ public class SpareAreaServiceImpl implements ISpareAreaService {
                 return new ResultVO(1007);
             }
         }
-
         return ResultVO.ok();
     }
 
@@ -183,9 +186,16 @@ public class SpareAreaServiceImpl implements ISpareAreaService {
     public ResultVO showSpare(StoragePreDTO dto){
         // 根据栈板rfid查询入库单号
         StorageHeadPO storageHeadPO = storageHeadMapper.queryByRfid(dto.getPrfid());
+        LocationBO locationBO = locationMapper.queryByRfid(dto.getLrfid());
+        StorageDetailPO po = storageDetailMapper.queryByLidAndRfid(locationBO.getLocationId(),dto.getPrfid());
+        MaterialPO materialPO = materialMapper.selectByPrimaryKey(po.getMaterialId());
+        SpareMaterialVO vo = new SpareMaterialVO();
         if(null == storageHeadPO){
-
+            vo.setFlag(true);
         }
-        return ResultVO.ok();
+        vo.setRfid(dto.getPrfid());
+        vo.setMmodel(materialPO.getMaterialModel());
+        vo.setMname(materialPO.getMaterialName());
+        return ResultVO.ok().setData(vo);
     }
 }

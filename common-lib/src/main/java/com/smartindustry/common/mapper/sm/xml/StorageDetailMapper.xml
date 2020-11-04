@@ -144,4 +144,16 @@
     from sm_storage_detail
     where location_id = #{lid,jdbcType=BIGINT} and storage_status = 1
   </select>
+
+  <delete id="deleteByShidAndRfid">
+    delete from sm_storage_detail
+    where storage_head_id = #{shid,jdbcType=BIGINT} and rfid = #{rfid,jdbcType=CHAR}
+  </delete>
+
+  <select id="queryByLidAndRfid" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from sm_storage_detail
+    where location_id = #{lid,jdbcType=BIGINT} and rfid = #{rfid,jdbcType=CHAR}
+  </select>
 </mapper>
