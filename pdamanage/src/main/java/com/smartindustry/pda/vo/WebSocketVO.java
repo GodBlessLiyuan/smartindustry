@@ -40,6 +40,10 @@ public class WebSocketVO implements Serializable {
          * 叉车
          */
         private List<String> fnames;
+        /**
+         * 状态：1-入库；2-出库
+         */
+        private Byte status;
     }
 
     /**

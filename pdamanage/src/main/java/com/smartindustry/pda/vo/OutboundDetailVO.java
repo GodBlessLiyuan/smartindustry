@@ -46,9 +46,9 @@ public class OutboundDetailVO implements Serializable {
      */
     private List<String> fnames;
     /**
-     * 状态：开始执行；辅助执行；关闭
+     * 状态：1-开始执行；2-辅助执行；3-关闭;4-消失
      */
-    private String status;
+    private Byte status;
     /**
      * 储位图
      */

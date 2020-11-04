@@ -1,7 +1,7 @@
 package com.smartindustry.pda.service;
 
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.pda.dto.OutboundDTO;
+import com.smartindustry.pda.dto.CommonDTO;
 
 import javax.servlet.http.HttpSession;
 
@@ -12,7 +12,9 @@ import javax.servlet.http.HttpSession;
  * @version: 1.0
  */
 public interface ICommonService {
-    ResultVO online(HttpSession session, OutboundDTO dto);
+    ResultVO online(HttpSession session, CommonDTO dto);
 
-    ResultVO list(HttpSession session, Byte type);
+    ResultVO list(HttpSession session, CommonDTO dto);
+
+    ResultVO rfid(HttpSession session, CommonDTO dto);
 }

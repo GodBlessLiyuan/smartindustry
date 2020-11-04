@@ -17,6 +17,4 @@ public interface IOutboundService {
     ResultVO detail(HttpSession session, OutboundDTO dto);
 
     ResultVO execute(HttpSession session);
-
-    ResultVO rfid(HttpSession session, OutboundDTO dto);
 }

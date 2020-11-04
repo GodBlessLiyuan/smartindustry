@@ -1,7 +1,7 @@
 package com.smartindustry.pda.controller;
 
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.pda.dto.OutboundDTO;
+import com.smartindustry.pda.dto.CommonDTO;
 import com.smartindustry.pda.service.ICommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,14 +24,19 @@ public class CommonController {
     private ICommonService commonService;
 
     @PostMapping("online")
-    public ResultVO online(HttpSession session, @RequestBody OutboundDTO dto) {
+    public ResultVO online(HttpSession session, @RequestBody CommonDTO dto) {
         return commonService.online(session, dto);
     }
 
 
 
     @PostMapping("list")
-    public ResultVO list(HttpSession session, @RequestBody OutboundDTO dto) {
-        return commonService.list(session, dto.getType());
+    public ResultVO list(HttpSession session, @RequestBody CommonDTO dto) {
+        return commonService.list(session, dto);
+    }
+
+    @PostMapping("rfid")
+    public ResultVO rfid(HttpSession session, @RequestBody CommonDTO dto) {
+        return commonService.rfid(session, dto);
     }
 }

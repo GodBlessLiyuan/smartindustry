@@ -14,24 +14,8 @@ import java.io.Serializable;
 public class OutboundDTO implements Serializable {
     private static final long SerialVersionUID = 1L;
 
-    /**
-     * IMEI 号
-     */
-    private String imei;
-    /**
-     * 类别类型：1-待执行，2-执行中，3-已执行
-     */
-    private Byte type;
     /**出库单表头ID
      *
      */
     private Long ohid;
-    /**
-     * 物料砧板RFID
-     */
-    private String mrfid;
-    /**
-     * 库位RFID
-     */
-    private String lrfid;
 }

@@ -1,23 +1,21 @@
 package com.smartindustry.pda.service.impl;
 
 import com.smartindustry.common.bo.om.OutboundBodyBO;
-import com.smartindustry.common.bo.om.OutboundForkliftBO;
 import com.smartindustry.common.bo.om.OutboundHeadBO;
 import com.smartindustry.common.mapper.om.OutboundBodyMapper;
 import com.smartindustry.common.mapper.om.OutboundForkliftMapper;
 import com.smartindustry.common.mapper.om.OutboundHeadMapper;
 import com.smartindustry.common.mapper.si.ForkliftMapper;
 import com.smartindustry.common.mapper.si.LocationMapper;
-import com.smartindustry.common.mapper.sm.StorageDetailMapper;
 import com.smartindustry.common.pojo.om.OutboundBodyPO;
 import com.smartindustry.common.pojo.om.OutboundForkliftPO;
 import com.smartindustry.common.pojo.om.OutboundHeadPO;
 import com.smartindustry.common.pojo.si.ForkliftPO;
 import com.smartindustry.common.pojo.si.LocationPO;
-import com.smartindustry.common.pojo.sm.StorageDetailPO;
 import com.smartindustry.common.util.DateUtil;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.pda.constant.CommonConstant;
+import com.smartindustry.pda.constant.OutboundConstant;
 import com.smartindustry.pda.dto.OutboundDTO;
 import com.smartindustry.pda.service.IOutboundService;
 import com.smartindustry.pda.socket.WebSocketServer;
@@ -46,8 +44,6 @@ public class OutboundServiceImpl implements IOutboundService {
     private OutboundHeadMapper outboundHeadMapper;
     @Autowired
     private OutboundBodyMapper outboundBodyMapper;
-    @Autowired
-    private StorageDetailMapper storageDetailMapper;
     @Autowired
     private ForkliftMapper forkliftMapper;
     @Autowired
@@ -137,18 +133,18 @@ public class OutboundServiceImpl implements IOutboundService {
         // 叉车信息
         List<ForkliftPO> pos = forkliftMapper.queryByOhid(dto.getOhid());
         if (null != pos && pos.size() > 0) {
-            vo.setStatus("辅助执行");
+            vo.setStatus(OutboundConstant.STATUS_OUTBOUND_ASSIST);
 
             List<String> fnames = new ArrayList<>(pos.size());
             for (ForkliftPO po : pos) {
                 fnames.add(po.getForkliftNo());
                 if (imei.equals(po.getImeiNo())) {
-                    vo.setStatus("关闭");
+                    vo.setStatus(OutboundConstant.STATUS_OUTBOUND_CLOSE);
                 }
             }
             vo.setFnames(fnames);
         } else {
-            vo.setStatus("开始执行");
+            vo.setStatus(OutboundConstant.STATUS_OUTBOUND_START);
         }
         vo.setCnum(headBO.getOutboundNum().add(BigDecimal.valueOf(null == pos ? 0 : pos.size())));
 
@@ -163,6 +159,7 @@ public class OutboundServiceImpl implements IOutboundService {
      * @param session
      * @return
      */
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO execute(HttpSession session) {
         String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
@@ -174,164 +171,81 @@ public class OutboundServiceImpl implements IOutboundService {
         if (null == ohid) {
             return new ResultVO(1002);
         }
-        ForkliftPO fPO = forkliftMapper.queryByImei(imei);
+        ForkliftPO curForkliftPO = forkliftMapper.queryByImei(imei);
 
-        List<ForkliftPO> pos = forkliftMapper.queryByOhid(ohid);
+        // 当前执行该出库订单的所有叉车
         List<String> fnames = new ArrayList<>();
-        if (null == pos || pos.size() == 0) {
+        List<ForkliftPO> forkliftPOs = forkliftMapper.queryByOhid(ohid);
+        if (null == forkliftPOs || forkliftPOs.size() == 0) {
             // 开始任务
-            OutboundForkliftPO ofPO = new OutboundForkliftPO();
-            ofPO.setForkliftId(fPO.getForkliftId());
-            ofPO.setOutboundHeadId(ohid);
-            outboundForkliftMapper.insert(ofPO);
-
-            session.setAttribute(CommonConstant.SESSION_OHID, ohid);
-
-            // 发送 websocket
-            fnames.add(fPO.getForkliftName());
-            sendOutboundMsg(ohid, fnames);
-
-            return ResultVO.ok();
+            return execute(session, curForkliftPO, ohid, fnames);
         }
 
         boolean close = false;
-        for (ForkliftPO po : pos) {
-            if (imei.equals(po.getImeiNo())) {
+        for (ForkliftPO forkliftPO : forkliftPOs) {
+            if (imei.equals(forkliftPO.getImeiNo())) {
                 // 关闭
-                outboundForkliftMapper.deleteByFid(po.getForkliftId());
-                session.removeAttribute(CommonConstant.SESSION_OHID);
+                outboundForkliftMapper.deleteByFid(forkliftPO.getForkliftId());
+
+                // 叉车状态 - 空闲
+                curForkliftPO.setStatus(CommonConstant.STATUS_FORKLIFT_IDLE);
+                forkliftMapper.updateByPrimaryKey(curForkliftPO);
+
+                session.removeAttribute(CommonConstant.SESSION_STATUS_FORKLIFT);
+
                 close = true;
             } else {
-                fnames.add(po.getForkliftName());
+                fnames.add(forkliftPO.getForkliftName());
             }
         }
 
         if (!close) {
             // 辅助任务
-            OutboundForkliftPO ofPO = new OutboundForkliftPO();
-            ofPO.setForkliftId(fPO.getForkliftId());
-            ofPO.setOutboundHeadId(ohid);
-            outboundForkliftMapper.insert(ofPO);
-
-            fnames.add(fPO.getForkliftName());
-
-            session.setAttribute(CommonConstant.SESSION_OHID, ohid);
+            return execute(session, curForkliftPO, ohid, fnames);
         }
 
+        // websocket
         sendOutboundMsg(ohid, fnames);
 
-        return ResultVO.ok();
+        return ResultVO.ok().setData(forkliftPOs.size() == 1 ? OutboundConstant.STATUS_OUTBOUND_START : OutboundConstant.STATUS_OUTBOUND_ASSIST);
     }
 
     /**
-     * 出库
+     * 开始执行 / 辅助执行
      *
      * @param session
-     * @param dto
+     * @param curForkliftPO
+     * @param ohid
+     * @param fnames
      * @return
      */
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public ResultVO rfid(HttpSession session, OutboundDTO dto) {
-        if (this.checkRfids(session, dto)) {
-            return ResultVO.ok();
-        }
+    private ResultVO execute(HttpSession session, ForkliftPO curForkliftPO, Long ohid, List<String> fnames) {
+        // 出库叉车信息
+        OutboundForkliftPO ofPO = new OutboundForkliftPO();
+        ofPO.setForkliftId(curForkliftPO.getForkliftId());
+        ofPO.setOutboundHeadId(ohid);
+        outboundForkliftMapper.insert(ofPO);
 
-        // 当前叉车信息
-        String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
-        if (null == imei) {
-            return new ResultVO(1111);
-        }
+        // 叉车状态 - 忙碌
+        curForkliftPO.setStatus(CommonConstant.STATUS_FORKLIFT_BUSY);
+        forkliftMapper.updateByPrimaryKey(curForkliftPO);
 
-        ForkliftPO fPO = forkliftMapper.queryByImei(imei);
-        if (null == fPO) {
-            return new ResultVO(1002);
-        }
+        // 叉车工作类型 - 出库
+        session.setAttribute(CommonConstant.SESSION_STATUS_FORKLIFT, CommonConstant.STATUS_FORKLIFT_OUTBOUND);
 
-        OutboundForkliftPO ofPO = outboundForkliftMapper.queryByFid(fPO.getForkliftId());
-        if (null == ofPO) {
-            // 尚未开始任务
-            WebSocketServer.sendMsg(imei, "请先开始任务！");
-            return new ResultVO(1003);
-        }
+        // websocket
+        fnames.add(curForkliftPO.getForkliftName());
+        sendOutboundMsg(ohid, fnames);
 
-        StorageDetailPO detailPO = storageDetailMapper.queryByRfidAndStatus(dto.getMrfid(), (byte) 1);
-        if (null == detailPO) {
-            // 入库
-        } else {
-            // 出库
-            if (null == ofPO.getRfid()) {
-                // 叉起砧板
-                ofPO.setRfid(dto.getMrfid());
-                outboundForkliftMapper.updateByPrimaryKey(ofPO);
-            } else {
-                // 砧板出库
-                ofPO.setRfid(null);
-                outboundForkliftMapper.updateByPrimaryKey(ofPO);
-
-                detailPO.setStorageStatus((byte) 2);
-                storageDetailMapper.updateByPrimaryKey(detailPO);
-
-                OutboundHeadPO headPO = outboundHeadMapper.selectByPrimaryKey(ofPO.getOutboundHeadId());
-                headPO.setOutboundNum(headPO.getOutboundNum().add(BigDecimal.ONE));
-                if (headPO.getExpectNum().equals(headPO.getOutboundNum())) {
-                    // 出库完成
-                    headPO.setStatus((byte) 1);
-                    // 发送消息
-                    List<OutboundForkliftBO> ofBOs = outboundForkliftMapper.queryByOhid(headPO.getOutboundHeadId());
-                    List<String> imeis = new ArrayList<>();
-                    for (OutboundForkliftBO ofBO : ofBOs) {
-                        if (!imei.equals(ofBO.getImeiNo())) {
-                            imeis.add(ofBO.getImeiNo());
-                        }
-                    }
-                    WebSocketVO vo = new WebSocketVO();
-                    WebSocketVO.TitleVO titleVO = new WebSocketVO.TitleVO();
-                    titleVO.setMsg("当前订单已完成");
-                    WebSocketServer.sendMsg(imeis, vo);
-                }
-                outboundHeadMapper.updateByPrimaryKey(headPO);
-                OutboundBodyPO bodyPO = outboundBodyMapper.queryByOhidAndMid(ofPO.getOutboundHeadId(), detailPO.getMaterialId());
-                bodyPO.setOutboundNum(bodyPO.getOutboundNum().add(BigDecimal.ONE));
-                outboundBodyMapper.updateByPrimaryKey(bodyPO);
-            }
-        }
-
-        return ResultVO.ok();
+        return ResultVO.ok().setData(OutboundConstant.STATUS_OUTBOUND_CLOSE);
     }
 
-    /**
-     * 验证 Rfids, true : 数据一样
-     *
-     * @param session
-     * @param dto
-     * @return
-     */
-    private boolean checkRfids(HttpSession session, OutboundDTO dto) {
-        String mrfid = (String) session.getAttribute(CommonConstant.SESSION_MRFID);
-        String lrfid = (String) session.getAttribute(CommonConstant.SESSION_LRFID);
-        session.setAttribute(CommonConstant.SESSION_MRFID, dto.getMrfid());
-        session.setAttribute(CommonConstant.SESSION_LRFID, dto.getLrfid());
-
-        if (null == dto.getMrfid()) {
-            if (null != mrfid) {
-                return true;
-            }
-        } else {
-            if (!dto.getMrfid().equals(mrfid)) {
-                return true;
-            }
-        }
-
-        if (null == dto.getLrfid()) {
-            return null != lrfid;
-        } else {
-            return !dto.getLrfid().equals(lrfid);
-        }
-    }
 
     /**
      * WebSocket 发送信息
+     *
+     * @param ohid
+     * @param fnames
      */
     private void sendOutboundMsg(Long ohid, List<String> fnames) {
         WebSocketVO vo = new WebSocketVO();
@@ -341,7 +255,9 @@ public class OutboundServiceImpl implements IOutboundService {
         ovo.setSnum(headPO.getOutboundNum());
         ovo.setFnames(fnames);
         ovo.setCnum(headPO.getOutboundNum().add(BigDecimal.valueOf(fnames.size())));
+        ovo.setStatus(CommonConstant.FLAG_OUTBOUND);
         vo.setOvo(ovo);
         WebSocketServer.sendAllMsg(vo);
     }
+
 }
