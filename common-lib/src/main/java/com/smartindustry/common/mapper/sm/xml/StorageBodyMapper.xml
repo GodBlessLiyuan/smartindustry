@@ -210,4 +210,11 @@
     left join sm_storage_body sb on sh.storage_head_id = sb.storage_head_id
     where sb.dr = 1 and sh.storage_head_id = #{shid,jdbcType=BIGINT} and sb.location_id = #{lid,jdbcType=BIGINT}
   </select>
+
+  <select id="queryMaterial" parameterType="java.lang.Long" resultType="com.smartindustry.common.pojo.si.MaterialPO">
+    select distinct m.material_id as materialId, m.material_name as materialName, m.material_no as materialNo, m.material_model as materialModel
+    from sm_storage_body sb
+    left join si_material m on sb.material_id = m.material_id
+    where sb.dr = 1 and sb.storage_head_id = #{shid,jdbcType=BIGINT}
+  </select>
 </mapper>

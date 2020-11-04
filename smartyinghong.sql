@@ -646,7 +646,6 @@ CREATE TABLE sm_storage_forklift
 	UNIQUE (storage_forklift_id)
 ) COMMENT = '入库叉车表';
 
-
 -- 入库单表头
 CREATE TABLE sm_storage_head
 (

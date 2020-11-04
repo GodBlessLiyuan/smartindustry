@@ -27,7 +27,10 @@ public class StoragePreDTO implements Serializable {
      */
     private String lrfid;
 
-
+    /**
+     * 物料id
+     */
+    private Long mid;
 
     /**
      * 当前栈板入库数 1栈板为一单位
