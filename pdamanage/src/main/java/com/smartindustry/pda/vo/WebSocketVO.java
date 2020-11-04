@@ -46,7 +46,7 @@ public class WebSocketVO implements Serializable {
      * 提示区
      */
     @Data
-    private static class TitleVO {
+    public static class TitleVO {
         /**
          * 提示文案
          */

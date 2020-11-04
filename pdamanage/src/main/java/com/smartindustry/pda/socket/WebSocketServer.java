@@ -30,6 +30,21 @@ public class WebSocketServer {
     private static AtomicInteger num = new AtomicInteger();
     private static ConcurrentHashMap<String, Session> sessionPools = new ConcurrentHashMap<>();
 
+    @OnOpen
+    public void onOpen(Session session, @PathParam("imei") String imei) {
+        sessionPools.put(imei, session);
+        num.incrementAndGet();
+        logger.info(imei);
+        sendMsg(imei, "连接成功");
+    }
+
+    @OnClose
+    public void onClose(@PathParam("imei") String imei) {
+        sendMsg(imei, "断开连接成功");
+        sessionPools.remove(imei);
+        num.decrementAndGet();
+    }
+
     /**
      * 发送所有信息
      *
@@ -46,19 +61,15 @@ public class WebSocketServer {
         }
     }
 
-    @OnOpen
-    public void onOpen(Session session, @PathParam("imei") String imei) {
-        sessionPools.put(imei, session);
-        num.incrementAndGet();
-        logger.info(imei);
-        sendMsg(imei, "连接成功");
-    }
-
-    @OnClose
-    public void onClose(@PathParam("imei") String imei) {
-        sendMsg(imei, "断开连接成功");
-        sessionPools.remove(imei);
-        num.decrementAndGet();
+    /**
+     * 发送消息
+     *
+     * @throws IOException
+     */
+    public static void sendMsg(List<String> imeis, WebSocketVO vo) {
+        for (String imei : imeis) {
+            sendMsg(imei, JSON.toJSONString(vo));
+        }
     }
 
     /**

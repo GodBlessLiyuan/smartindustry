@@ -1,6 +1,7 @@
 package com.smartindustry.pda.service.impl;
 
 import com.smartindustry.common.bo.om.OutboundBodyBO;
+import com.smartindustry.common.bo.om.OutboundForkliftBO;
 import com.smartindustry.common.bo.om.OutboundHeadBO;
 import com.smartindustry.common.bo.sm.StorageHeadBO;
 import com.smartindustry.common.mapper.om.OutboundBodyMapper;
@@ -352,7 +353,7 @@ public class OutboundServiceImpl implements IOutboundService {
                 ofPO.setRfid(dto.getMrfid());
                 outboundForkliftMapper.updateByPrimaryKey(ofPO);
             } else {
-                // 砧板入库
+                // 砧板出库
                 ofPO.setRfid(null);
                 outboundForkliftMapper.updateByPrimaryKey(ofPO);
 
@@ -361,8 +362,19 @@ public class OutboundServiceImpl implements IOutboundService {
 
                 OutboundHeadPO headPO = outboundHeadMapper.selectByPrimaryKey(ofPO.getOutboundHeadId());
                 headPO.setOutboundNum(headPO.getOutboundNum().add(BigDecimal.ONE));
-                if(headPO.getExpectNum().equals(headPO.getOutboundNum())) {
-                    // 入库完成
+                if (headPO.getExpectNum().equals(headPO.getOutboundNum())) {
+                    // 出库完成
+                    headPO.setStatus((byte) 1);
+                    // 发送消息
+                    List<OutboundForkliftBO> ofBOs = outboundForkliftMapper.queryByOhid(headPO.getOutboundHeadId());
+                    List<String> imeis = new ArrayList<>();
+                    for (OutboundForkliftBO ofBO : ofBOs) {
+                        imeis.add(ofBO.getImeiNo());
+                    }
+                    WebSocketVO vo = new WebSocketVO();
+                    WebSocketVO.TitleVO titleVO = new WebSocketVO.TitleVO();
+                    titleVO.setMsg("当前订单已完成");
+                    WebSocketServer.sendMsg(imeis, vo);
                 }
                 outboundHeadMapper.updateByPrimaryKey(headPO);
                 OutboundBodyPO bodyPO = outboundBodyMapper.queryByOhidAndMid(ofPO.getOutboundHeadId(), detailPO.getMaterialId());
