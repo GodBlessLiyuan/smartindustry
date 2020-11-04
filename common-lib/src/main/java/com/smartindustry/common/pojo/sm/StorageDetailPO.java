@@ -17,9 +17,9 @@ public class StorageDetailPO implements Serializable {
     private Long storageId;
 
     /**
-     * 入库单表体ID
+     * 入库单表头ID
      */
-    private Long storageBodyId;
+    private Long storageHeadId;
 
     /**
      * 库位ID
@@ -47,7 +47,9 @@ public class StorageDetailPO implements Serializable {
     private String rfid;
 
     /**
-     * 入库状态 : 入库状态：1.已入库  2.已出库
+     * 入库状态 : 1 待入库
+2 已入库
+3 已出库
      */
     private Byte storageStatus;
 
