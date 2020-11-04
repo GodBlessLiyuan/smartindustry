@@ -321,8 +321,8 @@ public class OutboundServiceImpl implements IOutboundService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO rfid(HttpSession session, OutboundDTO dto) {
-        if (null == dto.getMrfid() && null == dto.getLrfid()) {
-            return new ResultVO(1001);
+        if (this.checkRfids(session, dto)) {
+            return ResultVO.ok();
         }
 
         // 当前叉车信息
@@ -388,6 +388,35 @@ public class OutboundServiceImpl implements IOutboundService {
         return ResultVO.ok();
     }
 
+    /**
+     * 验证 Rfids, true : 数据一样
+     *
+     * @param session
+     * @param dto
+     * @return
+     */
+    private boolean checkRfids(HttpSession session, OutboundDTO dto) {
+        String mrfid = (String) session.getAttribute(OutboundConstant.SESSION_MRFID);
+        String lrfid = (String) session.getAttribute(OutboundConstant.SESSION_LRFID);
+        session.setAttribute(OutboundConstant.SESSION_MRFID, dto.getMrfid());
+        session.setAttribute(OutboundConstant.SESSION_LRFID, dto.getLrfid());
+
+        if (null == dto.getMrfid()) {
+            if (null != mrfid) {
+                return true;
+            }
+        } else {
+            if (!dto.getMrfid().equals(mrfid)) {
+                return true;
+            }
+        }
+
+        if (null == dto.getLrfid()) {
+            return null != lrfid;
+        } else {
+            return !dto.getLrfid().equals(lrfid);
+        }
+    }
 
     /**
      * WebSocket 发送信息

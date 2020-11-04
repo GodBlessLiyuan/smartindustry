@@ -20,9 +20,6 @@ public class ForkliftPO implements Serializable {
      */
     private String forkliftNo;
 
-    /**
-     * 叉车名称
-     */
     private String forkliftName;
 
     /**

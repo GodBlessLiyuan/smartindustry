@@ -1,125 +1,147 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.smartindustry.common.mapper.sm.StorageDetailMapper">
-    <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.sm.StorageDetailPO">
-        <id column="storage_id" jdbcType="BIGINT" property="storageId"/>
-        <result column="storage_body_id" jdbcType="BIGINT" property="storageBodyId"/>
-        <result column="location_id" jdbcType="BIGINT" property="locationId"/>
-        <result column="storage_num" jdbcType="DECIMAL" property="storageNum"/>
-        <result column="storage_time" jdbcType="TIMESTAMP" property="storageTime"/>
-        <result column="rfid" jdbcType="CHAR" property="rfid"/>
-        <result column="storage_status" jdbcType="TINYINT" property="storageStatus"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-        storage_id, storage_body_id, location_id, storage_num, storage_time, rfid, storage_status
-    </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from sm_storage_detail
-        where storage_id = #{storageId,jdbcType=BIGINT}
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-        delete
-        from sm_storage_detail
-        where storage_id = #{storageId,jdbcType=BIGINT}
-    </delete>
-    <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.StorageDetailPO">
-        insert into sm_storage_detail (storage_id, storage_body_id, location_id,
-                                       storage_num, storage_time, rfid,
-                                       storage_status)
-        values (#{storageId,jdbcType=BIGINT}, #{storageBodyId,jdbcType=BIGINT}, #{locationId,jdbcType=BIGINT},
-                #{storageNum,jdbcType=DECIMAL}, #{storageTime,jdbcType=TIMESTAMP}, #{rfid,jdbcType=CHAR},
-                #{storageStatus,jdbcType=TINYINT})
-    </insert>
-    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.sm.StorageDetailPO">
-        insert into sm_storage_detail
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="storageId != null">
-                storage_id,
-            </if>
-            <if test="storageBodyId != null">
-                storage_body_id,
-            </if>
-            <if test="locationId != null">
-                location_id,
-            </if>
-            <if test="storageNum != null">
-                storage_num,
-            </if>
-            <if test="storageTime != null">
-                storage_time,
-            </if>
-            <if test="rfid != null">
-                rfid,
-            </if>
-            <if test="storageStatus != null">
-                storage_status,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="storageId != null">
-                #{storageId,jdbcType=BIGINT},
-            </if>
-            <if test="storageBodyId != null">
-                #{storageBodyId,jdbcType=BIGINT},
-            </if>
-            <if test="locationId != null">
-                #{locationId,jdbcType=BIGINT},
-            </if>
-            <if test="storageNum != null">
-                #{storageNum,jdbcType=DECIMAL},
-            </if>
-            <if test="storageTime != null">
-                #{storageTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="rfid != null">
-                #{rfid,jdbcType=CHAR},
-            </if>
-            <if test="storageStatus != null">
-                #{storageStatus,jdbcType=TINYINT},
-            </if>
-        </trim>
-    </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.sm.StorageDetailPO">
-        update sm_storage_detail
-        <set>
-            <if test="storageBodyId != null">
-                storage_body_id = #{storageBodyId,jdbcType=BIGINT},
-            </if>
-            <if test="locationId != null">
-                location_id = #{locationId,jdbcType=BIGINT},
-            </if>
-            <if test="storageNum != null">
-                storage_num = #{storageNum,jdbcType=DECIMAL},
-            </if>
-            <if test="storageTime != null">
-                storage_time = #{storageTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="rfid != null">
-                rfid = #{rfid,jdbcType=CHAR},
-            </if>
-            <if test="storageStatus != null">
-                storage_status = #{storageStatus,jdbcType=TINYINT},
-            </if>
-        </set>
-        where storage_id = #{storageId,jdbcType=BIGINT}
-    </update>
-    <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.sm.StorageDetailPO">
-        update sm_storage_detail
-        set storage_body_id = #{storageBodyId,jdbcType=BIGINT},
-            location_id     = #{locationId,jdbcType=BIGINT},
-            storage_num     = #{storageNum,jdbcType=DECIMAL},
-            storage_time    = #{storageTime,jdbcType=TIMESTAMP},
-            rfid            = #{rfid,jdbcType=CHAR},
-            storage_status  = #{storageStatus,jdbcType=TINYINT}
-        where storage_id = #{storageId,jdbcType=BIGINT}
-    </update>
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.sm.StorageDetailPO">
+    <id column="storage_id" jdbcType="BIGINT" property="storageId" />
+    <result column="storage_head_id" jdbcType="BIGINT" property="storageHeadId" />
+    <result column="location_id" jdbcType="BIGINT" property="locationId" />
+    <result column="material_id" jdbcType="BIGINT" property="materialId" />
+    <result column="storage_num" jdbcType="DECIMAL" property="storageNum" />
+    <result column="storage_time" jdbcType="TIMESTAMP" property="storageTime" />
+    <result column="rfid" jdbcType="CHAR" property="rfid" />
+    <result column="storage_status" jdbcType="TINYINT" property="storageStatus" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    storage_id, storage_head_id, location_id, material_id, storage_num, storage_time, 
+    rfid, storage_status
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sm_storage_detail
+    where storage_id = #{storageId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sm_storage_detail
+    where storage_id = #{storageId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.StorageDetailPO">
+    insert into sm_storage_detail (storage_id, storage_head_id, location_id, 
+      material_id, storage_num, storage_time, 
+      rfid, storage_status)
+    values (#{storageId,jdbcType=BIGINT}, #{storageHeadId,jdbcType=BIGINT}, #{locationId,jdbcType=BIGINT}, 
+      #{materialId,jdbcType=BIGINT}, #{storageNum,jdbcType=DECIMAL}, #{storageTime,jdbcType=TIMESTAMP}, 
+      #{rfid,jdbcType=CHAR}, #{storageStatus,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.sm.StorageDetailPO">
+    insert into sm_storage_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="storageId != null">
+        storage_id,
+      </if>
+      <if test="storageHeadId != null">
+        storage_head_id,
+      </if>
+      <if test="locationId != null">
+        location_id,
+      </if>
+      <if test="materialId != null">
+        material_id,
+      </if>
+      <if test="storageNum != null">
+        storage_num,
+      </if>
+      <if test="storageTime != null">
+        storage_time,
+      </if>
+      <if test="rfid != null">
+        rfid,
+      </if>
+      <if test="storageStatus != null">
+        storage_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="storageId != null">
+        #{storageId,jdbcType=BIGINT},
+      </if>
+      <if test="storageHeadId != null">
+        #{storageHeadId,jdbcType=BIGINT},
+      </if>
+      <if test="locationId != null">
+        #{locationId,jdbcType=BIGINT},
+      </if>
+      <if test="materialId != null">
+        #{materialId,jdbcType=BIGINT},
+      </if>
+      <if test="storageNum != null">
+        #{storageNum,jdbcType=DECIMAL},
+      </if>
+      <if test="storageTime != null">
+        #{storageTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rfid != null">
+        #{rfid,jdbcType=CHAR},
+      </if>
+      <if test="storageStatus != null">
+        #{storageStatus,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.sm.StorageDetailPO">
+    update sm_storage_detail
+    <set>
+      <if test="storageHeadId != null">
+        storage_head_id = #{storageHeadId,jdbcType=BIGINT},
+      </if>
+      <if test="locationId != null">
+        location_id = #{locationId,jdbcType=BIGINT},
+      </if>
+      <if test="materialId != null">
+        material_id = #{materialId,jdbcType=BIGINT},
+      </if>
+      <if test="storageNum != null">
+        storage_num = #{storageNum,jdbcType=DECIMAL},
+      </if>
+      <if test="storageTime != null">
+        storage_time = #{storageTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rfid != null">
+        rfid = #{rfid,jdbcType=CHAR},
+      </if>
+      <if test="storageStatus != null">
+        storage_status = #{storageStatus,jdbcType=TINYINT},
+      </if>
+    </set>
+    where storage_id = #{storageId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.sm.StorageDetailPO">
+    update sm_storage_detail
+    set storage_head_id = #{storageHeadId,jdbcType=BIGINT},
+      location_id = #{locationId,jdbcType=BIGINT},
+      material_id = #{materialId,jdbcType=BIGINT},
+      storage_num = #{storageNum,jdbcType=DECIMAL},
+      storage_time = #{storageTime,jdbcType=TIMESTAMP},
+      rfid = #{rfid,jdbcType=CHAR},
+      storage_status = #{storageStatus,jdbcType=TINYINT}
+    where storage_id = #{storageId,jdbcType=BIGINT}
+  </update>
 
-    <select id="queryByRfidAndStatus" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from sm_storage_detail
-        where rfid = #{rfid,jdbcType=CHAR} and storage_status = #{status,jdbcType=TINYINT} limit 1
-    </select>
+  <select id="queryByRfidAndStatus" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from sm_storage_detail
+    where rfid = #{rfid,jdbcType=CHAR} and storage_status = #{status,jdbcType=TINYINT} limit 1
+  </select>
+
+  <delete id="deleteDetail">
+    delete from sm_storage_detail
+    where location_id = #{lid,jdbcType=BIGINT} and rfid = #{rfid,jdbcType=CHAR}
+  </delete>
+
+  <select id="queryStored" parameterType="java.lang.Long" resultType="java.math.BigDecimal">
+    select count(rfid)
+    from sm_storage_detail
+    where location_id = #{lid,jdbcType=BIGINT} and storage_status = 1
+  </select>
 </mapper>
