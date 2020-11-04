@@ -40,16 +40,6 @@ public class StorageController {
     }
 
     /**
-     * 列表查询
-     *
-     * @return
-     */
-    @PostMapping("list_query")
-    public ResultVO ListQuery(HttpSession session, @RequestBody StorageDTO dto) {
-        return finishOutboundService.list(session, dto.getType());
-    }
-
-    /**
      * 详细查询
      *
      * @return

@@ -14,10 +14,6 @@ import javax.servlet.http.HttpSession;
 public interface IOutboundService {
     ResultVO erp();
 
-    ResultVO online(HttpSession session, OutboundDTO dto);
-
-    ResultVO list(HttpSession session, Byte type);
-
     ResultVO detail(HttpSession session, OutboundDTO dto);
 
     ResultVO execute(HttpSession session);

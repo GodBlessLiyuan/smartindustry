@@ -3,15 +3,12 @@ package com.smartindustry.pda.service.impl;
 import com.smartindustry.common.bo.om.OutboundBodyBO;
 import com.smartindustry.common.bo.om.OutboundForkliftBO;
 import com.smartindustry.common.bo.om.OutboundHeadBO;
-import com.smartindustry.common.bo.sm.StorageHeadBO;
 import com.smartindustry.common.mapper.om.OutboundBodyMapper;
 import com.smartindustry.common.mapper.om.OutboundForkliftMapper;
 import com.smartindustry.common.mapper.om.OutboundHeadMapper;
 import com.smartindustry.common.mapper.si.ForkliftMapper;
 import com.smartindustry.common.mapper.si.LocationMapper;
-import com.smartindustry.common.mapper.sm.StorageBodyMapper;
 import com.smartindustry.common.mapper.sm.StorageDetailMapper;
-import com.smartindustry.common.mapper.sm.StorageHeadMapper;
 import com.smartindustry.common.pojo.om.OutboundBodyPO;
 import com.smartindustry.common.pojo.om.OutboundForkliftPO;
 import com.smartindustry.common.pojo.om.OutboundHeadPO;
@@ -20,20 +17,17 @@ import com.smartindustry.common.pojo.si.LocationPO;
 import com.smartindustry.common.pojo.sm.StorageDetailPO;
 import com.smartindustry.common.util.DateUtil;
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.pda.constant.OutboundConstant;
-import com.smartindustry.pda.constant.StorageConstant;
+import com.smartindustry.pda.constant.CommonConstant;
 import com.smartindustry.pda.dto.OutboundDTO;
 import com.smartindustry.pda.service.IOutboundService;
 import com.smartindustry.pda.socket.WebSocketServer;
 import com.smartindustry.pda.util.OutboundNoUtil;
 import com.smartindustry.pda.vo.OutboundDetailVO;
-import com.smartindustry.pda.vo.PdaListVO;
 import com.smartindustry.pda.vo.WebSocketVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
@@ -52,10 +46,6 @@ public class OutboundServiceImpl implements IOutboundService {
     private OutboundHeadMapper outboundHeadMapper;
     @Autowired
     private OutboundBodyMapper outboundBodyMapper;
-    @Autowired
-    private StorageHeadMapper storageHeadMapper;
-    @Autowired
-    private StorageBodyMapper storageBodyMapper;
     @Autowired
     private StorageDetailMapper storageDetailMapper;
     @Autowired
@@ -105,84 +95,6 @@ public class OutboundServiceImpl implements IOutboundService {
     }
 
     /**
-     * 上线
-     *
-     * @param session
-     * @param dto
-     * @return
-     */
-    @Override
-    public ResultVO online(HttpSession session, OutboundDTO dto) {
-        if (StringUtils.isEmpty(dto.getImei())) {
-            return new ResultVO(1001);
-        }
-
-        // 叉车信息
-        ForkliftPO forkliftPO = forkliftMapper.queryByImei(dto.getImei());
-        if (null == forkliftPO) {
-            return new ResultVO(1002);
-        }
-
-        session.setAttribute(OutboundConstant.SESSION_IMEI, dto.getImei());
-        session.setMaxInactiveInterval(30 * 24 * 60 * 60);
-
-        return ResultVO.ok().setData(forkliftPO.getForkliftName());
-    }
-
-    /**
-     * 列表区域
-     *
-     * @param session
-     * @param type
-     * @return
-     */
-    @Override
-    public ResultVO list(HttpSession session, Byte type) {
-        if (null == type) {
-            return new ResultVO(1001);
-        }
-
-        String imei = (String) session.getAttribute(OutboundConstant.SESSION_IMEI);
-        if (null == imei) {
-            return new ResultVO(1111);
-        }
-
-        // 叉车信息
-        ForkliftPO forkliftPO = forkliftMapper.queryByImei(imei);
-        if (null == forkliftPO) {
-            return new ResultVO(1002);
-        }
-
-        PdaListVO vo = new PdaListVO();
-        vo.setType(forkliftPO.getWorkArea());
-
-        if (type != (byte) 4) {
-            // 出库信息
-            List<OutboundHeadBO> headBOs = outboundHeadMapper.queryPdaByType(type);
-
-            Set<Long> ohids = new HashSet<>();
-            for (OutboundHeadBO headBO : headBOs) {
-                ohids.add(headBO.getOutboundHeadId());
-            }
-            session.setAttribute(OutboundConstant.SESSION_OHIDS, ohids);
-
-            vo.setOlist(headBOs);
-        }
-
-        // 入库信息
-        List<StorageHeadBO> storageHeadBOS = storageHeadMapper.queryPdaByType(type);
-
-        Set<Long> shids = new HashSet<>();
-        for (StorageHeadBO storageHeadBO : storageHeadBOS) {
-            shids.add(storageHeadBO.getStorageHeadId());
-        }
-        session.setAttribute(StorageConstant.SESSION_SHIDS, shids);
-        vo.setSlist(storageHeadBOS);
-
-        return ResultVO.ok().setData(vo);
-    }
-
-    /**
      * 详情
      *
      * @param session
@@ -195,7 +107,7 @@ public class OutboundServiceImpl implements IOutboundService {
             return new ResultVO(1001);
         }
 
-        String imei = (String) session.getAttribute(OutboundConstant.SESSION_IMEI);
+        String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
         if (null == imei) {
             return new ResultVO(1111);
         }
@@ -240,7 +152,7 @@ public class OutboundServiceImpl implements IOutboundService {
         }
         vo.setCnum(headBO.getOutboundNum().add(BigDecimal.valueOf(null == pos ? 0 : pos.size())));
 
-        session.setAttribute(OutboundConstant.SESSION_OHID, dto.getOhid());
+        session.setAttribute(CommonConstant.SESSION_OHID, dto.getOhid());
 
         return ResultVO.ok().setData(vo);
     }
@@ -253,12 +165,12 @@ public class OutboundServiceImpl implements IOutboundService {
      */
     @Override
     public ResultVO execute(HttpSession session) {
-        String imei = (String) session.getAttribute(OutboundConstant.SESSION_IMEI);
+        String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
         if (null == imei) {
             return new ResultVO(1111);
         }
 
-        Long ohid = (Long) session.getAttribute(OutboundConstant.SESSION_OHID);
+        Long ohid = (Long) session.getAttribute(CommonConstant.SESSION_OHID);
         if (null == ohid) {
             return new ResultVO(1002);
         }
@@ -273,7 +185,7 @@ public class OutboundServiceImpl implements IOutboundService {
             ofPO.setOutboundHeadId(ohid);
             outboundForkliftMapper.insert(ofPO);
 
-            session.setAttribute(OutboundConstant.SESSION_OHID, ohid);
+            session.setAttribute(CommonConstant.SESSION_OHID, ohid);
 
             // 发送 websocket
             fnames.add(fPO.getForkliftName());
@@ -287,7 +199,7 @@ public class OutboundServiceImpl implements IOutboundService {
             if (imei.equals(po.getImeiNo())) {
                 // 关闭
                 outboundForkliftMapper.deleteByFid(po.getForkliftId());
-                session.removeAttribute(OutboundConstant.SESSION_OHID);
+                session.removeAttribute(CommonConstant.SESSION_OHID);
                 close = true;
             } else {
                 fnames.add(po.getForkliftName());
@@ -303,7 +215,7 @@ public class OutboundServiceImpl implements IOutboundService {
 
             fnames.add(fPO.getForkliftName());
 
-            session.setAttribute(OutboundConstant.SESSION_OHID, ohid);
+            session.setAttribute(CommonConstant.SESSION_OHID, ohid);
         }
 
         sendOutboundMsg(ohid, fnames);
@@ -326,7 +238,7 @@ public class OutboundServiceImpl implements IOutboundService {
         }
 
         // 当前叉车信息
-        String imei = (String) session.getAttribute(OutboundConstant.SESSION_IMEI);
+        String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
         if (null == imei) {
             return new ResultVO(1111);
         }
@@ -396,10 +308,10 @@ public class OutboundServiceImpl implements IOutboundService {
      * @return
      */
     private boolean checkRfids(HttpSession session, OutboundDTO dto) {
-        String mrfid = (String) session.getAttribute(OutboundConstant.SESSION_MRFID);
-        String lrfid = (String) session.getAttribute(OutboundConstant.SESSION_LRFID);
-        session.setAttribute(OutboundConstant.SESSION_MRFID, dto.getMrfid());
-        session.setAttribute(OutboundConstant.SESSION_LRFID, dto.getLrfid());
+        String mrfid = (String) session.getAttribute(CommonConstant.SESSION_MRFID);
+        String lrfid = (String) session.getAttribute(CommonConstant.SESSION_LRFID);
+        session.setAttribute(CommonConstant.SESSION_MRFID, dto.getMrfid());
+        session.setAttribute(CommonConstant.SESSION_LRFID, dto.getLrfid());
 
         if (null == dto.getMrfid()) {
             if (null != mrfid) {

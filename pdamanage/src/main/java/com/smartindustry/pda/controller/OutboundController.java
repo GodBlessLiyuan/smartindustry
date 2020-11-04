@@ -28,16 +28,6 @@ public class OutboundController {
         return finishOutboundService.erp();
     }
 
-    @PostMapping("online")
-    public ResultVO online(HttpSession session, @RequestBody OutboundDTO dto) {
-        return finishOutboundService.online(session, dto);
-    }
-
-    @PostMapping("list")
-    public ResultVO list(HttpSession session, @RequestBody OutboundDTO dto) {
-        return finishOutboundService.list(session, dto.getType());
-    }
-
     @PostMapping("detail")
     public ResultVO detail(HttpSession session, @RequestBody OutboundDTO dto) {
         return finishOutboundService.detail(session, dto);
