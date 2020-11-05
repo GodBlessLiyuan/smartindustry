@@ -13,10 +13,6 @@ import java.util.Map;
  */
 @Mapper
 public interface MaterialMapper extends BaseMapper<MaterialPO, Long> {
-    /**
-     * 用于添加采购入库单表体的物料展示
-     * @param reqData
-     * @return
-     */
+
     List<MaterialBO> pageQueryStorage(Map<String, Object> reqData);
 }

@@ -21,13 +21,13 @@
         from dd_measure_unit
         where measure_unit_id = #{measureUnitId,jdbcType=BIGINT}
     </delete>
-    <insert id="insert" parameterType="com.smartindustry.common.pojo.dd.MeasureUnitPO">
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.dd.MeasureUnitPO" useGeneratedKeys="true" keyProperty="measureUnitId">
         insert into dd_measure_unit (measure_unit_id, measure_unit_name, user_id,
                                      create_time)
         values (#{measureUnitId,jdbcType=BIGINT}, #{measureUnitName,jdbcType=CHAR}, #{userId,jdbcType=BIGINT},
                 #{createTime,jdbcType=TIMESTAMP})
     </insert>
-    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.dd.MeasureUnitPO">
+    <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.dd.MeasureUnitPO" >
         insert into dd_measure_unit
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="measureUnitId != null">
