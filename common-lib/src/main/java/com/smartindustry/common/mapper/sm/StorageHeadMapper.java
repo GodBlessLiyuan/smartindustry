@@ -2,7 +2,9 @@ package com.smartindustry.common.mapper.sm;
 
 import com.smartindustry.common.bo.om.OutboundHeadBO;
 import com.smartindustry.common.bo.sm.StorageHeadBO;
+import com.smartindustry.common.bo.sm.WarehouseBO;
 import com.smartindustry.common.mapper.BaseMapper;
+import com.smartindustry.common.pojo.sm.StorageDetailPO;
 import com.smartindustry.common.pojo.sm.StorageHeadPO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -70,4 +72,18 @@ public interface StorageHeadMapper extends BaseMapper<StorageHeadPO, Long> {
      * @return
      */
     StorageHeadBO queryPdaDetailByShid(Long shid);
+
+    /**
+     * 根据入库单id 查询所有入库库存详情
+     * @param shid
+     * @return
+     */
+    StorageHeadBO queryStored(Long shid);
+
+    /**
+     * 查询所有的待入库的以及在备料区的
+     * @param shid
+     * @return
+     */
+    List<StorageDetailPO> queryAwaitStore(Long shid);
 }

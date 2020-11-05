@@ -2,6 +2,7 @@ package com.smartindustry.outbound.vo;
 
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.smartindustry.common.bo.om.OutboundBodyBO;
 import com.smartindustry.common.bo.om.OutboundHeadBO;
 import com.smartindustry.common.pojo.om.OutboundHeadPO;
@@ -44,6 +45,7 @@ public class OutboundHeadVO implements Serializable {
     /**
      * 计划出库时间
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date ptime;
     /**
      * 完成出库时间

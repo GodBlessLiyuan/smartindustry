@@ -73,6 +73,7 @@ public class OutboundHeadDTO implements Serializable {
         /**
          * 出库时间
          */
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
         private Date otime;
         /**
          * 物料id

@@ -1,6 +1,7 @@
 package com.smartindustry.storage.service;
 
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.storage.dto.OperateDTO;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Map;
@@ -18,4 +19,11 @@ public interface IProduceStorageService {
      * @return
      */
     ResultVO pageQuery(Map<String, Object> reqData);
+
+    /**
+     * 查询入库明细
+     * @param dto
+     * @return
+     */
+    ResultVO detail(OperateDTO dto);
 }
