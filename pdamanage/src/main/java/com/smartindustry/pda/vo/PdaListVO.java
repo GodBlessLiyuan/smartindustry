@@ -4,6 +4,7 @@ import com.smartindustry.common.bo.om.OutboundBodyBO;
 import com.smartindustry.common.bo.om.OutboundHeadBO;
 import com.smartindustry.common.bo.sm.StorageBodyBO;
 import com.smartindustry.common.bo.sm.StorageHeadBO;
+import com.smartindustry.pda.constant.CommonConstant;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -59,6 +60,11 @@ public class PdaListVO implements Serializable {
     }
 
 
+    /**
+     * 设置出库列表数据
+     *
+     * @param bos
+     */
     public void setOlist(List<OutboundHeadBO> bos) {
         List<ListVO> vos = new ArrayList<>(bos.size());
         for (OutboundHeadBO bo : bos) {
@@ -73,7 +79,7 @@ public class PdaListVO implements Serializable {
         vo.setSno(bo.getSourceNo());
         vo.setDnum(bo.getExpectNum());
         vo.setCnum(bo.getOutboundNum());
-        vo.setStatus((byte) 2);
+        vo.setStatus(CommonConstant.FLAG_OUTBOUND);
 
         if (null != bo.getBodyBOs() && bo.getBodyBOs().size() > 0) {
             OutboundBodyBO bodyBO = bo.getBodyBOs().get(0);

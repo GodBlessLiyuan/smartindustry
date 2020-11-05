@@ -2,30 +2,25 @@ package com.smartindustry.pda.constant;
 
 /**
  * @author: xiahui
- * @date: Created in 2020/10/31 18:50
- * @description: 成品出库
+ * @date: Created in 2020/11/4 19:48
+ * @description: TODO
  * @version: 1.0
  */
 public class OutboundConstant {
-
     /**
-     * session imei
+     * 开始执行
      */
-    public final static String SESSION_IMEI = "imei";
+    public final static String STATUS_OUTBOUND_START = "开始执行";
     /**
-     * session 出库表头IDs
+     * 辅助执行
      */
-    public final static String SESSION_OHIDS = "ohids";
+    public final static String STATUS_OUTBOUND_ASSIST = "辅助执行";
     /**
-     * session 出库表头ID
+     * 关闭
      */
-    public final static String SESSION_OHID = "ohid";
+    public final static String STATUS_OUTBOUND_CLOSE = "关闭";
     /**
-     * session 物料RFID
+     * 消失
      */
-    public final static String SESSION_MRFID = "mrfid";
-    /**
-     * session 库位RFID
-     */
-    public final static String SESSION_LRFID = "lrfid";
+    public final static String STATUS_OUTBOUND_VANISH = "消失";
 }

@@ -5,7 +5,9 @@ import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.om.OutboundForkliftPO;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * OutboundForkliftMapper继承基类
@@ -34,4 +36,12 @@ public interface OutboundForkliftMapper extends BaseMapper<OutboundForkliftPO, L
      * @return
      */
     List<OutboundForkliftBO> queryByOhid(Long outboundHeadId);
+
+    /**
+     * 根据hids查询当前叉车数
+     *
+     * @param hids
+     * @return
+     */
+    Map<Long, Integer> queryFnumByHids(List<Long> hids);
 }

@@ -28,6 +28,10 @@ public class StorageHeadVO implements Serializable {
      */
     private String sno;
     /**
+     * 来源单号-生产工单
+     */
+    private String sono;
+    /**
      * 入库仓库id
      */
     private Long wid;
@@ -114,6 +118,7 @@ public class StorageHeadVO implements Serializable {
         StorageHeadVO vo = new StorageHeadVO();
         vo.setShid(bo.getStorageHeadId());
         vo.setSno(bo.getStorageNo());
+        vo.setSono(bo.getSourceNo());
         vo.setStatus(bo.getStatus());
         vo.setStime(bo.getStorageTime());
         vo.setWname(bo.getWarehouseName());

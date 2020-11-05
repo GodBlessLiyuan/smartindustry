@@ -46,7 +46,7 @@ public class OutboundDetailVO implements Serializable {
      */
     private List<String> fnames;
     /**
-     * 状态：开始执行；辅助执行；关闭
+     * 状态：开始执行；辅助执行；关闭;消失
      */
     private String status;
     /**
@@ -78,7 +78,7 @@ public class OutboundDetailVO implements Serializable {
     }
 
     @Data
-    private static class MaterialVO {
+    static class MaterialVO {
         /**
          * 出库物料
          */

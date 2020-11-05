@@ -108,4 +108,20 @@
         left join si_forklift f on oof.forklift_id = f.forklift_id
         where f.dr = 1
     </select>
+
+    <resultMap id="mapResult" type="java.util.HashMap">
+        <result property="key" column="outboundHeadId" javaType="java.lang.Long" jdbcType="BIGINT"/>
+        <result property="value" column="fnum" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+    </resultMap>
+    <select id="queryFnumByHids" parameterType="java.util.List" resultType="java.util.Map">
+        select outbound_head_id as outboundHeadId,
+        count(outbound_head_id) as fnum
+        from om_outbound_forklift
+        where outbound_head_id in (
+        <foreach collection="list" item="ohid" separator=",">
+            outbound_head_id = #{ohid,jdbcType=BIGINT}
+        </foreach>
+        )
+        group by outbound_head_id
+    </select>
 </mapper>

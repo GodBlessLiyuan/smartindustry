@@ -78,13 +78,13 @@ public class MixHeadVO implements Serializable {
 
     public static MixHeadVO convert(MixHeadBO bo) {
         MixHeadVO vo = new MixHeadVO();
-        vo.setMixid(bo.getMixHeadId());
-        vo.setMixno(bo.getMixNo());
-        vo.setPtime(bo.getPlanTime());
+        vo.setMixid(bo.getSlurryId());
+        vo.setMixno(bo.getSlurryNo());
+        vo.setPtime(bo.getPlanDate());
         List<MixBodyVO> vos = new ArrayList<>();
         for(MixBodyBO bodyBO : bo.getBos()){
             MixBodyVO bodyVO = new MixBodyVO();
-            bodyVO.setMbid(bodyBO.getMixBodyId());
+            bodyVO.setMbid(bodyBO.getSlurryMaterialId());
             bodyVO.setMid(bodyBO.getMaterialId());
             bodyVO.setMno(bodyBO.getMaterialNo());
             bodyVO.setMmodel(bodyBO.getMaterialModel());

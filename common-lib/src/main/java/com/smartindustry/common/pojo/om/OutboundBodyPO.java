@@ -3,6 +3,8 @@ package com.smartindustry.common.pojo.om;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 /**

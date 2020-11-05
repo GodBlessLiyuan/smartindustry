@@ -91,45 +91,6 @@
     where mix_head_id = #{mixHeadId,jdbcType=BIGINT}
   </update>
 
-  <resultMap id="BOSResultMap" type="com.smartindustry.common.bo.om.MixHeadBO" extends="BaseResultMap">
-    <result column="mix_head_id" jdbcType="BIGINT" property="mixHeadId"/>
-    <result column="mix_no" jdbcType="CHAR" property="mixNo"/>
-    <result column="plan_time" jdbcType="DATE" property="planTime"/>
-    <collection property="bos" ofType="com.smartindustry.common.bo.om.MixBodyBO">
-      <id column="mix_body_id" jdbcType="BIGINT" property="mixBodyId"/>
-      <result column="material_id" jdbcType="BIGINT" property="materialId"/>
-      <result column="material_no" jdbcType="CHAR" property="materialNo"/>
-      <result column="material_name" jdbcType="CHAR" property="materialName"/>
-      <result column="material_model" jdbcType="CHAR" property="materialModel"/>
-      <result column="plan_num" jdbcType="DECIMAL" property="planNum"/>
-      <result column="measure_unit_name" jdbcType="CHAR" property="measureUnitName"/>
-    </collection>
-  </resultMap>
-  <sql id="BOS_Column_List">
-     mh.mix_head_id, mh.mix_no,mh.plan_time, mb.mix_body_id, mb.material_id, mb.plan_num, m.material_no, m.material_name, m.material_model,mu.measure_unit_name
-  </sql>
-  <select id="queryMix" resultMap="BOSResultMap">
-    select
-    <include refid="BOS_Column_List" />
-    from om_mix_head mh
-    left join om_mix_body mb on mh.mix_head_id = mb.mix_head_id
-    left join si_material m on mb.material_id = m.material_id
-    left join dd_measure_unit mu on m.measure_unit_id = mu.measure_unit_id
-    where mh.dr = 1 and date(mh.create_time) = curdate();
-  </select>
 
-  <select id="queryByMhid" resultType="java.math.BigDecimal">
-    select mb.plan_num
-    from om_mix_head mh
-    left join om_mix_body mb on mh.mix_head_id = mb.mix_head_id
-    where mh.mix_no = #{mixno,jdbcType=CHAR} and mb.material_id = #{mid,jdbcType=BIGINT}
-  </select>
-
-  <select id="queryTotal" parameterType="java.lang.String" resultType="java.math.BigDecimal">
-    select sum(mb.plan_num)
-    from om_mix_head mh
-    left join om_mix_body mb on mh.mix_head_id = mb.mix_head_id
-    where mh.mix_no = #{mixno,jdbcType=CHAR}
-  </select>
 
 </mapper>

@@ -15,10 +15,13 @@ import java.util.List;
 public class OperateDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
-     * 生产单id
+     * mess生产单id
      */
     private Long poid;
-
+    /**
+     * mess打包记录id
+     */
+    private Long pid;
     /**
      * 表体的批量删除
      */
