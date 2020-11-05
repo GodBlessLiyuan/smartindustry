@@ -189,18 +189,17 @@ public class SpareAreaServiceImpl implements ISpareAreaService {
     @Override
     public ResultVO showSpare(StoragePreDTO dto){
         // 根据栈板rfid查询入库单号
-        StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(dto.getPrfid());
-        StorageHeadPO storageHeadPO = storageHeadMapper.selectByPrimaryKey(storageDetailPO.getStorageHeadId());
-        LocationBO locationBO = locationMapper.queryByRfid(dto.getLrfid());
-        StorageDetailPO po = storageDetailMapper.queryByLidAndRfid(locationBO.getLocationId(),dto.getPrfid());
-        MaterialPO materialPO = materialMapper.selectByPrimaryKey(po.getMaterialId());
+        StorageDetailPO po = storageDetailMapper.queryByLidAndRfid(dto.getPrfid());
         SpareMaterialVO vo = new SpareMaterialVO();
-        if(null == storageHeadPO){
+        if(null != po){
+            MaterialPO materialPO = materialMapper.selectByPrimaryKey(po.getMaterialId());
             vo.setFlag(true);
+            vo.setRfid(dto.getPrfid());
+            vo.setMmodel(materialPO.getMaterialModel());
+            vo.setMname(materialPO.getMaterialName());
+        }else{
+            vo.setFlag(false);
         }
-        vo.setRfid(dto.getPrfid());
-        vo.setMmodel(materialPO.getMaterialModel());
-        vo.setMname(materialPO.getMaterialName());
         return ResultVO.ok().setData(vo);
     }
 }

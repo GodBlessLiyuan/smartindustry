@@ -146,13 +146,12 @@ public class OutBoundServiceImpl implements IOutBoundService {
 
     @Override
     public ResultVO detail(OperateDTO dto){
-        List<OutboundHeadBO> bo = outboundHeadMapper.queryMixByOhid(dto.getOhid());
-
+        OutboundHeadBO bo = outboundHeadMapper.queryMixByOhid(dto.getOhid());
         if(null == bo){
             // 出库单表体不存在
             return new ResultVO(ExceptionEnums.NO_EXIST.getCode());
         }
-        return ResultVO.ok().setData(bo);
+        return ResultVO.ok().setData(OutboundHeadVO.convert(bo));
     }
 
     @Override

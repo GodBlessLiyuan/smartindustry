@@ -52,11 +52,11 @@ public interface StorageDetailMapper extends BaseMapper<StorageDetailPO, Long> {
     /**
      * 根据库位和rfid进行入库详情表的查询
      *
-     * @param lid
+     *
      * @param rfid
      * @return
      */
-    StorageDetailPO queryByLidAndRfid(Long lid, String rfid);
+    StorageDetailPO queryByLidAndRfid(String rfid);
 
     /**
      *
