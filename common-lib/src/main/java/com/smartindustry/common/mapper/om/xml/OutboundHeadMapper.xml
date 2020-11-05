@@ -223,12 +223,12 @@
         select
         <include refid="BOS_Column_List"/>
         from om_outbound_head oh
-        left join om_outbound_body ob on oh.outbound_head_id = ob.outbound_head_id
         left join wo_slurry_order so on oh.source_no = so.slurry_no
+        left join om_outbound_body ob on oh.outbound_head_id = ob.outbound_head_id
         left join wo_slurry_material sm on so.slurry_id = sm.slurry_id
         left join si_material m on ob.material_id = m.material_id
         left join dd_measure_unit mu on m.measure_unit_id = mu.measure_unit_id
-        where oh.dr = 1 and ob.material_id = sm.material_id and oh.outbound_head_id = #{ohid,jdbcType=BIGINT}
+        where oh.dr = 1 and sm.material_id = ob.material_id and oh.outbound_head_id = #{ohid,jdbcType=BIGINT}
     </select>
 
     <select id="queryNo" parameterType="java.lang.String" resultMap="BaseResultMap">
