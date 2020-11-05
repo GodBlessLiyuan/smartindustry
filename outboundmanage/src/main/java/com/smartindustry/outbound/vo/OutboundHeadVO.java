@@ -135,8 +135,6 @@ public class OutboundHeadVO implements Serializable {
         OutboundHeadVO vo = new OutboundHeadVO();
         vo.setOhid(bo.getOutboundHeadId());
         vo.setOno(bo.getOutboundNo());
-        vo.setMixid(bo.getMixHeadId());
-        vo.setMixno(bo.getMixNo());
         vo.setPtime(bo.getPlanTime());
         vo.setExtra(bo.getExtra());
         List<OutboundBodyVO> vos = new ArrayList<>();
@@ -146,7 +144,6 @@ public class OutboundHeadVO implements Serializable {
             bodyVO.setMno(bodyBO.getMaterialNo());
             bodyVO.setMname(bodyBO.getMaterialName());
             bodyVO.setMmodel(bodyBO.getMaterialModel());
-            bodyVO.setPnum(bodyBO.getPlanNum());
             bodyVO.setOnum(bodyBO.getOutboundNum());
             bodyVO.setOtime(bodyBO.getOutboundTime());
             bodyVO.setMuname(bodyBO.getMeasureUnitName());
