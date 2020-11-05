@@ -118,9 +118,11 @@ public class CommonServiceImpl implements ICommonService {
                 for (OutboundHeadBO headBO : headBOs) {
                     hids.add(headBO.getOutboundHeadId());
                 }
-                Map<Long, Integer> fnumMap = outboundForkliftMapper.queryFnumByHids(hids);
-                for (OutboundHeadBO headBO : headBOs) {
-                    headBO.setExpectNum(headBO.getExpectNum().add(BigDecimal.valueOf(fnumMap.get(headBO.getOutboundHeadId()))));
+                if (hids.size() != 0) {
+                    Map<Long, Integer> fnumMap = outboundForkliftMapper.queryFnumByHids(hids);
+                    for (OutboundHeadBO headBO : headBOs) {
+                        headBO.setExpectNum(headBO.getExpectNum().add(BigDecimal.valueOf(fnumMap.get(headBO.getOutboundHeadId()))));
+                    }
                 }
             }
             vo.setOlist(headBOs);
@@ -134,9 +136,11 @@ public class CommonServiceImpl implements ICommonService {
             for (StorageHeadBO headBO : storageHeadBOS) {
                 sids.add(headBO.getStorageHeadId());
             }
-            Map<Long, Integer> fnumMap = storageForkliftMapper.queryFnumBySids(sids);
-            for (StorageHeadBO headBO : storageHeadBOS) {
-                headBO.setStorageNum(headBO.getStorageNum().add(BigDecimal.valueOf(fnumMap.get(headBO.getStorageHeadId()))));
+            if (sids.size() != 0) {
+                Map<Long, Integer> fnumMap = storageForkliftMapper.queryFnumBySids(sids);
+                for (StorageHeadBO headBO : storageHeadBOS) {
+                    headBO.setStorageNum(headBO.getStorageNum().add(BigDecimal.valueOf(fnumMap.get(headBO.getStorageHeadId()))));
+                }
             }
         }
         vo.setSlist(storageHeadBOS);
