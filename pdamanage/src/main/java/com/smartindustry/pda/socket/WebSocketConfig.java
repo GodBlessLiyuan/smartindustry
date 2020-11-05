@@ -1,4 +1,4 @@
-package com.smartindustry.pda.config;
+package com.smartindustry.pda.socket;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
