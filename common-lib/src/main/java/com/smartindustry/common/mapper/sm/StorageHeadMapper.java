@@ -2,7 +2,6 @@ package com.smartindustry.common.mapper.sm;
 
 import com.smartindustry.common.bo.om.OutboundHeadBO;
 import com.smartindustry.common.bo.sm.StorageHeadBO;
-import com.smartindustry.common.bo.sm.WarehouseBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.sm.StorageDetailPO;
 import com.smartindustry.common.pojo.sm.StorageHeadPO;
@@ -86,4 +85,10 @@ public interface StorageHeadMapper extends BaseMapper<StorageHeadPO, Long> {
      * @return
      */
     List<StorageDetailPO> queryAwaitStore(Long shid);
+    /**
+     * 通过来源单号查表头信息
+     * @param sourceNo
+     * @return
+     */
+    StorageHeadPO queryBySourceNo(String sourceNo);
 }

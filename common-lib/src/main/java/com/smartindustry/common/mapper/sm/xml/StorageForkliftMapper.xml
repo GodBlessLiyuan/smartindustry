@@ -79,4 +79,16 @@
       rfid = #{rfid,jdbcType=CHAR}
     where storage_forklift_id = #{storageForkliftId,jdbcType=BIGINT}
   </update>
+
+  <select id="queryFnumBySids" parameterType="java.util.List" resultType="java.util.Map">
+    select storage_head_id as storageHeadId,
+    count(storage_head_id) as fnum
+    from sm_storage_forklift
+    where storage_head_id in (
+    <foreach collection="list" item="shid" separator=",">
+      outbound_head_id = #{ohid,jdbcType=BIGINT}
+    </foreach>
+    )
+    group by storage_head_id
+  </select>
 </mapper>

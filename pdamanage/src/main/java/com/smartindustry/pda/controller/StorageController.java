@@ -2,7 +2,6 @@ package com.smartindustry.pda.controller;
 
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.pda.dto.OperateDTO;
-import com.smartindustry.pda.dto.OutboundDTO;
 import com.smartindustry.pda.dto.StorageDTO;
 import com.smartindustry.pda.service.IOutboundService;
 import com.smartindustry.pda.service.IStorageService;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
-import java.util.Map;
 
 /**
  * @ Author     ：AnHongxu.
@@ -40,6 +38,16 @@ public class StorageController {
     }
 
     /**
+     * mes打包后进行rfid和表头进行绑定
+     *
+     * @return
+     */
+    @PostMapping("rfid_bound")
+    public ResultVO rfidBound(@RequestBody OperateDTO dto) {
+        return storageService.rfidBound(dto);
+    }
+
+    /**
      * 详细查询
      *
      * @return
@@ -54,8 +62,8 @@ public class StorageController {
      *
      * @return
      */
-  /*  @PostMapping("execute")
+    @PostMapping("execute")
     public ResultVO forkliftLift(HttpSession session, @RequestBody StorageDTO dto) {
-        return storageService.forkliftLift(session, dto);
-    }*/
+        return storageService.execute(session, dto);
+    }
 }

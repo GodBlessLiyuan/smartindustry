@@ -8,6 +8,7 @@ import com.smartindustry.common.mapper.om.OutboundForkliftMapper;
 import com.smartindustry.common.mapper.om.OutboundHeadMapper;
 import com.smartindustry.common.mapper.si.ForkliftMapper;
 import com.smartindustry.common.mapper.sm.StorageDetailMapper;
+import com.smartindustry.common.mapper.sm.StorageForkliftMapper;
 import com.smartindustry.common.mapper.sm.StorageHeadMapper;
 import com.smartindustry.common.pojo.om.OutboundBodyPO;
 import com.smartindustry.common.pojo.om.OutboundForkliftPO;
@@ -51,6 +52,8 @@ public class CommonServiceImpl implements ICommonService {
     private StorageDetailMapper storageDetailMapper;
     @Autowired
     private OutboundBodyMapper outboundBodyMapper;
+    @Autowired
+    private StorageForkliftMapper storageForkliftMapper;
 
     /**
      * 上线
@@ -124,12 +127,17 @@ public class CommonServiceImpl implements ICommonService {
 
         // 入库信息
         List<StorageHeadBO> storageHeadBOS = storageHeadMapper.queryPdaByType(dto.getType());
-
-        Set<Long> shids = new HashSet<>();
-        for (StorageHeadBO storageHeadBO : storageHeadBOS) {
-            shids.add(storageHeadBO.getStorageHeadId());
+        if (CommonConstant.TYPE_LIST_DOING.equals(dto.getType())) {
+            // 执行中需要计算当前数量
+            List<Long> sids = new ArrayList<>(storageHeadBOS.size());
+            for (StorageHeadBO headBO : storageHeadBOS) {
+                sids.add(headBO.getStorageHeadId());
+            }
+            Map<Long, Integer> fnumMap = storageForkliftMapper.queryFnumBySids(sids);
+            for (StorageHeadBO headBO : storageHeadBOS) {
+                headBO.setStorageNum(headBO.getStorageNum().add(BigDecimal.valueOf(fnumMap.get(headBO.getStorageHeadId()))));
+            }
         }
-        session.setAttribute(StorageConstant.SESSION_SHIDS, shids);
         vo.setSlist(storageHeadBOS);
 
         return ResultVO.ok().setData(vo);
