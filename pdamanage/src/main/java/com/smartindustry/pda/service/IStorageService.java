@@ -21,6 +21,12 @@ public interface IStorageService {
      * @return
      */
     ResultVO generateStockbill(OperateDTO dto);
+    /**
+     * mes系统打包时将rfid和入库单号绑定
+     * @param dto
+     * @return
+     */
+    ResultVO rfidBound(OperateDTO dto);
 
     /**
      * 入库单详情
@@ -30,9 +36,9 @@ public interface IStorageService {
     ResultVO detail(HttpSession session, StorageDTO dto);
 
     /**
-     * 叉车叉起货物调用接口
-     * @param reqData
+     * 叉车插货物动作
+     * @param dto
      * @return
      */
-    ResultVO forkliftLift(Map<String, Object> reqData);
+    ResultVO execute(HttpSession session, StorageDTO dto);
 }

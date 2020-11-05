@@ -130,14 +130,13 @@
 
     <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="outboundBodyId">
         insert into om_outbound_body (outbound_body_id, outbound_head_id, material_id,
-        outbound_num, outing_num, create_time,
+        expect_num, outbound_num, create_time,
         outbound_time, dr
         )
         values
         <foreach collection="list" separator="," item="po">
-            (#{po.outboundBodyId,jdbcType=BIGINT}, #{po.outboundHeadId,jdbcType=BIGINT},
-            #{po.materialId,jdbcType=BIGINT},
-            #{po.outboundNum,jdbcType=DECIMAL}, #{po.outingNum,jdbcType=DECIMAL}, #{po.createTime,jdbcType=TIMESTAMP},
+            (#{po.outboundBodyId,jdbcType=BIGINT}, #{po.outboundHeadId,jdbcType=BIGINT}, #{po.materialId,jdbcType=BIGINT},
+            #{po.expectNum,jdbcType=DECIMAL}, #{po.outboundNum,jdbcType=DECIMAL}, #{po.createTime,jdbcType=TIMESTAMP},
             #{po.outboundTime,jdbcType=TIMESTAMP}, #{po.dr,jdbcType=TINYINT})
         </foreach>
     </insert>

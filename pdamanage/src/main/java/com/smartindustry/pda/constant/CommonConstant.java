@@ -12,6 +12,10 @@ public class CommonConstant {
      */
     public final static String SESSION_IMEI = "imei";
     /**
+     * session 入库单表头ID
+     */
+    public final static String SESSION_SHID = "shid";
+    /**
      * session 出库表头ID
      */
     public final static String SESSION_OHID = "ohid";

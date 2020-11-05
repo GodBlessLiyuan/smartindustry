@@ -50,6 +50,10 @@ public class StorageDetailVO {
      */
     private String status;
     /**
+     * 当前排位
+     */
+    private BigDecimal cnum;
+    /**
      * 储位图
      */
     private List<StorageDetailVO.LocationVO> lvos;
@@ -74,7 +78,7 @@ public class StorageDetailVO {
     }
 
     @Data
-    private static class MaterialVO {
+    static class MaterialVO {
         /**
          * 入库物料
          */

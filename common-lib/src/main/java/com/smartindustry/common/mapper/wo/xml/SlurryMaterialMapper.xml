@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.wo.SlurryMaterialMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.wo.SlurryMaterialPO">
+    <id column="slurry_material_id" jdbcType="BIGINT" property="slurryMaterialId" />
+    <result column="slurry_id" jdbcType="BIGINT" property="slurryId" />
+    <result column="material_id" jdbcType="BIGINT" property="materialId" />
+    <result column="need_num" jdbcType="DECIMAL" property="needNum" />
+    <result column="plan_num" jdbcType="DECIMAL" property="planNum" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    slurry_material_id, slurry_id, material_id, need_num, plan_num
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from wo_slurry_material
+    where slurry_material_id = #{slurryMaterialId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from wo_slurry_material
+    where slurry_material_id = #{slurryMaterialId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.wo.SlurryMaterialPO">
+    insert into wo_slurry_material (slurry_material_id, slurry_id, material_id, 
+      need_num, plan_num)
+    values (#{slurryMaterialId,jdbcType=BIGINT}, #{slurryId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT}, 
+      #{needNum,jdbcType=DECIMAL}, #{planNum,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.wo.SlurryMaterialPO">
+    insert into wo_slurry_material
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="slurryMaterialId != null">
+        slurry_material_id,
+      </if>
+      <if test="slurryId != null">
+        slurry_id,
+      </if>
+      <if test="materialId != null">
+        material_id,
+      </if>
+      <if test="needNum != null">
+        need_num,
+      </if>
+      <if test="planNum != null">
+        plan_num,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="slurryMaterialId != null">
+        #{slurryMaterialId,jdbcType=BIGINT},
+      </if>
+      <if test="slurryId != null">
+        #{slurryId,jdbcType=BIGINT},
+      </if>
+      <if test="materialId != null">
+        #{materialId,jdbcType=BIGINT},
+      </if>
+      <if test="needNum != null">
+        #{needNum,jdbcType=DECIMAL},
+      </if>
+      <if test="planNum != null">
+        #{planNum,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.wo.SlurryMaterialPO">
+    update wo_slurry_material
+    <set>
+      <if test="slurryId != null">
+        slurry_id = #{slurryId,jdbcType=BIGINT},
+      </if>
+      <if test="materialId != null">
+        material_id = #{materialId,jdbcType=BIGINT},
+      </if>
+      <if test="needNum != null">
+        need_num = #{needNum,jdbcType=DECIMAL},
+      </if>
+      <if test="planNum != null">
+        plan_num = #{planNum,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where slurry_material_id = #{slurryMaterialId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.wo.SlurryMaterialPO">
+    update wo_slurry_material
+    set slurry_id = #{slurryId,jdbcType=BIGINT},
+      material_id = #{materialId,jdbcType=BIGINT},
+      need_num = #{needNum,jdbcType=DECIMAL},
+      plan_num = #{planNum,jdbcType=DECIMAL}
+    where slurry_material_id = #{slurryMaterialId,jdbcType=BIGINT}
+  </update>
+</mapper>

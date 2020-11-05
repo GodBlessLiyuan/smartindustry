@@ -4,26 +4,28 @@ import com.smartindustry.common.bo.sm.StorageBodyBO;
 import com.smartindustry.common.bo.sm.StorageHeadBO;
 import com.smartindustry.common.mapper.si.ForkliftMapper;
 import com.smartindustry.common.mapper.si.LocationMapper;
-import com.smartindustry.common.mapper.sm.StorageBodyMapper;
-import com.smartindustry.common.mapper.sm.StorageHeadMapper;
-import com.smartindustry.common.mapper.sm.StorageRecordMapper;
+import com.smartindustry.common.mapper.sm.*;
+import com.smartindustry.common.mapper.wo.PackageMapper;
 import com.smartindustry.common.mapper.wo.ProduceOrderMapper;
 import com.smartindustry.common.pojo.si.ForkliftPO;
 import com.smartindustry.common.pojo.si.LocationPO;
-import com.smartindustry.common.pojo.sm.StorageBodyPO;
-import com.smartindustry.common.pojo.sm.StorageHeadPO;
-import com.smartindustry.common.pojo.sm.StorageRecordPO;
+import com.smartindustry.common.pojo.sm.*;
+import com.smartindustry.common.pojo.wo.PackagePO;
 import com.smartindustry.common.pojo.wo.ProduceOrderPO;
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.pda.constant.CommonConstant;
 import com.smartindustry.pda.constant.StorageConstant;
 import com.smartindustry.pda.dto.OperateDTO;
 import com.smartindustry.pda.dto.StorageDTO;
 import com.smartindustry.pda.service.IStorageService;
 import com.smartindustry.pda.util.StorageNoUtil;
 import com.smartindustry.pda.vo.StorageDetailVO;
+import org.apache.poi.hpsf.Decimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationAdapter;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
@@ -49,7 +51,13 @@ public class StorageServiceImpl implements IStorageService {
     @Autowired
     private ForkliftMapper forkliftMapper;
     @Autowired
+    private PackageMapper packageMapper;
+    @Autowired
+    StorageDetailMapper storageDetailMapper;
+    @Autowired
     private LocationMapper locationMapper;
+    @Autowired
+    private StorageForkliftMapper storageForkliftMapper;
 
     /**
      * @Description 生成入库单
@@ -113,6 +121,41 @@ public class StorageServiceImpl implements IStorageService {
     }
 
     /**
+     * @Description rfid和入库单id绑定
+     * @Param
+     * @Return
+     * @Author AnHongxu.
+     * @Date 2020/11/4
+     * @Time 19:44
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public ResultVO rfidBound(OperateDTO dto) {
+        /*查询成品工单详细信息生成入库详细记录，进而绑定rfid*/
+        //查询打包信息
+        PackagePO packagePO = packageMapper.selectByPrimaryKey(dto.getPid());
+        if (null == packagePO || null == packagePO.getProduceOrderId()) {
+            //没有打包记录或没有绑定生产单
+            return new ResultVO(1001);
+        }
+        //查询成品工单详细信息
+        ProduceOrderPO produceOrderPO = produceOderMapper.selectByPrimaryKey(packagePO.getProduceOrderId());
+        if (produceOrderPO == null) {
+            //没有该生产工单
+            return new ResultVO(1002);
+        }
+        //通过工单编号（来源单号）查入库单id
+        StorageHeadPO storageHeadPO = storageHeadMapper.queryBySourceNo(produceOrderPO.getProduceNo());
+        //在详细表中进行绑定
+        StorageDetailPO storageDetailPO = new StorageDetailPO();
+        storageDetailPO.setStorageHeadId(storageHeadPO.getStorageHeadId());
+        storageDetailPO.setRfid(packagePO.getRfid());
+        storageDetailPO.setStorageStatus(StorageConstant.STATUS_PRESTORED);
+        storageDetailMapper.insertSelective(storageDetailPO);
+        return ResultVO.ok();
+    }
+
+    /**
      * 详情
      *
      * @param session
@@ -125,7 +168,6 @@ public class StorageServiceImpl implements IStorageService {
             //没有有传入入库单表头
             return new ResultVO(1001);
         }
-
         // 入库信息
         StorageHeadBO storageHeadBO = storageHeadMapper.queryPdaDetailByShid(dto.getShid());
         if (null == storageHeadBO) {
@@ -136,13 +178,11 @@ public class StorageServiceImpl implements IStorageService {
 
         // 储位图
         Map<Long, StorageDetailVO.LocationVO> lvos = new HashMap<>();
-        int colorIndex = 0;
         for (StorageBodyBO bo : storageHeadBO.getBos()) {
             StorageDetailVO.LocationVO lvo = new StorageDetailVO.LocationVO();
-            lvo.setColor(StorageDetailVO.COLORS[colorIndex]);
+            lvo.setColor(StorageDetailVO.COLORS[lvos.size()]);
             lvo.setMinfo(bo.getMaterialName() + " " + bo.getMaterialModel());
             lvos.put(bo.getMaterialId(), lvo);
-            colorIndex += colorIndex;
         }
         List<LocationPO> locationPOs = locationMapper.queryByMids(new ArrayList<>(lvos.keySet()));
         for (LocationPO locationPO : locationPOs) {
@@ -154,22 +194,92 @@ public class StorageServiceImpl implements IStorageService {
         // 叉车信息
         List<ForkliftPO> pos = forkliftMapper.queryByShid(dto.getShid());
         if (null != pos && pos.size() > 0) {
-            String imei = (String) session.getAttribute(StorageConstant.SESSION_IMEI);
             List<String> fnames = new ArrayList<>(pos.size());
             for (ForkliftPO po : pos) {
                 fnames.add(po.getForkliftNo());
             }
             vo.setFnames(fnames);
         }
-
-        session.setAttribute(StorageConstant.SESSION_SHID, dto.getShid());
-
+        BigDecimal storageNum = storageHeadBO.getStorageNum() == null ? BigDecimal.valueOf(0) : storageHeadBO.getStorageNum();
+        vo.setCnum(storageNum.add(BigDecimal.valueOf(null == pos ? 0 : pos.size())));
+        session.setAttribute(CommonConstant.SESSION_SHID, dto.getShid());
         return ResultVO.ok().setData(vo);
     }
 
-
+    /**
+     * 叉车插入货物接口
+     *
+     * @param session
+     * @param dto
+     * @return
+     */
     @Override
-    public ResultVO forkliftLift(Map<String, Object> reqData) {
-        return null;
+    public ResultVO execute(HttpSession session, StorageDTO dto) {
+        String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
+        if (null == imei) {
+            //为获取到session中的imei
+            return new ResultVO(1001);
+        }
+
+        //通过rfid获取入库单和物料信息
+        StorageHeadPO storageHeadPO = storageHeadMapper.queryByRfid(dto.getMrfid());
+        if (null == storageHeadPO) {
+            //没有该入库单
+            return new ResultVO(1002);
+        }
+
+        /*将当前叉车放入入库单叉车表中，加入执行任务*/
+        //查询叉车表信息
+        ForkliftPO forkliftPO = forkliftMapper.queryByImei(imei);
+        StorageForkliftPO storageForkliftPO = new StorageForkliftPO();
+        storageForkliftPO.setRfid(dto.getMrfid());
+        storageForkliftPO.setForkliftId(forkliftPO.getForkliftId());
+        storageForkliftPO.setStorageHeadId(storageHeadPO.getStorageHeadId());
+        storageForkliftMapper.insertSelective(storageForkliftPO);
+
+        //查找物料信息
+        StorageHeadBO storageHeadBO = storageHeadMapper.queryPdaDetailByShid(storageHeadPO.getStorageHeadId());
+        if (null == storageHeadBO) {
+            //该入库单没有物料信息
+            return new ResultVO(1003);
+        }
+
+        StorageDetailVO vo = StorageDetailVO.convert(storageHeadBO);
+        // 储位图
+        Map<Long, StorageDetailVO.LocationVO> lvos = new HashMap<>();
+        for (StorageBodyBO bo : storageHeadBO.getBos()) {
+            StorageDetailVO.LocationVO lvo = new StorageDetailVO.LocationVO();
+            lvo.setColor(StorageDetailVO.COLORS[lvos.size()]);
+            lvo.setMinfo(bo.getMaterialName() + " " + bo.getMaterialModel());
+            lvos.put(bo.getMaterialId(), lvo);
+        }
+        List<LocationPO> locationPOs = locationMapper.queryByMids(new ArrayList<>(lvos.keySet()));
+        for (LocationPO locationPO : locationPOs) {
+            StorageDetailVO.LocationVO lvo = lvos.get(locationPO.getMaterialId());
+            lvo.getLrfids().add(locationPO.getLocationNo());
+        }
+        vo.setLvos(new ArrayList<>(lvos.values()));
+
+        // 叉车信息
+        List<ForkliftPO> pos = forkliftMapper.queryByShid(dto.getShid());
+        if (null != pos && pos.size() > 0) {
+            List<String> fnames = new ArrayList<>(pos.size());
+            for (ForkliftPO po : pos) {
+                fnames.add(po.getForkliftNo());
+            }
+            vo.setFnames(fnames);
+        }
+        BigDecimal storageNum = storageHeadBO.getStorageNum() == null ? BigDecimal.valueOf(0) : storageHeadBO.getStorageNum();
+        vo.setCnum(storageNum.add(BigDecimal.valueOf(null == pos ? 0 : pos.size())));
+        session.setAttribute(CommonConstant.SESSION_SHID, storageHeadPO.getStorageHeadId());
+
+        //添加该入库单任务的操作记录表
+        //入库操作记录:执行入库或参与入库
+        if (vo.getCnum().compareTo(new BigDecimal(1)) == 0) {
+            storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), forkliftPO.getForkliftId(), StorageConstant.OPERATE_NAME_EXECUTE));
+        } else {
+            storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), forkliftPO.getForkliftId(), StorageConstant.OPERATE_NAME_JOIN));
+        }
+        return ResultVO.ok().setData(vo);
     }
 }

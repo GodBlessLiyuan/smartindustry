@@ -78,7 +78,7 @@ public class OutboundDetailVO implements Serializable {
     }
 
     @Data
-    private static class MaterialVO {
+    static class MaterialVO {
         /**
          * 出库物料
          */

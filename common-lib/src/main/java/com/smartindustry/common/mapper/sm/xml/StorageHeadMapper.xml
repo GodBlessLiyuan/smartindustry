@@ -180,7 +180,7 @@
     <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
   </resultMap>
   <sql id="BO_Column_List">
-     sh.storage_head_id, sh.storage_no, sh.storage_time, sh.`status`, w.warehouse_name
+     sh.storage_head_id, sh.storage_no,sh.source_no, sh.storage_time, sh.`status`, w.warehouse_name
   </sql>
   <select id="pageQuery" parameterType="java.util.Map" resultMap="BOResultMap">
     select
@@ -207,14 +207,13 @@
     left join si_warehouse w on sh.warehouse_id = w.warehouse_id
     where sh.dr = 1
     <if test="no != null and no != ''">
-      and sh.storage_no = #{no,jdbcType=CHAR}
+      and (sh.storage_no like '%' #{no,jdbcType=CHAR} '%' or
+      sh.source_no like '%' #{no,jdbcType=CHAR} '%')
     </if>
-    <if test="status != null and status != 0">
-      and sh.`status` = #{status,jdbcType=TINYINT}
+    <if test="wid != null and wid != 0">
+      and sh.warehouse_id = #{wid,jdbcType=BIGINT}
     </if>
-    <if test="stime != null and stime != ''">
-      and sh.storage_time like concat('%',#{stime,jdbcType=CHAR},'%')
-    </if>
+    order by sh.create_time desc
   </select>
 
   <resultMap id="BOSResultMap" type="com.smartindustry.common.bo.sm.StorageHeadBO" extends="BaseResultMap">
@@ -327,6 +326,60 @@
     from sm_storage_head sh
     left join sm_storage_body sb on sh.storage_head_id = sb.storage_head_id
     left join si_material m on sb.material_id = m.material_id
-    where sh.source_type = 2 and sh.dr = 1 and sh.storage_head_id = #{storageHeadId,jdbcType=BIGINT}
+    where sh.source_type = 2 and sh.dr = 1 and sh.storage_head_id = #{shid,jdbcType=BIGINT}
+  </select>
+  <select id="queryBySourceNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sm_storage_head sh
+    where sh.source_no = #{sourceNo,jdbcType=CHAR}
+  </select>
+
+
+  <sql id="Storage_Column_List">
+     sh.storage_head_id,sh.storage_no,sh.source_no,sh.storage_time,l.warehouse_id,w.warehouse_name,
+     sd.location_id,l.location_no,m.material_no,m.material_name,count(sd.rfid) as num
+  </sql>
+  <resultMap id="StorageResultMap" type="com.smartindustry.common.bo.sm.StorageHeadBO" extends="BaseResultMap">
+    <result column="storage_head_id" jdbcType="BIGINT" property="storageHeadId"/>
+    <result column="storage_no" jdbcType="CHAR" property="storageNo"/>
+    <result column="source_no" jdbcType="CHAR" property="sourceNo"/>
+    <result column="storage_time" jdbcType="TIMESTAMP" property="storageTime"/>
+    <collection property="warehouseBOS" resultMap="warehouseListResp"/>
+  </resultMap>
+
+  <resultMap id="warehouseListResp" type="com.smartindustry.common.bo.sm.WarehouseBO">
+    <id column="warehouse_id" jdbcType="BIGINT" property="warehouseId" />
+    <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
+    <collection property="locationBOS" resultMap="locationListResp"/>
+  </resultMap>
+
+  <resultMap id="locationListResp" type="com.smartindustry.common.bo.sm.LocationBO">
+    <id column="location_id" jdbcType="BIGINT" property="locationId" />
+    <result column="location_no" jdbcType="CHAR" property="locationNo"/>
+    <collection property="materialBOS" ofType="com.smartindustry.common.bo.sm.MaterialBO">
+      <result column="material_no" jdbcType="CHAR" property="materialNo"/>
+      <result column="material_name" jdbcType="CHAR" property="materialName"/>
+      <result column="num" jdbcType="INTEGER" property="num"/>
+    </collection>
+  </resultMap>
+
+  <select id="queryStored" parameterType="java.lang.Long" resultMap="StorageResultMap">
+    select
+    <include refid="Storage_Column_List"/>
+    from sm_storage_head sh
+    left join sm_storage_detail sd on sh.storage_head_id = sd.storage_head_id
+    left join si_location l on sd.location_id = l.location_id
+    left join si_material m on l.material_id = m.material_id
+    left join si_warehouse w on l.warehouse_id = w.warehouse_id
+    where sh.dr = 1 and sh.storage_head_id = #{shid,jdbcType=BIGINT} and sd.storage_status = 1
+    group by sd.storage_head_id,sd.location_id
+  </select>
+  
+  <select id="queryAwaitStore" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.sm.MaterialDetailBO">
+    select
+    from sm_storage_head sh
+    left join sm_storage_detail sd on sh.storage_head_id = sd.storage_head_id
+    where sh.dr = 1 and sh.storage_head_id = #{shid,jdbcType=BIGINT} and (sd.storage_status = 3 or sd.dr = 2)
   </select>
 </mapper>
