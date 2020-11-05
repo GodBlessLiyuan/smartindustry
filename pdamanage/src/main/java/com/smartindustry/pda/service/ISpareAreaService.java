@@ -1,7 +1,8 @@
-package com.smartindustry.storage.service;
+package com.smartindustry.pda.service;
 
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.storage.dto.StoragePreDTO;
+import com.smartindustry.pda.dto.StoragePreDTO;
+
 
 import javax.servlet.http.HttpSession;
 

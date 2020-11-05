@@ -11,6 +11,7 @@ public class StorageConstant {
      * 已入库
      */
     public static final Byte STATUS_STORED = 1;
+
     /**
      * 待入库
      */
@@ -30,5 +31,34 @@ public class StorageConstant {
      * 釜到栈运算
      */
     public static final Integer F2Z = 36;
+
+    /**
+     * 成品区的储位类型
+     */
+    public static final Long TYPE_FINISHED_AREA = 1L;
+    /**
+     * 备料区的储位类型
+     */
+    public static final Long TYPE_PREPARATION_AREA = 2L;
+
+
+    /**
+     * 采购出库单已出库
+     */
+    public static final Byte STATUS_OUTED = 1;
+    /**
+     * 采购出库单待出库
+     */
+    public static final Byte STATUS_OUTING = 3;
+
+    /**
+     * 直接生产工单成品入库
+     */
+    public static final Byte TYPE_PRODUCT_STORAGE = 2;
+    /**
+     * 备料区入库
+     */
+    public static final Byte TYPE_PRE_STORAGE = 3;
+
 
 }

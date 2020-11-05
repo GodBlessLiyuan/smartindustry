@@ -313,13 +313,6 @@
         where sh.dr = 1 and sh.`status` = #{status,jdbcType=TINYINT} and sh.source_type = #{type,jdbcType=TINYINT}
     </select>
 
-  <select id="queryByRfid" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from sm_storage_detail sd
-    left join sm_storage_head sh on sd.storage_head_id = sh.storage_head_id
-    where sh.dr = 1 and p.rfid = #{rfid,jdbcType=CHAR}
-  </select>
   <select id="queryPdaDetailByShid" parameterType="java.lang.Long" resultMap="PdaResultMap">
     select
     <include refid="Pda_Column_List"/>

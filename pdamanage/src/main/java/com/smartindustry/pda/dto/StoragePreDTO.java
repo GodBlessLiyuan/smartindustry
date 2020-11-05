@@ -1,4 +1,4 @@
-package com.smartindustry.storage.dto;
+package com.smartindustry.pda.dto;
 
 import lombok.Data;
 

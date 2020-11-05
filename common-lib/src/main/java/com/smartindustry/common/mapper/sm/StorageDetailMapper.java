@@ -57,4 +57,11 @@ public interface StorageDetailMapper extends BaseMapper<StorageDetailPO, Long> {
      * @return
      */
     StorageDetailPO queryByLidAndRfid(Long lid, String rfid);
+
+    /**
+     *
+     * @param rfid
+     * @return
+     */
+    StorageDetailPO queryByRfid(String rfid);
 }

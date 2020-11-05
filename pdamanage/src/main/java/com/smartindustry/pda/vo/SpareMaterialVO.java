@@ -1,4 +1,4 @@
-package com.smartindustry.storage.vo;
+package com.smartindustry.pda.vo;
 
 import lombok.Data;
 
