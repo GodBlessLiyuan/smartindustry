@@ -52,7 +52,7 @@ public class StorageConstant {
     public static final Byte STATUS_OUTING = 3;
 
     /**
-     * 直接生产工单成品入库
+     * 生产入库
      */
     public static final Byte TYPE_PRODUCT_STORAGE = 2;
     /**
