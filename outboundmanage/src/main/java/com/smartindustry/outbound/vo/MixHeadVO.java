@@ -89,7 +89,7 @@ public class MixHeadVO implements Serializable {
             bodyVO.setMno(bodyBO.getMaterialNo());
             bodyVO.setMmodel(bodyBO.getMaterialModel());
             bodyVO.setMname(bodyBO.getMaterialName());
-            bodyVO.setPnum(bodyBO.getNeedNum());
+            bodyVO.setPnum(bodyBO.getPlanNum());
             bodyVO.setMuname(bodyBO.getMeasureUnitName());
             vos.add(bodyVO);
         }
