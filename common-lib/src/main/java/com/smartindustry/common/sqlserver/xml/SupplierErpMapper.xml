@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.sqlserver.SupplierErpMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.ds.sqlserver.SupplierErpPO">
+    <result column="ID" jdbcType="DOUBLE" property="supplierId" />
+    <result column="编号" jdbcType="NVARCHAR" property="supplierCode" />
+    <result column="供应商名称" jdbcType="NVARCHAR" property="supplierName" />
+    <result column="地址" jdbcType="NVARCHAR" property="address" />
+    <result column="电话号码" jdbcType="NVARCHAR" property="telephone" />
+    <result column="手机号码" jdbcType="NVARCHAR" property="cellphone" />
+    <result column="传真号码" jdbcType="NVARCHAR" property="fax" />
+    <result column="公司主页" jdbcType="NVARCHAR" property="homeAddress" />
+    <result column="电子邮件地址" jdbcType="NVARCHAR" property="email" />
+    <result column="联系人" jdbcType="NVARCHAR" property="contact" />
+    <result column="备注" jdbcType="NVARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+ID, 编号, 供应商名称,       地址, 电话号码, 手机号码,       传真号码, 公司主页, 电子邮件地址,       联系人, 备注
+  </sql>
+  <select id="queryAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from dbo.供应商
+  </select>
+</mapper>

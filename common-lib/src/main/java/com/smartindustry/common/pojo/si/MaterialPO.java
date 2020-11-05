@@ -1,6 +1,7 @@
 package com.smartindustry.common.pojo.si;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import lombok.Data;
 
@@ -21,46 +22,10 @@ public class MaterialPO implements Serializable {
     private String materialNo;
 
     /**
-     * 一级物料类型 : 1：原材料
-2：半成品
-3：成品
+     * 物料类型 : 1：原材料
+2：成品
      */
     private Byte materialType;
-
-    /**
-     * 二级物料类型ID
-     */
-    private Long materialTypeId;
-
-    /**
-     * 湿度等级ID
-     */
-    private Long humidityLevelId;
-
-    /**
-     * 物料层级ID
-     */
-    private Long materialLevelId;
-
-    /**
-     * 计量单位ID
-     */
-    private Long measureUnitId;
-
-    /**
-     * 物料版本ID
-     */
-    private Long materialVersionId;
-
-    /**
-     * 生产损耗等级ID
-     */
-    private Long produceLossLevelId;
-
-    /**
-     * 生命周期状态ID
-     */
-    private Long lifeCycleStateId;
 
     /**
      * 物料名称
@@ -68,14 +33,9 @@ public class MaterialPO implements Serializable {
     private String materialName;
 
     /**
-     * 交期天数
+     * 物料等级
      */
-    private Integer deliveryDays;
-
-    /**
-     * MOQ
-     */
-    private String moq;
+    private String materialLevel;
 
     /**
      * 规格型号
@@ -83,9 +43,14 @@ public class MaterialPO implements Serializable {
     private String materialModel;
 
     /**
-     * 物料图号
+     * 计量单位ID
      */
-    private String materialDraw;
+    private Long measureUnitId;
+
+    /**
+     * 包装体积
+     */
+    private BigDecimal packageVolume;
 
     /**
      * 供应商ID
@@ -96,11 +61,6 @@ public class MaterialPO implements Serializable {
      * 物料描述
      */
     private String materialDesc;
-
-    /**
-     * 检验类型
-     */
-    private Byte testType;
 
     /**
      * 创建人

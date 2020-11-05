@@ -1,0 +1,66 @@
+spring:
+  application:
+    name: workbenchmanage
+  jackson:
+    serialization:
+      indent-output: true
+      fail-on-empty-beans: true
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+08
+  datasource:
+    test1:
+     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+     jdbc-url: jdbc:sqlserver://192.168.10.49:1433;DatabaseName=boke
+     username: sa
+     password: yinghong
+    test2:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://192.168.10.3:3306/smartyinghong?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+      username: root
+      password: 1234qwer
+  servlet:
+    multipart:
+      enabled: true #是否启用http上传处理
+      max-request-size: 100MB #最大请求文件的大小
+      max-file-size: 100MB #设置单个文件最大长度
+  security:
+    user:
+      name: vbooster
+      password: 123456a
+  redis:
+    database: 1
+    host: 192.168.10.3
+    port: 6379
+    password: 123456
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@localhost:8030/eureka/
+config:
+  file:
+    localPath: D:\\testFile
+    publicPath: http://dev.smartindustry.vbooster.cn
+    tmpPath: E:\\tmp\\
+
+# token配置
+token:
+  # 令牌自定义标识
+  header: Authorization
+  # 令牌密钥
+  secret: abcdefghijklmnopqrstuvwxyz
+  # 令牌有效期（默认30分钟）
+  expireTime: 3000000
+
+server:
+    port: 8141
+
+
+logging:
+  level:
+    com:
+      smartindustry:
+        common:
+          mapper: debug
+  config: classpath:logback-spring-test.xml
+
+
