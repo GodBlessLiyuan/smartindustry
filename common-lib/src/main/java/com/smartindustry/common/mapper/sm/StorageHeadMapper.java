@@ -70,4 +70,10 @@ public interface StorageHeadMapper extends BaseMapper<StorageHeadPO, Long> {
      * @return
      */
     StorageHeadBO queryPdaDetailByShid(Long shid);
+    /**
+     * 通过来源单号查表头信息
+     * @param sourceNo
+     * @return
+     */
+    StorageHeadPO queryBySourceNo(String sourceNo);
 }
