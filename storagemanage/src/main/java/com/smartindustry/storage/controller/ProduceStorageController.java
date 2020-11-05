@@ -1,6 +1,7 @@
 package com.smartindustry.storage.controller;
 
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.storage.dto.OperateDTO;
 import com.smartindustry.storage.service.IProduceStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,4 +31,14 @@ public class ProduceStorageController {
     public ResultVO pageQuery(@RequestBody Map<String, Object> reqData) {
         return produceStorageService.pageQuery(reqData);
     }
+
+    @PostMapping("detail")
+    public ResultVO detail(@RequestBody OperateDTO dto) {
+        return produceStorageService.detail(dto);
+    }
+
+//    @PostMapping("queryBySbid")
+//    public ResultVO queryBySbid(@RequestBody OperateDTO dto) {
+//        return produceStorageService.queryBySbid(dto);
+//    }
 }

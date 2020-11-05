@@ -1,6 +1,7 @@
 package com.smartindustry.common.bo.om;
 
 import com.smartindustry.common.pojo.om.MixBodyPO;
+import com.smartindustry.common.pojo.wo.SlurryMaterialPO;
 import lombok.Data;
 
 /**
@@ -10,7 +11,7 @@ import lombok.Data;
  * @description:
  */
 @Data
-public class MixBodyBO extends MixBodyPO {
+public class MixBodyBO extends SlurryMaterialPO {
 
     private String materialNo;
 
