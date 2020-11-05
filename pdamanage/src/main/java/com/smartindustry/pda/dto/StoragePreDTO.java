@@ -21,7 +21,7 @@ public class StoragePreDTO implements Serializable {
     /**
      * 成品RFID
      */
-    private String prfid;
+    private String mrfid;
     /**
      * 储位RFID
      */

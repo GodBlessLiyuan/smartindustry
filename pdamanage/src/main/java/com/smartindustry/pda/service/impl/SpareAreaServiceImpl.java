@@ -59,7 +59,7 @@ public class SpareAreaServiceImpl implements ISpareAreaService {
         // 根据imei查询出叉车id
         ForkliftPO forkliftPO = forkliftMapper.queryByImei(imei);
         // 根据栈板rfid查询入库单
-        StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(dto.getPrfid());
+        StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(dto.getMrfid());
         StorageHeadPO storageHeadPO = storageHeadMapper.selectByPrimaryKey(storageDetailPO.getStorageHeadId());
         // 查询当前储位的基本信息
         Date date = new Date();
@@ -74,7 +74,7 @@ public class SpareAreaServiceImpl implements ISpareAreaService {
             StorageDetailPO detailPO = new StorageDetailPO();
             detailPO.setLocationId(locationBO.getLocationId());
             detailPO.setStorageTime(date);
-            detailPO.setRfid(dto.getPrfid());
+            detailPO.setRfid(dto.getMrfid());
             storageDetailMapper.insert(detailPO);
             //2. 入库单表体已入库数量+1
             if(null != bodyPO){
@@ -110,11 +110,11 @@ public class SpareAreaServiceImpl implements ISpareAreaService {
             StorageDetailPO detailPO = new StorageDetailPO();
             detailPO.setLocationId(locationBO.getLocationId());
             detailPO.setStorageTime(date);
-            detailPO.setRfid(dto.getPrfid());
+            detailPO.setRfid(dto.getMrfid());
             detailPO.setMaterialId(dto.getMid());
             storageDetailMapper.insert(detailPO);
             // 解绑,就是将入库单的来源单号给置空,根据入库单表头id和rfid删除
-            storageDetailMapper.deleteByShidAndRfid(storageHeadPO.getStorageHeadId(),dto.getPrfid());
+            storageDetailMapper.deleteByShidAndRfid(storageHeadPO.getStorageHeadId(),dto.getMrfid());
             // 判断储位是否已满
             if(!judgeFull(locationBO.getLocationId())){
                 // 储位已满
@@ -125,7 +125,7 @@ public class SpareAreaServiceImpl implements ISpareAreaService {
         //# 阅读器扫描备货区成品，准备运往成品区
         if(locationBO.getLocationTypeId().equals(StorageConstant.TYPE_PREPARATION_AREA) && storageHeadPO == null){
             // 那么入库详情表需要删除
-            storageDetailMapper.deleteDetail(locationBO.getLocationId(),dto.getPrfid());
+            storageDetailMapper.deleteDetail(locationBO.getLocationId(),dto.getMrfid());
         }
 
         //# 阅读器扫描成品区库位，并且来源是备货入库单，入库一条成功后，此时生成备货入库单
@@ -150,7 +150,7 @@ public class SpareAreaServiceImpl implements ISpareAreaService {
             StorageDetailPO detailPO = new StorageDetailPO();
             detailPO.setLocationId(locationBO.getLocationId());
             detailPO.setStorageTime(date);
-            detailPO.setRfid(dto.getPrfid());
+            detailPO.setRfid(dto.getMrfid());
             detailPO.setStorageStatus(StorageConstant.STATUS_STORED);
             // 判断储位是否已满
             if(!judgeFull(locationBO.getLocationId())){
@@ -180,7 +180,7 @@ public class SpareAreaServiceImpl implements ISpareAreaService {
     @Override
     public ResultVO chooseMaterial(StoragePreDTO dto){
         // 根据栈板rfid查询入库单
-        StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(dto.getPrfid());
+        StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(dto.getMrfid());
         StorageHeadPO storageHeadPO = storageHeadMapper.selectByPrimaryKey(storageDetailPO.getStorageHeadId());
         List<MaterialPO> pos = storageBodyMapper.queryMaterial(storageHeadPO.getStorageHeadId());
         return ResultVO.ok().setData(MaterialVO.convertPO(pos));
@@ -189,12 +189,12 @@ public class SpareAreaServiceImpl implements ISpareAreaService {
     @Override
     public ResultVO showSpare(StoragePreDTO dto){
         // 根据栈板rfid查询入库单号
-        StorageDetailPO po = storageDetailMapper.queryByLidAndRfid(dto.getPrfid());
+        StorageDetailPO po = storageDetailMapper.queryByRfid(dto.getMrfid());
         SpareMaterialVO vo = new SpareMaterialVO();
-        if(null != po){
+        if(null == po.getStorageHeadId()){
             MaterialPO materialPO = materialMapper.selectByPrimaryKey(po.getMaterialId());
             vo.setFlag(true);
-            vo.setRfid(dto.getPrfid());
+            vo.setRfid(dto.getMrfid());
             vo.setMmodel(materialPO.getMaterialModel());
             vo.setMname(materialPO.getMaterialName());
         }else{
