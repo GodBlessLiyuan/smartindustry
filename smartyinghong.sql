@@ -8,13 +8,13 @@ DROP TABLE IF EXISTS am_authority;
 DROP TABLE IF EXISTS am_dept_record;
 DROP TABLE IF EXISTS am_role_record;
 DROP TABLE IF EXISTS am_user_record;
-DROP TABLE IF EXISTS om_mix_body;
 DROP TABLE IF EXISTS om_outbound_body;
 DROP TABLE IF EXISTS si_location_record;
 DROP TABLE IF EXISTS sm_storage_body;
 DROP TABLE IF EXISTS sm_storage_detail;
 DROP TABLE IF EXISTS si_location;
 DROP TABLE IF EXISTS si_material_record;
+DROP TABLE IF EXISTS wo_slurry_material;
 DROP TABLE IF EXISTS si_material;
 DROP TABLE IF EXISTS dd_measure_unit;
 DROP TABLE IF EXISTS si_warehouse_record;
@@ -32,11 +32,11 @@ DROP TABLE IF EXISTS am_user;
 DROP TABLE IF EXISTS am_dept;
 DROP TABLE IF EXISTS am_role;
 DROP TABLE IF EXISTS dd_location_type;
-DROP TABLE IF EXISTS om_mix_head;
 DROP TABLE IF EXISTS om_outbound_forklift;
 DROP TABLE IF EXISTS om_outbound_head;
 DROP TABLE IF EXISTS si_client;
 DROP TABLE IF EXISTS si_forklift;
+DROP TABLE IF EXISTS wo_slurry_order;
 
 
 
@@ -231,40 +231,6 @@ CREATE TABLE dd_warehouse_type
 ) COMMENT = '仓库类型表';
 
 
--- 混料单表体
-CREATE TABLE om_mix_body
-(
-	mix_body_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '混料单表体id',
-	mix_head_id bigint unsigned NOT NULL COMMENT '混料单表头id',
-	material_id bigint unsigned COMMENT '物料ID',
-	plan_num decimal(10,2) COMMENT '计划出库数量',
-	create_time datetime COMMENT '创建时间',
-	-- 1 未删除
-	-- 2 已删除
-	dr tinyint COMMENT '是否删除 : 1 未删除
-2 已删除',
-	PRIMARY KEY (mix_body_id),
-	UNIQUE (mix_body_id),
-	UNIQUE (mix_head_id)
-) COMMENT = '混料单表体';
-
-
--- 混料单表头
-CREATE TABLE om_mix_head
-(
-	mix_head_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '混料单表头id',
-	mix_no char(128) NOT NULL COMMENT '混料单编码',
-	plan_time date COMMENT '计划出库时间',
-	create_time datetime COMMENT '创建时间',
-	-- 1 未删除
-	-- 2 已删除
-	dr tinyint COMMENT '是否删除 : 1 未删除
-2 已删除',
-	PRIMARY KEY (mix_head_id),
-	UNIQUE (mix_head_id)
-) COMMENT = '混料单表头';
-
-
 -- 出库单表体
 CREATE TABLE om_outbound_body
 (
@@ -287,7 +253,7 @@ CREATE TABLE om_outbound_body
 -- 出库叉车表
 CREATE TABLE om_outbound_forklift
 (
-	outbound_forklift_id bigint NOT NULL COMMENT '出库叉车id',
+	outbound_forklift_id bigint NOT NULL AUTO_INCREMENT COMMENT '出库叉车id',
 	outbound_head_id bigint unsigned NOT NULL COMMENT '出库单表头ID',
 	forklift_id bigint unsigned NOT NULL COMMENT '叉车id',
 	rfid char(128) COMMENT 'RFID',
@@ -302,14 +268,12 @@ CREATE TABLE om_outbound_head
 	outbound_head_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '出库单表头ID',
 	outbound_no char(128) NOT NULL COMMENT '出库单编码',
 	source_no char(128) COMMENT '来源单号',
-	-- 1-混料出库
-	-- 2-生产出库
-	-- 3-销售出库
-	-- 4-备料区出库
-	source_type tinyint COMMENT '来源类型 : 1-混料出库
-2-生产出库
-3-销售出库
-4-备料区出库',
+	-- 1 原材料出库
+	-- 2 销售出库
+	-- 3 备料区出库
+	source_type tinyint COMMENT '来源类型 : 1 原材料出库
+2 销售出库
+3 备料区出库',
 	plan_time date COMMENT '计划出库时间',
 	outbound_time datetime COMMENT '完成出库时间',
 	expect_num decimal(10,2) COMMENT '期望出库数',
@@ -407,12 +371,12 @@ CREATE TABLE si_forklift
 2 成品入库区
 3 成品出库区',
 	supplier_name char(64) COMMENT '供应商名称',
-	-- 1-空闲中
-	-- 2-忙碌中
-	-- 3-不在线
-	status tinyint COMMENT '当前状态 : 1-空闲中
-2-忙碌中
-3-不在线 ',
+	-- 1 忙碌中
+	-- 2 空闲中
+	--
+	status tinyint COMMENT '当前状态 : 1 忙碌中
+2 空闲中
+ ',
 	extra char(255) COMMENT '备注',
 	create_time datetime COMMENT '创建时间',
 	-- 1 未删除
@@ -628,12 +592,12 @@ CREATE TABLE sm_storage_detail
 	storage_num decimal(10,2) COMMENT '入库数',
 	storage_time datetime COMMENT '入库时间',
 	rfid char(128) COMMENT '栈板RFID',
-	-- 1 已入库
-	-- 2 已出库
-	-- 3 待入库
-	storage_status tinyint COMMENT '入库状态 : 1 已入库
-2 已出库
-3 待入库',
+	-- 1 待入库
+	-- 2 已入库
+	-- 3 已出库
+	storage_status tinyint COMMENT '入库状态 : 1 待入库
+2 已入库
+3 已出库',
 	PRIMARY KEY (storage_id),
 	UNIQUE (storage_id)
 ) COMMENT = '入库详细表';
@@ -642,7 +606,7 @@ CREATE TABLE sm_storage_detail
 -- 入库叉车表
 CREATE TABLE sm_storage_forklift
 (
-	storage_forklift_id bigint NOT NULL COMMENT '入库叉车id',
+	storage_forklift_id bigint NOT NULL AUTO_INCREMENT COMMENT '入库叉车id',
 	storage_head_id bigint unsigned COMMENT '入库单表头ID',
 	forklift_id bigint unsigned COMMENT '叉车id',
 	rfid char(128) COMMENT '当前运作的RFID',
@@ -699,6 +663,49 @@ CREATE TABLE sm_storage_record
 	PRIMARY KEY (record_id),
 	UNIQUE (record_id)
 ) COMMENT = '入库操作记录表';
+
+
+-- 料浆原材料
+CREATE TABLE wo_slurry_material
+(
+	slurry_material_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '料浆原材料ID',
+	slurry_id bigint unsigned NOT NULL COMMENT '料浆工单ID',
+	material_id bigint unsigned NOT NULL COMMENT '物料ID',
+	need_num decimal(10,2) COMMENT '需求量',
+	plan_num decimal(10,2) COMMENT '计划出库数量',
+	PRIMARY KEY (slurry_material_id),
+	UNIQUE (slurry_material_id),
+	UNIQUE (material_id)
+) COMMENT = '料浆原材料';
+
+
+-- 料浆制作工单
+CREATE TABLE wo_slurry_order
+(
+	slurry_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '料浆工单ID',
+	slurry_no char(255) COMMENT '工单编号',
+	plan_date date COMMENT '计划制作日期',
+	-- 1. 待下发
+	-- 2. 下发中
+	-- 3. 待完成
+	-- 4. 已完成
+	status tinyint COMMENT '状态 : 1. 待下发
+2. 下发中
+3. 待完成
+4. 已完成',
+	finish_time datetime COMMENT '完成时间',
+	remark char(255) COMMENT '备注',
+	create_time datetime COMMENT '创建时间',
+	creator bigint COMMENT '创建人',
+	finisher bigint COMMENT '完成人',
+	update_time datetime COMMENT '更新时间',
+	-- 1 未删除
+	-- 2 已删除
+	dr tinyint COMMENT '是否删除 : 1 未删除
+2 已删除',
+	PRIMARY KEY (slurry_id),
+	UNIQUE (slurry_id)
+) COMMENT = '料浆制作工单';
 
 
 
@@ -952,14 +959,6 @@ ALTER TABLE si_warehouse
 ;
 
 
-ALTER TABLE om_mix_body
-	ADD FOREIGN KEY (mix_head_id)
-	REFERENCES om_mix_head (mix_head_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
 ALTER TABLE om_outbound_body
 	ADD FOREIGN KEY (outbound_head_id)
 	REFERENCES om_outbound_head (outbound_head_id)
@@ -1040,14 +1039,6 @@ ALTER TABLE sm_storage_detail
 ;
 
 
-ALTER TABLE om_mix_body
-	ADD FOREIGN KEY (material_id)
-	REFERENCES si_material (material_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
 ALTER TABLE om_outbound_body
 	ADD FOREIGN KEY (material_id)
 	REFERENCES si_material (material_id)
@@ -1081,6 +1072,14 @@ ALTER TABLE sm_storage_body
 
 
 ALTER TABLE sm_storage_detail
+	ADD FOREIGN KEY (material_id)
+	REFERENCES si_material (material_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
+ALTER TABLE wo_slurry_material
 	ADD FOREIGN KEY (material_id)
 	REFERENCES si_material (material_id)
 	ON UPDATE RESTRICT
@@ -1155,6 +1154,14 @@ ALTER TABLE sm_storage_forklift
 ALTER TABLE sm_storage_record
 	ADD FOREIGN KEY (storage_head_id)
 	REFERENCES sm_storage_head (storage_head_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
+ALTER TABLE wo_slurry_material
+	ADD FOREIGN KEY (slurry_id)
+	REFERENCES wo_slurry_order (slurry_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
 ;
