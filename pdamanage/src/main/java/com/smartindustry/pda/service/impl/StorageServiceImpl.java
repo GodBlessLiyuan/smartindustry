@@ -222,7 +222,8 @@ public class StorageServiceImpl implements IStorageService {
         }
 
         //通过rfid获取入库单和物料信息
-        StorageHeadPO storageHeadPO = storageHeadMapper.queryByRfid(dto.getMrfid());
+        StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(dto.getMrfid());
+        StorageHeadPO storageHeadPO = storageHeadMapper.selectByPrimaryKey(storageDetailPO.getStorageHeadId());
         if (null == storageHeadPO) {
             //没有该入库单
             return new ResultVO(1002);

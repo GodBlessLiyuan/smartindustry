@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.sqlserver.PurchaseErpMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.ds.sqlserver.PurchaseErpPO">
+    <result column="ID" jdbcType="DOUBLE" property="purchaseId" />
+    <result column="单号" jdbcType="NVARCHAR" property="purchaseNo" />
+    <result column="供应商ID" jdbcType="DOUBLE" property="supplierId" />
+    <result column="仓库ID" jdbcType="DOUBLE" property="warehouseId" />
+    <result column="日期" jdbcType="TIMESTAMP" property="acceptDate" />
+    <result column="业务员ID" jdbcType="DOUBLE" property="salesmanId" />
+    <result column="业务员姓名" jdbcType="NVARCHAR" property="salesmanName" />
+    <result column="操作员ID" jdbcType="DOUBLE" property="operatorId" />
+    <result column="操作员姓名" jdbcType="NVARCHAR" property="operatorName" />
+    <result column="审核员ID" jdbcType="DOUBLE" property="auditorId" />
+    <result column="审核员姓名" jdbcType="NVARCHAR" property="auditorName" />
+    <result column="付款ID" jdbcType="DOUBLE" property="payMethod" />
+    <result column="付款名称" jdbcType="NVARCHAR" property="payName" />
+    <result column="备注" jdbcType="NVARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+ID, 单号, 供应商ID,       仓库ID, 日期, 业务员ID,       业务员姓名, 操作员ID, 操作员姓名,       审核员ID, 审核员姓名, 付款ID,       付款名称, 备注
+  </sql>
+  <select id="queryAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from dbo.采购到货
+  </select>
+</mapper>

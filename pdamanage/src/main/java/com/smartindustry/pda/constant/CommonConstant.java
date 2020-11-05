@@ -78,7 +78,11 @@ public class CommonConstant {
     /**
      * 叉车-出库
      */
-    public final static Byte STATUS_FORKLIFT_WORK_OUTBOUND = 2;
+    public final static Byte STATUS_FORKLIFT_WORK_OUTBOUND_ONE = 2;
+    /**
+     * 叉车-出库
+     */
+    public final static Byte STATUS_FORKLIFT_WORK_OUTBOUND_TWO = 3;
 
     /**
      * 入库

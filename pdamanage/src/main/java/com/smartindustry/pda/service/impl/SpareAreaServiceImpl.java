@@ -1,6 +1,7 @@
-package com.smartindustry.storage.service.impl;
+package com.smartindustry.pda.service.impl;
 
 import com.smartindustry.common.bo.si.LocationBO;
+import com.smartindustry.common.bo.sm.StorageHeadBO;
 import com.smartindustry.common.mapper.si.ForkliftMapper;
 import com.smartindustry.common.mapper.si.LocationMapper;
 import com.smartindustry.common.mapper.si.MaterialMapper;
@@ -14,13 +15,14 @@ import com.smartindustry.common.pojo.sm.StorageDetailPO;
 import com.smartindustry.common.pojo.sm.StorageHeadPO;
 import com.smartindustry.common.util.DateUtil;
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.storage.constant.StorageConstant;
-import com.smartindustry.storage.dto.StoragePreDTO;
-import com.smartindustry.storage.service.ISpareAreaService;
-import com.smartindustry.storage.util.StorageNoUtil;
-import com.smartindustry.storage.vo.MaterialVO;
-import com.smartindustry.storage.vo.SpareMaterialVO;
-import lombok.AllArgsConstructor;
+
+import com.smartindustry.pda.constant.CommonConstant;
+import com.smartindustry.pda.constant.StorageConstant;
+import com.smartindustry.pda.dto.StoragePreDTO;
+import com.smartindustry.pda.service.ISpareAreaService;
+import com.smartindustry.pda.util.StorageNoUtil;
+import com.smartindustry.pda.vo.MaterialVO;
+import com.smartindustry.pda.vo.SpareMaterialVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,11 +55,12 @@ public class SpareAreaServiceImpl implements ISpareAreaService {
     @Override
     public ResultVO enterSpare(StoragePreDTO dto, HttpSession session){
         // 当前叉车信息
-        String imei = (String) session.getAttribute(StorageConstant.SESSION_IMEI);
+        String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
         // 根据imei查询出叉车id
         ForkliftPO forkliftPO = forkliftMapper.queryByImei(imei);
         // 根据栈板rfid查询入库单
-        StorageHeadPO storageHeadPO = storageHeadMapper.queryByRfid(dto.getPrfid());
+        StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(dto.getPrfid());
+        StorageHeadPO storageHeadPO = storageHeadMapper.selectByPrimaryKey(storageDetailPO.getStorageHeadId());
         // 查询当前储位的基本信息
         Date date = new Date();
         LocationBO locationBO = locationMapper.queryByRfid(dto.getLrfid());
@@ -88,7 +91,7 @@ public class SpareAreaServiceImpl implements ISpareAreaService {
             storageHeadPO.setStorageNum(bodyPO.getStorageNum().add(new BigDecimal(1)));
             //判断入库单的状态
             if(storageHeadPO.getStorageNum().add(new BigDecimal(1)).compareTo(storageHeadPO.getExpectNum()) == -1){
-                storageHeadPO.setStatus(StorageConstant.STATUS_INSTORAGE);
+                storageHeadPO.setStatus(StorageConstant.STATUS_STOREING);
             }else {
                 storageHeadPO.setStatus(StorageConstant.STATUS_STORED);
                 storageHeadPO.setStorageTime(date);
@@ -136,7 +139,7 @@ public class SpareAreaServiceImpl implements ISpareAreaService {
                 headPO1.setStorageNo(StorageNoUtil.genStorageHeadNo(storageHeadMapper,StorageNoUtil.RECEIPT_HEAD_YP,new Date()));
                 headPO1.setSourceType(StorageConstant.TYPE_PRE_STORAGE);
                 headPO1.setStorageNum(new BigDecimal(1));
-                headPO1.setStatus(StorageConstant.STATUS_INSTORAGE);
+                headPO1.setStatus(StorageConstant.STATUS_STOREING);
                 headPO1.setCreateTime(date);
                 headPO1.setDr((byte)1);
                 storageHeadMapper.insert(headPO1);
@@ -177,7 +180,8 @@ public class SpareAreaServiceImpl implements ISpareAreaService {
     @Override
     public ResultVO chooseMaterial(StoragePreDTO dto){
         // 根据栈板rfid查询入库单
-        StorageHeadPO storageHeadPO = storageHeadMapper.queryByRfid(dto.getPrfid());
+        StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(dto.getPrfid());
+        StorageHeadPO storageHeadPO = storageHeadMapper.selectByPrimaryKey(storageDetailPO.getStorageHeadId());
         List<MaterialPO> pos = storageBodyMapper.queryMaterial(storageHeadPO.getStorageHeadId());
         return ResultVO.ok().setData(MaterialVO.convertPO(pos));
     }
@@ -185,7 +189,8 @@ public class SpareAreaServiceImpl implements ISpareAreaService {
     @Override
     public ResultVO showSpare(StoragePreDTO dto){
         // 根据栈板rfid查询入库单号
-        StorageHeadPO storageHeadPO = storageHeadMapper.queryByRfid(dto.getPrfid());
+        StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(dto.getPrfid());
+        StorageHeadPO storageHeadPO = storageHeadMapper.selectByPrimaryKey(storageDetailPO.getStorageHeadId());
         LocationBO locationBO = locationMapper.queryByRfid(dto.getLrfid());
         StorageDetailPO po = storageDetailMapper.queryByLidAndRfid(locationBO.getLocationId(),dto.getPrfid());
         MaterialPO materialPO = materialMapper.selectByPrimaryKey(po.getMaterialId());

@@ -1,9 +1,9 @@
-package com.smartindustry.storage.controller;
+package com.smartindustry.pda.controller;
 
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.storage.dto.OperateDTO;
-import com.smartindustry.storage.dto.StoragePreDTO;
-import com.smartindustry.storage.service.ISpareAreaService;
+
+import com.smartindustry.pda.dto.StoragePreDTO;
+import com.smartindustry.pda.service.ISpareAreaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

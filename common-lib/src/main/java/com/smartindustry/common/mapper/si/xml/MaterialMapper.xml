@@ -5,31 +5,22 @@
     <id column="material_id" jdbcType="BIGINT" property="materialId" />
     <result column="material_no" jdbcType="CHAR" property="materialNo" />
     <result column="material_type" jdbcType="TINYINT" property="materialType" />
-    <result column="material_type_id" jdbcType="BIGINT" property="materialTypeId" />
-    <result column="humidity_level_id" jdbcType="BIGINT" property="humidityLevelId" />
-    <result column="material_level_id" jdbcType="BIGINT" property="materialLevelId" />
-    <result column="measure_unit_id" jdbcType="BIGINT" property="measureUnitId" />
-    <result column="material_version_id" jdbcType="BIGINT" property="materialVersionId" />
-    <result column="produce_loss_level_id" jdbcType="BIGINT" property="produceLossLevelId" />
-    <result column="life_cycle_state_id" jdbcType="BIGINT" property="lifeCycleStateId" />
     <result column="material_name" jdbcType="CHAR" property="materialName" />
-    <result column="delivery_days" jdbcType="INTEGER" property="deliveryDays" />
-    <result column="moq" jdbcType="CHAR" property="moq" />
+    <result column="material_level" jdbcType="CHAR" property="materialLevel" />
     <result column="material_model" jdbcType="CHAR" property="materialModel" />
-    <result column="material_draw" jdbcType="CHAR" property="materialDraw" />
+    <result column="measure_unit_id" jdbcType="BIGINT" property="measureUnitId" />
+    <result column="package_volume" jdbcType="DECIMAL" property="packageVolume" />
     <result column="supplier_id" jdbcType="BIGINT" property="supplierId" />
     <result column="material_desc" jdbcType="CHAR" property="materialDesc" />
-    <result column="test_type" jdbcType="TINYINT" property="testType" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="dr" jdbcType="TINYINT" property="dr" />
   </resultMap>
   <sql id="Base_Column_List">
-    material_id, material_no, material_type, material_type_id, humidity_level_id, material_level_id, 
-    measure_unit_id, material_version_id, produce_loss_level_id, life_cycle_state_id, 
-    material_name, delivery_days, moq, material_model, material_draw, supplier_id, material_desc, 
-    test_type, user_id, create_time, update_time, dr
+    material_id, material_no, material_type, material_name, material_level, material_model, 
+    measure_unit_id, package_volume, supplier_id, material_desc, user_id, create_time, 
+    update_time, dr
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -43,21 +34,15 @@
   </delete>
   <insert id="insert" parameterType="com.smartindustry.common.pojo.si.MaterialPO">
     insert into si_material (material_id, material_no, material_type, 
-      material_type_id, humidity_level_id, material_level_id, 
-      measure_unit_id, material_version_id, produce_loss_level_id, 
-      life_cycle_state_id, material_name, delivery_days, 
-      moq, material_model, material_draw, 
-      supplier_id, material_desc, test_type, 
-      user_id, create_time, update_time, 
-      dr)
+      material_name, material_level, material_model, 
+      measure_unit_id, package_volume, supplier_id, 
+      material_desc, user_id, create_time, 
+      update_time, dr)
     values (#{materialId,jdbcType=BIGINT}, #{materialNo,jdbcType=CHAR}, #{materialType,jdbcType=TINYINT}, 
-      #{materialTypeId,jdbcType=BIGINT}, #{humidityLevelId,jdbcType=BIGINT}, #{materialLevelId,jdbcType=BIGINT}, 
-      #{measureUnitId,jdbcType=BIGINT}, #{materialVersionId,jdbcType=BIGINT}, #{produceLossLevelId,jdbcType=BIGINT}, 
-      #{lifeCycleStateId,jdbcType=BIGINT}, #{materialName,jdbcType=CHAR}, #{deliveryDays,jdbcType=INTEGER}, 
-      #{moq,jdbcType=CHAR}, #{materialModel,jdbcType=CHAR}, #{materialDraw,jdbcType=CHAR}, 
-      #{supplierId,jdbcType=BIGINT}, #{materialDesc,jdbcType=CHAR}, #{testType,jdbcType=TINYINT}, 
-      #{userId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{dr,jdbcType=TINYINT})
+      #{materialName,jdbcType=CHAR}, #{materialLevel,jdbcType=CHAR}, #{materialModel,jdbcType=CHAR}, 
+      #{measureUnitId,jdbcType=BIGINT}, #{packageVolume,jdbcType=DECIMAL}, #{supplierId,jdbcType=BIGINT}, 
+      #{materialDesc,jdbcType=CHAR}, #{userId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.MaterialPO">
     insert into si_material
@@ -71,50 +56,26 @@
       <if test="materialType != null">
         material_type,
       </if>
-      <if test="materialTypeId != null">
-        material_type_id,
-      </if>
-      <if test="humidityLevelId != null">
-        humidity_level_id,
-      </if>
-      <if test="materialLevelId != null">
-        material_level_id,
-      </if>
-      <if test="measureUnitId != null">
-        measure_unit_id,
-      </if>
-      <if test="materialVersionId != null">
-        material_version_id,
-      </if>
-      <if test="produceLossLevelId != null">
-        produce_loss_level_id,
-      </if>
-      <if test="lifeCycleStateId != null">
-        life_cycle_state_id,
-      </if>
       <if test="materialName != null">
         material_name,
       </if>
-      <if test="deliveryDays != null">
-        delivery_days,
-      </if>
-      <if test="moq != null">
-        moq,
+      <if test="materialLevel != null">
+        material_level,
       </if>
       <if test="materialModel != null">
         material_model,
       </if>
-      <if test="materialDraw != null">
-        material_draw,
+      <if test="measureUnitId != null">
+        measure_unit_id,
+      </if>
+      <if test="packageVolume != null">
+        package_volume,
       </if>
       <if test="supplierId != null">
         supplier_id,
       </if>
       <if test="materialDesc != null">
         material_desc,
-      </if>
-      <if test="testType != null">
-        test_type,
       </if>
       <if test="userId != null">
         user_id,
@@ -139,50 +100,26 @@
       <if test="materialType != null">
         #{materialType,jdbcType=TINYINT},
       </if>
-      <if test="materialTypeId != null">
-        #{materialTypeId,jdbcType=BIGINT},
-      </if>
-      <if test="humidityLevelId != null">
-        #{humidityLevelId,jdbcType=BIGINT},
-      </if>
-      <if test="materialLevelId != null">
-        #{materialLevelId,jdbcType=BIGINT},
-      </if>
-      <if test="measureUnitId != null">
-        #{measureUnitId,jdbcType=BIGINT},
-      </if>
-      <if test="materialVersionId != null">
-        #{materialVersionId,jdbcType=BIGINT},
-      </if>
-      <if test="produceLossLevelId != null">
-        #{produceLossLevelId,jdbcType=BIGINT},
-      </if>
-      <if test="lifeCycleStateId != null">
-        #{lifeCycleStateId,jdbcType=BIGINT},
-      </if>
       <if test="materialName != null">
         #{materialName,jdbcType=CHAR},
       </if>
-      <if test="deliveryDays != null">
-        #{deliveryDays,jdbcType=INTEGER},
-      </if>
-      <if test="moq != null">
-        #{moq,jdbcType=CHAR},
+      <if test="materialLevel != null">
+        #{materialLevel,jdbcType=CHAR},
       </if>
       <if test="materialModel != null">
         #{materialModel,jdbcType=CHAR},
       </if>
-      <if test="materialDraw != null">
-        #{materialDraw,jdbcType=CHAR},
+      <if test="measureUnitId != null">
+        #{measureUnitId,jdbcType=BIGINT},
+      </if>
+      <if test="packageVolume != null">
+        #{packageVolume,jdbcType=DECIMAL},
       </if>
       <if test="supplierId != null">
         #{supplierId,jdbcType=BIGINT},
       </if>
       <if test="materialDesc != null">
         #{materialDesc,jdbcType=CHAR},
-      </if>
-      <if test="testType != null">
-        #{testType,jdbcType=TINYINT},
       </if>
       <if test="userId != null">
         #{userId,jdbcType=BIGINT},
@@ -207,50 +144,26 @@
       <if test="materialType != null">
         material_type = #{materialType,jdbcType=TINYINT},
       </if>
-      <if test="materialTypeId != null">
-        material_type_id = #{materialTypeId,jdbcType=BIGINT},
-      </if>
-      <if test="humidityLevelId != null">
-        humidity_level_id = #{humidityLevelId,jdbcType=BIGINT},
-      </if>
-      <if test="materialLevelId != null">
-        material_level_id = #{materialLevelId,jdbcType=BIGINT},
-      </if>
-      <if test="measureUnitId != null">
-        measure_unit_id = #{measureUnitId,jdbcType=BIGINT},
-      </if>
-      <if test="materialVersionId != null">
-        material_version_id = #{materialVersionId,jdbcType=BIGINT},
-      </if>
-      <if test="produceLossLevelId != null">
-        produce_loss_level_id = #{produceLossLevelId,jdbcType=BIGINT},
-      </if>
-      <if test="lifeCycleStateId != null">
-        life_cycle_state_id = #{lifeCycleStateId,jdbcType=BIGINT},
-      </if>
       <if test="materialName != null">
         material_name = #{materialName,jdbcType=CHAR},
       </if>
-      <if test="deliveryDays != null">
-        delivery_days = #{deliveryDays,jdbcType=INTEGER},
-      </if>
-      <if test="moq != null">
-        moq = #{moq,jdbcType=CHAR},
+      <if test="materialLevel != null">
+        material_level = #{materialLevel,jdbcType=CHAR},
       </if>
       <if test="materialModel != null">
         material_model = #{materialModel,jdbcType=CHAR},
       </if>
-      <if test="materialDraw != null">
-        material_draw = #{materialDraw,jdbcType=CHAR},
+      <if test="measureUnitId != null">
+        measure_unit_id = #{measureUnitId,jdbcType=BIGINT},
+      </if>
+      <if test="packageVolume != null">
+        package_volume = #{packageVolume,jdbcType=DECIMAL},
       </if>
       <if test="supplierId != null">
         supplier_id = #{supplierId,jdbcType=BIGINT},
       </if>
       <if test="materialDesc != null">
         material_desc = #{materialDesc,jdbcType=CHAR},
-      </if>
-      <if test="testType != null">
-        test_type = #{testType,jdbcType=TINYINT},
       </if>
       <if test="userId != null">
         user_id = #{userId,jdbcType=BIGINT},
@@ -271,21 +184,13 @@
     update si_material
     set material_no = #{materialNo,jdbcType=CHAR},
       material_type = #{materialType,jdbcType=TINYINT},
-      material_type_id = #{materialTypeId,jdbcType=BIGINT},
-      humidity_level_id = #{humidityLevelId,jdbcType=BIGINT},
-      material_level_id = #{materialLevelId,jdbcType=BIGINT},
-      measure_unit_id = #{measureUnitId,jdbcType=BIGINT},
-      material_version_id = #{materialVersionId,jdbcType=BIGINT},
-      produce_loss_level_id = #{produceLossLevelId,jdbcType=BIGINT},
-      life_cycle_state_id = #{lifeCycleStateId,jdbcType=BIGINT},
       material_name = #{materialName,jdbcType=CHAR},
-      delivery_days = #{deliveryDays,jdbcType=INTEGER},
-      moq = #{moq,jdbcType=CHAR},
+      material_level = #{materialLevel,jdbcType=CHAR},
       material_model = #{materialModel,jdbcType=CHAR},
-      material_draw = #{materialDraw,jdbcType=CHAR},
+      measure_unit_id = #{measureUnitId,jdbcType=BIGINT},
+      package_volume = #{packageVolume,jdbcType=DECIMAL},
       supplier_id = #{supplierId,jdbcType=BIGINT},
       material_desc = #{materialDesc,jdbcType=CHAR},
-      test_type = #{testType,jdbcType=TINYINT},
       user_id = #{userId,jdbcType=BIGINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
@@ -304,4 +209,11 @@
     <if test="mmodel != null and mmodel != ''">and m.material_model like '%' #{mmodel,jdbcType=CHAR} '%'</if>
     order by m.create_time desc
   </select>
+
+  <insert id="batchInsert" parameterType="java.util.List">
+        insert into si_material (  material_no, material_type, material_name,material_model,     measure_unit_id, material_desc, user_id, create_time,   dr) values
+        <foreach collection="list" item = "po" separator=",">
+          ( #{po.materialNo,jdbcType=CHAR}, #{po.materialType,jdbcType=TINYINT},#{po.materialName,jdbcType=CHAR}, #{po.materialModel,jdbcType=CHAR}, #{po.measureUnitId,jdbcType=BIGINT}, #{po.materialDesc,jdbcType=CHAR}, #{po.userId,jdbcType=BIGINT}, #{po.createTime,jdbcType=TIMESTAMP},#{po.dr,jdbcType=TINYINT})
+        </foreach>
+    </insert>
 </mapper>

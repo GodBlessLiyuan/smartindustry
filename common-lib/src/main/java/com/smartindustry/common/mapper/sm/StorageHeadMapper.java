@@ -60,12 +60,6 @@ public interface StorageHeadMapper extends BaseMapper<StorageHeadPO, Long> {
     List<StorageHeadPO> queryByStatus(Byte status,Byte type);
 
     /**
-     * 根据货物rfid查询入库单
-     * @param rfid
-     * @return
-     */
-    StorageHeadPO queryByRfid(String rfid);
-    /**
      * 通过入库单表头id 查询所有详细信息
      * @param shid
      * @return

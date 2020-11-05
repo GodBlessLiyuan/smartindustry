@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.sqlserver.DeptErMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.ds.sqlserver.DeptErpPO">
+    <result column="ID" jdbcType="DOUBLE" property="deptId" />
+    <result column="部门代码" jdbcType="NVARCHAR" property="deptCode" />
+    <result column="部门名称" jdbcType="NVARCHAR" property="deptName" />
+    <result column="上级代码" jdbcType="NVARCHAR" property="parentCode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, 部门代码, 部门名称,
+      上级代码
+  </sql>
+  <select id="queryAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from dbo.部门
+  </select>
+</mapper>

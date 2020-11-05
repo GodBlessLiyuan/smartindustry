@@ -239,7 +239,8 @@
 
     <sql id="Pda_Column_List">
         oh.outbound_head_id, oh.source_no, oh.expect_num, oh.outbound_num,
-        m.material_name, m.material_model
+        ob.expect_num as ob_expect_num, ob.outbound_num as ob_outbound_num,
+        m.material_name, m.material_model, m.package_volume
     </sql>
     <resultMap id="PdaResultMap" type="com.smartindustry.common.bo.om.OutboundHeadBO" extends="BaseResultMap">
         <result column="outbound_head_id" jdbcType="BIGINT" property="outboundHeadId"/>
@@ -249,6 +250,9 @@
             <result column="material_no" jdbcType="CHAR" property="materialNo"/>
             <result column="material_name" jdbcType="CHAR" property="materialName"/>
             <result column="material_model" jdbcType="CHAR" property="materialModel"/>
+            <result column="package_volume" jdbcType="DECIMAL" property="packageVolume"/>
+            <result column="ob_expect_num" jdbcType="DECIMAL" property="expectNum"/>
+            <result column="ob_outbound_num" jdbcType="DECIMAL" property="outboundNum"/>
         </collection>
     </resultMap>
     <select id="queryOlistByPdaType" parameterType="java.lang.Byte" resultMap="PdaResultMap">
