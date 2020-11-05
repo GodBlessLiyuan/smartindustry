@@ -105,9 +105,34 @@ public class CommonConstant {
     /**
      * 入库 - 叉起物料
      */
-    public static final Byte STATUS_FORKLIFT_RFID_FORKLIFT = 1;
+    public static final Byte STATUS_FORKLIFT_RFID_STORAGE_FORKLIFT = 1;
     /**
      * 入库
      */
-    public static final Byte STATUS_FORKLIFT_RFID_STORAGE = 2;
+    public static final Byte STATUS_FORKLIFT_RFID_STORAGE_DONE = 2;
+    /**
+     * 出库 - 叉起物料
+     */
+    public static final Byte STATUS_FORKLIFT_RFID_OUTBOUND_FORKLIFT = 4;
+    /**
+     * 出库
+     */
+    public static final Byte STATUS_FORKLIFT_RFID_OUTBOUND_DONE = 5;
+
+    /**
+     * 提示信息
+     */
+    public static final Byte TYPE_TITLE_INTO = 1;
+    /**
+     * 警告信息
+     */
+    public static final Byte TYPE_TITLE_WARN = 2;
+    /**
+     * 错误信息
+     */
+    public static final Byte TYPE_TITLE_ERROR = 3;
+    /**
+     * 弹框信息
+     */
+    public static final Byte TYPE_TITLE_BOX = 4;
 }
