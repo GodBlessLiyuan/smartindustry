@@ -8,6 +8,7 @@ import com.smartindustry.common.mapper.om.OutboundForkliftMapper;
 import com.smartindustry.common.mapper.om.OutboundHeadMapper;
 import com.smartindustry.common.mapper.si.ForkliftMapper;
 import com.smartindustry.common.mapper.sm.StorageDetailMapper;
+import com.smartindustry.common.mapper.sm.StorageForkliftMapper;
 import com.smartindustry.common.mapper.sm.StorageHeadMapper;
 import com.smartindustry.common.pojo.om.OutboundBodyPO;
 import com.smartindustry.common.pojo.om.OutboundForkliftPO;
@@ -39,18 +40,21 @@ import java.util.*;
  */
 @Service
 public class CommonServiceImpl implements ICommonService {
+
     @Autowired
     private ForkliftMapper forkliftMapper;
     @Autowired
-    private StorageHeadMapper storageHeadMapper;
-    @Autowired
     private OutboundHeadMapper outboundHeadMapper;
+    @Autowired
+    private OutboundBodyMapper outboundBodyMapper;
     @Autowired
     private OutboundForkliftMapper outboundForkliftMapper;
     @Autowired
+    private StorageHeadMapper storageHeadMapper;
+    @Autowired
     private StorageDetailMapper storageDetailMapper;
     @Autowired
-    private OutboundBodyMapper outboundBodyMapper;
+    private StorageForkliftMapper storageForkliftMapper;
 
     /**
      * 上线
@@ -145,14 +149,14 @@ public class CommonServiceImpl implements ICommonService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO rfid(HttpSession session, CommonDTO dto) {
-        Byte status = this.checkRfids(session, dto);
-
-
         // 当前叉车信息
         String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
         if (null == imei) {
             return new ResultVO(1111);
         }
+
+        Byte status = this.checkRfids(session, dto);
+
 
         ForkliftPO fPO = forkliftMapper.queryByImei(imei);
         if (null == fPO) {
@@ -211,10 +215,8 @@ public class CommonServiceImpl implements ICommonService {
         return ResultVO.ok();
     }
 
-    private static final Byte STATUS_RFID_NONE = 0;
-
     /**
-     * 验证 Rfids, true : 数据一样
+     * 数采预处理
      *
      * @param session
      * @param dto
@@ -222,23 +224,41 @@ public class CommonServiceImpl implements ICommonService {
      */
     private Byte checkRfids(HttpSession session, CommonDTO dto) {
         Byte status = (Byte) session.getAttribute(CommonConstant.SESSION_STATUS_FORKLIFT);
+        String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
 
         if (null == status) {
             // 无状态
             if (null == dto.getMrfid()) {
-                return STATUS_RFID_NONE;
+                return CommonConstant.STATUS_FORKLIFT_RFID_NONE;
             }
 
-            StorageDetailPO detailPO = storageDetailMapper.queryByRfidAndStatus(dto.getMrfid(), (byte) 1);
+            StorageDetailPO detailPO = storageDetailMapper.queryByRfidAndStatus(dto.getMrfid(), CommonConstant.STATUS_RFID_STORAGE);
+            if (null == detailPO) {
+                // 入库
+                session.setAttribute(CommonConstant.SESSION_STATUS_FORKLIFT, CommonConstant.STATUS_FORKLIFT_WORK_STORAGE);
+                session.setAttribute(CommonConstant.SESSION_MRFID, dto.getMrfid());
+                return CommonConstant.STATUS_FORKLIFT_RFID_FORKLIFT;
+            }
+
+            // 出库
+            WebSocketServer.sendMsg(imei, WebSocketVO.createTitleVO("找不到该物料RFID"));
+            return CommonConstant.STATUS_FORKLIFT_RFID_NONE;
         }
         if (CommonConstant.STATUS_FORKLIFT_WORK_STORAGE.equals(status)) {
             // 入库
+            if (null != dto.getMrfid()) {
+                return CommonConstant.STATUS_FORKLIFT_RFID_NONE;
+            }
+            if (null == dto.getLrfid()) {
+                WebSocketServer.sendMsg(imei, WebSocketVO.createTitleVO("没有储位RFID"));
+                return CommonConstant.STATUS_FORKLIFT_RFID_NONE;
+            }
+
+            session.removeAttribute(CommonConstant.SESSION_STATUS_FORKLIFT);
+            return CommonConstant.STATUS_FORKLIFT_RFID_STORAGE;
         }
         if (CommonConstant.STATUS_FORKLIFT_WORK_OUTBOUND.equals(status)) {
             // 出库
-        }
-        if (CommonConstant.STATUS_FORKLIFT_WORK_PREPARE.equals(status)) {
-            // 备料
         }
 
         return 1;

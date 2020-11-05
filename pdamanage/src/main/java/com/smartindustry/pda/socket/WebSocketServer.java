@@ -63,13 +63,18 @@ public class WebSocketServer {
 
     /**
      * 发送消息
-     *
-     * @throws IOException
      */
     public static void sendMsg(List<String> imeis, WebSocketVO vo) {
         for (String imei : imeis) {
-            sendMsg(imei, JSON.toJSONString(vo));
+            sendMsg(imei, vo);
         }
+    }
+
+    /**
+     * 发送消息
+     */
+    public static void sendMsg(String imei, WebSocketVO vo) {
+        sendMsg(imei, JSON.toJSONString(vo));
     }
 
     /**

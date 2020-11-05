@@ -1,6 +1,7 @@
 package com.smartindustry.pda.vo;
 
 import lombok.Data;
+import org.apache.poi.ss.formula.functions.T;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -18,6 +19,20 @@ public class WebSocketVO implements Serializable {
 
     private OutboundVO ovo;
     private TitleVO title;
+
+    /**
+     * 创建 Title VO
+     *
+     * @param msg
+     * @return
+     */
+    public static WebSocketVO createTitleVO(String msg) {
+        WebSocketVO vo = new WebSocketVO();
+        TitleVO titleVO = new TitleVO();
+        titleVO.setMsg(msg);
+        vo.setTitle(titleVO);
+        return vo;
+    }
 
     /**
      * 列表区

@@ -10,17 +10,17 @@ public class OutboundConstant {
     /**
      * 开始执行
      */
-    public final static Byte STATUS_OUTBOUND_START = 1;
+    public final static String STATUS_OUTBOUND_START = "开始执行";
     /**
      * 辅助执行
      */
-    public final static Byte STATUS_OUTBOUND_ASSIST = 2;
+    public final static String STATUS_OUTBOUND_ASSIST = "辅助执行";
     /**
      * 关闭
      */
-    public final static Byte STATUS_OUTBOUND_CLOSE = 3;
+    public final static String STATUS_OUTBOUND_CLOSE = "关闭";
     /**
      * 消失
      */
-    public final static Byte STATUS_OUTBOUND_VANISH = 4;
+    public final static String STATUS_OUTBOUND_VANISH = "消失";
 }
