@@ -3,6 +3,8 @@ package com.smartindustry.common.bo.sm;
 import com.smartindustry.common.pojo.sm.StorageBodyPO;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 /**
  * @author: jiangzhaojie
  * @date: Created in 14:22 2020/10/27
@@ -23,4 +25,6 @@ public class StorageBodyBO extends StorageBodyPO {
     private String locationNo;
 
     private String measureUnitName;
+
+    private BigDecimal packageVolume;
 }

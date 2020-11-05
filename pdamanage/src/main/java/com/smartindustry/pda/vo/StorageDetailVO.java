@@ -52,6 +52,10 @@ public class StorageDetailVO {
     /**
      * 当前排位
      */
+    private BigDecimal tvolume;
+    /**
+     * 当前排位
+     */
     private BigDecimal cnum;
     /**
      * 储位图
@@ -64,6 +68,7 @@ public class StorageDetailVO {
         vo.setSno(bo.getSourceNo());
         vo.setDnum(bo.getExpectNum());
         vo.setSnum(bo.getStorageNum());
+        BigDecimal tvolume = new BigDecimal(0);
         if (null != bo.getBos() && bo.getBos().size() > 0) {
             List<StorageDetailVO.MaterialVO> mvos = new ArrayList<>(bo.getBos().size());
             for (StorageBodyBO bodyBO : bo.getBos()) {
@@ -71,9 +76,12 @@ public class StorageDetailVO {
                 mvo.setMname(bodyBO.getMaterialName());
                 mvo.setMmodel(bodyBO.getMaterialModel());
                 mvos.add(mvo);
+                System.out.println(bodyBO.toString());
+                tvolume = tvolume.add(bodyBO.getExpectNum().multiply(bodyBO.getPackageVolume()));
             }
             vo.setMvos(mvos);
         }
+        vo.setTvolume(tvolume);
         return vo;
     }
 
