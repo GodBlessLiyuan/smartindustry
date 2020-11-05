@@ -17,7 +17,6 @@ import com.smartindustry.common.pojo.si.ForkliftPO;
 import com.smartindustry.common.pojo.sm.StorageDetailPO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.pda.constant.CommonConstant;
-import com.smartindustry.pda.constant.StorageConstant;
 import com.smartindustry.pda.dto.CommonDTO;
 import com.smartindustry.pda.service.ICommonService;
 import com.smartindustry.pda.socket.WebSocketServer;
@@ -266,10 +265,15 @@ public class CommonServiceImpl implements ICommonService {
             session.removeAttribute(CommonConstant.SESSION_STATUS_FORKLIFT);
             return CommonConstant.STATUS_FORKLIFT_RFID_STORAGE;
         }
-        if (CommonConstant.STATUS_FORKLIFT_WORK_OUTBOUND.equals(status)) {
+        if (CommonConstant.STATUS_FORKLIFT_WORK_OUTBOUND_ONE.equals(status)) {
+            // 出库 - 叉起货物
+            if (null == dto.getMrfid()) {
+                return CommonConstant.STATUS_FORKLIFT_RFID_NONE;
+            }
+        }
+        if (CommonConstant.STATUS_FORKLIFT_WORK_OUTBOUND_TWO.equals(status)) {
             // 出库
         }
-
         return 1;
     }
 }

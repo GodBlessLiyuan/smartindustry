@@ -38,7 +38,11 @@ public class OutboundDetailVO implements Serializable {
      */
     private BigDecimal dnum;
     /**
-     * 入库数
+     * 需出库量
+     */
+    private BigDecimal dnum2;
+    /**
+     * 出库数
      */
     private BigDecimal onum;
     /**
@@ -64,6 +68,7 @@ public class OutboundDetailVO implements Serializable {
         vo.setSno(bo.getSourceNo());
         vo.setDnum(bo.getExpectNum());
         vo.setOnum(bo.getOutboundNum());
+        BigDecimal dnum2 = new BigDecimal(0);
         if (null != bo.getBodyBOs() && bo.getBodyBOs().size() > 0) {
             List<MaterialVO> mvos = new ArrayList<>(bo.getBodyBOs().size());
             for (OutboundBodyBO bodyBO : bo.getBodyBOs()) {
@@ -71,9 +76,12 @@ public class OutboundDetailVO implements Serializable {
                 mvo.setMname(bodyBO.getMaterialName());
                 mvo.setMmodel(bodyBO.getMaterialModel());
                 mvos.add(mvo);
+
+                dnum2 = dnum2.add(bodyBO.getExpectNum().multiply(bodyBO.getPackageVolume()));
             }
             vo.setMvos(mvos);
         }
+        vo.setDnum2(dnum2);
         return vo;
     }
 
