@@ -24,6 +24,7 @@ import com.smartindustry.pda.service.ICommonService;
 import com.smartindustry.pda.socket.WebSocketServer;
 import com.smartindustry.pda.vo.PdaListVO;
 import com.smartindustry.pda.vo.WebSocketVO;
+import org.apache.ibatis.javassist.tools.web.Webserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -243,8 +244,20 @@ public class CommonServiceImpl implements ICommonService {
                         imeis.add(ofBO.getImeiNo());
                     }
                 }
-                WebSocketServer.sendMsg(imeis, WebSocketVO.createTitleVO("业务单号：" + headPO.getSourceNo() + "（销售出库），已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
+
+                // websocket
+                WebSocketVO vo = WebSocketVO.createTitleVO("业务单号：" + headPO.getSourceNo() + "（销售出库），已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO);
+                WebSocketVO.OutboundVO ovo = new WebSocketVO.OutboundVO();
+                ovo.setCnum(headPO.getOutboundNum());
+                ovo.setSnum(headPO.getOutboundNum());
+                ovo.setId(headPO.getOutboundHeadId());
+                ovo.setFnames(new ArrayList<>());
+                ovo.setType(CommonConstant.TYPE_LIST_DONE);
+                ovo.setStatus(CommonConstant.FLAG_OUTBOUND);
+                vo.setOvo(ovo);
+                WebSocketServer.sendMsg(imeis, vo);
             }
+
             outboundHeadMapper.updateByPrimaryKey(headPO);
 
             OutboundBodyPO bodyPO = outboundBodyMapper.queryByOhidAndMid(outboundForkliftPO.getOutboundHeadId(), detailPO.getMaterialId());

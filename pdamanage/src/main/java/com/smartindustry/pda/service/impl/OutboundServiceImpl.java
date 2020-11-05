@@ -255,7 +255,7 @@ public class OutboundServiceImpl implements IOutboundService {
         ovo.setSnum(headPO.getOutboundNum());
         ovo.setFnames(fnames);
         ovo.setCnum(headPO.getOutboundNum().add(BigDecimal.valueOf(fnames.size())));
-        ovo.setStatus(CommonConstant.FLAG_OUTBOUND);
+        ovo.setType(CommonConstant.FLAG_OUTBOUND);
         vo.setOvo(ovo);
         WebSocketServer.sendAllMsg(vo);
     }
