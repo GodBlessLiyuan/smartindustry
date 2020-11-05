@@ -35,8 +35,8 @@ public class OutboundConstant {
     public static final Byte TYPE_INSERT_BY_AUTO = 2;
 
     public static final String OPERATE_NAME_AGREE = "确认入库";
-    public static final String OPERATE_NAME_INSERT = "创建入库单";
+    public static final String OPERATE_NAME_INSERT = "形成入库单";
 
     public static final String OPERATE_NAME_AGREE_OUT = "确认出库";
-    public static final String OPERATE_NAME_INSERT_OUT = "创建出库单";
+    public static final String OPERATE_NAME_INSERT_OUT = "形成出库单";
 }
