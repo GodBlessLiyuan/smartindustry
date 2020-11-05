@@ -85,18 +85,21 @@ public class CommonConstant {
     public final static Byte STATUS_FORKLIFT_WORK_OUTBOUND_TWO = 3;
 
     /**
-     * 入库
+     * 在库
      */
     public final static Byte STATUS_RFID_STORAGE = 1;
     /**
-     * 销售出库
-     */
-    public final static Byte STATUS_RFID_OUTBOUND = 2;
-    /**
      * 待入库
      */
-    public final static Byte STATUS_RFID_PRE_STORAGE = 3;
-
+    public final static Byte STATUS_RFID_PRE_STORAGE = 2;
+    /**
+     * 销售出库
+     */
+    public final static Byte STATUS_RFID_OUTBOUND_SALE = 3;
+    /**
+     * 已出库
+     */
+    public final static Byte STATUS_RFID_OUTBOUND_DONE = 4;
 
     /**
      * 无效
@@ -107,17 +110,21 @@ public class CommonConstant {
      */
     public static final Byte STATUS_FORKLIFT_RFID_STORAGE_FORKLIFT = 1;
     /**
-     * 入库
+     * 入库 - 完成入库
      */
     public static final Byte STATUS_FORKLIFT_RFID_STORAGE_DONE = 2;
     /**
      * 出库 - 叉起物料
      */
-    public static final Byte STATUS_FORKLIFT_RFID_OUTBOUND_FORKLIFT = 4;
+    public static final Byte STATUS_FORKLIFT_RFID_OUTBOUND_FORKLIFT = 11;
     /**
-     * 出库
+     * 出库 - 放下物料
      */
-    public static final Byte STATUS_FORKLIFT_RFID_OUTBOUND_DONE = 5;
+    public static final Byte STATUS_FORKLIFT_RFID_OUTBOUND_RETURN = 12;
+    /**
+     * 出库 - 完成出库
+     */
+    public static final Byte STATUS_FORKLIFT_RFID_OUTBOUND_DONE = 13;
 
     /**
      * 提示信息

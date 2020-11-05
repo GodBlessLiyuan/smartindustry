@@ -7,6 +7,7 @@ import com.smartindustry.common.mapper.om.OutboundBodyMapper;
 import com.smartindustry.common.mapper.om.OutboundForkliftMapper;
 import com.smartindustry.common.mapper.om.OutboundHeadMapper;
 import com.smartindustry.common.mapper.si.ForkliftMapper;
+import com.smartindustry.common.mapper.si.LocationMapper;
 import com.smartindustry.common.mapper.sm.StorageDetailMapper;
 import com.smartindustry.common.mapper.sm.StorageForkliftMapper;
 import com.smartindustry.common.mapper.sm.StorageHeadMapper;
@@ -14,6 +15,7 @@ import com.smartindustry.common.pojo.om.OutboundBodyPO;
 import com.smartindustry.common.pojo.om.OutboundForkliftPO;
 import com.smartindustry.common.pojo.om.OutboundHeadPO;
 import com.smartindustry.common.pojo.si.ForkliftPO;
+import com.smartindustry.common.pojo.si.LocationPO;
 import com.smartindustry.common.pojo.sm.StorageDetailPO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.pda.constant.CommonConstant;
@@ -40,6 +42,8 @@ import java.util.*;
 @Service
 public class CommonServiceImpl implements ICommonService {
 
+    @Autowired
+    private LocationMapper locationMapper;
     @Autowired
     private ForkliftMapper forkliftMapper;
     @Autowired
@@ -174,7 +178,10 @@ public class CommonServiceImpl implements ICommonService {
         }
         if (CommonConstant.STATUS_FORKLIFT_RFID_STORAGE_FORKLIFT.equals(status)) {
             // 入库，叉起物料
+            String mrfid = dto.getMrfid();
+
             // TODO: 业务逻辑
+
             return ResultVO.ok();
         }
         if (CommonConstant.STATUS_FORKLIFT_RFID_STORAGE_DONE.equals(status)) {
@@ -187,65 +194,68 @@ public class CommonServiceImpl implements ICommonService {
             session.removeAttribute(CommonConstant.SESSION_MRFID);
             return ResultVO.ok();
         }
+
+        OutboundForkliftPO outboundForkliftPO = outboundForkliftMapper.queryByFid(fPO.getForkliftId());
         if (CommonConstant.STATUS_FORKLIFT_RFID_OUTBOUND_FORKLIFT.equals(status)) {
             // 出库，叉起物料
+            outboundForkliftPO.setRfid(dto.getMrfid());
+            outboundForkliftMapper.updateByPrimaryKey(outboundForkliftPO);
+
+            StorageDetailPO detailPO = storageDetailMapper.queryByRfidAndStatus(dto.getMrfid(), CommonConstant.STATUS_RFID_STORAGE);
+            detailPO.setStorageStatus(CommonConstant.STATUS_RFID_STORAGE);
+            storageDetailMapper.updateByPrimaryKey(detailPO);
+
+            return ResultVO.ok();
+        }
+        if (CommonConstant.STATUS_FORKLIFT_RFID_OUTBOUND_RETURN.equals(status)) {
+            // 出库，物料放回原位
+            outboundForkliftPO.setRfid(null);
+            outboundForkliftMapper.updateByPrimaryKey(outboundForkliftPO);
+
+            StorageDetailPO detailPO = storageDetailMapper.queryByRfidAndStatus((String) session.getAttribute(CommonConstant.SESSION_MRFID), CommonConstant.STATUS_RFID_OUTBOUND_SALE);
+            detailPO.setStorageStatus(CommonConstant.STATUS_RFID_STORAGE);
+            storageDetailMapper.updateByPrimaryKey(detailPO);
+
+            session.removeAttribute(CommonConstant.SESSION_MRFID);
+
             return ResultVO.ok();
         }
         if (CommonConstant.STATUS_FORKLIFT_RFID_OUTBOUND_DONE.equals(status)) {
             // 出库
-            String mrfid = (String) session.getAttribute(CommonConstant.SESSION_MRFID);
+            outboundForkliftPO.setRfid(null);
+            outboundForkliftMapper.updateByPrimaryKey(outboundForkliftPO);
+
+            StorageDetailPO detailPO = storageDetailMapper.queryByRfidAndStatus((String) session.getAttribute(CommonConstant.SESSION_MRFID), CommonConstant.STATUS_RFID_OUTBOUND_SALE);
+            detailPO.setStorageStatus(CommonConstant.STATUS_RFID_OUTBOUND_DONE);
+            storageDetailMapper.updateByPrimaryKey(detailPO);
+
+            OutboundHeadPO headPO = outboundHeadMapper.selectByPrimaryKey(outboundForkliftPO.getOutboundHeadId());
+            headPO.setOutboundNum(headPO.getOutboundNum().add(BigDecimal.ONE));
+            if (headPO.getExpectNum().equals(headPO.getOutboundNum())) {
+                // 出库完成
+                headPO.setStatus((byte) 1);
+                headPO.setOutboundTime(new Date());
+                // 发送消息
+                List<OutboundForkliftBO> ofBOs = outboundForkliftMapper.queryByOhid(headPO.getOutboundHeadId());
+                List<String> imeis = new ArrayList<>();
+                for (OutboundForkliftBO ofBO : ofBOs) {
+                    if (!imei.equals(ofBO.getImeiNo())) {
+                        imeis.add(ofBO.getImeiNo());
+                    }
+                }
+                WebSocketServer.sendMsg(imeis, WebSocketVO.createTitleVO("业务单号：" + headPO.getSourceNo() + "（销售出库），已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
+            }
+            outboundHeadMapper.updateByPrimaryKey(headPO);
+
+            OutboundBodyPO bodyPO = outboundBodyMapper.queryByOhidAndMid(outboundForkliftPO.getOutboundHeadId(), detailPO.getMaterialId());
+            bodyPO.setOutboundNum(bodyPO.getOutboundNum().add(BigDecimal.ONE));
+            if (bodyPO.getExpectNum().equals(bodyPO.getOutboundNum())) {
+                bodyPO.setOutboundTime(new Date());
+            }
+            outboundBodyMapper.updateByPrimaryKey(bodyPO);
 
             session.removeAttribute(CommonConstant.SESSION_MRFID);
             return ResultVO.ok();
-        }
-
-        OutboundForkliftPO ofPO = outboundForkliftMapper.queryByFid(fPO.getForkliftId());
-        if (null == ofPO) {
-            // 尚未开始任务
-            WebSocketServer.sendMsg(imei, "请先开始任务！");
-            return new ResultVO(1003);
-        }
-
-        StorageDetailPO detailPO = storageDetailMapper.queryByRfidAndStatus(dto.getMrfid(), (byte) 1);
-        if (null == detailPO) {
-            // 入库
-        } else {
-            // 出库
-            if (null == ofPO.getRfid()) {
-                // 叉起砧板
-                ofPO.setRfid(dto.getMrfid());
-                outboundForkliftMapper.updateByPrimaryKey(ofPO);
-            } else {
-                // 砧板出库
-                ofPO.setRfid(null);
-                outboundForkliftMapper.updateByPrimaryKey(ofPO);
-
-                detailPO.setStorageStatus((byte) 2);
-                storageDetailMapper.updateByPrimaryKey(detailPO);
-
-                OutboundHeadPO headPO = outboundHeadMapper.selectByPrimaryKey(ofPO.getOutboundHeadId());
-                headPO.setOutboundNum(headPO.getOutboundNum().add(BigDecimal.ONE));
-                if (headPO.getExpectNum().equals(headPO.getOutboundNum())) {
-                    // 出库完成
-                    headPO.setStatus((byte) 1);
-                    // 发送消息
-                    List<OutboundForkliftBO> ofBOs = outboundForkliftMapper.queryByOhid(headPO.getOutboundHeadId());
-                    List<String> imeis = new ArrayList<>();
-                    for (OutboundForkliftBO ofBO : ofBOs) {
-                        if (!imei.equals(ofBO.getImeiNo())) {
-                            imeis.add(ofBO.getImeiNo());
-                        }
-                    }
-                    WebSocketVO vo = new WebSocketVO();
-                    WebSocketVO.TitleVO titleVO = new WebSocketVO.TitleVO();
-                    titleVO.setMsg("当前订单已完成");
-                    WebSocketServer.sendMsg(imeis, vo);
-                }
-                outboundHeadMapper.updateByPrimaryKey(headPO);
-                OutboundBodyPO bodyPO = outboundBodyMapper.queryByOhidAndMid(ofPO.getOutboundHeadId(), detailPO.getMaterialId());
-                bodyPO.setOutboundNum(bodyPO.getOutboundNum().add(BigDecimal.ONE));
-                outboundBodyMapper.updateByPrimaryKey(bodyPO);
-            }
         }
 
         return ResultVO.ok();
@@ -259,9 +269,13 @@ public class CommonServiceImpl implements ICommonService {
      * @return
      */
     private Byte checkRfids(HttpSession session, CommonDTO dto) {
-        Byte status = (Byte) session.getAttribute(CommonConstant.SESSION_STATUS_FORKLIFT);
         String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
+        if ("ERROR".equals(dto.getMrfid()) || "ERROR".equals(dto.getLrfid())) {
+            WebSocketServer.sendMsg(imei, WebSocketVO.createTitleVO("当前阅读器或串口线故障，请检查！", CommonConstant.TYPE_TITLE_ERROR));
+            return CommonConstant.STATUS_FORKLIFT_RFID_NONE;
+        }
 
+        Byte status = (Byte) session.getAttribute(CommonConstant.SESSION_STATUS_FORKLIFT);
         if (null == status) {
             // 无状态
             if (null == dto.getMrfid()) {
@@ -328,7 +342,16 @@ public class CommonServiceImpl implements ICommonService {
             }
 
             if (null != dto.getLrfid()) {
-                WebSocketServer.sendMsg(imei, WebSocketVO.createTitleVO("还未到出库区，物料RFID丢失", CommonConstant.TYPE_TITLE_WARN));
+                StorageDetailPO detailPO = storageDetailMapper.queryByRfidAndStatus((String) session.getAttribute(CommonConstant.SESSION_MRFID), CommonConstant.STATUS_RFID_OUTBOUND_SALE);
+                LocationPO locationPO = locationMapper.selectByPrimaryKey(detailPO.getLocationId());
+                if (dto.getLrfid().equals(locationPO.getLocationNo())) {
+                    // 物料放回原位
+                    session.setAttribute(CommonConstant.SESSION_STATUS_FORKLIFT, CommonConstant.STATUS_FORKLIFT_WORK_OUTBOUND_ONE);
+                    return CommonConstant.STATUS_FORKLIFT_RFID_OUTBOUND_RETURN;
+                } else {
+                    WebSocketServer.sendMsg(imei, WebSocketVO.createTitleVO("还未到出库区，物料RFID丢失", CommonConstant.TYPE_TITLE_WARN));
+                }
+
                 return CommonConstant.STATUS_FORKLIFT_RFID_NONE;
             }
 
