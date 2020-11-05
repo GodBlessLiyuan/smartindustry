@@ -154,7 +154,7 @@
     select
     <include refid="Base_Column_List"/>
     from sm_storage_detail
-    where location_id = #{lid,jdbcType=BIGINT} and rfid = #{rfid,jdbcType=CHAR}
+    where  rfid = #{rfid,jdbcType=CHAR} and storage_head_id is null
   </select>
 
   <select id="queryByRfid" parameterType="java.lang.String" resultMap="BaseResultMap">

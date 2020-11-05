@@ -182,10 +182,10 @@
         from om_outbound_head oh
         where oh.dr = 1
         <if test="mixno != null and mixno != ''">
-            and oh.source_no like concat('%',#{mixno,jdbcType=CHAR},'%')
+            and oh.source_no like concat('%',#{mixno,jdbcType=CHAR},'%') and oh.source_type = 1
         </if>
         <if test="pno != null and pno != ''">
-            and oh.source_no like concat('%',#{pno,jdbcType=CHAR},'%')
+            and oh.source_no like concat('%',#{pno,jdbcType=CHAR},'%') and oh.source_type = 3
         </if>
         <if test="status != null and status != 0">
             and oh.`status` = #{status,jdbcType=TINYINT}
@@ -196,7 +196,7 @@
         order by oh.create_time desc
     </select>
 
-    <resultMap id="BOSResultMap" type="com.smartindustry.common.bo.om.OutboundHeadBO" extends="BaseResultMap">
+    <resultMap id="BOSResultMap" type="com.smartindustry.common.bo.om.OutboundHeadBO">
         <result column="outbound_head_id" jdbcType="BIGINT" property="outboundHeadId"/>
         <result column="slurry_id" jdbcType="BIGINT" property="mixHeadId"/>
         <result column="outbound_no" jdbcType="CHAR" property="outboundNo"/>
@@ -211,12 +211,13 @@
             <result column="material_model" jdbcType="CHAR" property="materialModel"/>
             <result column="outbound_num" jdbcType="DECIMAL" property="outboundNum"/>
             <result column="outbound_time" jdbcType="TIMESTAMP" property="outboundTime"/>
+            <result column="plan_num" jdbcType="DECIMAL" property="planNum"/>
             <result column="measure_unit_name" jdbcType="CHAR" property="measureUnitName"/>
         </collection>
     </resultMap>
     <sql id="BOS_Column_List">
          oh.outbound_head_id, oh.outbound_no, so.slurry_id, so.slurry_no, so.plan_date, oh.extra,
-      ob.material_id, m.material_no, m.material_name, m.material_model, ob.outbound_num, ob.outbound_time, mu.measure_unit_name
+      ob.material_id, m.material_id,m.material_no, m.material_name, m.material_model, ob.outbound_num, ob.outbound_time,sm.plan_num, mu.measure_unit_name
     </sql>
     <select id="queryMixByOhid" parameterType="java.lang.Long" resultMap="BOSResultMap">
         select
@@ -224,6 +225,7 @@
         from om_outbound_head oh
         left join wo_slurry_order so on oh.source_no = so.slurry_no
         left join om_outbound_body ob on oh.outbound_head_id = ob.outbound_head_id
+        left join wo_slurry_material sm on (ob.material_id = sm.material_id and so.slurry_id = sm.slurry_id)
         left join si_material m on ob.material_id = m.material_id
         left join dd_measure_unit mu on m.measure_unit_id = mu.measure_unit_id
         where oh.dr = 1 and oh.outbound_head_id = #{ohid,jdbcType=BIGINT}

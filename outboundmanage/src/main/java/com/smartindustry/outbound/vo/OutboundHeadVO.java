@@ -68,6 +68,8 @@ public class OutboundHeadVO implements Serializable {
          * 表体id
          */
         private Long obid;
+
+        private Long mid;
         /**
          * 物料编号
          */
@@ -135,17 +137,21 @@ public class OutboundHeadVO implements Serializable {
         OutboundHeadVO vo = new OutboundHeadVO();
         vo.setOhid(bo.getOutboundHeadId());
         vo.setOno(bo.getOutboundNo());
+        vo.setMixid(bo.getMixHeadId());
+        vo.setMixno(bo.getMixNo());
         vo.setPtime(bo.getPlanTime());
         vo.setExtra(bo.getExtra());
         List<OutboundBodyVO> vos = new ArrayList<>();
         for (OutboundBodyBO bodyBO : bo.getBodyBOs()){
             OutboundBodyVO bodyVO = new OutboundBodyVO();
             bodyVO.setObid(bodyBO.getOutboundBodyId());
+            bodyVO.setMid(bodyBO.getMaterialId());
             bodyVO.setMno(bodyBO.getMaterialNo());
             bodyVO.setMname(bodyBO.getMaterialName());
             bodyVO.setMmodel(bodyBO.getMaterialModel());
             bodyVO.setOnum(bodyBO.getOutboundNum());
             bodyVO.setOtime(bodyBO.getOutboundTime());
+            bodyVO.setPnum(bodyBO.getPlanNum());
             bodyVO.setMuname(bodyBO.getMeasureUnitName());
             vos.add(bodyVO);
         }
