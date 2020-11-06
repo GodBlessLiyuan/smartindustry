@@ -119,7 +119,7 @@
         from om_outbound_forklift
         where outbound_head_id in (
         <foreach collection="list" item="ohid" separator=",">
-            #{ohid,jdbcType=BIGINT}
+            outbound_head_id = #{ohid,jdbcType=BIGINT}
         </foreach>
         )
         group by outbound_head_id

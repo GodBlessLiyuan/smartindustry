@@ -27,7 +27,7 @@ public interface RoleAuthorityMapper extends BaseMapper<RoleAuthorityPO, Long> {
      * @param perms
      * @return
      */
-    Integer insertBatch(@Param("roleId") Long roleId,@Param("perms") List<Long> perms);
+    Integer insertBatch(@Param("roleId") Long roleId, @Param("perms") List<Long> perms);
 
 
     /**

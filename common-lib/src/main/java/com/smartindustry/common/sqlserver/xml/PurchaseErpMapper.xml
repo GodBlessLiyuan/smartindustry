@@ -5,6 +5,8 @@
     <result column="ID" jdbcType="DOUBLE" property="purchaseId" />
     <result column="单号" jdbcType="NVARCHAR" property="purchaseNo" />
     <result column="供应商ID" jdbcType="DOUBLE" property="supplierId" />
+    <result column="订单ID" jdbcType="DOUBLE" property="orderId" />
+    <result column="订单号" jdbcType="NVARCHAR" property="orderNo" />
     <result column="仓库ID" jdbcType="DOUBLE" property="warehouseId" />
     <result column="日期" jdbcType="TIMESTAMP" property="acceptDate" />
     <result column="业务员ID" jdbcType="DOUBLE" property="salesmanId" />
@@ -16,13 +18,27 @@
     <result column="付款ID" jdbcType="DOUBLE" property="payMethod" />
     <result column="付款名称" jdbcType="NVARCHAR" property="payName" />
     <result column="备注" jdbcType="NVARCHAR" property="remark" />
+    <result column="引用数量" jdbcType="DOUBLE" property="num" />
   </resultMap>
-  <sql id="Base_Column_List">
-ID, 单号, 供应商ID,       仓库ID, 日期, 业务员ID,       业务员姓名, 操作员ID, 操作员姓名,       审核员ID, 审核员姓名, 付款ID,       付款名称, 备注
+  <sql id="BO_Column_List">
+    s.ID, s.单号,s.订单ID, s.订单号, s.供应商ID,s.仓库ID, s.日期, s.业务员ID,  s.业务员姓名,s.操作员ID, s.操作员姓名, s.审核员ID,s.审核员姓名, s.付款ID, s.付款名称, s.备注,s.引用数量,
+    d.ID as detail_id, d.到货ID, d.物品ID,  d.数量, d.单价, d.金额, d.不含税单价, d.不含税金额, d.备注 as remark
   </sql>
+  <resultMap id="BOResultMap" type="com.smartindustry.common.bo.ds.PurchaseErpBO" extends="BaseResultMap">
+    <collection property="pdpos" ofType="com.smartindustry.common.pojo.ds.sqlserver.PurchaseDetailErpPO">
+      <result column="detail_id" jdbcType="DOUBLE" property="detailId" />
+      <result column="物品ID" jdbcType="DOUBLE" property="materialId" />
+      <result column="数量" jdbcType="DOUBLE" property="num" />
+      <result column="单价" jdbcType="DOUBLE" property="unitPrice" />
+      <result column="金额" jdbcType="DOUBLE" property="sum" />
+      <result column="不含税单价" jdbcType="DOUBLE" property="unitPriceNoTax" />
+      <result column="不含税金额" jdbcType="DOUBLE" property="sumNoTax" />
+      <result column="remark" jdbcType="NVARCHAR" property="remark" />
+    </collection>
+  </resultMap>
   <select id="queryAll" resultMap="BaseResultMap">
     select
-    <include refid="Base_Column_List"/>
-    from dbo.采购到货
+    <include refid="BO_Column_List"/>
+    from dbo.采购到货 as s left join dbo.采购到货明细 as d on s.ID = d.到货ID
   </select>
 </mapper>

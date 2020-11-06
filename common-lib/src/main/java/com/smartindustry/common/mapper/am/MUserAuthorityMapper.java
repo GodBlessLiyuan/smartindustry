@@ -34,5 +34,5 @@ public interface MUserAuthorityMapper extends BaseMapper<MUserAuthorityPO, Long>
      * @param perms
      * @return
      */
-    Integer insertBatch(@Param("uids") List<Long> uids,@Param("perms") List<Long> perms);
+    Integer insertBatch(@Param("uids") List<Long> uids, @Param("perms") List<Long> perms);
 }

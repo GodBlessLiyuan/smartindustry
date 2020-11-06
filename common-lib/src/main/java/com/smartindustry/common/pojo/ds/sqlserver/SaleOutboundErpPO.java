@@ -16,11 +16,15 @@ public class SaleOutboundErpPO implements Serializable {
 
     private Double clientId;
 
+    private String clientNo;
+
     private Date saleDate;
 
     private Double operatorId;
 
     private String operatorName;
+
+    private String operatorCode;
 
     private static final long serialVersionUID = 1L;
 }

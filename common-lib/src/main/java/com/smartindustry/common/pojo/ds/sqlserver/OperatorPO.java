@@ -21,5 +21,9 @@ public class OperatorPO implements Serializable {
 
     private Double deptId;
 
+    private String roleCode;
+
+    private String deptCode;
+
     private static final long serialVersionUID = 1L;
 }

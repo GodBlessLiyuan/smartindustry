@@ -1,6 +1,6 @@
 spring:
   application:
-    name: workbenchmanage
+    name: datasynchronize
   jackson:
     serialization:
       indent-output: true
@@ -52,7 +52,7 @@ token:
   expireTime: 3000000
 
 server:
-    port: 8141
+    port: 8036
 
 
 logging:

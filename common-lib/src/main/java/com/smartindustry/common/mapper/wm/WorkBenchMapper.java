@@ -21,5 +21,5 @@ public interface WorkBenchMapper extends BaseMapper<WorkBenchPO, Long> {
      * @param benchType
      * @return
      */
-    List<WorkBenchBO> queryByModuleId(@Param("benchModule") Byte benchModule,@Param("benchType") Byte benchType);
+    List<WorkBenchBO> queryByModuleId(@Param("benchModule") Byte benchModule, @Param("benchType") Byte benchType);
 }

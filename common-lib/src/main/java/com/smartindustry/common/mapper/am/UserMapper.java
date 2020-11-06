@@ -63,7 +63,7 @@ public interface UserMapper extends BaseMapper<UserPO, Long> {
      * @param username
      * @return
      */
-    Integer judgeRepeatName(@Param("username") String username,@Param("userId") Long userId);
+    Integer judgeRepeatName(@Param("username") String username, @Param("userId") Long userId);
 
     /**
      * 根据roleId查询所有的相关用户
@@ -86,7 +86,7 @@ public interface UserMapper extends BaseMapper<UserPO, Long> {
      * @param userId
      * @return
      */
-    Integer updatePassword(@Param("password") String password,@Param("userId") Long userId);
+    Integer updatePassword(@Param("password") String password, @Param("userId") Long userId);
 
     /**
      * 查询用户详细的个人信息
@@ -101,4 +101,11 @@ public interface UserMapper extends BaseMapper<UserPO, Long> {
      * @return
      */
     List<UserPO> queryUserRole(@Param("roleId") Long roleId);
+
+    /**
+     * 根据用户编码查找用户
+     * @param userCode
+     * @return
+     */
+    UserPO queryByCode(@Param("userCode") String userCode);
 }

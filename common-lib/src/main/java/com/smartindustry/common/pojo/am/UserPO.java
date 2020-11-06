@@ -14,6 +14,8 @@ public class UserPO implements Serializable {
 
     private String name;
 
+    private String userCode;
+
     /**
      * 1 男
 2 女

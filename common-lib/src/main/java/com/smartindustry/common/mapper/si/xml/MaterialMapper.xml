@@ -210,10 +210,16 @@
     order by m.create_time desc
   </select>
 
-  <insert id="batchInsert" parameterType="java.util.List">
+    <select id="queryByMaterialNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List"/>
+      from si_material where material_no = #{materialNo, jdbcType=CHAR} and material_name = #{materialName, jdbcType=CHAR}
+    </select>
+
+    <insert id="batchInsert" parameterType="java.util.List">
         insert into si_material (  material_no, material_type, material_name,material_model,     measure_unit_id, material_desc, user_id, create_time,   dr) values
         <foreach collection="list" item = "po" separator=",">
-          ( #{po.materialNo,jdbcType=CHAR}, #{po.materialType,jdbcType=TINYINT},#{po.materialName,jdbcType=CHAR}, #{po.materialModel,jdbcType=CHAR}, #{po.measureUnitId,jdbcType=BIGINT}, #{po.materialDesc,jdbcType=CHAR}, #{po.userId,jdbcType=BIGINT}, #{po.createTime,jdbcType=TIMESTAMP},#{po.dr,jdbcType=TINYINT})
+          (  #{po.materialNo,jdbcType=CHAR}, #{po.materialType,jdbcType=TINYINT},#{po.materialName,jdbcType=CHAR}, #{po.materialModel,jdbcType=CHAR}, #{po.measureUnitId,jdbcType=BIGINT}, #{po.materialDesc,jdbcType=CHAR}, #{po.userId,jdbcType=BIGINT}, #{po.createTime,jdbcType=TIMESTAMP},#{po.dr,jdbcType=TINYINT})
         </foreach>
     </insert>
 </mapper>
