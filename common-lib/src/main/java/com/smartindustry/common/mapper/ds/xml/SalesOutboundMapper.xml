@@ -17,7 +17,8 @@
     from ds_sales_outbound
     where sales_outbound_id = #{salesOutboundId,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from ds_sales_outbound
     where sales_outbound_id = #{salesOutboundId,jdbcType=BIGINT}
   </delete>
@@ -98,4 +99,10 @@
             #{po.clientId,jdbcType=BIGINT}, #{po.userId,jdbcType=BIGINT})
         </foreach>
     </insert>
+
+  <select id="queryBySalesNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from ds_sales_outbound where sales_no = #{salesNo, jdbcType=CHAR}  limit 1
+  </select>
 </mapper>

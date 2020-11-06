@@ -104,10 +104,15 @@ public class BasicServiceImpl implements IBasicService {
             po.setUserId(1L);
             po.setDr((byte)1);
             po.setCreateTime(Calendar.getInstance().getTime());
-            pos.add(po);
+            MaterialPO p = materialMapper.queryByMaterialNo(po.getMaterialNo(), po.getMaterialName());
+            if (p == null) {
+                pos.add(po);
+            }
         }
-        materialMapper.batchInsert(pos);
-        return ResultVO.ok();
+        if (!pos.isEmpty()) {
+            materialMapper.batchInsert(pos);
+        }
+        return ResultVO.ok().setData(materials);
     }
 
     @Override
@@ -128,10 +133,14 @@ public class BasicServiceImpl implements IBasicService {
             po.setRemark(erppo.getRemark());
             po.setCreateTime(Calendar.getInstance().getTime());
             po.setDr((byte) 1);
-            pos.add(po);
+            if (clientMapper.queryByClientNo(po.getClientNo()) == null) {
+                pos.add(po);
+            }
         }
-        clientMapper.batchInsert(pos);
-        return ResultVO.ok();
+        if (!pos.isEmpty()) {
+            clientMapper.batchInsert(pos);
+        }
+        return ResultVO.ok().setData(clients);
     }
 
     @Override
@@ -152,10 +161,14 @@ public class BasicServiceImpl implements IBasicService {
             po.setUserId(1L);
             po.setCreateTime(Calendar.getInstance().getTime());
             po.setDr((byte)1);
-            pos.add(po);
+            if (supplierMapper.queryBySno(po.getSupplierNo()) == null) {
+                pos.add(po);
+            }
         }
-        supplierMapper.batchInsert(pos);
-        return ResultVO.ok();
+        if (!pos.isEmpty()) {
+            supplierMapper.batchInsert(pos);
+        }
+        return ResultVO.ok().setData(suppliers);
     }
 
     @Override
@@ -170,10 +183,14 @@ public class BasicServiceImpl implements IBasicService {
             po.setStatus((byte)1);
             po.setCreateTime(Calendar.getInstance().getTime());
             po.setDr((byte)1);
-            pos.add(po);
+            if (deptMapper.queryByCode(po.getDeptCode()) == null ) {
+                pos.add(po);
+            }
         }
-        deptMapper.batchInsert(pos);
-        return ResultVO.ok();
+        if (!pos.isEmpty()) {
+            deptMapper.batchInsert(pos);
+        }
+        return ResultVO.ok().setData(depts);
     }
 
     @Override
@@ -187,10 +204,14 @@ public class BasicServiceImpl implements IBasicService {
             po.setStatus((byte)1);
             po.setCreateTime(Calendar.getInstance().getTime());
             po.setDr((byte)1);
-            pos.add(po);
+            if (roleMapper.queryByCode(po.getRoleCode()) == null) {
+                pos.add(po);
+            }
         }
-        roleMapper.batchInsert(pos);
-        return ResultVO.ok();
+        if (!pos.isEmpty()) {
+            roleMapper.batchInsert(pos);
+        }
+        return ResultVO.ok().setData(roles);
     }
 
     @Override
@@ -220,9 +241,13 @@ public class BasicServiceImpl implements IBasicService {
             po.setStatus((byte)1);
             po.setCreateTime(Calendar.getInstance().getTime());
             po.setDr((byte)1);
-            pos.add(po);
+            if (userMapper.queryByCode(po.getUserCode()) == null) {
+                pos.add(po);
+            }
         }
-        userMapper.batchInsert(pos);
-        return ResultVO.ok();
+        if (!pos.isEmpty()) {
+            userMapper.batchInsert(pos);
+        }
+        return ResultVO.ok().setData(operators);
     }
 }

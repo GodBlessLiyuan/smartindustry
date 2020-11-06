@@ -57,6 +57,9 @@ public class SalesOutboundServiceImpl implements ISalesOutboundService {
         List<SalesOutboundPO> pos = new ArrayList<>(bos.size());
         for (SaleOutboundErpBO bo: bos) {
             SalesOutboundPO po = new SalesOutboundPO();
+            if (salesOutboundMapper.queryBySalesNo(po.getSalesNo()) != null) {
+                continue;
+            }
             po.setSalesNo(bo.getSaleNo());
             if(bo.getClientId() != null) {
                 ClientPO client = clientMapper.queryByClientNo(bo.getClientNo());
@@ -92,7 +95,9 @@ public class SalesOutboundServiceImpl implements ISalesOutboundService {
                 }
             }
         }
-        salesOutboundDetailMapper.batchInsert(sodpos);
+        if (!sodpos.isEmpty()) {
+            salesOutboundDetailMapper.batchInsert(sodpos);
+        }
         return ResultVO.ok();
     }
 
