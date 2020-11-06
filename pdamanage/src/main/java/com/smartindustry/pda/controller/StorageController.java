@@ -58,12 +58,22 @@ public class StorageController {
     }
 
     /**
-     * 叉车叉货时叉起调用接口
+     * 叉车叉刚生产出货时叉起调用接口
      *
      * @return
      */
     @PostMapping("execute")
-    public ResultVO forkliftLift(HttpSession session, @RequestBody StorageDTO dto) {
+    public ResultVO execute(HttpSession session, @RequestBody StorageDTO dto) {
         return storageService.execute(session, dto);
+    }
+
+    /**
+     * 叉车叉备料区实时展示接口
+     *
+     * @return
+     */
+    @PostMapping("execute_for_pre")
+    public ResultVO executeForPre(HttpSession session, @RequestBody StorageDTO dto) {
+        return storageService.executeForPre(session, dto);
     }
 }
