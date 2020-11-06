@@ -30,7 +30,7 @@
     from si_client
     where client_id = #{clientId,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from si_client
     where client_id = #{clientId,jdbcType=BIGINT}
   </delete>
@@ -231,4 +231,19 @@
       dr = #{dr,jdbcType=TINYINT}
     where client_id = #{clientId,jdbcType=BIGINT}
   </update>
+
+  <insert id="batchInsert" parameterType="java.util.List" keyProperty="clientId" useGeneratedKeys="true">
+    insert into si_client (client_id ,  client_no, client_type_id, client_name, contact,  phone, email, fax,
+    url, address, remark, create_time, dr) values
+    <foreach collection="list" item = "po" separator=",">
+      (#{po.clientId,jdbcType=CHAR}, #{po.clientNo,jdbcType=CHAR}, #{po.clientTypeId,jdbcType=BIGINT},  #{po.clientName,jdbcType=CHAR}, #{po.contact,jdbcType=CHAR},   #{po.phone,jdbcType=CHAR}, #{po.email,jdbcType=CHAR}, #{po.fax,jdbcType=CHAR}, #{po.url,jdbcType=CHAR}, #{po.address,jdbcType=CHAR},
+      #{po.remark,jdbcType=CHAR}, #{po.createTime,jdbcType=TIMESTAMP},      #{po.dr,jdbcType=TINYINT})
+    </foreach>
+  </insert>
+
+  <select id="queryByClientNo" parameterType="java.lang.String"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+     from si_client where client_no = #{clientNo, jdbcType=CHAR} limit 1
+  </select>
 </mapper>

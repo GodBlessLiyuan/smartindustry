@@ -57,7 +57,7 @@ public interface DeptMapper extends BaseMapper<DeptPO, Long> {
      * @param deptName
      * @return
      */
-    Integer judgeRepeatName(@Param("deptName") String deptName,@Param("deptId") Long deptId);
+    Integer judgeRepeatName(@Param("deptName") String deptName, @Param("deptId") Long deptId);
 
     /**
      * 将上级部门为当前输入的部门id的置空
@@ -79,4 +79,11 @@ public interface DeptMapper extends BaseMapper<DeptPO, Long> {
      * @return
      */
     List<DeptPO> queryByParent(@Param("parentId") Long parentId);
+
+    /**
+     *
+     * @param deptCode
+     * @return
+     */
+    DeptPO queryByCode(@Param("deptCode") String deptCode);
 }

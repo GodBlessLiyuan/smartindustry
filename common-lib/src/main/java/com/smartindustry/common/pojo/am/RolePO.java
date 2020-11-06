@@ -12,6 +12,8 @@ import lombok.Data;
 public class RolePO implements Serializable {
     private Long roleId;
 
+    private String roleCode;
+
     private String roleName;
 
     private String roleDesc;

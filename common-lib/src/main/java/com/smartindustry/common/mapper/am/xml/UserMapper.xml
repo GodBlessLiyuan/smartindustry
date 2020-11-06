@@ -4,6 +4,7 @@
     <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.am.UserPO">
         <id column="user_id" jdbcType="BIGINT" property="userId"/>
         <result column="name" jdbcType="CHAR" property="name"/>
+        <result column="user_code" jdbcType="CHAR" property="userCode"/>
         <result column="sex" jdbcType="TINYINT" property="sex"/>
         <result column="dept_id" jdbcType="BIGINT" property="deptId"/>
         <result column="username" jdbcType="CHAR" property="username"/>
@@ -19,7 +20,7 @@
         <result column="dr" jdbcType="TINYINT" property="dr"/>
     </resultMap>
     <sql id="Base_Column_List">
-        user_id, `name`, sex, dept_id, username, `password`, role_id, job, phone, email,
+        user_id, `name`,user_code, sex, dept_id, username, `password`, role_id, job, phone, email,
     `status`, remark, create_time, update_time, dr
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -35,12 +36,12 @@
     </delete>
     <insert id="insert" parameterType="com.smartindustry.common.pojo.am.UserPO" useGeneratedKeys="true"
             keyProperty="userId">
-        insert into am_user (user_id, `name`, sex,
+        insert into am_user (user_id, `name`,user_code, sex,
                              dept_id, username, `password`,
                              role_id, job, phone, email,
                              `status`, remark, create_time,
                              update_time, dr)
-        values (#{userId,jdbcType=BIGINT}, #{name,jdbcType=CHAR}, #{sex,jdbcType=TINYINT},
+        values (#{userId,jdbcType=BIGINT}, #{name,jdbcType=CHAR}, #{userCode,jdbcType=CHAR}, #{sex,jdbcType=TINYINT},
                 #{deptId,jdbcType=BIGINT}, #{username,jdbcType=CHAR}, #{password,jdbcType=CHAR},
                 #{roleId,jdbcType=BIGINT}, #{job,jdbcType=CHAR}, #{phone,jdbcType=CHAR}, #{email,jdbcType=CHAR},
                 #{status,jdbcType=TINYINT}, #{remark,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP},
@@ -54,6 +55,9 @@
             </if>
             <if test="name != null">
                 `name`,
+            </if>
+            <if test="userCode != null">
+                user_code,
             </if>
             <if test="sex != null">
                 sex,
@@ -102,6 +106,9 @@
             <if test="name != null">
                 #{name,jdbcType=CHAR},
             </if>
+            <if test="userCode != null">
+                #{userCode,jdbcType=CHAR},
+            </if>
             <if test="sex != null">
                 #{sex,jdbcType=TINYINT},
             </if>
@@ -149,6 +156,9 @@
             <if test="name != null">
                 `name` = #{name,jdbcType=CHAR},
             </if>
+            <if test="userCode != null">
+                user_code = #{userCode,jdbcType=CHAR},
+            </if>
             <if test="sex != null">
                 sex = #{sex,jdbcType=TINYINT},
             </if>
@@ -194,6 +204,7 @@
     <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.am.UserPO">
         update am_user
         set `name`      = #{name,jdbcType=CHAR},
+        user_code      = #{userCode,jdbcType=CHAR},
             sex         = #{sex,jdbcType=TINYINT},
             dept_id     = #{deptId,jdbcType=BIGINT},
             username    = #{username,jdbcType=CHAR},
@@ -215,7 +226,7 @@
         <result column="roleName" jdbcType="CHAR" property="roleName"/>
     </resultMap>
     <sql id="BO_Column_List">
-        u.user_id, u.`name`, u.sex, u.dept_id, u.username, u.`password`, u.role_id, u.job, u.phone, u.email,
+        u.user_id, u.`name`, u.sex, u.dept_id, u.username, u.`password`, u.role_id, u.job, u.phone, u.email,u.user_code,
     u.`status`, u.remark, u.create_time, u.update_time, u.dr,d.dept_name as deptName,r.role_name as roleName
     </sql>
 
@@ -344,4 +355,25 @@
         from am_user u
         where u.role_id = #{roleId,jdbcType=BIGINT} and u.dr = 1
     </select>
+
+    <select id="queryByCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from am_user where user_code = #{userCode, jdbcType=CHAR}
+    </select>
+
+    <insert id="batchInsert" parameterType="java.util.List" keyProperty="userId" useGeneratedKeys="true">
+        insert into am_user (  `name`,user_code,
+        dept_id, username, `password`,
+        role_id,
+        `status`,  create_time,
+         dr) values
+        <foreach collection="list" item = "po" separator=",">
+            ( #{po.name,jdbcType=CHAR},#{po.userCode,jdbcType=CHAR},
+            #{po.deptId,jdbcType=BIGINT}, #{po.username,jdbcType=CHAR}, #{po.password,jdbcType=CHAR},
+            #{po.roleId,jdbcType=BIGINT},
+            #{po.status,jdbcType=TINYINT},  #{po.createTime,jdbcType=TIMESTAMP},
+           #{po.dr,jdbcType=TINYINT})
+        </foreach>
+    </insert>
 </mapper>

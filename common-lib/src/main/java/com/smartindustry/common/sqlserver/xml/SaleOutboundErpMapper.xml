@@ -5,17 +5,36 @@
     <result column="ID" jdbcType="DOUBLE" property="saleId" />
     <result column="单号" jdbcType="NVARCHAR" property="saleNo" />
     <result column="客户ID" jdbcType="DOUBLE" property="clientId" />
+    <result column="编号" jdbcType="NVARCHAR" property="clientNo" />
     <result column="日期" jdbcType="TIMESTAMP" property="saleDate" />
     <result column="操作员ID" jdbcType="DOUBLE" property="operatorId" />
     <result column="操作员姓名" jdbcType="NVARCHAR" property="operatorName" />
+    <result column="操作员编号" jdbcType="NVARCHAR" property="operatorCode" />
   </resultMap>
-  <sql id="Base_Column_List">
-ID, 单号, 客户ID,       日期, 操作员ID, 操作员姓名
+  <sql id="BO_Column_List">
+    p.ID,p.单号,p.客户ID,c.编号,p.日期,p.操作员ID,p.操作员姓名,d.ID AS detail_id,d.物品ID,d.数量,d.单价,d.金额,d.备注,o.操作员编号,m.物品编号,m.物品名称
   </sql>
-  <select id="queryAll" resultMap="BaseResultMap">
+  <resultMap id="BOResultMap" type="com.smartindustry.common.bo.ds.SaleOutboundErpBO" extends="BaseResultMap">
+    <collection property="sdpos" ofType="com.smartindustry.common.pojo.ds.sqlserver.SaleDetailErpPO">
+      <result column="detail_id" jdbcType="DOUBLE" property="detailId" />
+      <result column="物品ID" jdbcType="DOUBLE" property="materialId" />
+      <result column="物品编号" jdbcType="NVARCHAR" property="materialNo" />
+      <result column="物品名称" jdbcType="NVARCHAR" property="materialName" />
+      <result column="数量" jdbcType="DOUBLE" property="saleNum" />
+      <result column="单价" jdbcType="DOUBLE" property="unitPrice" />
+      <result column="金额" jdbcType="DOUBLE" property="sum" />
+      <result column="备注" jdbcType="NVARCHAR" property="remark" />
+    </collection>
+  </resultMap>
+  <select id="queryAll" resultMap="BOResultMap">
     select
-    <include refid="Base_Column_List"/>
-    from dbo.销售发货
+    <include refid="BO_Column_List"/>
+    FROM
+    dbo.销售发货 AS p
+    LEFT JOIN dbo.销售发货明细 AS d ON p.ID = d.发货ID
+    LEFT JOIN dbo.物品 as m on m.ID = d.物品ID
+    LEFT JOIN dbo.操作员 as o on o.id = p.操作员ID
+    LEFT JOIN dbo.客户 as c on c.id = p.客户ID
+    WHERE m.类别ID = 117 or m.类别ID = 120
   </select>
-
 </mapper>

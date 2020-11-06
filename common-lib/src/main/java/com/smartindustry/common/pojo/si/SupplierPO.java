@@ -21,31 +21,6 @@ public class SupplierPO implements Serializable {
     private String supplierNo;
 
     /**
-     * 供应商组ID
-     */
-    private Long supplierGroupId;
-
-    /**
-     * 认证状态ID
-     */
-    private Long certStatusId;
-
-    /**
-     * 供应商类型ID
-     */
-    private Long supplierTypeId;
-
-    /**
-     * 结算期限ID
-     */
-    private Long settlePeriodId;
-
-    /**
-     * 币种ID
-     */
-    private Long currencyId;
-
-    /**
      * 供应商名称
      */
     private String supplierName;

@@ -27,7 +27,7 @@ public interface OutboundHeadMapper extends BaseMapper<OutboundHeadPO, Long> {
      * @param ohid
      * @return
      */
-     OutboundHeadBO queryMixByOhid(Long ohid);
+    List<OutboundHeadBO> queryMixByOhid(Long ohid);
 
     /**
      * 根据 pda类型 查询出库列表数据

@@ -4,11 +4,6 @@
   <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.SupplierPO">
     <id column="supplier_id" jdbcType="BIGINT" property="supplierId" />
     <result column="supplier_no" jdbcType="CHAR" property="supplierNo" />
-    <result column="supplier_group_id" jdbcType="BIGINT" property="supplierGroupId" />
-    <result column="cert_status_id" jdbcType="BIGINT" property="certStatusId" />
-    <result column="supplier_type_id" jdbcType="BIGINT" property="supplierTypeId" />
-    <result column="settle_period_id" jdbcType="BIGINT" property="settlePeriodId" />
-    <result column="currency_id" jdbcType="BIGINT" property="currencyId" />
     <result column="supplier_name" jdbcType="CHAR" property="supplierName" />
     <result column="contact_name" jdbcType="CHAR" property="contactName" />
     <result column="phone" jdbcType="CHAR" property="phone" />
@@ -24,9 +19,8 @@
     <result column="dr" jdbcType="TINYINT" property="dr" />
   </resultMap>
   <sql id="Base_Column_List">
-    supplier_id, supplier_no, supplier_group_id, cert_status_id, supplier_type_id, settle_period_id, 
-    currency_id, supplier_name, contact_name, phone, fax, site, mail, area, address, 
-    remark, user_id, create_time, update_time, dr
+    supplier_id, supplier_no, supplier_name, contact_name, phone, fax, site, mail, area, 
+    address, remark, user_id, create_time, update_time, dr
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -39,20 +33,16 @@
     where supplier_id = #{supplierId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.smartindustry.common.pojo.si.SupplierPO">
-    insert into si_supplier (supplier_id, supplier_no, supplier_group_id, 
-      cert_status_id, supplier_type_id, settle_period_id, 
-      currency_id, supplier_name, contact_name, 
-      phone, fax, site, mail, 
-      area, address, remark, user_id, 
-      create_time, update_time, dr
-      )
-    values (#{supplierId,jdbcType=BIGINT}, #{supplierNo,jdbcType=CHAR}, #{supplierGroupId,jdbcType=BIGINT}, 
-      #{certStatusId,jdbcType=BIGINT}, #{supplierTypeId,jdbcType=BIGINT}, #{settlePeriodId,jdbcType=BIGINT}, 
-      #{currencyId,jdbcType=BIGINT}, #{supplierName,jdbcType=CHAR}, #{contactName,jdbcType=CHAR}, 
-      #{phone,jdbcType=CHAR}, #{fax,jdbcType=CHAR}, #{site,jdbcType=CHAR}, #{mail,jdbcType=CHAR}, 
-      #{area,jdbcType=CHAR}, #{address,jdbcType=CHAR}, #{remark,jdbcType=CHAR}, #{userId,jdbcType=BIGINT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT}
-      )
+    insert into si_supplier (supplier_id, supplier_no, supplier_name, 
+      contact_name, phone, fax, site, 
+      mail, area, address, remark, 
+      user_id, create_time, update_time, 
+      dr)
+    values (#{supplierId,jdbcType=BIGINT}, #{supplierNo,jdbcType=CHAR}, #{supplierName,jdbcType=CHAR}, 
+      #{contactName,jdbcType=CHAR}, #{phone,jdbcType=CHAR}, #{fax,jdbcType=CHAR}, #{site,jdbcType=CHAR}, 
+      #{mail,jdbcType=CHAR}, #{area,jdbcType=CHAR}, #{address,jdbcType=CHAR}, #{remark,jdbcType=CHAR}, 
+      #{userId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{dr,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.SupplierPO">
     insert into si_supplier
@@ -62,21 +52,6 @@
       </if>
       <if test="supplierNo != null">
         supplier_no,
-      </if>
-      <if test="supplierGroupId != null">
-        supplier_group_id,
-      </if>
-      <if test="certStatusId != null">
-        cert_status_id,
-      </if>
-      <if test="supplierTypeId != null">
-        supplier_type_id,
-      </if>
-      <if test="settlePeriodId != null">
-        settle_period_id,
-      </if>
-      <if test="currencyId != null">
-        currency_id,
       </if>
       <if test="supplierName != null">
         supplier_name,
@@ -125,21 +100,6 @@
       <if test="supplierNo != null">
         #{supplierNo,jdbcType=CHAR},
       </if>
-      <if test="supplierGroupId != null">
-        #{supplierGroupId,jdbcType=BIGINT},
-      </if>
-      <if test="certStatusId != null">
-        #{certStatusId,jdbcType=BIGINT},
-      </if>
-      <if test="supplierTypeId != null">
-        #{supplierTypeId,jdbcType=BIGINT},
-      </if>
-      <if test="settlePeriodId != null">
-        #{settlePeriodId,jdbcType=BIGINT},
-      </if>
-      <if test="currencyId != null">
-        #{currencyId,jdbcType=BIGINT},
-      </if>
       <if test="supplierName != null">
         #{supplierName,jdbcType=CHAR},
       </if>
@@ -187,21 +147,6 @@
       <if test="supplierNo != null">
         supplier_no = #{supplierNo,jdbcType=CHAR},
       </if>
-      <if test="supplierGroupId != null">
-        supplier_group_id = #{supplierGroupId,jdbcType=BIGINT},
-      </if>
-      <if test="certStatusId != null">
-        cert_status_id = #{certStatusId,jdbcType=BIGINT},
-      </if>
-      <if test="supplierTypeId != null">
-        supplier_type_id = #{supplierTypeId,jdbcType=BIGINT},
-      </if>
-      <if test="settlePeriodId != null">
-        settle_period_id = #{settlePeriodId,jdbcType=BIGINT},
-      </if>
-      <if test="currencyId != null">
-        currency_id = #{currencyId,jdbcType=BIGINT},
-      </if>
       <if test="supplierName != null">
         supplier_name = #{supplierName,jdbcType=CHAR},
       </if>
@@ -247,11 +192,6 @@
   <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.SupplierPO">
     update si_supplier
     set supplier_no = #{supplierNo,jdbcType=CHAR},
-      supplier_group_id = #{supplierGroupId,jdbcType=BIGINT},
-      cert_status_id = #{certStatusId,jdbcType=BIGINT},
-      supplier_type_id = #{supplierTypeId,jdbcType=BIGINT},
-      settle_period_id = #{settlePeriodId,jdbcType=BIGINT},
-      currency_id = #{currencyId,jdbcType=BIGINT},
       supplier_name = #{supplierName,jdbcType=CHAR},
       contact_name = #{contactName,jdbcType=CHAR},
       phone = #{phone,jdbcType=CHAR},
@@ -267,4 +207,14 @@
       dr = #{dr,jdbcType=TINYINT}
     where supplier_id = #{supplierId,jdbcType=BIGINT}
   </update>
+
+  <insert id="batchInsert" parameterType="java.util.List" keyProperty="supplierId" useGeneratedKeys="true">
+    insert into si_supplier (supplier_id,   supplier_no, supplier_name,
+    contact_name, phone, fax,     mail, area, address, remark,
+    user_id, create_time, dr) values
+    <foreach collection="list" item = "po" separator=",">
+      ( #{po.supplierId,jdbcType=CHAR},#{po.supplierNo,jdbcType=CHAR}, #{po.supplierName,jdbcType=CHAR},
+      #{po.contactName,jdbcType=CHAR}, #{po.phone,jdbcType=CHAR}, #{po.fax,jdbcType=CHAR},       #{po.mail,jdbcType=CHAR}, #{po.area,jdbcType=CHAR}, #{po.address,jdbcType=CHAR}, #{po.remark,jdbcType=CHAR},      #{po.userId,jdbcType=BIGINT}, #{po.createTime,jdbcType=TIMESTAMP},   #{po.dr,jdbcType=TINYINT})
+    </foreach>
+  </insert>
 </mapper>

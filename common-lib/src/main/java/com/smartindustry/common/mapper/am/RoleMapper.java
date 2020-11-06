@@ -50,5 +50,13 @@ public interface RoleMapper extends BaseMapper<RolePO, Long> {
      * @param roleName
      * @return
      */
-    Integer judgeRepeatName(@Param("roleName") String roleName,@Param("roleId") Long roleId);
+    Integer judgeRepeatName(@Param("roleName") String roleName, @Param("roleId") Long roleId);
+
+    /**
+     * 根据角色编码查询
+     *
+     * @param roleCode
+     * @return
+     */
+    RolePO queryByCode(@Param("roleCode") String roleCode);
 }

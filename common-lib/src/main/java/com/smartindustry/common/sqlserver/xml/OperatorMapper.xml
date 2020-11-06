@@ -8,13 +8,18 @@
     <result column="密码" jdbcType="NVARCHAR" property="password" />
     <result column="角色ID" jdbcType="DOUBLE" property="roleId" />
     <result column="部门ID" jdbcType="DOUBLE" property="deptId" />
+    <result column="角色代码" jdbcType="NVARCHAR" property="roleCode" />
+    <result column="部门代码" jdbcType="NVARCHAR" property="deptCode" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, 操作员编号, 操作员姓名,       密码, 角色ID, 部门ID
+    o.id,	o.操作员编号,o.操作员姓名,o.密码,o.角色ID,o.部门ID,r.角色代码,	d.部门代码
   </sql>
   <select id="queryAll" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
-    from dbo.操作员
+    FROM
+    dbo.操作员 AS o
+    LEFT JOIN dbo.员工角色 as r ON r.id = o.角色ID
+    LEFT JOIN dbo.部门 as d ON d.ID = o.部门ID
   </select>
 </mapper>

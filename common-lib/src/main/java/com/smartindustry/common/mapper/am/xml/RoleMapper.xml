@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.am.RolePO">
     <id column="role_id" jdbcType="BIGINT" property="roleId" />
     <result column="role_name" jdbcType="CHAR" property="roleName" />
+    <result column="role_code" jdbcType="CHAR" property="roleCode" />
     <result column="role_desc" jdbcType="CHAR" property="roleDesc" />
     <result column="status" jdbcType="TINYINT" property="status" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -11,7 +12,7 @@
     <result column="dr" jdbcType="TINYINT" property="dr" />
   </resultMap>
   <sql id="Base_Column_List">
-    role_id, role_name, role_desc, `status`, create_time, update_time, dr
+    role_id, role_name,role_code, role_desc, `status`, create_time, update_time, dr
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -24,10 +25,10 @@
     where role_id = #{roleId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.smartindustry.common.pojo.am.RolePO" useGeneratedKeys="true" keyProperty="roleId">
-    insert into am_role (role_id, role_name, role_desc, 
+    insert into am_role (role_id, role_name,role_code, role_desc,
       `status`, create_time, update_time, 
       dr)
-    values (#{roleId,jdbcType=BIGINT}, #{roleName,jdbcType=CHAR}, #{roleDesc,jdbcType=CHAR}, 
+    values (#{roleId,jdbcType=BIGINT}, #{roleName,jdbcType=CHAR},#{roleCode,jdbcType=CHAR}, #{roleDesc,jdbcType=CHAR},
       #{status,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{dr,jdbcType=TINYINT})
   </insert>
@@ -39,6 +40,9 @@
       </if>
       <if test="roleName != null">
         role_name,
+      </if>
+      <if test="roleCode != null">
+        role_code,
       </if>
       <if test="roleDesc != null">
         role_desc,
@@ -63,6 +67,9 @@
       <if test="roleName != null">
         #{roleName,jdbcType=CHAR},
       </if>
+      <if test="roleCode != null">
+        #{roleCode,jdbcType=CHAR},
+      </if>
       <if test="roleDesc != null">
         #{roleDesc,jdbcType=CHAR},
       </if>
@@ -86,6 +93,9 @@
       <if test="roleName != null">
         role_name = #{roleName,jdbcType=CHAR},
       </if>
+      <if test="roleCode != null">
+        role_code = #{roleCode,jdbcType=CHAR},
+      </if>
       <if test="roleDesc != null">
         role_desc = #{roleDesc,jdbcType=CHAR},
       </if>
@@ -107,6 +117,7 @@
   <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.am.RolePO">
     update am_role
     set role_name = #{roleName,jdbcType=CHAR},
+    role_code = #{roleCode,jdbcType=CHAR},
       role_desc = #{roleDesc,jdbcType=CHAR},
       `status` = #{status,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -175,4 +186,18 @@
     then 1
     else 0 end as result
   </select>
+
+  <select id="queryByCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from am_role where role_code = #{roleCode, jdbcType=CHAR} limit 1
+  </select>
+
+  <insert id="batchInsert" parameterType="java.util.List" keyProperty="roleId" useGeneratedKeys="true">
+    insert into am_role (   role_name,role_code, `status`, create_time, dr) values
+    <foreach collection="list" item = "po" separator=",">
+      (  #{po.roleName,jdbcType=CHAR},#{po.roleCode,jdbcType=CHAR},   #{po.status,jdbcType=TINYINT},
+      #{po.createTime,jdbcType=TIMESTAMP},#{po.dr,jdbcType=TINYINT})
+    </foreach>
+  </insert>
 </mapper>

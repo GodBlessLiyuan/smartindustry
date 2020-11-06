@@ -16,6 +16,10 @@ public class PurchaseErpPO implements Serializable {
 
     private Double supplierId;
 
+    private String orderNo;
+
+    private Double orderId;
+
     private Double warehouseId;
 
     private Date acceptDate;
@@ -35,6 +39,8 @@ public class PurchaseErpPO implements Serializable {
     private Double payMethod;
 
     private String payName;
+
+    private Double num;
 
     private String remark;
 

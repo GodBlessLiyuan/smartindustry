@@ -17,6 +17,6 @@
     select
     <include refid="Base_Column_List"/>
     from dbo.物品
-    where 类别ID = 117 or 类别ID = 120
+    where (类别ID = 117 or 类别ID = 120) and 物品编号 is not null
   </select>
 </mapper>

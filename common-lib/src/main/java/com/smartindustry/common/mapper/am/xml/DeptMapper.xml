@@ -4,6 +4,7 @@
     <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.am.DeptPO">
         <id column="dept_id" jdbcType="BIGINT" property="deptId"/>
         <result column="parent_id" jdbcType="BIGINT" property="parentId"/>
+        <result column="dept_code" jdbcType="CHAR" property="deptCode"/>
         <result column="dept_name" jdbcType="CHAR" property="deptName"/>
         <result column="user_id" jdbcType="BIGINT" property="userId"/>
         <result column="dept_desc" jdbcType="CHAR" property="deptDesc"/>
@@ -13,7 +14,7 @@
         <result column="dr" jdbcType="TINYINT" property="dr"/>
     </resultMap>
     <sql id="Base_Column_List">
-    dept_id, parent_id, dept_name, user_id, dept_desc, `status`, create_time, update_time, 
+    dept_id, parent_id, dept_name, dept_code, user_id, dept_desc, `status`, create_time, update_time,
     dr
   </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -28,11 +29,11 @@
   </delete>
     <insert id="insert" parameterType="com.smartindustry.common.pojo.am.DeptPO" useGeneratedKeys="true"
             keyProperty="deptId">
-    insert into am_dept (dept_id, parent_id, dept_name, 
+    insert into am_dept (dept_id, parent_id, dept_name, dept_code,
       user_id, dept_desc, `status`, 
       create_time, update_time, dr
       )
-    values (#{deptId,jdbcType=BIGINT}, #{parentId,jdbcType=BIGINT}, #{deptName,jdbcType=CHAR}, 
+    values (#{deptId,jdbcType=BIGINT}, #{parentId,jdbcType=BIGINT}, #{deptName,jdbcType=CHAR}, #{deptCode,jdbcType=CHAR},
       #{userId,jdbcType=BIGINT}, #{deptDesc,jdbcType=CHAR}, #{status,jdbcType=TINYINT}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT}
       )
@@ -48,6 +49,9 @@
             </if>
             <if test="deptName != null">
                 dept_name,
+            </if>
+            <if test="deptCode != null">
+                dept_code,
             </if>
             <if test="userId != null">
                 user_id,
@@ -77,6 +81,9 @@
             </if>
             <if test="deptName != null">
                 #{deptName,jdbcType=CHAR},
+             </if>
+            <if test="deptCode != null">
+                #{deptCode,jdbcType=CHAR},
             </if>
             <if test="userId != null">
                 #{userId,jdbcType=BIGINT},
@@ -107,6 +114,9 @@
             <if test="deptName != null">
                 dept_name = #{deptName,jdbcType=CHAR},
             </if>
+            <if test="deptCode != null">
+                dept_code = #{deptCode,jdbcType=CHAR},
+            </if>
             <if test="userId != null">
                 user_id = #{userId,jdbcType=BIGINT},
             </if>
@@ -132,6 +142,7 @@
     update am_dept
     set parent_id = #{parentId,jdbcType=BIGINT},
       dept_name = #{deptName,jdbcType=CHAR},
+      dept_code = #{deptCode,jdbcType=CHAR},
       user_id = #{userId,jdbcType=BIGINT},
       dept_desc = #{deptDesc,jdbcType=CHAR},
       `status` = #{status,jdbcType=TINYINT},
@@ -146,7 +157,7 @@
         <result column="parentName" jdbcType="CHAR" property="parentName"/>
     </resultMap>
     <sql id="BO_Column_List">
-        d.dept_id, d.parent_id, d.dept_name, d.user_id, d.dept_desc, d.`status`, d.create_time, d.update_time,
+        d.dept_id, d.parent_id, d.dept_name, d.user_id, d.dept_desc, d.`status`, d.create_time, d.update_time,d.dept_code,
     d.dr,u.name as username,d2.dept_name as parentName
     </sql>
 
@@ -264,4 +275,18 @@
         from am_dept
         where parent_id = #{parentId,jdbcType=BIGINT} and dr = 1
     </select>
+    <select id="queryByCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from am_dept where dept_code = #{deptCode, jdbcType=CHAR} limit 1
+    </select>
+
+    <insert id="batchInsert" parameterType="java.util.List" keyProperty="deptId" useGeneratedKeys="true">
+        insert into am_dept (  dept_name, dept_code, user_id, `status`, create_time, dr) values
+        <foreach collection="list" item = "po" separator=",">
+            ( #{po.deptName,jdbcType=CHAR}, #{po.deptCode,jdbcType=CHAR},  #{po.userId,jdbcType=BIGINT},  #{po.status,jdbcType=TINYINT},
+            #{po.createTime,jdbcType=TIMESTAMP},#{po.dr,jdbcType=TINYINT})
+        </foreach>
+    </insert>
+
 </mapper>

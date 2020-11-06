@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.ds.SalesOutboundMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.ds.SalesOutboundPO">
+    <id column="sales_outbound_id" jdbcType="BIGINT" property="salesOutboundId" />
+    <result column="sales_no" jdbcType="CHAR" property="salesNo" />
+    <result column="sales_date" jdbcType="DATE" property="salesDate" />
+    <result column="client_id" jdbcType="BIGINT" property="clientId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    sales_outbound_id, sales_no, sales_date, client_id, user_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ds_sales_outbound
+    where sales_outbound_id = #{salesOutboundId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from ds_sales_outbound
+    where sales_outbound_id = #{salesOutboundId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.ds.SalesOutboundPO" useGeneratedKeys="true" keyProperty="salesOutboundId">
+    insert into ds_sales_outbound (sales_outbound_id, sales_no, sales_date, 
+      client_id, user_id)
+    values (#{salesOutboundId,jdbcType=BIGINT}, #{salesNo,jdbcType=CHAR}, #{salesDate,jdbcType=DATE}, 
+      #{clientId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.ds.SalesOutboundPO">
+    insert into ds_sales_outbound
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="salesOutboundId != null">
+        sales_outbound_id,
+      </if>
+      <if test="salesNo != null">
+        sales_no,
+      </if>
+      <if test="salesDate != null">
+        sales_date,
+      </if>
+      <if test="clientId != null">
+        client_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="salesOutboundId != null">
+        #{salesOutboundId,jdbcType=BIGINT},
+      </if>
+      <if test="salesNo != null">
+        #{salesNo,jdbcType=CHAR},
+      </if>
+      <if test="salesDate != null">
+        #{salesDate,jdbcType=DATE},
+      </if>
+      <if test="clientId != null">
+        #{clientId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.ds.SalesOutboundPO">
+    update ds_sales_outbound
+    <set>
+      <if test="salesNo != null">
+        sales_no = #{salesNo,jdbcType=CHAR},
+      </if>
+      <if test="salesDate != null">
+        sales_date = #{salesDate,jdbcType=DATE},
+      </if>
+      <if test="clientId != null">
+        client_id = #{clientId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where sales_outbound_id = #{salesOutboundId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.ds.SalesOutboundPO">
+    update ds_sales_outbound
+    set sales_no = #{salesNo,jdbcType=CHAR},
+      sales_date = #{salesDate,jdbcType=DATE},
+      client_id = #{clientId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT}
+    where sales_outbound_id = #{salesOutboundId,jdbcType=BIGINT}
+  </update>
+
+    <insert id="batchInsert" parameterType="java.util.List" keyProperty="salesOutboundId" useGeneratedKeys="true">
+        insert into ds_sales_outbound ( sales_no, sales_date, client_id, user_id) values
+        <foreach collection="list" item = "po" separator=",">
+            (  #{po.salesNo,jdbcType=CHAR}, #{po.salesDate,jdbcType=DATE},
+            #{po.clientId,jdbcType=BIGINT}, #{po.userId,jdbcType=BIGINT})
+        </foreach>
+    </insert>
+</mapper>
