@@ -1,4 +1,4 @@
-package com.smartindustry.pda.vo;
+package com.smartindustry.pda.socket;
 
 import lombok.Data;
 
@@ -35,7 +35,7 @@ public class WebSocketVO implements Serializable {
     }
 
     /**
-     * 列表区
+     * 列表/详情区
      */
     @Data
     public static class OutboundVO {
