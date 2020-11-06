@@ -53,5 +53,10 @@ public class StorageDetailPO implements Serializable {
      */
     private Byte storageStatus;
 
+    /**
+     * 是否删除 1 未删除 2 已删除
+     */
+    private Byte dr;
+
     private static final long serialVersionUID = 1L;
 }
