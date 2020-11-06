@@ -21,16 +21,16 @@ public interface ISpareAreaService {
     ResultVO enterSpare(StoragePreDTO dto, HttpSession session);
 
     /**
-     * 备料区入库提示
+     * 备料区入库提示选择那种物料弹窗
      * @param dto
      * @return
      */
-    ResultVO chooseMaterial(StoragePreDTO dto);
+    ResultVO chooseMaterialShow(StoragePreDTO dto);
 
     /**
      * 展示当前备料区入成品区的提示
      * @param dto
      * @return
      */
-    ResultVO showSpare(StoragePreDTO dto);
+    ResultVO executeSpareAreaShow(StoragePreDTO dto);
 }

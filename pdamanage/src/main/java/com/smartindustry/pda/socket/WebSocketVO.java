@@ -71,6 +71,10 @@ public class WebSocketVO implements Serializable {
     @Data
     public static class TitleVO {
         /**
+         * 弹框左上角小标题
+         */
+        private String tip;
+        /**
          * 提示文案
          */
         private String msg;
@@ -78,6 +82,48 @@ public class WebSocketVO implements Serializable {
          * 提示框类型，1-提示性消息，2-报警性提醒，3-故障性提示，4-弹窗
          */
         private Byte type;
+
+        /**
+         * 备料区选择物料返回物料信息VO列表
+         */
+        private List<MaterialVO> vos;
+        /**
+         * 备料区入成品区的VO列信息
+         */
+        private MaterialVO mvo;
+
+    }
+
+    /**
+     * 入库备料区选择物料属性
+     */
+
+    @Data
+    public static class MaterialVO {
+        /**
+         * 产品id
+         */
+        private Long mid;
+        /**
+         * 产品名称
+         */
+        private String mname;
+        /**
+         * 产品等级
+         */
+        private String mlevel;
+        /**
+         * 产品规格
+         */
+        private String model;
+        /**
+         * 栈板ifid
+         */
+        private String mrfid;
+        /**
+         * 每栈板的体积
+         */
+        private String mvolume;
     }
 }
 

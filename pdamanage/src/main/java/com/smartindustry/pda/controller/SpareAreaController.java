@@ -31,11 +31,11 @@ public class SpareAreaController {
 
     @PostMapping("chooseMaterial")
     public ResultVO chooseMaterial(@RequestBody StoragePreDTO dto) {
-        return spareAreaService.chooseMaterial(dto);
+        return spareAreaService.chooseMaterialShow(dto);
     }
 
     @PostMapping("showSpare")
     public ResultVO showSpare(@RequestBody StoragePreDTO dto) {
-        return spareAreaService.showSpare(dto);
+        return spareAreaService.executeSpareAreaShow(dto);
     }
 }

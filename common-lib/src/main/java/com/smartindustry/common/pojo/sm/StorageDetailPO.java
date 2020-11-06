@@ -47,11 +47,17 @@ public class StorageDetailPO implements Serializable {
     private String rfid;
 
     /**
-     * 入库状态 : 1 待入库
-2 已入库
-3 已出库
+     * 入库状态 : 1 已入库
+     *          2 已出库
+     *          3 待入库
      */
     private Byte storageStatus;
+
+    /**
+     * 1 或为空.不是备料区
+     * 2 在备料区
+     */
+    private Byte preparation;
 
     private static final long serialVersionUID = 1L;
 }
