@@ -240,7 +240,7 @@
     </select>
 
     <sql id="Pda_Column_List">
-        oh.outbound_head_id, oh.source_no, oh.expect_num, oh.outbound_num,
+        oh.outbound_head_id, oh.source_no, oh.expect_num, oh.outbound_num, oh.create_time,
         ob.expect_num as ob_expect_num, ob.outbound_num as ob_outbound_num,
         m.material_name, m.material_model, m.package_volume
     </sql>

@@ -7,6 +7,7 @@ import lombok.Data;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -61,6 +62,10 @@ public class OutboundDetailVO implements Serializable {
      * 当前排位
      */
     private BigDecimal cnum;
+    /**
+     * 创建时间
+     */
+    private Date ctime;
 
     public static OutboundDetailVO convert(OutboundHeadBO bo) {
         OutboundDetailVO vo = new OutboundDetailVO();
@@ -68,6 +73,7 @@ public class OutboundDetailVO implements Serializable {
         vo.setSno(bo.getSourceNo());
         vo.setDnum(bo.getExpectNum());
         vo.setOnum(bo.getOutboundNum());
+        vo.setCtime(bo.getCreateTime());
         BigDecimal dnum2 = new BigDecimal(0);
         if (null != bo.getBodyBOs() && bo.getBodyBOs().size() > 0) {
             List<MaterialVO> mvos = new ArrayList<>(bo.getBodyBOs().size());
