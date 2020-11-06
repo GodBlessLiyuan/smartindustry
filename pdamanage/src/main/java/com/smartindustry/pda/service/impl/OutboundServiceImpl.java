@@ -21,7 +21,7 @@ import com.smartindustry.pda.service.IOutboundService;
 import com.smartindustry.pda.socket.WebSocketServer;
 import com.smartindustry.pda.util.OutboundNoUtil;
 import com.smartindustry.pda.vo.OutboundDetailVO;
-import com.smartindustry.pda.vo.WebSocketVO;
+import com.smartindustry.pda.socket.WebSocketVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;

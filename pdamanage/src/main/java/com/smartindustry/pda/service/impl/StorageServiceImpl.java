@@ -4,11 +4,13 @@ import com.smartindustry.common.bo.sm.StorageBodyBO;
 import com.smartindustry.common.bo.sm.StorageHeadBO;
 import com.smartindustry.common.mapper.si.ForkliftMapper;
 import com.smartindustry.common.mapper.si.LocationMapper;
+import com.smartindustry.common.mapper.si.MaterialMapper;
 import com.smartindustry.common.mapper.sm.*;
 import com.smartindustry.common.mapper.wo.PackageMapper;
 import com.smartindustry.common.mapper.wo.ProduceOrderMapper;
 import com.smartindustry.common.pojo.si.ForkliftPO;
 import com.smartindustry.common.pojo.si.LocationPO;
+import com.smartindustry.common.pojo.si.MaterialPO;
 import com.smartindustry.common.pojo.sm.*;
 import com.smartindustry.common.pojo.wo.PackagePO;
 import com.smartindustry.common.pojo.wo.ProduceOrderPO;
@@ -58,6 +60,8 @@ public class StorageServiceImpl implements IStorageService {
     private LocationMapper locationMapper;
     @Autowired
     private StorageForkliftMapper storageForkliftMapper;
+    @Autowired
+    private MaterialMapper materialMapper;
 
     /**
      * @Description 生成入库单
@@ -207,7 +211,7 @@ public class StorageServiceImpl implements IStorageService {
     }
 
     /**
-     * 叉车插入货物接口
+     * 叉车插入原产区货物接口
      *
      * @param session
      * @param dto
@@ -281,6 +285,70 @@ public class StorageServiceImpl implements IStorageService {
         } else {
             storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), forkliftPO.getForkliftId(), StorageConstant.OPERATE_NAME_JOIN));
         }
+        return ResultVO.ok().setData(vo);
+    }
+
+    /**
+     * 叉车插入备货区货物接口
+     *
+     * @param session
+     * @param dto
+     * @return
+     */
+    @Override
+    public ResultVO executeForPre(HttpSession session, StorageDTO dto) {
+        String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
+        if (null == imei) {
+            //为获取到session中的imei
+            return new ResultVO(1001);
+        }
+
+        //通过rfid获取入库单和物料信息
+        StorageDetailPO storageDetailPO = storageDetailMapper.queryByLidAndRfid(dto.getMrfid());
+          if (null == storageDetailPO) {
+            //在详细表中查不到备料区数据
+            return new ResultVO(1002);
+        }
+        //根据成品id查询成品信息
+        MaterialPO materialPO = materialMapper.selectByPrimaryKey(storageDetailPO.getMaterialId());
+        if (null == materialPO) {
+            //查不到成品基本信息
+            return new ResultVO(1003);
+        }
+        //构造详情格式的StorageHeadBO
+        StorageHeadBO storageHeadBO = new StorageHeadBO();
+        StorageBodyBO storageBodyBO = new StorageBodyBO();
+        storageBodyBO.setMaterialName(materialPO.getMaterialName());
+        storageBodyBO.setMaterialModel(materialPO.getMaterialModel());
+        //等级level代写
+
+        storageBodyBO.setPackageVolume(materialPO.getPackageVolume());
+
+        List<StorageBodyBO> bodyBOList= new ArrayList<>(1);
+        bodyBOList.add(storageBodyBO);
+        storageHeadBO.setBos(bodyBOList);
+
+        StorageDetailVO vo = StorageDetailVO.convert(storageHeadBO);
+        // 储位图
+        Map<Long, StorageDetailVO.LocationVO> lvos = new HashMap<>();
+        for (StorageBodyBO bo : storageHeadBO.getBos()) {
+            StorageDetailVO.LocationVO lvo = new StorageDetailVO.LocationVO();
+            lvo.setColor(StorageDetailVO.COLORS[lvos.size()]);
+            lvo.setMinfo(bo.getMaterialName() + " " + bo.getMaterialModel());
+            lvos.put(bo.getMaterialId(), lvo);
+        }
+        List<LocationPO> locationPOs = locationMapper.queryByMids(new ArrayList<>(lvos.keySet()));
+        for (LocationPO locationPO : locationPOs) {
+            StorageDetailVO.LocationVO lvo = lvos.get(locationPO.getMaterialId());
+            lvo.getLrfids().add(locationPO.getLocationNo());
+        }
+        vo.setLvos(new ArrayList<>(lvos.values()));
+
+        //当前叉车执行信息
+        ForkliftPO forkliftPO = forkliftMapper.queryByImei(imei);
+        List<String> fnames = new ArrayList<>(1);
+        fnames.add(forkliftPO.getForkliftName());
+        vo.setFnames(fnames);
         return ResultVO.ok().setData(vo);
     }
 }

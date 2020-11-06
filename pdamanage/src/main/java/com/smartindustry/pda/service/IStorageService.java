@@ -41,4 +41,11 @@ public interface IStorageService {
      * @return
      */
     ResultVO execute(HttpSession session, StorageDTO dto);
+
+    /**
+     * 叉车插货物动作
+     * @param dto
+     * @return
+     */
+    ResultVO executeForPre(HttpSession session, StorageDTO dto);
 }
