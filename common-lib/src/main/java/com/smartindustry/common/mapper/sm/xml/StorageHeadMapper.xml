@@ -334,9 +334,9 @@
 
   <sql id="Storage_Column_List">
      sh.storage_head_id,sh.storage_no,sh.source_no,sh.storage_time,l.warehouse_id,w.warehouse_name,
-     sd.location_id,l.location_no,m.material_no,m.material_name,count(sd.rfid) as num
+     sd.location_id,l.location_no,m.material_no,m.material_name,count(sd.rfid) as num,m.package_volume
   </sql>
-  <resultMap id="StorageResultMap" type="com.smartindustry.common.bo.sm.StorageHeadBO" extends="BaseResultMap">
+  <resultMap id="StorageResultMap" type="com.smartindustry.common.bo.sm.StorageHeadBO">
     <result column="storage_head_id" jdbcType="BIGINT" property="storageHeadId"/>
     <result column="storage_no" jdbcType="CHAR" property="storageNo"/>
     <result column="source_no" jdbcType="CHAR" property="sourceNo"/>
@@ -356,6 +356,7 @@
     <collection property="materialBOS" ofType="com.smartindustry.common.bo.sm.MaterialBO">
       <result column="material_no" jdbcType="CHAR" property="materialNo"/>
       <result column="material_name" jdbcType="CHAR" property="materialName"/>
+      <result column="package_volume" jdbcType="DECIMAL" property="packageVolume"/>
       <result column="num" jdbcType="INTEGER" property="num"/>
     </collection>
   </resultMap>

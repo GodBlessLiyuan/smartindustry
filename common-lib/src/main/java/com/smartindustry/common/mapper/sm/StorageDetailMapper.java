@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * StorageDetailMapper继承基类
@@ -64,4 +65,19 @@ public interface StorageDetailMapper extends BaseMapper<StorageDetailPO, Long> {
      * @return
      */
     StorageDetailPO queryByRfid(String rfid);
+
+    /**
+     * 查询当前入库单得进备料区得rfid
+     * @param shid
+     * @return
+     */
+    List<StorageDetailPO> queryPrepare(Long shid);
+
+    /**
+     * 查询当前入库单得待入库rfid
+     * @param shid
+     * @return
+     */
+    List<StorageDetailPO> querySave(Long shid);
+
 }
