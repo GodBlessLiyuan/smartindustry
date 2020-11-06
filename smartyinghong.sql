@@ -241,10 +241,10 @@ CREATE TABLE om_outbound_body
 	outbound_num decimal(10,2) COMMENT '已出库数量',
 	create_time datetime COMMENT '创建时间',
 	outbound_time datetime COMMENT '出库时间',
-	-- 1 未删除
-	-- 2 已删除
-	dr tinyint COMMENT '是否删除 : 1 未删除
-2 已删除',
+	-- 1 或为空.不是备料区
+	-- 2 在备料区
+	preparation tinyint COMMENT '是否在备料区 : 1 或为空.不是备料区
+2 在备料区',
 	PRIMARY KEY (outbound_body_id),
 	UNIQUE (outbound_body_id)
 ) COMMENT = '出库单表体';
@@ -330,10 +330,10 @@ CREATE TABLE si_client
 	remark char(255) COMMENT '备注',
 	create_time datetime COMMENT '创建时间',
 	update_time datetime COMMENT '更新时间',
-	-- 1 未删除
-	-- 2 已删除
-	dr tinyint COMMENT '是否删除 : 1 未删除
-2 已删除',
+	-- 1 或为空.不是备料区
+	-- 2 在备料区
+	preparation tinyint COMMENT '是否在备料区 : 1 或为空.不是备料区
+2 在备料区',
 	PRIMARY KEY (client_id),
 	UNIQUE (client_id)
 ) COMMENT = '客户';
@@ -373,16 +373,16 @@ CREATE TABLE si_forklift
 	supplier_name char(64) COMMENT '供应商名称',
 	-- 1 忙碌中
 	-- 2 空闲中
-	--
+	--  
 	status tinyint COMMENT '当前状态 : 1 忙碌中
 2 空闲中
  ',
 	extra char(255) COMMENT '备注',
 	create_time datetime COMMENT '创建时间',
-	-- 1 未删除
-	-- 2 已删除
-	dr tinyint COMMENT '是否删除 : 1 未删除
-2 已删除',
+	-- 1 或为空.不是备料区
+	-- 2 在备料区
+	preparation tinyint COMMENT '是否在备料区 : 1 或为空.不是备料区
+2 在备料区',
 	PRIMARY KEY (forklift_id),
 	UNIQUE (forklift_id)
 ) COMMENT = '叉车信息';
@@ -592,12 +592,16 @@ CREATE TABLE sm_storage_detail
 	storage_num decimal(10,2) COMMENT '入库数',
 	storage_time datetime COMMENT '入库时间',
 	rfid char(128) COMMENT '栈板RFID',
-	-- 1 待入库
-	-- 2 已入库
-	-- 3 已出库
-	storage_status tinyint COMMENT '入库状态 : 1 待入库
-2 已入库
-3 已出库',
+	-- 1 已入库
+	-- 2 已出库
+	-- 3 待入库
+	storage_status tinyint COMMENT '入库状态 : 1 已入库
+2 已出库
+3 待入库',
+	-- 1 或为空.不是备料区
+	-- 2 在备料区
+	preparation tinyint COMMENT '是否在备料区 : 1 或为空.不是备料区
+2 在备料区',
 	PRIMARY KEY (storage_id),
 	UNIQUE (storage_id)
 ) COMMENT = '入库详细表';
@@ -635,8 +639,8 @@ CREATE TABLE sm_storage_head
 	-- 1：已入库
 	-- 2：入库中
 	-- 3：待入库
-	--
-	--
+	-- 
+	-- 
 	status tinyint COMMENT '入库状态 : 1：已入库
 2：入库中
 3：待入库
@@ -699,10 +703,10 @@ CREATE TABLE wo_slurry_order
 	creator bigint COMMENT '创建人',
 	finisher bigint COMMENT '完成人',
 	update_time datetime COMMENT '更新时间',
-	-- 1 未删除
-	-- 2 已删除
-	dr tinyint COMMENT '是否删除 : 1 未删除
-2 已删除',
+	-- 1 或为空.不是备料区
+	-- 2 在备料区
+	preparation tinyint COMMENT '是否在备料区 : 1 或为空.不是备料区
+2 在备料区',
 	PRIMARY KEY (slurry_id),
 	UNIQUE (slurry_id)
 ) COMMENT = '料浆制作工单';

@@ -10,14 +10,14 @@
     <result column="storage_time" jdbcType="TIMESTAMP" property="storageTime" />
     <result column="rfid" jdbcType="CHAR" property="rfid" />
     <result column="storage_status" jdbcType="TINYINT" property="storageStatus" />
-    <result column="dr" jdbcType="TINYINT" property="dr" />
+    <result column="preparation" jdbcType="TINYINT" property="preparation" />
   </resultMap>
   <sql id="Base_Column_List">
-    storage_id, storage_head_id, location_id, material_id, storage_num, storage_time, 
-    rfid, storage_status, dr
+    storage_id, storage_head_id, location_id, material_id, storage_num, storage_time,
+    rfid, storage_status, preparation
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from sm_storage_detail
     where storage_id = #{storageId,jdbcType=BIGINT}
@@ -27,13 +27,13 @@
     where storage_id = #{storageId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.StorageDetailPO">
-    insert into sm_storage_detail (storage_id, storage_head_id, location_id, 
-      material_id, storage_num, storage_time, 
-      rfid, storage_status, dr
+    insert into sm_storage_detail (storage_id, storage_head_id, location_id,
+      material_id, storage_num, storage_time,
+      rfid, storage_status, preparation
       )
-    values (#{storageId,jdbcType=BIGINT}, #{storageHeadId,jdbcType=BIGINT}, #{locationId,jdbcType=BIGINT}, 
-      #{materialId,jdbcType=BIGINT}, #{storageNum,jdbcType=DECIMAL}, #{storageTime,jdbcType=TIMESTAMP}, 
-      #{rfid,jdbcType=CHAR}, #{storageStatus,jdbcType=TINYINT}, #{dr,jdbcType=TINYINT}
+    values (#{storageId,jdbcType=BIGINT}, #{storageHeadId,jdbcType=BIGINT}, #{locationId,jdbcType=BIGINT},
+      #{materialId,jdbcType=BIGINT}, #{storageNum,jdbcType=DECIMAL}, #{storageTime,jdbcType=TIMESTAMP},
+      #{rfid,jdbcType=CHAR}, #{storageStatus,jdbcType=TINYINT}, #{preparation,jdbcType=TINYINT}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.sm.StorageDetailPO">
@@ -63,8 +63,8 @@
       <if test="storageStatus != null">
         storage_status,
       </if>
-      <if test="dr != null">
-        dr,
+      <if test="preparation != null">
+        preparation,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -92,8 +92,8 @@
       <if test="storageStatus != null">
         #{storageStatus,jdbcType=TINYINT},
       </if>
-      <if test="dr != null">
-        #{dr,jdbcType=TINYINT},
+      <if test="preparation != null">
+        #{preparation,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -121,8 +121,8 @@
       <if test="storageStatus != null">
         storage_status = #{storageStatus,jdbcType=TINYINT},
       </if>
-      <if test="dr != null">
-        dr = #{dr,jdbcType=TINYINT},
+      <if test="preparation != null">
+        preparation = #{preparation,jdbcType=TINYINT},
       </if>
     </set>
     where storage_id = #{storageId,jdbcType=BIGINT}
@@ -136,7 +136,7 @@
       storage_time = #{storageTime,jdbcType=TIMESTAMP},
       rfid = #{rfid,jdbcType=CHAR},
       storage_status = #{storageStatus,jdbcType=TINYINT},
-      dr = #{dr,jdbcType=TINYINT}
+      preparation = #{preparation,jdbcType=TINYINT}
     where storage_id = #{storageId,jdbcType=BIGINT}
   </update>
 
@@ -181,7 +181,7 @@
     select
     <include refid="Base_Column_List" />
     from sm_storage_detail sd
-    where sd.storage_head_id = #{shid,jdbcType=BIGINT} and sd.dr = 2
+    where sd.storage_head_id = #{shid,jdbcType=BIGINT} and sd.preparation = 2
   </select>
 
   <select id="querySave" parameterType="java.lang.Long" resultMap="BaseResultMap">
