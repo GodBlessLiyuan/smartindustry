@@ -28,7 +28,7 @@
     from si_supplier
     where supplier_id = #{supplierId,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from si_supplier
     where supplier_id = #{supplierId,jdbcType=BIGINT}
   </delete>
@@ -217,4 +217,10 @@
       #{po.contactName,jdbcType=CHAR}, #{po.phone,jdbcType=CHAR}, #{po.fax,jdbcType=CHAR},       #{po.mail,jdbcType=CHAR}, #{po.area,jdbcType=CHAR}, #{po.address,jdbcType=CHAR}, #{po.remark,jdbcType=CHAR},      #{po.userId,jdbcType=BIGINT}, #{po.createTime,jdbcType=TIMESTAMP},   #{po.dr,jdbcType=TINYINT})
     </foreach>
   </insert>
+
+  <select id="queryBySno" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+     from si_supplier where supplier_no = #{supplierNo, jdbcType=CHAR}  limit 1
+  </select>
 </mapper>
