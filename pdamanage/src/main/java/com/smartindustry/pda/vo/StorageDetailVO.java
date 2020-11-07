@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -58,6 +59,10 @@ public class StorageDetailVO {
      */
     private BigDecimal cnum;
     /**
+     * 当前排位
+     */
+    private Date ctime;
+    /**
      * 储位图
      */
     private List<StorageDetailVO.LocationVO> lvos;
@@ -68,6 +73,7 @@ public class StorageDetailVO {
         vo.setSno(bo.getSourceNo());
         vo.setDnum(bo.getExpectNum());
         vo.setSnum(bo.getStorageNum());
+        vo.setCtime(bo.getCreateTime());
         BigDecimal tvolume = new BigDecimal(0);
         if (null != bo.getBos() && bo.getBos().size() > 0) {
             List<StorageDetailVO.MaterialVO> mvos = new ArrayList<>(bo.getBos().size());

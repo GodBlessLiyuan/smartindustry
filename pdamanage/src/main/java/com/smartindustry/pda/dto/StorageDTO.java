@@ -16,10 +16,6 @@ public class StorageDTO implements Serializable {
         private static final long SerialVersionUID = 1L;
 
         /**
-         * IMEI 号
-         */
-        private String imei;
-        /**
          * 类别类型：1-待执行，2-执行中，3-已完成，4-为完成生产
          */
         private Byte type;
