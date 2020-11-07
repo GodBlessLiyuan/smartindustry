@@ -21,11 +21,17 @@ public class StorageConstant {
      */
     public static final Byte STATUS_STOREING = 2;
 
+    /**
+     * 是否在备货区：1.在成品区  2.在备料区
+     */
+    public static final Byte Preparation_NO = 1;
+    public static final Byte Preparation_YES = 2;
 
     public static final String OPERATE_NAME_AGREE = "确认入库";
     public static final String OPERATE_NAME_INSERT = "创建入库单";
     public static final String OPERATE_NAME_EXECUTE = "执行入库";
     public static final String OPERATE_NAME_JOIN = "参与入库";
+    public static final String OPERATE_NAME_FINISH = "完成入库";
 
     /**
      * 釜到栈运算

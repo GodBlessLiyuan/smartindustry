@@ -3,6 +3,7 @@ package com.smartindustry.pda.service;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.pda.dto.OperateDTO;
 import com.smartindustry.pda.dto.StorageDTO;
+import com.smartindustry.pda.dto.StoragePreDTO;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
@@ -48,4 +49,11 @@ public interface IStorageService {
      * @return
      */
     ResultVO executeForPre(HttpSession session, StorageDTO dto);
+    /**
+     * 备料区入库提示选择那种物料确认
+     * @param dto
+     * @return
+     */
+    ResultVO chooseMaterialConfirm(HttpSession session,StorageDTO dto);
+
 }

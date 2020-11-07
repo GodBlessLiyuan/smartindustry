@@ -19,16 +19,17 @@ import com.smartindustry.pda.constant.CommonConstant;
 import com.smartindustry.pda.constant.StorageConstant;
 import com.smartindustry.pda.dto.OperateDTO;
 import com.smartindustry.pda.dto.StorageDTO;
+import com.smartindustry.pda.dto.StoragePreDTO;
 import com.smartindustry.pda.service.IStorageService;
+import com.smartindustry.pda.socket.WebSocketServer;
+import com.smartindustry.pda.socket.WebSocketVO;
 import com.smartindustry.pda.util.StorageNoUtil;
+import com.smartindustry.pda.vo.MaterialVO;
+import com.smartindustry.pda.vo.SpareMaterialVO;
 import com.smartindustry.pda.vo.StorageDetailVO;
-import org.apache.poi.hpsf.Decimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronizationAdapter;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
-
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.*;
@@ -102,6 +103,7 @@ public class StorageServiceImpl implements IStorageService {
             storageBodyPO.setStorageHeadId(storageHeadPO.getStorageHeadId());
             storageBodyPO.setMaterialId(produceOrderPO.getMaterialId1());
             storageBodyPO.setCreateTime(new Date());
+            storageBodyPO.setDr((byte) 1);
             storageBodyMapper.insert(storageBodyPO);
         } else {
             List<StorageBodyPO> storageBodyPOS = new ArrayList<>(2);
@@ -109,12 +111,14 @@ public class StorageServiceImpl implements IStorageService {
             storageBodyPO1.setStorageHeadId(storageHeadPO.getStorageHeadId());
             storageBodyPO1.setMaterialId(produceOrderPO.getMaterialId1());
             storageBodyPO1.setCreateTime(new Date());
+            storageBodyPO1.setDr((byte) 1);
             storageBodyPOS.add(storageBodyPO1);
 
             StorageBodyPO storageBodyPO2 = new StorageBodyPO();
             storageBodyPO2.setStorageHeadId(storageHeadPO.getStorageHeadId());
             storageBodyPO2.setMaterialId(produceOrderPO.getMaterialId2());
             storageBodyPO2.setCreateTime(new Date());
+            storageBodyPO2.setDr((byte) 1);
             storageBodyPOS.add(storageBodyPO2);
 
             storageBodyMapper.batchInsert(storageBodyPOS);
@@ -350,5 +354,128 @@ public class StorageServiceImpl implements IStorageService {
         fnames.add(forkliftPO.getForkliftName());
         vo.setFnames(fnames);
         return ResultVO.ok().setData(vo);
+    }
+
+    /**
+     * @Description 进入备料区存储时选择物料弹窗
+     * @Param
+     * @Return
+     * @Author AnHongxu.
+     * @Date 2020/11/6
+     * @Time 9:39
+     */
+    public ResultVO chooseMaterialShow(StoragePreDTO dto) {
+        // 根据栈板rfid查询入库单
+        StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(dto.getMrfid());
+        StorageHeadPO storageHeadPO = storageHeadMapper.selectByPrimaryKey(storageDetailPO.getStorageHeadId());
+        List<MaterialPO> pos = storageBodyMapper.queryMaterial(storageHeadPO.getStorageHeadId());
+        sendChooseMaterialShowMsg(pos);
+        return ResultVO.ok().setData(MaterialVO.convertPO(pos));
+    }
+
+    /**
+     * @Description 进入备料区司机选择产品后触发动作
+     * @Param
+     * @Return
+     * @Author AnHongxu.
+     * @Date 2020/11/6
+     * @Time 15:39
+     */
+    @Override
+    public ResultVO chooseMaterialConfirm(HttpSession session,StorageDTO dto) {
+        // 不知道最终是去成品区还是去备料区，所以信息暂存
+        StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(dto.getMrfid());
+        if (null == storageDetailPO) {
+
+        }
+        storageDetailPO.setRfid(dto.getMrfid());
+        storageDetailPO.setMaterialId(dto.getMid());
+
+        storageDetailMapper.insertSelective(storageDetailPO);
+        return ResultVO.ok();
+    }
+
+
+    /**
+     * WebSocket 备料区入库选择成品类型消息
+     *
+     * @param materialPOS
+     */
+    private void sendChooseMaterialShowMsg(List<MaterialPO> materialPOS) {
+        WebSocketVO vo = new WebSocketVO();
+        WebSocketVO.TitleVO titleVO = new WebSocketVO.TitleVO();
+        titleVO.setTip("备料区入库提示");
+        titleVO.setMsg("您是否要进行备料区入库作业？如果是请选择成品类型。");
+        //类型为弹窗
+        titleVO.setType((byte) 4);
+        List<WebSocketVO.MaterialVO> materialVOS = new ArrayList<>(2);
+        for (MaterialPO materialPO : materialPOS) {
+            WebSocketVO.MaterialVO materialVO = new WebSocketVO.MaterialVO();
+            materialVO.setMid(materialPO.getMaterialId());
+            materialVO.setMname(materialPO.getMaterialName());
+            materialVO.setMlevel(materialPO.getMaterialLevel());
+            materialVO.setModel(materialPO.getMaterialModel());
+            materialVOS.add(materialVO);
+        }
+        titleVO.setVos(materialVOS);
+        vo.setTitle(titleVO);
+        WebSocketServer.sendAllMsg(vo);
+    }
+
+
+    /**
+     * @Description 进备料区插货物的弹窗
+     * @Param
+     * @Return
+     * @Author AnHongxu.
+     * @Date 2020/11/6
+     * @Time 16:05
+     */
+    public ResultVO executeSpareAreaShow(StoragePreDTO dto) {
+        // 根据栈板rfid查询物料信息
+        StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(dto.getMrfid());
+        if (null == storageDetailPO) {
+            // 没有该物料信息
+            return new ResultVO(1007);
+        }
+        MaterialPO materialPO = materialMapper.selectByPrimaryKey(storageDetailPO.getMaterialId());
+        //发送socket消息
+        sendexecuteSpareAreaShowMsg(dto.getMrfid(), materialPO);
+
+        SpareMaterialVO vo = new SpareMaterialVO();
+        if (null == storageDetailPO.getStorageHeadId()) {
+            vo.setFlag(true);
+            vo.setRfid(dto.getMrfid());
+            vo.setMmodel(materialPO.getMaterialModel());
+            vo.setMname(materialPO.getMaterialName());
+        } else {
+            vo.setFlag(false);
+        }
+        return ResultVO.ok().setData(vo);
+    }
+
+
+
+    /**
+     * WebSocket 备料区入库选择成品类型消息
+     *
+     * @param materialPO
+     */
+    private void sendexecuteSpareAreaShowMsg(String mrfid, MaterialPO materialPO) {
+        WebSocketVO vo = new WebSocketVO();
+        WebSocketVO.TitleVO titleVO = new WebSocketVO.TitleVO();
+        titleVO.setTip("备料区物料信息");
+        titleVO.setMsg("您目前操作的为备料区成品，是否执行备料区成品入库仓库？");
+        //类型为弹窗
+        titleVO.setType((byte) 4);
+        WebSocketVO.MaterialVO materialVO = new WebSocketVO.MaterialVO();
+        materialVO.setMrfid(mrfid);
+        materialVO.setMid(materialPO.getMaterialId());
+        materialVO.setMname(materialPO.getMaterialName());
+        materialVO.setMlevel(materialPO.getMaterialLevel());
+        materialVO.setModel(materialPO.getMaterialModel());
+        titleVO.setMvo(materialVO);
+        vo.setTitle(titleVO);
+        WebSocketServer.sendAllMsg(vo);
     }
 }

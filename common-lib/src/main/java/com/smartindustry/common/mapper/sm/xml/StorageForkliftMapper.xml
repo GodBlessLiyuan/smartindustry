@@ -86,9 +86,17 @@
     from sm_storage_forklift
     where storage_head_id in (
     <foreach collection="list" item="shid" separator=",">
-      outbound_head_id = #{ohid,jdbcType=BIGINT}
+      storage_head_id = #{shid,jdbcType=BIGINT}
     </foreach>
     )
     group by storage_head_id
   </select>
+
+  <select id="queryByFid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sm_storage_forklift
+    where forklift_id = #{fid,jdbcType=BIGINT}
+  </select>
+
 </mapper>

@@ -28,14 +28,4 @@ public class SpareAreaController {
     public ResultVO enterSpare(@RequestBody StoragePreDTO dto, HttpSession session) {
         return spareAreaService.enterSpare(dto,session);
     }
-
-    @PostMapping("chooseMaterial")
-    public ResultVO chooseMaterial(@RequestBody StoragePreDTO dto) {
-        return spareAreaService.chooseMaterialShow(dto);
-    }
-
-    @PostMapping("showSpare")
-    public ResultVO showSpare(@RequestBody StoragePreDTO dto) {
-        return spareAreaService.executeSpareAreaShow(dto);
-    }
 }

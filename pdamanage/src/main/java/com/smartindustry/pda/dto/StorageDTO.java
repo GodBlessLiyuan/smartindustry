@@ -24,6 +24,10 @@ public class StorageDTO implements Serializable {
          */
         private Long shid;
         /**
+         * 物料id
+         */
+        private Long  mid;
+        /**
          * 物料砧板RFID
          */
         private String mrfid;

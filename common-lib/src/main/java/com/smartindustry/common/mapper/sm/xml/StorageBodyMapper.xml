@@ -256,7 +256,7 @@
     where storage_head_id = #{shid,jdbcType=BIGINT}
   </select>
 
-  <select id="queryByShidAndLid" resultMap="BaseResultMap">
+  <select id="queryByShidAndMid" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from sm_storage_head sh
@@ -265,8 +265,8 @@
     <if test="shid != null">
       and sh.storage_head_id = #{shid,jdbcType=BIGINT}
     </if>
-    <if test="lid != null">
-      and sb.location_id = #{lid,jdbcType=BIGINT}
+    <if test="mid != null">
+      and sb.material_id = #{mid,jdbcType=BIGINT}
     </if>
   </select>
 
