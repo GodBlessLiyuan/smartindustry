@@ -7,6 +7,7 @@
     <result column="供应商ID" jdbcType="DOUBLE" property="supplierId" />
     <result column="订单ID" jdbcType="DOUBLE" property="orderId" />
     <result column="订单号" jdbcType="NVARCHAR" property="orderNo" />
+    <result column="编号" jdbcType="NVARCHAR" property="supplierNo" />
     <result column="仓库ID" jdbcType="DOUBLE" property="warehouseId" />
     <result column="日期" jdbcType="TIMESTAMP" property="acceptDate" />
     <result column="业务员ID" jdbcType="DOUBLE" property="salesmanId" />
@@ -21,7 +22,7 @@
     <result column="引用数量" jdbcType="DOUBLE" property="num" />
   </resultMap>
   <sql id="BO_Column_List">
-    s.ID, s.单号,s.订单ID, s.订单号, s.供应商ID,s.仓库ID, s.日期, s.业务员ID,  s.业务员姓名,s.操作员ID, s.操作员姓名, s.审核员ID,s.审核员姓名, s.付款ID, s.付款名称, s.备注,s.引用数量,
+    s.ID, s.单号,s.订单ID, s.订单号, s.供应商ID,s.仓库ID, s.日期, s.业务员ID,  s.业务员姓名,s.操作员ID, s.操作员姓名, s.审核员ID,s.审核员姓名, s.付款ID, s.付款名称, s.备注,s.引用数量,su.编号,m.物品编号,m.物品名称,
     d.ID as detail_id, d.到货ID, d.物品ID,  d.数量, d.单价, d.金额, d.不含税单价, d.不含税金额, d.备注 as remark
   </sql>
   <resultMap id="BOResultMap" type="com.smartindustry.common.bo.ds.PurchaseErpBO" extends="BaseResultMap">
@@ -34,11 +35,16 @@
       <result column="不含税单价" jdbcType="DOUBLE" property="unitPriceNoTax" />
       <result column="不含税金额" jdbcType="DOUBLE" property="sumNoTax" />
       <result column="remark" jdbcType="NVARCHAR" property="remark" />
+      <result column="物品编号" jdbcType="NVARCHAR" property="materialNo" />
+      <result column="物品名称" jdbcType="NVARCHAR" property="materialName" />
     </collection>
   </resultMap>
-  <select id="queryAll" resultMap="BaseResultMap">
+  <select id="queryAll" resultMap="BOResultMap">
     select
     <include refid="BO_Column_List"/>
     from dbo.采购到货 as s left join dbo.采购到货明细 as d on s.ID = d.到货ID
+    LEFT JOIN dbo.物品 as m on d.物品ID = m.ID
+    LEFT JOIN dbo.供应商 as su on su.ID = s.供应商ID
+    WHERE m.[类别ID] = 117 or m.[类别ID] = 120
   </select>
 </mapper>

@@ -1,7 +1,9 @@
 package com.smartindustry.datasynchronize.service.impl;
 
-import com.netflix.discovery.converters.Auto;
+import com.github.pagehelper.Page;
 import com.smartindustry.common.bo.ds.SaleOutboundErpBO;
+import com.smartindustry.common.bo.ds.SalesOutboundBO;
+import com.smartindustry.common.bo.si.MaterialBO;
 import com.smartindustry.common.mapper.am.UserMapper;
 import com.smartindustry.common.mapper.ds.SalesOutboundDetailMapper;
 import com.smartindustry.common.mapper.ds.SalesOutboundMapper;
@@ -14,11 +16,16 @@ import com.smartindustry.common.pojo.ds.sqlserver.SaleDetailErpPO;
 import com.smartindustry.common.pojo.si.ClientPO;
 import com.smartindustry.common.pojo.si.MaterialPO;
 import com.smartindustry.common.sqlserver.SaleOutboundErpMapper;
+import com.smartindustry.common.util.PageQueryUtil;
+import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.datasynchronize.service.ISalesOutboundService;
+import com.smartindustry.datasynchronize.vo.MaterialVO;
+import com.smartindustry.datasynchronize.vo.SalesOutboundVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -50,8 +57,14 @@ public class SalesOutboundServiceImpl implements ISalesOutboundService {
     @Autowired
     private MaterialMapper materialMapper;
 
+    /**
+     * 销售出库 同步
+     * @param reqData
+     * @return
+     */
     @Override
-    public ResultVO sync() {
+    @Transactional(rollbackFor = Exception.class)
+    public ResultVO sync(Map<String, Object> reqData) {
         List<SaleOutboundErpBO> bos = saleOutboundErpMapper.queryAll();
         Map<String, List<SalesOutboundDetailPO>> dpos = new HashMap<>(bos.size());
         List<SalesOutboundPO> pos = new ArrayList<>(bos.size());
@@ -98,7 +111,15 @@ public class SalesOutboundServiceImpl implements ISalesOutboundService {
         if (!sodpos.isEmpty()) {
             salesOutboundDetailMapper.batchInsert(sodpos);
         }
-        return ResultVO.ok();
+
+
+        //查询
+        Calendar c =Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, c.get(Calendar.HOUR_OF_DAY)-2);
+        reqData.put("ctime", c.getTime());
+        Page<Long> page = PageQueryUtil.startPage(reqData);
+        List<SalesOutboundBO> list = salesOutboundMapper.pageQuery(reqData);
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), SalesOutboundVO.convert(list)));
     }
 
     private List<SalesOutboundDetailPO> convert(List<SaleDetailErpPO> sdpos, Long salesOutboundId) {

@@ -15,6 +15,10 @@ public class PurchaseDetailErpPO implements Serializable {
 
     private Double materialId;
 
+    private String materialName;
+
+    private String materialNo;
+
     private Double num;
 
     private Double unitPrice;

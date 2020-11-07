@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS am_authority;
 DROP TABLE IF EXISTS am_dept_record;
 DROP TABLE IF EXISTS am_role_record;
 DROP TABLE IF EXISTS am_user_record;
+DROP TABLE IF EXISTS ds_sales_outbound_detail;
 DROP TABLE IF EXISTS om_outbound_body;
 DROP TABLE IF EXISTS si_location_record;
 DROP TABLE IF EXISTS sm_storage_body;
@@ -23,6 +24,7 @@ DROP TABLE IF EXISTS sm_storage_record;
 DROP TABLE IF EXISTS sm_storage_head;
 DROP TABLE IF EXISTS si_warehouse;
 DROP TABLE IF EXISTS dd_warehouse_type;
+DROP TABLE IF EXISTS ds_sales_outbound;
 DROP TABLE IF EXISTS om_outbound_record;
 DROP TABLE IF EXISTS si_client_record;
 DROP TABLE IF EXISTS si_forklift_record;
@@ -63,6 +65,7 @@ CREATE TABLE am_dept
 (
 	dept_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '部门id',
 	parent_id bigint unsigned COMMENT '上级部门id',
+	dept_code char(255) COMMENT '部门代码',
 	dept_name char(32) NOT NULL COMMENT '部门名称',
 	user_id bigint unsigned COMMENT '部门负责人',
 	dept_desc char(255) COMMENT '部门描述',
@@ -121,6 +124,7 @@ CREATE TABLE am_role
 	-- 2：已删除
 	dr tinyint COMMENT '是否删除 : 1：未删除
 2：已删除',
+	role_code char(255) COMMENT '角色编码',
 	PRIMARY KEY (role_id),
 	UNIQUE (role_id)
 ) COMMENT = '角色表';
@@ -153,6 +157,7 @@ CREATE TABLE am_role_record
 CREATE TABLE am_user
 (
 	user_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '用户ID',
+	user_code char(255) COMMENT '用户编码',
 	name char(32) NOT NULL COMMENT '用户姓名',
 	-- 1 男
 	-- 2 女
@@ -231,6 +236,34 @@ CREATE TABLE dd_warehouse_type
 ) COMMENT = '仓库类型表';
 
 
+-- 销售出库
+CREATE TABLE ds_sales_outbound
+(
+	sales_outbound_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '销售出库ID',
+	sales_no char(255) COMMENT '业务单号',
+	sales_date date COMMENT '开票日期',
+	client_id bigint unsigned NOT NULL COMMENT '客户id',
+	user_id bigint unsigned COMMENT '开票员ID',
+	create_time datetime COMMENT '创建时间',
+	PRIMARY KEY (sales_outbound_id),
+	UNIQUE (sales_outbound_id)
+) COMMENT = '销售出库';
+
+
+-- 销售出库明细
+CREATE TABLE ds_sales_outbound_detail
+(
+	sales_outbound_detail_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '销售出库明细ID',
+	sales_outbound_id bigint unsigned NOT NULL COMMENT '销售出库ID',
+	material_id bigint unsigned NOT NULL COMMENT '物料ID',
+	need_num decimal(10,3) COMMENT '需求量',
+	unit_price decimal(10,2) COMMENT '单价',
+	total_price decimal(10,2) COMMENT '金额',
+	PRIMARY KEY (sales_outbound_detail_id),
+	UNIQUE (sales_outbound_detail_id)
+) COMMENT = '销售出库明细';
+
+
 -- 出库单表体
 CREATE TABLE om_outbound_body
 (
@@ -241,10 +274,10 @@ CREATE TABLE om_outbound_body
 	outbound_num decimal(10,2) COMMENT '已出库数量',
 	create_time datetime COMMENT '创建时间',
 	outbound_time datetime COMMENT '出库时间',
-	-- 1 或为空.不是备料区
-	-- 2 在备料区
-	preparation tinyint COMMENT '是否在备料区 : 1 或为空.不是备料区
-2 在备料区',
+	-- 1 未删除
+	-- 2 已删除
+	dr tinyint COMMENT '是否删除 : 1 未删除
+2 已删除',
 	PRIMARY KEY (outbound_body_id),
 	UNIQUE (outbound_body_id)
 ) COMMENT = '出库单表体';
@@ -330,10 +363,10 @@ CREATE TABLE si_client
 	remark char(255) COMMENT '备注',
 	create_time datetime COMMENT '创建时间',
 	update_time datetime COMMENT '更新时间',
-	-- 1 或为空.不是备料区
-	-- 2 在备料区
-	preparation tinyint COMMENT '是否在备料区 : 1 或为空.不是备料区
-2 在备料区',
+	-- 1 未删除
+	-- 2 已删除
+	dr tinyint COMMENT '是否删除 : 1 未删除
+2 已删除',
 	PRIMARY KEY (client_id),
 	UNIQUE (client_id)
 ) COMMENT = '客户';
@@ -379,10 +412,10 @@ CREATE TABLE si_forklift
  ',
 	extra char(255) COMMENT '备注',
 	create_time datetime COMMENT '创建时间',
-	-- 1 或为空.不是备料区
-	-- 2 在备料区
-	preparation tinyint COMMENT '是否在备料区 : 1 或为空.不是备料区
-2 在备料区',
+	-- 1 未删除
+	-- 2 已删除
+	dr tinyint COMMENT '是否删除 : 1 未删除
+2 已删除',
 	PRIMARY KEY (forklift_id),
 	UNIQUE (forklift_id)
 ) COMMENT = '叉车信息';
@@ -577,6 +610,11 @@ CREATE TABLE sm_storage_body
 	-- 2：已删除
 	dr tinyint COMMENT '是否删除 : 1：未删除
 2：已删除',
+	unit_price decimal(10,2) COMMENT '单价',
+	sum_price decimal(10,2) COMMENT '金额',
+	unit_price_notax decimal(10,2) COMMENT '不含税单价',
+	sum_price_notax decimal(10,2) COMMENT '不含税金额',
+	supplier_id bigint unsigned COMMENT '供应商ID',
 	PRIMARY KEY (storage_body_id),
 	UNIQUE (storage_body_id)
 ) COMMENT = '入库单表体';
@@ -592,16 +630,12 @@ CREATE TABLE sm_storage_detail
 	storage_num decimal(10,2) COMMENT '入库数',
 	storage_time datetime COMMENT '入库时间',
 	rfid char(128) COMMENT '栈板RFID',
-	-- 1 已入库
-	-- 2 已出库
-	-- 3 待入库
-	storage_status tinyint COMMENT '入库状态 : 1 已入库
-2 已出库
-3 待入库',
-	-- 1 或为空.不是备料区
-	-- 2 在备料区
-	preparation tinyint COMMENT '是否在备料区 : 1 或为空.不是备料区
-2 在备料区',
+	-- 1 待入库
+	-- 2 已入库
+	-- 3 已出库
+	storage_status tinyint COMMENT '入库状态 : 1 待入库
+2 已入库
+3 已出库',
 	PRIMARY KEY (storage_id),
 	UNIQUE (storage_id)
 ) COMMENT = '入库详细表';
@@ -651,6 +685,10 @@ CREATE TABLE sm_storage_head
 	-- 2：已删除
 	dr tinyint COMMENT '是否删除 : 1：未删除
 2：已删除',
+	-- 1. 现金
+	-- 2. 欠款
+	pay_method tinyint COMMENT '付款方式 : 1. 现金
+2. 欠款',
 	PRIMARY KEY (storage_head_id),
 	UNIQUE (storage_head_id)
 ) COMMENT = '入库单表头';
@@ -703,10 +741,10 @@ CREATE TABLE wo_slurry_order
 	creator bigint COMMENT '创建人',
 	finisher bigint COMMENT '完成人',
 	update_time datetime COMMENT '更新时间',
-	-- 1 或为空.不是备料区
-	-- 2 在备料区
-	preparation tinyint COMMENT '是否在备料区 : 1 或为空.不是备料区
-2 在备料区',
+	-- 1 未删除
+	-- 2 已删除
+	dr tinyint COMMENT '是否删除 : 1 未删除
+2 已删除',
 	PRIMARY KEY (slurry_id),
 	UNIQUE (slurry_id)
 ) COMMENT = '料浆制作工单';
@@ -812,7 +850,7 @@ ALTER TABLE am_role_record
 
 
 ALTER TABLE am_user_record
-	ADD FOREIGN KEY (operate_id)
+	ADD FOREIGN KEY (user_id)
 	REFERENCES am_user (user_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
@@ -820,7 +858,7 @@ ALTER TABLE am_user_record
 
 
 ALTER TABLE am_user_record
-	ADD FOREIGN KEY (user_id)
+	ADD FOREIGN KEY (operate_id)
 	REFERENCES am_user (user_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
@@ -836,6 +874,14 @@ ALTER TABLE dd_measure_unit
 
 
 ALTER TABLE dd_warehouse_type
+	ADD FOREIGN KEY (user_id)
+	REFERENCES am_user (user_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
+ALTER TABLE ds_sales_outbound
 	ADD FOREIGN KEY (user_id)
 	REFERENCES am_user (user_id)
 	ON UPDATE RESTRICT
@@ -963,6 +1009,14 @@ ALTER TABLE si_warehouse
 ;
 
 
+ALTER TABLE ds_sales_outbound_detail
+	ADD FOREIGN KEY (sales_outbound_id)
+	REFERENCES ds_sales_outbound (sales_outbound_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
 ALTER TABLE om_outbound_body
 	ADD FOREIGN KEY (outbound_head_id)
 	REFERENCES om_outbound_head (outbound_head_id)
@@ -982,6 +1036,14 @@ ALTER TABLE om_outbound_forklift
 ALTER TABLE om_outbound_record
 	ADD FOREIGN KEY (outbound_head_id)
 	REFERENCES om_outbound_head (outbound_head_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
+ALTER TABLE ds_sales_outbound
+	ADD FOREIGN KEY (client_id)
+	REFERENCES si_client (client_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
 ;
@@ -1038,6 +1100,14 @@ ALTER TABLE sm_storage_body
 ALTER TABLE sm_storage_detail
 	ADD FOREIGN KEY (location_id)
 	REFERENCES si_location (location_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
+ALTER TABLE ds_sales_outbound_detail
+	ADD FOREIGN KEY (material_id)
+	REFERENCES si_material (material_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
 ;
@@ -1100,6 +1170,14 @@ ALTER TABLE si_material
 
 
 ALTER TABLE si_supplier_record
+	ADD FOREIGN KEY (supplier_id)
+	REFERENCES si_supplier (supplier_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
+ALTER TABLE sm_storage_body
 	ADD FOREIGN KEY (supplier_id)
 	REFERENCES si_supplier (supplier_id)
 	ON UPDATE RESTRICT

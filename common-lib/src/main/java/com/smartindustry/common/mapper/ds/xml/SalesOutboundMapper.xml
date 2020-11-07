@@ -7,9 +7,10 @@
     <result column="sales_date" jdbcType="DATE" property="salesDate" />
     <result column="client_id" jdbcType="BIGINT" property="clientId" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    sales_outbound_id, sales_no, sales_date, client_id, user_id
+    sales_outbound_id, sales_no, sales_date, client_id, user_id, create_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -17,16 +18,17 @@
     from ds_sales_outbound
     where sales_outbound_id = #{salesOutboundId,jdbcType=BIGINT}
   </select>
-
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from ds_sales_outbound
     where sales_outbound_id = #{salesOutboundId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.smartindustry.common.pojo.ds.SalesOutboundPO" useGeneratedKeys="true" keyProperty="salesOutboundId">
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.ds.SalesOutboundPO">
     insert into ds_sales_outbound (sales_outbound_id, sales_no, sales_date, 
-      client_id, user_id)
+      client_id, user_id, create_time
+      )
     values (#{salesOutboundId,jdbcType=BIGINT}, #{salesNo,jdbcType=CHAR}, #{salesDate,jdbcType=DATE}, 
-      #{clientId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT})
+      #{clientId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.ds.SalesOutboundPO">
     insert into ds_sales_outbound
@@ -46,6 +48,9 @@
       <if test="userId != null">
         user_id,
       </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="salesOutboundId != null">
@@ -62,6 +67,9 @@
       </if>
       <if test="userId != null">
         #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -80,6 +88,9 @@
       <if test="userId != null">
         user_id = #{userId,jdbcType=BIGINT},
       </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where sales_outbound_id = #{salesOutboundId,jdbcType=BIGINT}
   </update>
@@ -88,21 +99,54 @@
     set sales_no = #{salesNo,jdbcType=CHAR},
       sales_date = #{salesDate,jdbcType=DATE},
       client_id = #{clientId,jdbcType=BIGINT},
-      user_id = #{userId,jdbcType=BIGINT}
+      user_id = #{userId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
     where sales_outbound_id = #{salesOutboundId,jdbcType=BIGINT}
   </update>
 
-    <insert id="batchInsert" parameterType="java.util.List" keyProperty="salesOutboundId" useGeneratedKeys="true">
-        insert into ds_sales_outbound ( sales_no, sales_date, client_id, user_id) values
-        <foreach collection="list" item = "po" separator=",">
-            (  #{po.salesNo,jdbcType=CHAR}, #{po.salesDate,jdbcType=DATE},
-            #{po.clientId,jdbcType=BIGINT}, #{po.userId,jdbcType=BIGINT})
-        </foreach>
-    </insert>
+  <insert id="batchInsert" parameterType="java.util.List" keyProperty="salesOutboundId" useGeneratedKeys="true">
+    insert into ds_sales_outbound ( sales_no, sales_date, client_id, user_id) values
+    <foreach collection="list" item = "po" separator=",">
+      (  #{po.salesNo,jdbcType=CHAR}, #{po.salesDate,jdbcType=DATE},
+      #{po.clientId,jdbcType=BIGINT}, #{po.userId,jdbcType=BIGINT})
+    </foreach>
+  </insert>
 
   <select id="queryBySalesNo" parameterType="java.lang.String" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
     from ds_sales_outbound where sales_no = #{salesNo, jdbcType=CHAR}  limit 1
+  </select>
+
+  <sql id="BO_Column_List">
+        so.sales_outbound_id, so.sales_no, so.sales_date, so.client_id , so.create_time,c.client_name, u.username, so.user_id,     sod.sales_outbound_detail_id, sod.material_id, sod.need_num, sod.unit_price, sod.total_price, m.material_no, m.material_name
+  </sql>
+  <resultMap id="BOResultMap" type="com.smartindustry.common.bo.ds.SalesOutboundBO" extends="BaseResultMap">
+    <result column="client_name" jdbcType="CHAR" property="clientName" />
+    <result column="username" jdbcType="CHAR" property="userName" />
+    <collection property="details" ofType="com.smartindustry.common.bo.ds.SalesOutboundDetailBO">
+      <id column="sales_outbound_detail_id" jdbcType="BIGINT" property="salesOutboundDetailId" />
+      <result column="material_id" jdbcType="BIGINT" property="materialId" />
+      <result column="need_num" jdbcType="DECIMAL" property="needNum" />
+      <result column="unit_price" jdbcType="DECIMAL" property="unitPrice" />
+      <result column="total_price" jdbcType="DECIMAL" property="totalPrice" />
+      <result column="material_name" jdbcType="CHAR" property="materialName" />
+      <result column="material_no" jdbcType="CHAR" property="materialNo" />
+    </collection>
+  </resultMap>
+  <select id="pageQuery" parameterType="java.util.Map" resultMap="BOResultMap">
+    select
+    <include refid="BO_Column_List"/>
+    from ds_sales_outbound so left join
+    si_client c on c.client_id = so.client_id
+    left join am_user u on u.user_id = so.user_id
+    left join ds_sales_outbound_detail sod on sod.sales_outbound_id = so.sales_outbound_id
+    left join si_material_id m on m.material_id = sod.material_id
+    <if test="ctime != null">
+      <where>
+            create_time &gt; #{ctime, jdbcType=TIMESTAMP}
+      </where>
+    </if>
+
   </select>
 </mapper>

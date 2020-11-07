@@ -1,11 +1,11 @@
 package com.smartindustry.common.mapper.sm;
 
-import com.smartindustry.common.bo.om.OutboundHeadBO;
 import com.smartindustry.common.bo.sm.StorageHeadBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.sm.StorageDetailPO;
 import com.smartindustry.common.pojo.sm.StorageHeadPO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;
@@ -85,4 +85,11 @@ public interface StorageHeadMapper extends BaseMapper<StorageHeadPO, Long> {
      * @return
      */
     StorageHeadPO queryBySourceNo(String sourceNo);
+
+    /**
+     * 根据入库单号查找入库单
+     * @param storageNo
+     * @return
+     */
+    StorageHeadPO queryByStorageNo(@Param("storageNo") String storageNo);
 }

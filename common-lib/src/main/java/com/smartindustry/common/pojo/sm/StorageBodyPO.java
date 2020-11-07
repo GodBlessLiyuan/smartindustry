@@ -62,5 +62,30 @@ public class StorageBodyPO implements Serializable {
      */
     private Byte dr;
 
+    /**
+     * 单价
+     */
+    private BigDecimal unitPrice;
+
+    /**
+     * 金额
+     */
+    private BigDecimal sumPrice;
+
+    /**
+     * 不含税单价
+     */
+    private BigDecimal unitPriceNotax;
+
+    /**
+     * 不含税金额
+     */
+    private BigDecimal sumPriceNotax;
+
+    /**
+     * 供应商ID
+     */
+    private Long supplierId;
+
     private static final long serialVersionUID = 1L;
 }

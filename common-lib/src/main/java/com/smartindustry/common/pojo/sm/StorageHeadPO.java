@@ -1,9 +1,10 @@
 package com.smartindustry.common.pojo.sm;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * sm_storage_head
@@ -48,6 +49,11 @@ public class StorageHeadPO implements Serializable {
 2：已删除
      */
     private Byte dr;
+
+    /**
+     * 付款方式 1. 现金 2. 欠款
+     */
+    private Byte payMethod;
 
     private static final long serialVersionUID = 1L;
 }
