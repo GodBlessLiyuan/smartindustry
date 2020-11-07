@@ -59,7 +59,7 @@ public class StorageDetailVO {
      */
     private BigDecimal cnum;
     /**
-     * 当前排位
+     * 创建时间
      */
     private Date ctime;
     /**
