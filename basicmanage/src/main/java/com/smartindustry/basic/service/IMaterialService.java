@@ -18,5 +18,4 @@ public interface IMaterialService {
 
     ResultVO detail(OperateDTO dto);
 
-    ResultVO record(OperateDTO dto);
 }

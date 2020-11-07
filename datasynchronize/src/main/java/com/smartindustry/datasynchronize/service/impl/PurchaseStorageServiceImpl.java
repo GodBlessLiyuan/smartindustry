@@ -1,8 +1,6 @@
 package com.smartindustry.datasynchronize.service.impl;
 
-import com.github.pagehelper.Page;
 import com.smartindustry.common.bo.ds.PurchaseErpBO;
-import com.smartindustry.common.bo.sm.StorageHeadBO;
 import com.smartindustry.common.mapper.si.MaterialMapper;
 import com.smartindustry.common.mapper.si.SupplierMapper;
 import com.smartindustry.common.mapper.sm.StorageBodyMapper;
@@ -13,12 +11,9 @@ import com.smartindustry.common.pojo.si.SupplierPO;
 import com.smartindustry.common.pojo.sm.StorageBodyPO;
 import com.smartindustry.common.pojo.sm.StorageHeadPO;
 import com.smartindustry.common.sqlserver.PurchaseErpMapper;
-import com.smartindustry.common.util.PageQueryUtil;
-import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.datasynchronize.constant.SyncConstant;
 import com.smartindustry.datasynchronize.service.IPurchaseStorageService;
-import com.smartindustry.datasynchronize.vo.StorageHeadVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -54,12 +49,11 @@ public class PurchaseStorageServiceImpl implements IPurchaseStorageService {
 
     /**
      * 原材料新增入库 同步
-     * @param reqData
      * @return
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ResultVO sync(Map<String, Object> reqData) {
+    public ResultVO sync() {
         //从erp中获取数据
         List<PurchaseErpBO> bos = purchaseErpMapper.queryAll();
         List<StorageHeadPO> hpos = new ArrayList<>(bos.size());
@@ -106,14 +100,7 @@ public class PurchaseStorageServiceImpl implements IPurchaseStorageService {
                 storageBodyMapper.batchInsert(pos);
             }
         }
-
-        //查询
-        Calendar c =Calendar.getInstance();
-        c.set(Calendar.HOUR_OF_DAY, c.get(Calendar.HOUR_OF_DAY)-2);
-        reqData.put("ctime", c.getTime());
-        Page<Long> page = PageQueryUtil.startPage(reqData);
-        List<StorageHeadBO> list = storageHeadMapper.pageQuery(reqData);
-        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), StorageHeadVO.convert(list)));
+        return ResultVO.ok();
     }
 
     private List<StorageBodyPO> convert(List<PurchaseDetailErpPO> sdpos, Date acceptDate, Long supplierId) {

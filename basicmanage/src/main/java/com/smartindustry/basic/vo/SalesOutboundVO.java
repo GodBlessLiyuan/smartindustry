@@ -1,4 +1,4 @@
-package com.smartindustry.datasynchronize.vo;
+package com.smartindustry.basic.vo;
 
 import com.smartindustry.common.bo.ds.SalesOutboundBO;
 import com.smartindustry.common.bo.ds.SalesOutboundDetailBO;
@@ -58,7 +58,7 @@ public class SalesOutboundVO implements Serializable {
         return vos;
     }
 
-    private static SalesOutboundVO convert(SalesOutboundBO bo) {
+    public static SalesOutboundVO convert(SalesOutboundBO bo) {
         SalesOutboundVO vo = new SalesOutboundVO();
         vo.setSoid(bo.getSalesOutboundId());
         vo.setSno(bo.getSalesNo());

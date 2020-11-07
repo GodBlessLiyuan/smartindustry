@@ -1,4 +1,4 @@
-package com.smartindustry.datasynchronize.vo;
+package com.smartindustry.basic.vo;
 
 import com.smartindustry.common.pojo.am.RolePO;
 import lombok.Data;

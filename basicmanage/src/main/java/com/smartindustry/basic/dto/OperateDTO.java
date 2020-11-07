@@ -26,4 +26,6 @@ public class OperateDTO implements Serializable {
      */
     private Long cid;
 
+    private Long soid;
+
 }
