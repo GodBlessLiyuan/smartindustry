@@ -227,7 +227,7 @@
   <select id="pageQuery" parameterType="java.util.Map" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
-    from si_client where dr = 1
+    from si_supplier where dr = 1
     <if test="ctime != null">
       and create_time &gt; #{ctime, jdbcType=TIMESTAMP}
     </if>

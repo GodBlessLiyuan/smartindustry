@@ -70,11 +70,6 @@ public class SupplierVO implements Serializable {
     private String remark;
 
     /**
-     * 创建人
-     */
-    private Long uid;
-
-    /**
      * 创建时间
      */
     private Date ctime;

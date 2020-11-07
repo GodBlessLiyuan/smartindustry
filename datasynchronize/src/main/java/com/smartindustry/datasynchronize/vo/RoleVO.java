@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,9 +22,9 @@ public class RoleVO implements Serializable {
 
     private String rname;
 
-    private Byte status;
+    private Date ctime;
 
-    private String rdesc;
+    private String rcode;
 
     public static List<RoleVO> convert(List<RolePO> pos) {
         List<RoleVO> vos = new ArrayList<>(pos.size());
@@ -37,8 +38,8 @@ public class RoleVO implements Serializable {
         RoleVO vo = new RoleVO();
         vo.setRid(po.getRoleId());
         vo.setRname(po.getRoleName());
-        vo.setStatus(po.getStatus());
-        vo.setRdesc(po.getRoleDesc());
+        vo.setRcode(po.getRoleCode());
+        vo.setCtime(po.getCreateTime());
         return vo;
     }
 }

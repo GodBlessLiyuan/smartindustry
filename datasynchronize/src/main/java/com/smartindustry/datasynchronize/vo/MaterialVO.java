@@ -34,10 +34,6 @@ public class MaterialVO implements Serializable {
      */
     private String mmodel;
     /**
-     * 供应商
-     */
-    private String sname;
-    /**
      * 物料计量单位
      */
     private String muname;
@@ -56,7 +52,6 @@ public class MaterialVO implements Serializable {
         vo.setMno(bo.getMaterialNo());
         vo.setMname(bo.getMaterialName());
         vo.setMmodel(bo.getMaterialModel());
-        vo.setSname(bo.getSupplierName());
         vo.setMuname(bo.getMeasureUnitName());
         return vo;
     }

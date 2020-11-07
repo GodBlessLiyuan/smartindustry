@@ -32,14 +32,6 @@ public class StorageHeadVO implements Serializable {
      */
     private String sono;
     /**
-     * 入库仓库id
-     */
-    private Long wid;
-    /**
-     * 入库仓库
-     */
-    private String wname;
-    /**
      * 单据状态
      */
     private Byte status;
@@ -82,10 +74,6 @@ public class StorageHeadVO implements Serializable {
          * 供应商名称
          */
         private String sname;
-        /**
-         * 车牌信息
-         */
-        private String cbrand;
         /**
          * 接受数量
          */
@@ -150,7 +138,6 @@ public class StorageHeadVO implements Serializable {
         vo.setSono(bo.getSourceNo());
         vo.setStatus(bo.getStatus());
         vo.setStime(bo.getStorageTime());
-        vo.setWname(bo.getWarehouseName());
         vo.setPmethod(bo.getPayMethod());
         return vo;
     }
@@ -161,8 +148,6 @@ public class StorageHeadVO implements Serializable {
         vo.setSno(bo.getStorageNo());
         vo.setStatus(bo.getStatus());
         vo.setStime(bo.getStorageTime());
-        vo.setWid(bo.getWarehouseId());
-        vo.setWname(bo.getWarehouseName());
         vo.setExtra(bo.getExtra());
         List<StorageBodyVO> vos = new ArrayList<>();
         for (StorageBodyBO bodyBO : bo.getBos()){
@@ -173,7 +158,6 @@ public class StorageHeadVO implements Serializable {
             bodyVO.setMname(bodyBO.getMaterialName());
             bodyVO.setMmodel(bodyBO.getMaterialModel());
             bodyVO.setSname(bodyBO.getSupplierName());
-            bodyVO.setCbrand(bodyBO.getCarBrand());
             bodyVO.setAnum(bodyBO.getStorageNum());
             bodyVO.setAtime(bodyBO.getAcceptTime());
             bodyVO.setLid(bodyBO.getLocationId());
