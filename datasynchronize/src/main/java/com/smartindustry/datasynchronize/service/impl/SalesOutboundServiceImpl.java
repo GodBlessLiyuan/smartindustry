@@ -89,6 +89,7 @@ public class SalesOutboundServiceImpl implements ISalesOutboundService {
                 }
                 po.setUserId(user.getUserId());
             }
+            po.setCreateTime(Calendar.getInstance().getTime());
             pos.add(po);
             if (bo.getSdpos() != null && !bo.getSdpos().isEmpty()) {
                 dpos.put(po.getSalesNo(), convert(bo.getSdpos(), po.getSalesOutboundId()));

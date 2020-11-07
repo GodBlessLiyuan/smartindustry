@@ -105,10 +105,10 @@
   </update>
 
   <insert id="batchInsert" parameterType="java.util.List" keyProperty="salesOutboundId" useGeneratedKeys="true">
-    insert into ds_sales_outbound ( sales_no, sales_date, client_id, user_id) values
+    insert into ds_sales_outbound ( sales_no, sales_date, client_id, user_id,create_time) values
     <foreach collection="list" item = "po" separator=",">
       (  #{po.salesNo,jdbcType=CHAR}, #{po.salesDate,jdbcType=DATE},
-      #{po.clientId,jdbcType=BIGINT}, #{po.userId,jdbcType=BIGINT})
+      #{po.clientId,jdbcType=BIGINT}, #{po.userId,jdbcType=BIGINT},#{po.createTime, jdbcType=TIMESTAMP})
     </foreach>
   </insert>
 
@@ -119,7 +119,7 @@
   </select>
 
   <sql id="BO_Column_List">
-        so.sales_outbound_id, so.sales_no, so.sales_date, so.client_id , so.create_time,c.client_name, u.username, so.user_id,     sod.sales_outbound_detail_id, sod.material_id, sod.need_num, sod.unit_price, sod.total_price, m.material_no, m.material_name
+        so.sales_outbound_id, so.sales_no, so.sales_date, so.client_id , so.create_time,c.client_name, u.username, so.user_id,     sod.sales_outbound_detail_id, sod.material_id, sod.need_num, sod.unit_price, sod.total_price, m.material_no, m.material_name, so.create_time
   </sql>
   <resultMap id="BOResultMap" type="com.smartindustry.common.bo.ds.SalesOutboundBO" extends="BaseResultMap">
     <result column="client_name" jdbcType="CHAR" property="clientName" />
@@ -141,11 +141,9 @@
     si_client c on c.client_id = so.client_id
     left join am_user u on u.user_id = so.user_id
     left join ds_sales_outbound_detail sod on sod.sales_outbound_id = so.sales_outbound_id
-    left join si_material_id m on m.material_id = sod.material_id
+    left join si_material m on m.material_id = sod.material_id
     <if test="ctime != null">
-      <where>
-            create_time &gt; #{ctime, jdbcType=TIMESTAMP}
-      </where>
+          where  so.create_time &gt; #{ctime, jdbcType=TIMESTAMP}
     </if>
 
   </select>

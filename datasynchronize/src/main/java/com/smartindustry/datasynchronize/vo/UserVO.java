@@ -37,27 +37,13 @@ public class UserVO implements Serializable {
      */
     private String dname;
 
-    private String phone;
-
-    private Byte status;
-
-    private String email;
-
-    private String job;
-
-    private String password;
-
     private Long rid;
 
     private String rname;
 
-    private Byte sex;
-
-    private String remark;
-
-    private List<Long> dcode;
-
     private Date ctime;
+
+    private String userCode;
 
     public static List<UserVO> convert(List<UserBO> bos) {
         List<UserVO> vos = new ArrayList<>(bos.size());
@@ -71,19 +57,13 @@ public class UserVO implements Serializable {
         UserVO vo = new UserVO();
         vo.setDname(bo.getDeptName());
         vo.setName(bo.getName());
-        vo.setPhone(bo.getPhone());
-        vo.setStatus(bo.getStatus());
         vo.setUid(bo.getUserId());
         vo.setUname(bo.getUsername());
         vo.setDid(bo.getDeptId());
-        vo.setPassword("******");
-        vo.setJob(bo.getJob());
-        vo.setEmail(bo.getEmail());
         vo.setRname(bo.getRoleName());
-        vo.setSex(bo.getSex());
-        vo.setRemark(bo.getRemark());
         vo.setRid(bo.getRoleId());
         vo.setCtime(bo.getCreateTime());
+        vo.setUserCode(bo.getUserCode());
         return vo;
     }
 
@@ -91,12 +71,9 @@ public class UserVO implements Serializable {
         UserVO vo = new UserVO();
         vo.setName(bo.getName());
         vo.setUname(bo.getUsername());
-        vo.setPhone(bo.getPhone());
-        vo.setEmail(bo.getEmail());
         vo.setDname(bo.getDeptName());
         vo.setRname(bo.getRoleName());
         vo.setCtime(bo.getCreateTime());
-        vo.setSex(bo.getSex());
         return vo;
     }
 
