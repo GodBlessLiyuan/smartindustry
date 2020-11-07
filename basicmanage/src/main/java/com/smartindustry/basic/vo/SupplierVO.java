@@ -1,4 +1,4 @@
-package com.smartindustry.datasynchronize.vo;
+package com.smartindustry.basic.vo;
 
 import com.smartindustry.common.pojo.si.SupplierPO;
 import lombok.Data;
@@ -89,7 +89,7 @@ public class SupplierVO implements Serializable {
         return vos;
     }
 
-    private static SupplierVO convert(SupplierPO po) {
+    public static SupplierVO convert(SupplierPO po) {
         SupplierVO vo = new SupplierVO();
         vo.setSid(po.getSupplierId());
         vo.setSname(po.getSupplierName());

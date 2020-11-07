@@ -2,17 +2,16 @@ package com.smartindustry.basic.service;
 
 import com.smartindustry.basic.dto.OperateDTO;
 import com.smartindustry.common.vo.ResultVO;
+
 import java.util.Map;
 
 /**
- * @author: xiahui
- * @date: Created in 2020/7/29 9:19
- * @description: 供应商管理
- * @version: 1.0
+ * @author hui.feng
+ * @date created in 2020/11/5
+ * @description
  */
-public interface ISupplierService {
+public interface ISalesOutboundService {
     ResultVO pageQuery(Map<String, Object> reqData);
 
     ResultVO detail(OperateDTO dto);
-
 }

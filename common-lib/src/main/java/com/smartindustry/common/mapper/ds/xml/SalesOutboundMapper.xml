@@ -147,4 +147,16 @@
     </if>
 
   </select>
+    <select id="queryBySoid" parameterType="java.lang.Long" resultMap="BOResultMap">
+      select
+      <include refid="BO_Column_List"/>
+      from ds_sales_outbound so left join
+      si_client c on c.client_id = so.client_id
+      left join am_user u on u.user_id = so.user_id
+      left join ds_sales_outbound_detail sod on sod.sales_outbound_id = so.sales_outbound_id
+      left join si_material m on m.material_id = sod.material_id
+      <if test="ctime != null">
+        where  so.sales_outbound_id = #{soid, jdbcType=BIGINT}
+      </if>
+    </select>
 </mapper>

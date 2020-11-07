@@ -16,6 +16,7 @@ import com.smartindustry.common.mapper.si.MaterialAttributeMapper;
 import com.smartindustry.common.mapper.si.MaterialMapper;
 import com.smartindustry.common.mapper.si.MaterialRecordMapper;
 import com.smartindustry.common.mapper.si.MaterialSpecificationMapper;
+import com.smartindustry.common.pojo.si.MaterialPO;
 import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.vo.PageInfoVO;
@@ -50,21 +51,17 @@ public class MaterialServiceImpl implements IMaterialService {
         Page<MaterialBO> page = PageQueryUtil.startPage(reqData);
         List<MaterialBO> bos = materialMapper.pageQueryStorage(reqData);
 
-        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), MaterialVO.convert(bos, filePathConfig)));
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), MaterialVO.convert(bos)));
     }
 
     @Override
     public ResultVO detail(OperateDTO dto) {
-        MaterialBO materialBO = materialMapper.queryByMid(dto.getMid());
-        if (null == materialBO) {
+        MaterialPO po = materialMapper.selectByPrimaryKey(dto.getMid());
+        if (null == po) {
             return new ResultVO(1002);
         }
 
-        MaterialVO vo = MaterialVO.convert(materialBO, filePathConfig);
-        MaterialAttributeBO attributeBO = pu.detail(materialBO.getMaterialId());
-        if (null != attributeBO) {
-//            vo.setMattribute(MaterialAttributeVO.convert(attributeBO));
-        }
+        MaterialVO vo = MaterialVO.convert(po);
 
         return ResultVO.ok().setData(vo);
     }

@@ -47,14 +47,5 @@ public class SupplierController {
         return supplierService.detail(dto);
     }
 
-    /**
-     * 供应商 查询
-     *
-     * @return
-     */
-    @PostMapping("queryAll")
-    public ResultVO queryAll() {
-        return supplierService.queryAll();
-    }
 
 }

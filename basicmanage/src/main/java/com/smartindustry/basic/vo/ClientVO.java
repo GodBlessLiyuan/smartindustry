@@ -1,111 +1,107 @@
 package com.smartindustry.basic.vo;
 
-import com.smartindustry.common.bo.si.ClientBO;
 import com.smartindustry.common.pojo.si.ClientPO;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
- * @author: jiangzhaojie
- * @date: Created in 14:37 2020/9/16
- * @version: 1.0.0
- * @description:
+ * @author hui.feng
+ * @date created in 2020/11/6
+ * @description
  */
 @Data
-public class ClientVO {
-    private static final long SerialVersionUID = 1L;
+public class ClientVO implements Serializable {
+    private static final Long serialVersionUID = 1L;
 
     /**
      * 客户id
      */
     private Long cid;
+
     /**
      * 客户代码
      */
     private String cno;
-    /**
-     * 客户类型
-     */
-    private Long ctid;
-    /**
-     * 客户类型名称
-     */
-    private String ctname;
+
+
     /**
      * 客户名称
      */
     private String cname;
+
     /**
      * 联系人
      */
     private String contact;
-    /**
-     * 性别
-     */
-    private Byte sex;
+
+
     /**
      * 联系电话
      */
     private String phone;
+
     /**
      * 客户邮箱
      */
     private String email;
+
     /**
      * 传真
      */
     private String fax;
+
     /**
      * 网址
      */
     private String url;
-    /**
-     * 信用等级id
-     */
-    private Long clid;
-    /**
-     * 信用等级名称
-     */
-    private String clname;
-    /**
-     * 地区
-     */
-    private String area;
+
     /**
      * 详细地址
      */
     private String address;
+
     /**
      * 备注
      */
     private String remark;
 
-    public static List<ClientVO> convert(List<ClientPO> bos) {
-        List<ClientVO> vos = new ArrayList<>(bos.size());
-        for (ClientPO bo : bos) {
-            vos.add(convert(bo));
+    /**
+     * 创建时间
+     */
+    private Date ctime;
+
+    /**
+     * 是否删除 : 1 未删除
+     2 已删除
+     */
+    private Byte dr;
+
+    public static List<ClientVO> convert(List<ClientPO> pos) {
+        List<ClientVO> vos = new ArrayList<>(pos.size());
+        for (ClientPO po : pos) {
+            vos.add(convert(po));
         }
         return vos;
     }
 
-    public static ClientVO convert(ClientPO bo) {
+    public static ClientVO convert(ClientPO po) {
         ClientVO vo = new ClientVO();
-        vo.setCid(bo.getClientId());
-        vo.setCno(bo.getClientNo());
-        vo.setCtid(bo.getClientTypeId());
-        vo.setCname(bo.getClientName());
-        vo.setContact(bo.getContact());
-        vo.setSex(bo.getSex());
-        vo.setPhone(bo.getPhone());
-        vo.setEmail(bo.getEmail());
-        vo.setFax(bo.getFax());
-        vo.setUrl(bo.getUrl());
-        vo.setClid(bo.getCreditLevelId());
-        vo.setArea(bo.getArea());
-        vo.setAddress(bo.getAddress());
-        vo.setRemark(bo.getRemark());
+        vo.setCid(po.getClientId());
+        vo.setCno(po.getClientNo());
+        vo.setCname(po.getClientName());
+        vo.setContact(po.getContact());
+        vo.setPhone(po.getPhone());
+        vo.setEmail(po.getEmail());
+        vo.setFax(po.getFax());
+        vo.setUrl(po.getUrl());
+        vo.setAddress(po.getAddress());
+        vo.setRemark(po.getRemark());
+        vo.setCtime(po.getCreateTime());
+        vo.setDr(po.getDr());
         return vo;
     }
 }

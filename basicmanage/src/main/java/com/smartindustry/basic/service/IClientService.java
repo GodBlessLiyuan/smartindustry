@@ -21,14 +21,6 @@ public interface IClientService {
      */
     ResultVO pageQuery(Map<String, Object> reqData);
 
-
-    /**
-     * 查询操作记录
-     * @param dto
-     * @return
-     */
-    ResultVO queryRecord(OperateDTO dto);
-
     /**
      * 查询当前客户的详细信息
      * @param dto

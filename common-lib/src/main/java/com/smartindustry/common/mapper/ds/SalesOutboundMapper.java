@@ -29,4 +29,6 @@ public interface SalesOutboundMapper extends BaseMapper<SalesOutboundPO, Long> {
      * @return
      */
     List<SalesOutboundBO> pageQuery(Map<String, Object> reqData);
+
+    SalesOutboundBO queryBySoid(@Param("soid") Long soid);
 }

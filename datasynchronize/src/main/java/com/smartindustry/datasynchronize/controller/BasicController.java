@@ -23,33 +23,33 @@ public class BasicController {
     private IBasicService basicService;
 
     @PostMapping("material")
-    public ResultVO sync(@RequestBody Map<String, Object> reqData){
-        return basicService.material(reqData);
+    public ResultVO sync(){
+        return basicService.material();
     }
 
     @PostMapping("client")
-    public ResultVO client(@RequestBody Map<String, Object> reqData){
-        return basicService.client(reqData);
+    public ResultVO client(){
+        return basicService.client();
     }
 
     @PostMapping("supplier")
-    public ResultVO supplier(@RequestBody Map<String, Object> reqData){
-        return basicService.supplier(reqData);
+    public ResultVO supplier(){
+        return basicService.supplier();
     }
 
     @PostMapping("dept")
-    public ResultVO dept(@RequestBody Map<String, Object> reqData){
-        return basicService.dept(reqData);
+    public ResultVO dept(){
+        return basicService.dept();
     }
 
     @PostMapping("role")
-    public ResultVO role(@RequestBody Map<String, Object> reqData){
-        return basicService.role(reqData);
+    public ResultVO role(){
+        return basicService.role();
     }
 
     @PostMapping("user")
-    public ResultVO user(@RequestBody Map<String, Object> reqData){
-        return basicService.user(reqData);
+    public ResultVO user(){
+        return basicService.user();
     }
 
 }
