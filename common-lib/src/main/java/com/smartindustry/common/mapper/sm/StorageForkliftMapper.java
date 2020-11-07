@@ -19,4 +19,11 @@ public interface StorageForkliftMapper extends BaseMapper<StorageForkliftPO, Lon
      * @return
      */
     Map<Long, Integer> queryFnumBySids(List<Long> sids);
+    /**
+     * 根据叉车id查询当前正在运行的叉车数记录
+     *
+     * @param fid
+     * @return
+     */
+    StorageForkliftPO queryByFid(Long fid);
 }

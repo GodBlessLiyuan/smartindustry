@@ -34,10 +34,10 @@ public interface StorageBodyMapper extends BaseMapper<StorageBodyPO, Long> {
     /**
      * 根据入库单id和物料id
      * @param shid
-     * @param lid
+     * @param mid
      * @return
      */
-    StorageBodyPO queryByShidAndLid(Long shid,Long lid);
+    StorageBodyPO queryByShidAndMid(Long shid,Long mid);
 
     /**
      * 查看当前入库单下所有的物料类型

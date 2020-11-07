@@ -76,4 +76,13 @@ public class StorageController {
     public ResultVO executeForPre(HttpSession session, @RequestBody StorageDTO dto) {
         return storageService.executeForPre(session, dto);
     }
+    /**
+     * 备料区选择产品后调用接口
+     *
+     * @return
+     */
+    @PostMapping("choose_material_confirm")
+    public ResultVO chooseMaterialComfirm(HttpSession session, @RequestBody StorageDTO dto) {
+        return storageService.chooseMaterialConfirm(session, dto);
+    }
 }
