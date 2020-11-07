@@ -14,10 +14,11 @@
     <result column="status" jdbcType="TINYINT" property="status" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="dr" jdbcType="TINYINT" property="dr" />
+    <result column="pay_method" jdbcType="TINYINT" property="payMethod" />
   </resultMap>
   <sql id="Base_Column_List">
     storage_head_id, warehouse_id, storage_no, source_no, source_type, storage_time, 
-    expect_num, storage_num, extra, `status`, create_time, dr
+    expect_num, storage_num, extra, `status`, create_time, dr, pay_method
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -33,13 +34,13 @@
     insert into sm_storage_head (storage_head_id, warehouse_id, storage_no, 
       source_no, source_type, storage_time, 
       expect_num, storage_num, extra, 
-      `status`, create_time, dr
-      )
-    values (#{storageHeadId,jdbcType=BIGINT}, #{warehouseId,jdbcType=BIGINT}, #{storageNo,jdbcType=CHAR}, 
-      #{sourceNo,jdbcType=CHAR}, #{sourceType,jdbcType=TINYINT}, #{storageTime,jdbcType=TIMESTAMP}, 
-      #{expectNum,jdbcType=DECIMAL}, #{storageNum,jdbcType=DECIMAL}, #{extra,jdbcType=CHAR}, 
-      #{status,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT}
-      )
+      `status`, create_time, dr,
+      pay_method)
+    values (#{storageHeadId,jdbcType=BIGINT}, #{warehouseId,jdbcType=BIGINT}, #{storageNo,jdbcType=CHAR},
+      #{sourceNo,jdbcType=CHAR}, #{sourceType,jdbcType=TINYINT}, #{storageTime,jdbcType=TIMESTAMP},
+      #{expectNum,jdbcType=DECIMAL}, #{storageNum,jdbcType=DECIMAL}, #{extra,jdbcType=CHAR},
+      #{status,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT},
+      #{payMethod,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.sm.StorageHeadPO">
     insert into sm_storage_head
@@ -80,6 +81,9 @@
       <if test="dr != null">
         dr,
       </if>
+      <if test="payMethod != null">
+        pay_method,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="storageHeadId != null">
@@ -117,6 +121,9 @@
       </if>
       <if test="dr != null">
         #{dr,jdbcType=TINYINT},
+      </if>
+      <if test="payMethod != null">
+        #{payMethod,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -156,6 +163,9 @@
       <if test="dr != null">
         dr = #{dr,jdbcType=TINYINT},
       </if>
+      <if test="payMethod != null">
+        pay_method = #{payMethod,jdbcType=TINYINT},
+      </if>
     </set>
     where storage_head_id = #{storageHeadId,jdbcType=BIGINT}
   </update>
@@ -171,7 +181,8 @@
       extra = #{extra,jdbcType=CHAR},
       `status` = #{status,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      dr = #{dr,jdbcType=TINYINT}
+      dr = #{dr,jdbcType=TINYINT},
+      pay_method = #{payMethod,jdbcType=TINYINT}
     where storage_head_id = #{storageHeadId,jdbcType=BIGINT}
   </update>
 
@@ -379,4 +390,19 @@
     left join sm_storage_detail sd on sh.storage_head_id = sd.storage_head_id
     where sh.dr = 1 and sh.storage_head_id = #{shid,jdbcType=BIGINT} and (sd.storage_status = 3 or sd.dr = 2)
   </select>
+  <select id="queryByStorageNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sm_storage_head sh
+    where sh.storage_no = #{storageNo,jdbcType=CHAR} limit 1
+  </select>
+
+  <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="storageHeadId">
+    insert into sm_storage_head ( storage_no, source_no, source_type, storage_time,expect_num,  extra, `status`, create_time, dr, pay_method
+    )
+    values
+    <foreach collection="list" separator="," item="po">
+      ( #{po.storageNo,jdbcType=CHAR}, #{po.sourceNo,jdbcType=CHAR}, #{po.sourceType,jdbcType=TINYINT}, #{po.storageTime,jdbcType=TIMESTAMP}, #{po.expectNum,jdbcType=DECIMAL},  #{po.extra,jdbcType=CHAR}, #{po.status,jdbcType=TINYINT}, #{po.createTime,jdbcType=TIMESTAMP}, #{po.dr,jdbcType=TINYINT}, #{po.payMethod,jdbcType=TINYINT})
+    </foreach>
+  </insert>
 </mapper>

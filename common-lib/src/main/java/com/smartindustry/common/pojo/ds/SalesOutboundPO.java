@@ -35,5 +35,10 @@ public class SalesOutboundPO implements Serializable {
      */
     private Long userId;
 
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+
     private static final long serialVersionUID = 1L;
 }

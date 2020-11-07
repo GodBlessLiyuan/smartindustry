@@ -175,6 +175,9 @@
         <if test="status != null and status != 0">
             and d.`status` = #{status,jdbcType=TINYINT}
         </if>
+        <if test="ctime != null">
+            and d.create_time &gt; #{ctime, jdbcType=TIMESTAMP}
+        </if>
         order by d.create_time desc
     </select>
 

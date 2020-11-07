@@ -2,21 +2,23 @@ package com.smartindustry.datasynchronize.service;
 
 import com.smartindustry.common.vo.ResultVO;
 
+import java.util.Map;
+
 /**
  * @author hui.feng
  * @date created in 2020/11/5
  * @description
  */
 public interface IBasicService {
-    ResultVO material();
+    ResultVO material(Map<String, Object> reqData);
 
-    ResultVO client();
+    ResultVO client(Map<String, Object> reqData);
 
-    ResultVO supplier();
+    ResultVO supplier(Map<String, Object> reqData);
 
-    ResultVO dept();
+    ResultVO dept(Map<String, Object> reqData);
 
-    ResultVO role();
+    ResultVO role(Map<String, Object> reqData);
 
-    ResultVO user();
+    ResultVO user(Map<String, Object> reqData);
 }

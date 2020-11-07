@@ -44,5 +44,7 @@ public class PurchaseErpPO implements Serializable {
 
     private String remark;
 
+    private String supplierNo;
+
     private static final long serialVersionUID = 1L;
 }

@@ -1,9 +1,13 @@
 package com.smartindustry.common.mapper.ds;
 
+import com.smartindustry.common.bo.ds.SalesOutboundBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.ds.SalesOutboundPO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * SalesOutboundMapper继承基类
@@ -17,4 +21,12 @@ public interface SalesOutboundMapper extends BaseMapper<SalesOutboundPO, Long> {
      * @return
      */
     SalesOutboundPO queryBySalesNo(@Param("salesNo") String salesNo);
+
+    /**
+     * 分页查询
+     *
+     * @param reqData
+     * @return
+     */
+    List<SalesOutboundBO> pageQuery(Map<String, Object> reqData);
 }

@@ -1,5 +1,11 @@
 package com.smartindustry.datasynchronize.service.impl;
 
+import com.github.pagehelper.Page;
+import com.smartindustry.common.bo.am.DeptBO;
+import com.smartindustry.common.bo.am.UserBO;
+import com.smartindustry.common.bo.si.ClientBO;
+import com.smartindustry.common.bo.si.MaterialBO;
+import com.smartindustry.common.bo.si.SupplierBO;
 import com.smartindustry.common.mapper.am.DeptMapper;
 import com.smartindustry.common.mapper.am.RoleMapper;
 import com.smartindustry.common.mapper.am.UserMapper;
@@ -16,9 +22,12 @@ import com.smartindustry.common.pojo.si.ClientPO;
 import com.smartindustry.common.pojo.si.MaterialPO;
 import com.smartindustry.common.pojo.si.SupplierPO;
 import com.smartindustry.common.sqlserver.*;
+import com.smartindustry.common.util.PageQueryUtil;
+import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.datasynchronize.constant.SyncConstant;
 import com.smartindustry.datasynchronize.service.IBasicService;
+import com.smartindustry.datasynchronize.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -27,6 +36,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author hui.feng
@@ -76,8 +86,13 @@ public class BasicServiceImpl implements IBasicService {
     @Autowired
     private MeasureUnitMapper measureUnitMapper;
 
+    /**
+     * 物料同步数据
+     * @param reqData
+     * @return
+     */
     @Override
-    public ResultVO material() {
+    public ResultVO material(Map<String, Object> reqData) {
         List<MaterialErpPO> materials = materialErpMapper.queryAll();
         List<MaterialPO> pos = new ArrayList<>(materials.size());
         for (MaterialErpPO erppo : materials) {
@@ -112,11 +127,23 @@ public class BasicServiceImpl implements IBasicService {
         if (!pos.isEmpty()) {
             materialMapper.batchInsert(pos);
         }
-        return ResultVO.ok().setData(materials);
+
+        //查询
+        Calendar c =Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, c.get(Calendar.HOUR_OF_DAY)-2);
+        reqData.put("ctime", c.getTime());
+        Page<Long> page = PageQueryUtil.startPage(reqData);
+        List<MaterialBO> list = materialMapper.pageQueryStorage(reqData);
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), MaterialVO.convert(list)));
     }
 
+    /**
+     * 客户同步数据
+     * @param reqData
+     * @return
+     */
     @Override
-    public ResultVO client() {
+    public ResultVO client(Map<String, Object> reqData) {
         List<ClientErpPO> clients = clientErpMapper.queryAll();
         List<ClientPO> pos = new ArrayList<>(clients.size());
         for (ClientErpPO erppo: clients) {
@@ -140,11 +167,22 @@ public class BasicServiceImpl implements IBasicService {
         if (!pos.isEmpty()) {
             clientMapper.batchInsert(pos);
         }
-        return ResultVO.ok().setData(clients);
+        //查询
+        Calendar c =Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, c.get(Calendar.HOUR_OF_DAY)-2);
+        reqData.put("ctime", c.getTime());
+        Page<Long> page = PageQueryUtil.startPage(reqData);
+        List<ClientPO> list = clientMapper.pageQuery(reqData);
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), ClientVO.convert(list)));
     }
 
+    /**
+     * 供应商数据同步
+     * @param reqData
+     * @return
+     */
     @Override
-    public ResultVO supplier() {
+    public ResultVO supplier(Map<String, Object> reqData) {
         List<SupplierErpPO> suppliers = supplierErpMapper.queryAll();
         List<SupplierPO> pos = new ArrayList<>(suppliers.size());
         for (SupplierErpPO ep: suppliers) {
@@ -168,11 +206,22 @@ public class BasicServiceImpl implements IBasicService {
         if (!pos.isEmpty()) {
             supplierMapper.batchInsert(pos);
         }
-        return ResultVO.ok().setData(suppliers);
+        //查询
+        Calendar c =Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, c.get(Calendar.HOUR_OF_DAY)-2);
+        reqData.put("ctime", c.getTime());
+        Page<Long> page = PageQueryUtil.startPage(reqData);
+        List<SupplierPO> list = supplierMapper.pageQuery(reqData);
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), SupplierVO.convert(list)));
     }
 
+    /**
+     * 部门数据同步
+     * @param reqData
+     * @return
+     */
     @Override
-    public ResultVO dept() {
+    public ResultVO dept(Map<String, Object> reqData) {
         List<DeptErpPO> depts = deptErpMapper.queryAll();
         List<DeptPO> pos = new ArrayList<>(depts.size());
         for (DeptErpPO ep: depts) {
@@ -190,11 +239,22 @@ public class BasicServiceImpl implements IBasicService {
         if (!pos.isEmpty()) {
             deptMapper.batchInsert(pos);
         }
-        return ResultVO.ok().setData(depts);
+        //查询
+        Calendar c =Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, c.get(Calendar.HOUR_OF_DAY)-2);
+        reqData.put("ctime", c.getTime());
+        Page<Long> page = PageQueryUtil.startPage(reqData);
+        List<DeptBO> list = deptMapper.deptPageQuery(reqData);
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), DeptVO.convert(list)));
     }
 
+    /**
+     * 用户角色数据同步
+     * @param reqData
+     * @return
+     */
     @Override
-    public ResultVO role() {
+    public ResultVO role(Map<String, Object> reqData) {
         List<RoleErpPO> roles = roleErpMapper.queryAll();
         List<RolePO> pos = new ArrayList<>(roles.size());
         for (RoleErpPO ep: roles) {
@@ -211,11 +271,22 @@ public class BasicServiceImpl implements IBasicService {
         if (!pos.isEmpty()) {
             roleMapper.batchInsert(pos);
         }
-        return ResultVO.ok().setData(roles);
+        //查询
+        Calendar c =Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, c.get(Calendar.HOUR_OF_DAY)-2);
+        reqData.put("ctime", c.getTime());
+        Page<Long> page = PageQueryUtil.startPage(reqData);
+        List<RolePO> list = roleMapper.rolePageQuery(reqData);
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), RoleVO.convert(list)));
     }
 
+    /**
+     * 用户数据同步
+     * @param reqData
+     * @return
+     */
     @Override
-    public ResultVO user() {
+    public ResultVO user(Map<String, Object> reqData) {
         List<OperatorPO> operators = operatorMapper.queryAll();
         List<UserPO> pos = new ArrayList<>(operators.size());
         for (OperatorPO ep: operators) {
@@ -248,6 +319,12 @@ public class BasicServiceImpl implements IBasicService {
         if (!pos.isEmpty()) {
             userMapper.batchInsert(pos);
         }
-        return ResultVO.ok().setData(operators);
+        //查询
+        Calendar c =Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, c.get(Calendar.HOUR_OF_DAY)-2);
+        reqData.put("ctime", c.getTime());
+        Page<Long> page = PageQueryUtil.startPage(reqData);
+        List<UserBO> list = userMapper.userPageQuery(reqData);
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), UserVO.convert(list)));
     }
 }

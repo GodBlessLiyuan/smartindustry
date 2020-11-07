@@ -207,6 +207,9 @@
     <if test="sname != null and sname != ''">and s.supplier_name like '%' #{sname,jdbcType=CHAR} '%'</if>
     <if test="mname != null and mname != ''">and m.material_name like '%' #{mname,jdbcType=CHAR} '%'</if>
     <if test="mmodel != null and mmodel != ''">and m.material_model like '%' #{mmodel,jdbcType=CHAR} '%'</if>
+    <if test="ctime != null">
+      and m.create_time &gt; #{ctime, jdbcType=TIMESTAMP}
+    </if>
     order by m.create_time desc
   </select>
 
