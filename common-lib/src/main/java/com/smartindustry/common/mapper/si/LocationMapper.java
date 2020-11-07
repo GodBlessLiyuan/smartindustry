@@ -104,6 +104,7 @@ public interface LocationMapper extends BaseMapper<LocationPO, Long> {
 
     /**
      * 根据储位rfid进行储位信息查询
+     *
      * @param rfid
      * @return
      */
@@ -111,8 +112,18 @@ public interface LocationMapper extends BaseMapper<LocationPO, Long> {
 
     /**
      * 根据物料id 查询
+     *
      * @param mids
      * @return
      */
     List<LocationPO> queryByMids(List<Long> mids);
+
+    /**
+     * 根据 Lrfid 和 Mrfid 查询
+     *
+     * @param lrfid
+     * @param mrfid
+     * @return
+     */
+    LocationBO queryByLrfidAndMrfid(@Param("lrfid") String lrfid, @Param("mrfid") String mrfid);
 }

@@ -72,17 +72,22 @@ public class CommonConstant {
     public final static Byte STATUS_FORKLIFT_OFFLINE = 3;
 
     /**
-     * 叉车-入库
+     * 叉车-入库(原材料）
      */
-    public final static Byte STATUS_FORKLIFT_WORK_STORAGE = 1;
+    public final static Byte FORKLIFT_STORAGE_START_RAW = 1;
     /**
-     * 叉车-出库
+     * 叉车-入库(备料）
      */
-    public final static Byte STATUS_FORKLIFT_WORK_OUTBOUND_ONE = 2;
+    public final static Byte FORKLIFT_STORAGE_START_PREPARE = 2;
+
     /**
-     * 叉车-出库
+     * 叉车-出库开始
      */
-    public final static Byte STATUS_FORKLIFT_WORK_OUTBOUND_TWO = 3;
+    public final static Byte FORKLIFT_WORK_OUTBOUND_START = 11;
+    /**
+     * 叉车-出库结束
+     */
+    public final static Byte FORKLIFT_WORK_OUTBOUND_END = 12;
 
     /**
      * 在库
@@ -102,31 +107,6 @@ public class CommonConstant {
     public final static Byte STATUS_RFID_OUTBOUND_DONE = 4;
 
     /**
-     * 无效
-     */
-    public static final Byte STATUS_FORKLIFT_RFID_NONE = 0;
-    /**
-     * 入库 - 叉起物料
-     */
-    public static final Byte STATUS_FORKLIFT_RFID_STORAGE_FORKLIFT = 1;
-    /**
-     * 入库 - 完成入库
-     */
-    public static final Byte STATUS_FORKLIFT_RFID_STORAGE_DONE = 2;
-    /**
-     * 出库 - 叉起物料
-     */
-    public static final Byte STATUS_FORKLIFT_RFID_OUTBOUND_FORKLIFT = 11;
-    /**
-     * 出库 - 放下物料
-     */
-    public static final Byte STATUS_FORKLIFT_RFID_OUTBOUND_RETURN = 12;
-    /**
-     * 出库 - 完成出库
-     */
-    public static final Byte STATUS_FORKLIFT_RFID_OUTBOUND_DONE = 13;
-
-    /**
      * 提示信息
      */
     public static final Byte TYPE_TITLE_INTO = 1;
@@ -142,4 +122,48 @@ public class CommonConstant {
      * 弹框信息
      */
     public static final Byte TYPE_TITLE_BOX = 4;
+
+
+    /**
+     * 无效
+     */
+    public static final Byte RFID_INVALID = 0;
+
+    /**
+     * 入库开始（原材料区）
+     */
+    public static final Byte RFID_STORAGE_START_RAW = 1;
+    /**
+     * 入库开始(备料区）
+     */
+    public static final Byte RFID_STORAGE_START_PREPARE = 2;
+    /**
+     * 入库完成(原材料入成品区）
+     */
+    public static final Byte RFID_STORAGE_END_RAW_PRODUCT = 3;
+    /**
+     * 入库完成(原材料入备料区）
+     */
+    public static final Byte RFID_STORAGE_END_RAW_PREPARE = 4;
+    /**
+     * 入库完成(备料入成品区）
+     */
+    public static final Byte RFID_STORAGE_END_PREPARE_PRODUCT = 5;
+    /**
+     * 检测到备料区
+     */
+    public static final Byte RFID_STORAGE_MEET_PREPARE = 6;
+
+    /**
+     * 出库开始
+     */
+    public static final Byte RFID_OUTBOUND_START = 11;
+    /**
+     * 出库 - 物归原主
+     */
+    public static final Byte RFID_OUTBOUND_RETURN = 12;
+    /**
+     * 出库完成
+     */
+    public static final Byte RFID_OUTBOUND_END = 13;
 }
