@@ -33,11 +33,7 @@ public class PdaListVO implements Serializable {
     /**
      * 出库物料
      */
-    private String mname;
-    /**
-     * 规格参数
-     */
-    private String mmodel;
+    private List<String> minfo;
     /**
      * 需出/入库量
      */
@@ -61,7 +57,7 @@ public class PdaListVO implements Serializable {
      * @return
      */
     public static List<PdaListVO> convert(Boolean firstStorage, List<StorageHeadBO> shBOs, List<OutboundHeadBO> ohBOs) {
-        List<PdaListVO> vos = new ArrayList<>(ohBOs.size());
+        List<PdaListVO> vos = new ArrayList<>(shBOs.size() + ohBOs.size());
         if (firstStorage) {
             for (StorageHeadBO bo : shBOs) {
                 vos.add(convert(bo));
@@ -85,13 +81,15 @@ public class PdaListVO implements Serializable {
         vo.setHid(bo.getOutboundHeadId());
         vo.setSno(bo.getSourceNo());
         vo.setDnum(bo.getExpectNum());
-        vo.setCnum(bo.getOutboundNum());
+        vo.setCnum(bo.getOutboundNum() == null ? BigDecimal.ZERO : bo.getOutboundNum());
         vo.setStatus(CommonConstant.FLAG_OUTBOUND);
 
         if (null != bo.getBodyBOs() && bo.getBodyBOs().size() > 0) {
-            OutboundBodyBO bodyBO = bo.getBodyBOs().get(0);
-            vo.setMname(bodyBO.getMaterialName());
-            vo.setMmodel(bodyBO.getMaterialModel());
+            List<String> minfo = new ArrayList<>(bo.getBodyBOs().size());
+            for (OutboundBodyBO bodyBO : bo.getBodyBOs()) {
+                minfo.add(bodyBO.getMaterialName() + " " + bodyBO.getMaterialModel());
+            }
+            vo.setMinfo(minfo);
         }
 
         return vo;
@@ -102,13 +100,15 @@ public class PdaListVO implements Serializable {
         vo.setHid(bo.getStorageHeadId());
         vo.setSno(bo.getSourceNo());
         vo.setDnum(bo.getExpectNum());
-        vo.setCnum(bo.getStorageNum());
+        vo.setCnum(bo.getStorageNum() == null ? BigDecimal.ZERO : bo.getStorageNum());
         vo.setStatus(CommonConstant.FLAG_STORAGE);
 
         if (null != bo.getBos() && bo.getBos().size() > 0) {
-            StorageBodyBO bodyBO = bo.getBos().get(0);
-            vo.setMname(bodyBO.getMaterialName());
-            vo.setMmodel(bodyBO.getMaterialModel());
+            List<String> minfo = new ArrayList<>(bo.getBos().size());
+            for (StorageBodyBO bodyBO : bo.getBos()) {
+                minfo.add(bodyBO.getMaterialName() + " " + bodyBO.getMaterialModel());
+            }
+            vo.setMinfo(minfo);
         }
 
         return vo;

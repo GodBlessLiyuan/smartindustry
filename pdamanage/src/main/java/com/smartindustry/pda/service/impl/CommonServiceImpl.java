@@ -126,8 +126,6 @@ public class CommonServiceImpl implements ICommonService {
         }
 
         // 列表信息
-        PdaListVO vo = new PdaListVO();
-
         List<OutboundHeadBO> ohBOs = new ArrayList<>();
         if (!CommonConstant.TYPE_LIST_UNDONE.equals(dto.getType())) {
             // 出库信息
@@ -163,9 +161,7 @@ public class CommonServiceImpl implements ICommonService {
             }
         }
 
-        PdaListVO.convert(forkliftPO.getWorkArea() == 2, shBOs, ohBOs);
-
-        return ResultVO.ok().setData(vo);
+        return ResultVO.ok().setData(PdaListVO.convert(forkliftPO.getWorkArea() == 2, shBOs, ohBOs));
     }
 
     /**
