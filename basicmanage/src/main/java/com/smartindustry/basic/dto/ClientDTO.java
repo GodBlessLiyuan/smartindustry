@@ -87,7 +87,6 @@ public class ClientDTO {
         ClientPO po = new ClientPO();
         po.setCreateTime(new Date());
         po.setDr((byte) 1);
-        po.setPreparation(dto.getPre());
         return buildPO(po, dto);
     }
 

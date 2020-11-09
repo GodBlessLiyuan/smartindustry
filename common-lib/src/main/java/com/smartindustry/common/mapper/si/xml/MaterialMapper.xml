@@ -289,4 +289,12 @@
       #{sid,jdbcType=BIGINT}
     </foreach>
   </select>
+
+  <select id="queryByMuid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from si_material
+    where dr = 1 and measure_unit_id = #{muid,jdbcType=BIGINT}
+  </select>
+
 </mapper>

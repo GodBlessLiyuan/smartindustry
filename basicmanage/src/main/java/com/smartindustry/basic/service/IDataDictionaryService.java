@@ -1,5 +1,9 @@
 package com.smartindustry.basic.service;
 
+import com.smartindustry.basic.dto.BasicDataDTO;
+import com.smartindustry.basic.dto.LocationTypeDTO;
+import com.smartindustry.basic.dto.MeasureUnitDTO;
+import com.smartindustry.basic.dto.WarehouseTypeDTO;
 import com.smartindustry.common.vo.ResultVO;
 
 /**
@@ -9,11 +13,21 @@ import com.smartindustry.common.vo.ResultVO;
  * @version: 1.0
  */
 public interface IDataDictionaryService {
+    ResultVO wtQuery();
 
+    ResultVO wtEdit(WarehouseTypeDTO dto);
 
-    ResultVO clQuery();
+    ResultVO wtDelete(BasicDataDTO dto);
 
+    ResultVO ltQuery();
 
-    ResultVO ctQuery();
+    ResultVO ltEdit(LocationTypeDTO dto);
 
+    ResultVO ltDelete(BasicDataDTO dto);
+
+    ResultVO muQuery();
+
+    ResultVO muEdit(MeasureUnitDTO dto);
+
+    ResultVO muDelete(BasicDataDTO dto);
 }
