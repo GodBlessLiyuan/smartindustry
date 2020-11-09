@@ -31,9 +31,13 @@ public class OutboundDetailVO implements Serializable {
      */
     private String sno;
     /**
-     * 物料
+     * 客户名称
      */
-    private List<MaterialVO> mvos;
+    private String cname;
+    /**
+     * 物料信息
+     */
+    private List<String> minfos;
     /**
      * 需出库量
      */
@@ -43,13 +47,13 @@ public class OutboundDetailVO implements Serializable {
      */
     private BigDecimal dnum2;
     /**
-     * 出库数
+     * 当前排位
+     */
+    private BigDecimal cnum;
+    /**
+     * 已出库数
      */
     private BigDecimal onum;
-    /**
-     * 叉车
-     */
-    private List<String> fnames;
     /**
      * 状态：开始执行；辅助执行；关闭;消失
      */
@@ -58,14 +62,6 @@ public class OutboundDetailVO implements Serializable {
      * 储位图
      */
     private List<LocationVO> lvos;
-    /**
-     * 当前排位
-     */
-    private BigDecimal cnum;
-    /**
-     * 创建时间
-     */
-    private Date ctime;
 
     public static OutboundDetailVO convert(OutboundHeadBO bo) {
         OutboundDetailVO vo = new OutboundDetailVO();
@@ -73,19 +69,16 @@ public class OutboundDetailVO implements Serializable {
         vo.setSno(bo.getSourceNo());
         vo.setDnum(bo.getExpectNum());
         vo.setOnum(bo.getOutboundNum());
-        vo.setCtime(bo.getCreateTime());
         BigDecimal dnum2 = new BigDecimal(0);
         if (null != bo.getBodyBOs() && bo.getBodyBOs().size() > 0) {
-            List<MaterialVO> mvos = new ArrayList<>(bo.getBodyBOs().size());
+            List<String> minfos = new ArrayList<>(bo.getBodyBOs().size());
             for (OutboundBodyBO bodyBO : bo.getBodyBOs()) {
-                MaterialVO mvo = new MaterialVO();
-                mvo.setMname(bodyBO.getMaterialName());
-                mvo.setMmodel(bodyBO.getMaterialModel());
-                mvos.add(mvo);
+                String minfo = bodyBO.getMaterialName() + " " + bodyBO.getMaterialModel();
+                minfos.add(minfo);
 
                 dnum2 = dnum2.add(bodyBO.getExpectNum().multiply(bodyBO.getPackageVolume()));
             }
-            vo.setMvos(mvos);
+            vo.setMinfos(minfos);
         }
         vo.setDnum2(dnum2);
         return vo;

@@ -134,15 +134,11 @@ public class OutboundServiceImpl implements IOutboundService {
         List<ForkliftPO> pos = forkliftMapper.queryByOhid(dto.getOhid());
         if (null != pos && pos.size() > 0) {
             vo.setStatus(OutboundConstant.STATUS_OUTBOUND_ASSIST);
-
-            List<String> fnames = new ArrayList<>(pos.size());
             for (ForkliftPO po : pos) {
-                fnames.add(po.getForkliftNo());
                 if (imei.equals(po.getImeiNo())) {
                     vo.setStatus(OutboundConstant.STATUS_OUTBOUND_CLOSE);
                 }
             }
-            vo.setFnames(fnames);
         } else {
             vo.setStatus(OutboundConstant.STATUS_OUTBOUND_START);
         }

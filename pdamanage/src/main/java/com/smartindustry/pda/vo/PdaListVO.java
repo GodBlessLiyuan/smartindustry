@@ -33,15 +33,7 @@ public class PdaListVO implements Serializable {
     /**
      * 出库物料
      */
-    private List<String> minfo;
-    /**
-     * 需出/入库量
-     */
-    private BigDecimal dnum;
-    /**
-     * 当前出库排位
-     */
-    private BigDecimal cnum;
+    private List<String> minfos;
     /**
      * 状态：1-入库；2-出库
      */
@@ -80,8 +72,6 @@ public class PdaListVO implements Serializable {
         PdaListVO vo = new PdaListVO();
         vo.setHid(bo.getOutboundHeadId());
         vo.setSno(bo.getSourceNo());
-        vo.setDnum(bo.getExpectNum());
-        vo.setCnum(bo.getOutboundNum() == null ? BigDecimal.ZERO : bo.getOutboundNum());
         vo.setStatus(CommonConstant.FLAG_OUTBOUND);
 
         if (null != bo.getBodyBOs() && bo.getBodyBOs().size() > 0) {
@@ -89,7 +79,7 @@ public class PdaListVO implements Serializable {
             for (OutboundBodyBO bodyBO : bo.getBodyBOs()) {
                 minfo.add(bodyBO.getMaterialName() + " " + bodyBO.getMaterialModel());
             }
-            vo.setMinfo(minfo);
+            vo.setMinfos(minfo);
         }
 
         return vo;
@@ -99,8 +89,6 @@ public class PdaListVO implements Serializable {
         PdaListVO vo = new PdaListVO();
         vo.setHid(bo.getStorageHeadId());
         vo.setSno(bo.getSourceNo());
-        vo.setDnum(bo.getExpectNum());
-        vo.setCnum(bo.getStorageNum() == null ? BigDecimal.ZERO : bo.getStorageNum());
         vo.setStatus(CommonConstant.FLAG_STORAGE);
 
         if (null != bo.getBos() && bo.getBos().size() > 0) {
@@ -108,7 +96,7 @@ public class PdaListVO implements Serializable {
             for (StorageBodyBO bodyBO : bo.getBos()) {
                 minfo.add(bodyBO.getMaterialName() + " " + bodyBO.getMaterialModel());
             }
-            vo.setMinfo(minfo);
+            vo.setMinfos(minfo);
         }
 
         return vo;
