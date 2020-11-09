@@ -198,7 +198,7 @@
     <include refid="BO_Column_List" />
     from sm_storage_head sh
     left join si_warehouse w on sh.warehouse_id = w.warehouse_id
-    where sh.dr = 1
+    where sh.dr = 1 and sh.source_type = 1
     <if test="wid != null and wid != 0">
       and w.warehouse_id = #{wid,jdbcType=TINYINT}
     </if>
@@ -216,7 +216,7 @@
     <include refid="BO_Column_List" />
     from sm_storage_head sh
     left join si_warehouse w on sh.warehouse_id = w.warehouse_id
-    where sh.dr = 1
+    where sh.dr = 1 and sh.source_type in(2,3)
     <if test="no != null and no != ''">
       and (sh.storage_no like '%' #{no,jdbcType=CHAR} '%' or
       sh.source_no like '%' #{no,jdbcType=CHAR} '%')

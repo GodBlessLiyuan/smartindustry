@@ -22,11 +22,6 @@ public class OutboundHeadPO implements Serializable {
     private String outboundNo;
 
     /**
-     * 客户id
-     */
-    private Long clientId;
-
-    /**
      * 来源单号
      */
     private String sourceNo;
