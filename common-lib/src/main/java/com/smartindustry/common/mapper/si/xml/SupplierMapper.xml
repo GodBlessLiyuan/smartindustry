@@ -232,4 +232,18 @@
       and create_time &gt; #{ctime, jdbcType=TIMESTAMP}
     </if>
   </select>
+
+  <update id="batchDelete" parameterType="java.util.List">
+    update si_supplier
+    set dr = 2 where supplier_id in
+    <foreach collection="list" item="sid" open="(" separator="," close=")">
+      #{sid,jdbcType=BIGINT}
+    </foreach>
+  </update>
+
+  <select id="queryAll" resultType="java.util.Map">
+        select supplier_id as sid, supplier_name as sname
+        from si_supplier
+        where dr = 1
+    </select>
 </mapper>

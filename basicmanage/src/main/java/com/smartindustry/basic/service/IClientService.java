@@ -4,6 +4,7 @@ import com.smartindustry.basic.dto.ClientDTO;
 import com.smartindustry.basic.dto.OperateDTO;
 import com.smartindustry.common.vo.ResultVO;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,4 +28,18 @@ public interface IClientService {
      * @return
      */
     ResultVO query(OperateDTO dto);
+    /**
+     * 批量删除客户
+     * @param cids
+     * @return
+     */
+    ResultVO delete(List<Long> cids);
+
+    /**
+     * 客户明细编辑
+     * @param dto
+     * @return
+     */
+    ResultVO edit(ClientDTO dto);
+
 }

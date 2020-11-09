@@ -19,10 +19,11 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="dr" jdbcType="TINYINT" property="dr" />
+    <result column="preparation" jdbcType="TINYINT" property="preparation"/>
   </resultMap>
   <sql id="Base_Column_List">
     client_id, client_no, client_type_id, client_name, contact, sex, phone, email, fax, 
-    url, credit_level_id, area, address, remark, create_time, update_time, dr
+    url, credit_level_id, area, address, remark, create_time, update_time, dr,preparation
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -40,13 +41,13 @@
       phone, email, fax, url, 
       credit_level_id, area, address, 
       remark, create_time, update_time, 
-      dr)
+      dr,preparation)
     values (#{clientId,jdbcType=BIGINT}, #{clientNo,jdbcType=CHAR}, #{clientTypeId,jdbcType=BIGINT}, 
       #{clientName,jdbcType=CHAR}, #{contact,jdbcType=CHAR}, #{sex,jdbcType=TINYINT}, 
       #{phone,jdbcType=CHAR}, #{email,jdbcType=CHAR}, #{fax,jdbcType=CHAR}, #{url,jdbcType=CHAR}, 
       #{creditLevelId,jdbcType=BIGINT}, #{area,jdbcType=CHAR}, #{address,jdbcType=CHAR}, 
       #{remark,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{dr,jdbcType=TINYINT})
+      #{dr,jdbcType=TINYINT},#{pre,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.ClientPO">
     insert into si_client
@@ -208,6 +209,9 @@
       <if test="dr != null">
         dr = #{dr,jdbcType=TINYINT},
       </if>
+      <if test="preparation != null">
+        preparation = #{preparation,jdbcType=TINYINT},
+      </if>
     </set>
     where client_id = #{clientId,jdbcType=BIGINT}
   </update>
@@ -254,5 +258,30 @@
     <if test="ctime != null">
       and create_time &gt; #{ctime, jdbcType=TIMESTAMP}
     </if>
+  </select>
+
+  <update id="batchDelete" parameterType="java.util.List">
+    update si_client
+    set dr = 2 where client_id in
+    <foreach collection="list" item="cid" open="(" separator="," close=")">
+      #{cid,jdbcType=BIGINT}
+    </foreach>
+  </update>
+
+  <resultMap id="BOBaseResult" type="com.smartindustry.common.bo.si.ClientBO" extends="BaseResultMap">
+    <result column="credit_level_name" jdbcType="CHAR" property="creditLevelName"/>
+    <result column="client_type_name" jdbcType="CHAR" property="clientTypeName"/>
+  </resultMap>
+  <sql id="BO_Column_List">
+    c.client_id, c.client_no, c.client_type_id, c.client_name, c.contact, c.sex, c.phone, c.email, c.fax,
+    c.url, c.credit_level_id, c.area, c.address, c.remark, c.create_time, c.update_time, c.dr,c.preparation,cl.credit_level_name,ct.client_type_name
+  </sql>
+  <select id="queryByCid" parameterType="java.lang.Long" resultMap="BOBaseResult">
+    select
+    <include refid="BO_Column_List"/>
+    from si_client c
+    left join dd_credit_level cl on c.credit_level_id = cl.credit_level_id
+    left join dd_client_type ct on c.client_type_id = ct.client_type_id
+    where c.dr = 1 and c.client_id = #{clientId,jdbcType=BIGINT}
   </select>
 </mapper>
