@@ -1,5 +1,6 @@
 package com.smartindustry.common.mapper.sm;
 
+import com.smartindustry.common.bo.sm.MaterialDetailBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.sm.StorageDetailPO;
 import org.apache.ibatis.annotations.Mapper;
@@ -71,13 +72,13 @@ public interface StorageDetailMapper extends BaseMapper<StorageDetailPO, Long> {
      * @param shid
      * @return
      */
-    List<StorageDetailPO> queryPrepare(Long shid);
+    List<MaterialDetailBO> queryPrepare(Long shid);
 
     /**
      * 查询当前入库单得待入库rfid
      * @param shid
      * @return
      */
-    List<StorageDetailPO> querySave(Long shid);
+    List<String> querySave(Long shid);
 
 }

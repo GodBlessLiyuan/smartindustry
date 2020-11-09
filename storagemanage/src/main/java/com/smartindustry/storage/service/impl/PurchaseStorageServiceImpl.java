@@ -66,7 +66,6 @@ public class PurchaseStorageServiceImpl implements IPurchaseStorageService {
     @Override
     public ResultVO detail(OperateDTO dto){
         StorageHeadBO bo = storageHeadMapper.queryByShid(dto.getShid());
-        System.out.println(bo);
         if(null == bo){
             // 采购单表体不存在
             return new ResultVO(ExceptionEnums.NO_EXIST.getCode());

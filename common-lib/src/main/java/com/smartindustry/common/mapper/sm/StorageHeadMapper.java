@@ -1,5 +1,6 @@
 package com.smartindustry.common.mapper.sm;
 
+import com.smartindustry.common.bo.sm.MaterialDetailBO;
 import com.smartindustry.common.bo.sm.StorageHeadBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.sm.StorageDetailPO;
@@ -92,4 +93,12 @@ public interface StorageHeadMapper extends BaseMapper<StorageHeadPO, Long> {
      * @return
      */
     StorageHeadPO queryByStorageNo(@Param("storageNo") String storageNo);
+
+    /**
+     * 查询入库单某储位某物料得详情
+     * @param shid
+     * @param lid
+     * @return
+     */
+    List<MaterialDetailBO> queryDetail(@Param("shid") Long shid, @Param("lid") Long lid);
 }

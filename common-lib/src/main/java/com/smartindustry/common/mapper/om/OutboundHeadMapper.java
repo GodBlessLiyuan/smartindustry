@@ -42,4 +42,11 @@ public interface OutboundHeadMapper extends BaseMapper<OutboundHeadPO, Long> {
      * @return
      */
     OutboundHeadBO queryByOhid(Long ohid);
+
+    /**
+     * PC端成品入库单的分页查询
+     * @param reqData
+     * @return
+     */
+    List<OutboundHeadBO> pageQueryPro(Map<String, Object> reqData);
 }

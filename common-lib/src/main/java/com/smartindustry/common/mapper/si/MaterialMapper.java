@@ -24,4 +24,5 @@ public interface MaterialMapper extends BaseMapper<MaterialPO, Long> {
      * @return
      */
     MaterialPO queryByMaterialNo(@Param("materialNo") String materialNo, @Param("materialName") String materialName);
+
 }
