@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.smartindustry.common.mapper.om.OutboundHeadMapper">
-  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.om.OutboundHeadPO">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.bo.om.OutboundHeadPO">
     <id column="outbound_head_id" jdbcType="BIGINT" property="outboundHeadId" />
     <result column="outbound_no" jdbcType="CHAR" property="outboundNo" />
     <result column="source_no" jdbcType="CHAR" property="sourceNo" />
     <result column="source_type" jdbcType="TINYINT" property="sourceType" />
+    <result column="client_no" jdbcType="CHAR" property="clientNo" />
     <result column="plan_time" jdbcType="DATE" property="planTime" />
     <result column="outbound_time" jdbcType="TIMESTAMP" property="outboundTime" />
     <result column="expect_num" jdbcType="DECIMAL" property="expectNum" />
@@ -17,7 +18,7 @@
     <result column="dr" jdbcType="TINYINT" property="dr" />
   </resultMap>
   <sql id="Base_Column_List">
-    outbound_head_id, outbound_no, source_no, source_type, plan_time, outbound_time, 
+    outbound_head_id, outbound_no, source_no, source_type, client_no, plan_time, outbound_time, 
     expect_num, outbound_num, extra, `status`, accept_address, create_time, dr
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -30,19 +31,19 @@
     delete from om_outbound_head
     where outbound_head_id = #{outboundHeadId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.smartindustry.common.pojo.om.OutboundHeadPO">
+  <insert id="insert" parameterType="com.smartindustry.common.bo.om.OutboundHeadPO">
     insert into om_outbound_head (outbound_head_id, outbound_no, source_no, 
-      source_type, plan_time, outbound_time, 
-      expect_num, outbound_num, extra, 
-      `status`, accept_address, create_time, 
-      dr)
+      source_type, client_no, plan_time, 
+      outbound_time, expect_num, outbound_num, 
+      extra, `status`, accept_address, 
+      create_time, dr)
     values (#{outboundHeadId,jdbcType=BIGINT}, #{outboundNo,jdbcType=CHAR}, #{sourceNo,jdbcType=CHAR}, 
-      #{sourceType,jdbcType=TINYINT}, #{planTime,jdbcType=DATE}, #{outboundTime,jdbcType=TIMESTAMP}, 
-      #{expectNum,jdbcType=DECIMAL}, #{outboundNum,jdbcType=DECIMAL}, #{extra,jdbcType=CHAR}, 
-      #{status,jdbcType=TINYINT}, #{acceptAddress,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{dr,jdbcType=TINYINT})
+      #{sourceType,jdbcType=TINYINT}, #{clientNo,jdbcType=CHAR}, #{planTime,jdbcType=DATE}, 
+      #{outboundTime,jdbcType=TIMESTAMP}, #{expectNum,jdbcType=DECIMAL}, #{outboundNum,jdbcType=DECIMAL}, 
+      #{extra,jdbcType=CHAR}, #{status,jdbcType=TINYINT}, #{acceptAddress,jdbcType=CHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
   </insert>
-  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.om.OutboundHeadPO">
+  <insert id="insertSelective" parameterType="com.smartindustry.common.bo.om.OutboundHeadPO">
     insert into om_outbound_head
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="outboundHeadId != null">
@@ -56,6 +57,9 @@
       </if>
       <if test="sourceType != null">
         source_type,
+      </if>
+      <if test="clientNo != null">
+        client_no,
       </if>
       <if test="planTime != null">
         plan_time,
@@ -98,6 +102,9 @@
       <if test="sourceType != null">
         #{sourceType,jdbcType=TINYINT},
       </if>
+      <if test="clientNo != null">
+        #{clientNo,jdbcType=CHAR},
+      </if>
       <if test="planTime != null">
         #{planTime,jdbcType=DATE},
       </if>
@@ -127,7 +134,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.om.OutboundHeadPO">
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.bo.om.OutboundHeadPO">
     update om_outbound_head
     <set>
       <if test="outboundNo != null">
@@ -138,6 +145,9 @@
       </if>
       <if test="sourceType != null">
         source_type = #{sourceType,jdbcType=TINYINT},
+      </if>
+      <if test="clientNo != null">
+        client_no = #{clientNo,jdbcType=CHAR},
       </if>
       <if test="planTime != null">
         plan_time = #{planTime,jdbcType=DATE},
@@ -169,11 +179,12 @@
     </set>
     where outbound_head_id = #{outboundHeadId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.om.OutboundHeadPO">
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.bo.om.OutboundHeadPO">
     update om_outbound_head
     set outbound_no = #{outboundNo,jdbcType=CHAR},
       source_no = #{sourceNo,jdbcType=CHAR},
       source_type = #{sourceType,jdbcType=TINYINT},
+      client_no = #{clientNo,jdbcType=CHAR},
       plan_time = #{planTime,jdbcType=DATE},
       outbound_time = #{outboundTime,jdbcType=TIMESTAMP},
       expect_num = #{expectNum,jdbcType=DECIMAL},
@@ -310,8 +321,7 @@
         select
         <include refid="POS_Column_List"/>
         from om_outbound_head oh
-        left join ds_sales_outbound so on oh.source_no = so.sales_no
-        left join si_client cl on so.client_id = cl.client_id
+        left join si_client cl on oh.client_no = cl.client_no
         where oh.dr = 1 and oh.source_type = 2
         <if test="no != null and no != ''">
             and (oh.outbound_no like concat('%',#{no,jdbcType=CHAR},'%') or oh.source_no like concat('%',#{pno,jdbcType=CHAR},'%'))
