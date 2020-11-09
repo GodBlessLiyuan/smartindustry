@@ -79,10 +79,7 @@ public class ClientVO implements Serializable {
      2 已删除
      */
     private Byte dr;
-    /***
-     *  是否在备料区 2是
-     */
-    private Byte pre;
+
     public static List<ClientVO> convert(List<ClientPO> pos) {
         List<ClientVO> vos = new ArrayList<>(pos.size());
         for (ClientPO po : pos) {
@@ -105,7 +102,6 @@ public class ClientVO implements Serializable {
         vo.setRemark(po.getRemark());
         vo.setCtime(po.getCreateTime());
         vo.setDr(po.getDr());
-        vo.setPre(po.getPreparation());
         return vo;
     }
 }
