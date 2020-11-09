@@ -24,4 +24,27 @@ public interface MaterialMapper extends BaseMapper<MaterialPO, Long> {
      * @return
      */
     MaterialPO queryByMaterialNo(@Param("materialNo") String materialNo, @Param("materialName") String materialName);
+
+    /**
+     * 根据 物料编码 查询
+     *
+     * @param mno
+     * @return
+     */
+    MaterialPO queryByMno(String mno);
+    /**
+     * 批量删除
+     *
+     * @param mids
+     */
+    void batchDelete(List<Long> mids);
+    /**
+     * 根据mid 查询
+     *
+     * @param mid
+     * @return
+     */
+    MaterialBO queryByMid(Long mid);
+
+    List<MaterialPO> queryBySids(List<Long> sids);
 }

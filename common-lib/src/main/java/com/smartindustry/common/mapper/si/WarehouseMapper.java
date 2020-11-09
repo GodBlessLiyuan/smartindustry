@@ -6,6 +6,7 @@ import com.smartindustry.common.pojo.si.WarehousePO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * WarehouseMapper继承基类
@@ -18,4 +19,12 @@ public interface WarehouseMapper extends BaseMapper<WarehousePO, Long> {
      * @return
      */
     List<WarehouseBO> queryAll();
+
+    List<WarehouseBO> pageQuery(Map<String, Object> reqData);
+
+    WarehousePO queryByNo(String wno);
+
+    void batchDelete(List<Long> wids);
+
+    WarehouseBO queryById(Long wid);
 }

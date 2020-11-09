@@ -1,6 +1,5 @@
 package com.smartindustry.common.mapper.si;
 
-import com.smartindustry.common.bo.si.SupplierBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.si.SupplierPO;
 import org.apache.ibatis.annotations.Mapper;
@@ -28,4 +27,16 @@ public interface SupplierMapper extends BaseMapper<SupplierPO, Long> {
      * @return
      */
     List<SupplierPO> pageQuery(Map<String, Object> reqData);
+    /**
+     * 批量删除
+     *
+     * @param sids
+     */
+    void batchDelete(List<Long> sids);
+    /**
+     * 查询所有
+     *
+     * @return
+     */
+    List<Map<String, Object>> queryAll();
 }

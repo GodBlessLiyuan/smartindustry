@@ -78,12 +78,16 @@ public class ClientDTO {
      * 备注
      */
     private String remark;
-
+    /****
+     * 是否在备料区
+     */
+    private Byte pre;
 
     public static ClientPO createPO(ClientDTO dto) {
         ClientPO po = new ClientPO();
         po.setCreateTime(new Date());
         po.setDr((byte) 1);
+        po.setPreparation(dto.getPre());
         return buildPO(po, dto);
     }
 

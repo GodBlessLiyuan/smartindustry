@@ -1,7 +1,10 @@
 package com.smartindustry.basic.service;
 
 import com.smartindustry.basic.dto.OperateDTO;
+import com.smartindustry.basic.dto.SupplierDTO;
 import com.smartindustry.common.vo.ResultVO;
+
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,4 +18,9 @@ public interface ISupplierService {
 
     ResultVO detail(OperateDTO dto);
 
+    ResultVO edit(SupplierDTO dto);
+
+    ResultVO delete(List<Long> sids);
+
+    ResultVO queryAll();
 }
