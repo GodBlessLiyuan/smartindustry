@@ -31,9 +31,9 @@ public class StorageDetailVO {
      */
     private String sno;
     /**
-     * 物料
+     * 物料信息
      */
-    private List<StorageDetailVO.MaterialVO> mvos;
+    private List<String> minfos;
     /**
      * 需入库量
      */
@@ -76,16 +76,14 @@ public class StorageDetailVO {
         vo.setCtime(bo.getCreateTime());
         BigDecimal tvolume = new BigDecimal(0);
         if (null != bo.getBos() && bo.getBos().size() > 0) {
-            List<StorageDetailVO.MaterialVO> mvos = new ArrayList<>(bo.getBos().size());
+            List<String> minfos = new ArrayList<>(bo.getBos().size());
             for (StorageBodyBO bodyBO : bo.getBos()) {
-                StorageDetailVO.MaterialVO mvo = new StorageDetailVO.MaterialVO();
-                mvo.setMname(bodyBO.getMaterialName());
-                mvo.setMmodel(bodyBO.getMaterialModel());
-                mvos.add(mvo);
-                System.out.println(bodyBO.toString());
+                String minfo = bodyBO.getMaterialName() + " " + bodyBO.getMaterialModel();
+                minfos.add(minfo);
+
                 tvolume = tvolume.add(bodyBO.getExpectNum().multiply(bodyBO.getPackageVolume()));
             }
-            vo.setMvos(mvos);
+            vo.setMinfos(minfos);
         }
         vo.setTvolume(tvolume);
         return vo;

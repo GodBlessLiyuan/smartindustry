@@ -6,12 +6,15 @@ import com.smartindustry.common.pojo.sm.StorageHeadPO;
 import com.smartindustry.common.pojo.sm.StorageRecordPO;
 import com.smartindustry.common.util.DateUtil;
 import com.smartindustry.pda.constant.StorageConstant;
+import com.smartindustry.pda.util.StorageNoUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.support.TransactionSynchronizationAdapter;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -48,5 +51,33 @@ public class StoragePrepareTask {
         }
         //插入入库完成操作记录
         storageRecordMapper.insert(new StorageRecordPO(pos.get(0).getStorageHeadId(), (long) 1, StorageConstant.OPERATE_NAME_FINISH));
+
+        //创建新的任务单
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
+            @Override
+            public void afterCommit() {
+                newStoragebill();
+            }
+        });
     }
+
+    /**
+     * @Description 创建新的入库单
+     * @Param
+     * @Return
+     * @Author AnHongxu.
+     * @Date 2020/11/9
+     * @Time 18:22
+     */
+    public void newStoragebill() {
+        // 生成备料区入库单表头
+        StorageHeadPO storageHeadPO = new StorageHeadPO();
+        storageHeadPO.setStorageNo(StorageNoUtil.genStorageHeadNo(storageHeadMapper, StorageNoUtil.RECEIPT_HEAD_YP, new Date()));
+        storageHeadPO.setSourceType(StorageConstant.TYPE_PRE_STORAGE);
+        storageHeadPO.setStatus(StorageConstant.STATUS_STOREING);
+        storageHeadPO.setCreateTime(new Date());
+        storageHeadPO.setDr((byte) 1);
+        storageHeadMapper.insert(storageHeadPO);
+    }
+
 }
