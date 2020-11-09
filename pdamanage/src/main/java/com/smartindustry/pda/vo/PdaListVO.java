@@ -23,58 +23,65 @@ public class PdaListVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 类型：2-入库在前，3-出库在前
+     * 出/入库单ID
      */
-    private Byte type;
+    private Long hid;
     /**
-     * 入库
+     * 单号
      */
-    private List<ListVO> slist;
+    private String sno;
     /**
-     * 出库
+     * 出库物料
      */
-    private List<ListVO> olist;
-
-    public void setSlist(List<StorageHeadBO> bos) {
-        List<ListVO> vos = new ArrayList<>(bos.size());
-        for (StorageHeadBO bo : bos) {
-            vos.add(convert(bo));
-        }
-        slist = vos;
-    }
-
-    private static ListVO convert(StorageHeadBO bo) {
-        ListVO vo = new ListVO();
-        vo.setHid(bo.getStorageHeadId());
-        vo.setSno(bo.getSourceNo());
-        vo.setDnum(bo.getExpectNum());
-        vo.setCnum(bo.getStorageNum());
-        vo.setStatus((byte) 1);
-
-        if (null != bo.getBos() && bo.getBos().size() > 0) {
-            StorageBodyBO bodyBO = bo.getBos().get(0);
-            vo.setMname(bodyBO.getMaterialName());
-            vo.setMmodel(bodyBO.getMaterialModel());
-        }
-        return vo;
-    }
+    private String mname;
+    /**
+     * 规格参数
+     */
+    private String mmodel;
+    /**
+     * 需出/入库量
+     */
+    private BigDecimal dnum;
+    /**
+     * 当前出库排位
+     */
+    private BigDecimal cnum;
+    /**
+     * 状态：1-入库；2-出库
+     */
+    private Byte status;
 
 
     /**
      * 设置出库列表数据
      *
-     * @param bos
+     * @param firstStorage 是否优先入库
+     * @param shBOs        入库数据
+     * @param ohBOs        出库数据
+     * @return
      */
-    public void setOlist(List<OutboundHeadBO> bos) {
-        List<ListVO> vos = new ArrayList<>(bos.size());
-        for (OutboundHeadBO bo : bos) {
-            vos.add(convert(bo));
+    public static List<PdaListVO> convert(Boolean firstStorage, List<StorageHeadBO> shBOs, List<OutboundHeadBO> ohBOs) {
+        List<PdaListVO> vos = new ArrayList<>(ohBOs.size());
+        if (firstStorage) {
+            for (StorageHeadBO bo : shBOs) {
+                vos.add(convert(bo));
+            }
+            for (OutboundHeadBO bo : ohBOs) {
+                vos.add(convert(bo));
+            }
+        } else {
+            for (OutboundHeadBO bo : ohBOs) {
+                vos.add(convert(bo));
+            }
+            for (StorageHeadBO bo : shBOs) {
+                vos.add(convert(bo));
+            }
         }
-        olist = vos;
+        return vos;
     }
 
-    private static ListVO convert(OutboundHeadBO bo) {
-        ListVO vo = new ListVO();
+    private static PdaListVO convert(OutboundHeadBO bo) {
+        PdaListVO vo = new PdaListVO();
         vo.setHid(bo.getOutboundHeadId());
         vo.setSno(bo.getSourceNo());
         vo.setDnum(bo.getExpectNum());
@@ -90,36 +97,20 @@ public class PdaListVO implements Serializable {
         return vo;
     }
 
+    private static PdaListVO convert(StorageHeadBO bo) {
+        PdaListVO vo = new PdaListVO();
+        vo.setHid(bo.getStorageHeadId());
+        vo.setSno(bo.getSourceNo());
+        vo.setDnum(bo.getExpectNum());
+        vo.setCnum(bo.getStorageNum());
+        vo.setStatus(CommonConstant.FLAG_STORAGE);
 
-    @Data
-    private static class ListVO {
-        /**
-         * 出/入库单ID
-         */
-        private Long hid;
-        /**
-         * 单号
-         */
-        private String sno;
-        /**
-         * 出库物料
-         */
-        private String mname;
-        /**
-         * 规格参数
-         */
-        private String mmodel;
-        /**
-         * 需出/入库量
-         */
-        private BigDecimal dnum;
-        /**
-         * 当前出库排位
-         */
-        private BigDecimal cnum;
-        /**
-         * 状态：1-入库；2-出库
-         */
-        private Byte status;
+        if (null != bo.getBos() && bo.getBos().size() > 0) {
+            StorageBodyBO bodyBO = bo.getBos().get(0);
+            vo.setMname(bodyBO.getMaterialName());
+            vo.setMmodel(bodyBO.getMaterialModel());
+        }
+
+        return vo;
     }
 }

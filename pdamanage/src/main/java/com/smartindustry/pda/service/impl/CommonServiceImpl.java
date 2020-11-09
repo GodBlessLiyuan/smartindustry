@@ -127,43 +127,43 @@ public class CommonServiceImpl implements ICommonService {
 
         // 列表信息
         PdaListVO vo = new PdaListVO();
-        vo.setType(forkliftPO.getWorkArea());
 
+        List<OutboundHeadBO> ohBOs = new ArrayList<>();
         if (!CommonConstant.TYPE_LIST_UNDONE.equals(dto.getType())) {
             // 出库信息
-            List<OutboundHeadBO> headBOs = outboundHeadMapper.queryOlistByPdaType(dto.getType());
+            ohBOs = outboundHeadMapper.queryOlistByPdaType(dto.getType());
             if (CommonConstant.TYPE_LIST_DOING.equals(dto.getType())) {
                 // 执行中需要计算当前数量
-                List<Long> hids = new ArrayList<>(headBOs.size());
-                for (OutboundHeadBO headBO : headBOs) {
+                List<Long> hids = new ArrayList<>(ohBOs.size());
+                for (OutboundHeadBO headBO : ohBOs) {
                     hids.add(headBO.getOutboundHeadId());
                 }
                 if (hids.size() != 0) {
                     Map<Long, Integer> fnumMap = outboundForkliftMapper.queryFnumByHids(hids);
-                    for (OutboundHeadBO headBO : headBOs) {
+                    for (OutboundHeadBO headBO : ohBOs) {
                         headBO.setExpectNum(headBO.getExpectNum().add(BigDecimal.valueOf(fnumMap.getOrDefault(headBO.getOutboundHeadId(), 0))));
                     }
                 }
             }
-            vo.setOlist(headBOs);
         }
 
         // 入库信息
-        List<StorageHeadBO> storageHeadBOS = storageHeadMapper.queryPdaByType(dto.getType());
+        List<StorageHeadBO> shBOs = storageHeadMapper.queryPdaByType(dto.getType());
         if (CommonConstant.TYPE_LIST_DOING.equals(dto.getType())) {
             // 执行中需要计算当前数量
-            List<Long> sids = new ArrayList<>(storageHeadBOS.size());
-            for (StorageHeadBO headBO : storageHeadBOS) {
+            List<Long> sids = new ArrayList<>(shBOs.size());
+            for (StorageHeadBO headBO : shBOs) {
                 sids.add(headBO.getStorageHeadId());
             }
             if (sids.size() != 0) {
                 Map<Long, Integer> fnumMap = storageForkliftMapper.queryFnumBySids(sids);
-                for (StorageHeadBO headBO : storageHeadBOS) {
+                for (StorageHeadBO headBO : shBOs) {
                     headBO.setStorageNum(headBO.getStorageNum().add(BigDecimal.valueOf(fnumMap.getOrDefault(headBO.getStorageHeadId(), 0))));
                 }
             }
         }
-        vo.setSlist(storageHeadBOS);
+
+        PdaListVO.convert(forkliftPO.getWorkArea() == 2, shBOs, ohBOs);
 
         return ResultVO.ok().setData(vo);
     }
@@ -249,10 +249,6 @@ public class CommonServiceImpl implements ICommonService {
             session.removeAttribute(CommonConstant.SESSION_MRFID);
             return ResultVO.ok();
         }
-
-
-
-
 
 
         OutboundForkliftPO outboundForkliftPO = outboundForkliftMapper.queryByFid(fPO.getForkliftId());

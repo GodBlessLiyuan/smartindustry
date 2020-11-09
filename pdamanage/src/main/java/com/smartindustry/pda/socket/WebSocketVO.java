@@ -57,28 +57,16 @@ public class WebSocketVO implements Serializable {
         private List<MaterialVO> mvos;
     }
 
-    /**
-     * 入库备料区选择物料属性
-     */
-
     @Data
     public static class MaterialVO {
         /**
-         * 产品id
+         * 物料id
          */
         private Long mid;
         /**
-         * 产品名称
+         * 物料信息
          */
-        private String mname;
-        /**
-         * 产品等级
-         */
-        private String mlevel;
-        /**
-         * 产品规格
-         */
-        private String model;
+        private String minfo;
     }
 }
 

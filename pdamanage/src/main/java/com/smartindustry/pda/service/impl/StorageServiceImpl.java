@@ -412,9 +412,9 @@ public class StorageServiceImpl implements IStorageService {
         for (MaterialPO materialPO : materialPOS) {
             WebSocketVO.MaterialVO materialVO = new WebSocketVO.MaterialVO();
             materialVO.setMid(materialPO.getMaterialId());
-            materialVO.setMname(materialPO.getMaterialName());
-            materialVO.setMlevel(materialPO.getMaterialLevel());
-            materialVO.setModel(materialPO.getMaterialModel());
+//            materialVO.setMname(materialPO.getMaterialName());
+//            materialVO.setMlevel(materialPO.getMaterialLevel());
+//            materialVO.setModel(materialPO.getMaterialModel());
             materialVOS.add(materialVO);
         }
         titleVO.setMvos(materialVOS);
@@ -470,9 +470,9 @@ public class StorageServiceImpl implements IStorageService {
         titleVO.setType((byte) 4);
         WebSocketVO.MaterialVO materialVO = new WebSocketVO.MaterialVO();
         materialVO.setMid(materialPO.getMaterialId());
-        materialVO.setMname(materialPO.getMaterialName());
-        materialVO.setMlevel(materialPO.getMaterialLevel());
-        materialVO.setModel(materialPO.getMaterialModel());
+//        materialVO.setMname(materialPO.getMaterialName());
+//        materialVO.setMlevel(materialPO.getMaterialLevel());
+//        materialVO.setModel(materialPO.getMaterialModel());
         vo.setTitle(titleVO);
         WebSocketServer.sendAllMsg(vo);
     }
