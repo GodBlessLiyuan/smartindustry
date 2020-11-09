@@ -34,6 +34,11 @@ public class OutboundHeadPO implements Serializable {
     private Byte sourceType;
 
     /**
+     * 客户编码
+     */
+    private String clientNo;
+
+    /**
      * 计划出库时间
      */
     private Date planTime;
