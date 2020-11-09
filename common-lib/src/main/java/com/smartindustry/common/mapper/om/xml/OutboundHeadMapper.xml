@@ -315,13 +315,14 @@
         <result column="status" jdbcType="TINYINT" property="status"/>
     </resultMap>
     <sql id="POS_Column_List">
-        oh.outbound_head_id, oh.outbound_no, oh.source_no, oh.accept_address, oh.plan_time, oh.outbound_time, oh.status, oh.accept_address, c.client_name
+        oh.outbound_head_id, oh.outbound_no, oh.source_no, oh.accept_address, oh.plan_time, oh.outbound_time, oh.status, oh.accept_address, cl.client_name
     </sql>
     <select id="pageQueryPro" parameterType="java.util.Map" resultMap="POSResultMap">
         select
         <include refid="POS_Column_List"/>
         from om_outbound_head oh
-        left join si_client c on oh.client_id = c.client_id
+        left join ds_sales_outbound so on oh.source_no = so.sales_no
+        left join si_client cl on so.client_id = cl.client_id
         where oh.dr = 1
         <if test="no != null and no != ''">
             and (oh.outbound_no like concat('%',#{no,jdbcType=CHAR},'%') or oh.source_no like concat('%',#{pno,jdbcType=CHAR},'%'))
@@ -329,8 +330,8 @@
         <if test="status != null and status != 0">
             and oh.`status` = #{status,jdbcType=TINYINT}
         </if>
-        <if test="otime != null and otime != ''">
-            and oh.outbound_time like concat('%',#{otime,jdbcType=CHAR},'%')
+        <if test="stime != null and stime != '' and etime != null and etime != ''">
+            and oh.outbound_time between #{stime,jdbcType=DATE} and #{etime,jdbcType=DATE}
         </if>
         order by oh.create_time desc
     </select>
