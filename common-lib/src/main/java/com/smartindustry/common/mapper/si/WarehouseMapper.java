@@ -21,10 +21,30 @@ public interface WarehouseMapper extends BaseMapper<WarehousePO, Long> {
     List<WarehouseBO> queryAll();
 
     List<WarehouseBO> pageQuery(Map<String, Object> reqData);
-
+    /**
+     * 根据编号查询
+     *
+     * @param wno
+     * @return
+     */
     WarehousePO queryByNo(String wno);
 
     void batchDelete(List<Long> wids);
 
+    /**
+     * 根据ID查询
+     *
+     * @param wid
+     * @return
+     */
     WarehouseBO queryById(Long wid);
+
+    /**
+     * 根据 wtid 查询
+     *
+     * @param wtid
+     * @return
+     */
+    List<WarehousePO> queryByWtid(Long wtid);
+
 }

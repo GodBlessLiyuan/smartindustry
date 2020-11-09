@@ -19,11 +19,10 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="dr" jdbcType="TINYINT" property="dr" />
-    <result column="preparation" jdbcType="TINYINT" property="preparation"/>
   </resultMap>
   <sql id="Base_Column_List">
     client_id, client_no, client_type_id, client_name, contact, sex, phone, email, fax, 
-    url, credit_level_id, area, address, remark, create_time, update_time, dr,preparation
+    url, credit_level_id, area, address, remark, create_time, update_time, dr
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -41,13 +40,13 @@
       phone, email, fax, url, 
       credit_level_id, area, address, 
       remark, create_time, update_time, 
-      dr,preparation)
+      dr)
     values (#{clientId,jdbcType=BIGINT}, #{clientNo,jdbcType=CHAR}, #{clientTypeId,jdbcType=BIGINT}, 
       #{clientName,jdbcType=CHAR}, #{contact,jdbcType=CHAR}, #{sex,jdbcType=TINYINT}, 
       #{phone,jdbcType=CHAR}, #{email,jdbcType=CHAR}, #{fax,jdbcType=CHAR}, #{url,jdbcType=CHAR}, 
       #{creditLevelId,jdbcType=BIGINT}, #{area,jdbcType=CHAR}, #{address,jdbcType=CHAR}, 
       #{remark,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{dr,jdbcType=TINYINT},#{pre,jdbcType=TINYINT})
+      #{dr,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.ClientPO">
     insert into si_client
@@ -209,9 +208,6 @@
       <if test="dr != null">
         dr = #{dr,jdbcType=TINYINT},
       </if>
-      <if test="preparation != null">
-        preparation = #{preparation,jdbcType=TINYINT},
-      </if>
     </set>
     where client_id = #{clientId,jdbcType=BIGINT}
   </update>
@@ -274,7 +270,7 @@
   </resultMap>
   <sql id="BO_Column_List">
     c.client_id, c.client_no, c.client_type_id, c.client_name, c.contact, c.sex, c.phone, c.email, c.fax,
-    c.url, c.credit_level_id, c.area, c.address, c.remark, c.create_time, c.update_time, c.dr,c.preparation,cl.credit_level_name,ct.client_type_name
+    c.url, c.credit_level_id, c.area, c.address, c.remark, c.create_time, c.update_time, c.dr,cl.credit_level_name,ct.client_type_name
   </sql>
   <select id="queryByCid" parameterType="java.lang.Long" resultMap="BOBaseResult">
     select
