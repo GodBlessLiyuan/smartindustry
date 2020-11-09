@@ -575,9 +575,7 @@ public class StorageServiceImpl implements IStorageService {
             }
         }
         //返回Socket视图
-        WebSocketVO vo = new WebSocketVO();
-        vo.setIsShow(true);
-        WebSocketServer.sendAllMsg(vo);
+        WebSocketServer.sendAllMsg(WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
         return ResultVO.ok();
     }
 
@@ -639,9 +637,7 @@ public class StorageServiceImpl implements IStorageService {
             }
         }
         //返回Socket视图
-        WebSocketVO vo = new WebSocketVO();
-        vo.setIsShow(true);
-        WebSocketServer.sendAllMsg(vo);
+        WebSocketServer.sendAllMsg(WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
         return ResultVO.ok();
     }
 
@@ -751,9 +747,7 @@ public class StorageServiceImpl implements IStorageService {
             }
         }
         //返回Socket视图
-        WebSocketVO vo = new WebSocketVO();
-        vo.setIsShow(true);
-        WebSocketServer.sendAllMsg(vo);
+        WebSocketServer.sendAllMsg(WebSocketVO.createShowVO(null, CommonConstant.FLAG_STORAGE));
 
         return ResultVO.ok();
     }

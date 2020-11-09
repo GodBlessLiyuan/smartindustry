@@ -1,5 +1,6 @@
 package com.smartindustry.pda.socket;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,8 +18,15 @@ import java.util.List;
 public class WebSocketVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private Boolean isShow = true;
+    private ShowVO show;
     private TitleVO title;
+
+    public static WebSocketVO createShowVO(Long hid, Byte status) {
+        WebSocketVO vo = new WebSocketVO();
+        ShowVO showVO = new ShowVO(hid, status);
+        vo.setShow(showVO);
+        return vo;
+    }
 
     /**
      * 创建 Title VO
@@ -33,6 +41,23 @@ public class WebSocketVO implements Serializable {
         titleVO.setType(type);
         vo.setTitle(titleVO);
         return vo;
+    }
+
+    /**
+     * 展示VO
+     */
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Data
+    public static class ShowVO {
+        /**
+         * 出/入库单ID
+         */
+        private Long hid;
+        /**
+         * 状态：1-入库；2-出库
+         */
+        private Byte status;
     }
 
     /**

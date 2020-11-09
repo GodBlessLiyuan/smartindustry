@@ -198,7 +198,7 @@ public class OutboundServiceImpl implements IOutboundService {
         }
 
         // websocket
-        WebSocketServer.sendAllMsg(new WebSocketVO());
+        WebSocketServer.sendAllMsg(WebSocketVO.createShowVO(ohid, CommonConstant.FLAG_OUTBOUND));
 
         return ResultVO.ok().setData(forkliftPOs.size() == 1 ? OutboundConstant.STATUS_OUTBOUND_START : OutboundConstant.STATUS_OUTBOUND_ASSIST);
     }
@@ -225,7 +225,7 @@ public class OutboundServiceImpl implements IOutboundService {
         // 叉车工作类型 - 出库
         session.setAttribute(CommonConstant.SESSION_STATUS_FORKLIFT, CommonConstant.FORKLIFT_WORK_OUTBOUND_START);
 
-        WebSocketServer.sendAllMsg(new WebSocketVO());
+        WebSocketServer.sendAllMsg(WebSocketVO.createShowVO(ohid, CommonConstant.FLAG_OUTBOUND));
 
         return ResultVO.ok().setData(OutboundConstant.STATUS_OUTBOUND_CLOSE);
     }
