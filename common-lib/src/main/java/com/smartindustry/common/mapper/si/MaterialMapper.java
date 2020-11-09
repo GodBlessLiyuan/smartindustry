@@ -4,6 +4,7 @@ import com.smartindustry.common.bo.si.MaterialBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.si.MaterialPO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -19,4 +20,40 @@ public interface MaterialMapper extends BaseMapper<MaterialPO, Long> {
      * @return
      */
     List<MaterialBO> pageQueryStorage(Map<String, Object> reqData);
+    /***
+    * 根据物料编号查找物料
+     * @param materialNo
+     * @param materialName
+     * @return
+             */
+    MaterialPO queryByMaterialNo(@Param("materialNo") String materialNo, @Param("materialName") String materialName);
+
+    /**
+     * 根据 物料编码 查询
+     *
+     * @param mno
+     * @return
+     */
+    MaterialPO queryByMno(String mno);
+    /**
+     * 批量删除
+     *
+     * @param mids
+     */
+    void batchDelete(List<Long> mids);
+    /**
+     * 根据mid 查询
+     *
+     * @param mid
+     * @return
+     */
+    MaterialBO queryByMid(Long mid);
+    /**
+     * 根据供应商ID 查询
+     *
+     * @param sids
+     * @return
+     */
+    List<MaterialPO> queryBySids(List<Long> sids);
+
 }
