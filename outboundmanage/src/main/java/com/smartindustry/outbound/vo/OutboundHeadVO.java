@@ -42,6 +42,8 @@ public class OutboundHeadVO implements Serializable {
      * 生产工单号
      */
     private String pno;
+
+    private String sno;
     /**
      * 计划出库时间
      */
@@ -59,6 +61,14 @@ public class OutboundHeadVO implements Serializable {
     private Byte type;
 
     private String extra;
+    /**
+     * 客户名称
+     */
+    private String cname;
+    /**
+     * 接受地址
+     */
+    private String address;
 
     private List<OutboundBodyVO> vos;
 
@@ -141,19 +151,26 @@ public class OutboundHeadVO implements Serializable {
         vo.setMixno(bo.getMixNo());
         vo.setPtime(bo.getPlanTime());
         vo.setExtra(bo.getExtra());
+        vo.setSno(bo.getSourceNo());
+        vo.setOtime(bo.getOutboundTime());
+        vo.setStatus(bo.getStatus());
+        vo.setAddress(bo.getAcceptAddress());
+        vo.setCname(bo.getClientName());
         List<OutboundBodyVO> vos = new ArrayList<>();
-        for (OutboundBodyBO bodyBO : bo.getBodyBOs()){
-            OutboundBodyVO bodyVO = new OutboundBodyVO();
-            bodyVO.setObid(bodyBO.getOutboundBodyId());
-            bodyVO.setMid(bodyBO.getMaterialId());
-            bodyVO.setMno(bodyBO.getMaterialNo());
-            bodyVO.setMname(bodyBO.getMaterialName());
-            bodyVO.setMmodel(bodyBO.getMaterialModel());
-            bodyVO.setOnum(bodyBO.getOutboundNum());
-            bodyVO.setOtime(bodyBO.getOutboundTime());
-            bodyVO.setPnum(bodyBO.getPlanNum());
-            bodyVO.setMuname(bodyBO.getMeasureUnitName());
-            vos.add(bodyVO);
+        if(bo.getBodyBOs() != null){
+            for (OutboundBodyBO bodyBO : bo.getBodyBOs()){
+                OutboundBodyVO bodyVO = new OutboundBodyVO();
+                bodyVO.setObid(bodyBO.getOutboundBodyId());
+                bodyVO.setMid(bodyBO.getMaterialId());
+                bodyVO.setMno(bodyBO.getMaterialNo());
+                bodyVO.setMname(bodyBO.getMaterialName());
+                bodyVO.setMmodel(bodyBO.getMaterialModel());
+                bodyVO.setOnum(bodyBO.getOutboundNum());
+                bodyVO.setOtime(bodyBO.getOutboundTime());
+                bodyVO.setPnum(bodyBO.getPlanNum());
+                bodyVO.setMuname(bodyBO.getMeasureUnitName());
+                vos.add(bodyVO);
+            }
         }
         vo.setVos(vos);
         return vo;

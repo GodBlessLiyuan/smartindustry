@@ -48,6 +48,10 @@ public class StorageHeadVO implements Serializable {
      */
     private Date stime;
     /**
+     * 付款方式
+     */
+    private Byte pmethod;
+    /**
      * 备注
      */
     private String extra;
@@ -104,6 +108,23 @@ public class StorageHeadVO implements Serializable {
          * 物料计量单位
          */
         private String muname;
+        /**
+         * 单价
+         */
+        private BigDecimal up;
+        /**
+         * 金额
+         */
+        private BigDecimal sp;
+        /**
+         * 不含税单价
+         */
+        private BigDecimal upn;
+        /**
+         * 不含税金额
+         */
+        private BigDecimal spn;
+
     }
 
     public static List<StorageHeadVO> convert(List<StorageHeadBO> bos) {
@@ -133,6 +154,7 @@ public class StorageHeadVO implements Serializable {
         vo.setStime(bo.getStorageTime());
         vo.setWid(bo.getWarehouseId());
         vo.setWname(bo.getWarehouseName());
+        vo.setPmethod(bo.getPayMethod());
         vo.setExtra(bo.getExtra());
         List<StorageBodyVO> vos = new ArrayList<>();
         for (StorageBodyBO bodyBO : bo.getBos()){
@@ -149,6 +171,10 @@ public class StorageHeadVO implements Serializable {
             bodyVO.setLid(bodyBO.getLocationId());
             bodyVO.setLno(bodyBO.getLocationNo());
             bodyVO.setMuname(bodyBO.getMeasureUnitName());
+            bodyVO.setUp(bodyBO.getUnitPrice());
+            bodyVO.setUpn(bodyBO.getUnitPriceNotax());
+            bodyVO.setSp(bodyBO.getSumPrice());
+            bodyVO.setSpn(bodyBO.getSumPriceNotax());
             vos.add(bodyVO);
         }
         vo.setVos(vos);

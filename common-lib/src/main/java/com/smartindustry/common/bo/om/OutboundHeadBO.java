@@ -22,5 +22,7 @@ public class OutboundHeadBO extends OutboundHeadPO {
 
     private Date planTime;
 
+    private String clientName;
+
     List<OutboundBodyBO> bodyBOs;
 }
