@@ -278,6 +278,9 @@ CREATE TABLE om_outbound_body
 	-- 2 已删除
 	dr tinyint COMMENT '是否删除 : 1 未删除
 2 已删除',
+	unit_price decimal(10,2) COMMENT '单价',
+	total_price decimal(10,2) COMMENT '金额',
+	extra char(255) COMMENT '备注',
 	PRIMARY KEY (outbound_body_id),
 	UNIQUE (outbound_body_id)
 ) COMMENT = '出库单表体';
@@ -307,6 +310,7 @@ CREATE TABLE om_outbound_head
 	source_type tinyint COMMENT '来源类型 : 1 原材料出库
 2 销售出库
 3 备料区出库',
+	client_no char(128) COMMENT '客户编码',
 	plan_time date COMMENT '计划出库时间',
 	outbound_time datetime COMMENT '完成出库时间',
 	expect_num decimal(10,2) COMMENT '期望出库数',
@@ -318,7 +322,10 @@ CREATE TABLE om_outbound_head
 	status tinyint COMMENT '状态 : 1：已出库
 2：出库中
 3：待出库',
+	accept_address char(255) COMMENT '接受地址',
 	create_time datetime COMMENT '创建时间',
+	sales_id bigint COMMENT '开票员ID',
+	sales_date datetime COMMENT '开票时间',
 	-- 1：未删除
 	-- 2：已删除
 	dr tinyint COMMENT '是否删除 : 1：未删除
@@ -630,12 +637,16 @@ CREATE TABLE sm_storage_detail
 	storage_num decimal(10,2) COMMENT '入库数',
 	storage_time datetime COMMENT '入库时间',
 	rfid char(128) COMMENT '栈板RFID',
-	-- 1 待入库
-	-- 2 已入库
-	-- 3 已出库
-	storage_status tinyint COMMENT '入库状态 : 1 待入库
-2 已入库
-3 已出库',
+	-- 1 已入库
+	-- 2 已出库
+	-- 3 待入库
+	storage_status tinyint COMMENT '入库状态 : 1 已入库
+2 已出库
+3 待入库',
+	-- 1 不是备料区
+	-- 2 在备料区
+	preparation tinyint COMMENT '是否备料区 : 1 不是备料区
+2 在备料区',
 	PRIMARY KEY (storage_id),
 	UNIQUE (storage_id)
 ) COMMENT = '入库详细表';
