@@ -39,3 +39,6 @@ logging:
       smartindustry:
         common:
           mapper: debug
+schedule:
+  storage:
+    trigger:  0 30 07,19 * * ?

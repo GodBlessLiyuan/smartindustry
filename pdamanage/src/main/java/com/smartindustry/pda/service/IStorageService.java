@@ -18,12 +18,15 @@ import java.util.Map;
 public interface IStorageService {
     /**
      * mes系统构建生产订单后，调用wms接口生成入库单
+     *
      * @param dto
      * @return
      */
     ResultVO generateStockbill(OperateDTO dto);
+
     /**
      * mes系统打包时将rfid和入库单号绑定
+     *
      * @param dto
      * @return
      */
@@ -31,6 +34,7 @@ public interface IStorageService {
 
     /**
      * 入库单详情
+     *
      * @param dto
      * @return
      */
@@ -38,6 +42,7 @@ public interface IStorageService {
 
     /**
      * 叉车插货物动作
+     *
      * @param dto
      * @return
      */
@@ -45,15 +50,26 @@ public interface IStorageService {
 
     /**
      * 叉车插货物动作
+     *
      * @param dto
      * @return
      */
     ResultVO executeForPre(HttpSession session, StorageDTO dto);
+
     /**
-     * 备料区入库提示选择那种物料确认
+     * 备料区入库提示选择消息弹窗接口
+     *
      * @param dto
      * @return
      */
-    ResultVO chooseMaterialConfirm(HttpSession session,StorageDTO dto);
+    ResultVO chooseMaterialShow(HttpSession session, StorageDTO dto);
+
+    /**
+     * 备料区入库提示选择那种物料确认
+     *
+     * @param dto
+     * @return
+     */
+    ResultVO chooseMaterialConfirm(HttpSession session, StorageDTO dto);
 
 }
