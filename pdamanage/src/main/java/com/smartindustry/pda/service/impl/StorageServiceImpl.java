@@ -224,13 +224,6 @@ public class StorageServiceImpl implements IStorageService {
 
         // 叉车信息
         List<ForkliftPO> pos = forkliftMapper.queryByShid(dto.getShid());
-        if (null != pos && pos.size() > 0) {
-            List<String> fnames = new ArrayList<>(pos.size());
-            for (ForkliftPO po : pos) {
-                fnames.add(po.getForkliftNo());
-            }
-            vo.setFnames(fnames);
-        }
         BigDecimal storageNum = storageHeadBO.getStorageNum() == null ? BigDecimal.valueOf(0) : storageHeadBO.getStorageNum();
         vo.setCnum(storageNum.add(BigDecimal.valueOf(null == pos ? 0 : pos.size())));
         session.setAttribute(CommonConstant.SESSION_SHID, dto.getShid());
