@@ -2,6 +2,7 @@ package com.smartindustry.storage.controller;
 
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.storage.dto.OperateDTO;
+import com.smartindustry.storage.dto.StorageDetailDTO;
 import com.smartindustry.storage.service.IProduceStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +18,7 @@ import java.util.Map;
  * @version: 1.0.0
  * @description:
  */
-@RequestMapping("produce")
+@RequestMapping("storageP")
 @RestController
 public class ProduceStorageController {
     @Autowired
@@ -37,8 +38,8 @@ public class ProduceStorageController {
         return produceStorageService.detail(dto);
     }
 
-//    @PostMapping("queryBySbid")
-//    public ResultVO queryBySbid(@RequestBody OperateDTO dto) {
-//        return produceStorageService.queryBySbid(dto);
-//    }
+    @PostMapping("queryDetail")
+    public ResultVO queryDetail(@RequestBody StorageDetailDTO dto) {
+        return produceStorageService.queryDetail(dto);
+    }
 }

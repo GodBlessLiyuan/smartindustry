@@ -28,6 +28,10 @@ public class StorageHeadDTO implements Serializable {
      */
     private Long wid;
     /**
+     * 付款方式
+     */
+    private Byte pmethod;
+    /**
      * 备注
      */
     private String extra;
@@ -65,6 +69,26 @@ public class StorageHeadDTO implements Serializable {
          * 储位id
          */
         private Long lid;
+        /**
+         * 供应商id
+         */
+        private Long sid;
+        /**
+         * 单价
+         */
+        private BigDecimal up;
+        /**
+         * 金额
+         */
+        private BigDecimal sp;
+        /**
+         * 不含税单价
+         */
+        private BigDecimal upn;
+        /**
+         * 不含税金额
+         */
+        private BigDecimal spn;
     }
 
     public static StorageHeadPO createPO(StorageHeadDTO dto) {
@@ -99,10 +123,13 @@ public class StorageHeadDTO implements Serializable {
 
     public static StorageBodyPO buildPO(StorageBodyPO bodyPO, StorageBodyDTO dto) {
         bodyPO.setMaterialId(dto.getMid());
-        bodyPO.setLocationId(dto.getLid());
-        bodyPO.setCarBrand(dto.getCbrand());
         bodyPO.setStorageNum(dto.getAnum());
         bodyPO.setAcceptTime(dto.getAtime());
+        bodyPO.setUnitPrice(dto.getUp());
+        bodyPO.setUnitPriceNotax(dto.getUpn());
+        bodyPO.setSumPrice(dto.getSp());
+        bodyPO.setSumPriceNotax(dto.getSpn());
+        bodyPO.setSupplierId(dto.getSid());
         return bodyPO;
     }
 

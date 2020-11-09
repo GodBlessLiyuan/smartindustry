@@ -22,12 +22,19 @@ public class OutboundHeadPO implements Serializable {
     private String outboundNo;
 
     /**
+     * 客户id
+     */
+    private Long clientId;
+
+    /**
      * 来源单号
      */
     private String sourceNo;
 
     /**
-     * 来源类型 :  
+     * 来源类型 : 1 原材料出库
+2 销售出库
+3 备料区出库
      */
     private Byte sourceType;
 
@@ -62,6 +69,11 @@ public class OutboundHeadPO implements Serializable {
 3：待出库
      */
     private Byte status;
+
+    /**
+     * 接受地址
+     */
+    private String acceptAddress;
 
     /**
      * 创建时间

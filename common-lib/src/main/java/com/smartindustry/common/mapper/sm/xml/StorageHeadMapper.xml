@@ -224,6 +224,9 @@
     <if test="wid != null and wid != 0">
       and sh.warehouse_id = #{wid,jdbcType=BIGINT}
     </if>
+    <if test="status != null and status != 0">
+      and sh.`status` = #{status,jdbcType=TINYINT}
+    </if>
     order by sh.create_time desc
   </select>
 
@@ -232,6 +235,7 @@
     <result column="storage_no" jdbcType="CHAR" property="storageNo"/>
     <result column="status" jdbcType="TINYINT" property="status"/>
     <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId"/>
+    <result column="pay_method" jdbcType="TINYINT" property="payMethod"/>
     <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
     <result column="extra" jdbcType="CHAR" property="extra"/>
     <collection property="bos" ofType="com.smartindustry.common.bo.sm.StorageBodyBO">
@@ -241,17 +245,18 @@
       <result column="material_name" jdbcType="CHAR" property="materialName"/>
       <result column="material_model" jdbcType="CHAR" property="materialModel"/>
       <result column="supplier_name" jdbcType="CHAR" property="supplierName"/>
-      <result column="location_id" jdbcType="BIGINT" property="locationId"/>
-      <result column="location_no" jdbcType="CHAR" property="locationNo"/>
-      <result column="car_brand" jdbcType="CHAR" property="carBrand"/>
       <result column="storage_num" jdbcType="INTEGER" property="storageNum"/>
       <result column="accept_time" jdbcType="TIMESTAMP" property="acceptTime"/>
       <result column="measure_unit_name" jdbcType="CHAR" property="measureUnitName"/>
+      <result column="unit_price" jdbcType="DECIMAL" property="unitPrice"/>
+      <result column="sum_price" jdbcType="DECIMAL" property="sumPrice"/>
+      <result column="unit_price_notax" jdbcType="DECIMAL" property="unitPriceNotax"/>
+      <result column="sum_price_notax" jdbcType="DECIMAL" property="sumPriceNotax"/>
     </collection>
   </resultMap>
   <sql id="BOS_Column_List">
-      sh.storage_head_id, sh.storage_no,sh.status, sh.extra,w.warehouse_id, w.warehouse_name, sb.storage_body_id,sb.material_id, m.material_no,
-      m.material_name, m.material_model, su.supplier_name, l.location_id,l.location_no,sb.car_brand, sb.storage_num,sb.accept_time,mu.measure_unit_name
+      sh.storage_head_id, sh.storage_no,sh.status, sh.extra,sh.pay_method,w.warehouse_id, w.warehouse_name, sb.storage_body_id,sb.material_id, m.material_no,
+      m.material_name, m.material_model, su.supplier_name, sb.storage_num,sb.accept_time,mu.measure_unit_name,sb.unit_price, sb.sum_price, sb.unit_price_notax, sb.sum_price_notax
   </sql>
   <select id="queryByShid" parameterType="java.lang.Long" resultMap="BOSResultMap">
     select
@@ -344,8 +349,8 @@
 
 
   <sql id="Storage_Column_List">
-     sh.storage_head_id,sh.storage_no,sh.source_no,sh.storage_time,l.warehouse_id,w.warehouse_name,
-     sd.location_id,l.location_no,m.material_no,m.material_name,count(sd.rfid) as num,m.package_volume
+      sh.storage_head_id,sh.storage_no,sh.source_no,sh.storage_time,l.warehouse_id,w.warehouse_name,
+     sd.location_id,l.location_no,m.material_id,m.material_no,m.material_name,count(sd.rfid) as num,m.package_volume
   </sql>
   <resultMap id="StorageResultMap" type="com.smartindustry.common.bo.sm.StorageHeadBO">
     <result column="storage_head_id" jdbcType="BIGINT" property="storageHeadId"/>
@@ -365,6 +370,7 @@
     <id column="location_id" jdbcType="BIGINT" property="locationId" />
     <result column="location_no" jdbcType="CHAR" property="locationNo"/>
     <collection property="materialBOS" ofType="com.smartindustry.common.bo.sm.MaterialBO">
+      <id column="material_id" jdbcType="BIGINT" property="materialId" />
       <result column="material_no" jdbcType="CHAR" property="materialNo"/>
       <result column="material_name" jdbcType="CHAR" property="materialName"/>
       <result column="package_volume" jdbcType="DECIMAL" property="packageVolume"/>
@@ -386,6 +392,7 @@
   
   <select id="queryAwaitStore" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.sm.MaterialDetailBO">
     select
+    <include refid="Base_Column_List" />
     from sm_storage_head sh
     left join sm_storage_detail sd on sh.storage_head_id = sd.storage_head_id
     where sh.dr = 1 and sh.storage_head_id = #{shid,jdbcType=BIGINT} and (sd.storage_status = 3 or sd.dr = 2)
@@ -405,4 +412,17 @@
       ( #{po.storageNo,jdbcType=CHAR}, #{po.sourceNo,jdbcType=CHAR}, #{po.sourceType,jdbcType=TINYINT}, #{po.storageTime,jdbcType=TIMESTAMP}, #{po.expectNum,jdbcType=DECIMAL},  #{po.extra,jdbcType=CHAR}, #{po.status,jdbcType=TINYINT}, #{po.createTime,jdbcType=TIMESTAMP}, #{po.dr,jdbcType=TINYINT}, #{po.payMethod,jdbcType=TINYINT})
     </foreach>
   </insert>
+
+  <select id="queryDetail" resultType="com.smartindustry.common.bo.sm.MaterialDetailBO">
+    select sd.rfid as rfid,w.warehouse_name as warehouseName,l.location_no as locationNo,m.material_name as materialName,m.material_no as materialNo,m.package_volume as volume
+    from sm_storage_head sh
+    left join sm_storage_detail sd on sh.storage_head_id = sd.storage_head_id
+    left join si_location l on sd.location_id = l.location_id
+    left join si_material m on l.material_id = m.material_id
+    left join si_warehouse w on l.warehouse_id = w.warehouse_id
+    where sh.dr = 1 and sh.storage_head_id = #{shid,jdbcType=BIGINT} and sd.storage_status = 1
+    <if test="lid != null and lid != 0">
+      and l.location_id = #{lid,jdbcType=BIGINT}
+    </if>
+  </select>
 </mapper>
