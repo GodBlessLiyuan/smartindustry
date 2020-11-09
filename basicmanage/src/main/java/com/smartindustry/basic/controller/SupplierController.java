@@ -1,6 +1,7 @@
 package com.smartindustry.basic.controller;
 
 import com.smartindustry.basic.dto.OperateDTO;
+import com.smartindustry.basic.dto.SupplierDTO;
 import com.smartindustry.basic.service.ISupplierService;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,6 +37,30 @@ public class SupplierController {
     public ResultVO pageQuery(@RequestBody Map<String, Object> reqData) {
         return supplierService.pageQuery(reqData);
     }
+
+    /**
+     * 新增/修改
+     *
+     * @return
+     */
+    @PostMapping("edit")
+    @PreAuthorize("@ss.hasAnyPermi('bm:sm:info:insert,bm:sm:info:update')")
+    public ResultVO edit(@RequestBody SupplierDTO dto) {
+        return supplierService.edit(dto);
+    }
+
+    /**
+     * 删除
+     *
+     * @param sids
+     * @return
+     */
+    @PostMapping("delete")
+    @PreAuthorize("@ss.hasPermi('bm:sm:info:delete')")
+    public ResultVO delete(@RequestBody List<Long> sids) {
+        return supplierService.delete(sids);
+    }
+
     /**
      * 查看详情
      *
@@ -47,5 +73,15 @@ public class SupplierController {
         return supplierService.detail(dto);
     }
 
+
+    /**
+     * 供应商 查询
+     *
+     * @return
+     */
+    @PostMapping("queryAll")
+    public ResultVO queryAll() {
+        return supplierService.queryAll();
+    }
 
 }

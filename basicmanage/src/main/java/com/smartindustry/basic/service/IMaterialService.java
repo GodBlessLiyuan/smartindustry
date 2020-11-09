@@ -1,5 +1,6 @@
 package com.smartindustry.basic.service;
 
+import com.smartindustry.basic.dto.MaterialDTO;
 import com.smartindustry.basic.dto.OperateDTO;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +17,11 @@ import java.util.Map;
 public interface IMaterialService {
     ResultVO pageQuery(Map<String, Object> reqData);
 
+    ResultVO delete(List<Long> mids);
+
     ResultVO detail(OperateDTO dto);
 
+    ResultVO upload(MultipartFile file);
+
+    ResultVO edit(MaterialDTO dto);
 }

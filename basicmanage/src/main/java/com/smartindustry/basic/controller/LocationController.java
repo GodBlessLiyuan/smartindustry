@@ -1,32 +1,30 @@
 package com.smartindustry.basic.controller;
 
-import com.smartindustry.basic.dto.MaterialDTO;
+import com.smartindustry.basic.dto.LocationDTO;
 import com.smartindustry.basic.dto.OperateDTO;
-import com.smartindustry.basic.service.IMaterialService;
+import com.smartindustry.basic.service.ILocationService;
 import com.smartindustry.common.vo.ResultVO;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
 
 /**
  * @author: xiahui
- * @date: Created in 2020/7/29 9:18
- * @description: 物料管理
+ * @date: Created in 2020/7/29 9:17
+ * @description: 货位管理
  * @version: 1.0
  */
-@RequestMapping("material")
+@RequestMapping("location")
 @RestController
-public class MaterialController {
+public class LocationController {
     @Autowired
-    private IMaterialService materialService;
+    private ILocationService locationService;
 
     /**
      * 分页查询
@@ -35,9 +33,9 @@ public class MaterialController {
      * @return
      */
     @PostMapping("pageQuery")
-    @PreAuthorize("@ss.hasPermi('bm:mm:main:query')")
+    @PreAuthorize("@ss.hasPermi('bm:wm:loc:query')")
     public ResultVO pageQuery(@RequestBody Map<String, Object> reqData) {
-        return materialService.pageQuery(reqData);
+        return locationService.pageQuery(reqData);
     }
 
     /**
@@ -46,20 +44,21 @@ public class MaterialController {
      * @return
      */
     @PostMapping("edit")
-    @PreAuthorize("@ss.hasAnyPermi('bm:mm:main:update,bm:mm:main:insert')")
-    public ResultVO edit(@RequestBody MaterialDTO dto) {
-        return materialService.edit(dto);
+    @PreAuthorize("@ss.hasAnyPermi('bm:wm:loc:insert,bm:wm:loc:update')")
+    public ResultVO edit(@RequestBody LocationDTO dto) {
+        return locationService.edit(dto);
     }
+
     /**
      * 删除
      *
-     * @param mids
+     * @param lids
      * @return
      */
     @PostMapping("delete")
-    @PreAuthorize("@ss.hasPermi('bm:mm:main:delete')")
-    public ResultVO delete(@RequestBody List<Long> mids) {
-        return materialService.delete(mids);
+    @PreAuthorize("@ss.hasPermi('bm:wm:loc:delete')")
+    public ResultVO delete(@RequestBody List<Long> lids) {
+        return locationService.delete(lids);
     }
 
     /**
@@ -69,20 +68,28 @@ public class MaterialController {
      * @return
      */
     @PostMapping("detail")
-    @PreAuthorize("@ss.hasAnyPermi('bm:mm:main:queryinfo,bm:mm:main:update')")
+    @PreAuthorize("@ss.hasAnyPermi('bm:wm:loc:queryinfo,bm:wm:loc:update')")
     public ResultVO detail(@RequestBody OperateDTO dto) {
-        return materialService.detail(dto);
-    }
-    /**
-     * 上传
-     *
-     * @param file
-     * @return
-     */
-    @PostMapping("upload")
-    @PreAuthorize("@ss.hasPermi('bm:mm:main:update')")
-    public ResultVO upload(@Param("file") MultipartFile file) {
-        return materialService.upload(file);
+        return locationService.detail(dto);
     }
 
+    /**
+     * 货位 查询
+     *
+     * @return
+     */
+    @PostMapping("queryAll")
+    public ResultVO queryAll() {
+        return locationService.queryAll();
+    }
+
+    /**
+     * 根据 仓库ID 查询
+     *
+     * @return
+     */
+    @PostMapping("queryByWid")
+    public ResultVO queryByWid(@RequestBody OperateDTO dto) {
+        return locationService.queryByWid(dto);
+    }
 }

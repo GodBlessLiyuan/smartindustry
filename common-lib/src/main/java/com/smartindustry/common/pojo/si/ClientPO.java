@@ -1,8 +1,9 @@
 package com.smartindustry.common.pojo.si;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * si_client
@@ -96,6 +97,10 @@ public class ClientPO implements Serializable {
 2 已删除
      */
     private Byte dr;
+    /***
+     *  1或者null不再备料区，2在备料区
+     */
+    private Byte preparation;
 
     private static final long serialVersionUID = 1L;
 }
