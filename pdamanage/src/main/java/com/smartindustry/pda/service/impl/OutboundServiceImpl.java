@@ -174,11 +174,10 @@ public class OutboundServiceImpl implements IOutboundService {
         ForkliftPO curForkliftPO = forkliftMapper.queryByImei(imei);
 
         // 当前执行该出库订单的所有叉车
-        List<String> fnames = new ArrayList<>();
         List<ForkliftPO> forkliftPOs = forkliftMapper.queryByOhid(ohid);
         if (null == forkliftPOs || forkliftPOs.size() == 0) {
             // 开始任务
-            return execute(session, curForkliftPO, ohid, fnames);
+            return execute(session, curForkliftPO, ohid);
         }
 
         boolean close = false;
@@ -194,18 +193,16 @@ public class OutboundServiceImpl implements IOutboundService {
                 session.removeAttribute(CommonConstant.SESSION_STATUS_FORKLIFT);
 
                 close = true;
-            } else {
-                fnames.add(forkliftPO.getForkliftName());
             }
         }
 
         if (!close) {
             // 辅助任务
-            return execute(session, curForkliftPO, ohid, fnames);
+            return execute(session, curForkliftPO, ohid);
         }
 
         // websocket
-        sendOutboundMsg(ohid, fnames);
+        WebSocketServer.sendAllMsg(new WebSocketVO());
 
         return ResultVO.ok().setData(forkliftPOs.size() == 1 ? OutboundConstant.STATUS_OUTBOUND_START : OutboundConstant.STATUS_OUTBOUND_ASSIST);
     }
@@ -216,10 +213,9 @@ public class OutboundServiceImpl implements IOutboundService {
      * @param session
      * @param curForkliftPO
      * @param ohid
-     * @param fnames
      * @return
      */
-    private ResultVO execute(HttpSession session, ForkliftPO curForkliftPO, Long ohid, List<String> fnames) {
+    private ResultVO execute(HttpSession session, ForkliftPO curForkliftPO, Long ohid) {
         // 出库叉车信息
         OutboundForkliftPO ofPO = new OutboundForkliftPO();
         ofPO.setForkliftId(curForkliftPO.getForkliftId());
@@ -233,23 +229,9 @@ public class OutboundServiceImpl implements IOutboundService {
         // 叉车工作类型 - 出库
         session.setAttribute(CommonConstant.SESSION_STATUS_FORKLIFT, CommonConstant.FORKLIFT_WORK_OUTBOUND_START);
 
-        // websocket
-        fnames.add(curForkliftPO.getForkliftName());
-        sendOutboundMsg(ohid, fnames);
+        WebSocketServer.sendAllMsg(new WebSocketVO());
 
         return ResultVO.ok().setData(OutboundConstant.STATUS_OUTBOUND_CLOSE);
-    }
-
-
-    /**
-     * WebSocket 发送信息
-     *
-     * @param ohid
-     * @param fnames
-     */
-    private void sendOutboundMsg(Long ohid, List<String> fnames) {
-        WebSocketVO vo = new WebSocketVO();
-        WebSocketServer.sendAllMsg(vo);
     }
 
 }

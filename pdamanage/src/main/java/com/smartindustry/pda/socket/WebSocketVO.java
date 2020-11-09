@@ -1,6 +1,7 @@
 package com.smartindustry.pda.socket;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.List;
@@ -11,11 +12,12 @@ import java.util.List;
  * @description: WebSocket 提示信息
  * @version: 1.0
  */
+@NoArgsConstructor
 @Data
 public class WebSocketVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private Boolean isShow;
+    private Boolean isShow = true;
     private TitleVO title;
 
     /**
@@ -50,7 +52,6 @@ public class WebSocketVO implements Serializable {
          * 提示文案
          */
         private String msg;
-
         /**
          * 备料区选择物料返回物料信息VO列表
          */
