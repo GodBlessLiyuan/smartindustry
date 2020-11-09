@@ -249,14 +249,6 @@ public class OutboundServiceImpl implements IOutboundService {
      */
     private void sendOutboundMsg(Long ohid, List<String> fnames) {
         WebSocketVO vo = new WebSocketVO();
-        WebSocketVO.OutboundVO ovo = new WebSocketVO.OutboundVO();
-        OutboundHeadPO headPO = outboundHeadMapper.selectByPrimaryKey(ohid);
-        ovo.setId(ohid);
-        ovo.setSnum(headPO.getOutboundNum());
-        ovo.setFnames(fnames);
-        ovo.setCnum(headPO.getOutboundNum().add(BigDecimal.valueOf(fnames.size())));
-        ovo.setType(CommonConstant.FLAG_OUTBOUND);
-        vo.setOvo(ovo);
         WebSocketServer.sendAllMsg(vo);
     }
 

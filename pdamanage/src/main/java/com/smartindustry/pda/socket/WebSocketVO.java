@@ -3,7 +3,6 @@ package com.smartindustry.pda.socket;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -16,7 +15,7 @@ import java.util.List;
 public class WebSocketVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private OutboundVO ovo;
+    private Boolean isShow;
     private TitleVO title;
 
     /**
@@ -35,41 +34,14 @@ public class WebSocketVO implements Serializable {
     }
 
     /**
-     * 列表/详情区
-     */
-    @Data
-    public static class OutboundVO {
-        /**
-         * 出/入库 ID
-         */
-        private Long id;
-        /**
-         * 当前数量
-         */
-        private BigDecimal cnum;
-        /**
-         * 成功出/入库数量
-         */
-        private BigDecimal snum;
-        /**
-         * 叉车
-         */
-        private List<String> fnames;
-        /**
-         * 状态：1-入库；2-出库
-         */
-        private Byte status;
-        /**
-         * 类型：1-待执行， 2-执行中，3-已执行
-         */
-        private Byte type;
-    }
-
-    /**
      * 提示区
      */
     @Data
     public static class TitleVO {
+        /**
+         * 提示框类型，1-提示性消息，2-报警性提醒，3-故障性提示，4-弹窗
+         */
+        private Byte type;
         /**
          * 弹框左上角小标题
          */
@@ -78,20 +50,11 @@ public class WebSocketVO implements Serializable {
          * 提示文案
          */
         private String msg;
-        /**
-         * 提示框类型，1-提示性消息，2-报警性提醒，3-故障性提示，4-弹窗
-         */
-        private Byte type;
 
         /**
          * 备料区选择物料返回物料信息VO列表
          */
-        private List<MaterialVO> vos;
-        /**
-         * 备料区入成品区的VO列信息
-         */
-        private MaterialVO mvo;
-
+        private List<MaterialVO> mvos;
     }
 
     /**
@@ -116,14 +79,6 @@ public class WebSocketVO implements Serializable {
          * 产品规格
          */
         private String model;
-        /**
-         * 栈板ifid
-         */
-        private String mrfid;
-        /**
-         * 每栈板的体积
-         */
-        private String mvolume;
     }
 }
 

@@ -417,7 +417,7 @@ public class StorageServiceImpl implements IStorageService {
             materialVO.setModel(materialPO.getMaterialModel());
             materialVOS.add(materialVO);
         }
-        titleVO.setVos(materialVOS);
+        titleVO.setMvos(materialVOS);
         vo.setTitle(titleVO);
         WebSocketServer.sendAllMsg(vo);
     }
@@ -469,12 +469,10 @@ public class StorageServiceImpl implements IStorageService {
         //类型为弹窗
         titleVO.setType((byte) 4);
         WebSocketVO.MaterialVO materialVO = new WebSocketVO.MaterialVO();
-        materialVO.setMrfid(mrfid);
         materialVO.setMid(materialPO.getMaterialId());
         materialVO.setMname(materialPO.getMaterialName());
         materialVO.setMlevel(materialPO.getMaterialLevel());
         materialVO.setModel(materialPO.getMaterialModel());
-        titleVO.setMvo(materialVO);
         vo.setTitle(titleVO);
         WebSocketServer.sendAllMsg(vo);
     }

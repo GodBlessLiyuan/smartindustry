@@ -306,14 +306,6 @@ public class CommonServiceImpl implements ICommonService {
 
                 // websocket
                 WebSocketVO vo = WebSocketVO.createTitleVO("业务单号：" + headPO.getSourceNo() + "（销售出库），已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO);
-                WebSocketVO.OutboundVO ovo = new WebSocketVO.OutboundVO();
-                ovo.setCnum(headPO.getOutboundNum());
-                ovo.setSnum(headPO.getOutboundNum());
-                ovo.setId(headPO.getOutboundHeadId());
-                ovo.setFnames(new ArrayList<>());
-                ovo.setType(CommonConstant.TYPE_LIST_DONE);
-                ovo.setStatus(CommonConstant.FLAG_OUTBOUND);
-                vo.setOvo(ovo);
                 WebSocketServer.sendMsg(imeis, vo);
             }
 
