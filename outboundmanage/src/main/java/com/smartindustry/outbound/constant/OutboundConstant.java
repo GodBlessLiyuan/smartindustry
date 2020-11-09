@@ -26,7 +26,7 @@ public class OutboundConstant {
     public static final Byte STATUS_OUTING = 3;
 
     /**
-     * 由自己新增的出库单
+     * 由自己新增的出库单/原材料出库
      */
     public static final Byte TYPE_INSERT_BY_OURS = 1;
     /**

@@ -2,6 +2,7 @@ package com.smartindustry.storage.dto;
 
 import com.smartindustry.common.pojo.sm.StorageBodyPO;
 import com.smartindustry.common.pojo.sm.StorageHeadPO;
+import com.smartindustry.storage.constant.StorageConstant;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -95,6 +96,7 @@ public class StorageHeadDTO implements Serializable {
         StorageHeadPO po = new StorageHeadPO();
         po.setCreateTime(new Date());
         po.setDr((byte) 1);
+        po.setSourceType(StorageConstant.TYPE_RAW_STORAGE);
         return buildPO(po, dto);
     }
 

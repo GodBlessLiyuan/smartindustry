@@ -1,4 +1,4 @@
-package com.smartindustry.common.pojo.om;
+package com.smartindustry.common.bo.om;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -32,6 +32,11 @@ public class OutboundHeadPO implements Serializable {
 3 备料区出库
      */
     private Byte sourceType;
+
+    /**
+     * 客户编码
+     */
+    private String clientNo;
 
     /**
      * 计划出库时间

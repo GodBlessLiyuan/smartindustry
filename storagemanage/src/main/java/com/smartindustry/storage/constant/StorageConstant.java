@@ -67,4 +67,9 @@ public class StorageConstant {
      * session imei
      */
     public final static String SESSION_IMEI = "imei";
+
+    /**
+     * 原材料入库的来源类型
+     */
+    public final static Byte TYPE_RAW_STORAGE = 1;
 }
