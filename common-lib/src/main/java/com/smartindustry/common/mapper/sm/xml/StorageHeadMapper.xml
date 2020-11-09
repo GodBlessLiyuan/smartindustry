@@ -280,7 +280,7 @@
   </select>
 
   <sql id="Pda_Column_List">
-        sh.storage_head_id, sh.source_no, sh.expect_num, sh.storage_num, sh.create_time,
+        sh.storage_head_id, sh.source_type, sh.source_no, sh.expect_num, sh.storage_num, sh.create_time,
         m.material_id, m.material_no, m.material_name, m.material_model, m.package_volume
     </sql>
   <resultMap id="PdaResultMap" type="com.smartindustry.common.bo.sm.StorageHeadBO" extends="BaseResultMap">
