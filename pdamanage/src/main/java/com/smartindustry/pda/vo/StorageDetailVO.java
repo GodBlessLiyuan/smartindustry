@@ -43,10 +43,6 @@ public class StorageDetailVO {
      */
     private BigDecimal snum;
     /**
-     * 叉车
-     */
-    private List<String> fnames;
-    /**
      * 状态：
      */
     private String status;
@@ -59,10 +55,6 @@ public class StorageDetailVO {
      */
     private BigDecimal cnum;
     /**
-     * 创建时间
-     */
-    private Date ctime;
-    /**
      * 储位图
      */
     private List<StorageDetailVO.LocationVO> lvos;
@@ -73,7 +65,6 @@ public class StorageDetailVO {
         vo.setSno(bo.getSourceNo());
         vo.setDnum(bo.getExpectNum());
         vo.setSnum(bo.getStorageNum());
-        vo.setCtime(bo.getCreateTime());
         BigDecimal tvolume = new BigDecimal(0);
         if (null != bo.getBos() && bo.getBos().size() > 0) {
             List<String> minfos = new ArrayList<>(bo.getBos().size());
