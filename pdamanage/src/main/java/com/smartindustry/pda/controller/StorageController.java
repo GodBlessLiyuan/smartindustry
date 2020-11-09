@@ -27,12 +27,13 @@ public class StorageController {
     private IStorageService storageService;
     @Autowired
     private IOutboundService finishOutboundService;
+
     /**
      * mes系统构建生产订单后，调用wms接口生成入库单
      *
      * @return
      */
-    @PostMapping("generate_stockbill")
+    @PostMapping("gstockbill")
     public ResultVO generateStockbill(@RequestBody OperateDTO dto) {
         return storageService.generateStockbill(dto);
     }
@@ -42,7 +43,7 @@ public class StorageController {
      *
      * @return
      */
-    @PostMapping("rfid_bound")
+    @PostMapping("rfidbound")
     public ResultVO rfidBound(@RequestBody OperateDTO dto) {
         return storageService.rfidBound(dto);
     }
@@ -72,16 +73,27 @@ public class StorageController {
      *
      * @return
      */
-    @PostMapping("execute_for_pre")
+    @PostMapping("efpre")
     public ResultVO executeForPre(HttpSession session, @RequestBody StorageDTO dto) {
         return storageService.executeForPre(session, dto);
     }
+
+    /**
+     * 备料区选择产品的弹窗接口
+     *
+     * @return
+     */
+    @PostMapping("cmshow")
+    public ResultVO chooseMaterialShow(HttpSession session, @RequestBody StorageDTO dto) {
+        return storageService.chooseMaterialShow(session, dto);
+    }
+
     /**
      * 备料区选择产品后调用接口
      *
      * @return
      */
-    @PostMapping("choose_material_confirm")
+    @PostMapping("cmconfirm")
     public ResultVO chooseMaterialComfirm(HttpSession session, @RequestBody StorageDTO dto) {
         return storageService.chooseMaterialConfirm(session, dto);
     }
