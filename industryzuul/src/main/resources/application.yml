@@ -19,11 +19,13 @@ eureka:
 zuul:
   sensitive-headers: '*'
   routes:
-    storagemanage: /sm/**
-    outboundmanage: /om/**
-    basicmanage: /ba/**
-    authoritymanage: /am/**
-    inventorymanage: /im/**
+    storagemanage-yh: /sm-yh/**
+    outboundmanage-yh: /om-yh/**
+    basicmanage-yh: /bm-yh/**
+    authoritymanage-yh: /am-yh/**
+    inventorymanage-yh: /im-yh/**
+    pdamanage-yh: /pda-yh/**
+    datasynchronize-yh: /ds-yh/**
   host:
     connect-timeout-millis: 15000
     socket-timeout-millis: 60000
