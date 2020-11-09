@@ -279,4 +279,14 @@
     left join si_material_specification ms on m.material_id = ms.material_id
     where m.dr = 1 and m.material_id = #{mid,jdbcType=BIGINT}
   </select>
+
+  <select id="queryBySids" parameterType="java.util.List" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from si_material
+    where dr = 1 and supplier_id in
+    <foreach collection="list" item="sid" separator="," open="(" close=")">
+      #{sid,jdbcType=BIGINT}
+    </foreach>
+  </select>
 </mapper>

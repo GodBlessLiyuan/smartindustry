@@ -14,15 +14,18 @@ import java.util.Map;
  */
 @Mapper
 public interface MaterialMapper extends BaseMapper<MaterialPO, Long> {
-
-    List<MaterialBO> pageQueryStorage(Map<String, Object> reqData);
-
     /**
-     * 根据物料编号查找物料
+     * 用于添加采购入库单表体的物料展示
+     * @param reqData
+     * @return
+     */
+    List<MaterialBO> pageQueryStorage(Map<String, Object> reqData);
+    /***
+    * 根据物料编号查找物料
      * @param materialNo
      * @param materialName
      * @return
-     */
+             */
     MaterialPO queryByMaterialNo(@Param("materialNo") String materialNo, @Param("materialName") String materialName);
 
     /**
@@ -47,4 +50,5 @@ public interface MaterialMapper extends BaseMapper<MaterialPO, Long> {
     MaterialBO queryByMid(Long mid);
 
     List<MaterialPO> queryBySids(List<Long> sids);
+
 }
