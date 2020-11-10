@@ -138,4 +138,5 @@ public interface StorageHeadMapper extends BaseMapper<StorageHeadPO, Long> {
      * @return
      */
     StorageHeadPO queryNowUnfinishedByType(Byte type);
+
 }

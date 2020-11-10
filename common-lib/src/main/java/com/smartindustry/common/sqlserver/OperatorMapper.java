@@ -1,6 +1,5 @@
 package com.smartindustry.common.sqlserver;
 
-import com.smartindustry.common.pojo.ds.sqlserver.ClientErpPO;
 import com.smartindustry.common.pojo.ds.sqlserver.OperatorPO;
 import org.apache.ibatis.annotations.Mapper;
 

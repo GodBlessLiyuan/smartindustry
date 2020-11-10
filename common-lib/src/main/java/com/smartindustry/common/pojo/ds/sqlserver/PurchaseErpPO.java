@@ -24,18 +24,6 @@ public class PurchaseErpPO implements Serializable {
 
     private Date acceptDate;
 
-    private Double salesmanId;
-
-    private String salesmanName;
-
-    private Double operatorId;
-
-    private String operatorName;
-
-    private Double auditorId;
-
-    private String auditorName;
-
     private Double payMethod;
 
     private String payName;
