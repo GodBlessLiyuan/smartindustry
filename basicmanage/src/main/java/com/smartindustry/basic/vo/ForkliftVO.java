@@ -58,6 +58,10 @@ public class ForkliftVO {
      * 联系电话
      */
     private String cphone;
+    /**
+     * 备注
+     */
+    private String extra;
 
     public static List<ForkliftVO> convert(List<ForkliftPO> bos) {
         List<ForkliftVO> vos = new ArrayList<>(bos.size());
@@ -80,6 +84,7 @@ public class ForkliftVO {
         vo.setStatus(bo.getStatus());
         vo.setContact(bo.getContact());
         vo.setCphone(bo.getContactPhone());
+        vo.setExtra(bo.getExtra());
         return vo;
     }
 }
