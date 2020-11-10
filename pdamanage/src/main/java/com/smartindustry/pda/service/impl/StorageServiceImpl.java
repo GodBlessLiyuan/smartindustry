@@ -132,7 +132,7 @@ public class StorageServiceImpl implements IStorageService {
     }
 
     /**
-     * @Description rfid和入库单id绑定
+     * @Description 与mes交互 rfid和入库单id绑定
      * @Param
      * @Return
      * @Author AnHongxu.
@@ -165,6 +165,35 @@ public class StorageServiceImpl implements IStorageService {
         storageDetailMapper.insertSelective(storageDetailPO);
         return ResultVO.ok();
     }
+
+
+    /**
+     * @Description 与pda交互 rfid和入库单id绑定
+     * @Param
+     * @Return
+     * @Author AnHongxu.
+     * @Date 2020/11/4
+     * @Time 19:44
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public ResultVO rfidBoundStorageHeadId(StorageDTO dto) {
+        /*最新的未入库完成的，并且入库单来源为生产订单的入库单id，进而绑定rfid，插入到详细记录表中*/
+        //新的未入库完成的，并且入库单来源为生产订单的入库单id
+        StorageHeadPO storageHeadPO = storageHeadMapper.queryNowUnfinishedByType(StorageConstant.TYPE_PRODUCT_STORAGE);
+        if (null == storageHeadPO) {
+            //没有当前生产订单入库单信息
+            return new ResultVO(1001);
+        }
+        //在详细表中进行绑定
+        StorageDetailPO storageDetailPO = new StorageDetailPO();
+        storageDetailPO.setStorageHeadId(storageHeadPO.getStorageHeadId());
+        storageDetailPO.setRfid(dto.getMrfid());
+        storageDetailPO.setStorageStatus(StorageConstant.STATUS_PRESTORED);
+        storageDetailMapper.insertSelective(storageDetailPO);
+        return ResultVO.ok();
+    }
+
 
     /**
      * 详情
