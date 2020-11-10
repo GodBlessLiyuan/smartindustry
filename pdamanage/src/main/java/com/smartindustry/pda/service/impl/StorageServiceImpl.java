@@ -9,7 +9,6 @@ import com.smartindustry.common.mapper.si.MaterialMapper;
 import com.smartindustry.common.mapper.sm.*;
 import com.smartindustry.common.mapper.wo.PackageMapper;
 import com.smartindustry.common.mapper.wo.ProduceOrderMapper;
-import com.smartindustry.common.pojo.om.OutboundForkliftPO;
 import com.smartindustry.common.pojo.si.ForkliftPO;
 import com.smartindustry.common.pojo.si.LocationPO;
 import com.smartindustry.common.pojo.si.MaterialPO;
@@ -251,12 +250,12 @@ public class StorageServiceImpl implements IStorageService {
      * 叉车插入原产区货物接口
      *
      * @param session
-     * @param dto
+     * @param mrfid
      * @return
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ResultVO execute(HttpSession session, StorageDTO dto) {
+    public ResultVO execute(HttpSession session, String mrfid) {
         String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
         if (null == imei) {
             //为获取到session中的imei
@@ -264,7 +263,7 @@ public class StorageServiceImpl implements IStorageService {
         }
 
         //通过rfid获取入库单和物料信息
-        StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(dto.getMrfid());
+        StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(mrfid);
         StorageHeadPO storageHeadPO = storageHeadMapper.selectByPrimaryKey(storageDetailPO.getStorageHeadId());
         if (null == storageHeadPO) {
             //没有该入库单
@@ -275,7 +274,7 @@ public class StorageServiceImpl implements IStorageService {
         //查询叉车表信息
         ForkliftPO forkliftPO = forkliftMapper.queryByImei(imei);
         StorageForkliftPO storageForkliftPO = new StorageForkliftPO();
-        storageForkliftPO.setRfid(dto.getMrfid());
+        storageForkliftPO.setRfid(mrfid);
         storageForkliftPO.setForkliftId(forkliftPO.getForkliftId());
         storageForkliftPO.setStorageHeadId(storageHeadPO.getStorageHeadId());
         storageForkliftMapper.insertSelective(storageForkliftPO);
@@ -301,12 +300,12 @@ public class StorageServiceImpl implements IStorageService {
      * 叉车插入备货区货物接口
      *
      * @param session
-     * @param dto
+     * @param mrfid
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public ResultVO executeForPre(HttpSession session, StorageDTO dto) {
+    public ResultVO executeForPre(HttpSession session, String mrfid) {
         String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
         if (null == imei) {
             //为获取到session中的imei
@@ -323,7 +322,7 @@ public class StorageServiceImpl implements IStorageService {
         //查询叉车表信息
         ForkliftPO forkliftPO = forkliftMapper.queryByImei(imei);
         StorageForkliftPO storageForkliftPO = new StorageForkliftPO();
-        storageForkliftPO.setRfid(dto.getMrfid());
+        storageForkliftPO.setRfid(mrfid);
         storageForkliftPO.setForkliftId(forkliftPO.getForkliftId());
         storageForkliftPO.setStorageHeadId(storageHeadPOS.get(0).getStorageHeadId());
         storageForkliftMapper.insertSelective(storageForkliftPO);
@@ -353,9 +352,9 @@ public class StorageServiceImpl implements IStorageService {
      * @Time 9:39
      */
     @Override
-    public ResultVO chooseMaterialShow(HttpSession session, StorageDTO dto) {
+    public ResultVO chooseMaterialShow(String mrfid) {
         // 根据栈板rfid查询入库单
-        StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(dto.getMrfid());
+        StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(mrfid);
         StorageHeadPO storageHeadPO = storageHeadMapper.selectByPrimaryKey(storageDetailPO.getStorageHeadId());
         List<MaterialPO> pos = storageBodyMapper.queryMaterial(storageHeadPO.getStorageHeadId());
         sendChooseMaterialShowMsg(pos);
@@ -427,61 +426,6 @@ public class StorageServiceImpl implements IStorageService {
         WebSocketServer.sendAllMsg(vo);
     }
 
-
-    /**
-     * @Description 进备料区插货物的弹窗
-     * @Param
-     * @Return
-     * @Author AnHongxu.
-     * @Date 2020/11/6
-     * @Time 16:05
-     */
-    public ResultVO executeSpareAreaShow(StoragePreDTO dto) {
-        // 根据栈板rfid查询物料信息
-        StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(dto.getMrfid());
-        if (null == storageDetailPO) {
-            // 没有该物料信息
-            return new ResultVO(1007);
-        }
-        MaterialPO materialPO = materialMapper.selectByPrimaryKey(storageDetailPO.getMaterialId());
-        //发送socket消息
-        sendexecuteSpareAreaShowMsg(dto.getMrfid(), materialPO);
-
-        SpareMaterialVO vo = new SpareMaterialVO();
-        if (null == storageDetailPO.getStorageHeadId()) {
-            vo.setFlag(true);
-            vo.setRfid(dto.getMrfid());
-            vo.setMmodel(materialPO.getMaterialModel());
-            vo.setMname(materialPO.getMaterialName());
-        } else {
-            vo.setFlag(false);
-        }
-        return ResultVO.ok().setData(vo);
-    }
-
-
-    /**
-     * WebSocket 备料区入库选择成品类型消息
-     *
-     * @param materialPO
-     */
-    private void sendexecuteSpareAreaShowMsg(String mrfid, MaterialPO materialPO) {
-        WebSocketVO vo = new WebSocketVO();
-        WebSocketVO.TitleVO titleVO = new WebSocketVO.TitleVO();
-        titleVO.setTip("备料区物料信息");
-        titleVO.setMsg("您目前操作的为备料区成品，是否执行备料区成品入库仓库？");
-        //类型为弹窗
-        titleVO.setType((byte) 4);
-        WebSocketVO.MaterialVO materialVO = new WebSocketVO.MaterialVO();
-        materialVO.setMid(materialPO.getMaterialId());
-//        materialVO.setMname(materialPO.getMaterialName());
-//        materialVO.setMlevel(materialPO.getMaterialLevel());
-//        materialVO.setModel(materialPO.getMaterialModel());
-        vo.setTitle(titleVO);
-        WebSocketServer.sendAllMsg(vo);
-    }
-
-
     /**
      * @Description 原产区入库到成品区
      * @Param
@@ -490,17 +434,18 @@ public class StorageServiceImpl implements IStorageService {
      * @Date 2020/11/7
      * @Time 16:41
      */
+    @Override
     @Transactional(rollbackFor = Exception.class)
-    public ResultVO finishedOriginToStorage(HttpSession session, StoragePreDTO dto) {
+    public ResultVO finishedOriginToStorage(HttpSession session, String mrfid, String lrfid) {
         // 当前叉车信息
         String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
         // 根据imei查询出叉车id
         ForkliftPO forkliftPO = forkliftMapper.queryByImei(imei);
         // 根据栈板rfid查询入库单
-        StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(dto.getMrfid());
+        StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(mrfid);
         StorageHeadPO storageHeadPO = storageHeadMapper.selectByPrimaryKey(storageDetailPO.getStorageHeadId());
         // 查询当前储位的基本信息
-        LocationBO locationBO = locationMapper.queryByRfid(dto.getLrfid());
+        LocationBO locationBO = locationMapper.queryByRfid(lrfid);
         //# 当前储位为成品区并且来源订单类型是生产入库
         if (locationBO.getLocationTypeId().equals(StorageConstant.TYPE_FINISHED_AREA) && storageHeadPO.getSourceType().equals(StorageConstant.TYPE_PRODUCT_STORAGE)) {
             //1. 入库详情表更新添加信息
@@ -569,17 +514,18 @@ public class StorageServiceImpl implements IStorageService {
      * @Date 2020/11/7
      * @Time 16:40
      */
+    @Override
     @Transactional(rollbackFor = Exception.class)
-    public ResultVO finishedOriginToSpareArea(HttpSession session, StorageDTO dto) {
+    public ResultVO finishedOriginToSpareArea(HttpSession session, String mrfid, String lrfid) {
         // 当前叉车信息
         String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
         // 根据imei查询出叉车id
         ForkliftPO forkliftPO = forkliftMapper.queryByImei(imei);
         // 根据栈板rfid查询入库单
-        StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(dto.getMrfid());
+        StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(mrfid);
         StorageHeadPO storageHeadPO = storageHeadMapper.selectByPrimaryKey(storageDetailPO.getStorageHeadId());
         // 查询当前储位的基本信息
-        LocationBO locationBO = locationMapper.queryByRfid(dto.getLrfid());
+        LocationBO locationBO = locationMapper.queryByRfid(lrfid);
         //# 叉车运送到备货区,rfid 和 入库单解绑,也就是删除其生产来源单号
         if (locationBO.getLocationTypeId().equals(StorageConstant.TYPE_PREPARATION_AREA) && storageHeadPO.getSourceType().equals(StorageConstant.TYPE_PRODUCT_STORAGE)) {
             // 首先更新入库详情表，添加信息
@@ -646,16 +592,17 @@ public class StorageServiceImpl implements IStorageService {
      * @Date 2020/11/7
      * @Time 16:40
      */
+    @Override
     @Transactional(rollbackFor = Exception.class)
-    public ResultVO finishedSpareAreaToStorage(HttpSession session, StorageDTO dto) {
+    public ResultVO finishedSpareAreaToStorage(HttpSession session, String mrfid, String lrfid) {
         // 当前叉车信息
         String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
         // 根据imei查询出叉车id
         ForkliftPO forkliftPO = forkliftMapper.queryByImei(imei);
         // 根据栈板rfid查询入库单
-        StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(dto.getMrfid());
+        StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(mrfid);
         // 查询当前储位的基本信息
-        LocationBO locationBO = locationMapper.queryByRfid(dto.getLrfid());
+        LocationBO locationBO = locationMapper.queryByRfid(lrfid);
         //入库单id全局变量
         Long storageHeadId = null;
         //# 阅读器扫描成品区库位，并且来源是备货入库单，入库第一条成功后，此时生成备货入库单
@@ -697,7 +644,7 @@ public class StorageServiceImpl implements IStorageService {
                 poForStorage.setMaterialId(storageDetailPO.getMaterialId());
                 poForStorage.setStorageNum(new BigDecimal(1));
                 poForStorage.setStorageTime(new Date());
-                poForStorage.setRfid(dto.getMrfid());
+                poForStorage.setRfid(mrfid);
                 poForStorage.setStorageStatus(StorageConstant.STATUS_STORED);
                 poForStorage.setPreparation(StorageConstant.Preparation_NO);
                 storageDetailMapper.insertSelective(poForStorage);
@@ -744,7 +691,7 @@ public class StorageServiceImpl implements IStorageService {
                 poForStorage.setMaterialId(storageDetailPO.getMaterialId());
                 poForStorage.setStorageNum(new BigDecimal(1));
                 poForStorage.setStorageTime(new Date());
-                poForStorage.setRfid(dto.getMrfid());
+                poForStorage.setRfid(mrfid);
                 poForStorage.setStorageStatus(StorageConstant.STATUS_STORED);
                 poForStorage.setPreparation(StorageConstant.Preparation_NO);
                 storageDetailMapper.insertSelective(poForStorage);
@@ -754,7 +701,7 @@ public class StorageServiceImpl implements IStorageService {
                     //插入入单执行操作
                     storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), forkliftPO.getForkliftId(), StorageConstant.OPERATE_NAME_EXECUTE));
                 }
-              storageHeadId = storageHeadPO.getStorageHeadId();
+                storageHeadId = storageHeadPO.getStorageHeadId();
             }
             //将当前运作的叉车删掉
             //根据叉车id查询当前执行入库的入库叉车表记录,删除
