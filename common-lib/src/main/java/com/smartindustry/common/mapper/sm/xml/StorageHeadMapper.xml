@@ -349,14 +349,15 @@
 
 
   <sql id="Storage_Column_List">
-      sh.storage_head_id,sh.storage_no,sh.source_no,sh.storage_time,l.warehouse_id,w.warehouse_name,
-     sd.location_id,l.location_no,m.material_id,m.material_no,m.material_name,count(sd.rfid) as num,m.package_volume
+      sh.storage_head_id,sh.storage_no,sh.source_no,sh.storage_time,sh.status,l.warehouse_id,w.warehouse_name,
+     sd.location_id,l.location_no,m.material_id,m.material_no,m.material_name,count(sd.rfid) as num,m.package_volume,mu.measure_unit_name
   </sql>
   <resultMap id="StorageResultMap" type="com.smartindustry.common.bo.sm.StorageHeadBO">
     <result column="storage_head_id" jdbcType="BIGINT" property="storageHeadId"/>
     <result column="storage_no" jdbcType="CHAR" property="storageNo"/>
     <result column="source_no" jdbcType="CHAR" property="sourceNo"/>
     <result column="storage_time" jdbcType="TIMESTAMP" property="storageTime"/>
+    <result column="status" jdbcType="TINYINT" property="status"/>
     <collection property="warehouseBOS" resultMap="warehouseListResp"/>
   </resultMap>
 
@@ -375,6 +376,7 @@
       <result column="material_name" jdbcType="CHAR" property="materialName"/>
       <result column="package_volume" jdbcType="DECIMAL" property="packageVolume"/>
       <result column="num" jdbcType="INTEGER" property="num"/>
+      <result column="measure_unit_name" jdbcType="CHAR" property="measureUnitName"/>
     </collection>
   </resultMap>
 
@@ -386,6 +388,7 @@
     left join si_location l on sd.location_id = l.location_id
     left join si_material m on l.material_id = m.material_id
     left join si_warehouse w on l.warehouse_id = w.warehouse_id
+    left join dd_measure_unit mu on m.measure_unit_id = mu.measure_unit_id
     where sh.dr = 1 and sh.storage_head_id = #{shid,jdbcType=BIGINT} and sd.storage_status = 1
     group by sd.storage_head_id,sd.location_id
   </select>
@@ -413,16 +416,48 @@
     </foreach>
   </insert>
 
-  <select id="queryDetail" resultType="com.smartindustry.common.bo.sm.MaterialDetailBO">
-    select sd.rfid as rfid,w.warehouse_name as warehouseName,l.location_no as locationNo,m.material_name as materialName,m.material_no as materialNo,m.package_volume as volume
+  <sql id="Storage_Detail_Column_List">
+     m.material_id, m.material_no, m.material_name, w.warehouse_name, l.location_no, l.location_name, sd.rfid, m.package_volume, mu.measure_unit_name
+  </sql>
+  <resultMap id="DetailListResp" type="com.smartindustry.common.bo.sm.MaterialDetailBO">
+    <id column="material_id" jdbcType="BIGINT" property="materialId" />
+    <result column="material_no" jdbcType="CHAR" property="materialNo"/>
+    <result column="material_name" jdbcType="CHAR" property="materialName"/>
+    <result column="package_volume" jdbcType="DECIMAL" property="packageVolume"/>
+    <result column="measure_unit_name" jdbcType="CHAR" property="measureUnitName"/>
+    <collection property="bos" ofType="com.smartindustry.common.bo.sm.LocationDetailBO">
+      <result column="warehouse_name" jdbcType="CHAR" property="warehouseName" />
+      <result column="location_no" jdbcType="CHAR" property="locationNo"/>
+      <result column="location_name" jdbcType="CHAR" property="locationName"/>
+      <result column="rfid" jdbcType="CHAR" property="rfid" />
+      <result column="package_volume" jdbcType="DECIMAL" property="packageVolume"/>
+      <result column="measure_unit_name" jdbcType="CHAR" property="measureUnitName"/>
+    </collection>
+  </resultMap>
+  <select id="queryDetail" resultMap="DetailListResp">
+    select
+    <include refid="Storage_Detail_Column_List" />
     from sm_storage_head sh
     left join sm_storage_detail sd on sh.storage_head_id = sd.storage_head_id
     left join si_location l on sd.location_id = l.location_id
     left join si_material m on l.material_id = m.material_id
     left join si_warehouse w on l.warehouse_id = w.warehouse_id
+    left join dd_measure_unit mu on m.measure_unit_id = mu.measure_unit_id
     where sh.dr = 1 and sh.storage_head_id = #{shid,jdbcType=BIGINT} and sd.storage_status = 1
     <if test="lid != null and lid != 0">
       and l.location_id = #{lid,jdbcType=BIGINT}
     </if>
+  </select>
+
+  <select id="queryPrepare" parameterType="java.lang.Long" resultMap="DetailListResp">
+    select
+    <include refid="Storage_Detail_Column_List" />
+    from sm_storage_head sh
+    left join sm_storage_detail sd on sh.storage_head_id = sd.storage_head_id
+    left join si_location l on sd.location_id = l.location_id
+    left join si_material m on l.material_id = m.material_id
+    left join si_warehouse w on l.warehouse_id = w.warehouse_id
+    left join dd_measure_unit mu on m.measure_unit_id = mu.measure_unit_id
+    where sd.storage_head_id = #{shid,jdbcType=BIGINT} and sd.preparation = 2
   </select>
 </mapper>
