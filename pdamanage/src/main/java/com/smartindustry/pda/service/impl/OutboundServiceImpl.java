@@ -123,12 +123,14 @@ public class OutboundServiceImpl implements IOutboundService {
             lvo.setMinfo(bo.getMaterialName() + " " + bo.getMaterialModel());
             lvos.put(bo.getMaterialId(), lvo);
         }
-        List<LocationPO> locationPOs = locationMapper.queryByMids(new ArrayList<>(lvos.keySet()));
-        for (LocationPO locationPO : locationPOs) {
-            OutboundDetailVO.LocationVO lvo = lvos.get(locationPO.getMaterialId());
-            lvo.getLrfids().add(locationPO.getLocationNo());
+        if (lvos.size() > 0) {
+            List<LocationPO> locationPOs = locationMapper.queryByMids(new ArrayList<>(lvos.keySet()));
+            for (LocationPO locationPO : locationPOs) {
+                OutboundDetailVO.LocationVO lvo = lvos.get(locationPO.getMaterialId());
+                lvo.getLrfids().add(locationPO.getLocationNo());
+            }
+            vo.setLvos(new ArrayList<>(lvos.values()));
         }
-        vo.setLvos(new ArrayList<>(lvos.values()));
 
         // 叉车信息
         List<ForkliftPO> pos = forkliftMapper.queryByOhid(dto.getOhid());

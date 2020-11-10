@@ -305,6 +305,7 @@
         from om_outbound_head oh
         left join om_outbound_body ob on oh.outbound_head_id = ob.outbound_head_id
         left join si_material m on ob.material_id = m.material_id
+        left join si_client c on oh.client_no = c.client_no
         where oh.source_type = 3 and oh.dr = 1 and oh.outbound_head_id = #{outboundHeadId,jdbcType=BIGINT}
     </select>
 
