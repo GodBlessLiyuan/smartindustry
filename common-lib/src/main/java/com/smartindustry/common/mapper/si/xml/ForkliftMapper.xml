@@ -202,7 +202,6 @@
         select
         <include refid="Base_Column_List"/>
         from si_forklift f
-        left join si_supplier s on f.supplier_id = s.supplier_id
         where f.dr = 1
         <if test="area != null and area != 0">
             and f.work_area = #{wid,jdbcType=TINYINT}

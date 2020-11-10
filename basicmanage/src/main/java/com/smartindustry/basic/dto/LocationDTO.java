@@ -4,6 +4,7 @@ import com.smartindustry.common.pojo.si.LocationPO;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -22,7 +23,7 @@ public class LocationDTO implements Serializable {
     private Long ltid;
     private Long wid;
     private String remark;
-
+    private Long tnum;
     public static LocationPO createPO(LocationDTO dto) {
         LocationPO po = new LocationPO();
         po.setCreateTime(new Date());
@@ -36,6 +37,7 @@ public class LocationDTO implements Serializable {
         po.setLocationTypeId(dto.getLtid());
         po.setWarehouseId(dto.getWid());
         po.setRemark(dto.getRemark());
+        po.setHoldTrayNum(new BigDecimal(dto.getTnum()));
         return po;
     }
 }

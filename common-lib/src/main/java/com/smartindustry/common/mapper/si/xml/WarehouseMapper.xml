@@ -187,7 +187,7 @@
   </update>
 
   <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.WarehouseBO" extends="BaseResultMap">
-    <collection property="pos" ofType="com.smartindustry.common.pojo.si.LocationPO">
+    <collection property="pos"  ofType="com.smartindustry.common.pojo.si.LocationPO">
       <id column="location_id" jdbcType="BIGINT" property="locationId"/>
       <result column="location_no" jdbcType="CHAR" property="locationNo"/>
       <result column="location_name" jdbcType="CHAR" property="locationName"/>
@@ -208,6 +208,7 @@
     select
     <include refid="BO_Column_List"/>
     from si_warehouse w
+    left join si_location l on l.warehouse_id=w.warehouse_id
     left join dd_warehouse_type wt on w.warehouse_type_id = wt.warehouse_type_id
     where w.dr = 1
     <if test="wno != null and wno != ''">
@@ -250,5 +251,12 @@
     <include refid="Base_Column_List"/>
     from si_warehouse
     where dr = 1 and warehouse_type_id = #{wtid,jdbcType=BIGINT}
+  </select>
+
+  <select id="querySimpleAll" resultType="java.util.HashMap">
+    select w.warehouse_id as wid , w.warehouse_no as wno , w.warehouse_name as wname
+    from si_warehouse w
+    left join si_location l on w.warehouse_id = l.warehouse_id
+    where w.dr = 1
   </select>
 </mapper>

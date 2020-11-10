@@ -107,12 +107,11 @@ public class MaterialDTO implements Serializable {
     public static MaterialPO buildPO(MaterialPO po, MaterialDTO dto) {
         po.setMaterialNo(dto.getMno());
         po.setMaterialType(dto.getMtype());
-        po.setMaterialName(dto.getMname());
         po.setMeasureUnitId(dto.getMuid());
+        po.setMaterialName(dto.getMname());
         po.setMaterialModel(dto.getMmodel());
         po.setSupplierId(dto.getSid());
         po.setMaterialDesc(dto.getMdesc());
-        //
         return po;
     }
 
