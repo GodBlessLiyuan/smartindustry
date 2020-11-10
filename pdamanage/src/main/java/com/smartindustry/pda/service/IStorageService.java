@@ -43,26 +43,26 @@ public interface IStorageService {
     /**
      * 叉车插货物动作
      *
-     * @param dto
+     * @param mrfid
      * @return
      */
-    ResultVO execute(HttpSession session, StorageDTO dto);
+    ResultVO execute(HttpSession session, String mrfid);
 
     /**
      * 叉车插货物动作
      *
-     * @param dto
+     * @param mrfid
      * @return
      */
-    ResultVO executeForPre(HttpSession session, StorageDTO dto);
+    ResultVO executeForPre(HttpSession session, String mrfid);
 
     /**
      * 备料区入库提示选择消息弹窗接口
      *
-     * @param dto
+     * @param mrfid
      * @return
      */
-    ResultVO chooseMaterialShow(HttpSession session, StorageDTO dto);
+    ResultVO chooseMaterialShow(String mrfid);
 
     /**
      * 备料区入库提示选择那种物料确认
@@ -71,5 +71,35 @@ public interface IStorageService {
      * @return
      */
     ResultVO chooseMaterialConfirm(HttpSession session, StorageDTO dto);
+
+    /**
+     * @Description 原产区入库到成品区
+     * @Param
+     * @Return
+     * @Author AnHongxu.
+     * @Date 2020/11/10
+     * @Time 16:41
+     */
+    ResultVO finishedOriginToStorage(HttpSession session, String mrfid, String lrfid);
+
+    /**
+     * @Description 原产区入库到备料区
+     * @Param
+     * @Return
+     * @Author AnHongxu.
+     * @Date 2020/11/10
+     * @Time 16:40
+     */
+    ResultVO finishedOriginToSpareArea(HttpSession session, String mrfid, String lrfid);
+
+    /**
+     * @Description 备料区入成品区
+     * @Param
+     * @Return
+     * @Author AnHongxu.
+     * @Date 2020/11/10
+     * @Time 16:40
+     */
+    ResultVO finishedSpareAreaToStorage(HttpSession session, String mrfid, String lrfid);
 
 }

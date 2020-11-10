@@ -22,6 +22,7 @@ import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.pda.constant.CommonConstant;
 import com.smartindustry.pda.dto.CommonDTO;
 import com.smartindustry.pda.service.ICommonService;
+import com.smartindustry.pda.service.IStorageService;
 import com.smartindustry.pda.socket.WebSocketServer;
 import com.smartindustry.pda.vo.PdaListVO;
 import com.smartindustry.pda.socket.WebSocketVO;
@@ -60,6 +61,8 @@ public class CommonServiceImpl implements ICommonService {
     private StorageDetailMapper storageDetailMapper;
     @Autowired
     private StorageForkliftMapper storageForkliftMapper;
+    @Autowired
+    private IStorageService storageService;
 
     /**
      * 备料区 RFID
@@ -194,6 +197,7 @@ public class CommonServiceImpl implements ICommonService {
             String mrfid = dto.getMrfid();
 
             // TODO: 业务逻辑
+            storageService.execute(session, mrfid);
 
             return ResultVO.ok();
         }
@@ -202,7 +206,7 @@ public class CommonServiceImpl implements ICommonService {
             String mrfid = dto.getMrfid();
 
             // TODO: 业务逻辑
-
+            storageService.executeForPre(session, mrfid);
             return ResultVO.ok();
         }
         if (CommonConstant.RFID_STORAGE_END_RAW_PRODUCT.equals(status)) {
@@ -211,6 +215,7 @@ public class CommonServiceImpl implements ICommonService {
             String lrfid = dto.getLrfid();
 
             // TODO: 业务逻辑
+            storageService.finishedOriginToStorage(session, mrfid, lrfid);
 
             session.removeAttribute(CommonConstant.SESSION_MRFID);
             return ResultVO.ok();
@@ -221,6 +226,7 @@ public class CommonServiceImpl implements ICommonService {
             String lrfid = dto.getLrfid();
 
             // TODO: 业务逻辑
+            storageService.finishedOriginToSpareArea(session, mrfid, lrfid);
 
             session.removeAttribute(CommonConstant.SESSION_MRFID);
             return ResultVO.ok();
@@ -231,6 +237,7 @@ public class CommonServiceImpl implements ICommonService {
             String lrfid = dto.getLrfid();
 
             // TODO: 业务逻辑
+            storageService.finishedSpareAreaToStorage(session, mrfid, lrfid);
 
             session.removeAttribute(CommonConstant.SESSION_MRFID);
             return ResultVO.ok();
@@ -241,6 +248,7 @@ public class CommonServiceImpl implements ICommonService {
             String lrfid = dto.getLrfid();
 
             // TODO: 业务逻辑
+            storageService.chooseMaterialShow(mrfid);
 
             session.removeAttribute(CommonConstant.SESSION_MRFID);
             return ResultVO.ok();
