@@ -108,4 +108,11 @@ public interface StorageHeadMapper extends BaseMapper<StorageHeadPO, Long> {
      * @return
      */
     List<MaterialDetailBO> queryPrepare(Long shid);
+
+    /**
+     * 查询当前入库单得待入库rfid
+     * @param shid
+     * @return
+     */
+    List<MaterialDetailBO> querySave(Long shid);
 }

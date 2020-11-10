@@ -4,6 +4,7 @@ import com.smartindustry.common.bo.sm.LocationDetailBO;
 import com.smartindustry.common.bo.sm.MaterialDetailBO;
 import com.smartindustry.common.pojo.sm.StorageDetailPO;
 import lombok.Data;
+import org.springframework.security.core.parameters.P;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -94,7 +95,9 @@ public class MaterialDetailVO implements Serializable {
         vo.setMid(bo.getMaterialId());
         vo.setMname(bo.getMaterialName());
         vo.setMno(bo.getMaterialNo());
-        vo.setTotal(new BigDecimal(bo.getBos().size()).multiply(bo.getPackageVolume()));
+        if(!bo.getBos().isEmpty() && bo.getPackageVolume()!=null){
+            vo.setTotal(new BigDecimal(bo.getBos().size()).multiply(bo.getPackageVolume()));
+        }
         vo.setMuname(bo.getMeasureUnitName());
         List<LocationDetailVO> vos = new ArrayList<>();
         for (LocationDetailBO detailBO : bo.getBos()){
@@ -103,6 +106,11 @@ public class MaterialDetailVO implements Serializable {
             detailVO.setWname(detailBO.getWarehouseName());
             detailVO.setLname(detailBO.getLocationName());
             detailVO.setLno(detailBO.getLocationNo());
+            if(detailBO.getLocationNo() == null){
+                detailVO.setFlag(false);
+            }else{
+                detailVO.setFlag(true);
+            }
             detailVO.setVolume(detailBO.getPackageVolume());
             detailVO.setMuname(detailBO.getMeasureUnitName());
             vos.add(detailVO);
