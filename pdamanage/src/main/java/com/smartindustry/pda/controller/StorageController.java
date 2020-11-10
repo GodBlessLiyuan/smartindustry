@@ -65,7 +65,7 @@ public class StorageController {
      */
     @PostMapping("execute")
     public ResultVO execute(HttpSession session, @RequestBody StorageDTO dto) {
-        return storageService.execute(session, dto);
+        return storageService.execute(session, dto.getMrfid());
     }
 
     /**
@@ -75,7 +75,7 @@ public class StorageController {
      */
     @PostMapping("efpre")
     public ResultVO executeForPre(HttpSession session, @RequestBody StorageDTO dto) {
-        return storageService.executeForPre(session, dto);
+        return storageService.executeForPre(session, dto.getMrfid());
     }
 
     /**
@@ -84,8 +84,8 @@ public class StorageController {
      * @return
      */
     @PostMapping("cmshow")
-    public ResultVO chooseMaterialShow(HttpSession session, @RequestBody StorageDTO dto) {
-        return storageService.chooseMaterialShow(session, dto);
+    public ResultVO chooseMaterialShow(@RequestBody StorageDTO dto) {
+        return storageService.chooseMaterialShow(dto.getMrfid());
     }
 
     /**

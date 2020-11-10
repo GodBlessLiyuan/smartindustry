@@ -1,33 +1,27 @@
-package com.smartindustry.common.bo.sm.bo.sm;
+package com.smartindustry.common.bo.sm;
 
+import com.smartindustry.common.pojo.si.LocationPO;
 import lombok.Data;
+
+import java.math.BigDecimal;
 
 /**
  * @author: jiangzhaojie
- * @date: Created in 18:29 2020/11/4
+ * @date: Created in 9:44 2020/11/10
  * @version: 1.0.0
  * @description:
  */
 @Data
-public class MaterialDetailBO {
-
+public class LocationDetailBO extends LocationPO{
+    /**
+     * 栈板rfid
+     */
     private String rfid;
     /**
      * 仓库名称
      */
     private String warehouseName;
-    /**
-     * 库位编号
-     */
-    private String locationNo;
-    /**
-     * 物料名称
-     */
-    private String materialName;
-    /**
-     * 物料编号
-     */
-    private String materialNo;
+
     /**
      * 是否是备料区false还是成品区true
      */
@@ -39,5 +33,10 @@ public class MaterialDetailBO {
     /**
      * 1 栈板的体积
      */
-    private String volume;
+    private BigDecimal packageVolume;
+
+    /**
+     * 单位名称
+     */
+    private String measureUnitName;
 }

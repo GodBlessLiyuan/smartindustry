@@ -2,6 +2,9 @@ package com.smartindustry.common.bo.sm;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 /**
  * @author: jiangzhaojie
  * @date: Created in 18:29 2020/11/4
@@ -10,16 +13,10 @@ import lombok.Data;
  */
 @Data
 public class MaterialDetailBO {
-
-    private String rfid;
     /**
-     * 仓库名称
+     * 物料id
      */
-    private String warehouseName;
-    /**
-     * 库位编号
-     */
-    private String locationNo;
+    private Long materialId;
     /**
      * 物料名称
      */
@@ -29,15 +26,17 @@ public class MaterialDetailBO {
      */
     private String materialNo;
     /**
-     * 是否是备料区false还是成品区true
+     * 栈板合计总数
      */
-    private Boolean flag;
-    /**
-     * 栈板显示 1 栈板
-     */
-    private String pallet;
+    private Integer total;
     /**
      * 1 栈板的体积
      */
-    private String volume;
+    private BigDecimal packageVolume;
+    /**
+     * 单位名称
+     */
+    private String measureUnitName;
+
+    private List<LocationDetailBO> bos;
 }

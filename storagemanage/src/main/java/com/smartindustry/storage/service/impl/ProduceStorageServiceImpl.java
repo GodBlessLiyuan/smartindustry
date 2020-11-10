@@ -56,14 +56,13 @@ public class ProduceStorageServiceImpl implements IProduceStorageService {
         //入库单表头信息
         StorageHeadBO bo = storageHeadMapper.queryStored(dto.getShid());
         // 查询待入库物料
-        List<MaterialDetailBO> preList = storageDetailMapper.queryPrepare(dto.getShid());
+        List<MaterialDetailBO> preList = storageHeadMapper.queryPrepare(dto.getShid());
         // 当前入库单得待入库rfid
-        List<String> storeList = storageDetailMapper.querySave(dto.getShid());
+        List<MaterialDetailBO> storeList = storageHeadMapper.querySave(dto.getShid());
         //合并数组
-//        preList.addAll(storeList);
+        preList.addAll(storeList);
         Map<String,Object> map = new HashMap<>();
         map.put("prepare",MaterialDetailVO.convert(preList));
-        map.put("stored",storeList);
         map.put("detail", StorageDetailVO.convert(bo));
         return ResultVO.ok().setData(map);
     }
@@ -71,13 +70,7 @@ public class ProduceStorageServiceImpl implements IProduceStorageService {
     @Override
     public ResultVO queryDetail(StorageDetailDTO dto){
         List<MaterialDetailBO> bos = storageHeadMapper.queryDetail(dto.getShid(),dto.getLid());
-        Map<String,Object> map = new HashMap<>();
-        LocationPO locationPO = locationMapper.selectByPrimaryKey(dto.getLid());
-        MaterialPO materialPO = materialMapper.selectByPrimaryKey(locationPO.getMaterialId());
-        if(!bos.isEmpty()){
-            map.put("list",MaterialDetailVO.convert(bos));
-            map.put("total",materialPO.getPackageVolume().multiply(new BigDecimal(bos.size())));
-        }
-        return ResultVO.ok().setData(map);
+
+        return ResultVO.ok().setData(MaterialDetailVO.convert(bos));
     }
 }

@@ -38,6 +38,8 @@ public class StorageDetailVO implements Serializable {
      */
     private Date stime;
 
+    private Byte status;
+
     private List<WarehouseVO> vos;
 
     @Data
@@ -90,6 +92,8 @@ public class StorageDetailVO implements Serializable {
          * 数量/立方米
          */
         private BigDecimal volume;
+
+        private String muname;
     }
 
     public static StorageDetailVO convert(StorageHeadBO bo) {
@@ -97,6 +101,7 @@ public class StorageDetailVO implements Serializable {
         vo.setShid(bo.getStorageHeadId());
         vo.setSno(bo.getStorageNo());
         vo.setSono(bo.getSourceNo());
+        vo.setStatus(bo.getStatus());
         vo.setStime(bo.getStorageTime());
         List<WarehouseVO> warehouseVOS = new ArrayList<>();
         for(WarehouseBO warehouseBO : bo.getWarehouseBOS()){
@@ -115,6 +120,7 @@ public class StorageDetailVO implements Serializable {
                     rfidVO.setMname(materialBO.getMaterialName());
                     rfidVO.setMno(materialBO.getMaterialNo());
                     rfidVO.setNum(materialBO.getNum());
+                    rfidVO.setMuname(materialBO.getMeasureUnitName());
                     rfidVO.setVolume(new BigDecimal(materialBO.getNum()).multiply(materialBO.getPackageVolume()));
                     rfidVOS.add(rfidVO);
                 }
