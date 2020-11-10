@@ -36,4 +36,14 @@ public class ProduceOutboundController {
     public ResultVO queryOutboundRecord(@RequestBody OperateDTO dto) {
         return produceOutboundService.queryOutboundRecord(dto);
     }
+
+    /**
+     * 查看详情
+     *
+     * @return
+     */
+    @PostMapping("detail")
+    public ResultVO detail(@RequestBody OperateDTO dto) {
+        return produceOutboundService.detail(dto);
+    }
 }
