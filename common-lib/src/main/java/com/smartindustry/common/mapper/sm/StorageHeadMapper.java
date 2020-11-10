@@ -20,6 +20,7 @@ public interface StorageHeadMapper extends BaseMapper<StorageHeadPO, Long> {
 
     /**
      * 采购入库单的分页查询
+     *
      * @param reqData
      * @return
      */
@@ -27,6 +28,7 @@ public interface StorageHeadMapper extends BaseMapper<StorageHeadPO, Long> {
 
     /**
      * 生产入库单的分页查询
+     *
      * @param reqData
      * @return
      */
@@ -34,10 +36,12 @@ public interface StorageHeadMapper extends BaseMapper<StorageHeadPO, Long> {
 
     /**
      * 通过采购表头id 查询所有信息
+     *
      * @param shid
      * @return
      */
     StorageHeadBO queryByShid(Long shid);
+
     /**
      * 根据 pda 类型 查询
      *
@@ -48,20 +52,23 @@ public interface StorageHeadMapper extends BaseMapper<StorageHeadPO, Long> {
 
     /**
      * 查询和当前时间段
+     *
      * @param cdate
      * @return
      */
-    StorageHeadPO queryPrepareNo(Date cdate,Date stime,Date etime);
+    StorageHeadPO queryPrepareNo(Date cdate, Date stime, Date etime);
 
     /**
      * 根据状态查询入库单以及来源类型
+     *
      * @param status
      * @return
      */
-    List<StorageHeadPO> queryByStatus(Byte status,Byte type);
+    List<StorageHeadPO> queryByStatus(Byte status, Byte type);
 
     /**
      * 通过入库单表头id 查询所有详细信息
+     *
      * @param shid
      * @return
      */
@@ -69,6 +76,7 @@ public interface StorageHeadMapper extends BaseMapper<StorageHeadPO, Long> {
 
     /**
      * 根据入库单id 查询所有入库库存详情
+     *
      * @param shid
      * @return
      */
@@ -76,12 +84,15 @@ public interface StorageHeadMapper extends BaseMapper<StorageHeadPO, Long> {
 
     /**
      * 查询所有的待入库的以及在备料区的
+     *
      * @param shid
      * @return
      */
     List<StorageDetailPO> queryAwaitStore(Long shid);
+
     /**
      * 通过来源单号查表头信息
+     *
      * @param sourceNo
      * @return
      */
@@ -89,6 +100,7 @@ public interface StorageHeadMapper extends BaseMapper<StorageHeadPO, Long> {
 
     /**
      * 根据入库单号查找入库单
+     *
      * @param storageNo
      * @return
      */
@@ -96,6 +108,7 @@ public interface StorageHeadMapper extends BaseMapper<StorageHeadPO, Long> {
 
     /**
      * 查询入库单某储位某物料得详情
+     *
      * @param shid
      * @param lid
      * @return
@@ -104,6 +117,7 @@ public interface StorageHeadMapper extends BaseMapper<StorageHeadPO, Long> {
 
     /**
      * 查询当前入库单得进备料区得rfid
+     *
      * @param shid
      * @return
      */
@@ -111,8 +125,17 @@ public interface StorageHeadMapper extends BaseMapper<StorageHeadPO, Long> {
 
     /**
      * 查询当前入库单得待入库rfid
+     *
      * @param shid
      * @return
      */
     List<MaterialDetailBO> querySave(Long shid);
+
+    /**
+     * 根据状态以及来源类型查询正在进行的未完成的一个入库单
+     *
+     * @param type
+     * @return
+     */
+    StorageHeadPO queryNowUnfinishedByType(Byte type);
 }

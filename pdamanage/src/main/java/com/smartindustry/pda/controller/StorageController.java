@@ -49,6 +49,16 @@ public class StorageController {
     }
 
     /**
+     * mes打包后进行rfid和表头进行绑定
+     *
+     * @return
+     */
+    @PostMapping("rfidbshid")
+    public ResultVO rfidBoundStorageHeadId(@RequestBody StorageDTO dto) {
+        return storageService.rfidBoundStorageHeadId(dto);
+    }
+
+    /**
      * 详细查询
      *
      * @return

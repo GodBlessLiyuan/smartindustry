@@ -33,6 +33,14 @@ public interface IStorageService {
     ResultVO rfidBound(OperateDTO dto);
 
     /**
+     * pda打包时将rfid和入库单号绑定
+     *
+     * @param dto
+     * @return
+     */
+    ResultVO rfidBoundStorageHeadId(StorageDTO dto);
+
+    /**
      * 入库单详情
      *
      * @param dto
