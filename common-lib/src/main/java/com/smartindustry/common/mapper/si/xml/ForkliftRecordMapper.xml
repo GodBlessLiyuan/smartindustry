@@ -4,11 +4,12 @@
   <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.ForkliftRecordPO">
     <id column="record_id" jdbcType="BIGINT" property="recordId" />
     <result column="forklift_id" jdbcType="BIGINT" property="forkliftId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
     <result column="operation_name" jdbcType="CHAR" property="operationName" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    record_id, forklift_id, operation_name, create_time
+    record_id, forklift_id, user_id, operation_name, create_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -21,10 +22,10 @@
     where record_id = #{recordId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.smartindustry.common.pojo.si.ForkliftRecordPO">
-    insert into si_forklift_record (record_id, forklift_id, operation_name, 
-      create_time)
-    values (#{recordId,jdbcType=BIGINT}, #{forkliftId,jdbcType=BIGINT}, #{operationName,jdbcType=CHAR}, 
-      #{createTime,jdbcType=TIMESTAMP})
+    insert into si_forklift_record (record_id, forklift_id, user_id, 
+      operation_name, create_time)
+    values (#{recordId,jdbcType=BIGINT}, #{forkliftId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
+      #{operationName,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.ForkliftRecordPO">
     insert into si_forklift_record
@@ -34,6 +35,9 @@
       </if>
       <if test="forkliftId != null">
         forklift_id,
+      </if>
+      <if test="userId != null">
+        user_id,
       </if>
       <if test="operationName != null">
         operation_name,
@@ -49,6 +53,9 @@
       <if test="forkliftId != null">
         #{forkliftId,jdbcType=BIGINT},
       </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
       <if test="operationName != null">
         #{operationName,jdbcType=CHAR},
       </if>
@@ -63,6 +70,9 @@
       <if test="forkliftId != null">
         forklift_id = #{forkliftId,jdbcType=BIGINT},
       </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
       <if test="operationName != null">
         operation_name = #{operationName,jdbcType=CHAR},
       </if>
@@ -75,8 +85,17 @@
   <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.ForkliftRecordPO">
     update si_forklift_record
     set forklift_id = #{forkliftId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
       operation_name = #{operationName,jdbcType=CHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where record_id = #{recordId,jdbcType=BIGINT}
   </update>
+  <resultMap id="BO_Column_List" type="com.smartindustry.common.bo.si.ForkliftRecordBO" extends="BaseResultMap">
+    <result column="name" jdbcType="CHAR" property="userName" />
+  </resultMap>
+  <select id="listRecord" parameterType="java.lang.Long" resultMap="BO_Column_List">
+    select fc.operation_name, fc.create_time, u.name
+    from si_forklift_record fc left join am_user u on fc.user_id =u.user_id
+    where fc.forklift_id=#{fid}
+  </select>
 </mapper>

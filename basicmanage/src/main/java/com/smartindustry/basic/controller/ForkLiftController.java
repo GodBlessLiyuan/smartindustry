@@ -42,4 +42,24 @@ public class ForkLiftController {
     public ResultVO edit(@RequestBody ForkLiftDTO dto){
         return forkLiftService.edit(dto);
     }
+
+    /***
+     * 叉车删除接口
+     * @param dto
+     * @return
+     */
+    @PostMapping("delete")
+    public ResultVO delete(@RequestBody ForkLiftDTO dto){
+        return forkLiftService.delete(dto.getFid());
+    }
+
+    /***
+     * 查询叉车记录
+     * @param dto
+     * @return
+     */
+    @PostMapping("record")
+    public ResultVO forkRecord(@RequestBody ForkLiftDTO dto){
+        return forkLiftService.record(dto.getFid());
+    }
 }

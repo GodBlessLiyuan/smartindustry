@@ -32,7 +32,12 @@
         from si_forklift
         where forklift_id = #{forkliftId,jdbcType=BIGINT}
     </delete>
-    <insert id="insert" parameterType="com.smartindustry.common.pojo.si.ForkliftPO">
+    <update id="deleteDr" parameterType="java.lang.Long">
+        update si_forklift
+        set dr=2 where forklift_id = #{forkliftId,jdbcType=BIGINT}
+    </update>
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.si.ForkliftPO" useGeneratedKeys="true"
+            keyProperty="forklift_id">
         insert into si_forklift (forklift_id, forklift_no, forklift_name,
                                  forklift_model, forklift_brand, supplier_name,
                                  contact, contact_phone, imei_no,
@@ -260,5 +265,11 @@
                  right join sm_storage_forklift sf on f.forklift_id = sf.forklift_id
         where storage_head_id = #{shid,jdbcType=BIGINT}
           and f.dr = 1
+    </select>
+
+    <select id="queryNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from si_forklift
+        where forklift_no = #{queryNo} and f.dr = 1
     </select>
 </mapper>

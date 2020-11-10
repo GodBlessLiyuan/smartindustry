@@ -25,4 +25,18 @@ public interface IForkLiftService {
      * @return
      */
     ResultVO edit(ForkLiftDTO dto);
+
+    /***
+     * 删除叉车信息
+     * @param fid
+     * @return
+     */
+    ResultVO delete(Long fid);
+
+    /***
+     * 查询操作记录
+     * @param fid
+     * @return
+     */
+    ResultVO record(Long fid);
 }
