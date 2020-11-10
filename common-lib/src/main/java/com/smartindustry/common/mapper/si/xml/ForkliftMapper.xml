@@ -212,7 +212,7 @@
         from si_forklift f
         where f.dr = 1
         <if test="area != null and area != 0">
-            and f.work_area = #{wid,jdbcType=TINYINT}
+            and f.work_area = #{area,jdbcType=TINYINT}
         </if>
         <if test="status != null and status != 0">
             and f.`status` = #{status,jdbcType=TINYINT}
