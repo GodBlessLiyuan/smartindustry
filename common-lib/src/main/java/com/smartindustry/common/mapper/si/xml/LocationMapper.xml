@@ -305,6 +305,17 @@
         ) and exist_num > 0
     </select>
 
+    <select id="queryRecommendByMids" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_location
+        where dr = 1 and material_id in (
+        <foreach collection="list" item="mid" separator=",">
+            #{mid,jdbcType=BIGINT}
+        </foreach>
+        ) and exist_num <![CDATA[ < ]]> hold_tray_num
+    </select>
+
     <select id="queryByRfid" parameterType="java.lang.String" resultMap="BOResultMap">
         select
         <include refid="BO_Column_List"/>
