@@ -271,6 +271,27 @@
     where sh.dr = 1 and sb.dr = 1 and sh.storage_head_id = #{shid,jdbcType=BIGINT}
   </select>
 
+  <select id = "queryAll" parameterType="java.util.Map" resultMap="BOSResultMap">
+    select
+    <include refid="BOS_Column_List" />
+    from sm_storage_head sh
+    left join si_warehouse w on sh.warehouse_id = w.warehouse_id
+    left join sm_storage_body sb on sh.storage_head_id = sb.storage_head_id
+    left join si_location l on sb.location_id = l.location_id
+    left join si_material m on sb.material_id = m.material_id
+    left join si_supplier su on m.supplier_id = su.supplier_id
+    left join dd_measure_unit mu on m.measure_unit_id = mu.measure_unit_id
+    <where>
+      <if test="status != null and status != 0">
+        and sh.`status` = #{status,jdbcType=TINYINT}
+      </if>
+      <if test="stype != null">
+        and sh.source_type = #{stype,jdbcType=TINYINT}
+      </if>
+    </where>
+
+  </select>
+
   <select id="queryNo" parameterType="java.lang.String" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
