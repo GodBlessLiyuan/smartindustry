@@ -318,6 +318,12 @@ public class CommonServiceImpl implements ICommonService {
             }
             outboundBodyMapper.updateByPrimaryKey(bodyPO);
 
+            // 储位数量 -1
+            detailPO = storageDetailMapper.queryByRfid((String) session.getAttribute(CommonConstant.SESSION_MRFID));
+            LocationPO locationPO = locationMapper.selectByPrimaryKey(detailPO.getLocationId());
+            locationPO.setExistNum(locationPO.getExistNum().subtract(BigDecimal.ONE));
+            locationMapper.updateByPrimaryKey(locationPO);
+
             session.removeAttribute(CommonConstant.SESSION_MRFID);
             return ResultVO.ok();
         }

@@ -302,7 +302,7 @@
         <foreach collection="list" item="mid" separator=",">
             #{mid,jdbcType=BIGINT}
         </foreach>
-        )
+        ) and exist_num > 0
     </select>
 
     <select id="queryByRfid" parameterType="java.lang.String" resultMap="BOResultMap">
