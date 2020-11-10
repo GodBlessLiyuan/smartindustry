@@ -754,7 +754,7 @@ public class StorageServiceImpl implements IStorageService {
             //备料区已存库位-1
             //通过rfid查找备料区的库位id
             LocationPO locationPOForPre = locationMapper.selectByPrimaryKey(storageDetailPO.getLocationId());
-            locationPOForPre.setExistNum(locationPO.getExistNum() == null ? new BigDecimal(1) : locationPO.getExistNum().add(new BigDecimal(1)));
+            locationPOForPre.setExistNum(locationPO.getExistNum() == null ? new BigDecimal(1) : locationPO.getExistNum().subtract(new BigDecimal(1)));
             locationMapper.updateByPrimaryKey(locationPOForPre);
         }
 
