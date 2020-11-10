@@ -1,5 +1,6 @@
 package com.smartindustry.storage.vo;
 
+import com.smartindustry.common.bo.sm.StorageRecordBO;
 import com.smartindustry.common.pojo.sm.StorageRecordPO;
 import lombok.Data;
 
@@ -30,19 +31,23 @@ public class StorageRecordVO implements Serializable {
      */
     private String type;
 
-    public static List<StorageRecordVO> convert(List<StorageRecordPO> pos) {
-        List<StorageRecordVO> vos = new ArrayList<>(pos.size());
-        for (StorageRecordPO po : pos) {
-            vos.add(convert(po));
+    public static List<StorageRecordVO> convert(List<StorageRecordBO> bos) {
+        List<StorageRecordVO> vos = new ArrayList<>(bos.size());
+        for (StorageRecordBO bo : bos) {
+            vos.add(convert(bo));
         }
         return vos;
     }
 
-    public static StorageRecordVO convert(StorageRecordPO po) {
+    public static StorageRecordVO convert(StorageRecordBO bo) {
         StorageRecordVO vo = new StorageRecordVO();
-        vo.setName("admin");
-        vo.setCtime(po.getCreateTime());
-        vo.setType(po.getOperationName());
+        if(bo.getName()!=null){
+            vo.setName(bo.getName());
+        }else {
+            vo.setName("系统");
+        }
+        vo.setCtime(bo.getCreateTime());
+        vo.setType(bo.getOperationName());
         return vo;
     }
 }

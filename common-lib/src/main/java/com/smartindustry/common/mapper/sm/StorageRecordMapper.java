@@ -1,5 +1,7 @@
 package com.smartindustry.common.mapper.sm;
 
+import com.smartindustry.common.bo.om.OutboundRecordBO;
+import com.smartindustry.common.bo.sm.StorageRecordBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.sm.StorageRecordPO;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,5 +18,12 @@ public interface StorageRecordMapper extends BaseMapper<StorageRecordPO, Long> {
      * @param shid
      * @return
      */
-    List<StorageRecordPO> queryByShid(Long shid);
+    List<StorageRecordBO> queryByShid(Long shid);
+
+    /**
+     * 成品入库库查询纪录
+     * @param shid
+     * @return
+     */
+    List<StorageRecordBO> queryForkByShid(Long shid);
 }
