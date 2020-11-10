@@ -127,7 +127,7 @@ public class StorageServiceImpl implements IStorageService {
             storageBodyMapper.batchInsert(storageBodyPOS);
         }
         //入库操作记录:新建入库单
-        storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), 1L, StorageConstant.OPERATE_NAME_INSERT));
+        storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), null, StorageConstant.OPERATE_NAME_INSERT));
         return ResultVO.ok();
     }
 
@@ -244,7 +244,7 @@ public class StorageServiceImpl implements IStorageService {
         for (LocationPO locationPO : locationPOs) {
             StorageDetailVO.LocationVO lvo = lvos.get(locationPO.getMaterialId());
             //如果库位未满，返回推荐，满了则不推荐
-            if (!judgeFull(locationPO.getLocationId())) {
+            if (judgeCanPut(locationPO.getLocationId())) {
                 lvo.getLrfids().add(locationPO.getLocationNo());
             }
         }
@@ -264,11 +264,12 @@ public class StorageServiceImpl implements IStorageService {
      * @param lid
      * @return
      */
-    public boolean judgeFull(Long lid) {
+    public boolean judgeCanPut(Long lid) {
         // 获取当前储位的在库数量
-        BigDecimal curLnoNum = storageDetailMapper.queryStored(lid);
+        // BigDecimal curLnoNum = storageDetailMapper.queryStored(lid);
+        BigDecimal existNum = locationMapper.selectByPrimaryKey(lid).getExistNum();
         BigDecimal trayNum = locationMapper.selectByPrimaryKey(lid).getHoldTrayNum();
-        if (curLnoNum.compareTo(trayNum) == -1) {
+        if (trayNum.compareTo(existNum) == 1) {
             return true;
         } else {
             return false;
@@ -518,10 +519,12 @@ public class StorageServiceImpl implements IStorageService {
             if (storageForkliftPO != null) {
                 storageForkliftMapper.deleteByPrimaryKey(storageForkliftPO.getStorageForkliftId());
             }
-            // 叉车状态 - 空闲
+            //5.叉车状态 - 空闲
             forkliftPO.setStatus(CommonConstant.STATUS_FORKLIFT_IDLE);
             forkliftMapper.updateByPrimaryKey(forkliftPO);
-
+            //6.库位已经存在的数量+1
+            LocationPO locationPO = locationMapper.selectByPrimaryKey(locationBO.getLocationId());
+            locationPO.setExistNum(locationPO.getExistNum() == null ? new BigDecimal(1) : locationPO.getExistNum().add(new BigDecimal(1)));
         }
 
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
@@ -569,12 +572,12 @@ public class StorageServiceImpl implements IStorageService {
             storageHeadPO.setWarehouseId(locationBO.getWarehouseId());
             //更新入库单的状态
             if (storageHeadPO.getStorageNum() == null || storageHeadPO.getStorageNum().compareTo(new BigDecimal(0)) == 0) {
-                //插入入库完成操作记录
+                //执行操作记录
                 storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), forkliftPO.getForkliftId(), StorageConstant.OPERATE_NAME_EXECUTE));
             }
             if (storageHeadPO.getStorageNum().add(new BigDecimal(1)).compareTo(storageHeadPO.getExpectNum()) == -1) {
                 storageHeadPO.setStatus(StorageConstant.STATUS_STOREING);
-                //插入入库完成操作记录
+                //加入入库操作记录
                 storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), forkliftPO.getForkliftId(), StorageConstant.OPERATE_NAME_JOIN));
             } else {
                 storageHeadPO.setStatus(StorageConstant.STATUS_STORED);
@@ -598,9 +601,12 @@ public class StorageServiceImpl implements IStorageService {
             if (storageForkliftPO != null) {
                 storageForkliftMapper.deleteByPrimaryKey(storageForkliftPO.getStorageForkliftId());
             }
-            // 叉车状态 - 空闲
+            //5. 叉车状态 - 空闲
             forkliftPO.setStatus(CommonConstant.STATUS_FORKLIFT_IDLE);
             forkliftMapper.updateByPrimaryKey(forkliftPO);
+            //6.库位已经存在的数量+1
+            LocationPO locationPO = locationMapper.selectByPrimaryKey(locationBO.getLocationId());
+            locationPO.setExistNum(locationPO.getExistNum() == null ? new BigDecimal(1) : locationPO.getExistNum().add(new BigDecimal(1)));
         }
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
             @Override
@@ -628,7 +634,7 @@ public class StorageServiceImpl implements IStorageService {
         String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
         // 根据imei查询出叉车id
         ForkliftPO forkliftPO = forkliftMapper.queryByImei(imei);
-        // 根据栈板rfid查询入库单
+        // 根据栈板rfid查询之前的入库单
         StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(mrfid);
         // 查询当前储位的基本信息
         LocationBO locationBO = locationMapper.queryByRfid(lrfid);
@@ -741,6 +747,15 @@ public class StorageServiceImpl implements IStorageService {
             // 叉车状态 - 空闲
             forkliftPO.setStatus(CommonConstant.STATUS_FORKLIFT_IDLE);
             forkliftMapper.updateByPrimaryKey(forkliftPO);
+            //成品库位已经存在的数量+1
+            LocationPO locationPO = locationMapper.selectByPrimaryKey(locationBO.getLocationId());
+            locationPO.setExistNum(locationPO.getExistNum() == null ? new BigDecimal(1) : locationPO.getExistNum().add(new BigDecimal(1)));
+            locationMapper.updateByPrimaryKey(locationPO);
+            //备料区已存库位-1
+            //通过rfid查找备料区的库位id
+            LocationPO locationPOForPre = locationMapper.selectByPrimaryKey(storageDetailPO.getLocationId());
+            locationPOForPre.setExistNum(locationPO.getExistNum() == null ? new BigDecimal(1) : locationPO.getExistNum().add(new BigDecimal(1)));
+            locationMapper.updateByPrimaryKey(locationPOForPre);
         }
 
         Long finalStorageHeadId = storageHeadId;
