@@ -137,4 +137,67 @@
             #{mid,jdbcType=BIGINT}
         </foreach>
     </update>
+
+    <resultMap id="BOResultMap" type="com.smartindustry.common.bo.im.MaterialInventoryBO" extends="BaseResultMap">
+        <result column="material_no" jdbcType="CHAR" property="materialNo"/>
+        <result column="material_name" jdbcType="CHAR" property="materialName"/>
+        <result column="material_type" jdbcType="TINYINT" property="materialType"/>
+        <result column="material_model" jdbcType="CHAR" property="materialModel"/>
+        <result column="material_desc" jdbcType="CHAR" property="materialDesc"/>
+        <result column="supplier_name" jdbcType="CHAR" property="supplierName"/>
+        <result column="safe_stock_id" jdbcType="BIGINT" property="safeStockId"/>
+        <result column="lower_limit" jdbcType="INTEGER" property="lowerLimit"/>
+        <result column="measure_unit_name" jdbcType="CHAR" property="measureUnitName"/>
+        <result column="way" jdbcType="TINYINT" property="way"/>
+        <result column="available_num" jdbcType="INTEGER" property="availableNum"/>
+        <collection property="locations" ofType="com.smartindustry.common.bo.si.LocationBO">
+            <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
+        </collection>
+    </resultMap>
+    <sql id="BO_Column_List">
+        mi.material_inventory_id, mi.material_id, mi.way_num, mi.storage_num, mi.lock_num, mi.relate_num, mi.`status`, mi.available_num,
+        m.material_no, m.material_name, m.material_type, m.material_model, m.material_desc,me.measure_unit_name,
+        s.supplier_name,
+        ss.safe_stock_id, ss.lower_limit,
+        w.warehouse_name
+    </sql>
+    <select id="pageQuery" parameterType="java.util.Map" resultType="java.lang.Long">
+        select mi.material_inventory_id as materialInventoryId
+        from im_material_inventory mi
+        left join si_material m on mi.material_id = m.material_id
+        <where>
+            <if test="keyword != null and keyword != ''">
+                and (m.material_no like '%' #{keyword,jdbcType=CHAR} '%'
+                or m.material_name like '%' #{keyword,jdbcType=CHAR} '%'
+                or m.material_desc like '%' #{keyword,jdbcType=CHAR} '%')
+            </if>
+            <if test="mtype != null and mtype != 0">
+                and m.material_type = #{mtype,jdbcType=TINYINT}
+            </if>
+            <if test="wid != null and wid != 0">
+                and mi.material_id in (
+                select sl.material_id from si_storage_label sl
+                where sl.warehouse_id = #{wid,jdbcType=BIGINT}
+                )
+            </if>
+        </where>
+        order by mi.`status` desc, m.create_time desc
+    </select>
+
+    <select id="queryByMiids" parameterType="java.util.Map" resultMap="BOResultMap">
+        select
+        <include refid="BO_Column_List"/>
+        from im_material_inventory mi
+        left join si_material m on mi.material_id = m.material_id
+        left join dd_measure_unit me on me.measure_unit_id = m.measure_unit_id
+        left join si_supplier s on m.supplier_id = s.supplier_id
+        left join im_safe_stock ss on mi.material_inventory_id = ss.material_inventory_id
+        left join si_storage_label sl on mi.material_id = sl.material_id
+        left join si_warehouse w on sl.warehouse_id = w.warehouse_id
+        where mi.material_inventory_id in
+        <foreach collection="list" item="miid" separator="," open="(" close=")">
+            #{miid,jdbcType=BIGINT}
+        </foreach>
+        order by mi.`status` desc, m.create_time desc
+    </select>
 </mapper>

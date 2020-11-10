@@ -1,5 +1,6 @@
 package com.smartindustry.common.mapper.im;
 
+import com.smartindustry.common.bo.im.MaterialInventoryBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.im.MaterialInventoryPO;
 import org.apache.ibatis.annotations.Mapper;
@@ -26,4 +27,12 @@ public interface MaterialInventoryMapper extends BaseMapper<MaterialInventoryPO,
      * @param mids
      */
     void batchDelete(List<Long> mids);
+
+    /**
+     * 根据Miid查询
+     *
+     * @param miids
+     * @return
+     */
+    List<MaterialInventoryBO> queryByMiids(List<Long> miids);
 }
