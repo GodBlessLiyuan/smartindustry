@@ -341,4 +341,36 @@
         </if>
         order by oh.create_time desc
     </select>
+
+
+    <resultMap id="DOSResultMap" type="com.smartindustry.common.bo.om.OutboundHeadBO" extends="BaseResultMap">
+        <result column="outbound_head_id" jdbcType="BIGINT" property="outboundHeadId"/>
+        <result column="outbound_no" jdbcType="CHAR" property="outboundNo"/>
+        <result column="source_no" jdbcType="CHAR" property="sourceNo"/>
+        <result column="plan_time" jdbcType="DATE" property="planTime"/>
+        <result column="extra" jdbcType="CHAR" property="extra"/>
+        <collection property="bodyBOs" ofType="com.smartindustry.common.bo.om.OutboundBodyBO">
+            <id column="outbound_body_id" jdbcType="BIGINT" property="outboundBodyId"/>
+            <result column="material_id" jdbcType="BIGINT" property="materialId"/>
+            <result column="material_no" jdbcType="CHAR" property="materialNo"/>
+            <result column="material_name" jdbcType="CHAR" property="materialName"/>
+            <result column="material_model" jdbcType="CHAR" property="materialModel"/>
+            <result column="outbound_num" jdbcType="DECIMAL" property="outboundNum"/>
+            <result column="outbound_time" jdbcType="TIMESTAMP" property="outboundTime"/>
+            <result column="measure_unit_name" jdbcType="CHAR" property="measureUnitName"/>
+        </collection>
+    </resultMap>
+    <sql id="DOS_Column_List">
+        oh.outbound_head_id, oh.outbound_no, oh.source_no, oh.plan_time, ob.outbound_body_id,
+        m.material_id, m.material_no, m.material_name, m.material_model, ob.outbound_num, mu.measure_unit_name
+    </sql>
+    <select id="queryDetail" parameterType="java.lang.Long" resultMap="DOSResultMap">
+        select
+        <include refid="DOS_Column_List"/>
+        from om_outbound_head oh
+        left join om_outbound_body ob on oh.outbound_head_id = ob.outbound_head_id
+        left join si_material m on ob.material_id = m.material_id
+        left join dd_measure_unit mu on m.measure_unit_id = mu.measure_unit_id
+        where oh.dr = 1 and oh.outbound_head_id = #{ohid,jdbcType=BIGINT}
+    </select>
 </mapper>
