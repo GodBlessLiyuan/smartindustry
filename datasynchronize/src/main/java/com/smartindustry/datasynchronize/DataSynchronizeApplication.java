@@ -12,7 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @date created in 2020/11/4
  * @description
  */
-@MapperScan("com.smartindustry.common.mapper")
+//@MapperScan("com.smartindustry.common.mapper")
 @ComponentScan({"com.smartindustry.common.security", "com.smartindustry.datasynchronize"})
 @EnableDiscoveryClient
 @EnableFeignClients

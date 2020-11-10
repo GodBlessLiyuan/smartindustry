@@ -10,7 +10,7 @@ spring:
   datasource:
     test1:
      driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-     jdbc-url: jdbc:sqlserver://192.168.10.49:1433;DatabaseName=boke
+     jdbc-url: jdbc:sqlserver://192.168.10.199:1433;DatabaseName=boke
      username: sa
      password: yinghong
     test2:

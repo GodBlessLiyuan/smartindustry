@@ -30,11 +30,11 @@
     select
     <include refid="BO_Column_List"/>
     FROM
-    dbo.销售发货 AS p
-    LEFT JOIN dbo.销售发货明细 AS d ON p.ID = d.发货ID
-    LEFT JOIN dbo.物品 as m on m.ID = d.物品ID
-    LEFT JOIN dbo.操作员 as o on o.id = p.操作员ID
-    LEFT JOIN dbo.客户 as c on c.id = p.客户ID
+    销售发货 AS p
+    LEFT JOIN 销售发货明细 AS d ON p.ID = d.发货ID
+    LEFT JOIN 物品 as m on m.ID = d.物品ID
+    LEFT JOIN 操作员 as o on o.id = p.操作员ID
+    LEFT JOIN 客户 as c on c.id = p.客户ID
     WHERE m.类别ID = 117 or m.类别ID = 120
   </select>
 </mapper>

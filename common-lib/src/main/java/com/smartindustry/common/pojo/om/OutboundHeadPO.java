@@ -86,5 +86,15 @@ public class OutboundHeadPO implements Serializable {
      */
     private Byte dr;
 
+    /**
+     * 开票员
+     */
+    private Long salesId;
+
+    /**
+     * 开票日期
+     */
+    private Date salesDate;
+
     private static final long serialVersionUID = 1L;
 }

@@ -4,6 +4,7 @@ import com.smartindustry.common.bo.om.OutboundHeadBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.om.OutboundHeadPO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -56,4 +57,11 @@ public interface OutboundHeadMapper extends BaseMapper<OutboundHeadPO, Long> {
      * @return
      */
     OutboundHeadBO queryDetail(Long ohid);
+
+    /**
+     * 根据入库单号查询入库单表头
+     * @param outboundNo
+     * @return
+     */
+    OutboundHeadPO queryByOutboundNo(@Param("outboundNo") String outboundNo);
 }

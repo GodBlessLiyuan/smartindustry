@@ -2,19 +2,19 @@ package com.smartindustry.datasynchronize.service.impl;
 
 import com.smartindustry.common.bo.ds.SaleOutboundErpBO;
 import com.smartindustry.common.mapper.am.UserMapper;
-import com.smartindustry.common.mapper.ds.SalesOutboundDetailMapper;
-import com.smartindustry.common.mapper.ds.SalesOutboundMapper;
+import com.smartindustry.common.mapper.om.OutboundBodyMapper;
+import com.smartindustry.common.mapper.om.OutboundHeadMapper;
 import com.smartindustry.common.mapper.si.ClientMapper;
 import com.smartindustry.common.mapper.si.MaterialMapper;
-import com.smartindustry.common.pojo.am.UserPO;
-import com.smartindustry.common.pojo.ds.SalesOutboundDetailPO;
-import com.smartindustry.common.pojo.ds.SalesOutboundPO;
-import com.smartindustry.common.pojo.ds.sqlserver.SaleDetailErpPO;
-import com.smartindustry.common.pojo.si.ClientPO;
-import com.smartindustry.common.pojo.si.MaterialPO;
 import com.smartindustry.common.sqlserver.SaleOutboundErpMapper;
+import com.smartindustry.common.pojo.am.UserPO;
+import com.smartindustry.common.pojo.ds.sqlserver.SaleDetailErpPO;
+import com.smartindustry.common.pojo.om.OutboundBodyPO;
+import com.smartindustry.common.pojo.om.OutboundHeadPO;
+import com.smartindustry.common.pojo.si.MaterialPO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.datasynchronize.service.ISalesOutboundService;
+import com.smartindustry.datasynchronize.util.OutboundNoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -32,14 +32,15 @@ import java.util.*;
 @EnableTransactionManagement
 public class SalesOutboundServiceImpl implements ISalesOutboundService {
 
+
     @Autowired
     private SaleOutboundErpMapper saleOutboundErpMapper;
 
     @Autowired
-    private SalesOutboundMapper salesOutboundMapper;
+    private OutboundHeadMapper outboundHeadMapper;
 
     @Autowired
-    private SalesOutboundDetailMapper salesOutboundDetailMapper;
+    private OutboundBodyMapper outboundBodyMapper;
 
     @Autowired
     private ClientMapper clientMapper;
@@ -58,68 +59,74 @@ public class SalesOutboundServiceImpl implements ISalesOutboundService {
     @Transactional(rollbackFor = Exception.class)
     public ResultVO sync() {
         List<SaleOutboundErpBO> bos = saleOutboundErpMapper.queryAll();
-        Map<String, List<SalesOutboundDetailPO>> dpos = new HashMap<>(bos.size());
-        List<SalesOutboundPO> pos = new ArrayList<>(bos.size());
+        Map<String, List<OutboundBodyPO>> bpos = new HashMap<>(bos.size());
+        List<OutboundHeadPO> pos = new ArrayList<>(bos.size());
+        String outboundNo = OutboundNoUtil.genOutboundHeadNo(outboundHeadMapper,OutboundNoUtil.OUTBOUND_HEAD_XS,Calendar.getInstance().getTime());
+        String prefix = outboundNo.substring(0,outboundNo.length()-5);
+        Integer laterNum = Integer.valueOf(outboundNo.substring(outboundNo.length()-5));
         for (SaleOutboundErpBO bo: bos) {
-            SalesOutboundPO po = new SalesOutboundPO();
-            if (salesOutboundMapper.queryBySalesNo(po.getSalesNo()) != null) {
+            OutboundHeadPO po = new OutboundHeadPO();
+            if (outboundHeadMapper.queryByOutboundNo(bo.getSaleNo()) != null) {
                 continue;
             }
-            po.setSalesNo(bo.getSaleNo());
-            if(bo.getClientId() != null) {
-                ClientPO client = clientMapper.queryByClientNo(bo.getClientNo());
-                if (client == null) {
-                    continue;
-                }
-                po.setClientId(client.getClientId());
-            }
+            po.setOutboundNo(prefix+laterNum++);
+            po.setSourceNo(bo.getSaleNo());
+            po.setClientNo(bo.getClientNo());
+            clientMapper.queryByClientNo(bo.getClientNo());
             po.setSalesDate(bo.getSaleDate());
             if (bo.getOperatorId() != null) {
                 UserPO user = userMapper.queryByCode(bo.getOperatorCode());
                 if (user == null) {
                     continue;
                 }
-                po.setUserId(user.getUserId());
+                po.setSalesId(user.getUserId());
             }
             po.setCreateTime(Calendar.getInstance().getTime());
-            pos.add(po);
-            if (bo.getSdpos() != null && !bo.getSdpos().isEmpty()) {
-                dpos.put(po.getSalesNo(), convert(bo.getSdpos(), po.getSalesOutboundId()));
-            }
+            po.setDr((byte)1);
+            po.setStatus((byte)3);
+            po.setSourceType((byte)2);
 
+            if (bo.getSdpos() != null && !bo.getSdpos().isEmpty()) {
+                List<OutboundBodyPO> bodyPOS = convert(bo.getSdpos());
+                po.setExpectNum(BigDecimal.valueOf(bodyPOS.stream().mapToDouble(p->p.getExpectNum().doubleValue()).sum()));
+                bpos.put(po.getOutboundNo(), bodyPOS);
+            }
+            pos.add(po);
         }
         if (!pos.isEmpty()) {
-            salesOutboundMapper.batchInsert(pos);
+            outboundHeadMapper.batchInsert(pos);
         }
-        List<SalesOutboundDetailPO> sodpos = new ArrayList<>();
-        for (SalesOutboundPO po: pos) {
-            List<SalesOutboundDetailPO> sps = dpos.get(po.getSalesNo());
-            if (sps != null && !sps.isEmpty()) {
-                for (SalesOutboundDetailPO p : sps) {
-                    p.setSalesOutboundId(po.getSalesOutboundId());
-                    sodpos.add(p);
+        List<OutboundBodyPO> bodyPos = new ArrayList<>();
+        for (OutboundHeadPO po: pos) {
+            List<OutboundBodyPO> bps = bpos.get(po.getOutboundNo());
+            if (bps != null && !bps.isEmpty()) {
+                for (OutboundBodyPO p : bps) {
+                    p.setOutboundHeadId(po.getOutboundHeadId());
+                    bodyPos.add(p);
                 }
             }
         }
-        if (!sodpos.isEmpty()) {
-            salesOutboundDetailMapper.batchInsert(sodpos);
+        if (!bodyPos.isEmpty()) {
+            outboundBodyMapper.batchInsert(bodyPos);
         }
         return ResultVO.ok();
     }
 
-    private List<SalesOutboundDetailPO> convert(List<SaleDetailErpPO> sdpos, Long salesOutboundId) {
-        List<SalesOutboundDetailPO> pos = new ArrayList<>(sdpos.size());
+    private List<OutboundBodyPO> convert(List<SaleDetailErpPO> sdpos) {
+        List<OutboundBodyPO> pos = new ArrayList<>(sdpos.size());
         for (SaleDetailErpPO ep: sdpos) {
-            SalesOutboundDetailPO po = new SalesOutboundDetailPO();
-            po.setSalesOutboundId(salesOutboundId);
+            OutboundBodyPO po = new OutboundBodyPO();
             MaterialPO materialPO = materialMapper.queryByMaterialNo(ep.getMaterialNo(), ep.getMaterialName());
             if (materialPO == null) {
                 continue;
             }
             po.setMaterialId(materialPO.getMaterialId());
-            po.setNeedNum(BigDecimal.valueOf(ep.getSaleNum()));
+            po.setExpectNum(BigDecimal.valueOf(ep.getSaleNum()));
             po.setUnitPrice(BigDecimal.valueOf(ep.getUnitPrice()));
             po.setTotalPrice(BigDecimal.valueOf(ep.getSum()));
+            po.setCreateTime(Calendar.getInstance().getTime());
+            po.setRemark(ep.getRemark());
+            po.setDr((byte)1);
             pos.add(po);
         }
         return pos;

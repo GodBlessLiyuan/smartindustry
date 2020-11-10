@@ -36,6 +36,10 @@ public class SyncConstant {
 
     public static final Double PAY_METHOD_ERP_DEBT= 10.0;
 
+    public static final String PAY_NAME_ERP_BILL= "现金";
+
+    public static final String PAY_NAME_ERP_DEBT= "现金";
+
     public static final Byte PAY_METHOD_BILL= 1;
 
     public static final Byte PAY_METHOD_DEBT= 2;

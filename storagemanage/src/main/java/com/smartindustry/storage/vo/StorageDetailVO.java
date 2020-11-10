@@ -121,7 +121,9 @@ public class StorageDetailVO implements Serializable {
                     rfidVO.setMno(materialBO.getMaterialNo());
                     rfidVO.setNum(materialBO.getNum());
                     rfidVO.setMuname(materialBO.getMeasureUnitName());
-                    rfidVO.setVolume(new BigDecimal(materialBO.getNum()).multiply(materialBO.getPackageVolume()));
+                    if(materialBO.getNum()!=null && materialBO.getPackageVolume()!=null){
+                        rfidVO.setVolume(new BigDecimal(materialBO.getNum()).multiply(materialBO.getPackageVolume()));
+                    }
                     rfidVOS.add(rfidVO);
                 }
                 locationVO.setVos(rfidVOS);
