@@ -69,6 +69,7 @@ public class OutboundDetailVO implements Serializable {
         vo.setSno(bo.getSourceNo());
         vo.setDnum(bo.getExpectNum());
         vo.setOnum(bo.getOutboundNum());
+        vo.setCname(bo.getClientName());
         BigDecimal dnum2 = new BigDecimal(0);
         if (null != bo.getBodyBOs() && bo.getBodyBOs().size() > 0) {
             List<String> minfos = new ArrayList<>(bo.getBodyBOs().size());

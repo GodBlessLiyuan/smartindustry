@@ -1,6 +1,5 @@
 package com.smartindustry.common.bo.om;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.smartindustry.common.pojo.om.OutboundHeadPO;
 import lombok.Data;
 

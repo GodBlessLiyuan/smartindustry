@@ -8,7 +8,6 @@ import com.smartindustry.pda.constant.CommonConstant;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
