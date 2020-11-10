@@ -3,6 +3,7 @@ package com.smartindustry.basic.service;
 import com.smartindustry.basic.dto.ForkLiftDTO;
 import com.smartindustry.common.vo.ResultVO;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,7 +32,7 @@ public interface IForkLiftService {
      * @param fid
      * @return
      */
-    ResultVO delete(Long fid);
+    ResultVO delete(List<Long> fid);
 
     /***
      * 查询操作记录
@@ -39,4 +40,6 @@ public interface IForkLiftService {
      * @return
      */
     ResultVO record(Long fid);
+
+    ResultVO detail(Long fid);
 }

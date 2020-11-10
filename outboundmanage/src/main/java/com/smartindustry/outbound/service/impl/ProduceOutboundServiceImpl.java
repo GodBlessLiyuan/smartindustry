@@ -3,6 +3,7 @@ package com.smartindustry.outbound.service.impl;
 import com.github.pagehelper.Page;
 import com.smartindustry.common.bo.om.OutboundHeadBO;
 import com.smartindustry.common.bo.om.OutboundRecordBO;
+import com.smartindustry.common.constant.ExceptionEnums;
 import com.smartindustry.common.mapper.om.OutboundHeadMapper;
 import com.smartindustry.common.mapper.om.OutboundRecordMapper;
 import com.smartindustry.common.pojo.om.OutboundRecordPO;
@@ -45,5 +46,15 @@ public class ProduceOutboundServiceImpl implements IProduceOutboundService {
     public ResultVO queryOutboundRecord(OperateDTO dto){
         List<OutboundRecordBO> bos = outboundRecordMapper.queryForkByOhid(dto.getOhid());
         return ResultVO.ok().setData(OutboundRecordVO.convert(bos));
+    }
+
+    @Override
+    public ResultVO detail(OperateDTO dto){
+        OutboundHeadBO bo = outboundHeadMapper.queryDetail(dto.getOhid());
+        if(null == bo){
+            // 出库单不存在
+            return new ResultVO(ExceptionEnums.NO_EXIST.getCode());
+        }
+        return ResultVO.ok().setData(OutboundHeadVO.convert(bo));
     }
 }

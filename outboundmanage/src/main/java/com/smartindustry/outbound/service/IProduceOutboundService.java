@@ -25,4 +25,11 @@ public interface IProduceOutboundService {
      * @return
      */
     ResultVO queryOutboundRecord(OperateDTO dto);
+
+    /**
+     * 成品出库查看详情
+     * @param dto
+     * @return
+     */
+    ResultVO detail(OperateDTO dto);
 }

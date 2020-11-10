@@ -22,6 +22,10 @@ public class ForkliftVO {
      * 叉车编号
      */
     private String fno;
+    /***
+     * 叉车名
+     */
+    private String fname;
     /**
      * 叉车型号
      */
@@ -46,6 +50,18 @@ public class ForkliftVO {
      * 当前状态
      */
     private Byte status;
+    /***
+     * 联系人
+     */
+    private String contact;
+    /***
+     * 联系电话
+     */
+    private String cphone;
+    /**
+     * 备注
+     */
+    private String extra;
 
     public static List<ForkliftVO> convert(List<ForkliftPO> bos) {
         List<ForkliftVO> vos = new ArrayList<>(bos.size());
@@ -59,12 +75,16 @@ public class ForkliftVO {
         ForkliftVO vo = new ForkliftVO();
         vo.setFid(bo.getForkliftId());
         vo.setFno(bo.getForkliftNo());
+        vo.setFname(bo.getForkliftName());
         vo.setFmodel(bo.getForkliftModel());
         vo.setImeino(bo.getImeiNo());
         vo.setFbrand(bo.getForkliftBrand());
         vo.setSname(bo.getSupplierName());
         vo.setWarea(bo.getWorkArea());
         vo.setStatus(bo.getStatus());
+        vo.setContact(bo.getContact());
+        vo.setCphone(bo.getContactPhone());
+        vo.setExtra(bo.getExtra());
         return vo;
     }
 }
