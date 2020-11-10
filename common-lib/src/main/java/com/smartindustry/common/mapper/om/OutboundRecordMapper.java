@@ -1,5 +1,6 @@
 package com.smartindustry.common.mapper.om;
 
+import com.smartindustry.common.bo.om.OutboundRecordBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.om.OutboundRecordPO;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,5 +17,12 @@ public interface OutboundRecordMapper extends BaseMapper<OutboundRecordPO, Long>
      * @param ohid
      * @return
      */
-    List<OutboundRecordPO> queryByOhid(Long ohid);
+    List<OutboundRecordBO> queryByOhid(Long ohid);
+
+    /**
+     * 成品出库查询纪录
+     * @param ohid
+     * @return
+     */
+    List<OutboundRecordBO> queryForkByOhid(Long ohid);
 }

@@ -1,6 +1,7 @@
 package com.smartindustry.outbound.controller;
 
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.outbound.dto.OperateDTO;
 import com.smartindustry.outbound.service.IProduceOutboundService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,5 +30,20 @@ public class ProduceOutboundController {
     @PostMapping("pageQuery")
     public ResultVO pageQuery(@RequestBody Map<String, Object> reqData) {
         return produceOutboundService.pageQuery(reqData);
+    }
+
+    @PostMapping("queryOutboundRecord")
+    public ResultVO queryOutboundRecord(@RequestBody OperateDTO dto) {
+        return produceOutboundService.queryOutboundRecord(dto);
+    }
+
+    /**
+     * 查看详情
+     *
+     * @return
+     */
+    @PostMapping("detail")
+    public ResultVO detail(@RequestBody OperateDTO dto) {
+        return produceOutboundService.detail(dto);
     }
 }

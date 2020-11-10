@@ -34,4 +34,11 @@ public interface IProduceStorageService {
      * @return
      */
     ResultVO queryDetail(StorageDetailDTO dto);
+
+    /**
+     * 根据叉车/系统查询出库操作记录
+     * @param dto
+     * @return
+     */
+    ResultVO queryStorageRecord(OperateDTO dto);
 }

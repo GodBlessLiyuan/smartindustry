@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.smartindustry.common.bo.si.MaterialBO;
 import com.smartindustry.common.bo.si.WarehouseBO;
 import com.smartindustry.common.bo.sm.StorageHeadBO;
+import com.smartindustry.common.bo.sm.StorageRecordBO;
 import com.smartindustry.common.constant.ExceptionEnums;
 import com.smartindustry.common.mapper.si.MaterialMapper;
 import com.smartindustry.common.mapper.si.WarehouseMapper;
@@ -146,8 +147,8 @@ public class PurchaseStorageServiceImpl implements IPurchaseStorageService {
 
     @Override
     public ResultVO queryStorageRecord(OperateDTO dto){
-        List<StorageRecordPO> pos = storageRecordMapper.queryByShid(dto.getShid());
-        return ResultVO.ok().setData(StorageRecordVO.convert(pos));
+        List<StorageRecordBO> bos = storageRecordMapper.queryByShid(dto.getShid());
+        return ResultVO.ok().setData(StorageRecordVO.convert(bos));
     }
 
 }

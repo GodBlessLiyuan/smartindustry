@@ -3,10 +3,12 @@ package com.smartindustry.storage.service.impl;
 import com.github.pagehelper.Page;
 import com.smartindustry.common.bo.sm.MaterialDetailBO;
 import com.smartindustry.common.bo.sm.StorageHeadBO;
+import com.smartindustry.common.bo.sm.StorageRecordBO;
 import com.smartindustry.common.mapper.si.LocationMapper;
 import com.smartindustry.common.mapper.si.MaterialMapper;
 import com.smartindustry.common.mapper.sm.StorageDetailMapper;
 import com.smartindustry.common.mapper.sm.StorageHeadMapper;
+import com.smartindustry.common.mapper.sm.StorageRecordMapper;
 import com.smartindustry.common.pojo.si.LocationPO;
 import com.smartindustry.common.pojo.si.MaterialPO;
 import com.smartindustry.common.pojo.sm.StorageDetailPO;
@@ -19,6 +21,7 @@ import com.smartindustry.storage.service.IProduceStorageService;
 import com.smartindustry.storage.vo.MaterialDetailVO;
 import com.smartindustry.storage.vo.StorageDetailVO;
 import com.smartindustry.storage.vo.StorageHeadVO;
+import com.smartindustry.storage.vo.StorageRecordVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +46,8 @@ public class ProduceStorageServiceImpl implements IProduceStorageService {
     private MaterialMapper materialMapper;
     @Autowired
     private LocationMapper locationMapper;
+    @Autowired
+    private StorageRecordMapper storageRecordMapper;
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData){
@@ -72,5 +77,11 @@ public class ProduceStorageServiceImpl implements IProduceStorageService {
         List<MaterialDetailBO> bos = storageHeadMapper.queryDetail(dto.getShid(),dto.getLid());
 
         return ResultVO.ok().setData(MaterialDetailVO.convert(bos));
+    }
+
+    @Override
+    public ResultVO queryStorageRecord(OperateDTO dto){
+        List<StorageRecordBO> bos = storageRecordMapper.queryForkByShid(dto.getShid());
+        return ResultVO.ok().setData(StorageRecordVO.convert(bos));
     }
 }

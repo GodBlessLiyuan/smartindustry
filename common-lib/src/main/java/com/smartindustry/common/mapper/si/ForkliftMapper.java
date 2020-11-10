@@ -42,4 +42,12 @@ public interface ForkliftMapper extends BaseMapper<ForkliftPO, Long> {
      * @return
      */
     List<ForkliftPO> queryByShid(Long shid);
+
+    /***
+     * 假删除
+     * @param forkliftIdS
+     */
+    void deleteDr(List<Long> forkliftIdS);
+
+
 }

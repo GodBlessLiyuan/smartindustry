@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,5 +42,35 @@ public class ForkLiftController {
     @PostMapping("edit")
     public ResultVO edit(@RequestBody ForkLiftDTO dto){
         return forkLiftService.edit(dto);
+    }
+
+    /***
+     * 叉车删除接口
+     * @param ids
+     * @return
+     */
+    @PostMapping("delete")
+    public ResultVO delete(@RequestBody List<Long> ids){
+        return forkLiftService.delete(ids);
+    }
+
+    /***
+     * 查询叉车记录
+     * @param dto
+     * @return
+     */
+    @PostMapping("record")
+    public ResultVO forkRecord(@RequestBody ForkLiftDTO dto){
+        return forkLiftService.record(dto.getFid());
+    }
+
+    /***
+     * 查询叉车详情
+     * @param dto
+     * @return
+     */
+    @PostMapping("detail")
+    public ResultVO detail(@RequestBody ForkLiftDTO dto){
+        return forkLiftService.detail(dto.getFid());
     }
 }

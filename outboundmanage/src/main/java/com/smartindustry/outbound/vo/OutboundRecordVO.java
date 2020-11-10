@@ -1,5 +1,6 @@
 package com.smartindustry.outbound.vo;
 
+import com.smartindustry.common.bo.om.OutboundRecordBO;
 import com.smartindustry.common.pojo.om.OutboundRecordPO;
 import lombok.Data;
 
@@ -30,19 +31,23 @@ public class OutboundRecordVO implements Serializable {
      */
     private String type;
 
-    public static List<OutboundRecordVO> convert(List<OutboundRecordPO> pos) {
-        List<OutboundRecordVO> vos = new ArrayList<>(pos.size());
-        for (OutboundRecordPO po : pos) {
-            vos.add(convert(po));
+    public static List<OutboundRecordVO> convert(List<OutboundRecordBO> bos) {
+        List<OutboundRecordVO> vos = new ArrayList<>(bos.size());
+        for (OutboundRecordBO bo : bos) {
+            vos.add(convert(bo));
         }
         return vos;
     }
 
-    public static OutboundRecordVO convert(OutboundRecordPO po) {
+    public static OutboundRecordVO convert(OutboundRecordBO bo) {
         OutboundRecordVO vo = new OutboundRecordVO();
-        vo.setName("admin");
-        vo.setCtime(po.getCreateTime());
-        vo.setType(po.getOperationName());
+        if(bo.getName()!=null){
+            vo.setName(bo.getName());
+        }else {
+            vo.setName("系统");
+        }
+        vo.setCtime(bo.getCreateTime());
+        vo.setType(bo.getOperationName());
         return vo;
     }
 }
