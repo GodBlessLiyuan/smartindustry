@@ -5,6 +5,7 @@ import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.si.WarehousePO;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,4 +48,9 @@ public interface WarehouseMapper extends BaseMapper<WarehousePO, Long> {
      */
     List<WarehousePO> queryByWtid(Long wtid);
 
+    /***
+     * 查询所有的仓库
+     * @return
+     */
+    List<HashMap<String,Object>> querySimpleAll();
 }

@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -95,7 +96,8 @@ public class WarehouseServiceImpl implements IWarehouseService {
 
     @Override
     public ResultVO queryAll() {
-        List<WarehouseBO> warehouseBOS = warehouseMapper.queryAll();
+//        List<WarehouseBO> warehouseBOS = warehouseMapper.queryAll();
+        List<HashMap<String,Object>> warehouseBOS = warehouseMapper.querySimpleAll();
         return ResultVO.ok().setData(warehouseBOS);
     }
 }
