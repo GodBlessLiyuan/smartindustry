@@ -45,7 +45,9 @@ public interface ForkliftMapper extends BaseMapper<ForkliftPO, Long> {
 
     /***
      * 假删除
-     * @param forkliftId
+     * @param forkliftIdS
      */
-    void deleteDr(Long forkliftId);
+    void deleteDr(List<Long> forkliftIdS);
+
+
 }
