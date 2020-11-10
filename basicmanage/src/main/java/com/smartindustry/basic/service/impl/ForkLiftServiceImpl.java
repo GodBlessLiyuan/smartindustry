@@ -69,13 +69,8 @@ public class ForkLiftServiceImpl implements IForkLiftService {
     }
 
     @Override
-    public ResultVO delete(Long fid) {
-        UserPO user = tokenService.getLoginUser();
-        ForkliftPO forkliftPO = forkliftMapper.selectByPrimaryKey(fid);
-        if(forkliftPO==null){
-            return new ResultVO(1002);
-        }
-        forkliftMapper.deleteDr(forkliftPO.getForkliftId());
+    public ResultVO delete(List<Long> fid) {
+        forkliftMapper.deleteDr(fid);
         return ResultVO.ok();
     }
 
@@ -83,5 +78,14 @@ public class ForkLiftServiceImpl implements IForkLiftService {
     public ResultVO record(Long fid) {
         List<ForkliftRecordBO> forkLiftRecordBOS=forkliftRecordMapper.listRecord(fid);
         return new ResultVO(1000, ForkliftRecordVO.convert(forkLiftRecordBOS));
+    }
+
+    @Override
+    public ResultVO detail(Long fid) {
+        ForkliftPO forkliftPO = forkliftMapper.selectByPrimaryKey(fid);
+        if(forkliftPO==null){
+            return new ResultVO(1002);
+        }
+        return new ResultVO(1000,ForkliftVO.convert(forkliftPO));
     }
 }

@@ -23,6 +23,11 @@ public class ForkLiftDTO implements Serializable {
      * 叉车编号
      */
     private String fno;
+    /***
+     * 叉车名
+     */
+    private String fname;
+
     /**
      * 叉车型号
      */
@@ -31,10 +36,6 @@ public class ForkLiftDTO implements Serializable {
      * 叉车品牌
      */
     private String fbrand;
-    /**
-     * 供应商名称
-     */
-    private String sname;
     /**
      * 联系人
      */
@@ -51,6 +52,11 @@ public class ForkLiftDTO implements Serializable {
      * 作业区域
      */
     private Byte warea;
+    /**
+     * 供应商名称
+     */
+    private String sname;
+
     /**
      * 当前状态
      */
@@ -69,6 +75,7 @@ public class ForkLiftDTO implements Serializable {
 
     public static ForkliftPO buildPO(ForkliftPO forkliftPO, ForkLiftDTO dto) {
         forkliftPO.setForkliftNo(dto.getFno());
+        forkliftPO.setForkliftName(dto.getFname());
         forkliftPO.setForkliftModel(dto.getFmodel());
         forkliftPO.setForkliftBrand(dto.getFbrand());
         forkliftPO.setSupplierName(dto.getSname());

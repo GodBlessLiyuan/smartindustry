@@ -32,12 +32,15 @@
         from si_forklift
         where forklift_id = #{forkliftId,jdbcType=BIGINT}
     </delete>
-    <update id="deleteDr" parameterType="java.lang.Long">
+    <update id="deleteDr" parameterType="java.util.List">
         update si_forklift
-        set dr=2 where forklift_id = #{forkliftId,jdbcType=BIGINT}
+        set dr=2 where forklift_id in
+        <foreach collection="list" item="li" open="(" close=")" separator=",">
+            #{li,jdbcType=BIGINT}
+        </foreach>
     </update>
     <insert id="insert" parameterType="com.smartindustry.common.pojo.si.ForkliftPO" useGeneratedKeys="true"
-            keyProperty="forklift_id">
+            keyProperty="forkliftId">
         insert into si_forklift (forklift_id, forklift_no, forklift_name,
                                  forklift_model, forklift_brand, supplier_name,
                                  contact, contact_phone, imei_no,
@@ -270,6 +273,6 @@
     <select id="queryNo" parameterType="java.lang.String" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/>
         from si_forklift
-        where forklift_no = #{queryNo} and f.dr = 1
+        where forklift_no = #{queryNo} and dr = 1
     </select>
 </mapper>

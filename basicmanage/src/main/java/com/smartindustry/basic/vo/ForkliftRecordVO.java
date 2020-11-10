@@ -19,9 +19,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ForkliftRecordVO implements Serializable {
-    private String uname;
-    private String time;
-    private String ops;
+    //操作人
+    private String name;
+    private String ctime;
+    //操作类型
+    private String type;
 
 
     public static List<ForkliftRecordVO> convert(List<ForkliftRecordBO> forkLiftRecordBOS) {
