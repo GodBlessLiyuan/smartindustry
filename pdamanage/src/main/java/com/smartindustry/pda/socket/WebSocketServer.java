@@ -33,13 +33,14 @@ public class WebSocketServer {
     public void onOpen(Session session, @PathParam("imei") String imei) {
         sessionPools.put(imei, session);
         num.incrementAndGet();
-        logger.info(imei);
+        logger.info("连接成功imei: {}", imei);
         sendMsg(imei, "连接成功");
     }
 
     @OnClose
     public void onClose(@PathParam("imei") String imei) {
         sendMsg(imei, "断开连接成功");
+        logger.info("断开连接成功imei: {}", imei);
         sessionPools.remove(imei);
         num.decrementAndGet();
     }
@@ -53,7 +54,9 @@ public class WebSocketServer {
         String message = JSON.toJSONString(vo);
         for (Session session : sessionPools.values()) {
             try {
-                session.getBasicRemote().sendText(message);
+                if (session.isOpen()) {
+                    session.getBasicRemote().sendText(message);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -84,10 +87,24 @@ public class WebSocketServer {
      * @throws IOException
      */
     public static void sendMsg(String imei, String message) {
-        Session session = sessionPools.get(imei);
+        sendMsg(sessionPools.get(imei), message);
+    }
+
+    /**
+     * 发送信息
+     *
+     * @param session
+     * @param message
+     */
+    private static void sendMsg(Session session, String message) {
         if (null != session) {
             try {
-                session.getBasicRemote().sendText(message);
+                if (session.isOpen()) {
+                    session.getBasicRemote().sendText(message);
+                } else {
+                    sessionPools.values().remove(session);
+                    num.decrementAndGet();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
