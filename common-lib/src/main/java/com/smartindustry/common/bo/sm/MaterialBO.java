@@ -21,4 +21,6 @@ public class MaterialBO extends MaterialPO {
      * 体积数量
      */
     private BigDecimal volume;
+
+    private String measureUnitName;
 }
