@@ -50,7 +50,7 @@ public class StoragePrepareTask {
             }
         }
         //插入入库完成操作记录
-        storageRecordMapper.insert(new StorageRecordPO(pos.get(0).getStorageHeadId(), (long) 1, StorageConstant.OPERATE_NAME_FINISH));
+        storageRecordMapper.insert(new StorageRecordPO(pos.get(0).getStorageHeadId(), null, StorageConstant.OPERATE_NAME_FINISH));
 
         //创建新的任务单
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
