@@ -119,6 +119,14 @@ public interface LocationMapper extends BaseMapper<LocationPO, Long> {
     List<LocationPO> queryByMids(List<Long> mids);
 
     /**
+     * 根据物料id 查询推荐入库库位
+     *
+     * @param mids
+     * @return
+     */
+    List<LocationPO> queryRecommendByMids(List<Long> mids);
+
+    /**
      * 根据 Lrfid 和 Mrfid 查询
      *
      * @param lrfid
