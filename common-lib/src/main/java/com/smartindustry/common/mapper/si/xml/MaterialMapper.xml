@@ -208,7 +208,7 @@
     <if test="mname != null and mname != ''">and m.material_name like '%' #{mname,jdbcType=CHAR} '%'</if>
     <if test="mmodel != null and mmodel != ''">and m.material_model like '%' #{mmodel,jdbcType=CHAR} '%'</if>
     <if test="mno != null and mno != ''">and m.material_no like '%' #{mno,jdbcType=CHAR} '%'</if>
-    <if test="mdesc != null and mdesc != ''">and m.material_desc like '%' #{mno,jdbcType=CHAR} '%'</if>
+    <if test="mdesc != null and mdesc != ''">and m.material_desc like '%' #{mdesc,jdbcType=CHAR} '%'</if>
     <if test="ctime != null">
       and m.create_time &gt; #{ctime, jdbcType=TIMESTAMP}
     </if>
