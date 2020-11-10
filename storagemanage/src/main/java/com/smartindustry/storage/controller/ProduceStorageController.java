@@ -42,4 +42,9 @@ public class ProduceStorageController {
     public ResultVO queryDetail(@RequestBody StorageDetailDTO dto) {
         return produceStorageService.queryDetail(dto);
     }
+
+    @PostMapping("queryStorageRecord")
+    public ResultVO queryOutboundRecord(@RequestBody OperateDTO dto) {
+        return produceStorageService.queryStorageRecord(dto);
+    }
 }

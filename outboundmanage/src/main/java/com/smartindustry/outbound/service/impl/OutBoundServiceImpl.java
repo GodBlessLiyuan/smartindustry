@@ -4,6 +4,7 @@ package com.smartindustry.outbound.service.impl;
 import com.github.pagehelper.Page;
 import com.smartindustry.common.bo.om.MixHeadBO;
 import com.smartindustry.common.bo.om.OutboundHeadBO;
+import com.smartindustry.common.bo.om.OutboundRecordBO;
 import com.smartindustry.common.constant.ExceptionEnums;
 import com.smartindustry.common.mapper.om.*;
 import com.smartindustry.common.mapper.wo.SlurryMaterialMapper;
@@ -156,7 +157,7 @@ public class OutBoundServiceImpl implements IOutBoundService {
 
     @Override
     public ResultVO queryOutboundRecord(OperateDTO dto){
-        List<OutboundRecordPO> pos = outboundRecordMapper.queryByOhid(dto.getOhid());
+        List<OutboundRecordBO> pos = outboundRecordMapper.queryByOhid(dto.getOhid());
         return ResultVO.ok().setData(OutboundRecordVO.convert(pos));
     }
 }

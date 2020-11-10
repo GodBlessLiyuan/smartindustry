@@ -91,10 +91,46 @@
     where record_id = #{recordId,jdbcType=BIGINT}
   </update>
 
-  <select id="queryByShid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+
+  <resultMap id="BOSResultMap"  type="com.smartindustry.common.bo.sm.StorageRecordBO" extends="BaseResultMap">
+    <result column="name" jdbcType="CHAR" property="name"/>
+  </resultMap>
+<!--  <select id="queryByShid" parameterType="java.lang.Long" resultMap="BaseResultMap">-->
+<!--    select-->
+<!--    <include refid="Base_Column_List" />-->
+<!--    from sm_storage_record-->
+<!--    where storage_head_id = #{shid,jdbcType=BIGINT}-->
+<!--  </select>-->
+  <sql id="BOS_Column_List">
+    u.name, r.operation_name, r.create_time
+  </sql>
+  <select id="queryByShid" parameterType="java.lang.Long" resultMap="BOSResultMap">
     select
-    <include refid="Base_Column_List" />
-    from sm_storage_record
-    where storage_head_id = #{shid,jdbcType=BIGINT}
+    <include refid="BOS_Column_List" />
+    from sm_storage_record r
+    left join am_user u on r.user_id = u.user_id
+    where r.storage_head_id = #{shid,jdbcType=BIGINT} and r.user_id is not null
   </select>
+
+  <sql id="FOS_Column_List">
+     f.forklift_name as name, r.operation_name, r.create_time
+  </sql>
+  <sql id="NULLOS_Column_List">
+    r.user_id as name,r.operation_name, r.create_time
+  </sql>
+  <select id="queryForkByShid" parameterType="java.lang.Long" resultMap="BOSResultMap">
+    (select
+    <include refid="FOS_Column_List" />
+    from sm_storage_record r
+    left join si_forklift f on r.user_id = f.forklift_id
+    where r.storage_head_id = #{shid,jdbcType=BIGINT}
+    order by r.create_time desc)
+    union
+    (select
+    <include refid="NULLOS_Column_List" />
+    from sm_storage_record r
+    where r.storage_head_id = #{ohid,jdbcType=BIGINT} and r.user_id is null
+    order by r.create_time desc)
+  </select>
+
 </mapper>
