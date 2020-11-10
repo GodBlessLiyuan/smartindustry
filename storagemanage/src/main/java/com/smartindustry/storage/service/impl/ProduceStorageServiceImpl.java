@@ -58,12 +58,11 @@ public class ProduceStorageServiceImpl implements IProduceStorageService {
         // 查询待入库物料
         List<MaterialDetailBO> preList = storageHeadMapper.queryPrepare(dto.getShid());
         // 当前入库单得待入库rfid
-        List<String> storeList = storageDetailMapper.querySave(dto.getShid());
+        List<MaterialDetailBO> storeList = storageHeadMapper.querySave(dto.getShid());
         //合并数组
-//        preList.addAll(storeList);
+        preList.addAll(storeList);
         Map<String,Object> map = new HashMap<>();
         map.put("prepare",MaterialDetailVO.convert(preList));
-        map.put("stored",storeList);
         map.put("detail", StorageDetailVO.convert(bo));
         return ResultVO.ok().setData(map);
     }

@@ -67,11 +67,4 @@ public interface StorageDetailMapper extends BaseMapper<StorageDetailPO, Long> {
      */
     StorageDetailPO queryByRfid(String rfid);
 
-    /**
-     * 查询当前入库单得待入库rfid
-     * @param shid
-     * @return
-     */
-    List<String> querySave(Long shid);
-
 }
