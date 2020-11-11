@@ -16,11 +16,12 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="dr" jdbcType="TINYINT" property="dr" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
   </resultMap>
   <sql id="Base_Column_List">
     material_id, material_no, material_type, material_name, material_level, material_model, 
     measure_unit_id, package_volume, supplier_id, material_desc, user_id, create_time, 
-    update_time, dr
+    update_time, dr ,price
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -37,12 +38,12 @@
       material_name, material_level, material_model, 
       measure_unit_id, package_volume, supplier_id, 
       material_desc, user_id, create_time, 
-      update_time, dr)
+      update_time, dr ,price )
     values (#{materialId,jdbcType=BIGINT}, #{materialNo,jdbcType=CHAR}, #{materialType,jdbcType=TINYINT}, 
       #{materialName,jdbcType=CHAR}, #{materialLevel,jdbcType=CHAR}, #{materialModel,jdbcType=CHAR}, 
       #{measureUnitId,jdbcType=BIGINT}, #{packageVolume,jdbcType=DECIMAL}, #{supplierId,jdbcType=BIGINT}, 
       #{materialDesc,jdbcType=CHAR}, #{userId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
+      #{updateTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT},#{price,jdbcType=DECIMAL})
   </insert>
   <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.MaterialPO">
     insert into si_material
@@ -89,6 +90,9 @@
       <if test="dr != null">
         dr,
       </if>
+      <if test="price != null">
+        price,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="materialId != null">
@@ -132,6 +136,9 @@
       </if>
       <if test="dr != null">
         #{dr,jdbcType=TINYINT},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
       </if>
     </trim>
   </insert>
@@ -177,6 +184,9 @@
       <if test="dr != null">
         dr = #{dr,jdbcType=TINYINT},
       </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
     </set>
     where material_id = #{materialId,jdbcType=BIGINT}
   </update>
@@ -194,21 +204,22 @@
       user_id = #{userId,jdbcType=BIGINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      dr = #{dr,jdbcType=TINYINT}
+      dr = #{dr,jdbcType=TINYINT},
+      price = #{price,jdbcType=DECIMAL},
     where material_id = #{materialId,jdbcType=BIGINT}
   </update>
-    <select id="getSupperUnitByID" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.si.MaterialBO">
-    select m.material_id as materialId,m.material_no as materialNo,m.material_model as materialModel,m.material_name as materialName,
-    m.material_type as materialType ,m.material_desc as materialDesc,
-    s.supplier_name as supplierName, mu.measure_unit_name as measureUnitName
-    from si_material m
-    left join si_supplier s on m.supplier_id = s.supplier_id
-    left join dd_measure_unit mu on m.measure_unit_id = mu.measure_unit_id
-    where m.dr = 1 and m.material_id=#{mid}
+  <select id="getSupperUnitByID" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.si.MaterialBO">
+  select m.material_id as materialId,m.material_no as materialNo,m.material_model as materialModel,m.material_name as materialName,
+  m.material_type as materialType ,m.material_desc as materialDesc,m.price,
+  s.supplier_name as supplierName, mu.measure_unit_name as measureUnitName
+  from si_material m
+  left join si_supplier s on m.supplier_id = s.supplier_id
+  left join dd_measure_unit mu on m.measure_unit_id = mu.measure_unit_id
+  where m.dr  = 1 and m.material_id=#{mid}
     </select>
   <select id="pageQueryStorage" parameterType="java.util.Map" resultType="com.smartindustry.common.bo.si.MaterialBO">
     select m.material_id as materialId,m.material_no as materialNo,m.material_model as materialModel,m.material_name as materialName,
-    m.material_type as materialType ,m.material_desc as materialDesc,
+    m.material_type as materialType ,m.material_desc as materialDesc,m.price,
     s.supplier_name as supplierName, mu.measure_unit_name as measureUnitName
     from si_material m
     left join si_supplier s on m.supplier_id = s.supplier_id
@@ -220,7 +231,7 @@
       or m.material_model like '%' #{keyword,jdbcType=CHAR} '%')
     </if>
     <if test="mtype !=null and mtype!=0">
-      and m.material_type=mtype
+      and m.material_type= #{mtype}
     </if>
     order by m.create_time desc
   </select>

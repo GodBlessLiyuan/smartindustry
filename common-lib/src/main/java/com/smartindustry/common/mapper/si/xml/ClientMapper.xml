@@ -262,7 +262,7 @@
   <select id="pageQuery" parameterType="java.util.Map" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
-    from si_client where dr = 1
+    from si_client c where dr = 1
     <if test="cno != null and cno != ''">and c.client_no like '%' #{cno,jdbcType=CHAR} '%'</if>
     <if test="cname != null and cname != ''">and c.client_name like '%' #{cname,jdbcType=CHAR} '%'</if>
   </select>

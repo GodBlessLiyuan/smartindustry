@@ -482,6 +482,7 @@ public class StorageServiceImpl implements IStorageService {
         StorageHeadPO storageHeadPO = storageHeadMapper.selectByPrimaryKey(storageDetailPO.getStorageHeadId());
         // 查询当前储位的基本信息
         LocationBO locationBO = locationMapper.queryByRfid(lrfid);
+        log.info("取到的locationBO为：---------------" + locationBO.toString());
         //# 当前储位为成品区并且来源订单类型是生产入库
         //if (locationBO.getLocationTypeId().equals(StorageConstant.TYPE_FINISHED_AREA) && storageHeadPO.getSourceType().equals(StorageConstant.TYPE_PRODUCT_STORAGE)) {
         //1. 入库详情表更新添加信息

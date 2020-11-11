@@ -72,7 +72,6 @@ public class WarehouseController {
     public ResultVO detail(@RequestBody OperateDTO dto) {
         return warehouseService.detail(dto);
     }
-    
 
     /**
      * 仓库 查询
@@ -83,5 +82,7 @@ public class WarehouseController {
     public ResultVO queryAll() {
         return warehouseService.queryAll();
     }
+
+
 
 }
