@@ -23,8 +23,17 @@ public class DeptVO implements Serializable {
 
     private Date ctime;
 
-    private String dcode;
+    private List<Long> dcode;
 
+    private String code; //部门代码
+
+    private String dmanager;//部门负责人
+
+    private String pDeptName;//上级部分
+
+    private Byte status;//状态
+
+    private String desc;//描述
 
     public static List<DeptVO> convert(List<DeptBO> bos) {
         List<DeptVO> vos = new ArrayList<>(bos.size());
@@ -38,7 +47,11 @@ public class DeptVO implements Serializable {
         DeptVO vo = new DeptVO();
         vo.setDid(bo.getDeptId());
         vo.setDname(bo.getDeptName());
-        vo.setDcode(bo.getDeptCode());
+        vo.setPDeptName(bo.getParentName());
+        vo.setDmanager(bo.getUsername());//负责人
+        vo.setStatus(bo.getStatus());//状态
+        vo.setDesc(bo.getDeptDesc());
+        vo.setCode(bo.getDeptCode());
         vo.setCtime(bo.getCreateTime());
         return vo;
     }

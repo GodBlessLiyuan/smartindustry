@@ -45,6 +45,7 @@ public class UserVO implements Serializable {
 
     private String userCode;
 
+    private List<Long> dcode;
     public static List<UserVO> convert(List<UserBO> bos) {
         List<UserVO> vos = new ArrayList<>(bos.size());
         for (UserBO bo : bos) {

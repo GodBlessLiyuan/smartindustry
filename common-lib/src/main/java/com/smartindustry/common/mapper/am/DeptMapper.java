@@ -86,4 +86,6 @@ public interface DeptMapper extends BaseMapper<DeptPO, Long> {
      * @return
      */
     DeptPO queryByCode(@Param("deptCode") String deptCode);
+
+    DeptBO getBOByPri(Long did);
 }

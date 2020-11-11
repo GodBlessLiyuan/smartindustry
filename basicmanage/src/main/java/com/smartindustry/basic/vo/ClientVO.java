@@ -38,6 +38,7 @@ public class ClientVO implements Serializable {
      */
     private String contact;
 
+    private String tphone;
 
     /**
      * 联系电话
@@ -59,6 +60,7 @@ public class ClientVO implements Serializable {
      */
     private String url;
 
+    private String area;
     /**
      * 详细地址
      */
@@ -95,6 +97,7 @@ public class ClientVO implements Serializable {
         vo.setCname(po.getClientName());
         vo.setContact(po.getContact());
         vo.setPhone(po.getPhone());
+        vo.setTphone(po.getTelephone());
         vo.setEmail(po.getEmail());
         vo.setFax(po.getFax());
         vo.setUrl(po.getUrl());
@@ -102,6 +105,7 @@ public class ClientVO implements Serializable {
         vo.setRemark(po.getRemark());
         vo.setCtime(po.getCreateTime());
         vo.setDr(po.getDr());
+        vo.setArea(po.getArea());
         return vo;
     }
 }

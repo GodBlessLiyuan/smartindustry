@@ -263,9 +263,8 @@
     select
     <include refid="Base_Column_List"/>
     from si_client where dr = 1
-    <if test="ctime != null">
-      and create_time &gt; #{ctime, jdbcType=TIMESTAMP}
-    </if>
+    <if test="cno != null and cno != ''">and c.client_no like '%' #{cno,jdbcType=CHAR} '%'</if>
+    <if test="cname != null and cname != ''">and c.client_name like '%' #{cname,jdbcType=CHAR} '%'</if>
   </select>
 
   <update id="batchDelete" parameterType="java.util.List">
@@ -292,4 +291,6 @@
     left join dd_client_type ct on c.client_type_id = ct.client_type_id
     where c.dr = 1 and c.client_id = #{clientId,jdbcType=BIGINT}
   </select>
+
+
 </mapper>
