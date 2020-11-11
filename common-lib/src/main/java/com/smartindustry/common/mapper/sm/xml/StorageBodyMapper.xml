@@ -261,7 +261,7 @@
     <include refid="Base_Column_List" />
     from sm_storage_body sb
     where sb.dr = 1
-    and s.storage_head_id = #{shid,jdbcType=BIGINT}
+    and sb.storage_head_id = #{shid,jdbcType=BIGINT}
     and sb.material_id = #{mid,jdbcType=BIGINT}
   </select>
 

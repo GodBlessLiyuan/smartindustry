@@ -321,6 +321,6 @@
         from si_location l
         left join dd_location_type lt on l.location_type_id = lt.location_type_id
         left join si_warehouse w on l.warehouse_id = w.warehouse_id
-        where l.dr = 1 and l.location_no = #{rfid,jdbcType=CHAR}
+        where l.dr = 1 and l.location_no = #{lrfid,jdbcType=CHAR}
     </select>
 </mapper>
