@@ -87,22 +87,27 @@ public class PurchaseStorageServiceImpl implements IPurchaseStorageService {
                      po.setSupplierNo(epos.get(0).getSupplierNo());
                  }
              }
-
-            pos.add(po);
+             pos.add(po);
          }
-         if (pos.size()> 0) {
+         if (pos.isEmpty()) {
              purchaseErpMapper.batchInsert(pos);
          }
          List<PurchaseDetailErpPO> erppos = new ArrayList<>();
          for (PurchaseErpPO po: pos) {
+//             purchaseErpMapper.insert(po);
              List<PurchaseDetailErpPO > dpos = map.get(po.getPurchaseNo());
-             for (PurchaseDetailErpPO dpo: dpos) {
-                 dpo.setPurchaseId(po.getPurchaseId());
-                 erppos.add(dpo);
+             if (dpos != null && dpos.size()> 0) {
+                 for (PurchaseDetailErpPO dpo: dpos) {
+                     dpo.setPurchaseId(po.getPurchaseId());
+                     erppos.add(dpo);
+                 }
              }
          }
          if (!erppos.isEmpty()) {
-             purchaseDetailErpMapper.batchInsert(erppos);
+//             for (PurchaseDetailErpPO po: erppos) {
+//                 purchaseDetailErpMapper.insert(po);
+//             }
+            purchaseDetailErpMapper.batchInsert(erppos);
          }
         return ResultVO.ok();
     }

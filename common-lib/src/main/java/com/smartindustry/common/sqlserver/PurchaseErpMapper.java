@@ -11,4 +11,6 @@ public interface PurchaseErpMapper {
     List<PurchaseErpBO> queryAll();
 
     void batchInsert(List<PurchaseErpPO> pos);
+
+    void insert(PurchaseErpPO po);
 }

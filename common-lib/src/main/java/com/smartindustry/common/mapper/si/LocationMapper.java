@@ -125,13 +125,4 @@ public interface LocationMapper extends BaseMapper<LocationPO, Long> {
      * @return
      */
     List<LocationPO> queryRecommendByMids(List<Long> mids);
-
-    /**
-     * 根据 Lrfid 和 Mrfid 查询
-     *
-     * @param lrfid
-     * @param mrfid
-     * @return
-     */
-    LocationBO queryByLrfidAndMrfid(@Param("lrfid") String lrfid, @Param("mrfid") String mrfid);
 }

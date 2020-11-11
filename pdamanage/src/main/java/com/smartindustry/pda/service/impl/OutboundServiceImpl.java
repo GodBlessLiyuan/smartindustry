@@ -1,6 +1,7 @@
 package com.smartindustry.pda.service.impl;
 
 import com.smartindustry.common.bo.om.OutboundBodyBO;
+import com.smartindustry.common.bo.om.OutboundForkliftBO;
 import com.smartindustry.common.bo.om.OutboundHeadBO;
 import com.smartindustry.common.mapper.om.OutboundBodyMapper;
 import com.smartindustry.common.mapper.om.OutboundForkliftMapper;
@@ -14,6 +15,7 @@ import com.smartindustry.common.pojo.si.ForkliftPO;
 import com.smartindustry.common.pojo.si.LocationPO;
 import com.smartindustry.common.util.DateUtil;
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.pda.config.RfidConfig;
 import com.smartindustry.pda.constant.CommonConstant;
 import com.smartindustry.pda.constant.OutboundConstant;
 import com.smartindustry.pda.dto.OutboundDTO;
@@ -22,6 +24,7 @@ import com.smartindustry.pda.socket.WebSocketServer;
 import com.smartindustry.pda.util.OutboundNoUtil;
 import com.smartindustry.pda.vo.OutboundDetailVO;
 import com.smartindustry.pda.socket.WebSocketVO;
+import com.smartindustry.pda.vo.StorageDetailVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -50,6 +53,8 @@ public class OutboundServiceImpl implements IOutboundService {
     private OutboundForkliftMapper outboundForkliftMapper;
     @Autowired
     private LocationMapper locationMapper;
+    @Autowired
+    private RfidConfig rfidConfig;
 
     /**
      * ERP 生成 出库单
@@ -114,37 +119,49 @@ public class OutboundServiceImpl implements IOutboundService {
             return new ResultVO(1002);
         }
         OutboundDetailVO vo = OutboundDetailVO.convert(headBO);
+        if (headBO.getStatus() == 1) {
+            // 入库完成
+            vo.setCnum(headBO.getOutboundNum());
+            vo.setStatus(OutboundConstant.STATUS_OUTBOUND_VANISH);
+            return ResultVO.ok().setData(vo);
+        }
 
         // 储位图
         Map<Long, OutboundDetailVO.LocationVO> lvos = new HashMap<>();
         for (OutboundBodyBO bo : headBO.getBodyBOs()) {
             OutboundDetailVO.LocationVO lvo = new OutboundDetailVO.LocationVO();
-            lvo.setColor(OutboundDetailVO.COLORS[lvos.size()]);
+            lvo.setColor(CommonConstant.COLORS[lvos.size()]);
             lvo.setMinfo(bo.getMaterialName() + " " + bo.getMaterialModel());
             lvos.put(bo.getMaterialId(), lvo);
         }
+        Map<String, String> rfidMaps = rfidConfig.parseMap(rfidConfig.getMaps());
         if (lvos.size() > 0) {
             List<LocationPO> locationPOs = locationMapper.queryByMids(new ArrayList<>(lvos.keySet()));
             for (LocationPO locationPO : locationPOs) {
                 OutboundDetailVO.LocationVO lvo = lvos.get(locationPO.getMaterialId());
-                lvo.getLrfids().add(locationPO.getLocationNo());
+                for (Map.Entry<String, String> entry : rfidMaps.entrySet()) {
+                    if (entry.getKey().equals(locationPO.getLocationNo())) {
+                        lvo.getLrfids().add(entry.getValue());
+                    }
+                }
             }
             vo.setLvos(new ArrayList<>(lvos.values()));
         }
 
         // 叉车信息
-        List<ForkliftPO> pos = forkliftMapper.queryByOhid(dto.getOhid());
-        if (null != pos && pos.size() > 0) {
+        List<OutboundForkliftBO> ofBO = outboundForkliftMapper.queryByOhid(dto.getOhid());
+        if (null != ofBO && ofBO.size() > 0) {
             vo.setStatus(OutboundConstant.STATUS_OUTBOUND_ASSIST);
-            for (ForkliftPO po : pos) {
-                if (imei.equals(po.getImeiNo())) {
+            for (OutboundForkliftBO bo : ofBO) {
+                if (imei.equals(bo.getImeiNo())) {
                     vo.setStatus(OutboundConstant.STATUS_OUTBOUND_CLOSE);
+                    break;
                 }
             }
         } else {
             vo.setStatus(OutboundConstant.STATUS_OUTBOUND_START);
         }
-        vo.setCnum(headBO.getOutboundNum().add(BigDecimal.valueOf(null == pos ? 0 : pos.size())));
+        vo.setCnum(headBO.getOutboundNum().add(BigDecimal.valueOf(null == ofBO ? 0 : ofBO.size())));
 
         session.setAttribute(CommonConstant.SESSION_OHID, dto.getOhid());
 
@@ -169,67 +186,47 @@ public class OutboundServiceImpl implements IOutboundService {
         if (null == ohid) {
             return new ResultVO(1002);
         }
-        ForkliftPO curForkliftPO = forkliftMapper.queryByImei(imei);
+        ForkliftPO curFPO = forkliftMapper.queryByImei(imei);
 
-        // 当前执行该出库订单的所有叉车
-        List<ForkliftPO> forkliftPOs = forkliftMapper.queryByOhid(ohid);
-        if (null == forkliftPOs || forkliftPOs.size() == 0) {
-            // 开始任务
-            return execute(session, curForkliftPO, ohid);
-        }
+        String status;
+        OutboundForkliftPO existOfPO = outboundForkliftMapper.queryByFid(curFPO.getForkliftId());
+        if (null == existOfPO) {
+            // 开始执行/辅助执行
 
-        boolean close = false;
-        for (ForkliftPO forkliftPO : forkliftPOs) {
-            if (imei.equals(forkliftPO.getImeiNo())) {
-                // 关闭
-                outboundForkliftMapper.deleteByFid(forkliftPO.getForkliftId());
+            // 出库叉车信息
+            OutboundForkliftPO ofPO = new OutboundForkliftPO();
+            ofPO.setForkliftId(curFPO.getForkliftId());
+            ofPO.setOutboundHeadId(ohid);
+            outboundForkliftMapper.insert(ofPO);
 
-                // 叉车状态 - 空闲
-                curForkliftPO.setStatus(CommonConstant.STATUS_FORKLIFT_IDLE);
-                forkliftMapper.updateByPrimaryKey(curForkliftPO);
+            // 叉车状态 - 忙碌
+            curFPO.setStatus(CommonConstant.STATUS_FORKLIFT_BUSY);
+            forkliftMapper.updateByPrimaryKey(curFPO);
 
-                session.removeAttribute(CommonConstant.SESSION_STATUS_FORKLIFT);
+            // 叉车工作类型 - 出库
+            session.setAttribute(CommonConstant.SESSION_STATUS_FORKLIFT, CommonConstant.FORKLIFT_WORK_OUTBOUND_START);
 
-                close = true;
-            }
-        }
+            status = OutboundConstant.STATUS_OUTBOUND_CLOSE;
+        } else if (ohid.equals(existOfPO.getOutboundHeadId())) {
+            // 关闭
+            outboundForkliftMapper.deleteByFid(curFPO.getForkliftId());
 
-        if (!close) {
-            // 辅助任务
-            return execute(session, curForkliftPO, ohid);
+            // 叉车状态 - 空闲
+            curFPO.setStatus(CommonConstant.STATUS_FORKLIFT_IDLE);
+            forkliftMapper.updateByPrimaryKey(curFPO);
+
+            session.removeAttribute(CommonConstant.SESSION_STATUS_FORKLIFT);
+            List<OutboundForkliftBO> allOFBO = outboundForkliftMapper.queryByOhid(ohid);
+
+            status = allOFBO.size() == 0 ? OutboundConstant.STATUS_OUTBOUND_START : OutboundConstant.STATUS_OUTBOUND_ASSIST;
+        } else {
+            return new ResultVO<>(1010, "当前叉车已进行其他出库单任务！");
         }
 
         // websocket
         WebSocketServer.sendAllMsg(WebSocketVO.createShowVO(ohid, CommonConstant.FLAG_OUTBOUND));
 
-        return ResultVO.ok().setData(forkliftPOs.size() == 1 ? OutboundConstant.STATUS_OUTBOUND_START : OutboundConstant.STATUS_OUTBOUND_ASSIST);
-    }
-
-    /**
-     * 开始执行 / 辅助执行
-     *
-     * @param session
-     * @param curForkliftPO
-     * @param ohid
-     * @return
-     */
-    private ResultVO execute(HttpSession session, ForkliftPO curForkliftPO, Long ohid) {
-        // 出库叉车信息
-        OutboundForkliftPO ofPO = new OutboundForkliftPO();
-        ofPO.setForkliftId(curForkliftPO.getForkliftId());
-        ofPO.setOutboundHeadId(ohid);
-        outboundForkliftMapper.insert(ofPO);
-
-        // 叉车状态 - 忙碌
-        curForkliftPO.setStatus(CommonConstant.STATUS_FORKLIFT_BUSY);
-        forkliftMapper.updateByPrimaryKey(curForkliftPO);
-
-        // 叉车工作类型 - 出库
-        session.setAttribute(CommonConstant.SESSION_STATUS_FORKLIFT, CommonConstant.FORKLIFT_WORK_OUTBOUND_START);
-
-        WebSocketServer.sendAllMsg(WebSocketVO.createShowVO(ohid, CommonConstant.FLAG_OUTBOUND));
-
-        return ResultVO.ok().setData(OutboundConstant.STATUS_OUTBOUND_CLOSE);
+        return ResultVO.ok().setData(status);
     }
 
 }

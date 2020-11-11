@@ -227,7 +227,9 @@
   <select id="pageQuery" parameterType="java.util.Map" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
-    from si_supplier where dr = 1
+    from si_supplier s where dr = 1
+    <if test="sno != null and cno != ''">and s.supplier_no like '%' #{sno,jdbcType=CHAR} '%'</if>
+    <if test="sname != null and cname != ''">and s.supplier_name like '%' #{sname,jdbcType=CHAR} '%'</if>
     <if test="ctime != null">
       and create_time &gt; #{ctime, jdbcType=TIMESTAMP}
     </if>

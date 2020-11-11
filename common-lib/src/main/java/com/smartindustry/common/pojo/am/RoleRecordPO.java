@@ -1,8 +1,9 @@
 package com.smartindustry.common.pojo.am;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * am_role_record
@@ -30,4 +31,5 @@ public class RoleRecordPO implements Serializable {
     }
 
     public RoleRecordPO(){}
+
 }

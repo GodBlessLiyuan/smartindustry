@@ -10,4 +10,6 @@ public interface PurchaseDetailErpMapper {
     List<PurchaseDetailErpPO> queryAll();
 
     void batchInsert(List<PurchaseDetailErpPO> erppos);
+
+    void insert(PurchaseDetailErpPO po);
 }

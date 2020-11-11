@@ -9,7 +9,6 @@ import com.smartindustry.basic.vo.MaterialVO;
 import com.smartindustry.common.bo.si.MaterialBO;
 import com.smartindustry.common.config.FilePathConfig;
 import com.smartindustry.common.mapper.si.MaterialMapper;
-import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.si.MaterialPO;
 import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.FileUtil;
@@ -48,7 +47,6 @@ public class MaterialServiceImpl implements IMaterialService {
     public ResultVO pageQuery(Map<String, Object> reqData) {
         Page<MaterialBO> page = PageQueryUtil.startPage(reqData);
         List<MaterialBO> bos = materialMapper.pageQueryStorage(reqData);
-
         return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), MaterialVO.convert(bos)));
     }
 
@@ -96,7 +94,7 @@ public class MaterialServiceImpl implements IMaterialService {
 
     @Override
     public ResultVO detail(OperateDTO dto) {
-        MaterialBO materialBO = materialMapper.queryByMid(dto.getMid());
+        MaterialBO materialBO = materialMapper.getSupperUnitByID(dto.getMid());
         if (null == materialBO) {
             return new ResultVO(1002);
         }

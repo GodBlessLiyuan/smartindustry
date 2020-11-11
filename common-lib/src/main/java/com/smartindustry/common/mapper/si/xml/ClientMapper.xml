@@ -9,6 +9,7 @@
     <result column="contact" jdbcType="CHAR" property="contact" />
     <result column="sex" jdbcType="TINYINT" property="sex" />
     <result column="phone" jdbcType="CHAR" property="phone" />
+    <result column="telephone" jdbcType="VARCHAR" property="telephone" />
     <result column="email" jdbcType="CHAR" property="email" />
     <result column="fax" jdbcType="CHAR" property="fax" />
     <result column="url" jdbcType="CHAR" property="url" />
@@ -21,8 +22,9 @@
     <result column="dr" jdbcType="TINYINT" property="dr" />
   </resultMap>
   <sql id="Base_Column_List">
-    client_id, client_no, client_type_id, client_name, contact, sex, phone, email, fax, 
-    url, credit_level_id, area, address, remark, create_time, update_time, dr
+    client_id, client_no, client_type_id, client_name, contact, sex, phone, telephone, 
+    email, fax, url, credit_level_id, area, address, remark, create_time, update_time, 
+    dr
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -30,23 +32,23 @@
     from si_client
     where client_id = #{clientId,jdbcType=BIGINT}
   </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from si_client
     where client_id = #{clientId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.smartindustry.common.pojo.si.ClientPO">
     insert into si_client (client_id, client_no, client_type_id, 
       client_name, contact, sex, 
-      phone, email, fax, url, 
-      credit_level_id, area, address, 
-      remark, create_time, update_time, 
-      dr)
+      phone, telephone, email, 
+      fax, url, credit_level_id, area, 
+      address, remark, create_time, 
+      update_time, dr)
     values (#{clientId,jdbcType=BIGINT}, #{clientNo,jdbcType=CHAR}, #{clientTypeId,jdbcType=BIGINT}, 
       #{clientName,jdbcType=CHAR}, #{contact,jdbcType=CHAR}, #{sex,jdbcType=TINYINT}, 
-      #{phone,jdbcType=CHAR}, #{email,jdbcType=CHAR}, #{fax,jdbcType=CHAR}, #{url,jdbcType=CHAR}, 
-      #{creditLevelId,jdbcType=BIGINT}, #{area,jdbcType=CHAR}, #{address,jdbcType=CHAR}, 
-      #{remark,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{dr,jdbcType=TINYINT})
+      #{phone,jdbcType=CHAR}, #{telephone,jdbcType=VARCHAR}, #{email,jdbcType=CHAR}, 
+      #{fax,jdbcType=CHAR}, #{url,jdbcType=CHAR}, #{creditLevelId,jdbcType=BIGINT}, #{area,jdbcType=CHAR}, 
+      #{address,jdbcType=CHAR}, #{remark,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.ClientPO">
     insert into si_client
@@ -71,6 +73,9 @@
       </if>
       <if test="phone != null">
         phone,
+      </if>
+      <if test="telephone != null">
+        telephone,
       </if>
       <if test="email != null">
         email,
@@ -125,6 +130,9 @@
       <if test="phone != null">
         #{phone,jdbcType=CHAR},
       </if>
+      <if test="telephone != null">
+        #{telephone,jdbcType=VARCHAR},
+      </if>
       <if test="email != null">
         #{email,jdbcType=CHAR},
       </if>
@@ -178,6 +186,9 @@
       <if test="phone != null">
         phone = #{phone,jdbcType=CHAR},
       </if>
+      <if test="telephone != null">
+        telephone = #{telephone,jdbcType=VARCHAR},
+      </if>
       <if test="email != null">
         email = #{email,jdbcType=CHAR},
       </if>
@@ -219,6 +230,7 @@
       contact = #{contact,jdbcType=CHAR},
       sex = #{sex,jdbcType=TINYINT},
       phone = #{phone,jdbcType=CHAR},
+      telephone = #{telephone,jdbcType=VARCHAR},
       email = #{email,jdbcType=CHAR},
       fax = #{fax,jdbcType=CHAR},
       url = #{url,jdbcType=CHAR},
@@ -251,9 +263,8 @@
     select
     <include refid="Base_Column_List"/>
     from si_client where dr = 1
-    <if test="ctime != null">
-      and create_time &gt; #{ctime, jdbcType=TIMESTAMP}
-    </if>
+    <if test="cno != null and cno != ''">and c.client_no like '%' #{cno,jdbcType=CHAR} '%'</if>
+    <if test="cname != null and cname != ''">and c.client_name like '%' #{cname,jdbcType=CHAR} '%'</if>
   </select>
 
   <update id="batchDelete" parameterType="java.util.List">
@@ -280,4 +291,6 @@
     left join dd_client_type ct on c.client_type_id = ct.client_type_id
     where c.dr = 1 and c.client_id = #{clientId,jdbcType=BIGINT}
   </select>
+
+
 </mapper>

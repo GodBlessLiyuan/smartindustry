@@ -7,7 +7,6 @@ import lombok.Data;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,8 +18,6 @@ import java.util.List;
 @Data
 public class OutboundDetailVO implements Serializable {
     private static final long serialVersionUID = 1L;
-
-    public static final String[] COLORS = new String[]{"#FFFF00", "#FFFAFA", "#FF0000", "#00FF00"};
 
     /**
      * 出库单ID

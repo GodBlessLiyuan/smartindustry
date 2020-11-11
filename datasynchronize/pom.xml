@@ -137,11 +137,6 @@
 <!--        </dependency>-->
 <!--        <dependency>-->
 <!--            <groupId>com.microsoft.jdbc.sqlserver</groupId>-->
-<!--            <artifactId>msbase</artifactId>-->
-<!--            <version>4.0</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>com.microsoft.jdbc.sqlserver</groupId>-->
 <!--            <artifactId>mssqlserver</artifactId>-->
 <!--            <version>1.0</version>-->
 <!--        </dependency>-->
@@ -152,11 +147,11 @@
             <version>3.0</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.microsoft.jdbc.sqlserver</groupId>
-            <artifactId>msutil</artifactId>
-            <version>1.0</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.microsoft.jdbc.sqlserver</groupId>-->
+<!--            <artifactId>msutil</artifactId>-->
+<!--            <version>1.0</version>-->
+<!--        </dependency>-->
     </dependencies>
     <build>
         <plugins>

@@ -8,7 +8,8 @@ DROP TABLE IF EXISTS am_authority;
 DROP TABLE IF EXISTS am_dept_record;
 DROP TABLE IF EXISTS am_role_record;
 DROP TABLE IF EXISTS am_user_record;
-DROP TABLE IF EXISTS ds_sales_outbound_detail;
+DROP TABLE IF EXISTS im_safe_stock;
+DROP TABLE IF EXISTS im_material_inventory;
 DROP TABLE IF EXISTS om_outbound_body;
 DROP TABLE IF EXISTS si_location_record;
 DROP TABLE IF EXISTS sm_storage_body;
@@ -24,7 +25,6 @@ DROP TABLE IF EXISTS sm_storage_record;
 DROP TABLE IF EXISTS sm_storage_head;
 DROP TABLE IF EXISTS si_warehouse;
 DROP TABLE IF EXISTS dd_warehouse_type;
-DROP TABLE IF EXISTS ds_sales_outbound;
 DROP TABLE IF EXISTS om_outbound_record;
 DROP TABLE IF EXISTS si_client_record;
 DROP TABLE IF EXISTS si_forklift_record;
@@ -236,32 +236,37 @@ CREATE TABLE dd_warehouse_type
 ) COMMENT = '仓库类型表';
 
 
--- 销售出库
-CREATE TABLE ds_sales_outbound
+-- 物料库存信息表
+CREATE TABLE im_material_inventory
 (
-	sales_outbound_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '销售出库ID',
-	sales_no char(255) COMMENT '业务单号',
-	sales_date date COMMENT '开票日期',
-	client_id bigint unsigned NOT NULL COMMENT '客户id',
-	user_id bigint unsigned COMMENT '开票员ID',
-	create_time datetime COMMENT '创建时间',
-	PRIMARY KEY (sales_outbound_id),
-	UNIQUE (sales_outbound_id)
-) COMMENT = '销售出库';
-
-
--- 销售出库明细
-CREATE TABLE ds_sales_outbound_detail
-(
-	sales_outbound_detail_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '销售出库明细ID',
-	sales_outbound_id bigint unsigned NOT NULL COMMENT '销售出库ID',
+	material_inventory_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '物料库存信息ID',
 	material_id bigint unsigned NOT NULL COMMENT '物料ID',
-	need_num decimal(10,3) COMMENT '需求量',
-	unit_price decimal(10,2) COMMENT '单价',
-	total_price decimal(10,2) COMMENT '金额',
-	PRIMARY KEY (sales_outbound_detail_id),
-	UNIQUE (sales_outbound_detail_id)
-) COMMENT = '销售出库明细';
+	way_num int COMMENT '在途数量',
+	status tinyint COMMENT '库存状态',
+	storage_num int COMMENT '库存数',
+	lock_num int COMMENT '锁定数量',
+	relate_num int COMMENT '关联订单数量',
+	available_num int COMMENT '可用物料数量',
+	PRIMARY KEY (material_inventory_id),
+	UNIQUE (material_inventory_id)
+) COMMENT = '物料库存信息表';
+
+
+-- 安全库存
+CREATE TABLE im_safe_stock
+(
+	safe_stock_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '安全库存ID',
+	material_inventory_id bigint unsigned NOT NULL COMMENT '物料库存信息ID',
+	lower_limit decimal(10,2) COMMENT '库存下限',
+	-- 1：是
+	-- 2：否
+	way tinyint COMMENT '是否在途 : 1：是
+2：否',
+	user_id bigint unsigned COMMENT '创建人',
+	create_time datetime COMMENT '创建时间',
+	PRIMARY KEY (safe_stock_id),
+	UNIQUE (safe_stock_id)
+) COMMENT = '安全库存';
 
 
 -- 出库单表体
@@ -360,6 +365,7 @@ CREATE TABLE si_client
 	-- 2：女
 	sex tinyint COMMENT '联系人性别 : 1：男
 2：女',
+	telephone char(255) COMMENT '电话号码',
 	phone char(16) NOT NULL COMMENT '联系电话',
 	email char(255) COMMENT '客户邮箱',
 	fax char(16) COMMENT '传真',
@@ -501,6 +507,7 @@ CREATE TABLE si_material
 	user_id bigint unsigned COMMENT '创建人',
 	create_time datetime COMMENT '创建时间',
 	update_time datetime COMMENT '更新时间',
+	price decimal(10,2) COMMENT '单价',
 	-- 1：未删除
 	-- 2：已删除
 	dr tinyint COMMENT '是否删除 : 1：未删除
@@ -861,7 +868,7 @@ ALTER TABLE am_role_record
 
 
 ALTER TABLE am_user_record
-	ADD FOREIGN KEY (user_id)
+	ADD FOREIGN KEY (operate_id)
 	REFERENCES am_user (user_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
@@ -869,7 +876,7 @@ ALTER TABLE am_user_record
 
 
 ALTER TABLE am_user_record
-	ADD FOREIGN KEY (operate_id)
+	ADD FOREIGN KEY (user_id)
 	REFERENCES am_user (user_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
@@ -885,14 +892,6 @@ ALTER TABLE dd_measure_unit
 
 
 ALTER TABLE dd_warehouse_type
-	ADD FOREIGN KEY (user_id)
-	REFERENCES am_user (user_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE ds_sales_outbound
 	ADD FOREIGN KEY (user_id)
 	REFERENCES am_user (user_id)
 	ON UPDATE RESTRICT
@@ -1020,9 +1019,9 @@ ALTER TABLE si_warehouse
 ;
 
 
-ALTER TABLE ds_sales_outbound_detail
-	ADD FOREIGN KEY (sales_outbound_id)
-	REFERENCES ds_sales_outbound (sales_outbound_id)
+ALTER TABLE im_safe_stock
+	ADD FOREIGN KEY (material_inventory_id)
+	REFERENCES im_material_inventory (material_inventory_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
 ;
@@ -1047,14 +1046,6 @@ ALTER TABLE om_outbound_forklift
 ALTER TABLE om_outbound_record
 	ADD FOREIGN KEY (outbound_head_id)
 	REFERENCES om_outbound_head (outbound_head_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE ds_sales_outbound
-	ADD FOREIGN KEY (client_id)
-	REFERENCES si_client (client_id)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
 ;
@@ -1116,7 +1107,7 @@ ALTER TABLE sm_storage_detail
 ;
 
 
-ALTER TABLE ds_sales_outbound_detail
+ALTER TABLE im_material_inventory
 	ADD FOREIGN KEY (material_id)
 	REFERENCES si_material (material_id)
 	ON UPDATE RESTRICT
