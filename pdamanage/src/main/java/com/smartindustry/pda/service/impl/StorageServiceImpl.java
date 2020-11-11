@@ -237,7 +237,7 @@ public class StorageServiceImpl implements IStorageService {
         Map<Long, StorageDetailVO.LocationVO> lvos = new HashMap<>();
         for (StorageBodyBO bo : storageHeadBO.getBos()) {
             StorageDetailVO.LocationVO lvo = new StorageDetailVO.LocationVO();
-            lvo.setColor(StorageDetailVO.COLORS[lvos.size()]);
+            lvo.setColor(CommonConstant.COLORS[lvos.size()]);
             lvo.setMinfo(bo.getMaterialName() + " " + bo.getMaterialModel());
             lvos.put(bo.getMaterialId(), lvo);
         }

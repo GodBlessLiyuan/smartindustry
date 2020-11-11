@@ -19,8 +19,6 @@ import java.util.List;
 public class OutboundDetailVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    public static final String[] COLORS = new String[]{"#FF0000", "#00FF00", "#0000FF"};
-
     /**
      * 出库单ID
      */

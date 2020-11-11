@@ -19,9 +19,6 @@ import java.util.List;
 @Data
 public class StorageDetailVO {
     private static final long serialVersionUID = 1L;
-
-    public static final String[] COLORS = new String[]{"#FFFF00", "#FFFAFA", "#FF0000", "#00FF00"};
-
     /**
      * 入库单ID
      */

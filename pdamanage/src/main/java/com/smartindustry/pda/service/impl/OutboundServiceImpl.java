@@ -130,7 +130,7 @@ public class OutboundServiceImpl implements IOutboundService {
         Map<Long, OutboundDetailVO.LocationVO> lvos = new HashMap<>();
         for (OutboundBodyBO bo : headBO.getBodyBOs()) {
             OutboundDetailVO.LocationVO lvo = new OutboundDetailVO.LocationVO();
-            lvo.setColor(OutboundDetailVO.COLORS[lvos.size()]);
+            lvo.setColor(CommonConstant.COLORS[lvos.size()]);
             lvo.setMinfo(bo.getMaterialName() + " " + bo.getMaterialModel());
             lvos.put(bo.getMaterialId(), lvo);
         }

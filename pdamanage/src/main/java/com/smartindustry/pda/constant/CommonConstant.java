@@ -7,6 +7,7 @@ package com.smartindustry.pda.constant;
  * @version: 1.0
  */
 public class CommonConstant {
+    public static final String[] COLORS = new String[]{"#FF0000", "#00FF00", "#0000FF"};
     /**
      * session imei
      */
