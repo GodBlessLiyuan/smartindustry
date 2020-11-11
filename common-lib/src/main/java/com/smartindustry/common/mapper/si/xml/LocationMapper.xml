@@ -192,8 +192,7 @@
         <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
     </resultMap>
     <sql id="BO_Column_List">
-        l.location_id, l.location_no, l.location_name, l.location_type_id, l.warehouse_id, l.remark, l.user_id, l.create_time,
-    l.update_time, l.dr, lt.location_type_name, w.warehouse_name
+    l.location_id, l.material_id, l.location_no, l.location_name, l.location_type_id, l.warehouse_id, l.remark, l.user_id, l.create_time, l.update_time, l.dr, lt.location_type_name, w.warehouse_name
     </sql>
     <select id="pageQuery" parameterType="java.util.Map" resultMap="BOResultMap">
         select

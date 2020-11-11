@@ -16,6 +16,7 @@ import com.smartindustry.common.pojo.sm.*;
 import com.smartindustry.common.pojo.wo.PackagePO;
 import com.smartindustry.common.pojo.wo.ProduceOrderPO;
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.pda.PdaApplication;
 import com.smartindustry.pda.config.RfidConfig;
 import com.smartindustry.pda.constant.CommonConstant;
 import com.smartindustry.pda.constant.StorageConstant;
@@ -28,6 +29,7 @@ import com.smartindustry.pda.util.StorageNoUtil;
 import com.smartindustry.pda.vo.StorageDetailVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronizationAdapter;
@@ -473,7 +475,10 @@ public class StorageServiceImpl implements IStorageService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO finishedOriginToStorage(HttpSession session, String mrfid, String lrfid) {
+
+        log.info("取到mrfid为：" + mrfid + "-----------lrfid为：" + lrfid);
         // 当前叉车信息
+        //String imei = "863958040755311";
         String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
         // 根据imei查询出叉车id
         ForkliftPO forkliftPO = forkliftMapper.queryByImei(imei);
@@ -488,6 +493,7 @@ public class StorageServiceImpl implements IStorageService {
         //1. 入库详情表更新添加信息
         storageDetailPO.setLocationId(locationBO.getLocationId());
         storageDetailPO.setStorageTime(new Date());
+        storageDetailPO.setStorageNum(BigDecimal.ONE);
         storageDetailPO.setMaterialId(locationBO.getMaterialId());
         storageDetailPO.setStorageStatus(StorageConstant.STATUS_STORED);
         storageDetailPO.setPreparation(StorageConstant.Preparation_NO);
