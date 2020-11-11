@@ -3,7 +3,6 @@ package com.smartindustry.basic.vo;
 import com.smartindustry.common.bo.si.MaterialBO;
 import com.smartindustry.common.config.FilePathConfig;
 import com.smartindustry.common.pojo.si.MaterialPO;
-import com.smartindustry.common.pojo.si.MaterialSpecificationPO;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -41,7 +40,12 @@ public class MaterialVO implements Serializable {
     private String muname;
 
     private List<FileVO> files;
-
+    //物料描述
+    private String mdes;
+    //物料类型
+    private Byte mtype;
+    //所属供应商
+    private String sname;
     public static List<MaterialVO> convert(List<MaterialBO> bos) {
         List<MaterialVO> vos = new ArrayList<>(bos.size());
         for (MaterialBO bo : bos) {
@@ -57,6 +61,8 @@ public class MaterialVO implements Serializable {
         vo.setMname(bo.getMaterialName());
         vo.setMmodel(bo.getMaterialModel());
         vo.setMuname(bo.getMeasureUnitName());
+        vo.setMtype(bo.getMaterialType());
+        vo.setMdes(bo.getMaterialDesc());
         return vo;
     }
 
@@ -85,13 +91,9 @@ public class MaterialVO implements Serializable {
         vo.setMuname(bo.getMeasureUnitName());
         vo.setMname(bo.getMaterialName());
         vo.setMmodel(bo.getMaterialModel());
-        if (null != bo.getFiles() && bo.getFiles().size() > 0) {
-            List<FileVO> files = new ArrayList<>(bo.getFiles().size());
-            for (MaterialSpecificationPO po : bo.getFiles()) {
-                files.add(new FileVO(po.getFileName(), config.getPublicPath() + po.getFilePath()));
-            }
-            vo.setFiles(files);
-        }
+        vo.setMtype(bo.getMaterialType());
+        vo.setMdes(bo.getMaterialDesc());
+        vo.setSname(bo.getSupplierName());
         return vo;
     }
 

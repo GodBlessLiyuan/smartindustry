@@ -57,4 +57,11 @@ public interface MaterialMapper extends BaseMapper<MaterialPO, Long> {
     List<MaterialPO> queryBySids(List<Long> sids);
 
     List<MaterialPO> queryByMuid(Long muid);
+
+    /***
+     * 查看详情，包括单位，供应商
+     * @param mid
+     * @return
+     */
+    MaterialBO getSupperUnitByID(Long mid);
 }

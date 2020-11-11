@@ -80,6 +80,10 @@ public class SupplierVO implements Serializable {
      2：已删除
      */
     private Byte dr;
+    /***
+     * 区域
+     */
+    private String area;
 
     public static List<SupplierVO> convert(List<SupplierPO> pos) {
         List<SupplierVO> vos = new ArrayList<>(pos.size());
@@ -103,6 +107,7 @@ public class SupplierVO implements Serializable {
         vo.setRemark(po.getRemark());
         vo.setCtime(po.getCreateTime());
         vo.setDr(po.getDr());
+        vo.setArea(po.getArea());
         return vo;
     }
 }

@@ -161,6 +161,14 @@
     d.dr,u.name as username,d2.dept_name as parentName
     </sql>
 
+    <select id="getBOByPri" parameterType="java.lang.Long" resultMap="BOResultMap">
+        select
+        <include refid="BO_Column_List"/>
+        from am_dept d
+        left join am_user u on d.user_id = u.user_id
+        left join am_dept d2 on d.parent_id = d2.dept_id
+        where d.dr = 1 and d.dept_id=#{did}
+    </select>
 
     <select id="deptPageQuery" parameterType="java.util.Map" resultMap="BOResultMap">
         select

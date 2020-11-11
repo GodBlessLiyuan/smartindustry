@@ -197,20 +197,30 @@
       dr = #{dr,jdbcType=TINYINT}
     where material_id = #{materialId,jdbcType=BIGINT}
   </update>
-
+    <select id="getSupperUnitByID" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.si.MaterialBO">
+    select m.material_id as materialId,m.material_no as materialNo,m.material_model as materialModel,m.material_name as materialName,
+    m.material_type as materialType ,m.material_desc as materialDesc,
+    s.supplier_name as supplierName, mu.measure_unit_name as measureUnitName
+    from si_material m
+    left join si_supplier s on m.supplier_id = s.supplier_id
+    left join dd_measure_unit mu on m.measure_unit_id = mu.measure_unit_id
+    where m.dr = 1 and m.material_id=#{mid}
+    </select>
   <select id="pageQueryStorage" parameterType="java.util.Map" resultType="com.smartindustry.common.bo.si.MaterialBO">
-    select m.material_id as materialId,m.material_no as materialNo,m.material_model as materialModel,m.material_name as materialName,s.supplier_name as supplierName, mu.measure_unit_name as measureUnitName
+    select m.material_id as materialId,m.material_no as materialNo,m.material_model as materialModel,m.material_name as materialName,
+    m.material_type as materialType ,m.material_desc as materialDesc,
+    s.supplier_name as supplierName, mu.measure_unit_name as measureUnitName
     from si_material m
     left join si_supplier s on m.supplier_id = s.supplier_id
     left join dd_measure_unit mu on m.measure_unit_id = mu.measure_unit_id
     where m.dr = 1
-    <if test="sname != null and sname != ''">and s.supplier_name like '%' #{sname,jdbcType=CHAR} '%'</if>
-    <if test="mname != null and mname != ''">and m.material_name like '%' #{mname,jdbcType=CHAR} '%'</if>
-    <if test="mmodel != null and mmodel != ''">and m.material_model like '%' #{mmodel,jdbcType=CHAR} '%'</if>
-    <if test="mno != null and mno != ''">and m.material_no like '%' #{mno,jdbcType=CHAR} '%'</if>
-    <if test="mdesc != null and mdesc != ''">and m.material_desc like '%' #{mdesc,jdbcType=CHAR} '%'</if>
-    <if test="ctime != null">
-      and m.create_time &gt; #{ctime, jdbcType=TIMESTAMP}
+    <if test="keyword != null and keyword != ''">
+      and (m.material_no like '%' #{keyword,jdbcType=CHAR} '%'
+      or m.material_name like '%' #{keyword,jdbcType=CHAR} '%'
+      or m.material_model like '%' #{keyword,jdbcType=CHAR} '%')
+    </if>
+    <if test="mtype !=null and mtype!=0">
+      and m.material_type=mtype
     </if>
     order by m.create_time desc
   </select>
