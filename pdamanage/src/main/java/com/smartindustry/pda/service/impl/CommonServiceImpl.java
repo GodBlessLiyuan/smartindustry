@@ -116,8 +116,8 @@ public class CommonServiceImpl implements ICommonService {
         if (null == dto.getType()) {
             return new ResultVO(1001);
         }
-        String imei = "868374034386920";
-        //String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
+        //String imei = "868374034386920";
+        String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
         if (null == imei) {
             return new ResultVO(1111);
         }
