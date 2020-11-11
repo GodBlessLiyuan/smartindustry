@@ -323,14 +323,4 @@
         left join si_warehouse w on l.warehouse_id = w.warehouse_id
         where l.dr = 1 and l.location_no = #{rfid,jdbcType=CHAR}
     </select>
-
-    <select id="queryByLrfidAndMrfid" parameterType="java.lang.String" resultMap="BOResultMap">
-        select
-        <include refid="BO_Column_List"/>
-        from si_location l
-        left join dd_location_type lt on l.location_type_id = lt.location_type_id
-        left join si_warehouse w on l.warehouse_id = w.warehouse_id
-        left join si_material m on l.material_id = m.material_id
-        where l.dr = 1 and l.location_no = #{lrfid,jdbcType=CHAR} and m.material_no = #{mrfid,jdbcType=CHAR}
-    </select>
 </mapper>

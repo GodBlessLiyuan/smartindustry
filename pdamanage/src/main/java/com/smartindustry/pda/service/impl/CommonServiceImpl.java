@@ -375,7 +375,7 @@ public class CommonServiceImpl implements ICommonService {
                     return CommonConstant.RFID_INVALID;
                 }
                 if (!prepareRFID.equals(dto.getLrfid())) {
-                    LocationBO locationBO = locationMapper.queryByLrfidAndMrfid(dto.getLrfid(), dto.getMrfid());
+                    LocationBO locationBO = locationMapper.queryByRfid(dto.getLrfid());
                     if (null == locationBO) {
                         WebSocketServer.sendMsg(imei, WebSocketVO.createTitleVO("作业错误，成品摆放错误或丢失，请立即处理！", CommonConstant.TYPE_TITLE_WARN));
                         return CommonConstant.RFID_INVALID;
