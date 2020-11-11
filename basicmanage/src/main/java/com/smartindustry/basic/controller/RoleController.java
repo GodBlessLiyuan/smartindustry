@@ -1,5 +1,6 @@
 package com.smartindustry.basic.controller;
 
+import com.smartindustry.basic.dto.OperateDTO;
 import com.smartindustry.basic.service.IRoleService;
 import com.smartindustry.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,4 +30,38 @@ public class RoleController {
         return roleService.pageQuery(reqData);
     }
 
+    /***
+     * 查询所有按钮权限列表
+     * @return
+     */
+    @PostMapping("queryAuthority")
+    public ResultVO queryAuthority() {
+        return roleService.queryAuthority();
+    }
+
+    /***
+     * 更新角色权限
+     * @param dto
+     * @return
+     */
+    @PostMapping("updatePerms")
+    @PreAuthorize("@ss.hasPermi('bm:am:role:site')")
+    public ResultVO updatePerms(@RequestBody OperateDTO dto) {
+        return roleService.updatePerms(dto);
+    }
+
+    /****
+     * 根据角色id查找权限id
+     * @param dto
+     * @return
+     */
+    @PostMapping("queryRolePerms")
+    public ResultVO queryRolePerms(@RequestBody OperateDTO dto) {
+        return roleService.queryRolePerms(dto);
+    }
+
+    @PostMapping("queryRoleRecord")
+    public ResultVO queryRoleRecord(@RequestBody Map<String, Object> reqData) {
+        return roleService.queryRoleRecord(reqData);
+    }
 }

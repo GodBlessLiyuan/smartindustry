@@ -26,6 +26,20 @@ public class OperateDTO implements Serializable {
      */
     private Long cid;
 
+    private Long rid;
+
     private Long soid;
 
+    /**
+     * 存放前端传回来的权限列表
+     */
+    private List<Long> perms;
+
+    public static boolean hasAdmin(OperateDTO dto) {
+        return isAdmin(dto.getRid());
+    }
+
+    public static boolean isAdmin(Long roleid) {
+        return null != roleid && roleid == 1L;
+    }
 }

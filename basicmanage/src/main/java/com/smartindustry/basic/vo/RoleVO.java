@@ -26,6 +26,11 @@ public class RoleVO implements Serializable {
 
     private String rcode;
 
+    private Byte status;
+
+    private String rdes;
+
+
     public static List<RoleVO> convert(List<RolePO> pos) {
         List<RoleVO> vos = new ArrayList<>(pos.size());
         for (RolePO po : pos) {
@@ -40,6 +45,8 @@ public class RoleVO implements Serializable {
         vo.setRname(po.getRoleName());
         vo.setRcode(po.getRoleCode());
         vo.setCtime(po.getCreateTime());
+        vo.setRdes(po.getRoleDesc());
+        vo.setStatus(po.getStatus());
         return vo;
     }
 }
