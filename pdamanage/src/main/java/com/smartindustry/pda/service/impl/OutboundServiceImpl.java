@@ -119,6 +119,12 @@ public class OutboundServiceImpl implements IOutboundService {
             return new ResultVO(1002);
         }
         OutboundDetailVO vo = OutboundDetailVO.convert(headBO);
+        if (headBO.getStatus() == 1) {
+            // 入库完成
+            vo.setCnum(headBO.getOutboundNum());
+            vo.setStatus(OutboundConstant.STATUS_OUTBOUND_VANISH);
+            return ResultVO.ok().setData(vo); 
+        }
 
         // 储位图
         Map<Long, OutboundDetailVO.LocationVO> lvos = new HashMap<>();
