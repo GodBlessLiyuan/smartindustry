@@ -522,7 +522,10 @@ public class StorageServiceImpl implements IStorageService {
             // 没有该body体
             return new ResultVO(1002, "没有该body体");
         }
-        storageBodyPO.setStorageNum(storageBodyPO.getStorageNum().add(new BigDecimal(1)));
+        if (storageBodyPO.getStorageNum() == null) {
+            storageBodyPO.setStorageNum(BigDecimal.ZERO);
+        }
+        storageBodyPO.setStorageNum(storageBodyPO.getStorageNum().add(BigDecimal.ONE));
         storageBodyMapper.updateByPrimaryKeySelective(storageBodyPO);
         log.info("更新入库单body----------：" + storageBodyPO.toString());
         //4.释放叉车
@@ -577,56 +580,59 @@ public class StorageServiceImpl implements IStorageService {
         LocationBO locationBO = locationMapper.queryByRfid(lrfid);
         //# 叉车运送到备货区,rfid 和 入库单解绑,也就是删除其生产来源单号
         //if (locationBO.getLocationTypeId().equals(StorageConstant.TYPE_PREPARATION_AREA) && storageHeadPO.getSourceType().equals(StorageConstant.TYPE_PRODUCT_STORAGE)) {
-            // 首先更新入库详情表，添加信息
-            //1. 入库详情表更新添加信息
-            storageDetailPO.setLocationId(locationBO.getLocationId());
-            storageDetailPO.setStorageTime(new Date());
-            storageDetailPO.setStorageStatus(StorageConstant.STATUS_STORED);
-            storageDetailPO.setPreparation(StorageConstant.Preparation_YES);
-            storageDetailMapper.updateByPrimaryKey(storageDetailPO);
-            //2.入库单表头已入库数量+1,以及判断入库单状态
-            if (storageHeadPO.getStorageNum() == null) {
-                storageHeadPO.setStorageNum(BigDecimal.ZERO);
-            }
-            storageHeadPO.setStorageNum(storageHeadPO.getStorageNum().add(new BigDecimal(1)));
-            storageHeadPO.setWarehouseId(locationBO.getWarehouseId());
-            //更新入库单的状态
-            if (storageHeadPO.getStorageNum() == null || storageHeadPO.getStorageNum().compareTo(new BigDecimal(0)) == 0) {
-                //执行操作记录
-                storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), forkliftPO.getForkliftId(), StorageConstant.OPERATE_NAME_EXECUTE));
-            }
-            if (storageHeadPO.getStorageNum().add(BigDecimal.ONE).compareTo(storageHeadPO.getExpectNum()) == -1) {
-                storageHeadPO.setStatus(StorageConstant.STATUS_STOREING);
-                //加入入库操作记录
-                storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), forkliftPO.getForkliftId(), StorageConstant.OPERATE_NAME_JOIN));
-            } else {
-                storageHeadPO.setStatus(StorageConstant.STATUS_STORED);
-                storageHeadPO.setStorageTime(new Date());
-                //插入入库完成操作记录
-                storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), forkliftPO.getForkliftId(), StorageConstant.OPERATE_NAME_FINISH));
-            }
-            storageHeadMapper.updateByPrimaryKey(storageHeadPO);
-            //3. 入库单表体已入库数量+1
-            // 根据入库单表头id和物料id唯一查找入库单表体，进行数量+1
-            StorageBodyPO storageBodyPO = storageBodyMapper.queryByShidAndMid(storageHeadPO.getStorageHeadId(), locationBO.getMaterialId());
-            if (null == storageBodyPO) {
-                // 没有该body体
-                return new ResultVO(1002, "没有该body体");
-            }
-            storageBodyPO.setStorageNum(storageBodyPO.getStorageNum().add(BigDecimal.ONE));
-            storageBodyMapper.updateByPrimaryKeySelective(storageBodyPO);
-            //4.释放叉车
-            //根据叉车id查询当前执行入库的入库叉车表记录,删除
-            StorageForkliftPO storageForkliftPO = storageForkliftMapper.queryByFid(forkliftPO.getForkliftId());
-            if (storageForkliftPO != null) {
-                storageForkliftMapper.deleteByPrimaryKey(storageForkliftPO.getStorageForkliftId());
-            }
-            //5. 叉车状态 - 空闲
-            forkliftPO.setStatus(CommonConstant.STATUS_FORKLIFT_IDLE);
-            forkliftMapper.updateByPrimaryKey(forkliftPO);
-            //6.库位已经存在的数量+1
-            LocationPO locationPO = locationMapper.selectByPrimaryKey(locationBO.getLocationId());
-            locationPO.setExistNum(locationPO.getExistNum() == null ? BigDecimal.ONE : locationPO.getExistNum().add(BigDecimal.ONE));
+        // 首先更新入库详情表，添加信息
+        //1. 入库详情表更新添加信息
+        storageDetailPO.setLocationId(locationBO.getLocationId());
+        storageDetailPO.setStorageTime(new Date());
+        storageDetailPO.setStorageStatus(StorageConstant.STATUS_STORED);
+        storageDetailPO.setPreparation(StorageConstant.Preparation_YES);
+        storageDetailMapper.updateByPrimaryKey(storageDetailPO);
+        //2.入库单表头已入库数量+1,以及判断入库单状态
+        if (storageHeadPO.getStorageNum() == null) {
+            storageHeadPO.setStorageNum(BigDecimal.ZERO);
+        }
+        storageHeadPO.setStorageNum(storageHeadPO.getStorageNum().add(new BigDecimal(1)));
+        storageHeadPO.setWarehouseId(locationBO.getWarehouseId());
+        //更新入库单的状态
+        if (storageHeadPO.getStorageNum() == null || storageHeadPO.getStorageNum().compareTo(new BigDecimal(0)) == 0) {
+            //执行操作记录
+            storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), forkliftPO.getForkliftId(), StorageConstant.OPERATE_NAME_EXECUTE));
+        }
+        if (storageHeadPO.getStorageNum().add(BigDecimal.ONE).compareTo(storageHeadPO.getExpectNum()) == -1) {
+            storageHeadPO.setStatus(StorageConstant.STATUS_STOREING);
+            //加入入库操作记录
+            storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), forkliftPO.getForkliftId(), StorageConstant.OPERATE_NAME_JOIN));
+        } else {
+            storageHeadPO.setStatus(StorageConstant.STATUS_STORED);
+            storageHeadPO.setStorageTime(new Date());
+            //插入入库完成操作记录
+            storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), forkliftPO.getForkliftId(), StorageConstant.OPERATE_NAME_FINISH));
+        }
+        storageHeadMapper.updateByPrimaryKey(storageHeadPO);
+        //3. 入库单表体已入库数量+1
+        // 根据入库单表头id和物料id唯一查找入库单表体，进行数量+1
+        StorageBodyPO storageBodyPO = storageBodyMapper.queryByShidAndMid(storageHeadPO.getStorageHeadId(), locationBO.getMaterialId());
+        if (null == storageBodyPO) {
+            // 没有该body体
+            return new ResultVO(1002, "没有该body体");
+        }
+        if (storageBodyPO.getStorageNum() == null) {
+            storageBodyPO.setStorageNum(BigDecimal.ZERO);
+        }
+        storageBodyPO.setStorageNum(storageBodyPO.getStorageNum().add(BigDecimal.ONE));
+        storageBodyMapper.updateByPrimaryKeySelective(storageBodyPO);
+        //4.释放叉车
+        //根据叉车id查询当前执行入库的入库叉车表记录,删除
+        StorageForkliftPO storageForkliftPO = storageForkliftMapper.queryByFid(forkliftPO.getForkliftId());
+        if (storageForkliftPO != null) {
+            storageForkliftMapper.deleteByPrimaryKey(storageForkliftPO.getStorageForkliftId());
+        }
+        //5. 叉车状态 - 空闲
+        forkliftPO.setStatus(CommonConstant.STATUS_FORKLIFT_IDLE);
+        forkliftMapper.updateByPrimaryKey(forkliftPO);
+        //6.库位已经存在的数量+1
+        LocationPO locationPO = locationMapper.selectByPrimaryKey(locationBO.getLocationId());
+        locationPO.setExistNum(locationPO.getExistNum() == null ? BigDecimal.ONE : locationPO.getExistNum().add(BigDecimal.ONE));
         //}
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
             @Override
@@ -662,24 +668,70 @@ public class StorageServiceImpl implements IStorageService {
         Long storageHeadId = null;
         //# 阅读器扫描成品区库位，并且来源是备货入库单，入库第一条成功后，此时生成备货入库单
         //if (locationBO.getLocationTypeId().equals(StorageConstant.TYPE_FINISHED_AREA) && storageDetailPO.getPreparation().equals(StorageConstant.Preparation_YES)) {
-            // 看是不是当前时间段备料区入库的第一单，如果是第一单，生成备料区入库单
-            //根据来源类型查询是否当前有备料区入库单
-            List<StorageHeadPO> storageHeadPOS = storageHeadMapper.queryByStatus(StorageConstant.STATUS_STOREING, StorageConstant.TYPE_PRE_STORAGE);
-            if (storageHeadPOS.size() <= 0) {
-                // 如果当前时间段没有备料入库单，那么就新增一条备料入库单
-                // 生成备料区入库单表头
-                StorageHeadPO storageHeadPO = new StorageHeadPO();
-                storageHeadPO.setStorageNo(StorageNoUtil.genStorageHeadNo(storageHeadMapper, StorageNoUtil.RECEIPT_HEAD_YP, new Date()));
-                storageHeadPO.setWarehouseId(locationBO.getWarehouseId());
-                storageHeadPO.setSourceType(StorageConstant.TYPE_PRE_STORAGE);
-                storageHeadPO.setStorageNum(BigDecimal.ONE);
+        // 看是不是当前时间段备料区入库的第一单，如果是第一单，生成备料区入库单
+        //根据来源类型查询是否当前有备料区入库单
+        List<StorageHeadPO> storageHeadPOS = storageHeadMapper.queryByStatus(StorageConstant.STATUS_STOREING, StorageConstant.TYPE_PRE_STORAGE);
+        if (storageHeadPOS.size() <= 0) {
+            // 如果当前时间段没有备料入库单，那么就新增一条备料入库单
+            // 生成备料区入库单表头
+            StorageHeadPO storageHeadPO = new StorageHeadPO();
+            storageHeadPO.setStorageNo(StorageNoUtil.genStorageHeadNo(storageHeadMapper, StorageNoUtil.RECEIPT_HEAD_YP, new Date()));
+            storageHeadPO.setWarehouseId(locationBO.getWarehouseId());
+            storageHeadPO.setSourceType(StorageConstant.TYPE_PRE_STORAGE);
+            storageHeadPO.setStorageNum(BigDecimal.ONE);
+            storageHeadPO.setStatus(StorageConstant.STATUS_STOREING);
+            storageHeadPO.setCreateTime(new Date());
+            storageHeadPO.setDr((byte) 1);
+            storageHeadMapper.insert(storageHeadPO);
+            //生成一条对应的入库单表体
+            // 只生成一个入库单表体
+            StorageBodyPO storageBodyPO = new StorageBodyPO();
+            storageBodyPO.setStorageHeadId(storageHeadPO.getStorageHeadId());
+            storageBodyPO.setMaterialId(storageDetailPO.getMaterialId());
+            storageBodyPO.setLocationId(locationBO.getLocationId());
+            storageBodyPO.setStorageNum(BigDecimal.ONE);
+            storageBodyPO.setCreateTime(new Date());
+            storageBodyPO.setDr((byte) 1);
+            storageBodyMapper.insert(storageBodyPO);
+
+            //更新详情记录表变为已经不在备料区了，并添加一条新的记录
+            storageDetailPO.setPreparation((byte) 1);
+            storageDetailMapper.updateByPrimaryKey(storageDetailPO);
+
+            //添加入库记录
+            StorageDetailPO poForStorage = new StorageDetailPO();
+            poForStorage.setStorageHeadId(storageBodyPO.getStorageHeadId());
+            poForStorage.setLocationId(locationBO.getLocationId());
+            poForStorage.setMaterialId(storageDetailPO.getMaterialId());
+            poForStorage.setStorageNum(BigDecimal.ONE);
+            poForStorage.setStorageTime(new Date());
+            poForStorage.setRfid(mrfid);
+            poForStorage.setStorageStatus(StorageConstant.STATUS_STORED);
+            poForStorage.setPreparation(StorageConstant.Preparation_NO);
+            storageDetailMapper.insertSelective(poForStorage);
+
+            //更新入库单的状态
+            if (storageHeadPO.getStorageNum() == null || storageHeadPO.getStorageNum().compareTo(new BigDecimal(0)) == 0) {
+                //插入入单执行操作
+                storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), forkliftPO.getForkliftId(), StorageConstant.OPERATE_NAME_EXECUTE));
+            }
+            if (storageHeadPO.getStorageNum().add(BigDecimal.ONE).compareTo(storageHeadPO.getExpectNum()) == -1) {
                 storageHeadPO.setStatus(StorageConstant.STATUS_STOREING);
-                storageHeadPO.setCreateTime(new Date());
-                storageHeadPO.setDr((byte) 1);
-                storageHeadMapper.insert(storageHeadPO);
-                //生成一条对应的入库单表体
-                // 只生成一个入库单表体
-                StorageBodyPO storageBodyPO = new StorageBodyPO();
+                //插入入库参与操作记录
+                storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), forkliftPO.getForkliftId(), StorageConstant.OPERATE_NAME_JOIN));
+            }
+            storageHeadId = storageHeadPO.getStorageHeadId();
+        } else {
+            //已经有入库单了，加入到有的入库单中，更新入库单入库数量，以及更新或添加表体信息
+            StorageHeadPO storageHeadPO = storageHeadPOS.get(0);
+            if (storageHeadPO.getStorageNum() == null) {
+                storageHeadPO.setStorageNum(BigDecimal.ZERO);
+            }
+            storageHeadPO.setStorageNum(storageHeadPO.getStorageNum().add(BigDecimal.ONE));
+            //根据表头和物料id查看是否之前有该备料入库单的表体，如果有更新，没有进行添加
+            StorageBodyPO storageBodyPO = storageBodyMapper.queryByShidAndMid(storageHeadPO.getStorageHeadId(), locationBO.getMaterialId());
+            if (storageBodyPO == null) {
+                //创建新的表体
                 storageBodyPO.setStorageHeadId(storageHeadPO.getStorageHeadId());
                 storageBodyPO.setMaterialId(storageDetailPO.getMaterialId());
                 storageBodyPO.setLocationId(locationBO.getLocationId());
@@ -687,98 +739,55 @@ public class StorageServiceImpl implements IStorageService {
                 storageBodyPO.setCreateTime(new Date());
                 storageBodyPO.setDr((byte) 1);
                 storageBodyMapper.insert(storageBodyPO);
-
-                //更新详情记录表变为已经不在备料区了，并添加一条新的记录
-                storageDetailPO.setPreparation((byte) 1);
-                storageDetailMapper.updateByPrimaryKey(storageDetailPO);
-
-                //添加入库记录
-                StorageDetailPO poForStorage = new StorageDetailPO();
-                poForStorage.setStorageHeadId(storageBodyPO.getStorageHeadId());
-                poForStorage.setLocationId(locationBO.getLocationId());
-                poForStorage.setMaterialId(storageDetailPO.getMaterialId());
-                poForStorage.setStorageNum(BigDecimal.ONE);
-                poForStorage.setStorageTime(new Date());
-                poForStorage.setRfid(mrfid);
-                poForStorage.setStorageStatus(StorageConstant.STATUS_STORED);
-                poForStorage.setPreparation(StorageConstant.Preparation_NO);
-                storageDetailMapper.insertSelective(poForStorage);
-
-                //更新入库单的状态
-                if (storageHeadPO.getStorageNum() == null || storageHeadPO.getStorageNum().compareTo(new BigDecimal(0)) == 0) {
-                    //插入入单执行操作
-                    storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), forkliftPO.getForkliftId(), StorageConstant.OPERATE_NAME_EXECUTE));
-                }
-                if (storageHeadPO.getStorageNum().add(BigDecimal.ONE).compareTo(storageHeadPO.getExpectNum()) == -1) {
-                    storageHeadPO.setStatus(StorageConstant.STATUS_STOREING);
-                    //插入入库参与操作记录
-                    storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), forkliftPO.getForkliftId(), StorageConstant.OPERATE_NAME_JOIN));
-                }
-                storageHeadId = storageHeadPO.getStorageHeadId();
             } else {
-                //已经有入库单了，加入到有的入库单中，更新入库单入库数量，以及更新或添加表体信息
-                StorageHeadPO storageHeadPO = storageHeadPOS.get(0);
-                if (storageHeadPO.getStorageNum() == null) {
-                    storageHeadPO.setStorageNum(BigDecimal.ZERO);
+                //更新原来的表体
+                if (storageBodyPO.getStorageNum() == null) {
+                    storageBodyPO.setStorageNum(BigDecimal.ZERO);
                 }
-                storageHeadPO.setStorageNum(storageHeadPO.getStorageNum().add(BigDecimal.ONE));
-                //根据表头和物料id查看是否之前有该备料入库单的表体，如果有更新，没有进行添加
-                StorageBodyPO storageBodyPO = storageBodyMapper.queryByShidAndMid(storageHeadPO.getStorageHeadId(), locationBO.getMaterialId());
-                if (storageBodyPO == null) {
-                    //创建新的表体
-                    storageBodyPO.setStorageHeadId(storageHeadPO.getStorageHeadId());
-                    storageBodyPO.setMaterialId(storageDetailPO.getMaterialId());
-                    storageBodyPO.setLocationId(locationBO.getLocationId());
-                    storageBodyPO.setStorageNum(BigDecimal.ONE);
-                    storageBodyPO.setCreateTime(new Date());
-                    storageBodyPO.setDr((byte) 1);
-                    storageBodyMapper.insert(storageBodyPO);
-                } else {
-                    //更新原来的表体
-                    storageBodyPO.setStorageNum(storageBodyPO.getStorageNum());
-                    storageBodyMapper.updateByPrimaryKey(storageBodyPO);
-                }
-                //更新详情记录表变为已经不在备料区了，并添加一条新的记录
-                storageDetailPO.setPreparation((byte) 1);
-                storageDetailMapper.updateByPrimaryKey(storageDetailPO);
-
-                //添加入库记录
-                StorageDetailPO poForStorage = new StorageDetailPO();
-                poForStorage.setStorageHeadId(storageBodyPO.getStorageHeadId());
-                poForStorage.setLocationId(locationBO.getLocationId());
-                poForStorage.setMaterialId(storageDetailPO.getMaterialId());
-                poForStorage.setStorageNum(BigDecimal.ONE);
-                poForStorage.setStorageTime(new Date());
-                poForStorage.setRfid(mrfid);
-                poForStorage.setStorageStatus(StorageConstant.STATUS_STORED);
-                poForStorage.setPreparation(StorageConstant.Preparation_NO);
-                storageDetailMapper.insertSelective(poForStorage);
-
-                //更新入库单的状态
-                if (storageHeadPO.getStorageNum() == null || storageHeadPO.getStorageNum().compareTo(new BigDecimal(0)) == 0) {
-                    //插入入单执行操作
-                    storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), forkliftPO.getForkliftId(), StorageConstant.OPERATE_NAME_EXECUTE));
-                }
-                storageHeadId = storageHeadPO.getStorageHeadId();
+                storageBodyPO.setStorageNum(storageBodyPO.getStorageNum().add(BigDecimal.ONE));
+                storageBodyMapper.updateByPrimaryKey(storageBodyPO);
             }
-            //将当前运作的叉车删掉
-            //根据叉车id查询当前执行入库的入库叉车表记录,删除
-            StorageForkliftPO storageForkliftPO = storageForkliftMapper.queryByFid(forkliftPO.getForkliftId());
-            if (storageForkliftPO != null) {
-                storageForkliftMapper.deleteByPrimaryKey(storageForkliftPO.getStorageForkliftId());
+            //更新详情记录表变为已经不在备料区了，并添加一条新的记录
+            storageDetailPO.setPreparation((byte) 1);
+            storageDetailMapper.updateByPrimaryKey(storageDetailPO);
+
+            //添加入库记录
+            StorageDetailPO poForStorage = new StorageDetailPO();
+            poForStorage.setStorageHeadId(storageBodyPO.getStorageHeadId());
+            poForStorage.setLocationId(locationBO.getLocationId());
+            poForStorage.setMaterialId(storageDetailPO.getMaterialId());
+            poForStorage.setStorageNum(BigDecimal.ONE);
+            poForStorage.setStorageTime(new Date());
+            poForStorage.setRfid(mrfid);
+            poForStorage.setStorageStatus(StorageConstant.STATUS_STORED);
+            poForStorage.setPreparation(StorageConstant.Preparation_NO);
+            storageDetailMapper.insertSelective(poForStorage);
+
+            //更新入库单的状态
+            if (storageHeadPO.getStorageNum() == null || storageHeadPO.getStorageNum().compareTo(new BigDecimal(0)) == 0) {
+                //插入入单执行操作
+                storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), forkliftPO.getForkliftId(), StorageConstant.OPERATE_NAME_EXECUTE));
             }
-            // 叉车状态 - 空闲
-            forkliftPO.setStatus(CommonConstant.STATUS_FORKLIFT_IDLE);
-            forkliftMapper.updateByPrimaryKey(forkliftPO);
-            //成品库位已经存在的数量+1
-            LocationPO locationPO = locationMapper.selectByPrimaryKey(locationBO.getLocationId());
-            locationPO.setExistNum(locationPO.getExistNum() == null ? BigDecimal.ONE : locationPO.getExistNum().add(BigDecimal.ONE));
-            locationMapper.updateByPrimaryKey(locationPO);
-            //备料区已存库位-1
-            //通过rfid查找备料区的库位id
-            LocationPO locationPOForPre = locationMapper.selectByPrimaryKey(storageDetailPO.getLocationId());
-            locationPOForPre.setExistNum(locationPO.getExistNum() == null ? BigDecimal.ONE : locationPO.getExistNum().subtract(BigDecimal.ONE));
-            locationMapper.updateByPrimaryKey(locationPOForPre);
+            storageHeadId = storageHeadPO.getStorageHeadId();
+        }
+        //将当前运作的叉车删掉
+        //根据叉车id查询当前执行入库的入库叉车表记录,删除
+        StorageForkliftPO storageForkliftPO = storageForkliftMapper.queryByFid(forkliftPO.getForkliftId());
+        if (storageForkliftPO != null) {
+            storageForkliftMapper.deleteByPrimaryKey(storageForkliftPO.getStorageForkliftId());
+        }
+        // 叉车状态 - 空闲
+        forkliftPO.setStatus(CommonConstant.STATUS_FORKLIFT_IDLE);
+        forkliftMapper.updateByPrimaryKey(forkliftPO);
+        //成品库位已经存在的数量+1
+        LocationPO locationPO = locationMapper.selectByPrimaryKey(locationBO.getLocationId());
+        locationPO.setExistNum(locationPO.getExistNum() == null ? BigDecimal.ONE : locationPO.getExistNum().add(BigDecimal.ONE));
+        locationMapper.updateByPrimaryKey(locationPO);
+        //备料区已存库位-1
+        //通过rfid查找备料区的库位id
+        LocationPO locationPOForPre = locationMapper.selectByPrimaryKey(storageDetailPO.getLocationId());
+        locationPOForPre.setExistNum(locationPO.getExistNum() == null ? BigDecimal.ONE : locationPO.getExistNum().subtract(BigDecimal.ONE));
+        locationMapper.updateByPrimaryKey(locationPOForPre);
         //}
 
         Long finalStorageHeadId = storageHeadId;
