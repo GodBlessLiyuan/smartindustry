@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartindustry.common.mapper.si.MaterialInventoryMapper">
+  <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.MaterialInventoryPO">
+    <id column="material_inventory_id" jdbcType="BIGINT" property="materialInventoryId" />
+    <result column="material_id" jdbcType="BIGINT" property="materialId" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="lower_limit" jdbcType="DECIMAL" property="lowerLimit" />
+    <result column="upper_limit" jdbcType="DECIMAL" property="upperLimit" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    material_inventory_id, material_id, `status`, lower_limit, upper_limit
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from si_material_inventory
+    where material_inventory_id = #{materialInventoryId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from si_material_inventory
+    where material_inventory_id = #{materialInventoryId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.si.MaterialInventoryPO">
+    insert into si_material_inventory (material_inventory_id, material_id, `status`, 
+      lower_limit, upper_limit)
+    values (#{materialInventoryId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT}, #{status,jdbcType=TINYINT}, 
+      #{lowerLimit,jdbcType=DECIMAL}, #{upperLimit,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.MaterialInventoryPO">
+    insert into si_material_inventory
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="materialInventoryId != null">
+        material_inventory_id,
+      </if>
+      <if test="materialId != null">
+        material_id,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="lowerLimit != null">
+        lower_limit,
+      </if>
+      <if test="upperLimit != null">
+        upper_limit,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="materialInventoryId != null">
+        #{materialInventoryId,jdbcType=BIGINT},
+      </if>
+      <if test="materialId != null">
+        #{materialId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="lowerLimit != null">
+        #{lowerLimit,jdbcType=DECIMAL},
+      </if>
+      <if test="upperLimit != null">
+        #{upperLimit,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.smartindustry.common.pojo.si.MaterialInventoryPO">
+    update si_material_inventory
+    <set>
+      <if test="materialId != null">
+        material_id = #{materialId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="lowerLimit != null">
+        lower_limit = #{lowerLimit,jdbcType=DECIMAL},
+      </if>
+      <if test="upperLimit != null">
+        upper_limit = #{upperLimit,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where material_inventory_id = #{materialInventoryId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.MaterialInventoryPO">
+    update si_material_inventory
+    set material_id = #{materialId,jdbcType=BIGINT},
+      `status` = #{status,jdbcType=TINYINT},
+      lower_limit = #{lowerLimit,jdbcType=DECIMAL},
+      upper_limit = #{upperLimit,jdbcType=DECIMAL}
+    where material_inventory_id = #{materialInventoryId,jdbcType=BIGINT}
+  </update>
+
+  <resultMap id="BOSResultMap" type="com.smartindustry.common.bo.si.MaterialInventoryBO" extends="BaseResultMap">
+    <result column="material_id" jdbcType="BIGINT" property="materialId"/>
+    <result column="material_no" jdbcType="CHAR" property="materialNo"/>
+    <result column="material_name" jdbcType="CHAR" property="materialName"/>
+    <result column="material_type" jdbcType="TINYINT" property="materialType"/>
+    <result column="material_model" jdbcType="CHAR" property="materialModel"/>
+    <result column="material_desc" jdbcType="CHAR" property="materialDesc"/>
+    <result column="package_volume" jdbcType="DECIMAL" property="packageVolume"/>
+    <result column="supplier_name" jdbcType="CHAR" property="supplierName"/>
+    <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId"/>
+    <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
+    <result column="inventoryQuantity" jdbcType="DECIMAL" property="inventoryQuantity"/>
+  </resultMap>
+  <sql id="BOS_Column_List">
+     m.material_id, m.material_no, m.material_name, m.material_type, m.material_model, m.material_desc,
+     s.supplier_name, w.warehouse_id, w.warehouse_name, mi.`status`,mi.lower_limit, mi.upper_limit, count(sd.rfid) as inventoryQuantity
+  </sql>
+  <select id="pageQuery" parameterType="java.util.Map" resultMap="BOSResultMap">
+    select
+    <include refid="BOS_Column_List" />
+    from sm_storage_detail sd
+    left join si_location l on sd.location_id = l.location_id
+    left join si_material m on l.material_id = m.material_id
+    left join si_supplier s on m.supplier_id = s.supplier_id
+    left join si_material_inventory mi on m.material_id = mi.material_id
+    left join dd_measure_unit mu on m.measure_unit_id = mu.measure_unit_id
+    left join si_warehouse w on l.warehouse_id = w.warehouse_id
+    where sd.storage_status = 1
+      <if test="keyword != null and keyword != ''">
+        and (m.material_no like '%' #{keyword,jdbcType=CHAR} '%'
+        or m.material_name like '%' #{keyword,jdbcType=CHAR} '%'
+        or m.material_desc like '%' #{keyword,jdbcType=CHAR} '%')
+      </if>
+      <if test="mtype != null and mtype != 0">
+        and m.material_type = #{mtype,jdbcType=TINYINT}
+      </if>
+      <if test="wid != null and wid != 0">
+        and l.warehouse_id = #{wid,jdbcType=BIGINT}
+      </if>
+      group by m.material_id,w.warehouse_id
+      order by mi.status asc, m.create_time desc
+  </select>
+
+
+  <resultMap id="POSResultMap" type="com.smartindustry.common.bo.si.ProductDetailBO">
+    <result column="rfid" jdbcType="CHAR" property="rfid"/>
+    <result column="material_no" jdbcType="CHAR" property="materialNo"/>
+    <result column="material_name" jdbcType="CHAR" property="materialName"/>
+    <result column="material_type" jdbcType="TINYINT" property="materialType"/>
+    <result column="material_model" jdbcType="CHAR" property="materialModel"/>
+    <result column="material_desc" jdbcType="CHAR" property="materialDesc"/>
+    <result column="material_batch" jdbcType="CHAR" property="materialBatch"/>
+    <result column="storage_time" jdbcType="TIMESTAMP" property="storageTime"/>
+    <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
+    <result column="materialStatus" jdbcType="TINYINT" property="materialStatus"/>
+  </resultMap>
+  <sql id="POS_Column_List">
+
+  </sql>
+  <select id="pageQueryPro" parameterType="java.util.Map" resultMap="BOSResultMap">
+    select
+    <include refid="BOS_Column_List" />
+    from sm_storage_detail sd
+    left join si_location l on sd.location_id = l.location_id
+    left join si_material m on l.material_id = m.material_id
+    left join si_supplier s on m.supplier_id = s.supplier_id
+    left join si_material_inventory mi on m.material_id = mi.material_id
+    left join dd_measure_unit mu on m.measure_unit_id = mu.measure_unit_id
+    left join si_warehouse w on l.warehouse_id = w.warehouse_id
+    where sd.storage_status = 1
+    <if test="keyword != null and keyword != ''">
+      and (sd.rfid like '%' #{keyword,jdbcType=CHAR} '%'
+      or m.material_no like '%' #{keyword,jdbcType=CHAR} '%'
+      or m.material_name like '%' #{keyword,jdbcType=CHAR} '%')
+    </if>
+    <if test="mbatch != null and mbatch != ''">
+      and m.material_batch = #{mbatch,jdbcType=CHAR}
+    </if>
+    <if test="wid != null and wid != 0">
+      and l.warehouse_id = #{wid,jdbcType=BIGINT}
+    </if>
+    <if test="lid != null and lid != 0">
+      and l.location_id = #{lid,jdbcType=BIGINT}
+    </if>
+    <if test="status != null and status != 0">
+      and sd.storage_status = #{status,jdbcType=BIGINT}
+    </if>
+  </select>
+
+  <update id="updateBatch" parameterType="java.util.List">
+    update si_material_inventory
+    set lower_limit = case material_id
+    <foreach collection="list" item="item">
+      when #{item.materialId,jdbcType=BIGINT} then #{item.lowerLimit,jdbcType=TINYINT}
+    </foreach>
+    end,
+    upper_limit = case material_id
+    <foreach collection="list" item="item">
+      when #{item.materialId,jdbcType=BIGINT} then #{item.upperLimit,jdbcType=TINYINT}
+    </foreach>
+    end
+    where material_id in
+    <foreach collection="list" item="item" open="(" separator="," close=")">
+      #{item.materialId,jdbcType=BIGINT}
+    </foreach>
+  </update>
+</mapper>
