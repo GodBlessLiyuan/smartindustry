@@ -14,6 +14,7 @@ import com.smartindustry.common.pojo.si.ForkliftPO;
 import com.smartindustry.common.pojo.si.LocationPO;
 import com.smartindustry.common.util.DateUtil;
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.pda.config.RfidConfig;
 import com.smartindustry.pda.constant.CommonConstant;
 import com.smartindustry.pda.constant.OutboundConstant;
 import com.smartindustry.pda.dto.OutboundDTO;
@@ -22,6 +23,7 @@ import com.smartindustry.pda.socket.WebSocketServer;
 import com.smartindustry.pda.util.OutboundNoUtil;
 import com.smartindustry.pda.vo.OutboundDetailVO;
 import com.smartindustry.pda.socket.WebSocketVO;
+import com.smartindustry.pda.vo.StorageDetailVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -50,6 +52,8 @@ public class OutboundServiceImpl implements IOutboundService {
     private OutboundForkliftMapper outboundForkliftMapper;
     @Autowired
     private LocationMapper locationMapper;
+    @Autowired
+    private RfidConfig rfidConfig;
 
     /**
      * ERP 生成 出库单
@@ -123,11 +127,16 @@ public class OutboundServiceImpl implements IOutboundService {
             lvo.setMinfo(bo.getMaterialName() + " " + bo.getMaterialModel());
             lvos.put(bo.getMaterialId(), lvo);
         }
+        Map<String, String> rfidMaps = rfidConfig.parseMap(rfidConfig.getMaps());
         if (lvos.size() > 0) {
             List<LocationPO> locationPOs = locationMapper.queryByMids(new ArrayList<>(lvos.keySet()));
             for (LocationPO locationPO : locationPOs) {
                 OutboundDetailVO.LocationVO lvo = lvos.get(locationPO.getMaterialId());
-                lvo.getLrfids().add(locationPO.getLocationNo());
+                for (Map.Entry<String, String> entry : rfidMaps.entrySet()) {
+                    if (entry.getKey().equals(locationPO.getLocationNo())) {
+                        lvo.getLrfids().add(entry.getValue());
+                    }
+                }
             }
             vo.setLvos(new ArrayList<>(lvos.values()));
         }
