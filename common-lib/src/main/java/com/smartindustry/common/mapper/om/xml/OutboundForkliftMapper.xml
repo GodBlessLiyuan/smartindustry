@@ -124,4 +124,10 @@
         )
         group by outbound_head_id
     </select>
+
+    <delete id="deleteByOhid" parameterType="java.lang.Long">
+        delete
+        from om_outbound_forklift
+        where outbound_head_id = #{outboundHeadId,jdbcType=BIGINT}
+    </delete>
 </mapper>

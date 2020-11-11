@@ -44,4 +44,12 @@ public interface OutboundForkliftMapper extends BaseMapper<OutboundForkliftPO, L
      * @return
      */
     Map<Long, Integer> queryFnumByHids(List<Long> hids);
+
+    /**
+     * 根据 Ohid 删除
+     *
+     * @param outboundHeadId
+     * @return
+     */
+    Integer deleteByOhid(Long outboundHeadId);
 }

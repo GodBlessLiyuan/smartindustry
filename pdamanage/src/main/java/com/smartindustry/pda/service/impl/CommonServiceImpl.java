@@ -296,6 +296,8 @@ public class CommonServiceImpl implements ICommonService {
                     }
                 }
 
+                outboundForkliftMapper.deleteByOhid(headPO.getOutboundHeadId());
+
                 // websocket
                 WebSocketVO vo = WebSocketVO.createTitleVO("业务单号：" + headPO.getSourceNo() + "（销售出库），已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO);
                 WebSocketServer.sendMsg(imeis, vo);
