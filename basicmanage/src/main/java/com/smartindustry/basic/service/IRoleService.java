@@ -1,5 +1,6 @@
 package com.smartindustry.basic.service;
 
+import com.smartindustry.basic.dto.OperateDTO;
 import com.smartindustry.common.vo.ResultVO;
 
 import java.util.Map;
@@ -18,4 +19,30 @@ public interface IRoleService {
      */
     ResultVO pageQuery(Map<String, Object> reqData);
 
+    /**
+     * 查询所有系统的所有权限
+     * @return
+     */
+    ResultVO queryAuthority();
+
+    /**
+     * 根据roleid和权限id列表更新角色权限表
+     * @param dto
+     * @return
+     */
+    ResultVO updatePerms(OperateDTO dto);
+
+    /**
+     * 根据角色id查找所有权限
+     * @param dto
+     * @return
+     */
+    ResultVO queryRolePerms(OperateDTO dto);
+
+    /**
+     * 根据操作人查询角色记录表
+     * @param reqData
+     * @return
+     */
+    ResultVO queryRoleRecord(Map<String, Object> reqData);
 }

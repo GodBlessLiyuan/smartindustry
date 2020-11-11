@@ -45,6 +45,10 @@ public class UserVO implements Serializable {
 
     private String userCode;
 
+    private String phone;
+
+    private Byte status;
+
     private List<Long> dcode;
     public static List<UserVO> convert(List<UserBO> bos) {
         List<UserVO> vos = new ArrayList<>(bos.size());
@@ -65,6 +69,8 @@ public class UserVO implements Serializable {
         vo.setRid(bo.getRoleId());
         vo.setCtime(bo.getCreateTime());
         vo.setUserCode(bo.getUserCode());
+        vo.setPhone(bo.getPhone());
+        vo.setStatus(bo.getStatus());
         return vo;
     }
 
