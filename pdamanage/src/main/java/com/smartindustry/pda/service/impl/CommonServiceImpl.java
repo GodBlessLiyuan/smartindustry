@@ -81,6 +81,7 @@ public class CommonServiceImpl implements ICommonService {
         } else {
             prepareRFID = locationPOs.get(0).getLocationNo();
         }
+        logger.info("备料区RFID：{}", prepareRFID);
     }
 
     /**
