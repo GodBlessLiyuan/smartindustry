@@ -322,15 +322,15 @@ public class CommonServiceImpl implements ICommonService {
      * @return
      */
     private Byte checkRfids(HttpSession session, CommonDTO dto) {
-        logger.info("==================================================================================================================================");
-        logger.info("RFID：MRFID-{}, LRFID-{}", dto.getMrfid(), dto.getLrfid());
-        logger.info("SESS：MRFID-{}, LRFID-{}", session.getAttribute(CommonConstant.SESSION_MRFID), session.getAttribute(CommonConstant.SESSION_LRFID));
-
         String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
         if ("ERROR".equals(dto.getMrfid()) || "ERROR".equals(dto.getLrfid())) {
             WebSocketServer.sendMsg(imei, WebSocketVO.createTitleVO("当前阅读器或串口线故障，请检查！", CommonConstant.TYPE_TITLE_ERROR));
             return CommonConstant.RFID_INVALID;
         }
+
+        logger.info("  ");
+        logger.info("{}-{}", dto.getMrfid(), dto.getLrfid());
+        logger.info("{}-{}", session.getAttribute(CommonConstant.SESSION_MRFID), session.getAttribute(CommonConstant.SESSION_LRFID));
 
         Byte status = (Byte) session.getAttribute(CommonConstant.SESSION_STATUS_FORKLIFT);
         if (null == status) {
