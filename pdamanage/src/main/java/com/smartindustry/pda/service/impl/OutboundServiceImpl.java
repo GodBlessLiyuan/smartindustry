@@ -123,7 +123,7 @@ public class OutboundServiceImpl implements IOutboundService {
             // 入库完成
             vo.setCnum(headBO.getOutboundNum());
             vo.setStatus(OutboundConstant.STATUS_OUTBOUND_VANISH);
-            return ResultVO.ok().setData(vo); 
+            return ResultVO.ok().setData(vo);
         }
 
         // 储位图
