@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.smartindustry.common.sqlserver.PurchaseErpMapper">
   <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.ds.sqlserver.PurchaseErpPO">
-    <result column="ID" jdbcType="DOUBLE" property="purchaseId" />
+    <id column="ID" jdbcType="DOUBLE" property="purchaseId" />
     <result column="单号" jdbcType="NVARCHAR" property="purchaseNo" />
     <result column="供应商ID" jdbcType="DOUBLE" property="supplierId" />
     <result column="订单ID" jdbcType="DOUBLE" property="orderId" />
@@ -19,16 +19,16 @@
     s.ID, s.单号,s.订单ID, s.订单号, s.供应商ID,s.仓库ID, s.日期, s.付款ID, s.付款名称, s.备注,s.引用数量,su.编号,m.物品编号,m.物品名称,
     d.ID as detail_id, d.到货ID, d.物品ID,  d.数量, d.单价, d.金额, d.不含税单价, d.不含税金额, d.备注 as remark
   </sql>
-  <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="ID">
+  <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="purchaseId">
     insert into dbo.采购到货 (单号,订单ID,订单号,供应商ID,日期,付款ID, 付款名称, 备注,引用数量,审核,终结) values
     <foreach collection="list" item="po" separator=",">
       (#{po.purchaseNo, jdbcType=NVARCHAR},#{po.orderId, jdbcType=DOUBLE},#{po.orderNo, jdbcType=NVARCHAR},#{po.supplierId, jdbcType=DOUBLE},#{po.acceptDate, jdbcType=TIMESTAMP},#{po.payMethod, jdbcType=DOUBLE},#{po.payName, jdbcType=NVARCHAR},#{po.remark, jdbcType=NVARCHAR},#{po.num, jdbcType=DOUBLE},1,0)
     </foreach>
   </insert>
 
-    <insert id="insert" parameterType="com.smartindustry.common.pojo.ds.sqlserver.PurchaseErpPO" useGeneratedKeys="true" keyProperty="ID">
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.ds.sqlserver.PurchaseErpPO" useGeneratedKeys="true" keyProperty="purchaseId">
         insert into dbo.采购到货 (单号,订单ID,订单号,供应商ID,日期,付款ID, 付款名称, 备注,引用数量,审核,终结) values
-            (#{po.purchaseNo, jdbcType=NVARCHAR},#{po.orderId, jdbcType=DOUBLE},#{po.orderNo, jdbcType=NVARCHAR},#{po.supplierId, jdbcType=DOUBLE},#{po.acceptDate, jdbcType=TIMESTAMP},#{po.payMethod, jdbcType=DOUBLE},#{po.payName, jdbcType=NVARCHAR},#{po.remark, jdbcType=NVARCHAR},#{po.num, jdbcType=DOUBLE},1,0)
+            (#{purchaseNo, jdbcType=NVARCHAR},#{orderId, jdbcType=DOUBLE},#{orderNo, jdbcType=NVARCHAR},#{supplierId, jdbcType=DOUBLE},#{acceptDate, jdbcType=TIMESTAMP},#{payMethod, jdbcType=DOUBLE},#{payName, jdbcType=NVARCHAR},#{remark, jdbcType=NVARCHAR},#{num, jdbcType=DOUBLE},1,0)
     </insert>
   <resultMap id="BOResultMap" type="com.smartindustry.common.bo.ds.PurchaseErpBO" extends="BaseResultMap">
     <collection property="pdpos" ofType="com.smartindustry.common.pojo.ds.sqlserver.PurchaseDetailErpPO">
