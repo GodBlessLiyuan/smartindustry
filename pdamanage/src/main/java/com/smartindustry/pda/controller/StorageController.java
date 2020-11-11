@@ -107,4 +107,35 @@ public class StorageController {
     public ResultVO chooseMaterialComfirm(HttpSession session, @RequestBody StorageDTO dto) {
         return storageService.chooseMaterialConfirm(session, dto);
     }
+
+
+    /**
+     * 原产区到成品区入库测试
+     *
+     * @return
+     */
+    @PostMapping("ytoc")
+    public ResultVO finishedOriginToStorage(HttpSession session, @RequestBody StorageDTO dto) {
+        return storageService.finishedOriginToStorage(session, dto.getMrfid(),dto.getLrfid());
+    }
+
+    /**
+     * 原产区到备料区测试
+     *
+     * @return
+     */
+    @PostMapping("ytob")
+    public ResultVO finishedOriginToSpareArea(HttpSession session, @RequestBody StorageDTO dto) {
+        return storageService.finishedOriginToSpareArea(session, dto.getMrfid(),dto.getLrfid());
+    }
+
+    /**
+     * 备料区到成品区测试
+     *
+     * @return
+     */
+    @PostMapping("btoc")
+    public ResultVO finishedSpareAreaToStorage(HttpSession session, @RequestBody StorageDTO dto) {
+        return storageService.finishedSpareAreaToStorage(session, dto.getMrfid(),dto.getLrfid());
+    }
 }
