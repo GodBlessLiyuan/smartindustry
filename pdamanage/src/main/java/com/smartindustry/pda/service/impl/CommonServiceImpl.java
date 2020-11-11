@@ -199,6 +199,7 @@ public class CommonServiceImpl implements ICommonService {
 
         logger.info("当前RFID捕捉状态值：{}", status);
         logger.info("当前RFID值为：MRFID-{}, LRFID-{}", dto.getMrfid(), dto.getLrfid());
+        logger.info("当前SESSION值为：MRFID-{}, LRFID-{}", session.getAttribute(CommonConstant.SESSION_MRFID), session.getAttribute(CommonConstant.SESSION_LRFID));
 
         ForkliftPO fPO = forkliftMapper.queryByImei(imei);
         if (null == fPO) {
