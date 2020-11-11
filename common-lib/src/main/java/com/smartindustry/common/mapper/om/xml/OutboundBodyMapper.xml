@@ -200,6 +200,6 @@
         select
         <include refid="Base_Column_List"/>
         from om_outbound_body
-        where outbound_head_id = #{ohid,jdbcType=BIGINT} and material_id = #{mid,jdbcType=BIGINT}and dr = 1
+        where outbound_head_id = #{ohid,jdbcType=BIGINT} and material_id = #{mid,jdbcType=BIGINT} and dr = 1
     </select>
 </mapper>
