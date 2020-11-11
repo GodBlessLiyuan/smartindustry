@@ -20,11 +20,16 @@
     d.ID as detail_id, d.到货ID, d.物品ID,  d.数量, d.单价, d.金额, d.不含税单价, d.不含税金额, d.备注 as remark
   </sql>
   <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="ID">
-    insert into dto.采购到货 (单号,订单ID,订单号,供应商ID,日期,付款ID, 付款名称, 备注,引用数量) values
+    insert into dbo.采购到货 (单号,订单ID,订单号,供应商ID,日期,付款ID, 付款名称, 备注,引用数量,审核,终结) values
     <foreach collection="list" item="po" separator=",">
-      (#{po.purchaseNo, jdbcType=NVARCHAR},#{po.orderId, jdbcType=DOUBLE},#{po.orderNo, jdbcType=NVARCHAR},#{po.supplierId, jdbcType=DOUBLE},#{po.acceptDate, jdbcType=TIMESTAMP},#{po.payMethod, jdbcType=DOUBLE},#{po.payName, jdbcType=NVARCHAR},#{po.remark, jdbcType=NVARCHAR},#{po.num, jdbcType=DOUBLE})
+      (#{po.purchaseNo, jdbcType=NVARCHAR},#{po.orderId, jdbcType=DOUBLE},#{po.orderNo, jdbcType=NVARCHAR},#{po.supplierId, jdbcType=DOUBLE},#{po.acceptDate, jdbcType=TIMESTAMP},#{po.payMethod, jdbcType=DOUBLE},#{po.payName, jdbcType=NVARCHAR},#{po.remark, jdbcType=NVARCHAR},#{po.num, jdbcType=DOUBLE},1,0)
     </foreach>
   </insert>
+
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.ds.sqlserver.PurchaseErpPO" useGeneratedKeys="true" keyProperty="ID">
+        insert into dbo.采购到货 (单号,订单ID,订单号,供应商ID,日期,付款ID, 付款名称, 备注,引用数量,审核,终结) values
+            (#{po.purchaseNo, jdbcType=NVARCHAR},#{po.orderId, jdbcType=DOUBLE},#{po.orderNo, jdbcType=NVARCHAR},#{po.supplierId, jdbcType=DOUBLE},#{po.acceptDate, jdbcType=TIMESTAMP},#{po.payMethod, jdbcType=DOUBLE},#{po.payName, jdbcType=NVARCHAR},#{po.remark, jdbcType=NVARCHAR},#{po.num, jdbcType=DOUBLE},1,0)
+    </insert>
   <resultMap id="BOResultMap" type="com.smartindustry.common.bo.ds.PurchaseErpBO" extends="BaseResultMap">
     <collection property="pdpos" ofType="com.smartindustry.common.pojo.ds.sqlserver.PurchaseDetailErpPO">
       <result column="detail_id" jdbcType="DOUBLE" property="detailId" />
