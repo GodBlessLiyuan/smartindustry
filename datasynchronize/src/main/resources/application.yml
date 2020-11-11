@@ -13,11 +13,13 @@ spring:
      jdbc-url: jdbc:sqlserver://192.168.10.199:1433;DatabaseName=boke
      username: sa
      password: yinghong
+     ConnectionTestQuery: SELECT 1
     test2:
       driver-class-name: com.mysql.cj.jdbc.Driver
       jdbc-url: jdbc:mysql://192.168.10.3:3306/smartyinghong?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
       username: root
       password: 1234qwer
+      ConnectionTestQuery: SELECT 1
   servlet:
     multipart:
       enabled: true #是否启用http上传处理
@@ -50,11 +52,8 @@ token:
   secret: abcdefghijklmnopqrstuvwxyz
   # 令牌有效期（默认30分钟）
   expireTime: 3000000
-
 server:
     port: 8036
-
-
 logging:
   level:
     com:

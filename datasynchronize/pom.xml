@@ -129,10 +129,33 @@
             <version>2.2.3</version>
             <classifier>jdk15</classifier><!-- jdk版本 -->
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc -->
+<!--        <dependency>-->
+<!--            <groupId>com.microsoft.jdbc.sqlserver</groupId>-->
+<!--            <artifactId>msbase</artifactId>-->
+<!--            <version>4.0</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.microsoft.jdbc.sqlserver</groupId>-->
+<!--            <artifactId>msbase</artifactId>-->
+<!--            <version>4.0</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.microsoft.jdbc.sqlserver</groupId>-->
+<!--            <artifactId>mssqlserver</artifactId>-->
+<!--            <version>1.0</version>-->
+<!--        </dependency>-->
+        <!-- https://mvnrepository.com/artifact/com.microsoft.sqlserver/sqljdbc4 -->
         <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>mssql-jdbc</artifactId>
-            <version>6.4.0.jre8</version>
+            <artifactId>sqljdbc4</artifactId>
+            <version>3.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.microsoft.jdbc.sqlserver</groupId>
+            <artifactId>msutil</artifactId>
+            <version>1.0</version>
         </dependency>
     </dependencies>
     <build>

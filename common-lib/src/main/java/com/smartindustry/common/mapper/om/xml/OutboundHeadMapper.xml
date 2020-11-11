@@ -402,4 +402,16 @@
         <include refid="Base_Column_List"/>
         from om_outbound_head where outbound_no = #{outboundNo, jdbcType=CHAR} limit 1
     </select>
+
+    <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="outboundHeadId">
+        insert into om_outbound_head ( outbound_no, source_no, source_type, client_no, plan_time, outbound_time,
+        expect_num, outbound_num, extra, `status`, accept_address, create_time, dr, sales_id,sales_date
+        )
+        values
+        <foreach collection="list" separator="," item="po">
+            (#{po.outboundNo,jdbcType=CHAR}, #{po.sourceNo,jdbcType=CHAR},
+            #{po.sourceType,jdbcType=TINYINT}, #{po.clientNo,jdbcType=CHAR}, #{po.planTime,jdbcType=DATE},
+            #{po.outboundTime,jdbcType=TIMESTAMP}, #{po.expectNum,jdbcType=DECIMAL}, #{po.outboundNum,jdbcType=DECIMAL},#{po.extra,jdbcType=CHAR}, #{po.status,jdbcType=TINYINT}, #{po.acceptAddress,jdbcType=CHAR},#{po.createTime,jdbcType=TIMESTAMP}, #{po.dr,jdbcType=TINYINT}, #{po.salesId,jdbcType=BIGINT},#{po.salesDate,jdbcType=TIMESTAMP})
+        </foreach>
+    </insert>
 </mapper>
