@@ -119,7 +119,7 @@ public class CommonServiceImpl implements ICommonService {
         if (null == dto.getType()) {
             return new ResultVO(1001);
         }
-
+        //String imei = "868374034386920";
         String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
         if (null == imei) {
             return new ResultVO(1111);
@@ -162,7 +162,12 @@ public class CommonServiceImpl implements ICommonService {
             if (sids.size() != 0) {
                 Map<Long, Integer> fnumMap = storageForkliftMapper.queryFnumBySids(sids);
                 for (StorageHeadBO headBO : shBOs) {
-                    headBO.setStorageNum(headBO.getStorageNum().add(BigDecimal.valueOf(fnumMap.getOrDefault(headBO.getStorageHeadId(), 0))));
+                    BigDecimal storageNum = headBO.getStorageNum() == null ? BigDecimal.valueOf(0) : headBO.getStorageNum();
+                    if (fnumMap == null) {
+                        headBO.setStorageNum(storageNum);
+                    } else {
+                        headBO.setStorageNum(storageNum.add(BigDecimal.valueOf(fnumMap.getOrDefault(headBO.getStorageHeadId(), 0))));
+                    }
                 }
             }
         }

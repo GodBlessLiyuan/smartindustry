@@ -27,15 +27,12 @@ import com.smartindustry.pda.socket.WebSocketVO;
 import com.smartindustry.pda.util.StorageNoUtil;
 import com.smartindustry.pda.vo.StorageDetailVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronizationAdapter;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
 
