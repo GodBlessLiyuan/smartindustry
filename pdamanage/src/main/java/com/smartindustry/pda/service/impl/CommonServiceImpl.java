@@ -197,41 +197,46 @@ public class CommonServiceImpl implements ICommonService {
             return ResultVO.ok();
         }
 
-        logger.info("当前RFID捕捉状态值：{}", status);
-
         ForkliftPO fPO = forkliftMapper.queryByImei(imei);
         if (null == fPO) {
             return new ResultVO(1002);
         }
         if (CommonConstant.RFID_STORAGE_START_RAW.equals(status)) {
+            logger.info("入库开始（原材料区）");
+
             // 入库开始（原材料区）
             storageService.execute(session, dto.getMrfid());
             return ResultVO.ok().setData("入库开始（原材料区）");
         }
         if (CommonConstant.RFID_STORAGE_START_PREPARE.equals(status)) {
+            logger.info("入库开始(备料区）");
             // 入库开始(备料区）
             storageService.executeForPre(session, dto.getMrfid());
             return ResultVO.ok().setData("入库开始(备料区）");
         }
         if (CommonConstant.RFID_STORAGE_END_RAW_PRODUCT.equals(status)) {
+            logger.info("入库完成(原材料入成品区）");
             // 入库完成(原材料入成品区）
             storageService.finishedOriginToStorage(session, (String) session.getAttribute(CommonConstant.SESSION_MRFID), dto.getLrfid());
             session.removeAttribute(CommonConstant.SESSION_MRFID);
             return ResultVO.ok().setData("入库完成(原材料入成品区）");
         }
         if (CommonConstant.RFID_STORAGE_END_RAW_PREPARE.equals(status)) {
+            logger.info("入库完成(原材料入备料区）");
             // 入库完成(原材料入备料区）
             storageService.finishedOriginToSpareArea(session, (String) session.getAttribute(CommonConstant.SESSION_MRFID), dto.getLrfid());
             session.removeAttribute(CommonConstant.SESSION_MRFID);
             return ResultVO.ok().setData("入库完成(原材料入备料区）");
         }
         if (CommonConstant.RFID_STORAGE_END_PREPARE_PRODUCT.equals(status)) {
+            logger.info("入库完成(备料入成品区）");
             // 入库完成(备料入成品区）
             storageService.finishedSpareAreaToStorage(session, (String) session.getAttribute(CommonConstant.SESSION_MRFID), dto.getLrfid());
             session.removeAttribute(CommonConstant.SESSION_MRFID);
             return ResultVO.ok().setData("入库完成(备料入成品区）");
         }
         if (CommonConstant.RFID_STORAGE_MEET_PREPARE.equals(status)) {
+            logger.info("检测到备料区");
             // 检测到备料区
             storageService.chooseMaterialShow((String) session.getAttribute(CommonConstant.SESSION_MRFID));
             session.removeAttribute(CommonConstant.SESSION_MRFID);
@@ -240,6 +245,7 @@ public class CommonServiceImpl implements ICommonService {
 
         OutboundForkliftPO outboundForkliftPO = outboundForkliftMapper.queryByFid(fPO.getForkliftId());
         if (CommonConstant.FORKLIFT_WORK_OUTBOUND_START.equals(status)) {
+            logger.info("出库，叉起物料");
             // 出库，叉起物料
             outboundForkliftPO.setRfid(dto.getMrfid());
             outboundForkliftMapper.updateByPrimaryKey(outboundForkliftPO);
@@ -251,6 +257,7 @@ public class CommonServiceImpl implements ICommonService {
             return ResultVO.ok().setData("出库，叉起物料");
         }
         if (CommonConstant.RFID_OUTBOUND_RETURN.equals(status)) {
+            logger.info("出库，物料放回原位");
             // 出库，物料放回原位
             outboundForkliftPO.setRfid(null);
             outboundForkliftMapper.updateByPrimaryKey(outboundForkliftPO);
@@ -264,6 +271,7 @@ public class CommonServiceImpl implements ICommonService {
             return ResultVO.ok().setData("出库，物料放回原位");
         }
         if (CommonConstant.RFID_OUTBOUND_END.equals(status)) {
+            logger.info("出库");
             // 出库
             outboundForkliftPO.setRfid(null);
             outboundForkliftMapper.updateByPrimaryKey(outboundForkliftPO);
@@ -328,7 +336,7 @@ public class CommonServiceImpl implements ICommonService {
             return CommonConstant.RFID_INVALID;
         }
 
-        logger.info("  ");
+        logger.info("        ");
         logger.info("{}-{}", dto.getMrfid(), dto.getLrfid());
         logger.info("{}-{}", session.getAttribute(CommonConstant.SESSION_MRFID), session.getAttribute(CommonConstant.SESSION_LRFID));
 
