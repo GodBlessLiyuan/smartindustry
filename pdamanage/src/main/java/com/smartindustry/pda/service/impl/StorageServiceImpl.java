@@ -493,7 +493,10 @@ public class StorageServiceImpl implements IStorageService {
         storageDetailMapper.updateByPrimaryKey(storageDetailPO);
         log.info("更新详细记录表为：---------------" + storageDetailPO.toString());
         //2.入库单表头已入库数量+1,以及判断入库单状态
-        storageHeadPO.setStorageNum(storageHeadPO.getStorageNum().add(new BigDecimal(1)));
+        if (storageHeadPO.getStorageNum() == null) {
+            storageHeadPO.setStorageNum(BigDecimal.ZERO);
+        }
+        storageHeadPO.setStorageNum(storageHeadPO.getStorageNum().add(BigDecimal.ONE));
         storageHeadPO.setWarehouseId(locationBO.getWarehouseId());
         //更新入库单的状态
         if (storageHeadPO.getStorageNum() == null || storageHeadPO.getStorageNum().compareTo(new BigDecimal(0)) == 0) {
@@ -573,7 +576,7 @@ public class StorageServiceImpl implements IStorageService {
         // 查询当前储位的基本信息
         LocationBO locationBO = locationMapper.queryByRfid(lrfid);
         //# 叉车运送到备货区,rfid 和 入库单解绑,也就是删除其生产来源单号
-        if (locationBO.getLocationTypeId().equals(StorageConstant.TYPE_PREPARATION_AREA) && storageHeadPO.getSourceType().equals(StorageConstant.TYPE_PRODUCT_STORAGE)) {
+        //if (locationBO.getLocationTypeId().equals(StorageConstant.TYPE_PREPARATION_AREA) && storageHeadPO.getSourceType().equals(StorageConstant.TYPE_PRODUCT_STORAGE)) {
             // 首先更新入库详情表，添加信息
             //1. 入库详情表更新添加信息
             storageDetailPO.setLocationId(locationBO.getLocationId());
@@ -582,6 +585,9 @@ public class StorageServiceImpl implements IStorageService {
             storageDetailPO.setPreparation(StorageConstant.Preparation_YES);
             storageDetailMapper.updateByPrimaryKey(storageDetailPO);
             //2.入库单表头已入库数量+1,以及判断入库单状态
+            if (storageHeadPO.getStorageNum() == null) {
+                storageHeadPO.setStorageNum(BigDecimal.ZERO);
+            }
             storageHeadPO.setStorageNum(storageHeadPO.getStorageNum().add(new BigDecimal(1)));
             storageHeadPO.setWarehouseId(locationBO.getWarehouseId());
             //更新入库单的状态
@@ -621,7 +627,7 @@ public class StorageServiceImpl implements IStorageService {
             //6.库位已经存在的数量+1
             LocationPO locationPO = locationMapper.selectByPrimaryKey(locationBO.getLocationId());
             locationPO.setExistNum(locationPO.getExistNum() == null ? BigDecimal.ONE : locationPO.getExistNum().add(BigDecimal.ONE));
-        }
+        //}
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
             @Override
             public void afterCommit() {
@@ -655,7 +661,7 @@ public class StorageServiceImpl implements IStorageService {
         //入库单id全局变量
         Long storageHeadId = null;
         //# 阅读器扫描成品区库位，并且来源是备货入库单，入库第一条成功后，此时生成备货入库单
-        if (locationBO.getLocationTypeId().equals(StorageConstant.TYPE_FINISHED_AREA) && storageDetailPO.getPreparation().equals(StorageConstant.Preparation_YES)) {
+        //if (locationBO.getLocationTypeId().equals(StorageConstant.TYPE_FINISHED_AREA) && storageDetailPO.getPreparation().equals(StorageConstant.Preparation_YES)) {
             // 看是不是当前时间段备料区入库的第一单，如果是第一单，生成备料区入库单
             //根据来源类型查询是否当前有备料区入库单
             List<StorageHeadPO> storageHeadPOS = storageHeadMapper.queryByStatus(StorageConstant.STATUS_STOREING, StorageConstant.TYPE_PRE_STORAGE);
@@ -712,6 +718,9 @@ public class StorageServiceImpl implements IStorageService {
             } else {
                 //已经有入库单了，加入到有的入库单中，更新入库单入库数量，以及更新或添加表体信息
                 StorageHeadPO storageHeadPO = storageHeadPOS.get(0);
+                if (storageHeadPO.getStorageNum() == null) {
+                    storageHeadPO.setStorageNum(BigDecimal.ZERO);
+                }
                 storageHeadPO.setStorageNum(storageHeadPO.getStorageNum().add(BigDecimal.ONE));
                 //根据表头和物料id查看是否之前有该备料入库单的表体，如果有更新，没有进行添加
                 StorageBodyPO storageBodyPO = storageBodyMapper.queryByShidAndMid(storageHeadPO.getStorageHeadId(), locationBO.getMaterialId());
@@ -770,7 +779,7 @@ public class StorageServiceImpl implements IStorageService {
             LocationPO locationPOForPre = locationMapper.selectByPrimaryKey(storageDetailPO.getLocationId());
             locationPOForPre.setExistNum(locationPO.getExistNum() == null ? BigDecimal.ONE : locationPO.getExistNum().subtract(BigDecimal.ONE));
             locationMapper.updateByPrimaryKey(locationPOForPre);
-        }
+        //}
 
         Long finalStorageHeadId = storageHeadId;
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
