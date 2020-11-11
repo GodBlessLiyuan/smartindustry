@@ -18,12 +18,12 @@
     <collection property="sdpos" ofType="com.smartindustry.common.pojo.ds.sqlserver.SaleDetailErpPO">
       <result column="detail_id" jdbcType="DOUBLE" property="detailId" />
       <result column="物品ID" jdbcType="DOUBLE" property="materialId" />
-      <result column="物品编号" jdbcType="NVARCHAR" property="materialNo" />
-      <result column="物品名称" jdbcType="NVARCHAR" property="materialName" />
+      <result column="物品编号" jdbcType="CHAR" property="materialNo" />
+      <result column="物品名称" jdbcType="CHAR" property="materialName" />
       <result column="数量" jdbcType="DOUBLE" property="saleNum" />
       <result column="单价" jdbcType="DOUBLE" property="unitPrice" />
       <result column="金额" jdbcType="DOUBLE" property="sum" />
-      <result column="备注" jdbcType="NVARCHAR" property="remark" />
+      <result column="备注" jdbcType="CHAR" property="remark" />
     </collection>
   </resultMap>
   <select id="queryAll" resultMap="BOResultMap">

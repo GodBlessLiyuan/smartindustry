@@ -22,4 +22,9 @@ ID, 编号, 供应商名称,       地址, 电话号码, 手机号码,       传
     <include refid="Base_Column_List"/>
     from dbo.供应商
   </select>
+    <select id="queryByNo" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List"/>
+      from dbo.供应商 where 编号=#{supplierNo,jdbcType=VARCHAR}
+    </select>
 </mapper>
