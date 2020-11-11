@@ -252,7 +252,7 @@ public class CommonServiceImpl implements ICommonService {
             outboundForkliftMapper.updateByPrimaryKey(outboundForkliftPO);
 
             StorageDetailPO detailPO = storageDetailMapper.queryByRfidAndStatus(dto.getMrfid(), CommonConstant.STATUS_RFID_STORAGE);
-            detailPO.setStorageStatus(CommonConstant.STATUS_RFID_STORAGE);
+            detailPO.setStorageStatus(CommonConstant.STATUS_RFID_OUTBOUND_SALE);
             storageDetailMapper.updateByPrimaryKey(detailPO);
 
             return ResultVO.ok().setData("出库，叉起物料");
