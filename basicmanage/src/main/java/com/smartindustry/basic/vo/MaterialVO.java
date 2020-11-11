@@ -6,6 +6,7 @@ import com.smartindustry.common.pojo.si.MaterialPO;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +47,8 @@ public class MaterialVO implements Serializable {
     private Byte mtype;
     //所属供应商
     private String sname;
+    private BigDecimal price;
+
     public static List<MaterialVO> convert(List<MaterialBO> bos) {
         List<MaterialVO> vos = new ArrayList<>(bos.size());
         for (MaterialBO bo : bos) {
@@ -63,6 +66,7 @@ public class MaterialVO implements Serializable {
         vo.setMuname(bo.getMeasureUnitName());
         vo.setMtype(bo.getMaterialType());
         vo.setMdes(bo.getMaterialDesc());
+        vo.setPrice(bo.getPrice());
         return vo;
     }
 
@@ -94,6 +98,7 @@ public class MaterialVO implements Serializable {
         vo.setMtype(bo.getMaterialType());
         vo.setMdes(bo.getMaterialDesc());
         vo.setSname(bo.getSupplierName());
+        vo.setPrice(bo.getPrice());
         return vo;
     }
 

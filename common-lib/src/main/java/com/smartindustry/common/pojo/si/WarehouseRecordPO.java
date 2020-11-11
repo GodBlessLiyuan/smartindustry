@@ -1,8 +1,9 @@
 package com.smartindustry.common.pojo.si;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * si_warehouse_record
@@ -36,4 +37,12 @@ public class WarehouseRecordPO implements Serializable {
     private String operationName;
 
     private static final long serialVersionUID = 1L;
+
+    public WarehouseRecordPO(){}
+    public WarehouseRecordPO(Long warehouseId,Long userId,String operationName ){
+        this.warehouseId=warehouseId;
+        this.userId=userId;
+        this.createTime=new Date();
+        this.operationName=operationName;
+    }
 }

@@ -53,4 +53,18 @@ public interface WarehouseMapper extends BaseMapper<WarehousePO, Long> {
      * @return
      */
     List<HashMap<String,Object>> querySimpleAll();
+
+    /***
+     * 分页查询:
+     * @param reqData
+     * @return
+     */
+    List<WarehouseBO> pageListQuery(Map<String, Object> reqData);
+
+    /***
+     * 单个查询
+     * @param wid
+     * @return
+     */
+    WarehouseBO getBOByPri(Long wid);
 }

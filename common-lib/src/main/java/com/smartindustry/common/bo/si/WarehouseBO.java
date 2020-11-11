@@ -15,6 +15,6 @@ import java.util.List;
 @Data
 public class WarehouseBO extends WarehousePO {
     private String warehouseTypeName;
-
+    private Long warehouseTypeId;
     List<LocationPO> pos;
 }

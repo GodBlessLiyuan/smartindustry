@@ -6,6 +6,7 @@ import com.smartindustry.common.pojo.si.MaterialSpecificationPO;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -88,6 +89,8 @@ public class MaterialDTO implements Serializable {
      * 物料描述
      */
     private String mdesc;
+
+    private BigDecimal price;
     /**
      * 物料规格书
      */
@@ -112,6 +115,7 @@ public class MaterialDTO implements Serializable {
         po.setMaterialModel(dto.getMmodel());
         po.setSupplierId(dto.getSid());
         po.setMaterialDesc(dto.getMdesc());
+        po.setPrice(dto.getPrice());
         return po;
     }
 
