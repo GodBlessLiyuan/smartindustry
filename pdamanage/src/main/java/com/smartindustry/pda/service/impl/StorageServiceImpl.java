@@ -16,6 +16,7 @@ import com.smartindustry.common.pojo.sm.*;
 import com.smartindustry.common.pojo.wo.PackagePO;
 import com.smartindustry.common.pojo.wo.ProduceOrderPO;
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.pda.config.RfidConfig;
 import com.smartindustry.pda.constant.CommonConstant;
 import com.smartindustry.pda.constant.StorageConstant;
 import com.smartindustry.pda.dto.OperateDTO;
@@ -26,12 +27,15 @@ import com.smartindustry.pda.socket.WebSocketVO;
 import com.smartindustry.pda.util.StorageNoUtil;
 import com.smartindustry.pda.vo.StorageDetailVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronizationAdapter;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -64,6 +68,8 @@ public class StorageServiceImpl implements IStorageService {
     private StorageForkliftMapper storageForkliftMapper;
     @Autowired
     private MaterialMapper materialMapper;
+    @Autowired
+    private RfidConfig rfidConfig;
 
     /**
      * @Description 生成入库单
@@ -238,13 +244,19 @@ public class StorageServiceImpl implements IStorageService {
             lvo.setMinfo(bo.getMaterialName() + " " + bo.getMaterialModel());
             lvos.put(bo.getMaterialId(), lvo);
         }
-        List<LocationPO> locationPOs = locationMapper.queryRecommendByMids(new ArrayList<>(lvos.keySet()));
-        for (LocationPO locationPO : locationPOs) {
-            StorageDetailVO.LocationVO lvo = lvos.get(locationPO.getMaterialId());
-                lvo.getLrfids().add(locationPO.getLocationNo());
+        Map<String, String> rfidMaps = rfidConfig.parseMap(rfidConfig.getMaps());
+        if (lvos.size() > 0) {
+            List<LocationPO> locationPOs = locationMapper.queryRecommendByMids(new ArrayList<>(lvos.keySet()));
+            for (LocationPO locationPO : locationPOs) {
+                StorageDetailVO.LocationVO lvo = lvos.get(locationPO.getMaterialId());
+                for (Map.Entry<String, String> entry : rfidMaps.entrySet()) {
+                    if (entry.getKey().equals(locationPO.getLocationNo())) {
+                        lvo.getLrfids().add(entry.getValue());
+                    }
+                }
+            }
+            vo.setLvos(new ArrayList<>(lvos.values()));
         }
-        vo.setLvos(new ArrayList<>(lvos.values()));
-
         // 叉车信息
         List<ForkliftPO> pos = forkliftMapper.queryByShid(dto.getShid());
         BigDecimal storageNum = storageHeadBO.getStorageNum() == null ? BigDecimal.valueOf(0) : storageHeadBO.getStorageNum();
