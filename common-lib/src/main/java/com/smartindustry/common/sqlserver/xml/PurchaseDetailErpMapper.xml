@@ -22,6 +22,12 @@
         (#{po.purchaseId, jdbcType=DOUBLE},#{po.materialId, jdbcType=DOUBLE},#{po.num, jdbcType=DOUBLE},#{po.unitPrice, jdbcType=DOUBLE},#{po.sum, jdbcType=DOUBLE},#{po.unitPriceNoTax, jdbcType=DOUBLE},#{po.sumNoTax, jdbcType=DOUBLE},#{po.remark, jdbcType=NVARCHAR})
       </foreach>
     </insert>
+
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.ds.sqlserver.PurchaseDetailErpPO" keyProperty="ID" useGeneratedKeys="true">
+        insert into dbo.采购到货明细 (到货ID, 物品ID,  数量, 单价, 金额, 不含税单价, 不含税金额, 备注)
+        values
+            (#{po.purchaseId, jdbcType=DOUBLE},#{po.materialId, jdbcType=DOUBLE},#{po.num, jdbcType=DOUBLE},#{po.unitPrice, jdbcType=DOUBLE},#{po.sum, jdbcType=DOUBLE},#{po.unitPriceNoTax, jdbcType=DOUBLE},#{po.sumNoTax, jdbcType=DOUBLE},#{po.remark, jdbcType=NVARCHAR})
+    </insert>
     <select id="queryAll" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>

@@ -1,9 +1,8 @@
 package com.smartindustry.common.pojo.si;
 
-import lombok.Data;
-
 import java.io.Serializable;
 import java.util.Date;
+import lombok.Data;
 
 /**
  * si_client
@@ -46,6 +45,11 @@ public class ClientPO implements Serializable {
      * 联系电话
      */
     private String phone;
+
+    /**
+     * 电话号码
+     */
+    private String telephone;
 
     /**
      * 客户邮箱

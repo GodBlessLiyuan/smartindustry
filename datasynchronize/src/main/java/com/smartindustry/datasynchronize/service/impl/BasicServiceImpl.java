@@ -135,6 +135,7 @@ public class BasicServiceImpl implements IBasicService {
             po.setAddress(erppo.getAddress());
             po.setPhone(erppo.getCellphone()!= null?erppo.getCellphone():"");
             po.setContact(erppo.getContact() != null?erppo.getContact():"");
+            po.setTelephone(erppo.getTelephone());
             po.setEmail(erppo.getEmail());
             po.setFax(erppo.getFax());
             po.setUrl(erppo.getHomeAddress());
