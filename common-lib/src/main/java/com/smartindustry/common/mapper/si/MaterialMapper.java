@@ -72,4 +72,11 @@ public interface MaterialMapper extends BaseMapper<MaterialPO, Long> {
      * @return
      */
     List<Map<String, Object>> listAll();
+
+    /***
+     * 物料详情分页查询
+     * @param reqData
+     * @return
+     */
+    List<MaterialBO> pageList(Map<String, Object> reqData);
 }
