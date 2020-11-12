@@ -382,6 +382,54 @@ public class StorageServiceImpl implements IStorageService {
     }
 
     /**
+     * 叉车插入备货区货物接口
+     *
+     * @param session
+     * @param mrfid
+     * @return
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public ResultVO executeForStorage(HttpSession session, String mrfid) {
+        String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
+        if (null == imei) {
+            //为获取到session中的imei
+            return new ResultVO(1001);
+        }
+        //通过rfid获取入库单和物料信息
+        StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(mrfid);
+        StorageHeadPO storageHeadPO = storageHeadMapper.selectByPrimaryKey(storageDetailPO.getStorageHeadId());
+        if (null == storageHeadPO) {
+            //没有该入库单
+            return new ResultVO(1002);
+        }
+
+        //*将当前叉车放入入库单叉车表中，加入执行任务*//*
+        //查询叉车表信息
+        ForkliftPO forkliftPO = forkliftMapper.queryByImei(imei);
+        StorageForkliftPO storageForkliftPO = new StorageForkliftPO();
+        storageForkliftPO.setRfid(mrfid);
+        storageForkliftPO.setForkliftId(forkliftPO.getForkliftId());
+        storageForkliftPO.setStorageHeadId(storageHeadPO.getStorageHeadId());
+        storageForkliftMapper.insertSelective(storageForkliftPO);
+
+        // 叉车状态 - 忙碌
+        forkliftPO.setStatus(CommonConstant.STATUS_FORKLIFT_BUSY);
+        forkliftMapper.updateByPrimaryKey(forkliftPO);
+
+        //发送socket请求
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
+            @Override
+            public void afterCommit() {
+                //发送socket消息
+                WebSocketServer.sendAllMsg(WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
+            }
+        });
+
+        return ResultVO.ok();
+    }
+
+    /**
      * @Description 进入备料区存储时选择物料弹窗
      * @Param
      * @Return
@@ -671,9 +719,9 @@ public class StorageServiceImpl implements IStorageService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO finishedSpareAreaToStorage(HttpSession session, String mrfid, String lrfid) {
-        String imei = "863958040755311";
+        //String imei = "863958040755311";
         // 当前叉车信息
-        //String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
+        String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
         // 根据imei查询出叉车id
         ForkliftPO forkliftPO = forkliftMapper.queryByImei(imei);
         // 根据栈板rfid查询之前的入库单
@@ -714,7 +762,7 @@ public class StorageServiceImpl implements IStorageService {
             storageDetailMapper.updateByPrimaryKey(storageDetailPO);
             log.info("进行备料区入成品区，更新详情记录表变为已经不在备料区了-----" + storageDetailPO.toString());
             //添加入库记录
-            StorageDetailPO poForStorage = new StorageDetailPO();
+            /*StorageDetailPO poForStorage = new StorageDetailPO();
             poForStorage.setStorageHeadId(storageBodyPO.getStorageHeadId());
             poForStorage.setLocationId(locationBO.getLocationId());
             poForStorage.setMaterialId(storageDetailPO.getMaterialId());
@@ -724,7 +772,7 @@ public class StorageServiceImpl implements IStorageService {
             poForStorage.setStorageStatus(StorageConstant.STATUS_STORED);
             poForStorage.setPreparation(StorageConstant.Preparation_NO);
             storageDetailMapper.insertSelective(poForStorage);
-            log.info("进行备料区入成品区，添加一条备料区入成品区的详细记录-----" + poForStorage.toString());
+            log.info("进行备料区入成品区，添加一条备料区入成品区的详细记录-----" + poForStorage.toString());*/
             //更新入库单的状态
             if (storageHeadPO.getStorageNum().compareTo(BigDecimal.ONE) == 0) {
                 //插入入单执行操作
@@ -770,7 +818,7 @@ public class StorageServiceImpl implements IStorageService {
             storageDetailMapper.updateByPrimaryKey(storageDetailPO);
             log.info("进行备料区入成品区，更新详情记录表变为已经不在备料区了-----" + storageDetailPO.toString());
             //添加入库记录
-            StorageDetailPO poForStorage = new StorageDetailPO();
+           /* StorageDetailPO poForStorage = new StorageDetailPO();
             poForStorage.setStorageHeadId(storageHeadPO.getStorageHeadId());
             poForStorage.setLocationId(locationBO.getLocationId());
             poForStorage.setMaterialId(storageDetailPO.getMaterialId());
@@ -780,7 +828,7 @@ public class StorageServiceImpl implements IStorageService {
             poForStorage.setStorageStatus(StorageConstant.STATUS_STORED);
             poForStorage.setPreparation(StorageConstant.Preparation_NO);
             storageDetailMapper.insertSelective(poForStorage);
-            log.info("进行备料区入成品区，添加一条新的记录-----" + poForStorage.toString());
+            log.info("进行备料区入成品区，添加一条新的记录-----" + poForStorage.toString());*/
             //更新入库单的状态
             if (storageHeadPO.getStorageNum().compareTo(BigDecimal.ONE) == 0) {
                 //插入入单执行操作
@@ -821,6 +869,61 @@ public class StorageServiceImpl implements IStorageService {
             public void afterCommit() {
                 //发送socket请求
                 WebSocketServer.sendAllMsg(WebSocketVO.createShowVO(finalStorageHeadId, CommonConstant.FLAG_STORAGE));
+                log.info("进行备料区入成品区，发送socket请求-----");
+            }
+        });
+        return ResultVO.ok();
+    }
+
+
+    /**
+     * @Description 备料区入成品区
+     * @Param
+     * @Return
+     * @Author AnHongxu.
+     * @Date 2020/11/7
+     * @Time 16:40
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public ResultVO finishedMove(HttpSession session, String mrfid, String lrfid, Byte ltype) {
+        //String imei = "863958040755311";
+        // 当前叉车信息
+        String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
+        // 根据imei查询出叉车id
+        ForkliftPO forkliftPO = forkliftMapper.queryByImei(imei);
+        // 根据栈板rfid查询之前的入库单详情记录
+        StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(mrfid);
+        // 查询当前储位的基本信息
+        LocationBO locationBO = locationMapper.queryByRfid(lrfid);
+        //更新库位
+        storageDetailPO.setLocationId(locationBO.getLocationId());
+        if (ltype.equals(1)) {
+            storageDetailPO.setPreparation(StorageConstant.Preparation_NO);
+        } else if (ltype.equals(2)) {
+            storageDetailPO.setPreparation(StorageConstant.Preparation_YES);
+        } else {
+            //既不是备料区也不是成品区，啥区也不是
+            return new ResultVO(1001);
+        }
+        //更新库位和是在哪个区标识
+        storageDetailMapper.updateByPrimaryKey(storageDetailPO);
+        //将当前运作的叉车删掉
+        //根据叉车id查询当前执行入库的入库叉车表记录,删除
+        StorageForkliftPO storageForkliftPO = storageForkliftMapper.queryByFid(forkliftPO.getForkliftId());
+        if (storageForkliftPO != null) {
+            storageForkliftMapper.deleteByPrimaryKey(storageForkliftPO.getStorageForkliftId());
+            log.info("进行库内平移，删掉该叉车-----" + storageForkliftPO.toString());
+        }
+        // 叉车状态 - 空闲
+        forkliftPO.setStatus(CommonConstant.STATUS_FORKLIFT_IDLE);
+        forkliftMapper.updateByPrimaryKey(forkliftPO);
+        log.info("进行库内平移，将该叉车变为空闲-----" + forkliftPO.toString());
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
+            @Override
+            public void afterCommit() {
+                //发送socket请求
+                WebSocketServer.sendAllMsg(WebSocketVO.createShowVO(storageDetailPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
                 log.info("进行备料区入成品区，发送socket请求-----");
             }
         });

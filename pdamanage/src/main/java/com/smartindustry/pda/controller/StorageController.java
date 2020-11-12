@@ -89,6 +89,16 @@ public class StorageController {
     }
 
     /**
+     * 叉车叉备料区实时展示接口
+     *
+     * @return
+     */
+    @PostMapping("efstorage")
+    public ResultVO executeForStorage(HttpSession session, @RequestBody StorageDTO dto) {
+        return storageService.executeForStorage(session, dto.getMrfid());
+    }
+
+    /**
      * 备料区选择产品的弹窗接口
      *
      * @return
@@ -116,7 +126,7 @@ public class StorageController {
      */
     @PostMapping("ytoc")
     public ResultVO finishedOriginToStorage(HttpSession session, @RequestBody StorageDTO dto) {
-        return storageService.finishedOriginToStorage(session, dto.getMrfid(),dto.getLrfid());
+        return storageService.finishedOriginToStorage(session, dto.getMrfid(), dto.getLrfid());
     }
 
     /**
@@ -126,7 +136,7 @@ public class StorageController {
      */
     @PostMapping("ytob")
     public ResultVO finishedOriginToSpareArea(HttpSession session, @RequestBody StorageDTO dto) {
-        return storageService.finishedOriginToSpareArea(session, dto.getMrfid(),dto.getLrfid());
+        return storageService.finishedOriginToSpareArea(session, dto.getMrfid(), dto.getLrfid());
     }
 
     /**
@@ -136,6 +146,16 @@ public class StorageController {
      */
     @PostMapping("btoc")
     public ResultVO finishedSpareAreaToStorage(HttpSession session, @RequestBody StorageDTO dto) {
-        return storageService.finishedSpareAreaToStorage(session, dto.getMrfid(),dto.getLrfid());
+        return storageService.finishedSpareAreaToStorage(session, dto.getMrfid(), dto.getLrfid());
+    }
+
+    /**
+     * 备料区到成品区测试
+     *
+     * @return
+     */
+    @PostMapping("fmove")
+    public ResultVO finishedMove(HttpSession session, @RequestBody StorageDTO dto) {
+        return storageService.finishedMove(session, dto.getMrfid(), dto.getLrfid(), dto.getLtype());
     }
 }
