@@ -12,11 +12,11 @@
         <result column="dr" jdbcType="TINYINT" property="dr"/>
         <result column="unit_price" jdbcType="DECIMAL" property="unitPrice"/>
         <result column="total_price" jdbcType="DECIMAL" property="totalPrice"/>
-        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="extra" jdbcType="VARCHAR" property="extra"/>
     </resultMap>
     <sql id="Base_Column_List">
         outbound_body_id, outbound_head_id, material_id, expect_num, outbound_num, create_time,
-    outbound_time, dr, unit_price, total_price, remark
+    outbound_time, dr, unit_price, total_price, extra
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
@@ -33,11 +33,11 @@
         insert into om_outbound_body (outbound_body_id, outbound_head_id, material_id,
                                       expect_num, outbound_num, create_time,
                                       outbound_time, dr, unit_price,
-                                      total_price, remark)
+                                      total_price, extra)
         values (#{outboundBodyId,jdbcType=BIGINT}, #{outboundHeadId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT},
                 #{expectNum,jdbcType=DECIMAL}, #{outboundNum,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP},
                 #{outboundTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT}, #{unitPrice,jdbcType=DECIMAL},
-                #{totalPrice,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR})
+                #{totalPrice,jdbcType=DECIMAL}, #{extra,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.om.OutboundBodyPO">
         insert into om_outbound_body
@@ -72,8 +72,8 @@
             <if test="totalPrice != null">
                 total_price,
             </if>
-            <if test="remark != null">
-                remark,
+            <if test="extra != null">
+                extra,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -107,8 +107,8 @@
             <if test="totalPrice != null">
                 #{totalPrice,jdbcType=DECIMAL},
             </if>
-            <if test="remark != null">
-                #{remark,jdbcType=VARCHAR},
+            <if test="extra != null">
+                #{extra,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -142,8 +142,8 @@
             <if test="totalPrice != null">
                 total_price = #{totalPrice,jdbcType=DECIMAL},
             </if>
-            <if test="remark != null">
-                remark = #{remark,jdbcType=VARCHAR},
+            <if test="extra != null">
+                extra = #{extra,jdbcType=VARCHAR},
             </if>
         </set>
         where outbound_body_id = #{outboundBodyId,jdbcType=BIGINT}
@@ -159,14 +159,14 @@
             dr               = #{dr,jdbcType=TINYINT},
             unit_price       = #{unitPrice,jdbcType=DECIMAL},
             total_price      = #{totalPrice,jdbcType=DECIMAL},
-            remark           = #{remark,jdbcType=VARCHAR}
+            extra           = #{extra,jdbcType=VARCHAR}
         where outbound_body_id = #{outboundBodyId,jdbcType=BIGINT}
     </update>
 
     <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="outboundBodyId">
         insert into om_outbound_body (outbound_body_id, outbound_head_id, material_id,
         expect_num, outbound_num, create_time,
-        outbound_time, dr, unit_price, total_price, remark
+        outbound_time, dr, unit_price, total_price, extra
         )
         values
         <foreach collection="list" separator="," item="po">
@@ -174,7 +174,7 @@
             #{po.materialId,jdbcType=BIGINT},
             #{po.expectNum,jdbcType=DECIMAL}, #{po.outboundNum,jdbcType=DECIMAL}, #{po.createTime,jdbcType=TIMESTAMP},
             #{po.outboundTime,jdbcType=TIMESTAMP}, #{po.dr,jdbcType=TINYINT},#{po.unitPrice,jdbcType=DECIMAL},
-            #{po.totalPrice,jdbcType=DECIMAL}, #{po.remark,jdbcType=VARCHAR})
+            #{po.totalPrice,jdbcType=DECIMAL}, #{po.extra,jdbcType=VARCHAR})
         </foreach>
     </insert>
 
