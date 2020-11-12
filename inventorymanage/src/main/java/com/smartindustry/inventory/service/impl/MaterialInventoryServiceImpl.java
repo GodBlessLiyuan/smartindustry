@@ -10,6 +10,8 @@ import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.inventory.dto.SafeStockDTO;
 import com.smartindustry.inventory.service.IMaterialInventoryService;
+import com.smartindustry.inventory.vo.MaterialInventoryVO;
+import com.smartindustry.inventory.vo.ProductDetailVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -32,8 +34,7 @@ public class MaterialInventoryServiceImpl implements IMaterialInventoryService {
     public ResultVO pageQuery(Map<String, Object> reqData) {
         Page<MaterialInventoryBO> page = PageQueryUtil.startPage(reqData);
         List<MaterialInventoryBO> bos = materialInventoryMapper.pageQuery(reqData);
-        System.out.println(bos);
-        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), bos));
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), MaterialInventoryVO.convert(bos)));
     }
 
     @Override
@@ -48,6 +49,6 @@ public class MaterialInventoryServiceImpl implements IMaterialInventoryService {
     public ResultVO pageQueryPro(Map<String, Object> reqData){
         Page<ProductDetailBO> page = PageQueryUtil.startPage(reqData);
         List<ProductDetailBO> bos = materialInventoryMapper.pageQueryPro(reqData);
-        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), bos));
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), ProductDetailVO.convert(bos)));
     }
 }
