@@ -20,6 +20,8 @@ public interface MaterialMapper extends BaseMapper<MaterialPO, Long> {
      * @return
      */
     List<MaterialBO> pageQueryStorage(Map<String, Object> reqData);
+
+    List<MaterialBO> pageQuery(Map<String, Object> reqData);
     /***
     * 根据物料编号查找物料
      * @param materialNo

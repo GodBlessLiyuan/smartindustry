@@ -229,6 +229,21 @@
     left join dd_measure_unit mu on m.measure_unit_id = mu.measure_unit_id
     where m.dr = 1
     <if test="sname != null and sname != ''">and s.supplier_name like '%' #{sname,jdbcType=CHAR} '%'</if>
+    <if test="keyword != null and keyword != ''">
+      and (m.material_no like '%' #{keyword,jdbcType=CHAR} '%'
+      or m.material_name like '%' #{keyword,jdbcType=CHAR} '%'
+      or m.material_model like '%' #{keyword,jdbcType=CHAR} '%')
+    </if>
+    order by m.create_time desc
+  </select>
+
+  <select id="pageQuery" parameterType="java.util.Map" resultType="com.smartindustry.common.bo.si.MaterialBO">
+    select m.material_id as materialId,m.material_no as materialNo,m.material_model as materialModel,m.material_name as materialName,s.supplier_name as supplierName, mu.measure_unit_name as measureUnitName
+    from si_material m
+    left join si_supplier s on m.supplier_id = s.supplier_id
+    left join dd_measure_unit mu on m.measure_unit_id = mu.measure_unit_id
+    where m.dr = 1
+    <if test="sname != null and sname != ''">and s.supplier_name like '%' #{sname,jdbcType=CHAR} '%'</if>
     <if test="mname != null and mname != ''">and m.material_name like '%' #{mname,jdbcType=CHAR} '%'</if>
     <if test="mmodel != null and mmodel != ''">and m.material_model like '%' #{mmodel,jdbcType=CHAR} '%'</if>
     <if test="mno != null and mno != ''">and m.material_no like '%' #{mno,jdbcType=CHAR} '%'</if>

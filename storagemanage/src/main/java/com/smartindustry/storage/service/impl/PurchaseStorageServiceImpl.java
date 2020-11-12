@@ -7,10 +7,12 @@ import com.smartindustry.common.bo.sm.StorageHeadBO;
 import com.smartindustry.common.bo.sm.StorageRecordBO;
 import com.smartindustry.common.constant.ExceptionEnums;
 import com.smartindustry.common.mapper.si.MaterialMapper;
+import com.smartindustry.common.mapper.si.SupplierMapper;
 import com.smartindustry.common.mapper.si.WarehouseMapper;
 import com.smartindustry.common.mapper.sm.StorageBodyMapper;
 import com.smartindustry.common.mapper.sm.StorageHeadMapper;
 import com.smartindustry.common.mapper.sm.StorageRecordMapper;
+import com.smartindustry.common.pojo.si.SupplierPO;
 import com.smartindustry.common.pojo.sm.StorageBodyPO;
 import com.smartindustry.common.pojo.sm.StorageHeadPO;
 import com.smartindustry.common.pojo.sm.StorageRecordPO;
@@ -55,6 +57,8 @@ public class PurchaseStorageServiceImpl implements IPurchaseStorageService {
     private MaterialMapper materialMapper;
     @Autowired
     private StorageRecordMapper storageRecordMapper;
+    @Autowired
+    private SupplierMapper supplierMapper;
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData){
@@ -138,6 +142,7 @@ public class PurchaseStorageServiceImpl implements IPurchaseStorageService {
         List<MaterialBO> bos = materialMapper.pageQueryStorage(reqData);
         return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), MaterialVO.convert(bos)));
     }
+
 
     @Override
     public ResultVO deleteBody(List<Long> sbids){
