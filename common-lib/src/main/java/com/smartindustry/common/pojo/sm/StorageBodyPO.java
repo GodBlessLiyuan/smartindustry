@@ -82,10 +82,5 @@ public class StorageBodyPO implements Serializable {
      */
     private BigDecimal sumPriceNotax;
 
-    /**
-     * 供应商ID
-     */
-    private Long supplierId;
-
     private static final long serialVersionUID = 1L;
 }

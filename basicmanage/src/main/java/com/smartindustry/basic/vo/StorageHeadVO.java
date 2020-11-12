@@ -148,7 +148,7 @@ public class StorageHeadVO implements Serializable {
         vo.setSno(bo.getStorageNo());
         vo.setStatus(bo.getStatus());
         vo.setStime(bo.getStorageTime());
-        vo.setExtra(bo.getExtra());
+        vo.setExtra(bo.getRemark());
         List<StorageBodyVO> vos = new ArrayList<>();
         for (StorageBodyBO bodyBO : bo.getBos()){
             StorageBodyVO bodyVO = new StorageBodyVO();
@@ -168,7 +168,6 @@ public class StorageHeadVO implements Serializable {
             bodyVO.setSpntax(bodyBO.getSumPriceNotax());
             bodyVO.setUpotax(bodyBO.getUnitPriceNotax());
             bodyVO.setSname(bodyBO.getSupplierName());
-            bodyVO.setSid(bodyBO.getSupplierId());
             vos.add(bodyVO);
         }
         vo.setVos(vos);

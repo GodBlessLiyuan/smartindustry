@@ -56,6 +56,11 @@ public class StorageHeadVO implements Serializable {
      */
     private String extra;
 
+    /**
+     * 供应商名称
+     */
+    private String sname;
+
     private List<StorageBodyVO> vos;
 
     @Data
@@ -152,10 +157,11 @@ public class StorageHeadVO implements Serializable {
         vo.setSno(bo.getStorageNo());
         vo.setStatus(bo.getStatus());
         vo.setStime(bo.getStorageTime());
+        vo.setSname(bo.getSupplierName());
         vo.setWid(bo.getWarehouseId());
         vo.setWname(bo.getWarehouseName());
         vo.setPmethod(bo.getPayMethod());
-        vo.setExtra(bo.getExtra());
+        vo.setExtra(bo.getRemark());
         List<StorageBodyVO> vos = new ArrayList<>();
         for (StorageBodyBO bodyBO : bo.getBos()){
             StorageBodyVO bodyVO = new StorageBodyVO();

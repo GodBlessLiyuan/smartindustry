@@ -16,12 +16,11 @@
     <result column="sum_price" jdbcType="DECIMAL" property="sumPrice" />
     <result column="unit_price_notax" jdbcType="DECIMAL" property="unitPriceNotax" />
     <result column="sum_price_notax" jdbcType="DECIMAL" property="sumPriceNotax" />
-    <result column="supplier_id" jdbcType="BIGINT" property="supplierId" />
   </resultMap>
   <sql id="Base_Column_List">
     storage_body_id, storage_head_id, material_id, location_id, car_brand, expect_num, 
-    storage_num, accept_time, create_time, dr, unit_price, sum_price, unit_price_notax,
-    sum_price_notax, supplier_id
+    storage_num, accept_time, create_time, dr, unit_price, sum_price, unit_price_notax, 
+    sum_price_notax
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -33,19 +32,17 @@
     delete from sm_storage_body
     where storage_body_id = #{storageBodyId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.StorageBodyPO">
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.StorageBodyPO" useGeneratedKeys="true" keyProperty="storageBodyId">
     insert into sm_storage_body (storage_body_id, storage_head_id, material_id, 
       location_id, car_brand, expect_num, 
       storage_num, accept_time, create_time, 
-      dr, unit_price, sum_price,
-      unit_price_notax, sum_price_notax, supplier_id
-      )
-    values (#{storageBodyId,jdbcType=BIGINT}, #{storageHeadId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT},
-      #{locationId,jdbcType=BIGINT}, #{carBrand,jdbcType=CHAR}, #{expectNum,jdbcType=DECIMAL},
-      #{storageNum,jdbcType=DECIMAL}, #{acceptTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP},
-      #{dr,jdbcType=TINYINT}, #{unitPrice,jdbcType=DECIMAL}, #{sumPrice,jdbcType=DECIMAL},
-      #{unitPriceNotax,jdbcType=DECIMAL}, #{sumPriceNotax,jdbcType=DECIMAL}, #{supplierId,jdbcType=BIGINT}
-      )
+      dr, unit_price, sum_price, 
+      unit_price_notax, sum_price_notax)
+    values (#{storageBodyId,jdbcType=BIGINT}, #{storageHeadId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT}, 
+      #{locationId,jdbcType=BIGINT}, #{carBrand,jdbcType=CHAR}, #{expectNum,jdbcType=DECIMAL}, 
+      #{storageNum,jdbcType=DECIMAL}, #{acceptTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{dr,jdbcType=TINYINT}, #{unitPrice,jdbcType=DECIMAL}, #{sumPrice,jdbcType=DECIMAL}, 
+      #{unitPriceNotax,jdbcType=DECIMAL}, #{sumPriceNotax,jdbcType=DECIMAL})
   </insert>
   <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.sm.StorageBodyPO">
     insert into sm_storage_body
@@ -92,9 +89,6 @@
       <if test="sumPriceNotax != null">
         sum_price_notax,
       </if>
-      <if test="supplierId != null">
-        supplier_id,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="storageBodyId != null">
@@ -138,9 +132,6 @@
       </if>
       <if test="sumPriceNotax != null">
         #{sumPriceNotax,jdbcType=DECIMAL},
-      </if>
-      <if test="supplierId != null">
-        #{supplierId,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -186,9 +177,6 @@
       <if test="sumPriceNotax != null">
         sum_price_notax = #{sumPriceNotax,jdbcType=DECIMAL},
       </if>
-      <if test="supplierId != null">
-        supplier_id = #{supplierId,jdbcType=BIGINT},
-      </if>
     </set>
     where storage_body_id = #{storageBodyId,jdbcType=BIGINT}
   </update>
@@ -203,19 +191,26 @@
       accept_time = #{acceptTime,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       dr = #{dr,jdbcType=TINYINT},
-            sum_price = #{sumPrice,jdbcType=DECIMAL},
+      unit_price = #{unitPrice,jdbcType=DECIMAL},
+      sum_price = #{sumPrice,jdbcType=DECIMAL},
       unit_price_notax = #{unitPriceNotax,jdbcType=DECIMAL},
-      sum_price_notax = #{sumPriceNotax,jdbcType=DECIMAL},
-      supplier_id = #{supplierId,jdbcType=BIGINT}
+      sum_price_notax = #{sumPriceNotax,jdbcType=DECIMAL}
     where storage_body_id = #{storageBodyId,jdbcType=BIGINT}
   </update>
 
   <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="storageBodyId">
-    insert into sm_storage_body (storage_head_id, material_id,  expect_num,  accept_time, create_time, dr, unit_price, sum_price, unit_price_notax,    sum_price_notax, supplier_id)
+    insert into sm_storage_body (storage_body_id, storage_head_id, material_id,
+    location_id, car_brand, expect_num,
+    storage_num, accept_time, create_time,
+    dr, unit_price, sum_price,
+    unit_price_notax, sum_price_notax)
     values
     <foreach collection="list" separator="," item="po">
-      ( #{po.storageHeadId, jdbcType=BIGINT},#{po.materialId,jdbcType=BIGINT},  #{po.expectNum,jdbcType=DECIMAL}, #{po.acceptTime,jdbcType=TIMESTAMP}, #{po.createTime,jdbcType=TIMESTAMP},
-      #{po.dr,jdbcType=TINYINT},#{po.unitPrice,jdbcType=DECIMAL}, #{po.sumPrice,jdbcType=DECIMAL},      #{po.unitPriceNotax,jdbcType=DECIMAL}, #{po.sumPriceNotax,jdbcType=DECIMAL}, #{po.supplierId,jdbcType=BIGINT})
+      (#{po.storageBodyId,jdbcType=BIGINT}, #{po.storageHeadId,jdbcType=BIGINT}, #{po.materialId,jdbcType=BIGINT},
+      #{po.locationId,jdbcType=BIGINT}, #{po.carBrand,jdbcType=CHAR}, #{po.expectNum,jdbcType=DECIMAL},
+      #{po.storageNum,jdbcType=DECIMAL}, #{po.acceptTime,jdbcType=TIMESTAMP}, #{po.createTime,jdbcType=TIMESTAMP},
+      #{po.dr,jdbcType=TINYINT}, #{po.unitPrice,jdbcType=DECIMAL}, #{po.sumPrice,jdbcType=DECIMAL},
+      #{po.unitPriceNotax,jdbcType=DECIMAL}, #{po.sumPriceNotax,jdbcType=DECIMAL})
     </foreach>
   </insert>
 

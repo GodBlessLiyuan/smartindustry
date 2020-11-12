@@ -106,7 +106,9 @@ public class StorageHeadDTO implements Serializable {
 
     public static StorageHeadPO buildPO(StorageHeadPO po, StorageHeadDTO dto) {
         po.setWarehouseId(dto.getWid());
-        po.setExtra(dto.getExtra());
+        po.setRemark(dto.getExtra());
+        po.setPayMethod(dto.getPmethod());
+        po.setSupplierId(dto.getSid());
         return po;
     }
 
@@ -135,7 +137,6 @@ public class StorageHeadDTO implements Serializable {
         bodyPO.setUnitPriceNotax(dto.getUpn());
         bodyPO.setSumPrice(dto.getSp());
         bodyPO.setSumPriceNotax(dto.getSpn());
-        bodyPO.setSupplierId(dto.getSid());
         return bodyPO;
     }
 
