@@ -99,6 +99,7 @@ public class ProductDetailVO implements Serializable {
         vo.setWname(bo.getWarehouseName());
         vo.setLno(bo.getLocationNo());
         vo.setMuname(bo.getMeasureUnitName());
+        vo.setNum(bo.getNum());
         return vo;
     }
 

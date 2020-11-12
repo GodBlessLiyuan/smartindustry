@@ -94,7 +94,5 @@ public class MaterialPO implements Serializable {
      */
     private Byte dr;
 
-    private BigDecimal price;
-
     private static final long serialVersionUID = 1L;
 }
