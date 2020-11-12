@@ -67,6 +67,7 @@ public class MaterialVO implements Serializable {
         vo.setMtype(bo.getMaterialType());
         vo.setMdes(bo.getMaterialDesc());
         vo.setPrice(bo.getPrice());
+        vo.setSname(bo.getSupplierName());
         return vo;
     }
 

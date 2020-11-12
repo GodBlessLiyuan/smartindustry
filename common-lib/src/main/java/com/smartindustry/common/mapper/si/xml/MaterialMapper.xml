@@ -223,7 +223,9 @@
   </update>
 
   <select id="pageQueryStorage" parameterType="java.util.Map" resultType="com.smartindustry.common.bo.si.MaterialBO">
-    select m.material_id as materialId,m.material_no as materialNo,m.material_model as materialModel,m.material_name as materialName,s.supplier_name as supplierName, mu.measure_unit_name as measureUnitName
+    select m.material_id as materialId,m.material_no as materialNo,m.material_model as materialModel,m.material_name as materialName,
+            m.material_type as materialType ,m.material_desc as materialDesc,m.price,
+        s.supplier_name as supplierName, mu.measure_unit_name as measureUnitName
     from si_material m
     left join si_supplier s on m.supplier_id = s.supplier_id
     left join dd_measure_unit mu on m.measure_unit_id = mu.measure_unit_id
@@ -338,4 +340,37 @@
     where dr = 1 and measure_unit_id = #{muid,jdbcType=BIGINT}
   </select>
 
+<!--ly接口写，物料全部信息-->
+  <select id="listAll" resultType="java.util.Map">
+    select  material_id as mid, material_no as mno, material_type as mtype , material_name as mname,  material_model as mnodel
+    from si_material
+    where dr = 1
+  </select>
+<!--ly写，查询物料详情-->
+  <select id="getSupperUnitByID" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.si.MaterialBO">
+  select m.material_id as materialId,m.material_no as materialNo,m.material_model as materialModel,m.material_name as materialName,
+    m.material_type as materialType ,m.material_desc as materialDesc,m.price,
+    s.supplier_name as supplierName, mu.measure_unit_name as measureUnitName
+  from si_material m
+  left join si_supplier s on m.supplier_id = s.supplier_id
+  left join dd_measure_unit mu on m.measure_unit_id = mu.measure_unit_id
+  where m.dr  = 1 and m.material_id=#{mid}
+    </select>
+  <!--ly 写物料的分页查询-->
+  <select id="pageList" parameterType="java.util.Map" resultType="com.smartindustry.common.bo.si.MaterialBO">
+    select m.material_id as materialId,m.material_no as materialNo,m.material_model as materialModel,m.material_name as materialName,
+    m.material_type as materialType ,m.material_desc as materialDesc,m.price,
+    s.supplier_name as supplierName, mu.measure_unit_name as measureUnitName
+    from si_material m
+    left join si_supplier s on m.supplier_id = s.supplier_id
+    left join dd_measure_unit mu on m.measure_unit_id = mu.measure_unit_id
+    where m.dr = 1
+    <if test="keyword != null and keyword != ''">
+      and (m.material_no like '%' #{keyword,jdbcType=CHAR} '%'
+      or m.material_name like '%' #{keyword,jdbcType=CHAR} '%'
+      or m.material_model like '%' #{keyword,jdbcType=CHAR} '%')
+    </if>
+    <if test="mtype != null and mtype != 0 ">and s.material_type = #{mtype} </if>
+    order by m.create_time desc
+  </select>
 </mapper>
