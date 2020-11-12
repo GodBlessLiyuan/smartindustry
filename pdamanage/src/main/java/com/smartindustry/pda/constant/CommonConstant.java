@@ -28,10 +28,6 @@ public class CommonConstant {
      * session 物料RFID
      */
     public final static String SESSION_MRFID = "mrfid";
-    /**
-     * session 库位RFID
-     */
-    public final static String SESSION_LRFID = "lrfid";
 
     /**
      * 待执行
@@ -80,6 +76,10 @@ public class CommonConstant {
      * 叉车-入库(备料）
      */
     public final static Byte FORKLIFT_STORAGE_START_PREPARE = 2;
+    /**
+     * 叉车-入库(成品）
+     */
+    public final static Byte FORKLIFT_STORAGE_START_PRODUCT = 2;
 
     /**
      * 叉车-出库开始
@@ -95,13 +95,13 @@ public class CommonConstant {
      */
     public final static Byte STATUS_RFID_STORAGE = 1;
     /**
-     * 待入库
-     */
-    public final static Byte STATUS_RFID_PRE_STORAGE = 2;
-    /**
      * 销售出库
      */
-    public final static Byte STATUS_RFID_OUTBOUND_SALE = 3;
+    public final static Byte STATUS_RFID_OUTBOUND_SALE = 2;
+    /**
+     * 待入库
+     */
+    public final static Byte STATUS_RFID_PRE_STORAGE = 3;
     /**
      * 已出库
      */
@@ -131,29 +131,37 @@ public class CommonConstant {
     public static final Byte RFID_INVALID = 0;
 
     /**
-     * 入库开始（原材料区）
+     * 入库开始(原材料)
      */
     public static final Byte RFID_STORAGE_START_RAW = 1;
     /**
-     * 入库开始(备料区）
+     * 入库开始(备料)
      */
     public static final Byte RFID_STORAGE_START_PREPARE = 2;
     /**
-     * 入库完成(原材料入成品区）
+     * 入库开始(成品)
      */
-    public static final Byte RFID_STORAGE_END_RAW_PRODUCT = 3;
+    public static final Byte RFID_STORAGE_START_PRODUCT = 3;
     /**
-     * 入库完成(原材料入备料区）
+     * 入库完成(原材料入成品）
      */
-    public static final Byte RFID_STORAGE_END_RAW_PREPARE = 4;
+    public static final Byte RFID_STORAGE_END_RAW_PRODUCT = 4;
     /**
-     * 入库完成(备料入成品区）
+     * 入库完成(原材料入备料）
      */
-    public static final Byte RFID_STORAGE_END_PREPARE_PRODUCT = 5;
+    public static final Byte RFID_STORAGE_END_RAW_PREPARE = 5;
     /**
-     * 检测到备料区
+     * 入库完成(备料入成品）
      */
-    public static final Byte RFID_STORAGE_MEET_PREPARE = 6;
+    public static final Byte RFID_STORAGE_END_PREPARE_PRODUCT = 6;
+    /**
+     * 入库完成(成品入成品）
+     */
+    public static final Byte RFID_STORAGE_END_PRODUCT_PRODUCT = 7;
+    /**
+     * 入库完成(成品入备料）
+     */
+    public static final Byte RFID_STORAGE_END_PRODUCT_PREPARE = 8;
 
     /**
      * 出库开始

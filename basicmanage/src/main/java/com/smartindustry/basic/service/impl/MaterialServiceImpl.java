@@ -46,7 +46,7 @@ public class MaterialServiceImpl implements IMaterialService {
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData) {
         Page<MaterialBO> page = PageQueryUtil.startPage(reqData);
-        List<MaterialBO> bos = materialMapper.pageQueryStorage(reqData);
+        List<MaterialBO> bos=materialMapper.pageList(reqData);
         return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), MaterialVO.convert(bos)));
     }
 
