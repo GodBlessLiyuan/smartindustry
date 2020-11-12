@@ -1,8 +1,9 @@
 package com.smartindustry.common.pojo.si;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * si_location_record
@@ -34,6 +35,12 @@ public class LocationRecordPO implements Serializable {
      * 操作名称
      */
     private String operationName;
+    public LocationRecordPO(){}
 
+    public LocationRecordPO(Long locationId,Long userId,String operationName){
+        this.locationId=locationId;
+        this.userId=userId;
+        this.operationName=operationName;
+    }
     private static final long serialVersionUID = 1L;
 }

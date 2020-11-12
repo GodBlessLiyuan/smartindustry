@@ -4,12 +4,18 @@ import com.github.pagehelper.Page;
 import com.smartindustry.basic.dto.OperateDTO;
 import com.smartindustry.basic.dto.WarehouseDTO;
 import com.smartindustry.basic.service.IWarehouseService;
+import com.smartindustry.basic.vo.WarehouseRecordVO;
 import com.smartindustry.basic.vo.WarehouseVO;
 import com.smartindustry.common.bo.si.LocationBO;
 import com.smartindustry.common.bo.si.WarehouseBO;
+import com.smartindustry.common.bo.si.WarehouseRecordBO;
 import com.smartindustry.common.mapper.si.LocationMapper;
 import com.smartindustry.common.mapper.si.WarehouseMapper;
+import com.smartindustry.common.mapper.si.WarehouseRecordMapper;
+import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.si.WarehousePO;
+import com.smartindustry.common.pojo.si.WarehouseRecordPO;
+import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
@@ -36,19 +42,21 @@ public class WarehouseServiceImpl implements IWarehouseService {
     private WarehouseMapper warehouseMapper;
     @Autowired
     private LocationMapper locationMapper;
-
-
+    @Autowired
+    private WarehouseRecordMapper warehouseRecordMapper;
+    @Autowired
+    private TokenService tokenService;
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData) {
         Page<WarehouseBO> page = PageQueryUtil.startPage(reqData);
-        List<WarehouseBO> bos = warehouseMapper.pageQuery(reqData);
-
+        List<WarehouseBO> bos = warehouseMapper.pageListQuery(reqData);
         return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), WarehouseVO.convert(bos)));
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO edit(WarehouseDTO dto) {
+        UserPO user = tokenService.getLoginUser();
         WarehousePO existPO = warehouseMapper.queryByNo(dto.getWno());
         if (null != existPO && !existPO.getWarehouseId().equals(dto.getWid())) {
             return new ResultVO(1004);
@@ -58,6 +66,7 @@ public class WarehouseServiceImpl implements IWarehouseService {
             // 新增
             WarehousePO warehousePO = WarehouseDTO.createPO(dto);
             warehouseMapper.insert(warehousePO);
+            warehouseRecordMapper.insert(new WarehouseRecordPO(warehousePO.getWarehouseId(), user.getUserId(),"新增"));
             return ResultVO.ok();
         }
         // 编辑
@@ -69,6 +78,7 @@ public class WarehouseServiceImpl implements IWarehouseService {
         WarehouseDTO.buildPO(warehousePO, dto);
         warehousePO.setUpdateTime(new Date());
         warehouseMapper.updateByPrimaryKey(warehousePO);
+        warehouseRecordMapper.insert(new WarehouseRecordPO(warehousePO.getWarehouseId(), user.getUserId(),"编辑"));
         return ResultVO.ok();
     }
 
@@ -85,7 +95,7 @@ public class WarehouseServiceImpl implements IWarehouseService {
 
     @Override
     public ResultVO detail(OperateDTO dto) {
-        WarehouseBO warehouseBO = warehouseMapper.queryById(dto.getWid());
+        WarehouseBO warehouseBO = warehouseMapper.getBOByPri(dto.getWid());
         if (null == warehouseBO) {
             return new ResultVO(1002);
         }
@@ -99,5 +109,11 @@ public class WarehouseServiceImpl implements IWarehouseService {
 //        List<WarehouseBO> warehouseBOS = warehouseMapper.queryAll();
         List<HashMap<String,Object>> warehouseBOS = warehouseMapper.querySimpleAll();
         return ResultVO.ok().setData(warehouseBOS);
+    }
+
+    @Override
+    public ResultVO record(Long wid) {
+        List<WarehouseRecordBO> bos=warehouseRecordMapper.listByWid(wid);
+        return new ResultVO(1000,WarehouseRecordVO.convert(bos));
     }
 }

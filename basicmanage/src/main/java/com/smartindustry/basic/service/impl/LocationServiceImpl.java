@@ -4,10 +4,15 @@ import com.github.pagehelper.Page;
 import com.smartindustry.basic.dto.LocationDTO;
 import com.smartindustry.basic.dto.OperateDTO;
 import com.smartindustry.basic.service.ILocationService;
+import com.smartindustry.basic.vo.LocationRecordVO;
 import com.smartindustry.basic.vo.LocationVO;
 import com.smartindustry.common.bo.si.LocationBO;
+import com.smartindustry.common.bo.si.LocationRecordBO;
 import com.smartindustry.common.mapper.si.LocationMapper;
+import com.smartindustry.common.mapper.si.LocationRecordMapper;
+import com.smartindustry.common.pojo.am.UserPO;
 import com.smartindustry.common.pojo.si.LocationPO;
+import com.smartindustry.common.pojo.si.LocationRecordPO;
 import com.smartindustry.common.security.service.TokenService;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.vo.PageInfoVO;
@@ -32,7 +37,8 @@ import java.util.Map;
 public class LocationServiceImpl implements ILocationService {
     @Autowired
     private LocationMapper locationMapper;
-
+    @Autowired
+    private LocationRecordMapper locationRecordMapper;
     @Autowired
     TokenService tokenService;
 
@@ -47,6 +53,7 @@ public class LocationServiceImpl implements ILocationService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResultVO edit(LocationDTO dto) {
+        UserPO userPO = tokenService.getLoginUser();
         LocationPO existPO = locationMapper.queryByLno(dto.getLno());
         if (null != existPO && !existPO.getLocationId().equals(dto.getLid())) {
             return new ResultVO(1004);
@@ -55,7 +62,9 @@ public class LocationServiceImpl implements ILocationService {
         if (null == dto.getLid()) {
             // 新增
             LocationPO locationPO = LocationDTO.createPO(dto);
+            locationPO.setUserId(userPO.getUserId());
             locationMapper.insert(locationPO);
+            locationRecordMapper.insert(new LocationRecordPO(locationPO.getLocationId(),userPO.getUserId(),"新增"));
             return ResultVO.ok();
         }
         // 编辑
@@ -67,6 +76,7 @@ public class LocationServiceImpl implements ILocationService {
         LocationDTO.buildPO(locationPO, dto);
         locationPO.setUpdateTime(new Date());
         locationMapper.updateByPrimaryKey(locationPO);
+        locationRecordMapper.insert(new LocationRecordPO(locationPO.getLocationId(),userPO.getUserId(),"编辑"));
         return ResultVO.ok();
     }
 
@@ -97,5 +107,11 @@ public class LocationServiceImpl implements ILocationService {
     public ResultVO queryByWid(OperateDTO dto) {
         List<Map<String, Object>> res = locationMapper.queryKvByWid(dto.getWid());
         return ResultVO.ok().setData(res);
+    }
+
+    @Override
+    public ResultVO record(OperateDTO dto) {
+        List<LocationRecordBO> bos=locationRecordMapper.listByLocatonID(dto.getLid());
+        return new ResultVO(1000, LocationRecordVO.convert(bos));
     }
 }

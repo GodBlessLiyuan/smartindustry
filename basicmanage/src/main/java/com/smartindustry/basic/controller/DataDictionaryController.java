@@ -117,5 +117,13 @@ public class DataDictionaryController {
         return dataDictionaryService.muDelete(dto);
     }
 
+    /***
+     * 查询物料类型
+     * @return
+     */
+    @PostMapping("maQuery")
+    public ResultVO maQuery(){
+        return dataDictionaryService.maQuery();
+    }
 
 }

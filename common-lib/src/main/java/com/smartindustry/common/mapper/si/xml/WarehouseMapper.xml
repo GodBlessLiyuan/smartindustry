@@ -30,7 +30,7 @@
     delete from si_warehouse
     where warehouse_id = #{warehouseId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.smartindustry.common.pojo.si.WarehousePO">
+  <insert id="insert" parameterType="com.smartindustry.common.pojo.si.WarehousePO" useGeneratedKeys="true" keyProperty="warehouseId">
     insert into si_warehouse (warehouse_id, warehouse_no, warehouse_name, 
       warehouse_type_id, principal, phone, 
       area, address, remark, user_id, 
@@ -187,6 +187,8 @@
   </update>
 
   <resultMap id="BOResultMap" type="com.smartindustry.common.bo.si.WarehouseBO" extends="BaseResultMap">
+    <result column="warehouse_type_id" jdbcType="BIGINT" property="warehouseTypeId"/>
+    <result column="warehouse_type_name" jdbcType="CHAR"  property="warehouseTypeName"/>
     <collection property="pos"  ofType="com.smartindustry.common.pojo.si.LocationPO">
       <id column="location_id" jdbcType="BIGINT" property="locationId"/>
       <result column="location_no" jdbcType="CHAR" property="locationNo"/>
@@ -256,7 +258,33 @@
   <select id="querySimpleAll" resultType="java.util.HashMap">
     select w.warehouse_id as wid , w.warehouse_no as wno , w.warehouse_name as wname
     from si_warehouse w
-    left join si_location l on w.warehouse_id = l.warehouse_id
     where w.dr = 1
+  </select>
+  
+  <select id="pageListQuery" parameterType="java.util.Map" resultMap="BOResultMap">
+    select  w.warehouse_id, w.warehouse_no, w.warehouse_name, wt.warehouse_type_id,wt.warehouse_type_name,
+            w.principal,w.phone , w.area,w.address,w.remark
+    from si_warehouse w
+    left join dd_warehouse_type wt on w.warehouse_type_id = wt.warehouse_type_id
+    where w.dr = 1
+    <if test="wno != null and wno != ''">
+      and w.warehouse_no like '%' #{wno,jdbcType=CHAR} '%'
+    </if>
+    <if test="wname != null and wname != ''">
+      and w.warehouse_name like '%' #{wname,jdbcType=CHAR} '%'
+    </if>
+    <if test="wtid != null and wtid != 0">
+      and w.warehouse_type_id = #{wtid,jdbcType=BIGINT}
+    </if>
+    order by w.create_time desc
+  </select>
+
+  <select id="getBOByPri" parameterType="java.lang.Long" resultMap="BOResultMap">
+     select  w.warehouse_id, w.warehouse_no, w.warehouse_name, wt.warehouse_type_id,wt.warehouse_type_name,
+            w.principal,w.phone , w.area,w.address,w.remark,l.location_id, l.location_no, l.location_name
+    from si_warehouse w
+    left join dd_warehouse_type wt on w.warehouse_type_id = wt.warehouse_type_id
+    left join si_location l on l.warehouse_id=w.warehouse_id
+    where w.dr = 1 and w.warehouse_id =#{wid}
   </select>
 </mapper>

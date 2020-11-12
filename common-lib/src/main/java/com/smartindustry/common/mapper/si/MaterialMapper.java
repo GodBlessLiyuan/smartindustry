@@ -64,4 +64,10 @@ public interface MaterialMapper extends BaseMapper<MaterialPO, Long> {
      * @return
      */
     MaterialBO getSupperUnitByID(Long mid);
+
+    /***
+     * 查询物料类型
+     * @return
+     */
+    List<Map<String, Object>> listAll();
 }

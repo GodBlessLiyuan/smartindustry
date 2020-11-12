@@ -1,9 +1,10 @@
 package com.smartindustry.common.pojo.si;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * si_material
@@ -92,6 +93,8 @@ public class MaterialPO implements Serializable {
 2：已删除
      */
     private Byte dr;
+
+    private BigDecimal price;
 
     private static final long serialVersionUID = 1L;
 }

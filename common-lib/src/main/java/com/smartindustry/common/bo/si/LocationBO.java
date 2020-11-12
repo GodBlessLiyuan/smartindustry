@@ -13,4 +13,7 @@ import lombok.Data;
 public class LocationBO extends LocationPO {
     private String locationTypeName;
     private String warehouseName;
+    private String materialNo;
+    private String materialName;
+    private String materialModel;
 }

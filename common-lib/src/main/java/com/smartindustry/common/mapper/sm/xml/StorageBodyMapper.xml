@@ -259,15 +259,10 @@
   <select id="queryByShidAndMid" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
-    from sm_storage_head sh
-    left join sm_storage_body sb on sh.storage_head_id = sb.storage_head_id
+    from sm_storage_body sb
     where sb.dr = 1
-    <if test="shid != null">
-      and sh.storage_head_id = #{shid,jdbcType=BIGINT}
-    </if>
-    <if test="mid != null">
-      and sb.material_id = #{mid,jdbcType=BIGINT}
-    </if>
+    and sb.storage_head_id = #{shid,jdbcType=BIGINT}
+    and sb.material_id = #{mid,jdbcType=BIGINT}
   </select>
 
   <select id="queryMaterial" parameterType="java.lang.Long" resultType="com.smartindustry.common.pojo.si.MaterialPO">

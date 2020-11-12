@@ -105,10 +105,10 @@ public interface LocationMapper extends BaseMapper<LocationPO, Long> {
     /**
      * 根据储位rfid进行储位信息查询
      *
-     * @param rfid
+     * @param lrfid
      * @return
      */
-    LocationBO queryByRfid(String rfid);
+    LocationBO queryByRfid(@Param("lrfid") String lrfid);
 
     /**
      * 根据物料id 查询

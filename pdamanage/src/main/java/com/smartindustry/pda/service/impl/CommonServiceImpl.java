@@ -252,7 +252,7 @@ public class CommonServiceImpl implements ICommonService {
             outboundForkliftMapper.updateByPrimaryKey(outboundForkliftPO);
 
             StorageDetailPO detailPO = storageDetailMapper.queryByRfidAndStatus(dto.getMrfid(), CommonConstant.STATUS_RFID_STORAGE);
-            detailPO.setStorageStatus(CommonConstant.STATUS_RFID_STORAGE);
+            detailPO.setStorageStatus(CommonConstant.STATUS_RFID_OUTBOUND_SALE);
             storageDetailMapper.updateByPrimaryKey(detailPO);
 
             return ResultVO.ok().setData("出库，叉起物料");
@@ -291,14 +291,13 @@ public class CommonServiceImpl implements ICommonService {
                 List<OutboundForkliftBO> ofBOs = outboundForkliftMapper.queryByOhid(headPO.getOutboundHeadId());
                 List<String> imeis = new ArrayList<>();
                 for (OutboundForkliftBO ofBO : ofBOs) {
-                    if (!imei.equals(ofBO.getImeiNo())) {
-                        imeis.add(ofBO.getImeiNo());
-                    }
+                    imeis.add(ofBO.getImeiNo());
                 }
 
+                outboundForkliftMapper.deleteByOhid(headPO.getOutboundHeadId());
+
                 // websocket
-                WebSocketVO vo = WebSocketVO.createTitleVO("业务单号：" + headPO.getSourceNo() + "（销售出库），已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO);
-                WebSocketServer.sendMsg(imeis, vo);
+                WebSocketServer.sendMsg(imeis, WebSocketVO.createTitleVO("业务单号：" + headPO.getSourceNo() + "（销售出库），已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
             }
 
             outboundHeadMapper.updateByPrimaryKey(headPO);

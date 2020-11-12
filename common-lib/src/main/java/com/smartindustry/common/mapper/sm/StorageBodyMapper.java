@@ -4,6 +4,7 @@ import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.si.MaterialPO;
 import com.smartindustry.common.pojo.sm.StorageBodyPO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -14,35 +15,40 @@ import java.util.List;
 public interface StorageBodyMapper extends BaseMapper<StorageBodyPO, Long> {
     /**
      * 采购单表体的批量更新
+     *
      * @param pos
      */
     void batchUpdate(List<StorageBodyPO> pos);
 
     /**
      * 批量删除
+     *
      * @param sbids
      */
     void deleteBatch(List<Long> sbids);
 
     /**
      * 查询采购订单表头得表体id
+     *
      * @param shid
      * @return
      */
-    List<Long> querySbids(Long shid);
+    List<Long> querySbids(@Param("shid") Long shid);
 
     /**
      * 根据入库单id和物料id
+     *
      * @param shid
      * @param mid
      * @return
      */
-    StorageBodyPO queryByShidAndMid(Long shid,Long mid);
+    StorageBodyPO queryByShidAndMid(@Param("shid") Long shid, @Param("mid") Long mid);
 
     /**
      * 查看当前入库单下所有的物料类型
+     *
      * @param shid
      * @return
      */
-    List<MaterialPO> queryMaterial(Long shid);
+    List<MaterialPO> queryMaterial(@Param("shid") Long shid);
 }

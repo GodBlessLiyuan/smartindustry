@@ -3,6 +3,7 @@ package com.smartindustry.common.mapper.om;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.om.OutboundBodyPO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -25,5 +26,5 @@ public interface OutboundBodyMapper extends BaseMapper<OutboundBodyPO, Long> {
      * @param mid
      * @return
      */
-    OutboundBodyPO queryByOhidAndMid(Long ohid, Long mid);
+    OutboundBodyPO queryByOhidAndMid(@Param("ohid") Long ohid,@Param("mid") Long mid);
 }
