@@ -226,12 +226,12 @@
         select
         <include refid="Base_Column_List"/>
         from om_outbound_head oh
-        where oh.dr = 1 and oh.source_type = 1
+        where oh.dr = 1
         <if test="mixno != null and mixno != ''">
-            and oh.source_no like concat('%',#{mixno,jdbcType=CHAR},'%')
+            and oh.source_no like concat('%',#{mixno,jdbcType=CHAR},'%') and oh.source_type = 1
         </if>
         <if test="pno != null and pno != ''">
-            and oh.source_no like concat('%',#{pno,jdbcType=CHAR},'%')
+            and oh.source_no like concat('%',#{pno,jdbcType=CHAR},'%') and oh.source_type = 2
         </if>
         <if test="status != null and status != 0">
             and oh.`status` = #{status,jdbcType=TINYINT}

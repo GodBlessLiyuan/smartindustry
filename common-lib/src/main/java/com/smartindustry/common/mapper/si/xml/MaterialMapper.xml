@@ -10,17 +10,19 @@
     <result column="material_model" jdbcType="CHAR" property="materialModel" />
     <result column="measure_unit_id" jdbcType="BIGINT" property="measureUnitId" />
     <result column="package_volume" jdbcType="DECIMAL" property="packageVolume" />
+    <result column="material_batch" jdbcType="CHAR" property="materialBatch" />
     <result column="supplier_id" jdbcType="BIGINT" property="supplierId" />
     <result column="material_desc" jdbcType="CHAR" property="materialDesc" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="dr" jdbcType="TINYINT" property="dr" />
   </resultMap>
   <sql id="Base_Column_List">
     material_id, material_no, material_type, material_name, material_level, material_model, 
-    measure_unit_id, package_volume, supplier_id, material_desc, user_id, create_time, 
-    update_time, dr
+    measure_unit_id, package_volume, material_batch, supplier_id, material_desc, user_id, 
+    price, create_time, update_time, dr
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -35,14 +37,16 @@
   <insert id="insert" parameterType="com.smartindustry.common.pojo.si.MaterialPO">
     insert into si_material (material_id, material_no, material_type, 
       material_name, material_level, material_model, 
-      measure_unit_id, package_volume, supplier_id, 
-      material_desc, user_id, create_time, 
-      update_time, dr)
+      measure_unit_id, package_volume, material_batch, 
+      supplier_id, material_desc, user_id, 
+      price, create_time, update_time, 
+      dr)
     values (#{materialId,jdbcType=BIGINT}, #{materialNo,jdbcType=CHAR}, #{materialType,jdbcType=TINYINT}, 
       #{materialName,jdbcType=CHAR}, #{materialLevel,jdbcType=CHAR}, #{materialModel,jdbcType=CHAR}, 
-      #{measureUnitId,jdbcType=BIGINT}, #{packageVolume,jdbcType=DECIMAL}, #{supplierId,jdbcType=BIGINT}, 
-      #{materialDesc,jdbcType=CHAR}, #{userId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT})
+      #{measureUnitId,jdbcType=BIGINT}, #{packageVolume,jdbcType=DECIMAL}, #{materialBatch,jdbcType=CHAR}, 
+      #{supplierId,jdbcType=BIGINT}, #{materialDesc,jdbcType=CHAR}, #{userId,jdbcType=BIGINT}, 
+      #{price,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{dr,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.MaterialPO">
     insert into si_material
@@ -71,6 +75,9 @@
       <if test="packageVolume != null">
         package_volume,
       </if>
+      <if test="materialBatch != null">
+        material_batch,
+      </if>
       <if test="supplierId != null">
         supplier_id,
       </if>
@@ -79,6 +86,9 @@
       </if>
       <if test="userId != null">
         user_id,
+      </if>
+      <if test="price != null">
+        price,
       </if>
       <if test="createTime != null">
         create_time,
@@ -115,6 +125,9 @@
       <if test="packageVolume != null">
         #{packageVolume,jdbcType=DECIMAL},
       </if>
+      <if test="materialBatch != null">
+        #{materialBatch,jdbcType=CHAR},
+      </if>
       <if test="supplierId != null">
         #{supplierId,jdbcType=BIGINT},
       </if>
@@ -123,6 +136,9 @@
       </if>
       <if test="userId != null">
         #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -159,6 +175,9 @@
       <if test="packageVolume != null">
         package_volume = #{packageVolume,jdbcType=DECIMAL},
       </if>
+      <if test="materialBatch != null">
+        material_batch = #{materialBatch,jdbcType=CHAR},
+      </if>
       <if test="supplierId != null">
         supplier_id = #{supplierId,jdbcType=BIGINT},
       </if>
@@ -167,6 +186,9 @@
       </if>
       <if test="userId != null">
         user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -189,38 +211,30 @@
       material_model = #{materialModel,jdbcType=CHAR},
       measure_unit_id = #{measureUnitId,jdbcType=BIGINT},
       package_volume = #{packageVolume,jdbcType=DECIMAL},
+      material_batch = #{materialBatch,jdbcType=CHAR},
       supplier_id = #{supplierId,jdbcType=BIGINT},
       material_desc = #{materialDesc,jdbcType=CHAR},
       user_id = #{userId,jdbcType=BIGINT},
+      price = #{price,jdbcType=DECIMAL},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       dr = #{dr,jdbcType=TINYINT}
     where material_id = #{materialId,jdbcType=BIGINT}
   </update>
-    <select id="getSupperUnitByID" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.si.MaterialBO">
-    select m.material_id as materialId,m.material_no as materialNo,m.material_model as materialModel,m.material_name as materialName,
-    m.material_type as materialType ,m.material_desc as materialDesc,
-    s.supplier_name as supplierName, mu.measure_unit_name as measureUnitName
-    from si_material m
-    left join si_supplier s on m.supplier_id = s.supplier_id
-    left join dd_measure_unit mu on m.measure_unit_id = mu.measure_unit_id
-    where m.dr = 1 and m.material_id=#{mid}
-    </select>
+
   <select id="pageQueryStorage" parameterType="java.util.Map" resultType="com.smartindustry.common.bo.si.MaterialBO">
-    select m.material_id as materialId,m.material_no as materialNo,m.material_model as materialModel,m.material_name as materialName,
-    m.material_type as materialType ,m.material_desc as materialDesc,
-    s.supplier_name as supplierName, mu.measure_unit_name as measureUnitName
+    select m.material_id as materialId,m.material_no as materialNo,m.material_model as materialModel,m.material_name as materialName,s.supplier_name as supplierName, mu.measure_unit_name as measureUnitName
     from si_material m
     left join si_supplier s on m.supplier_id = s.supplier_id
     left join dd_measure_unit mu on m.measure_unit_id = mu.measure_unit_id
     where m.dr = 1
-    <if test="keyword != null and keyword != ''">
-      and (m.material_no like '%' #{keyword,jdbcType=CHAR} '%'
-      or m.material_name like '%' #{keyword,jdbcType=CHAR} '%'
-      or m.material_model like '%' #{keyword,jdbcType=CHAR} '%')
-    </if>
-    <if test="mtype !=null and mtype!=0">
-      and m.material_type=mtype
+    <if test="sname != null and sname != ''">and s.supplier_name like '%' #{sname,jdbcType=CHAR} '%'</if>
+    <if test="mname != null and mname != ''">and m.material_name like '%' #{mname,jdbcType=CHAR} '%'</if>
+    <if test="mmodel != null and mmodel != ''">and m.material_model like '%' #{mmodel,jdbcType=CHAR} '%'</if>
+    <if test="mno != null and mno != ''">and m.material_no like '%' #{mno,jdbcType=CHAR} '%'</if>
+    <if test="mdesc != null and mdesc != ''">and m.material_desc like '%' #{mdesc,jdbcType=CHAR} '%'</if>
+    <if test="ctime != null">
+      and m.create_time &gt; #{ctime, jdbcType=TIMESTAMP}
     </if>
     order by m.create_time desc
   </select>

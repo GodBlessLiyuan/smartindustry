@@ -103,10 +103,16 @@
     <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId"/>
     <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
     <result column="inventoryQuantity" jdbcType="DECIMAL" property="inventoryQuantity"/>
+    <result column="status" jdbcType="TINYINT" property="status"/>
+    <result column="measure_unit_name" jdbcType="CHAR" property="measureUnitName"/>
   </resultMap>
   <sql id="BOS_Column_List">
-     m.material_id, m.material_no, m.material_name, m.material_type, m.material_model, m.material_desc,
-     s.supplier_name, w.warehouse_id, w.warehouse_name, mi.`status`,mi.lower_limit, mi.upper_limit, count(sd.rfid) as inventoryQuantity
+     m.material_id, m.material_no, m.material_name, m.material_type, m.material_model, m.material_desc,m.package_volume,
+     s.supplier_name, w.warehouse_id, w.warehouse_name, mi.lower_limit, mi.upper_limit, count(sd.rfid) as inventoryQuantity,mu.measure_unit_name,
+    (CASE WHEN count(sd.rfid)  &lt; mi.lower_limit THEN 2
+        WHEN count(sd.rfid) &gt;= mi.lower_limit AND count(sd.rfid) &lt; mi.upper_limit THEN 1
+    WHEN count(sd.rfid) &gt;= mi.upper_limit THEN 3
+    ELSE 0 END) AS status
   </sql>
   <select id="pageQuery" parameterType="java.util.Map" resultMap="BOSResultMap">
     select
@@ -131,7 +137,7 @@
         and l.warehouse_id = #{wid,jdbcType=BIGINT}
       </if>
       group by m.material_id,w.warehouse_id
-      order by mi.status asc, m.create_time desc
+      order by m.create_time desc
   </select>
 
 
@@ -145,21 +151,25 @@
     <result column="material_batch" jdbcType="CHAR" property="materialBatch"/>
     <result column="storage_time" jdbcType="TIMESTAMP" property="storageTime"/>
     <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
+    <result column="location_id" jdbcType="BIGINT" property="locationId"/>
+    <result column="location_no" jdbcType="CHAR" property="locationNo"/>
+    <result column="measure_unit_name" jdbcType="CHAR" property="measureUnitName"/>
     <result column="materialStatus" jdbcType="TINYINT" property="materialStatus"/>
+    <result column="num" jdbcType="DECIMAL" property="num"/>
   </resultMap>
   <sql id="POS_Column_List">
-
+     sd.rfid, m.material_no, m.material_name, m.material_type,m.material_model,m.material_desc, m.material_batch, sd.storage_time,
+     if(f.forklift_id,1,2) as materialStatus,w.warehouse_name,l.location_id, l.location_no , mu.measure_unit_name
   </sql>
-  <select id="pageQueryPro" parameterType="java.util.Map" resultMap="BOSResultMap">
+  <select id="pageQueryPro" parameterType="java.util.Map" resultMap="POSResultMap">
     select
-    <include refid="BOS_Column_List" />
+    <include refid="POS_Column_List" />
     from sm_storage_detail sd
     left join si_location l on sd.location_id = l.location_id
     left join si_material m on l.material_id = m.material_id
-    left join si_supplier s on m.supplier_id = s.supplier_id
-    left join si_material_inventory mi on m.material_id = mi.material_id
     left join dd_measure_unit mu on m.measure_unit_id = mu.measure_unit_id
     left join si_warehouse w on l.warehouse_id = w.warehouse_id
+    left join om_outbound_forklift f on sd.rfid = f.rfid
     where sd.storage_status = 1
     <if test="keyword != null and keyword != ''">
       and (sd.rfid like '%' #{keyword,jdbcType=CHAR} '%'
@@ -175,21 +185,27 @@
     <if test="lid != null and lid != 0">
       and l.location_id = #{lid,jdbcType=BIGINT}
     </if>
-    <if test="status != null and status != 0">
-      and sd.storage_status = #{status,jdbcType=BIGINT}
-    </if>
+    <choose>
+      <when test="status != null and status == 1">
+        and f.forklift_id is null
+      </when>
+      <otherwise>
+        and f.forklift_id is not null
+      </otherwise>
+    </choose>
+    order by sd.storage_time desc
   </select>
 
   <update id="updateBatch" parameterType="java.util.List">
     update si_material_inventory
     set lower_limit = case material_id
     <foreach collection="list" item="item">
-      when #{item.materialId,jdbcType=BIGINT} then #{item.lowerLimit,jdbcType=TINYINT}
+      when #{item.materialId,jdbcType=BIGINT} then #{item.lowerLimit,jdbcType=DECIMAL}
     </foreach>
     end,
     upper_limit = case material_id
     <foreach collection="list" item="item">
-      when #{item.materialId,jdbcType=BIGINT} then #{item.upperLimit,jdbcType=TINYINT}
+      when #{item.materialId,jdbcType=BIGINT} then #{item.upperLimit,jdbcType=DECIMAL}
     </foreach>
     end
     where material_id in
