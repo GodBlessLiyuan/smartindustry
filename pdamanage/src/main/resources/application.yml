@@ -41,4 +41,4 @@ logging:
           mapper: debug
 schedule:
   storage:
-    trigger:  0 30 07,19 * * ?
+    trigger: 0 30 07,19 * * ?
