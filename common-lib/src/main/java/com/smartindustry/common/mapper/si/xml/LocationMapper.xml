@@ -277,7 +277,9 @@
         select l.location_id as locationId, l.location_no as locationNo, l.location_name as locationName
         from si_location l
         where l.dr = 1
-          and l.warehouse_id = #{wid,jdbcType=BIGINT}
+        <if test="wid != null and wid != 0">
+            and l.warehouse_id = #{wid,jdbcType=BIGINT}
+        </if>
     </select>
 
     <select id="queryLocBySid" parameterType="java.lang.Long" resultMap="BaseResultMap">

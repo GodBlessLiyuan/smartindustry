@@ -1,6 +1,7 @@
 package com.smartindustry.inventory.service;
 
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.inventory.dto.OperateDTO;
 import com.smartindustry.inventory.dto.SafeStockDTO;
 
 import java.util.Map;
@@ -32,4 +33,17 @@ public interface IMaterialInventoryService {
      * @return
      */
     ResultVO pageQueryPro(Map<String, Object> reqData);
+
+    /**
+     * 查询所在仓库
+     * @return
+     */
+    ResultVO queryWarehouse();
+
+    /**
+     * 查询所有储位
+     * @param dto
+     * @return
+     */
+    ResultVO queryLocation(OperateDTO dto);
 }
