@@ -74,7 +74,7 @@ public class PurchaseStorageServiceImpl implements IPurchaseStorageService {
          for (StorageHeadBO bo : bos) {
              PurchaseErpPO po = new PurchaseErpPO();
              po.setPurchaseNo(bo.getStorageNo());
-             po.setRemark(bo.getExtra());
+             po.setRemark(bo.getRemark());
              po.setPayMethod(SyncConstant.PAY_METHOD_DEBT.equals(bo.getPayMethod())?SyncConstant.PAY_METHOD_ERP_DEBT: SyncConstant.PAY_METHOD_ERP_BILL);
              po.setPayName(SyncConstant.PAY_METHOD_DEBT.equals(bo.getPayMethod())?SyncConstant.PAY_NAME_ERP_DEBT: SyncConstant.PAY_NAME_ERP_BILL);
              po.setAcceptDate(bo.getStorageTime());

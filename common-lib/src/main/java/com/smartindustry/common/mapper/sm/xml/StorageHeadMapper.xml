@@ -10,15 +10,16 @@
     <result column="storage_time" jdbcType="TIMESTAMP" property="storageTime" />
     <result column="expect_num" jdbcType="DECIMAL" property="expectNum" />
     <result column="storage_num" jdbcType="DECIMAL" property="storageNum" />
-    <result column="extra" jdbcType="CHAR" property="extra" />
+    <result column="remark" jdbcType="CHAR" property="remark" />
     <result column="status" jdbcType="TINYINT" property="status" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="dr" jdbcType="TINYINT" property="dr" />
     <result column="pay_method" jdbcType="TINYINT" property="payMethod" />
+    <result column="supplier_id" jdbcType="BIGINT" property="supplierId" />
   </resultMap>
   <sql id="Base_Column_List">
     storage_head_id, warehouse_id, storage_no, source_no, source_type, storage_time, 
-    expect_num, storage_num, extra, `status`, create_time, dr, pay_method
+    expect_num, storage_num, remark, `status`, create_time, dr, pay_method, supplier_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -33,14 +34,14 @@
   <insert id="insert" parameterType="com.smartindustry.common.pojo.sm.StorageHeadPO" keyProperty="storageHeadId" useGeneratedKeys="true">
     insert into sm_storage_head (storage_head_id, warehouse_id, storage_no, 
       source_no, source_type, storage_time, 
-      expect_num, storage_num, extra, 
-      `status`, create_time, dr,
-      pay_method)
-    values (#{storageHeadId,jdbcType=BIGINT}, #{warehouseId,jdbcType=BIGINT}, #{storageNo,jdbcType=CHAR},
-      #{sourceNo,jdbcType=CHAR}, #{sourceType,jdbcType=TINYINT}, #{storageTime,jdbcType=TIMESTAMP},
-      #{expectNum,jdbcType=DECIMAL}, #{storageNum,jdbcType=DECIMAL}, #{extra,jdbcType=CHAR},
-      #{status,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT},
-      #{payMethod,jdbcType=TINYINT})
+      expect_num, storage_num, remark, 
+      `status`, create_time, dr, 
+      pay_method, supplier_id)
+    values (#{storageHeadId,jdbcType=BIGINT}, #{warehouseId,jdbcType=BIGINT}, #{storageNo,jdbcType=CHAR}, 
+      #{sourceNo,jdbcType=CHAR}, #{sourceType,jdbcType=TINYINT}, #{storageTime,jdbcType=TIMESTAMP}, 
+      #{expectNum,jdbcType=DECIMAL}, #{storageNum,jdbcType=DECIMAL}, #{remark,jdbcType=CHAR}, 
+      #{status,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{dr,jdbcType=TINYINT}, 
+      #{payMethod,jdbcType=TINYINT}, #{supplierId,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.sm.StorageHeadPO">
     insert into sm_storage_head
@@ -69,8 +70,8 @@
       <if test="storageNum != null">
         storage_num,
       </if>
-      <if test="extra != null">
-        extra,
+      <if test="remark != null">
+        remark,
       </if>
       <if test="status != null">
         `status`,
@@ -83,6 +84,9 @@
       </if>
       <if test="payMethod != null">
         pay_method,
+      </if>
+      <if test="supplierId != null">
+        supplier_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -110,8 +114,8 @@
       <if test="storageNum != null">
         #{storageNum,jdbcType=DECIMAL},
       </if>
-      <if test="extra != null">
-        #{extra,jdbcType=CHAR},
+      <if test="remark != null">
+        #{remark,jdbcType=CHAR},
       </if>
       <if test="status != null">
         #{status,jdbcType=TINYINT},
@@ -124,6 +128,9 @@
       </if>
       <if test="payMethod != null">
         #{payMethod,jdbcType=TINYINT},
+      </if>
+      <if test="supplierId != null">
+        #{supplierId,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -151,8 +158,8 @@
       <if test="storageNum != null">
         storage_num = #{storageNum,jdbcType=DECIMAL},
       </if>
-      <if test="extra != null">
-        extra = #{extra,jdbcType=CHAR},
+      <if test="remark != null">
+        remark = #{remark,jdbcType=CHAR},
       </if>
       <if test="status != null">
         `status` = #{status,jdbcType=TINYINT},
@@ -166,6 +173,9 @@
       <if test="payMethod != null">
         pay_method = #{payMethod,jdbcType=TINYINT},
       </if>
+      <if test="supplierId != null">
+        supplier_id = #{supplierId,jdbcType=BIGINT},
+      </if>
     </set>
     where storage_head_id = #{storageHeadId,jdbcType=BIGINT}
   </update>
@@ -178,11 +188,12 @@
       storage_time = #{storageTime,jdbcType=TIMESTAMP},
       expect_num = #{expectNum,jdbcType=DECIMAL},
       storage_num = #{storageNum,jdbcType=DECIMAL},
-      extra = #{extra,jdbcType=CHAR},
+      remark = #{remark,jdbcType=CHAR},
       `status` = #{status,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       dr = #{dr,jdbcType=TINYINT},
-      pay_method = #{payMethod,jdbcType=TINYINT}
+      pay_method = #{payMethod,jdbcType=TINYINT},
+      supplier_id = #{supplierId,jdbcType=BIGINT}
     where storage_head_id = #{storageHeadId,jdbcType=BIGINT}
   </update>
 
@@ -237,16 +248,17 @@
     <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId"/>
     <result column="pay_method" jdbcType="TINYINT" property="payMethod"/>
     <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
-    <result column="extra" jdbcType="CHAR" property="extra"/>
+    <result column="supplier_name" jdbcType="CHAR" property="supplierName"/>
+    <result column="remark" jdbcType="CHAR" property="remark"/>
     <collection property="bos" ofType="com.smartindustry.common.bo.sm.StorageBodyBO">
       <id column="storage_body_id" jdbcType="BIGINT" property="storageBodyId"/>
       <result column="material_id" jdbcType="BIGINT" property="materialId"/>
       <result column="material_no" jdbcType="CHAR" property="materialNo"/>
       <result column="material_name" jdbcType="CHAR" property="materialName"/>
       <result column="material_model" jdbcType="CHAR" property="materialModel"/>
-      <result column="supplier_name" jdbcType="CHAR" property="supplierName"/>
       <result column="storage_num" jdbcType="INTEGER" property="storageNum"/>
       <result column="accept_time" jdbcType="TIMESTAMP" property="acceptTime"/>
+      <result column="supplier_name" jdbcType="CHAR" property="supplierName"/>
       <result column="measure_unit_name" jdbcType="CHAR" property="measureUnitName"/>
       <result column="unit_price" jdbcType="DECIMAL" property="unitPrice"/>
       <result column="sum_price" jdbcType="DECIMAL" property="sumPrice"/>
@@ -255,13 +267,14 @@
     </collection>
   </resultMap>
   <sql id="BOS_Column_List">
-      sh.storage_head_id, sh.storage_no,sh.status, sh.extra,sh.pay_method,w.warehouse_id, w.warehouse_name, sb.storage_body_id,sb.material_id, m.material_no,
+      sh.storage_head_id, sh.storage_no,sh.status,su1.supplier_name, sh.remark,sh.pay_method,w.warehouse_id, w.warehouse_name, sb.storage_body_id,sb.material_id, m.material_no,
       m.material_name, m.material_model, su.supplier_name, sb.storage_num,sb.accept_time,mu.measure_unit_name,sb.unit_price, sb.sum_price, sb.unit_price_notax, sb.sum_price_notax
   </sql>
   <select id="queryByShid" parameterType="java.lang.Long" resultMap="BOSResultMap">
     select
     <include refid="BOS_Column_List" />
     from sm_storage_head sh
+    left join si_supplier su1 on sh.supplier_id = su1.supplier_id
     left join si_warehouse w on sh.warehouse_id = w.warehouse_id
     left join sm_storage_body sb on sh.storage_head_id = sb.storage_head_id
     left join si_location l on sb.location_id = l.location_id
@@ -413,7 +426,7 @@
     where sh.dr = 1 and sh.storage_head_id = #{shid,jdbcType=BIGINT} and (sd.storage_status <![CDATA[<>]]> 2 or sd.storage_status is null)
     group by sd.storage_head_id,sd.location_id
   </select>
-  
+
   <select id="queryAwaitStore" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.sm.MaterialDetailBO">
     select
     <include refid="Base_Column_List" />
@@ -429,11 +442,19 @@
   </select>
 
   <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="storageHeadId">
-    insert into sm_storage_head ( storage_no, source_no, source_type, storage_time,expect_num,  extra, `status`, create_time, dr, pay_method
+    insert into sm_storage_head (storage_head_id, warehouse_id, storage_no,
+    source_no, source_type, storage_time,
+    expect_num, storage_num, remark,
+    `status`, create_time, dr,
+    pay_method, supplier_id
     )
     values
     <foreach collection="list" separator="," item="po">
-      ( #{po.storageNo,jdbcType=CHAR}, #{po.sourceNo,jdbcType=CHAR}, #{po.sourceType,jdbcType=TINYINT}, #{po.storageTime,jdbcType=TIMESTAMP}, #{po.expectNum,jdbcType=DECIMAL},  #{po.extra,jdbcType=CHAR}, #{po.status,jdbcType=TINYINT}, #{po.createTime,jdbcType=TIMESTAMP}, #{po.dr,jdbcType=TINYINT}, #{po.payMethod,jdbcType=TINYINT})
+      (#{po.storageHeadId,jdbcType=BIGINT}, #{po.warehouseId,jdbcType=BIGINT}, #{po.storageNo,jdbcType=CHAR},
+      #{po.sourceNo,jdbcType=CHAR}, #{po.sourceType,jdbcType=TINYINT}, #{po.storageTime,jdbcType=TIMESTAMP},
+      #{po.expectNum,jdbcType=DECIMAL}, #{po.storageNum,jdbcType=DECIMAL}, #{po.remark,jdbcType=CHAR},
+      #{po.status,jdbcType=TINYINT}, #{po.createTime,jdbcType=TIMESTAMP}, #{po.dr,jdbcType=TINYINT},
+      #{po.payMethod,jdbcType=TINYINT}, #{po.supplierId,jdbcType=BIGINT})
     </foreach>
   </insert>
 
