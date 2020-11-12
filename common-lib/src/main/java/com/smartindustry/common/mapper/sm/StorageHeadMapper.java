@@ -64,7 +64,7 @@ public interface StorageHeadMapper extends BaseMapper<StorageHeadPO, Long> {
      * @param status
      * @return
      */
-    List<StorageHeadPO> queryByStatus(Byte status, Byte type);
+    List<StorageHeadPO> queryByStatus(@Param("status") Byte status, @Param("type") Byte type);
 
     /**
      * 通过入库单表头id 查询所有详细信息
