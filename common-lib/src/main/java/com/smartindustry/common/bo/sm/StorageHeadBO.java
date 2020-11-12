@@ -16,6 +16,8 @@ public class StorageHeadBO extends StorageHeadPO {
 
     private String warehouseName;
 
+    private Byte payMethod;
+
     private List<StorageBodyBO> bos;
 
     private List<WarehouseBO> warehouseBOS;
