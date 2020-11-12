@@ -81,6 +81,10 @@ public class WebSocketVO implements Serializable {
          * 备料区选择物料返回物料信息VO列表
          */
         private List<MaterialVO> mvos;
+        /**
+         * 备料区选择物料返回的RFID信息
+         */
+        private RFIDVO rfidvo;
     }
 
     @Data
@@ -93,6 +97,18 @@ public class WebSocketVO implements Serializable {
          * 物料信息
          */
         private String minfo;
+    }
+
+    @Data
+    public static class RFIDVO {
+        /**
+         * 栈板rfid
+         */
+        private String mrfid;
+        /**
+         * 库位rfid
+         */
+        private String lrfid;
     }
 }
 

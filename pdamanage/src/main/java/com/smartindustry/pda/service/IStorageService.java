@@ -88,6 +88,20 @@ public interface IStorageService {
      */
     ResultVO chooseMaterialConfirm(HttpSession session, StorageDTO dto);
 
+
+
+
+
+    /**
+     * @Description 选择物料确认入库到备料区
+     * @Param
+     * @Return
+     * @Author AnHongxu.
+     * @Date 2020/11/12
+     * @Time 16:41
+     */
+    ResultVO chooseMaterialToSpareArea(HttpSession session, StorageDTO dto);
+
     /**
      * @Description 原产区入库到成品区
      * @Param
