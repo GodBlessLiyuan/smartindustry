@@ -57,12 +57,20 @@ public interface IStorageService {
     ResultVO execute(HttpSession session, String mrfid);
 
     /**
-     * 叉车插货物动作
+     * 叉车插备料区货物动作
      *
      * @param mrfid
      * @return
      */
     ResultVO executeForPre(HttpSession session, String mrfid);
+
+    /**
+     * 叉车插成品区货物动作
+     *
+     * @param mrfid
+     * @return
+     */
+    ResultVO executeForStorage(HttpSession session, String mrfid);
 
     /**
      * 备料区入库提示选择消息弹窗接口
@@ -109,5 +117,15 @@ public interface IStorageService {
      * @Time 16:40
      */
     ResultVO finishedSpareAreaToStorage(HttpSession session, String mrfid, String lrfid);
+
+    /**
+     * @Description 库内完成平移操作
+     * @Param
+     * @Return
+     * @Author AnHongxu.
+     * @Date 2020/11/12
+     * @Time 16:40
+     */
+    ResultVO finishedMove(HttpSession session, String mrfid, String lrfid, Byte ltype);
 
 }
