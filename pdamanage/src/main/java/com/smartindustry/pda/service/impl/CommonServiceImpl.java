@@ -212,9 +212,16 @@ public class CommonServiceImpl implements ICommonService {
         }
         if (CommonConstant.RFID_STORAGE_START_PREPARE.equals(status)) {
             logger.info("入库开始(备料区)");
-            // 入库开始(备料区）
+            // 入库开始(备料区)
             storageService.executeForPre(session, dto.getMrfid());
             return ResultVO.ok().setData("入库开始(备料区)");
+        }
+        if (CommonConstant.RFID_STORAGE_START_PRODUCT.equals(status)) {
+            logger.info("入库开始(成品区)");
+            // 入库开始(成品区)
+            String mrfid = dto.getMrfid();
+            // TODO: 业务逻辑
+            return ResultVO.ok().setData("入库开始(成品区)");
         }
 
         if (CommonConstant.RFID_STORAGE_END_RAW_PRODUCT.equals(status)) {
@@ -228,14 +235,12 @@ public class CommonServiceImpl implements ICommonService {
             logger.info("入库完成(原材料入备料区)");
             // 入库完成(原材料入备料区）
             storageService.finishedOriginToSpareArea(session, (String) session.getAttribute(CommonConstant.SESSION_MRFID), dto.getLrfid());
-            session.removeAttribute(CommonConstant.SESSION_MRFID);
             return ResultVO.ok().setData("入库完成(原材料入备料区)");
         }
         if (CommonConstant.RFID_STORAGE_END_PREPARE_PRODUCT.equals(status)) {
             logger.info("入库完成(备料入成品区)");
             // 入库完成(备料入成品区）
             storageService.finishedSpareAreaToStorage(session, (String) session.getAttribute(CommonConstant.SESSION_MRFID), dto.getLrfid());
-            session.removeAttribute(CommonConstant.SESSION_MRFID);
             return ResultVO.ok().setData("入库完成(备料入成品区)");
         }
         if (CommonConstant.RFID_STORAGE_END_PRODUCT_PRODUCT.equals(status)) {
@@ -244,7 +249,6 @@ public class CommonServiceImpl implements ICommonService {
             String mrfid = (String) session.getAttribute(CommonConstant.SESSION_MRFID);
             String lrfid = dto.getLrfid();
             // TODO: 业务逻辑
-            session.removeAttribute(CommonConstant.SESSION_MRFID);
             return ResultVO.ok().setData("入库完成(成品入成品区)");
         }
         if (CommonConstant.RFID_STORAGE_END_PRODUCT_PREPARE.equals(status)) {
@@ -253,7 +257,6 @@ public class CommonServiceImpl implements ICommonService {
             String mrfid = (String) session.getAttribute(CommonConstant.SESSION_MRFID);
             String lrfid = dto.getLrfid();
             // TODO: 业务逻辑
-            session.removeAttribute(CommonConstant.SESSION_MRFID);
             return ResultVO.ok().setData("入库完成(成品入备料区)");
         }
 
@@ -279,8 +282,6 @@ public class CommonServiceImpl implements ICommonService {
             StorageDetailPO detailPO = storageDetailMapper.queryByRfidAndStatus((String) session.getAttribute(CommonConstant.SESSION_MRFID), CommonConstant.STATUS_RFID_OUTBOUND_SALE);
             detailPO.setStorageStatus(CommonConstant.STATUS_RFID_STORAGE);
             storageDetailMapper.updateByPrimaryKey(detailPO);
-
-            session.removeAttribute(CommonConstant.SESSION_MRFID);
 
             return ResultVO.ok().setData("出库，物料放回原位");
         }
@@ -328,7 +329,6 @@ public class CommonServiceImpl implements ICommonService {
             locationPO.setExistNum(locationPO.getExistNum().subtract(BigDecimal.ONE));
             locationMapper.updateByPrimaryKey(locationPO);
 
-            session.removeAttribute(CommonConstant.SESSION_MRFID);
             return ResultVO.ok().setData("出库");
         }
 
