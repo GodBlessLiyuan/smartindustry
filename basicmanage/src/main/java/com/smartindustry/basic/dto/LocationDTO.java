@@ -25,7 +25,6 @@ public class LocationDTO implements Serializable {
     private String remark;
     private Long tnum;
     private Long mid;
-    private Long typeId;
 
     public static LocationPO createPO(LocationDTO dto) {
         LocationPO po = new LocationPO();
@@ -37,12 +36,11 @@ public class LocationDTO implements Serializable {
     public static LocationPO buildPO(LocationPO po, LocationDTO dto) {
         po.setLocationNo(dto.getLno());
         po.setLocationName(dto.getLname());
-        po.setLocationTypeId(dto.getLtid());
+        po.setLocationTypeId(dto.getLtid());//类型
         po.setWarehouseId(dto.getWid()); //仓库
         po.setRemark(dto.getRemark());
         po.setHoldTrayNum(new BigDecimal(dto.getTnum()));
         po.setMaterialId(dto.getMid()); //物料
-        po.setLocationTypeId(dto.getTypeId()); //类型
         return po;
     }
 }
