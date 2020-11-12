@@ -125,7 +125,7 @@ public class SalesOutboundServiceImpl implements ISalesOutboundService {
             po.setUnitPrice(BigDecimal.valueOf(ep.getUnitPrice()));
             po.setTotalPrice(BigDecimal.valueOf(ep.getSum()));
             po.setCreateTime(Calendar.getInstance().getTime());
-            po.setRemark(ep.getRemark());
+            po.setExtra(ep.getRemark());
             po.setDr((byte)1);
             pos.add(po);
         }
