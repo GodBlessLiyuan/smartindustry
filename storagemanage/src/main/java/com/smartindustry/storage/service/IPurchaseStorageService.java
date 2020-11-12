@@ -62,4 +62,5 @@ public interface IPurchaseStorageService {
      * @return
      */
     ResultVO queryStorageRecord(OperateDTO dto);
+
 }
