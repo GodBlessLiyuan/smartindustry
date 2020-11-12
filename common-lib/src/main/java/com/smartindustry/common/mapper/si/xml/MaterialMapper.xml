@@ -230,12 +230,12 @@
     left join si_supplier s on m.supplier_id = s.supplier_id
     left join dd_measure_unit mu on m.measure_unit_id = mu.measure_unit_id
     where m.dr = 1
+    <if test="sid != null and sid != 0">and s.supplier_name = #{sid,jdbcType=BIGINT}</if>
     <if test="keyword != null and keyword != ''">
       and (m.material_no like '%' #{keyword,jdbcType=CHAR} '%'
       or m.material_name like '%' #{keyword,jdbcType=CHAR} '%'
       or m.material_model like '%' #{keyword,jdbcType=CHAR} '%')
     </if>
-    <if test="mtype != null and mtype != 0 ">and s.material_type = #{mtype} </if>
     order by m.create_time desc
   </select>
 
