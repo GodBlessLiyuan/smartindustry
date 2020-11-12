@@ -526,7 +526,7 @@ public class StorageServiceImpl implements IStorageService {
         StorageHeadPO storageHeadPO = storageHeadMapper.selectByPrimaryKey(storageDetailPO.getStorageHeadId());
         // 查询当前储位的基本信息
         //String lrfid = (String) session.getAttribute(CommonConstant.SESSION_LRFID);
-        LocationPO locationPO= locationMapper.queryByType((byte) 2);
+        LocationPO locationPO = locationMapper.queryByType(CommonConstant.LOCATION_TYPE_PREPARE);
         //# 叉车运送到备货区,rfid 和 入库单解绑,也就是删除其生产来源单号
         //if (locationBO.getLocationTypeId().equals(StorageConstant.TYPE_PREPARATION_AREA) && storageHeadPO.getSourceType().equals(StorageConstant.TYPE_PRODUCT_STORAGE)) {
         // 首先更新入库详情表，添加信息

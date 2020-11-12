@@ -179,4 +179,12 @@ public class CommonConstant {
      * 出库完成
      */
     public static final Byte RFID_OUTBOUND_END = 13;
+    /**
+     * 库位类型：备料区：1
+     */
+    public static final Byte LOCATION_TYPE_PREPARE = 1;
+    /**
+     * 库位类型：成品区：2
+     */
+    public static final Byte LOCATION_TYPE_PRODUCT = 2;
 }
