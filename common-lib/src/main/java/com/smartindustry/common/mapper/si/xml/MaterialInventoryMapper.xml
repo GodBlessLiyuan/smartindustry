@@ -159,7 +159,7 @@
   </resultMap>
   <sql id="POS_Column_List">
      sd.rfid, m.material_no, m.material_name, m.material_type,m.material_model,m.material_desc, m.material_batch, sd.storage_time,
-     if(f.forklift_id,1,2) as materialStatus,w.warehouse_name,l.location_id, l.location_no , mu.measure_unit_name
+     if(f.forklift_id,1,2) as materialStatus,w.warehouse_name,l.location_id, l.location_no , mu.measure_unit_name, 1*m.package_volume as num
   </sql>
   <select id="pageQueryPro" parameterType="java.util.Map" resultMap="POSResultMap">
     select

@@ -3,6 +3,7 @@ package com.smartindustry.inventory.service.impl;
 import com.github.pagehelper.Page;
 import com.smartindustry.common.bo.si.MaterialInventoryBO;
 import com.smartindustry.common.bo.si.ProductDetailBO;
+import com.smartindustry.common.constant.ExceptionEnums;
 import com.smartindustry.common.mapper.si.MaterialInventoryMapper;
 import com.smartindustry.common.pojo.si.MaterialInventoryPO;
 import com.smartindustry.common.util.PageQueryUtil;
@@ -40,6 +41,9 @@ public class MaterialInventoryServiceImpl implements IMaterialInventoryService {
     @Override
     public ResultVO safeStock(SafeStockDTO dto){
         List<MaterialInventoryPO> pos = SafeStockDTO.createPOS(dto);
+        if(pos.isEmpty()){
+            return new ResultVO(ExceptionEnums.NOT_EMPTY.getCode());
+        }
         // 批量更新
         materialInventoryMapper.updateBatch(pos);
         return ResultVO.ok();
