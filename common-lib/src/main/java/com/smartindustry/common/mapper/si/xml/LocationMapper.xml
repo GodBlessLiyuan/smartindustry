@@ -196,6 +196,10 @@
     </resultMap>
     <sql id="BO_Column_List">
     l.location_id, l.material_id, l.location_no, l.location_name, l.location_type_id, l.warehouse_id, l.remark,
+    l.hold_tray_num, l.user_id, l.create_time, l.update_time, l.dr, lt.location_type_name, w.warehouse_name
+    </sql>
+    <sql id="BO_Column_List_Detail">
+    l.location_id, l.material_id, l.location_no, l.location_name, l.location_type_id, l.warehouse_id, l.remark,
     l.hold_tray_num, l.user_id, l.create_time, l.update_time, l.dr, lt.location_type_name, w.warehouse_name,
     m.material_id, m.material_no,m.material_name ,m.material_model
     </sql>
@@ -236,7 +240,7 @@
     </select>
     <select id="queryById" parameterType="java.lang.Long" resultMap="BOResultMap">
         select
-        <include refid="BO_Column_List"/>
+        <include refid="BO_Column_List_Detail"/>
         from si_location l
         left join dd_location_type lt on l.location_type_id = lt.location_type_id
         left join si_warehouse w on l.warehouse_id = w.warehouse_id
