@@ -186,5 +186,9 @@ public class DataDictionaryServiceImpl implements IDataDictionaryService {
         return ResultVO.ok();
     }
 
-
+    @Override
+    public ResultVO maQuery() {
+        List<Map<String,Object>> vos=materialMapper.listAll();
+        return new ResultVO(1000,vos);
+    }
 }

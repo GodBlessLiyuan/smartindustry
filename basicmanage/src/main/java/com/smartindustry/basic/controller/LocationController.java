@@ -92,4 +92,15 @@ public class LocationController {
     public ResultVO queryByWid(@RequestBody OperateDTO dto) {
         return locationService.queryByWid(dto);
     }
+
+    /***
+     * 查询操作记录
+     * @param dto
+     * @return
+     */
+    @PostMapping("record")
+    public ResultVO record(@RequestBody OperateDTO dto){
+        return locationService.record(dto);
+    }
+
 }

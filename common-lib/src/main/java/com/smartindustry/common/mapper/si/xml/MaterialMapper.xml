@@ -320,4 +320,9 @@
     where dr = 1 and measure_unit_id = #{muid,jdbcType=BIGINT}
   </select>
 
+  <select id="listAll" resultType="java.util.Map">
+    select  material_id as mid, material_no as mno, material_type as mtype , material_name as mname,  material_model as mnodel
+    from si_material
+    where dr = 1
+  </select>
 </mapper>

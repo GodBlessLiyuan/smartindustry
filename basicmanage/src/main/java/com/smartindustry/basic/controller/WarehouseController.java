@@ -83,6 +83,9 @@ public class WarehouseController {
         return warehouseService.queryAll();
     }
 
-
+    @PostMapping("record")
+    public ResultVO record(@RequestBody WarehouseDTO dto){
+        return warehouseService.record(dto.getWid());
+    }
 
 }
