@@ -123,6 +123,10 @@ public class CommonConstant {
      * 弹框信息
      */
     public static final Byte TYPE_TITLE_BOX = 4;
+    /**
+     * 消息消失
+     */
+    public static final Byte TYPE_TITLE_VANISH = 5;
 
 
     /**

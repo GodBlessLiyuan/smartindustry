@@ -354,6 +354,7 @@ public class CommonServiceImpl implements ICommonService {
         logger.info("{}", session.getAttribute(CommonConstant.SESSION_MRFID));
 
         Byte status = (Byte) session.getAttribute(CommonConstant.SESSION_STATUS_FORKLIFT);
+        /* 出/入库开始 */
         if (null == status) {
             // 无状态
             if (null == dto.getMrfid()) {
@@ -381,13 +382,39 @@ public class CommonServiceImpl implements ICommonService {
 
             return rfidStatus;
         }
-
-        if (CommonConstant.FORKLIFT_STORAGE_START_RAW.equals(status)) {
-            // 原材料入库
-            if (null != dto.getMrfid()) {
+        if (CommonConstant.FORKLIFT_WORK_OUTBOUND_START.equals(status)) {
+            // 出库 - 叉起货物
+            if (null == dto.getMrfid()) {
                 return CommonConstant.RFID_INVALID;
             }
 
+            StorageDetailPO detailPO = storageDetailMapper.queryByRfidAndStatus(dto.getMrfid(), CommonConstant.STATUS_RFID_STORAGE);
+            if (null == detailPO || detailPO.getPreparation() == 2) {
+                WebSocketServer.sendMsg(imei, WebSocketVO.createTitleVO("作业错误，该栈板不在出库作业范围内，请查看可出库储位提示", CommonConstant.TYPE_TITLE_WARN));
+                return CommonConstant.RFID_INVALID;
+            }
+
+            OutboundBodyPO bodyPO = outboundBodyMapper.queryByOhidAndMid((Long) session.getAttribute(CommonConstant.SESSION_OHID), detailPO.getMaterialId());
+            if (null == bodyPO || bodyPO.getExpectNum().equals(bodyPO.getOutboundNum())) {
+                WebSocketServer.sendMsg(imei, WebSocketVO.createTitleVO("作业错误，该栈板不在出库作业范围内，请查看可出库储位提示", CommonConstant.TYPE_TITLE_WARN));
+                return CommonConstant.RFID_INVALID;
+            }
+
+            session.setAttribute(CommonConstant.SESSION_STATUS_FORKLIFT, CommonConstant.FORKLIFT_WORK_OUTBOUND_END);
+            session.setAttribute(CommonConstant.SESSION_MRFID, dto.getMrfid());
+
+            return CommonConstant.RFID_OUTBOUND_START;
+        }
+
+        /* 出/入库结束 */
+        if (null != dto.getMrfid()) {
+            if (dto.getMrfid().equals(session.getAttribute(CommonConstant.SESSION_MRFID))) {
+                WebSocketServer.sendMsg(imei, WebSocketVO.createTitleVO("取消警告！", CommonConstant.TYPE_TITLE_VANISH));
+            }
+            return CommonConstant.RFID_INVALID;
+        }
+        if (CommonConstant.FORKLIFT_STORAGE_START_RAW.equals(status)) {
+            // 原材料入库
             if (null == dto.getLrfid()) {
                 // 原材料区
                 WebSocketServer.sendMsg(imei, WebSocketVO.createTitleVO("作业错误，成品摆放错误或丢失，请立即处理！", CommonConstant.TYPE_TITLE_WARN));
@@ -416,10 +443,6 @@ public class CommonServiceImpl implements ICommonService {
         }
         if (CommonConstant.FORKLIFT_STORAGE_START_PREPARE.equals(status)) {
             // 备料区入库
-            if (null != dto.getMrfid()) {
-                return CommonConstant.RFID_INVALID;
-            }
-
             if (null == dto.getLrfid() || prepareRFID.equals(dto.getLrfid())) {
                 // 原材料区/备料区
                 WebSocketServer.sendMsg(imei, WebSocketVO.createTitleVO("作业错误，成品摆放错误或丢失，请立即处理！", CommonConstant.TYPE_TITLE_WARN));
@@ -439,10 +462,6 @@ public class CommonServiceImpl implements ICommonService {
         }
         if (CommonConstant.FORKLIFT_STORAGE_START_PRODUCT.equals(status)) {
             // 成品入库
-            if (null != dto.getMrfid()) {
-                return CommonConstant.RFID_INVALID;
-            }
-
             if (null == dto.getLrfid()) {
                 // 原材料区
                 WebSocketServer.sendMsg(imei, WebSocketVO.createTitleVO("作业错误，成品摆放错误或丢失，请立即处理！", CommonConstant.TYPE_TITLE_WARN));
@@ -459,36 +478,8 @@ public class CommonServiceImpl implements ICommonService {
             session.removeAttribute(CommonConstant.SESSION_STATUS_FORKLIFT);
             return CommonConstant.RFID_STORAGE_END_PRODUCT_PRODUCT;
         }
-
-        if (CommonConstant.FORKLIFT_WORK_OUTBOUND_START.equals(status)) {
-            // 出库 - 叉起货物
-            if (null == dto.getMrfid()) {
-                return CommonConstant.RFID_INVALID;
-            }
-
-            StorageDetailPO detailPO = storageDetailMapper.queryByRfidAndStatus(dto.getMrfid(), CommonConstant.STATUS_RFID_STORAGE);
-            if (null == detailPO || detailPO.getPreparation() == 2) {
-                WebSocketServer.sendMsg(imei, WebSocketVO.createTitleVO("作业错误，该栈板不在出库作业范围内，请查看可出库储位提示", CommonConstant.TYPE_TITLE_WARN));
-                return CommonConstant.RFID_INVALID;
-            }
-
-            OutboundBodyPO bodyPO = outboundBodyMapper.queryByOhidAndMid((Long) session.getAttribute(CommonConstant.SESSION_OHID), detailPO.getMaterialId());
-            if (null == bodyPO || bodyPO.getExpectNum().equals(bodyPO.getOutboundNum())) {
-                WebSocketServer.sendMsg(imei, WebSocketVO.createTitleVO("作业错误，该栈板不在出库作业范围内，请查看可出库储位提示", CommonConstant.TYPE_TITLE_WARN));
-                return CommonConstant.RFID_INVALID;
-            }
-
-            session.setAttribute(CommonConstant.SESSION_STATUS_FORKLIFT, CommonConstant.FORKLIFT_WORK_OUTBOUND_END);
-            session.setAttribute(CommonConstant.SESSION_MRFID, dto.getMrfid());
-
-            return CommonConstant.RFID_OUTBOUND_START;
-        }
         if (CommonConstant.FORKLIFT_WORK_OUTBOUND_END.equals(status)) {
             // 出库
-            if (null != dto.getMrfid()) {
-                return CommonConstant.RFID_INVALID;
-            }
-
             if (null != dto.getLrfid()) {
                 StorageDetailPO detailPO = storageDetailMapper.queryByRfidAndStatus((String) session.getAttribute(CommonConstant.SESSION_MRFID), CommonConstant.STATUS_RFID_OUTBOUND_SALE);
                 LocationPO locationPO = locationMapper.selectByPrimaryKey(detailPO.getLocationId());

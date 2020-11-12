@@ -370,7 +370,7 @@
       or m.material_name like '%' #{keyword,jdbcType=CHAR} '%'
       or m.material_model like '%' #{keyword,jdbcType=CHAR} '%')
     </if>
-    <if test="mtype != null and mtype != 0 ">and s.material_type = #{mtype} </if>
+    <if test="mtype != null and mtype != 0 ">and m.material_type = #{mtype} </if>
     order by m.create_time desc
   </select>
 </mapper>
