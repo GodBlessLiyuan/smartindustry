@@ -506,34 +506,6 @@ public class StorageServiceImpl implements IStorageService {
     }
 
     /**
-     * WebSocket 备料区入库选择成品类型消息
-     *
-     * @param materialPOS
-     */
-    private void sendChooseMaterialWindow(List<MaterialPO> materialPOS, String mrfid, String lrfid) {
-        WebSocketVO vo = new WebSocketVO();
-        WebSocketVO.TitleVO titleVO = new WebSocketVO.TitleVO();
-        titleVO.setTip("备料区入库提示");
-        titleVO.setMsg("您是否要进行备料区入库作业？如果是请选择成品类型。");
-        //类型为弹窗
-        titleVO.setType((byte) 4);
-        List<WebSocketVO.MaterialVO> materialVOS = new ArrayList<>(2);
-        for (MaterialPO materialPO : materialPOS) {
-            WebSocketVO.MaterialVO materialVO = new WebSocketVO.MaterialVO();
-            materialVO.setMid(materialPO.getMaterialId());
-            materialVO.setMinfo(materialPO.getMaterialName() + materialPO.getMaterialLevel() + "  " + materialPO.getMaterialModel());
-            materialVOS.add(materialVO);
-        }
-        WebSocketVO.RFIDVO rfidvo = new WebSocketVO.RFIDVO();
-        rfidvo.setMrfid(mrfid);
-        rfidvo.setLrfid(lrfid);
-        titleVO.setRfidvo(rfidvo);
-        titleVO.setMvos(materialVOS);
-        vo.setTitle(titleVO);
-        WebSocketServer.sendAllMsg(vo);
-    }
-
-    /**
      * @Description 进入备料区司机选择产品后触发动作
      * @Param
      * @Return
@@ -549,10 +521,12 @@ public class StorageServiceImpl implements IStorageService {
         // 根据imei查询出叉车id
         ForkliftPO forkliftPO = forkliftMapper.queryByImei(imei);
         // 根据栈板rfid查询入库单
-        StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(dto.getMrfid());
+        String mrfid = (String) session.getAttribute(CommonConstant.SESSION_MRFID);
+        StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(mrfid);
         StorageHeadPO storageHeadPO = storageHeadMapper.selectByPrimaryKey(storageDetailPO.getStorageHeadId());
         // 查询当前储位的基本信息
-        LocationBO locationBO = locationMapper.queryByRfid(dto.getLrfid());
+        String lrfid = (String) session.getAttribute(CommonConstant.SESSION_LRFID);
+        LocationBO locationBO = locationMapper.queryByRfid(lrfid);
         //# 叉车运送到备货区,rfid 和 入库单解绑,也就是删除其生产来源单号
         //if (locationBO.getLocationTypeId().equals(StorageConstant.TYPE_PREPARATION_AREA) && storageHeadPO.getSourceType().equals(StorageConstant.TYPE_PRODUCT_STORAGE)) {
         // 首先更新入库详情表，添加信息
@@ -747,7 +721,7 @@ public class StorageServiceImpl implements IStorageService {
         StorageHeadPO storageHeadPO = storageHeadMapper.selectByPrimaryKey(storageDetailPO.getStorageHeadId());
         List<MaterialPO> pos = storageBodyMapper.queryMaterial(storageHeadPO.getStorageHeadId());
         if (pos.size() > 1) {
-            sendChooseMaterialWindow(pos, mrfid, lrfid);
+            sendChooseMaterialShowMsg(pos);
             return ResultVO.ok();
         }
         // 当前叉车信息
