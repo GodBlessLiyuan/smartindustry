@@ -30,4 +30,6 @@ public interface IDataDictionaryService {
     ResultVO muEdit(MeasureUnitDTO dto);
 
     ResultVO muDelete(BasicDataDTO dto);
+
+    ResultVO maQuery();
 }

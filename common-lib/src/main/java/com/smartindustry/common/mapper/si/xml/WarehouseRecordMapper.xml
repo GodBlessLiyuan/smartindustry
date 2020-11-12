@@ -90,4 +90,11 @@
       operation_name = #{operationName,jdbcType=CHAR}
     where warehouse_record_id = #{warehouseRecordId,jdbcType=BIGINT}
   </update>
+
+  <select id="listByWid" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.si.WarehouseRecordBO">
+    select u.name,wr.create_time as createTime,wr.operation_name as operationName
+    from si_warehouse_record wr
+    left join am_user u on wr.user_id =u.user_id
+    where wr.warehouse_id = #{wid}
+  </select>
 </mapper>
