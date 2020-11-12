@@ -137,6 +137,7 @@ public class StorageHeadDTO implements Serializable {
         bodyPO.setUnitPriceNotax(dto.getUpn());
         bodyPO.setSumPrice(dto.getSp());
         bodyPO.setSumPriceNotax(dto.getSpn());
+        bodyPO.setLocationId(dto.getLid());
         return bodyPO;
     }
 
