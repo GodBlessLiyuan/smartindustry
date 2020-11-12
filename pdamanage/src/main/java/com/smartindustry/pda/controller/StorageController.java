@@ -119,6 +119,17 @@ public class StorageController {
     }
 
 
+
+    /**
+     * 选择物料后入库到备料区
+     *
+     * @return
+     */
+    @PostMapping("cmtaa")
+    public ResultVO chooseMaterialToSpareArea(HttpSession session, @RequestBody StorageDTO dto) {
+        return storageService.chooseMaterialToSpareArea(session, dto);
+    }
+
     /**
      * 原产区到成品区入库测试
      *
@@ -128,6 +139,7 @@ public class StorageController {
     public ResultVO finishedOriginToStorage(HttpSession session, @RequestBody StorageDTO dto) {
         return storageService.finishedOriginToStorage(session, dto.getMrfid(), dto.getLrfid());
     }
+
 
     /**
      * 原产区到备料区测试
