@@ -137,7 +137,7 @@
         and l.warehouse_id = #{wid,jdbcType=BIGINT}
       </if>
       group by m.material_id,w.warehouse_id
-      order by m.create_time desc
+      order by status asc,m.create_time desc
   </select>
 
 
@@ -159,7 +159,7 @@
   </resultMap>
   <sql id="POS_Column_List">
      sd.rfid, m.material_no, m.material_name, m.material_type,m.material_model,m.material_desc, m.material_batch, sd.storage_time,
-     if(f.forklift_id,1,2) as materialStatus,w.warehouse_name,l.location_id, l.location_no , mu.measure_unit_name, 1*m.package_volume as num
+     if(f.forklift_id,2,1) as materialStatus,w.warehouse_name,l.location_id, l.location_no , mu.measure_unit_name, 1*m.package_volume as num
   </sql>
   <select id="pageQueryPro" parameterType="java.util.Map" resultMap="POSResultMap">
     select
@@ -186,12 +186,12 @@
       and l.location_id = #{lid,jdbcType=BIGINT}
     </if>
     <choose>
-      <when test="status != null and status == 1">
+      <when test="status == 1">
         and f.forklift_id is null
       </when>
-      <otherwise>
+      <when test="status == 2">
         and f.forklift_id is not null
-      </otherwise>
+      </when>
     </choose>
     order by sd.storage_time desc
   </select>

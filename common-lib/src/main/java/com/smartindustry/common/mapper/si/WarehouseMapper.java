@@ -21,6 +21,12 @@ public interface WarehouseMapper extends BaseMapper<WarehousePO, Long> {
      */
     List<WarehouseBO> queryAll();
 
+    /**
+     * 查询所有仓库
+     * @return
+     */
+    List<WarehousePO> queryWarehouse();
+
     List<WarehouseBO> pageQuery(Map<String, Object> reqData);
     /**
      * 根据编号查询

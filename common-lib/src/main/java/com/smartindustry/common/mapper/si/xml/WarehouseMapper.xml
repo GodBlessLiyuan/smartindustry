@@ -206,6 +206,13 @@
     where w.dr = 1
   </select>
 
+  <select id="queryWarehouse" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from si_warehouse
+    where dr = 1
+  </select>
+
   <select id="pageQuery" parameterType="java.util.Map" resultMap="BOResultMap">
     select
     <include refid="BO_Column_List"/>

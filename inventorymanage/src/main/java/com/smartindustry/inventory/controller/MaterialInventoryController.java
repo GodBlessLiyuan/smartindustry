@@ -1,6 +1,7 @@
 package com.smartindustry.inventory.controller;
 
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.inventory.dto.OperateDTO;
 import com.smartindustry.inventory.dto.SafeStockDTO;
 import com.smartindustry.inventory.service.IMaterialInventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,5 +51,20 @@ public class MaterialInventoryController {
     @PostMapping("pageQueryPro")
     public ResultVO pageQueryPro(@RequestBody Map<String, Object> reqData) {
         return materialInventoryService.pageQueryPro(reqData);
+    }
+
+    /**
+     * 查询所有仓库
+     *
+     * @return
+     */
+    @PostMapping("queryWarehouse")
+    public ResultVO queryWarehouse() {
+        return materialInventoryService.queryWarehouse();
+    }
+
+    @PostMapping("queryLocation")
+    public ResultVO queryLocation(@RequestBody OperateDTO dto) {
+        return materialInventoryService.queryLocation(dto);
     }
 }

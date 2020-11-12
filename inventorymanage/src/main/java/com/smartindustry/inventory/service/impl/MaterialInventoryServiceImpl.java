@@ -3,16 +3,24 @@ package com.smartindustry.inventory.service.impl;
 import com.github.pagehelper.Page;
 import com.smartindustry.common.bo.si.MaterialInventoryBO;
 import com.smartindustry.common.bo.si.ProductDetailBO;
+import com.smartindustry.common.bo.si.WarehouseBO;
 import com.smartindustry.common.constant.ExceptionEnums;
+import com.smartindustry.common.mapper.si.LocationMapper;
 import com.smartindustry.common.mapper.si.MaterialInventoryMapper;
+import com.smartindustry.common.mapper.si.WarehouseMapper;
+import com.smartindustry.common.pojo.si.LocationPO;
 import com.smartindustry.common.pojo.si.MaterialInventoryPO;
+import com.smartindustry.common.pojo.si.WarehousePO;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.inventory.dto.OperateDTO;
 import com.smartindustry.inventory.dto.SafeStockDTO;
 import com.smartindustry.inventory.service.IMaterialInventoryService;
+import com.smartindustry.inventory.vo.LocationVO;
 import com.smartindustry.inventory.vo.MaterialInventoryVO;
 import com.smartindustry.inventory.vo.ProductDetailVO;
+import com.smartindustry.inventory.vo.WarehouseVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -30,6 +38,10 @@ import java.util.*;
 public class MaterialInventoryServiceImpl implements IMaterialInventoryService {
     @Autowired
     private MaterialInventoryMapper materialInventoryMapper;
+    @Autowired
+    private WarehouseMapper warehouseMapper;
+    @Autowired
+    private LocationMapper locationMapper;
 
     @Override
     public ResultVO pageQuery(Map<String, Object> reqData) {
@@ -54,5 +66,17 @@ public class MaterialInventoryServiceImpl implements IMaterialInventoryService {
         Page<ProductDetailBO> page = PageQueryUtil.startPage(reqData);
         List<ProductDetailBO> bos = materialInventoryMapper.pageQueryPro(reqData);
         return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), ProductDetailVO.convert(bos)));
+    }
+
+    @Override
+    public ResultVO queryWarehouse(){
+        List<WarehousePO> pos = warehouseMapper.queryWarehouse();
+        return ResultVO.ok().setData(WarehouseVO.convert(pos));
+    }
+
+    @Override
+    public ResultVO queryLocation(OperateDTO dto){
+        List<LocationPO> pos = locationMapper.queryLocation(dto.getWid());
+        return ResultVO.ok().setData(LocationVO.convert(pos));
     }
 }
