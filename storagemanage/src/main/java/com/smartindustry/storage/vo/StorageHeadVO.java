@@ -60,6 +60,10 @@ public class StorageHeadVO implements Serializable {
      * 供应商名称
      */
     private String sname;
+    /**
+     * 供应商id
+     */
+    private Long sid;
 
     private List<StorageBodyVO> vos;
 
@@ -157,6 +161,7 @@ public class StorageHeadVO implements Serializable {
         vo.setSno(bo.getStorageNo());
         vo.setStatus(bo.getStatus());
         vo.setStime(bo.getStorageTime());
+        vo.setSid(bo.getSupplierId());
         vo.setSname(bo.getSupplierName());
         vo.setWid(bo.getWarehouseId());
         vo.setWname(bo.getWarehouseName());

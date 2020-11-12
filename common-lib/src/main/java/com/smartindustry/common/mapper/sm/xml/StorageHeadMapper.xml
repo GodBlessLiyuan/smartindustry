@@ -248,6 +248,7 @@
     <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId"/>
     <result column="pay_method" jdbcType="TINYINT" property="payMethod"/>
     <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
+    <result column="supplier_id" jdbcType="CHAR" property="supplierId"/>
     <result column="supplier_name" jdbcType="CHAR" property="supplierName"/>
     <result column="remark" jdbcType="CHAR" property="remark"/>
     <collection property="bos" ofType="com.smartindustry.common.bo.sm.StorageBodyBO">
@@ -264,12 +265,13 @@
       <result column="sum_price" jdbcType="DECIMAL" property="sumPrice"/>
       <result column="unit_price_notax" jdbcType="DECIMAL" property="unitPriceNotax"/>
       <result column="sum_price_notax" jdbcType="DECIMAL" property="sumPriceNotax"/>
+      <result column="location_id" jdbcType="BIGINT" property="locationId"/>
       <result column="location_no" jdbcType="CHAR" property="locationNo"/>
     </collection>
   </resultMap>
   <sql id="BOS_Column_List">
-      sh.storage_head_id, sh.storage_no,sh.status,su1.supplier_name, sh.remark,sh.pay_method,w.warehouse_id, w.warehouse_name, sb.storage_body_id,sb.material_id, m.material_no,
-      m.material_name, m.material_model, su.supplier_name, sb.storage_num,sb.accept_time,mu.measure_unit_name,sb.unit_price, sb.sum_price, sb.unit_price_notax, sb.sum_price_notax,l.location_no
+      sh.storage_head_id, sh.storage_no,sh.status,su1.supplier_id,su1.supplier_name, sh.remark,sh.pay_method,w.warehouse_id, w.warehouse_name, sb.storage_body_id,sb.material_id, m.material_no,
+      m.material_name, m.material_model, su.supplier_name, sb.storage_num,sb.accept_time,mu.measure_unit_name,sb.unit_price, sb.sum_price, sb.unit_price_notax, sb.sum_price_notax,l.location_id,l.location_no
   </sql>
   <select id="queryByShid" parameterType="java.lang.Long" resultMap="BOSResultMap">
     select
