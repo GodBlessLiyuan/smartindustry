@@ -504,7 +504,6 @@ public class StorageServiceImpl implements IStorageService {
             storageHeadPO.setStorageNum(BigDecimal.ZERO);
         }
         storageHeadPO.setStorageNum(storageHeadPO.getStorageNum().add(BigDecimal.ONE));
-        storageHeadPO.setWarehouseId(locationBO.getWarehouseId());
         //更新入库单的状态
         if (storageHeadPO.getStorageNum() == null || storageHeadPO.getStorageNum().compareTo(new BigDecimal(0)) == 0) {
             //插入入库执行操作记录
@@ -577,7 +576,8 @@ public class StorageServiceImpl implements IStorageService {
     @Transactional(rollbackFor = Exception.class)
     public ResultVO finishedOriginToSpareArea(HttpSession session, String mrfid, String lrfid) {
         // 当前叉车信息
-        String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
+        String imei = "863958040755311";
+        //String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
         // 根据imei查询出叉车id
         ForkliftPO forkliftPO = forkliftMapper.queryByImei(imei);
         // 根据栈板rfid查询入库单
@@ -591,6 +591,7 @@ public class StorageServiceImpl implements IStorageService {
         //1. 入库详情表更新添加信息
         storageDetailPO.setLocationId(locationBO.getLocationId());
         storageDetailPO.setStorageTime(new Date());
+        storageDetailPO.setStorageNum(BigDecimal.ONE);
         storageDetailPO.setStorageStatus(StorageConstant.STATUS_STORED);
         storageDetailPO.setPreparation(StorageConstant.Preparation_YES);
         storageDetailMapper.updateByPrimaryKey(storageDetailPO);
@@ -600,7 +601,6 @@ public class StorageServiceImpl implements IStorageService {
             storageHeadPO.setStorageNum(BigDecimal.ZERO);
         }
         storageHeadPO.setStorageNum(storageHeadPO.getStorageNum().add(BigDecimal.ONE));
-        storageHeadPO.setWarehouseId(locationBO.getWarehouseId());
         //更新入库单的状态
         if (storageHeadPO.getStorageNum() == null || storageHeadPO.getStorageNum().compareTo(new BigDecimal(0)) == 0) {
             //执行操作记录
@@ -691,7 +691,6 @@ public class StorageServiceImpl implements IStorageService {
             // 生成备料区入库单表头
             StorageHeadPO storageHeadPO = new StorageHeadPO();
             storageHeadPO.setStorageNo(StorageNoUtil.genStorageHeadNo(storageHeadMapper, StorageNoUtil.RECEIPT_HEAD_YP, new Date()));
-            storageHeadPO.setWarehouseId(locationBO.getWarehouseId());
             storageHeadPO.setSourceType(StorageConstant.TYPE_PRE_STORAGE);
             storageHeadPO.setStorageNum(BigDecimal.ONE);
             storageHeadPO.setStatus(StorageConstant.STATUS_STOREING);
@@ -704,7 +703,6 @@ public class StorageServiceImpl implements IStorageService {
             StorageBodyPO storageBodyPO = new StorageBodyPO();
             storageBodyPO.setStorageHeadId(storageHeadPO.getStorageHeadId());
             storageBodyPO.setMaterialId(storageDetailPO.getMaterialId());
-            storageBodyPO.setLocationId(locationBO.getLocationId());
             storageBodyPO.setStorageNum(BigDecimal.ONE);
             storageBodyPO.setCreateTime(new Date());
             storageBodyPO.setDr((byte) 1);
@@ -752,7 +750,6 @@ public class StorageServiceImpl implements IStorageService {
                 //创建新的表体
                 storageBodyPO.setStorageHeadId(storageHeadPO.getStorageHeadId());
                 storageBodyPO.setMaterialId(storageDetailPO.getMaterialId());
-                storageBodyPO.setLocationId(locationBO.getLocationId());
                 storageBodyPO.setStorageNum(BigDecimal.ONE);
                 storageBodyPO.setCreateTime(new Date());
                 storageBodyPO.setDr((byte) 1);
