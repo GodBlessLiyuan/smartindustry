@@ -4,9 +4,11 @@ import com.github.pagehelper.Page;
 import com.smartindustry.basic.dto.OperateDTO;
 import com.smartindustry.basic.dto.WarehouseDTO;
 import com.smartindustry.basic.service.IWarehouseService;
+import com.smartindustry.basic.vo.WarehouseRecordVO;
 import com.smartindustry.basic.vo.WarehouseVO;
 import com.smartindustry.common.bo.si.LocationBO;
 import com.smartindustry.common.bo.si.WarehouseBO;
+import com.smartindustry.common.bo.si.WarehouseRecordBO;
 import com.smartindustry.common.mapper.si.LocationMapper;
 import com.smartindustry.common.mapper.si.WarehouseMapper;
 import com.smartindustry.common.mapper.si.WarehouseRecordMapper;
@@ -107,5 +109,11 @@ public class WarehouseServiceImpl implements IWarehouseService {
 //        List<WarehouseBO> warehouseBOS = warehouseMapper.queryAll();
         List<HashMap<String,Object>> warehouseBOS = warehouseMapper.querySimpleAll();
         return ResultVO.ok().setData(warehouseBOS);
+    }
+
+    @Override
+    public ResultVO record(Long wid) {
+        List<WarehouseRecordBO> bos=warehouseRecordMapper.listByWid(wid);
+        return new ResultVO(1000,WarehouseRecordVO.convert(bos));
     }
 }

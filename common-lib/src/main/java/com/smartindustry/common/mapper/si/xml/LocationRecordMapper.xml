@@ -90,4 +90,10 @@
       operation_name = #{operationName,jdbcType=CHAR}
     where location_record_id = #{locationRecordId,jdbcType=BIGINT}
   </update>
+
+  <select id="listByLocatonID" parameterType="java.lang.Long" resultType="com.smartindustry.common.bo.si.LocationRecordBO">
+    select u.name,lc.operation_name as operationName,lc.create_time as  createTime from
+    si_location_record lc left join am_user u on lc.user_id=u.user_id
+    where lc.location_id=#{lid}
+  </select>
 </mapper>

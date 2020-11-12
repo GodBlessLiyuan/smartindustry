@@ -504,17 +504,16 @@ public class StorageServiceImpl implements IStorageService {
             storageHeadPO.setStorageNum(BigDecimal.ZERO);
         }
         storageHeadPO.setStorageNum(storageHeadPO.getStorageNum().add(BigDecimal.ONE));
-        storageHeadPO.setWarehouseId(locationBO.getWarehouseId());
         //更新入库单的状态
-        if (storageHeadPO.getStorageNum() == null || storageHeadPO.getStorageNum().compareTo(new BigDecimal(0)) == 0) {
+        if (storageHeadPO.getStorageNum().compareTo(BigDecimal.ONE) == 0) {
             //插入入库执行操作记录
+            storageHeadPO.setStatus(StorageConstant.STATUS_STOREING);
             storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), forkliftPO.getForkliftId(), StorageConstant.OPERATE_NAME_EXECUTE));
         }
-        if (storageHeadPO.getStorageNum().add(new BigDecimal(1)).compareTo(storageHeadPO.getExpectNum()) == -1) {
-            storageHeadPO.setStatus(StorageConstant.STATUS_STOREING);
+        if (storageHeadPO.getStorageNum().compareTo(storageHeadPO.getExpectNum()) == -1) {
             //插入入库参与操作记录
             storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), forkliftPO.getForkliftId(), StorageConstant.OPERATE_NAME_JOIN));
-        } else {
+        } else if (storageHeadPO.getStorageNum().compareTo(storageHeadPO.getExpectNum()) == 0) {
             storageHeadPO.setStatus(StorageConstant.STATUS_STORED);
             storageHeadPO.setStorageTime(new Date());
             //插入入库完成操作记录
@@ -577,6 +576,7 @@ public class StorageServiceImpl implements IStorageService {
     @Transactional(rollbackFor = Exception.class)
     public ResultVO finishedOriginToSpareArea(HttpSession session, String mrfid, String lrfid) {
         // 当前叉车信息
+        //String imei = "863958040755311";
         String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
         // 根据imei查询出叉车id
         ForkliftPO forkliftPO = forkliftMapper.queryByImei(imei);
@@ -591,6 +591,7 @@ public class StorageServiceImpl implements IStorageService {
         //1. 入库详情表更新添加信息
         storageDetailPO.setLocationId(locationBO.getLocationId());
         storageDetailPO.setStorageTime(new Date());
+        storageDetailPO.setStorageNum(BigDecimal.ONE);
         storageDetailPO.setStorageStatus(StorageConstant.STATUS_STORED);
         storageDetailPO.setPreparation(StorageConstant.Preparation_YES);
         storageDetailMapper.updateByPrimaryKey(storageDetailPO);
@@ -600,17 +601,16 @@ public class StorageServiceImpl implements IStorageService {
             storageHeadPO.setStorageNum(BigDecimal.ZERO);
         }
         storageHeadPO.setStorageNum(storageHeadPO.getStorageNum().add(BigDecimal.ONE));
-        storageHeadPO.setWarehouseId(locationBO.getWarehouseId());
         //更新入库单的状态
-        if (storageHeadPO.getStorageNum() == null || storageHeadPO.getStorageNum().compareTo(new BigDecimal(0)) == 0) {
+        if (storageHeadPO.getStorageNum().compareTo(BigDecimal.ONE) == 0) {
             //执行操作记录
             storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), forkliftPO.getForkliftId(), StorageConstant.OPERATE_NAME_EXECUTE));
         }
-        if (storageHeadPO.getStorageNum().add(BigDecimal.ONE).compareTo(storageHeadPO.getExpectNum()) == -1) {
+        if (storageHeadPO.getStorageNum().compareTo(storageHeadPO.getExpectNum()) == -1) {
             storageHeadPO.setStatus(StorageConstant.STATUS_STOREING);
             //加入入库操作记录
             storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), forkliftPO.getForkliftId(), StorageConstant.OPERATE_NAME_JOIN));
-        } else {
+        } else if (storageHeadPO.getStorageNum().compareTo(storageHeadPO.getExpectNum()) == 0) {
             storageHeadPO.setStatus(StorageConstant.STATUS_STORED);
             storageHeadPO.setStorageTime(new Date());
             //插入入库完成操作记录
@@ -671,8 +671,9 @@ public class StorageServiceImpl implements IStorageService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO finishedSpareAreaToStorage(HttpSession session, String mrfid, String lrfid) {
+        String imei = "863958040755311";
         // 当前叉车信息
-        String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
+        //String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
         // 根据imei查询出叉车id
         ForkliftPO forkliftPO = forkliftMapper.queryByImei(imei);
         // 根据栈板rfid查询之前的入库单
@@ -691,7 +692,6 @@ public class StorageServiceImpl implements IStorageService {
             // 生成备料区入库单表头
             StorageHeadPO storageHeadPO = new StorageHeadPO();
             storageHeadPO.setStorageNo(StorageNoUtil.genStorageHeadNo(storageHeadMapper, StorageNoUtil.RECEIPT_HEAD_YP, new Date()));
-            storageHeadPO.setWarehouseId(locationBO.getWarehouseId());
             storageHeadPO.setSourceType(StorageConstant.TYPE_PRE_STORAGE);
             storageHeadPO.setStorageNum(BigDecimal.ONE);
             storageHeadPO.setStatus(StorageConstant.STATUS_STOREING);
@@ -704,7 +704,6 @@ public class StorageServiceImpl implements IStorageService {
             StorageBodyPO storageBodyPO = new StorageBodyPO();
             storageBodyPO.setStorageHeadId(storageHeadPO.getStorageHeadId());
             storageBodyPO.setMaterialId(storageDetailPO.getMaterialId());
-            storageBodyPO.setLocationId(locationBO.getLocationId());
             storageBodyPO.setStorageNum(BigDecimal.ONE);
             storageBodyPO.setCreateTime(new Date());
             storageBodyPO.setDr((byte) 1);
@@ -727,14 +726,13 @@ public class StorageServiceImpl implements IStorageService {
             storageDetailMapper.insertSelective(poForStorage);
             log.info("进行备料区入成品区，添加一条备料区入成品区的详细记录-----" + poForStorage.toString());
             //更新入库单的状态
-            if (storageHeadPO.getStorageNum() == null || storageHeadPO.getStorageNum().compareTo(new BigDecimal(0)) == 0) {
+            if (storageHeadPO.getStorageNum().compareTo(BigDecimal.ONE) == 0) {
                 //插入入单执行操作
                 storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), forkliftPO.getForkliftId(), StorageConstant.OPERATE_NAME_EXECUTE));
                 storageHeadPO.setStatus(StorageConstant.STATUS_STOREING);
                 storageHeadMapper.updateByPrimaryKey(storageHeadPO);
                 log.info("进行备料区入成品区，更新入库状态为进行中-----" + storageHeadPO.toString());
-            }
-            if (storageHeadPO.getStorageNum().add(BigDecimal.ONE).compareTo(storageHeadPO.getExpectNum()) == -1) {
+            } else {
                 //插入入库参与操作记录
                 storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), forkliftPO.getForkliftId(), StorageConstant.OPERATE_NAME_JOIN));
             }
@@ -750,14 +748,14 @@ public class StorageServiceImpl implements IStorageService {
             StorageBodyPO storageBodyPO = storageBodyMapper.queryByShidAndMid(storageHeadPO.getStorageHeadId(), locationBO.getMaterialId());
             if (storageBodyPO == null) {
                 //创建新的表体
-                storageBodyPO.setStorageHeadId(storageHeadPO.getStorageHeadId());
-                storageBodyPO.setMaterialId(storageDetailPO.getMaterialId());
-                storageBodyPO.setLocationId(locationBO.getLocationId());
-                storageBodyPO.setStorageNum(BigDecimal.ONE);
-                storageBodyPO.setCreateTime(new Date());
-                storageBodyPO.setDr((byte) 1);
-                storageBodyMapper.insert(storageBodyPO);
-                log.info("进行备料区入成品区，如果之前没有标体，创建新的标体-----" + storageBodyPO.toString());
+                StorageBodyPO storageBodyPONew = new StorageBodyPO();
+                storageBodyPONew.setStorageHeadId(storageHeadPO.getStorageHeadId());
+                storageBodyPONew.setMaterialId(storageDetailPO.getMaterialId());
+                storageBodyPONew.setStorageNum(BigDecimal.ONE);
+                storageBodyPONew.setCreateTime(new Date());
+                storageBodyPONew.setDr((byte) 1);
+                storageBodyMapper.insert(storageBodyPONew);
+                log.info("进行备料区入成品区，如果之前没有标体，创建新的表体-----" + storageBodyPONew.toString());
             } else {
                 //更新原来的表体
                 if (storageBodyPO.getStorageNum() == null) {
@@ -773,7 +771,7 @@ public class StorageServiceImpl implements IStorageService {
             log.info("进行备料区入成品区，更新详情记录表变为已经不在备料区了-----" + storageDetailPO.toString());
             //添加入库记录
             StorageDetailPO poForStorage = new StorageDetailPO();
-            poForStorage.setStorageHeadId(storageBodyPO.getStorageHeadId());
+            poForStorage.setStorageHeadId(storageHeadPO.getStorageHeadId());
             poForStorage.setLocationId(locationBO.getLocationId());
             poForStorage.setMaterialId(storageDetailPO.getMaterialId());
             poForStorage.setStorageNum(BigDecimal.ONE);
@@ -784,9 +782,12 @@ public class StorageServiceImpl implements IStorageService {
             storageDetailMapper.insertSelective(poForStorage);
             log.info("进行备料区入成品区，添加一条新的记录-----" + poForStorage.toString());
             //更新入库单的状态
-            if (storageHeadPO.getStorageNum() == null || storageHeadPO.getStorageNum().compareTo(new BigDecimal(0)) == 0) {
+            if (storageHeadPO.getStorageNum().compareTo(BigDecimal.ONE) == 0) {
                 //插入入单执行操作
                 storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), forkliftPO.getForkliftId(), StorageConstant.OPERATE_NAME_EXECUTE));
+            } else {
+                //插入入库参与操作记录
+                storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), forkliftPO.getForkliftId(), StorageConstant.OPERATE_NAME_JOIN));
             }
             storageHeadId = storageHeadPO.getStorageHeadId();
         }

@@ -1,9 +1,9 @@
 package com.smartindustry.common.bo.si;
 
 import com.smartindustry.common.pojo.si.MaterialInventoryPO;
+import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * @author: jiangzhaojie
@@ -11,6 +11,7 @@ import java.util.Date;
  * @version: 1.0.0
  * @description:
  */
+@Data
 public class MaterialInventoryBO extends MaterialInventoryPO {
     /**
      * 物料编号

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronizationAdapter;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
@@ -36,6 +37,7 @@ public class StoragePrepareTask {
     private StorageRecordMapper storageRecordMapper;
 
     @Scheduled(cron = "${schedule.storage.trigger}")
+    @Transactional(rollbackFor = Exception.class)
     public void storagePrepareStatus() {
         logger.info("StoragePrepare time, the current time is : [{}]", DateUtil.date2Str(Calendar.getInstance().getTime(), DateUtil.Y_M_D_T));
         Date date = new Date();

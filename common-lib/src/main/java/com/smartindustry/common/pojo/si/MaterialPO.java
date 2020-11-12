@@ -54,6 +54,11 @@ public class MaterialPO implements Serializable {
     private BigDecimal packageVolume;
 
     /**
+     * 物料批次
+     */
+    private String materialBatch;
+
+    /**
      * 供应商ID
      */
     private Long supplierId;
@@ -67,6 +72,11 @@ public class MaterialPO implements Serializable {
      * 创建人
      */
     private Long userId;
+
+    /**
+     * 单价
+     */
+    private BigDecimal price;
 
     /**
      * 创建时间
@@ -83,8 +93,6 @@ public class MaterialPO implements Serializable {
 2：已删除
      */
     private Byte dr;
-
-    private BigDecimal price;
 
     private static final long serialVersionUID = 1L;
 }

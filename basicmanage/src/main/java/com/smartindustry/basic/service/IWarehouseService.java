@@ -23,4 +23,6 @@ public interface IWarehouseService {
     ResultVO detail(OperateDTO dto);
 
     ResultVO queryAll();
+
+    ResultVO record(Long wid);
 }

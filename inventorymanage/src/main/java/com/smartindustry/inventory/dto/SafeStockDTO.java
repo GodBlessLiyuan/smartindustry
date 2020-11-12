@@ -38,6 +38,7 @@ public class SafeStockDTO implements Serializable {
             po.setMaterialId(mid);
             po.setLowerLimit(dto.getLower());
             po.setUpperLimit(dto.getUpper());
+            pos.add(po);
         }
         return pos;
     }

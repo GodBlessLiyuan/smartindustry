@@ -56,6 +56,10 @@ public class ProductDetailBO {
      */
     private String warehouseName;
     /**
+     * 储位id
+     */
+    private Long locationId;
+    /**
      * 所在储位编号
      */
     private String locationNo;
@@ -63,4 +67,8 @@ public class ProductDetailBO {
      * 当前储位本物料的所有物料数量
      */
     private BigDecimal num;
+    /**
+     * 计量单位
+     */
+    private String measureUnitName;
 }
