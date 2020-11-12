@@ -334,4 +334,10 @@
         left join si_warehouse w on l.warehouse_id = w.warehouse_id
         where l.dr = 1 and l.location_no = #{lrfid,jdbcType=CHAR}
     </select>
+    <select id="queryByType" parameterType="java.lang.Byte" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from si_location
+        where location_type_id = #{type,jdbcType=TINYINT}
+    </select>
 </mapper>

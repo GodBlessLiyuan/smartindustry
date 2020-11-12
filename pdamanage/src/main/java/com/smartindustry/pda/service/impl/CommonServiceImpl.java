@@ -221,6 +221,7 @@ public class CommonServiceImpl implements ICommonService {
             // 入库开始(成品区)
             String mrfid = dto.getMrfid();
             // TODO: 业务逻辑
+            storageService.executeForStorage(session, mrfid);
             return ResultVO.ok().setData("入库开始(成品区)");
         }
 
@@ -249,6 +250,7 @@ public class CommonServiceImpl implements ICommonService {
             String mrfid = (String) session.getAttribute(CommonConstant.SESSION_MRFID);
             String lrfid = dto.getLrfid();
             // TODO: 业务逻辑
+            storageService.finishedMove(session, mrfid, lrfid, (byte) 1);
             return ResultVO.ok().setData("入库完成(成品入成品区)");
         }
         if (CommonConstant.RFID_STORAGE_END_PRODUCT_PREPARE.equals(status)) {
@@ -257,6 +259,7 @@ public class CommonServiceImpl implements ICommonService {
             String mrfid = (String) session.getAttribute(CommonConstant.SESSION_MRFID);
             String lrfid = dto.getLrfid();
             // TODO: 业务逻辑
+            storageService.finishedMove(session, mrfid, lrfid, (byte) 2);
             return ResultVO.ok().setData("入库完成(成品入备料区)");
         }
 

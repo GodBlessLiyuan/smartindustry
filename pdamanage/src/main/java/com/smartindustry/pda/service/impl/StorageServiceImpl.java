@@ -525,13 +525,13 @@ public class StorageServiceImpl implements IStorageService {
         StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(mrfid);
         StorageHeadPO storageHeadPO = storageHeadMapper.selectByPrimaryKey(storageDetailPO.getStorageHeadId());
         // 查询当前储位的基本信息
-        String lrfid = (String) session.getAttribute(CommonConstant.SESSION_LRFID);
-        LocationBO locationBO = locationMapper.queryByRfid(lrfid);
+        //String lrfid = (String) session.getAttribute(CommonConstant.SESSION_LRFID);
+        LocationPO locationPO= locationMapper.queryByType((byte) 2);
         //# 叉车运送到备货区,rfid 和 入库单解绑,也就是删除其生产来源单号
         //if (locationBO.getLocationTypeId().equals(StorageConstant.TYPE_PREPARATION_AREA) && storageHeadPO.getSourceType().equals(StorageConstant.TYPE_PRODUCT_STORAGE)) {
         // 首先更新入库详情表，添加信息
         //1. 入库详情表更新添加信息
-        storageDetailPO.setLocationId(locationBO.getLocationId());
+        storageDetailPO.setLocationId(locationPO.getLocationId());
         storageDetailPO.setStorageTime(new Date());
         storageDetailPO.setStorageNum(BigDecimal.ONE);
         storageDetailPO.setStorageStatus(StorageConstant.STATUS_STORED);
@@ -585,7 +585,6 @@ public class StorageServiceImpl implements IStorageService {
         forkliftMapper.updateByPrimaryKey(forkliftPO);
         log.info("进行入库备料区后，修改叉车状态为空闲" + forkliftPO.toString());
         //6.库位已经存在的数量+1
-        LocationPO locationPO = locationMapper.selectByPrimaryKey(locationBO.getLocationId());
         locationPO.setExistNum(locationPO.getExistNum() == null ? BigDecimal.ONE : locationPO.getExistNum().add(BigDecimal.ONE));
         locationMapper.updateByPrimaryKey(locationPO);
         log.info("进行入库备料区后，更新库位信息数量+1" + locationPO.toString());
