@@ -33,6 +33,10 @@ public class StorageHeadDTO implements Serializable {
      */
     private Byte pmethod;
     /**
+     * 供应商id
+     */
+    private Long sid;
+    /**
      * 备注
      */
     private String extra;
