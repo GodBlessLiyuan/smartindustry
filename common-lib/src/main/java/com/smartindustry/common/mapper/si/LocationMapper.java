@@ -125,4 +125,12 @@ public interface LocationMapper extends BaseMapper<LocationPO, Long> {
      * @return
      */
     List<LocationPO> queryRecommendByMids(List<Long> mids);
+
+    /**
+     * 根据类型查备料区库位
+     *
+     * @param type
+     * @return
+     */
+    LocationPO queryByType(@Param("type") Byte type);
 }
