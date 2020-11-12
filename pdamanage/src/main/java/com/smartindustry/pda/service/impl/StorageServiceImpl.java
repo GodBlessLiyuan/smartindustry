@@ -576,8 +576,8 @@ public class StorageServiceImpl implements IStorageService {
     @Transactional(rollbackFor = Exception.class)
     public ResultVO finishedOriginToSpareArea(HttpSession session, String mrfid, String lrfid) {
         // 当前叉车信息
-        String imei = "863958040755311";
-        //String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
+        //String imei = "863958040755311";
+        String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
         // 根据imei查询出叉车id
         ForkliftPO forkliftPO = forkliftMapper.queryByImei(imei);
         // 根据栈板rfid查询入库单
