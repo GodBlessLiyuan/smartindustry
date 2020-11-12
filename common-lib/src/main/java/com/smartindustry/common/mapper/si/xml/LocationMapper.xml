@@ -31,7 +31,7 @@
         from si_location
         where location_id = #{locationId,jdbcType=BIGINT}
     </delete>
-    <insert id="insert" parameterType="com.smartindustry.common.pojo.si.LocationPO">
+    <insert id="insert" parameterType="com.smartindustry.common.pojo.si.LocationPO" useGeneratedKeys="true" keyProperty="locationId">
         insert into si_location (location_id, warehouse_id, material_id,
                                  location_type_id, user_id, location_no,
                                  location_name, hold_tray_num, exist_num,
