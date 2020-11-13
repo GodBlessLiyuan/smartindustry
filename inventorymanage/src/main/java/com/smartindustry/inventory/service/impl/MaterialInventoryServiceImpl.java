@@ -14,6 +14,7 @@ import com.smartindustry.common.pojo.si.WarehousePO;
 import com.smartindustry.common.util.PageQueryUtil;
 import com.smartindustry.common.vo.PageInfoVO;
 import com.smartindustry.common.vo.ResultVO;
+import com.smartindustry.inventory.constant.InventoryConstant;
 import com.smartindustry.inventory.dto.OperateDTO;
 import com.smartindustry.inventory.dto.SafeStockDTO;
 import com.smartindustry.inventory.service.IMaterialInventoryService;
@@ -28,6 +29,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author: jiangchaojie
@@ -51,7 +53,11 @@ public class MaterialInventoryServiceImpl implements IMaterialInventoryService {
         List<MaterialInventoryBO> bos = materialInventoryMapper.pageQuery(reqData);
         // 查询得到所有物料的当前库存数量
         Map<BigInteger, Map<Long, BigDecimal>> map = materialInventoryMapper.queryMaterialMap();
-        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), MaterialInventoryVO.convert(bos,map)));
+        List<MaterialInventoryVO> vos = MaterialInventoryVO.convert(bos,map);
+        List<MaterialInventoryVO> pre = vos.stream().filter(p -> p.getStatus()!= null && p.getStatus().equals(InventoryConstant.STATUS_NORMAL)).collect(Collectors.toList());
+        List<MaterialInventoryVO> back = vos.stream().filter(p -> p.getStatus()== null || !p.getStatus().equals(InventoryConstant.STATUS_NORMAL)).collect(Collectors.toList());
+        pre.addAll(back);
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(),pre));
     }
 
     @Override
