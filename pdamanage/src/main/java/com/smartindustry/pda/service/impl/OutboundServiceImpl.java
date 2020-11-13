@@ -164,7 +164,14 @@ public class OutboundServiceImpl implements IOutboundService {
             vo.setStatus(OutboundConstant.STATUS_OUTBOUND_START);
         }
         vo.setCnum(headBO.getOutboundNum().add(BigDecimal.valueOf(null == ofBO ? 0 : ofBO.size())));
-
+        vo.setEnable(true);
+        if (OutboundConstant.STATUS_OUTBOUND_START.equals(vo.getStatus()) || OutboundConstant.STATUS_OUTBOUND_ASSIST.equals(vo.getStatus())) {
+            ForkliftPO fPO = forkliftMapper.queryByImei(imei);
+            OutboundForkliftPO ofPO = outboundForkliftMapper.queryByFid(fPO.getForkliftId());
+            if (null != ofPO && !dto.getOhid().equals(ofPO.getOutboundHeadId())) {
+                vo.setEnable(false);
+            }
+        }
         session.setAttribute(CommonConstant.SESSION_OHID, dto.getOhid());
 
         return ResultVO.ok().setData(vo);

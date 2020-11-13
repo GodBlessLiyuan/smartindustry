@@ -5,8 +5,12 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import static com.smartindustry.inventory.constant.InventoryConstant.*;
 
 
 /**
@@ -71,15 +75,15 @@ public class MaterialInventoryVO implements Serializable {
      */
     private String muname;
 
-    public static List<MaterialInventoryVO> convert(List<MaterialInventoryBO> bos) {
+    public static List<MaterialInventoryVO> convert(List<MaterialInventoryBO> bos, Map<BigInteger, Map<Long, BigDecimal>> map) {
         List<MaterialInventoryVO> vos = new ArrayList<>(bos.size());
         for (MaterialInventoryBO bo : bos) {
-            vos.add(convert(bo));
+            vos.add(convert(bo,map));
         }
         return vos;
     }
 
-    public static MaterialInventoryVO convert(MaterialInventoryBO bo) {
+    public static MaterialInventoryVO convert(MaterialInventoryBO bo,Map<BigInteger, Map<Long, BigDecimal>> map) {
         MaterialInventoryVO vo = new MaterialInventoryVO();
         vo.setMid(bo.getMaterialId());
         vo.setMno(bo.getMaterialNo());
@@ -94,8 +98,19 @@ public class MaterialInventoryVO implements Serializable {
         if(bo.getInventoryQuantity()!=null && bo.getPackageVolume()!=null){
             vo.setNum(bo.getInventoryQuantity().multiply(bo.getPackageVolume()));
         }
+        for(Map.Entry<BigInteger, Map<Long, BigDecimal>> entry : map.entrySet()){
+            if(entry.getKey().longValue() == bo.getMaterialId() && bo.getPackageVolume()!=null){
+                BigDecimal curNum = new BigDecimal(String.valueOf(entry.getValue().get(VALUE_FLAG))).multiply(bo.getPackageVolume());
+                if(curNum.compareTo(bo.getLowerLimit()) == -1){
+                    vo.setStatus(STATUS_LACK);
+                }else if(curNum.compareTo(bo.getUpperLimit()) > -1){
+                    vo.setStatus(STATUS_FULL);
+                }else {
+                    vo.setStatus(STATUS_ORDINARY);
+                }
+            }
+        }
         vo.setMuname(bo.getMeasureUnitName());
-        vo.setStatus(bo.getStatus());
         return vo;
     }
 }
