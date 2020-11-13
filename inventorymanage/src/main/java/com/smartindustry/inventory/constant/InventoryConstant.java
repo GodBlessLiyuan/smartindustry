@@ -26,4 +26,23 @@ public class InventoryConstant {
      */
     public static final String TEXT_WORKING = "作业中";
 
+    /**
+     * 满仓
+     */
+    public static final Byte STATUS_FULL = 3;
+
+    /**
+     * 满仓
+     */
+    public static final Byte STATUS_LACK = 2;
+
+    /**
+     * 正常
+     */
+    public static final Byte STATUS_ORDINARY = 1;
+    /**
+     * map 取值标识
+     */
+    public static final String VALUE_FLAG = "num";
+
 }

@@ -4,8 +4,11 @@ import com.smartindustry.common.bo.si.MaterialInventoryBO;
 import com.smartindustry.common.bo.si.ProductDetailBO;
 import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.si.MaterialInventoryPO;
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
@@ -33,4 +36,11 @@ public interface MaterialInventoryMapper extends BaseMapper<MaterialInventoryPO,
      * @return
      */
     List<ProductDetailBO> pageQueryPro(Map<String, Object> reqData);
+
+    /**
+     * 查询所有物料的当前库存数量
+     * @return
+     */
+    @MapKey("mid")
+    Map<BigInteger, Map<Long, BigDecimal>> queryMaterialMap();
 }

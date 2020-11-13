@@ -353,7 +353,7 @@
         <include refid="POS_Column_List"/>
         from om_outbound_head oh
         left join si_client cl on oh.client_no = cl.client_no
-        where oh.dr = 1 and oh.source_type = 2
+        where oh.dr = 1 and oh.source_type = 3
         <if test="no != null and no != ''">
             and (oh.outbound_no like concat('%',#{no,jdbcType=CHAR},'%') or oh.source_no like
             concat('%',#{pno,jdbcType=CHAR},'%'))
