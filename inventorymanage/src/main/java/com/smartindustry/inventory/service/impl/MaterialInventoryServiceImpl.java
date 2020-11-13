@@ -25,6 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.*;
 
 /**
@@ -47,7 +49,9 @@ public class MaterialInventoryServiceImpl implements IMaterialInventoryService {
     public ResultVO pageQuery(Map<String, Object> reqData) {
         Page<MaterialInventoryBO> page = PageQueryUtil.startPage(reqData);
         List<MaterialInventoryBO> bos = materialInventoryMapper.pageQuery(reqData);
-        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), MaterialInventoryVO.convert(bos)));
+        // 查询得到所有物料的当前库存数量
+        Map<BigInteger, Map<Long, BigDecimal>> map = materialInventoryMapper.queryMaterialMap();
+        return ResultVO.ok().setData(new PageInfoVO<>(page.getTotal(), MaterialInventoryVO.convert(bos,map)));
     }
 
     @Override
