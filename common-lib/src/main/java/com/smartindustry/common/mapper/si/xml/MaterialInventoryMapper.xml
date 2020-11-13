@@ -103,16 +103,11 @@
     <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId"/>
     <result column="warehouse_name" jdbcType="CHAR" property="warehouseName"/>
     <result column="inventoryQuantity" jdbcType="DECIMAL" property="inventoryQuantity"/>
-    <result column="status" jdbcType="TINYINT" property="status"/>
     <result column="measure_unit_name" jdbcType="CHAR" property="measureUnitName"/>
   </resultMap>
   <sql id="BOS_Column_List">
      m.material_id, m.material_no, m.material_name, m.material_type, m.material_model, m.material_desc,m.package_volume,
-     s.supplier_name, w.warehouse_id, w.warehouse_name, mi.lower_limit, mi.upper_limit, count(sd.rfid) as inventoryQuantity,mu.measure_unit_name,
-    (CASE WHEN count(sd.rfid)  &lt; mi.lower_limit THEN 2
-        WHEN count(sd.rfid) &gt;= mi.lower_limit AND count(sd.rfid) &lt; mi.upper_limit THEN 1
-    WHEN count(sd.rfid) &gt;= mi.upper_limit THEN 3
-    ELSE 0 END) AS status
+     s.supplier_name, w.warehouse_id, w.warehouse_name, mi.lower_limit, mi.upper_limit, count(sd.rfid) as inventoryQuantity,mu.measure_unit_name
   </sql>
   <select id="pageQuery" parameterType="java.util.Map" resultMap="BOSResultMap">
     select
@@ -137,7 +132,7 @@
         and l.warehouse_id = #{wid,jdbcType=BIGINT}
       </if>
       group by m.material_id,w.warehouse_id
-      order by status asc,m.create_time desc
+      order by m.create_time desc
   </select>
 
 
@@ -213,4 +208,11 @@
       #{item.materialId,jdbcType=BIGINT}
     </foreach>
   </update>
+
+  <select id="queryMaterialMap" resultType="java.util.Map">
+    select count(sd.rfid) as num,sd.material_id as mid
+    from sm_storage_detail sd
+    where sd.storage_status = 1
+    group by sd.material_id
+  </select>
 </mapper>

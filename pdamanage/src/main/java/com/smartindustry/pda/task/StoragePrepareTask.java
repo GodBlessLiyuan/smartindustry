@@ -49,16 +49,18 @@ public class StoragePrepareTask {
                 po.setStatus(StorageConstant.STATUS_STORED);
                 po.setStorageTime(date);
                 storageHeadMapper.updateByPrimaryKey(po);
+                //插入入库完成操作记录
+                storageRecordMapper.insert(new StorageRecordPO(po.getStorageHeadId(), null, StorageConstant.OPERATE_NAME_FINISH));
             }
         }
-        //插入入库完成操作记录
-        storageRecordMapper.insert(new StorageRecordPO(pos.get(0).getStorageHeadId(), null, StorageConstant.OPERATE_NAME_FINISH));
+
 
         //创建新的任务单
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
             @Override
             public void afterCommit() {
                 newStoragebill();
+                logger.info("定时任务创建完备料区入库单。");
             }
         });
     }
