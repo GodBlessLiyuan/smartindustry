@@ -148,7 +148,12 @@ public class CommonServiceImpl implements ICommonService {
                 if (hids.size() != 0) {
                     Map<Long, Integer> fnumMap = outboundForkliftMapper.queryFnumByHids(hids);
                     for (OutboundHeadBO headBO : ohBOs) {
-                        headBO.setExpectNum(headBO.getExpectNum().add(BigDecimal.valueOf(fnumMap.getOrDefault(headBO.getOutboundHeadId(), 0))));
+                        BigDecimal outBoundNum = headBO.getOutboundNum() == null ? BigDecimal.ZERO : headBO.getOutboundNum();
+                        if (fnumMap == null) {
+                            headBO.setOutboundNum(outBoundNum);
+                        } else {
+                            headBO.setOutboundNum(headBO.getOutboundNum().add(BigDecimal.valueOf(fnumMap.getOrDefault(headBO.getOutboundHeadId(), 0))));
+                        }
                     }
                 }
             }
