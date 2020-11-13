@@ -68,7 +68,9 @@ public class StorageDetailVO {
             for (StorageBodyBO bodyBO : bo.getBos()) {
                 String minfo = bodyBO.getMaterialName() + " " + bodyBO.getMaterialModel();
                 minfos.add(minfo);
-
+                if (bodyBO.getExpectNum() == null) {
+                    bodyBO.setExpectNum(BigDecimal.ZERO);
+                }
                 tvolume = tvolume.add(bodyBO.getExpectNum().multiply(bodyBO.getPackageVolume()));
             }
             vo.setMinfos(minfos);
