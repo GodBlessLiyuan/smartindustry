@@ -222,7 +222,7 @@ public class OutboundServiceImpl implements IOutboundService {
 
             status = allOFBO.size() == 0 ? OutboundConstant.STATUS_OUTBOUND_START : OutboundConstant.STATUS_OUTBOUND_ASSIST;
         } else {
-            return new ResultVO<>(1010, "当前叉车已进行其他出库单任务！");
+            return new ResultVO<>(1100, "请关闭目前的执行任务，再进行其他操作？");
         }
 
         // websocket
