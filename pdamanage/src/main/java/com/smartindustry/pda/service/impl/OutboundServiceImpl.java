@@ -164,7 +164,7 @@ public class OutboundServiceImpl implements IOutboundService {
             vo.setStatus(OutboundConstant.STATUS_OUTBOUND_START);
         }
         vo.setCnum(headBO.getOutboundNum().add(BigDecimal.valueOf(null == ofBO ? 0 : ofBO.size())));
-
+        vo.setEnable(true);
         session.setAttribute(CommonConstant.SESSION_OHID, dto.getOhid());
 
         return ResultVO.ok().setData(vo);

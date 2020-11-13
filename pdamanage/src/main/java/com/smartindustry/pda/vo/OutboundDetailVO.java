@@ -56,6 +56,10 @@ public class OutboundDetailVO implements Serializable {
      */
     private String status;
     /**
+     * 状态：开始执行；辅助执行；关闭;消失
+     */
+    private Boolean enable;
+    /**
      * 储位图
      */
     private List<LocationVO> lvos;
