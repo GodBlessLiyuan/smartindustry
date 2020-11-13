@@ -113,7 +113,7 @@ public class StorageController {
      *
      * @return
      */
-    @PostMapping("cmconfirm")
+    @PostMapping("cmconfirm1")
     public ResultVO chooseMaterialComfirm(HttpSession session, @RequestBody StorageDTO dto) {
         return storageService.chooseMaterialConfirm(session, dto);
     }
@@ -125,7 +125,7 @@ public class StorageController {
      *
      * @return
      */
-    @PostMapping("cmtaa")
+    @PostMapping("cmconfirm")
     public ResultVO chooseMaterialToSpareArea(HttpSession session, @RequestBody StorageDTO dto) {
         return storageService.chooseMaterialToSpareArea(session, dto);
     }
