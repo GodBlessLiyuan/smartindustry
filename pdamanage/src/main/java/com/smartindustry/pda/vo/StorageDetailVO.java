@@ -71,6 +71,9 @@ public class StorageDetailVO {
                 if (bodyBO.getExpectNum() == null) {
                     bodyBO.setExpectNum(BigDecimal.ZERO);
                 }
+                if (bodyBO.getPackageVolume() == null) {
+                    bodyBO.setPackageVolume(BigDecimal.ZERO);
+                }
                 tvolume = tvolume.add(bodyBO.getExpectNum().multiply(bodyBO.getPackageVolume()));
             }
             vo.setMinfos(minfos);
