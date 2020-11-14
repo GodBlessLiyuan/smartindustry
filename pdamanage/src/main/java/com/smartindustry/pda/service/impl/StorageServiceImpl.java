@@ -1031,5 +1031,44 @@ public class StorageServiceImpl implements IStorageService {
         });
         return ResultVO.ok();
     }
+
+    /**
+     * @Description 备料区入成品区
+     * @Param
+     * @Return
+     * @Author AnHongxu.
+     * @Date 2020/11/7
+     * @Time 16:40
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public ResultVO finishedOriginToOrigin(HttpSession session, String mrfid, String lrfid) {
+        //String imei = "863958040755311";
+        // 当前叉车信息
+        String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
+        // 根据imei查询出叉车id
+        ForkliftPO forkliftPO = forkliftMapper.queryByImei(imei);
+        //根据叉车id查询当前执行入库的入库叉车表记录,删除
+        StorageForkliftPO storageForkliftPO = storageForkliftMapper.queryByFid(forkliftPO.getForkliftId());
+        // 根据栈板rfid查询之前的入库单详情记录
+        StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(mrfid);
+        if (storageForkliftPO != null) {
+            storageForkliftMapper.deleteByPrimaryKey(storageForkliftPO.getStorageForkliftId());
+            log.info("原产区到原产区，删掉该叉车-----" + storageForkliftPO.toString());
+        }
+        // 叉车状态 - 空闲
+        forkliftPO.setStatus(CommonConstant.STATUS_FORKLIFT_IDLE);
+        forkliftMapper.updateByPrimaryKey(forkliftPO);
+        log.info("原产区到原产区，将该叉车变为空闲-----" + forkliftPO.toString());
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
+            @Override
+            public void afterCommit() {
+                //发送socket请求
+                WebSocketServer.sendAllMsg(WebSocketVO.createShowVO(storageDetailPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
+                log.info("原产区到原产区，发送socket请求-----");
+            }
+        });
+        return ResultVO.ok();
+    }
 }
 
