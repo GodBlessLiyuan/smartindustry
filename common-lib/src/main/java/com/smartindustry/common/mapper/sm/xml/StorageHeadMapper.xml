@@ -352,7 +352,6 @@
     <if test="type == 4">
       and sh.status = 3 and sh.source_no not in (select distinct produce_order_id from wo_package)
     </if>
-    and sh.source_type = 2
   </select>
 
     <select id="queryPrepareNo" parameterType="java.util.Date" resultMap="BaseResultMap">
