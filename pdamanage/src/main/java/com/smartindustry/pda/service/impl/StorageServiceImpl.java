@@ -514,6 +514,7 @@ public class StorageServiceImpl implements IStorageService {
      * @Time 15:39
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ResultVO chooseMaterialToSpareArea(HttpSession session, StorageDTO dto) {
         // 当前叉车信息
         //String imei = "863958040755311";
