@@ -344,9 +344,9 @@ public class CommonServiceImpl implements ICommonService {
         logger.info("        ");
         logger.info("{}-{}", dto.getMrfid(), dto.getLrfid());
         logger.info("{}", session.getAttribute(CommonConstant.SESSION_MRFID));
-
+        
+        Byte status = (Byte) session.getAttribute(CommonConstant.SESSION_STATUS_FORKLIFT);
         if (dto.getType() == 1) {
-            Byte status = (Byte) session.getAttribute(CommonConstant.SESSION_STATUS_FORKLIFT);
             /* 出/入库开始 */
             if (null == status) {
                 // 无状态
