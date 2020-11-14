@@ -534,6 +534,7 @@ public class StorageServiceImpl implements IStorageService {
         //1. 入库详情表更新添加信息
         storageDetailPO.setLocationId(locationPO.getLocationId());
         storageDetailPO.setStorageTime(new Date());
+        storageDetailPO.setMaterialId(dto.getMid());
         storageDetailPO.setStorageNum(BigDecimal.ONE);
         storageDetailPO.setStorageStatus(StorageConstant.STATUS_STORED);
         storageDetailPO.setPreparation(StorageConstant.Preparation_YES);
@@ -738,6 +739,7 @@ public class StorageServiceImpl implements IStorageService {
         //1. 入库详情表更新添加信息
         storageDetailPO.setLocationId(locationBO.getLocationId());
         storageDetailPO.setStorageTime(new Date());
+        storageDetailPO.setMaterialId(locationBO.getMaterialId());
         storageDetailPO.setStorageNum(BigDecimal.ONE);
         storageDetailPO.setStorageStatus(StorageConstant.STATUS_STORED);
         storageDetailPO.setPreparation(StorageConstant.Preparation_YES);
