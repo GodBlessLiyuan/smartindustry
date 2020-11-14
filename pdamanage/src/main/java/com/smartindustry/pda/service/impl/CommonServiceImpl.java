@@ -223,7 +223,11 @@ public class CommonServiceImpl implements ICommonService {
             storageService.executeForStorage(session, dto.getMrfid());
             return ResultVO.ok().setData("入库开始(成品区)");
         }
-
+        if (CommonConstant.RFID_STORAGE_WARN_RAW_RAW.equals(status)) {
+            // 入库警告（原材料入原材料）
+            // TODO:
+            return ResultVO.ok().setData("入库警告（原材料入原材料）");
+        }
         if (CommonConstant.RFID_STORAGE_END_RAW_PRODUCT.equals(status)) {
             // 入库完成(原材料入成品区)
             storageService.finishedOriginToStorage(session, (String) session.getAttribute(CommonConstant.SESSION_MRFID), dto.getLrfid());
@@ -242,7 +246,7 @@ public class CommonServiceImpl implements ICommonService {
         }
         if (CommonConstant.RFID_STORAGE_END_PRODUCT_PRODUCT.equals(status)) {
             // 入库完成(成品入成品区)
-            storageService.finishedMove(session,  (String) session.getAttribute(CommonConstant.SESSION_MRFID), dto.getLrfid(), (byte) 1);
+            storageService.finishedMove(session, (String) session.getAttribute(CommonConstant.SESSION_MRFID), dto.getLrfid(), (byte) 1);
             return ResultVO.ok().setData("入库完成(成品入成品区)");
         }
         if (CommonConstant.RFID_STORAGE_END_PRODUCT_PREPARE.equals(status)) {
@@ -399,19 +403,25 @@ public class CommonServiceImpl implements ICommonService {
         }
 
         /* 出/入库结束 */
-        if (null != dto.getMrfid() && dto.getMrfid().equals(session.getAttribute(CommonConstant.SESSION_MRFID))) {
-            logger.info("取消警告");
-            if (dto.getMrfid().equals(session.getAttribute(CommonConstant.SESSION_MRFID))) {
-                WebSocketServer.sendMsg(imei, WebSocketVO.createTitleVO("取消警告！", CommonConstant.TYPE_TITLE_VANISH));
-            }
+        if (null == dto.getMrfid() || !dto.getMrfid().equals(session.getAttribute(CommonConstant.SESSION_MRFID))) {
+            // 数据有误
+            return CommonConstant.RFID_INVALID;
         }
+        if (session.getAttribute("warn") != null) {
+            logger.info("取消警告");
+            WebSocketServer.sendMsg(imei, WebSocketVO.createTitleVO("取消警告！", CommonConstant.TYPE_TITLE_VANISH));
+            session.removeAttribute("warn");
+            return CommonConstant.RFID_INVALID;
+        }
+
         if (CommonConstant.FORKLIFT_STORAGE_START_RAW.equals(status)) {
             // 原材料入库
             if (null == dto.getLrfid()) {
-                logger.info("作业错误(原材料入原材料)");
+                logger.info("入库警告（原材料入原材料）");
                 // 原材料区
                 WebSocketServer.sendMsg(imei, WebSocketVO.createTitleVO("作业错误，成品摆放错误或丢失，请立即处理！", CommonConstant.TYPE_TITLE_WARN));
-                return CommonConstant.RFID_INVALID;
+                session.setAttribute("warn", true);
+                return CommonConstant.RFID_STORAGE_WARN_RAW_RAW;
             }
 
             if (prepareRFID.equals(dto.getLrfid())) {
