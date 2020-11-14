@@ -404,7 +404,6 @@ public class CommonServiceImpl implements ICommonService {
             if (dto.getMrfid().equals(session.getAttribute(CommonConstant.SESSION_MRFID))) {
                 WebSocketServer.sendMsg(imei, WebSocketVO.createTitleVO("取消警告！", CommonConstant.TYPE_TITLE_VANISH));
             }
-            return CommonConstant.RFID_INVALID;
         }
         if (CommonConstant.FORKLIFT_STORAGE_START_RAW.equals(status)) {
             // 原材料入库
