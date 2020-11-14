@@ -451,7 +451,7 @@ public class CommonServiceImpl implements ICommonService {
                     }
                 }
 
-                logger.info("作业错误(原材料入成品区)");
+                logger.info("入库警告(原材料入成品区)");
                 session.setAttribute("warn", true);
                 WebSocketServer.sendMsg(imei, WebSocketVO.createTitleVO("作业错误，成品摆放错误或丢失，请立即处理！", CommonConstant.TYPE_TITLE_WARN));
                 return CommonConstant.RFID_INVALID;
@@ -460,6 +460,7 @@ public class CommonServiceImpl implements ICommonService {
                 // 备料区入库
                 if (null == dto.getLrfid() || prepareRFID.equals(dto.getLrfid())) {
                     // 原材料区/备料区
+                    logger.info("入库警告(备料区入原材料|备料区)");
                     session.setAttribute("warn", true);
                     WebSocketServer.sendMsg(imei, WebSocketVO.createTitleVO("作业错误，成品摆放错误或丢失，请立即处理！", CommonConstant.TYPE_TITLE_WARN));
                     return CommonConstant.RFID_INVALID;
@@ -474,6 +475,7 @@ public class CommonServiceImpl implements ICommonService {
                     return CommonConstant.RFID_STORAGE_END_PREPARE_PRODUCT;
                 }
 
+                logger.info("入库警告(备料区入成品区)");
                 session.setAttribute("warn", true);
                 WebSocketServer.sendMsg(imei, WebSocketVO.createTitleVO("作业错误，成品摆放错误或丢失，请立即处理！", CommonConstant.TYPE_TITLE_WARN));
                 return CommonConstant.RFID_INVALID;
@@ -482,6 +484,7 @@ public class CommonServiceImpl implements ICommonService {
                 // 成品入库
                 if (null == dto.getLrfid()) {
                     // 原材料区
+                    logger.info("入库警告(成品区入原材料区)");
                     session.setAttribute("warn", true);
                     WebSocketServer.sendMsg(imei, WebSocketVO.createTitleVO("作业错误，成品摆放错误或丢失，请立即处理！", CommonConstant.TYPE_TITLE_WARN));
                     return CommonConstant.RFID_INVALID;
