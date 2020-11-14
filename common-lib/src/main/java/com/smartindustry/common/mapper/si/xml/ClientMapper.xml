@@ -22,7 +22,7 @@
     <result column="dr" jdbcType="TINYINT" property="dr" />
   </resultMap>
   <sql id="Base_Column_List">
-    client_id, client_no, client_type_id, client_name, contact, sex, phone, telephone, 
+    client_id, client_no, client_type_id, client_name, contact, sex, phone, telephone,
     email, fax, url, credit_level_id, area, address, remark, create_time, update_time, 
     dr
   </sql>
