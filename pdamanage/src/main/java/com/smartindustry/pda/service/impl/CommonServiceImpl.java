@@ -433,7 +433,7 @@ public class CommonServiceImpl implements ICommonService {
                 }
 
                 // 成品区
-                StorageDetailPO detailPO = storageDetailMapper.queryByRfidAndStatus((String) session.getAttribute(CommonConstant.SESSION_MRFID), CommonConstant.STATUS_RFID_STORAGE);
+                StorageDetailPO detailPO = storageDetailMapper.queryByRfidAndStatus((String) session.getAttribute(CommonConstant.SESSION_MRFID), CommonConstant.STATUS_RFID_PRE_STORAGE);
                 StorageHeadBO headBO = storageHeadMapper.queryPdaDetailByShid(detailPO.getStorageHeadId());
                 LocationBO locationBO = locationMapper.queryByRfid(dto.getLrfid());
                 for (StorageBodyBO bodyBO : headBO.getBos()) {
