@@ -83,8 +83,14 @@ public class BasicServiceImpl implements IBasicService {
     public ResultVO material() {
         List<MaterialErpPO> materials = materialErpMapper.queryAll();
         List<MaterialPO> pos = new ArrayList<>(materials.size());
+        List<String> materialnos = new ArrayList<>(materials.size());
         for (MaterialErpPO erppo : materials) {
             MaterialPO po = new MaterialPO();
+            if (materialnos.contains(erppo.getMaterialNo())) {
+                continue;
+            } else {
+                materialnos.add(erppo.getMaterialNo());
+            }
             po.setMaterialNo(erppo.getMaterialNo());
             po.setMaterialDesc(erppo.getRemark());
             po.setMaterialName(erppo.getMaterialName());

@@ -10,15 +10,15 @@ spring:
   datasource:
     test1:
      driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-     jdbc-url: jdbc:sqlserver://192.168.10.199:1433;DatabaseName=boke
+     jdbc-url: jdbc:sqlserver://192.168.10.225:1433;DatabaseName=boke
      username: sa
      password: yinghong
      ConnectionTestQuery: SELECT 1
     test2:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://192.168.10.3:3306/smartyinghong?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+      jdbc-url: jdbc:mysql://39.97.253.38:3306/smartyinghong?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
       username: root
-      password: 1234qwer
+      password: '!qaZXSw2'
       ConnectionTestQuery: SELECT 1
   servlet:
     multipart:
@@ -61,5 +61,8 @@ logging:
         common:
           mapper: debug
   config: classpath:logback-spring-test.xml
+schedule:
+  data:
+    synchronize: 0 0 0 */1 * ?
 
 
