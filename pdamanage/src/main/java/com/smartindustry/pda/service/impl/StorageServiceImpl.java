@@ -757,10 +757,10 @@ public class StorageServiceImpl implements IStorageService {
         //更新入库单的状态
         if (storageHeadPO.getStorageNum().compareTo(BigDecimal.ONE) == 0) {
             //执行操作记录
+            storageHeadPO.setStatus(StorageConstant.STATUS_STOREING);
             storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), forkliftPO.getForkliftId(), StorageConstant.OPERATE_NAME_EXECUTE));
         }
         if (storageHeadPO.getStorageNum().compareTo(storageHeadPO.getExpectNum()) == -1) {
-            storageHeadPO.setStatus(StorageConstant.STATUS_STOREING);
             //加入入库操作记录
             storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), forkliftPO.getForkliftId(), StorageConstant.OPERATE_NAME_JOIN));
         } else if (storageHeadPO.getStorageNum().compareTo(storageHeadPO.getExpectNum()) == 0) {
@@ -941,6 +941,7 @@ public class StorageServiceImpl implements IStorageService {
             //更新入库单的状态
             if (storageHeadPO.getStorageNum().compareTo(BigDecimal.ONE) == 0) {
                 //插入入单执行操作
+                storageHeadPO.setStatus(StorageConstant.STATUS_STOREING);
                 storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), forkliftPO.getForkliftId(), StorageConstant.OPERATE_NAME_EXECUTE));
             } else {
                 //插入入库参与操作记录
