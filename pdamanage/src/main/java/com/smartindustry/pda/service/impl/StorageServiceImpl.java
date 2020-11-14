@@ -721,7 +721,7 @@ public class StorageServiceImpl implements IStorageService {
         StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(mrfid);
         StorageHeadPO storageHeadPO = storageHeadMapper.selectByPrimaryKey(storageDetailPO.getStorageHeadId());
         List<MaterialPO> pos = storageBodyMapper.queryMaterial(storageHeadPO.getStorageHeadId());
-        if(pos.size()==0){
+        if (pos.size() == 0) {
             //查不到盖body的物料信息
             return new ResultVO(1001);
         }
