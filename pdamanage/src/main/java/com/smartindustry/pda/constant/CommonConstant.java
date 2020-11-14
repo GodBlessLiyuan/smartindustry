@@ -79,7 +79,7 @@ public class CommonConstant {
     /**
      * 叉车-入库(成品）
      */
-    public final static Byte FORKLIFT_STORAGE_START_PRODUCT = 2;
+    public final static Byte FORKLIFT_STORAGE_START_PRODUCT = 3;
 
     /**
      * 叉车-出库开始
