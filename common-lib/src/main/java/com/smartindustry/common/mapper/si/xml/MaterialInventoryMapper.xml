@@ -112,14 +112,14 @@
   <select id="pageQuery" parameterType="java.util.Map" resultMap="BOSResultMap">
     select
     <include refid="BOS_Column_List" />
-    from sm_storage_detail sd
-    left join si_location l on sd.location_id = l.location_id
-    left join si_material m on l.material_id = m.material_id
-    left join si_supplier s on m.supplier_id = s.supplier_id
-    left join si_material_inventory mi on m.material_id = mi.material_id
-    left join dd_measure_unit mu on m.measure_unit_id = mu.measure_unit_id
-    left join si_warehouse w on l.warehouse_id = w.warehouse_id
-    where sd.storage_status = 1
+    FROM si_material m
+    LEFT JOIN si_location l ON m.material_id = l.material_id
+    LEFT JOIN si_warehouse w ON l.warehouse_id = w.warehouse_id
+    LEFT JOIN si_supplier s ON m.supplier_id = s.supplier_id
+    LEFT JOIN si_material_inventory mi ON m.material_id = mi.material_id
+    LEFT JOIN dd_measure_unit mu ON m.measure_unit_id = mu.measure_unit_id
+    LEFT JOIN sm_storage_detail sd ON l.location_id = sd.location_id
+    where (sd.storage_status = 1 or sd.storage_status is null)
       <if test="keyword != null and keyword != ''">
         and (m.material_no like '%' #{keyword,jdbcType=CHAR} '%'
         or m.material_name like '%' #{keyword,jdbcType=CHAR} '%'

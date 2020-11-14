@@ -352,6 +352,7 @@
     <if test="type == 4">
       and sh.status = 3 and sh.source_no not in (select distinct produce_order_id from wo_package)
     </if>
+    and sh.source_type = 2
   </select>
 
     <select id="queryPrepareNo" parameterType="java.util.Date" resultMap="BaseResultMap">
@@ -426,7 +427,7 @@
     left join si_material m on l.material_id = m.material_id
     left join si_warehouse w on l.warehouse_id = w.warehouse_id
     left join dd_measure_unit mu on m.measure_unit_id = mu.measure_unit_id
-    where sh.dr = 1 and sh.storage_head_id = #{shid,jdbcType=BIGINT} and (sd.storage_status <![CDATA[<>]]> 2 or sd.storage_status is null)
+    where sh.dr = 1 and sh.storage_head_id = #{shid,jdbcType=BIGINT} and sd.storage_status = 1
     group by sd.storage_head_id,sd.location_id
   </select>
 
