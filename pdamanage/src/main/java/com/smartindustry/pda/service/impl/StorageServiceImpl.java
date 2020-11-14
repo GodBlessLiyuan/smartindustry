@@ -721,6 +721,10 @@ public class StorageServiceImpl implements IStorageService {
         StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(mrfid);
         StorageHeadPO storageHeadPO = storageHeadMapper.selectByPrimaryKey(storageDetailPO.getStorageHeadId());
         List<MaterialPO> pos = storageBodyMapper.queryMaterial(storageHeadPO.getStorageHeadId());
+        if (pos.size() == 0) {
+            //查不到盖body的物料信息
+            return new ResultVO(1001);
+        }
         if (pos.size() > 1) {
             sendChooseMaterialShowMsg(pos);
             return ResultVO.ok();
@@ -739,7 +743,7 @@ public class StorageServiceImpl implements IStorageService {
         //1. 入库详情表更新添加信息
         storageDetailPO.setLocationId(locationBO.getLocationId());
         storageDetailPO.setStorageTime(new Date());
-        storageDetailPO.setMaterialId(locationBO.getMaterialId());
+        storageDetailPO.setMaterialId(pos.get(0).getMaterialId());
         storageDetailPO.setStorageNum(BigDecimal.ONE);
         storageDetailPO.setStorageStatus(StorageConstant.STATUS_STORED);
         storageDetailPO.setPreparation(StorageConstant.Preparation_YES);
