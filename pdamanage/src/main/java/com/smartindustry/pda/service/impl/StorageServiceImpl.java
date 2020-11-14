@@ -1033,11 +1033,11 @@ public class StorageServiceImpl implements IStorageService {
     }
 
     /**
-     * @Description 备料区入成品区
+     * @Description 原产区到原产品放下
      * @Param
      * @Return
      * @Author AnHongxu.
-     * @Date 2020/11/7
+     * @Date 2020/11/14
      * @Time 16:40
      */
     @Override
