@@ -141,5 +141,14 @@ public interface IStorageService {
      * @Time 16:40
      */
     ResultVO finishedMove(HttpSession session, String mrfid, String lrfid, Byte ltype);
+    /**
+     * @Description 原产品放下货物动作
+     * @Param
+     * @Return
+     * @Author AnHongxu.
+     * @Date 2020/11/14
+     * @Time 16:40
+     */
+    ResultVO finishedOriginToOrigin(HttpSession session, String mrfid, String lrfid);
 
 }

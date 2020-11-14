@@ -225,7 +225,7 @@ public class CommonServiceImpl implements ICommonService {
         }
         if (CommonConstant.RFID_STORAGE_WARN_RAW_RAW.equals(status)) {
             // 入库警告（原材料入原材料）
-            // TODO:
+            // storageService.finishedOriginToOrigin(session, (String) session.getAttribute(CommonConstant.SESSION_MRFID), dto.getLrfid());
             return ResultVO.ok().setData("入库警告（原材料入原材料）");
         }
         if (CommonConstant.RFID_STORAGE_END_RAW_PRODUCT.equals(status)) {
