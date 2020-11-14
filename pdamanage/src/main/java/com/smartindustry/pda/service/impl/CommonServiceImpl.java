@@ -403,6 +403,9 @@ public class CommonServiceImpl implements ICommonService {
         }
 
         /* 出/入库结束 */
+        if (dto.getType() == 1) {
+            return CommonConstant.RFID_INVALID;
+        }
         if (null == dto.getMrfid() || !dto.getMrfid().equals(session.getAttribute(CommonConstant.SESSION_MRFID))) {
             // 数据有误
             return CommonConstant.RFID_INVALID;
