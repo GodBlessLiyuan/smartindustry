@@ -350,6 +350,14 @@ public class CommonServiceImpl implements ICommonService {
 
         Byte status = (Byte) session.getAttribute(CommonConstant.SESSION_STATUS_FORKLIFT);
         if (dto.getType() == 1) {
+            // 叉起
+            if (session.getAttribute("warn") != null) {
+                logger.info("取消警告");
+                WebSocketServer.sendMsg(imei, WebSocketVO.createTitleVO("取消警告！", CommonConstant.TYPE_TITLE_VANISH));
+                session.removeAttribute("warn");
+                return CommonConstant.RFID_INVALID;
+            }
+
             /* 出/入库开始 */
             if (null == status) {
                 // 无状态
@@ -389,12 +397,14 @@ public class CommonServiceImpl implements ICommonService {
 
                 StorageDetailPO detailPO = storageDetailMapper.queryByRfidAndStatus(dto.getMrfid(), CommonConstant.STATUS_RFID_STORAGE);
                 if (null == detailPO || detailPO.getPreparation() == 2) {
+                    logger.info("出库警告(无数据|备料区)");
                     WebSocketServer.sendMsg(imei, WebSocketVO.createTitleVO("作业错误，该栈板不在出库作业范围内，请查看可出库储位提示", CommonConstant.TYPE_TITLE_WARN));
                     return CommonConstant.RFID_INVALID;
                 }
 
                 OutboundBodyPO bodyPO = outboundBodyMapper.queryByOhidAndMid((Long) session.getAttribute(CommonConstant.SESSION_OHID), detailPO.getMaterialId());
                 if (null == bodyPO || bodyPO.getExpectNum().equals(bodyPO.getOutboundNum())) {
+                    logger.info("出库警告(无数据|入库已满)");
                     WebSocketServer.sendMsg(imei, WebSocketVO.createTitleVO("作业错误，该栈板不在出库作业范围内，请查看可出库储位提示", CommonConstant.TYPE_TITLE_WARN));
                     return CommonConstant.RFID_INVALID;
                 }
@@ -409,12 +419,6 @@ public class CommonServiceImpl implements ICommonService {
             /* 出/入库结束 */
             if (null == dto.getMrfid() || !dto.getMrfid().equals(session.getAttribute(CommonConstant.SESSION_MRFID))) {
                 // 数据有误
-                return CommonConstant.RFID_INVALID;
-            }
-            if (session.getAttribute("warn") != null) {
-                logger.info("取消警告");
-                WebSocketServer.sendMsg(imei, WebSocketVO.createTitleVO("取消警告！", CommonConstant.TYPE_TITLE_VANISH));
-                session.removeAttribute("warn");
                 return CommonConstant.RFID_INVALID;
             }
 
@@ -507,6 +511,7 @@ public class CommonServiceImpl implements ICommonService {
                         return CommonConstant.RFID_OUTBOUND_RETURN;
                     }
 
+                    logger.info("出库警告(位置错误)");
                     session.setAttribute("warn", true);
                     WebSocketServer.sendMsg(imei, WebSocketVO.createTitleVO("作业错误，成品出库错误，请立即处理", CommonConstant.TYPE_TITLE_WARN));
                     return CommonConstant.RFID_INVALID;
