@@ -773,7 +773,7 @@ public class StorageServiceImpl implements IStorageService {
         log.info("更新：更新入库单的状态并入库数量加1" + storageHeadPO.toString());
         //3. 入库单表体已入库数量+1
         // 根据入库单表头id和物料id唯一查找入库单表体，进行数量+1
-        StorageBodyPO storageBodyPO = storageBodyMapper.queryByShidAndMid(storageHeadPO.getStorageHeadId(), locationBO.getMaterialId());
+        StorageBodyPO storageBodyPO = storageBodyMapper.queryByShidAndMid(storageHeadPO.getStorageHeadId(), storageDetailPO.getMaterialId());
         if (null == storageBodyPO) {
             // 没有该body体
             return new ResultVO(1002, "没有该body体");
