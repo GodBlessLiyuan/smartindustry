@@ -21,6 +21,7 @@ import com.smartindustry.common.pojo.si.LocationPO;
 import com.smartindustry.common.pojo.sm.StorageDetailPO;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.pda.constant.CommonConstant;
+import com.smartindustry.pda.constant.OutboundConstant;
 import com.smartindustry.pda.dto.CommonDTO;
 import com.smartindustry.pda.service.ICommonService;
 import com.smartindustry.pda.service.IOutboundService;
@@ -304,6 +305,8 @@ public class CommonServiceImpl implements ICommonService {
 
                 // websocket
                 WebSocketServer.sendMsg(imeis, WebSocketVO.createTitleVO("业务单号：" + headPO.getSourceNo() + "（销售出库），已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
+            } else {
+                WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(headPO.getOutboundHeadId(), CommonConstant.FLAG_OUTBOUND));
             }
 
             outboundHeadMapper.updateByPrimaryKey(headPO);
