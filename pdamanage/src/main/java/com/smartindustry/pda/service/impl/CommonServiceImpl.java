@@ -223,7 +223,11 @@ public class CommonServiceImpl implements ICommonService {
             storageService.executeForStorage(session, dto.getMrfid());
             return ResultVO.ok().setData("入库开始(成品区)");
         }
-
+        if (CommonConstant.RFID_STORAGE_WARN_RAW_RAW.equals(status)) {
+            // 入库警告（原材料入原材料）
+            // TODO:
+            return ResultVO.ok().setData("入库警告（原材料入原材料）");
+        }
         if (CommonConstant.RFID_STORAGE_END_RAW_PRODUCT.equals(status)) {
             // 入库完成(原材料入成品区)
             storageService.finishedOriginToStorage(session, (String) session.getAttribute(CommonConstant.SESSION_MRFID), dto.getLrfid());
@@ -413,11 +417,11 @@ public class CommonServiceImpl implements ICommonService {
         if (CommonConstant.FORKLIFT_STORAGE_START_RAW.equals(status)) {
             // 原材料入库
             if (null == dto.getLrfid()) {
-                logger.info("作业错误(原材料入原材料)");
+                logger.info("入库警告（原材料入原材料）");
                 // 原材料区
                 WebSocketServer.sendMsg(imei, WebSocketVO.createTitleVO("作业错误，成品摆放错误或丢失，请立即处理！", CommonConstant.TYPE_TITLE_WARN));
                 session.setAttribute("warn", true);
-                return CommonConstant.RFID_INVALID;
+                return CommonConstant.RFID_STORAGE_WARN_RAW_RAW;
             }
 
             if (prepareRFID.equals(dto.getLrfid())) {
