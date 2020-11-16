@@ -997,6 +997,7 @@ public class StorageServiceImpl implements IStorageService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO finishedMove(HttpSession session, String mrfid, String lrfid, Byte ltype) {
+        log.info("------------------进入库内平移操作，动作为：ltype：" + ltype);
         //String imei = "863958040755311";
         // 当前叉车信息
         String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
@@ -1008,9 +1009,9 @@ public class StorageServiceImpl implements IStorageService {
         LocationBO locationBO = locationMapper.queryByRfid(lrfid);
         //更新库位
         storageDetailPO.setLocationId(locationBO.getLocationId());
-        if (ltype.equals(1)) {
+        if (ltype.equals(StorageConstant.Preparation_NO)) {
             storageDetailPO.setPreparation(StorageConstant.Preparation_NO);
-        } else if (ltype.equals(2)) {
+        } else if (ltype.equals(StorageConstant.Preparation_YES)) {
             storageDetailPO.setPreparation(StorageConstant.Preparation_YES);
         } else {
             //既不是备料区也不是成品区，啥区也不是
@@ -1034,7 +1035,7 @@ public class StorageServiceImpl implements IStorageService {
             public void afterCommit() {
                 //发送socket请求
                 WebSocketServer.sendAllMsg(WebSocketVO.createShowVO(storageDetailPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
-                log.info("进行备料区入成品区，发送socket请求-----");
+                log.info("进行库内平移，发送socket请求-----");
             }
         });
         return ResultVO.ok();
