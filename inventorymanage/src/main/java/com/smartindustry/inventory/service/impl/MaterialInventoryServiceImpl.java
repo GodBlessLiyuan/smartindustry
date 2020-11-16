@@ -62,12 +62,14 @@ public class MaterialInventoryServiceImpl implements IMaterialInventoryService {
 
     @Override
     public ResultVO safeStock(SafeStockDTO dto){
+        // 设置安全库存前先对物料安全库存进行删除
+        materialInventoryMapper.deleteBatch(dto.getMids());
         List<MaterialInventoryPO> pos = SafeStockDTO.createPOS(dto);
         if(pos.isEmpty()){
             return new ResultVO(ExceptionEnums.NOT_EMPTY.getCode());
         }
-        // 批量更新
-        materialInventoryMapper.updateBatch(pos);
+        // 批量新增
+        materialInventoryMapper.batchInsert(pos);
         return ResultVO.ok();
     }
 

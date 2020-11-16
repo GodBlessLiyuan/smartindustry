@@ -4,12 +4,11 @@
   <resultMap id="BaseResultMap" type="com.smartindustry.common.pojo.si.MaterialInventoryPO">
     <id column="material_inventory_id" jdbcType="BIGINT" property="materialInventoryId" />
     <result column="material_id" jdbcType="BIGINT" property="materialId" />
-    <result column="status" jdbcType="TINYINT" property="status" />
     <result column="lower_limit" jdbcType="DECIMAL" property="lowerLimit" />
     <result column="upper_limit" jdbcType="DECIMAL" property="upperLimit" />
   </resultMap>
   <sql id="Base_Column_List">
-    material_inventory_id, material_id, `status`, lower_limit, upper_limit
+    material_inventory_id, material_id, lower_limit, upper_limit
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -22,10 +21,10 @@
     where material_inventory_id = #{materialInventoryId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.smartindustry.common.pojo.si.MaterialInventoryPO">
-    insert into si_material_inventory (material_inventory_id, material_id, `status`, 
-      lower_limit, upper_limit)
-    values (#{materialInventoryId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT}, #{status,jdbcType=TINYINT}, 
-      #{lowerLimit,jdbcType=DECIMAL}, #{upperLimit,jdbcType=DECIMAL})
+    insert into si_material_inventory (material_inventory_id, material_id, lower_limit, 
+      upper_limit)
+    values (#{materialInventoryId,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT}, #{lowerLimit,jdbcType=DECIMAL}, 
+      #{upperLimit,jdbcType=DECIMAL})
   </insert>
   <insert id="insertSelective" parameterType="com.smartindustry.common.pojo.si.MaterialInventoryPO">
     insert into si_material_inventory
@@ -35,9 +34,6 @@
       </if>
       <if test="materialId != null">
         material_id,
-      </if>
-      <if test="status != null">
-        `status`,
       </if>
       <if test="lowerLimit != null">
         lower_limit,
@@ -53,9 +49,6 @@
       <if test="materialId != null">
         #{materialId,jdbcType=BIGINT},
       </if>
-      <if test="status != null">
-        #{status,jdbcType=TINYINT},
-      </if>
       <if test="lowerLimit != null">
         #{lowerLimit,jdbcType=DECIMAL},
       </if>
@@ -70,9 +63,6 @@
       <if test="materialId != null">
         material_id = #{materialId,jdbcType=BIGINT},
       </if>
-      <if test="status != null">
-        `status` = #{status,jdbcType=TINYINT},
-      </if>
       <if test="lowerLimit != null">
         lower_limit = #{lowerLimit,jdbcType=DECIMAL},
       </if>
@@ -85,7 +75,6 @@
   <update id="updateByPrimaryKey" parameterType="com.smartindustry.common.pojo.si.MaterialInventoryPO">
     update si_material_inventory
     set material_id = #{materialId,jdbcType=BIGINT},
-      `status` = #{status,jdbcType=TINYINT},
       lower_limit = #{lowerLimit,jdbcType=DECIMAL},
       upper_limit = #{upperLimit,jdbcType=DECIMAL}
     where material_inventory_id = #{materialInventoryId,jdbcType=BIGINT}
@@ -215,4 +204,19 @@
     where sd.storage_status = 1
     group by sd.material_id
   </select>
+
+  <delete id="deleteBatch" parameterType="java.util.List">
+    delete from  si_material_inventory  where material_id in
+    <foreach collection="mids" item="item" open="("  separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+
+  <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="materialInventoryId">
+    insert into si_material_inventory (material_inventory_id, material_id, lower_limit, upper_limit)
+    values
+    <foreach collection="list" separator="," item="po">
+      (#{po.materialInventoryId,jdbcType=BIGINT}, #{po.materialId,jdbcType=BIGINT},#{po.lowerLimit,jdbcType=DECIMAL},#{po.upperLimit,jdbcType=DECIMAL})
+    </foreach>
+  </insert>
 </mapper>

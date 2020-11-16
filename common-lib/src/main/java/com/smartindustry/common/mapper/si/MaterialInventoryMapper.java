@@ -6,11 +6,13 @@ import com.smartindustry.common.mapper.BaseMapper;
 import com.smartindustry.common.pojo.si.MaterialInventoryPO;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * MaterialInventoryMapper继承基类
@@ -43,4 +45,11 @@ public interface MaterialInventoryMapper extends BaseMapper<MaterialInventoryPO,
      */
     @MapKey("mid")
     Map<BigInteger, Map<Long, BigDecimal>> queryMaterialMap();
+
+    /**
+     * 安全库存表的批量删除
+     * @param mids
+     */
+    void deleteBatch(@Param("mids") Set<Long> mids);
+
 }
