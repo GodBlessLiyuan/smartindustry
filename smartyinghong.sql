@@ -8,13 +8,12 @@ DROP TABLE IF EXISTS am_authority;
 DROP TABLE IF EXISTS am_dept_record;
 DROP TABLE IF EXISTS am_role_record;
 DROP TABLE IF EXISTS am_user_record;
-DROP TABLE IF EXISTS im_safe_stock;
-DROP TABLE IF EXISTS im_material_inventory;
 DROP TABLE IF EXISTS om_outbound_body;
 DROP TABLE IF EXISTS si_location_record;
 DROP TABLE IF EXISTS sm_storage_body;
 DROP TABLE IF EXISTS sm_storage_detail;
 DROP TABLE IF EXISTS si_location;
+DROP TABLE IF EXISTS si_material_inventory;
 DROP TABLE IF EXISTS si_material_record;
 DROP TABLE IF EXISTS wo_slurry_material;
 DROP TABLE IF EXISTS si_material;
@@ -236,39 +235,6 @@ CREATE TABLE dd_warehouse_type
 ) COMMENT = '仓库类型表';
 
 
--- 物料库存信息表
-CREATE TABLE im_material_inventory
-(
-	material_inventory_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '物料库存信息ID',
-	material_id bigint unsigned NOT NULL COMMENT '物料ID',
-	way_num int COMMENT '在途数量',
-	status tinyint COMMENT '库存状态',
-	storage_num int COMMENT '库存数',
-	lock_num int COMMENT '锁定数量',
-	relate_num int COMMENT '关联订单数量',
-	available_num int COMMENT '可用物料数量',
-	PRIMARY KEY (material_inventory_id),
-	UNIQUE (material_inventory_id)
-) COMMENT = '物料库存信息表';
-
-
--- 安全库存
-CREATE TABLE im_safe_stock
-(
-	safe_stock_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '安全库存ID',
-	material_inventory_id bigint unsigned NOT NULL COMMENT '物料库存信息ID',
-	lower_limit decimal(10,2) COMMENT '库存下限',
-	-- 1：是
-	-- 2：否
-	way tinyint COMMENT '是否在途 : 1：是
-2：否',
-	user_id bigint unsigned COMMENT '创建人',
-	create_time datetime COMMENT '创建时间',
-	PRIMARY KEY (safe_stock_id),
-	UNIQUE (safe_stock_id)
-) COMMENT = '安全库存';
-
-
 -- 出库单表体
 CREATE TABLE om_outbound_body
 (
@@ -285,7 +251,7 @@ CREATE TABLE om_outbound_body
 2 已删除',
 	unit_price decimal(10,2) COMMENT '单价',
 	total_price decimal(10,2) COMMENT '金额',
-	extra char(255) COMMENT '备注',
+	remark char(255) COMMENT '备注',
 	PRIMARY KEY (outbound_body_id),
 	UNIQUE (outbound_body_id)
 ) COMMENT = '出库单表体';
@@ -309,12 +275,14 @@ CREATE TABLE om_outbound_head
 	outbound_head_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '出库单表头ID',
 	outbound_no char(128) NOT NULL COMMENT '出库单编码',
 	source_no char(128) COMMENT '来源单号',
-	-- 1 原材料出库
-	-- 2 销售出库
-	-- 3 备料区出库
-	source_type tinyint COMMENT '来源类型 : 1 原材料出库
-2 销售出库
-3 备料区出库',
+	-- 1 混料工单
+	-- 2 生产工单
+	-- 3 销售出库
+	-- 4 备料区出库
+	source_type tinyint COMMENT '来源类型 : 1 混料工单
+2 生产工单
+3 销售出库
+4 备料区出库',
 	client_no char(128) COMMENT '客户编码',
 	plan_time date COMMENT '计划出库时间',
 	outbound_time datetime COMMENT '完成出库时间',
@@ -504,6 +472,7 @@ CREATE TABLE si_material
 	package_volume decimal(10,2) COMMENT '包装体积',
 	supplier_id bigint unsigned COMMENT '供应商ID',
 	material_desc char(255) COMMENT '物料描述',
+	material_batch char(64) COMMENT '物料批次',
 	user_id bigint unsigned COMMENT '创建人',
 	create_time datetime COMMENT '创建时间',
 	update_time datetime COMMENT '更新时间',
@@ -515,6 +484,19 @@ CREATE TABLE si_material
 	PRIMARY KEY (material_id),
 	UNIQUE (material_id)
 ) COMMENT = '物料表';
+
+
+-- 物料库存信息表
+CREATE TABLE si_material_inventory
+(
+	material_inventory_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '物料库存信息ID',
+	material_id bigint unsigned NOT NULL COMMENT '物料ID',
+	lower_limit decimal(10,2) COMMENT '库存下限',
+	upper_limit decimal(10,2) COMMENT '库存上限',
+	PRIMARY KEY (material_inventory_id),
+	UNIQUE (material_inventory_id),
+	UNIQUE (material_id)
+) COMMENT = '物料库存信息表';
 
 
 -- 物料记录表
@@ -628,7 +610,6 @@ CREATE TABLE sm_storage_body
 	sum_price decimal(10,2) COMMENT '金额',
 	unit_price_notax decimal(10,2) COMMENT '不含税单价',
 	sum_price_notax decimal(10,2) COMMENT '不含税金额',
-	supplier_id bigint unsigned COMMENT '供应商ID',
 	PRIMARY KEY (storage_body_id),
 	UNIQUE (storage_body_id)
 ) COMMENT = '入库单表体';
@@ -644,12 +625,20 @@ CREATE TABLE sm_storage_detail
 	storage_num decimal(10,2) COMMENT '入库数',
 	storage_time datetime COMMENT '入库时间',
 	rfid char(128) COMMENT '栈板RFID',
-	-- 1 已入库
-	-- 2 已出库
+	-- 1 在库
+	-- 
+	-- 2 销售出库
+	-- 
 	-- 3 待入库
-	storage_status tinyint COMMENT '入库状态 : 1 已入库
-2 已出库
-3 待入库',
+	-- 
+	-- 4 已出库
+	storage_status tinyint COMMENT '入库状态 : 1 在库
+
+2 销售出库
+
+3 待入库
+
+4 已出库',
 	-- 1 不是备料区
 	-- 2 在备料区
 	preparation tinyint COMMENT '是否备料区 : 1 不是备料区
@@ -676,6 +665,7 @@ CREATE TABLE sm_storage_head
 (
 	storage_head_id bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '入库单表头ID',
 	warehouse_id bigint unsigned COMMENT '仓库ID',
+	supplier_id bigint unsigned NOT NULL COMMENT '供应商ID',
 	storage_no char(128) COMMENT '入库单编号',
 	source_no char(128) COMMENT '来源单号',
 	-- 1 原材料入库
@@ -687,7 +677,7 @@ CREATE TABLE sm_storage_head
 	storage_time datetime COMMENT '入库时间',
 	expect_num decimal(10,2) COMMENT '期望入库数',
 	storage_num decimal(10,2) COMMENT '已入库数量',
-	extra char(255) COMMENT '备注',
+	remark char(255) COMMENT '备注',
 	-- 1：已入库
 	-- 2：入库中
 	-- 3：待入库
@@ -708,7 +698,8 @@ CREATE TABLE sm_storage_head
 	pay_method tinyint COMMENT '付款方式 : 1. 现金
 2. 欠款',
 	PRIMARY KEY (storage_head_id),
-	UNIQUE (storage_head_id)
+	UNIQUE (storage_head_id),
+	UNIQUE (supplier_id)
 ) COMMENT = '入库单表头';
 
 
@@ -1019,14 +1010,6 @@ ALTER TABLE si_warehouse
 ;
 
 
-ALTER TABLE im_safe_stock
-	ADD FOREIGN KEY (material_inventory_id)
-	REFERENCES im_material_inventory (material_inventory_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
 ALTER TABLE om_outbound_body
 	ADD FOREIGN KEY (outbound_head_id)
 	REFERENCES om_outbound_head (outbound_head_id)
@@ -1107,14 +1090,6 @@ ALTER TABLE sm_storage_detail
 ;
 
 
-ALTER TABLE im_material_inventory
-	ADD FOREIGN KEY (material_id)
-	REFERENCES si_material (material_id)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
 ALTER TABLE om_outbound_body
 	ADD FOREIGN KEY (material_id)
 	REFERENCES si_material (material_id)
@@ -1124,6 +1099,14 @@ ALTER TABLE om_outbound_body
 
 
 ALTER TABLE si_location
+	ADD FOREIGN KEY (material_id)
+	REFERENCES si_material (material_id)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
+ALTER TABLE si_material_inventory
 	ADD FOREIGN KEY (material_id)
 	REFERENCES si_material (material_id)
 	ON UPDATE RESTRICT
@@ -1179,7 +1162,7 @@ ALTER TABLE si_supplier_record
 ;
 
 
-ALTER TABLE sm_storage_body
+ALTER TABLE sm_storage_head
 	ADD FOREIGN KEY (supplier_id)
 	REFERENCES si_supplier (supplier_id)
 	ON UPDATE RESTRICT

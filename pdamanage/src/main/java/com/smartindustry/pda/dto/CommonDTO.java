@@ -20,6 +20,7 @@ public class CommonDTO implements Serializable {
     private String imei;
     /**
      * 类别类型：1-待执行，2-执行中，3-已执行
+     * 数采类型：1-叉起，2-放下
      */
     private Byte type;
     /**

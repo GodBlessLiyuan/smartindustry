@@ -79,7 +79,7 @@ public class CommonConstant {
     /**
      * 叉车-入库(成品）
      */
-    public final static Byte FORKLIFT_STORAGE_START_PRODUCT = 2;
+    public final static Byte FORKLIFT_STORAGE_START_PRODUCT = 3;
 
     /**
      * 叉车-出库开始
@@ -147,25 +147,29 @@ public class CommonConstant {
      */
     public static final Byte RFID_STORAGE_START_PRODUCT = 3;
     /**
+     * 入库警告（原材料入原材料）
+     */
+    public static final Byte RFID_STORAGE_WARN_RAW_RAW = 4;
+    /**
      * 入库完成(原材料入成品）
      */
-    public static final Byte RFID_STORAGE_END_RAW_PRODUCT = 4;
+    public static final Byte RFID_STORAGE_END_RAW_PRODUCT = 5;
     /**
      * 入库完成(原材料入备料）
      */
-    public static final Byte RFID_STORAGE_END_RAW_PREPARE = 5;
+    public static final Byte RFID_STORAGE_END_RAW_PREPARE = 6;
     /**
      * 入库完成(备料入成品）
      */
-    public static final Byte RFID_STORAGE_END_PREPARE_PRODUCT = 6;
+    public static final Byte RFID_STORAGE_END_PREPARE_PRODUCT = 7;
     /**
      * 入库完成(成品入成品）
      */
-    public static final Byte RFID_STORAGE_END_PRODUCT_PRODUCT = 7;
+    public static final Byte RFID_STORAGE_END_PRODUCT_PRODUCT = 8;
     /**
      * 入库完成(成品入备料）
      */
-    public static final Byte RFID_STORAGE_END_PRODUCT_PREPARE = 8;
+    public static final Byte RFID_STORAGE_END_PRODUCT_PREPARE = 9;
 
     /**
      * 出库开始
