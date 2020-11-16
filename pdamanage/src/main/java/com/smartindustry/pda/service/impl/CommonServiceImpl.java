@@ -266,7 +266,7 @@ public class CommonServiceImpl implements ICommonService {
             detailPO.setStorageStatus(CommonConstant.STATUS_RFID_OUTBOUND_SALE);
             storageDetailMapper.updateByPrimaryKey(detailPO);
 
-            WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(outboundForkliftPO.getOutboundHeadId(), CommonConstant.FLAG_OUTBOUND));
+            WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(outboundForkliftPO.getOutboundHeadId(), CommonConstant.FLAG_OUTBOUND, CommonConstant.TYPE_LIST_DOING));
 
             return ResultVO.ok().setData("出库，叉起物料");
         }
@@ -314,7 +314,7 @@ public class CommonServiceImpl implements ICommonService {
                 socketVO.setTitle(titleVO);
             }
 
-            socketVO.setShow(new WebSocketVO.ShowVO(headPO.getOutboundHeadId(), CommonConstant.FLAG_OUTBOUND));
+            socketVO.setShow(new WebSocketVO.ShowVO(headPO.getOutboundHeadId(), CommonConstant.FLAG_OUTBOUND, headPO.getExpectNum().equals(headPO.getOutboundNum()) ? CommonConstant.TYPE_LIST_DONE : CommonConstant.TYPE_LIST_DOING));
             WebSocketServer.sendMsg(imeis, socketVO);
 
             outboundHeadMapper.updateByPrimaryKey(headPO);

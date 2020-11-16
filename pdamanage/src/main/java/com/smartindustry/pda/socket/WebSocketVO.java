@@ -21,9 +21,9 @@ public class WebSocketVO implements Serializable {
     private ShowVO show;
     private TitleVO title;
 
-    public static WebSocketVO createShowVO(Long hid, Byte status) {
+    public static WebSocketVO createShowVO(Long hid, Byte status, Byte type) {
         WebSocketVO vo = new WebSocketVO();
-        ShowVO showVO = new ShowVO(hid, status);
+        ShowVO showVO = new ShowVO(hid, status, type);
         vo.setShow(showVO);
         return vo;
     }
@@ -58,6 +58,10 @@ public class WebSocketVO implements Serializable {
          * 状态：1-入库；2-出库
          */
         private Byte status;
+        /**
+         * 列表类型：1-待执行，2-执行中，3-已执行
+         */
+        private Byte type;
     }
 
     /**

@@ -198,6 +198,7 @@ public class OutboundServiceImpl implements IOutboundService {
         ForkliftPO curFPO = forkliftMapper.queryByImei(imei);
 
         String status;
+        Byte type;
         OutboundForkliftPO existOfPO = outboundForkliftMapper.queryByFid(curFPO.getForkliftId());
         if (null == existOfPO) {
             // 开始执行/辅助执行
@@ -233,7 +234,7 @@ public class OutboundServiceImpl implements IOutboundService {
         }
 
         // websocket
-        WebSocketServer.sendAllMsg(WebSocketVO.createShowVO(ohid, CommonConstant.FLAG_OUTBOUND));
+        WebSocketServer.sendAllMsg(WebSocketVO.createShowVO(ohid, CommonConstant.FLAG_OUTBOUND, CommonConstant.TYPE_LIST_DOING));
 
         return ResultVO.ok().setData(status);
     }

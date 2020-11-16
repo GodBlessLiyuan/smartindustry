@@ -325,7 +325,7 @@ public class StorageServiceImpl implements IStorageService {
             @Override
             public void afterCommit() {
                 //发送socket消息
-                WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
+                WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE, CommonConstant.TYPE_LIST_DOING));
             }
         });
 
@@ -373,7 +373,7 @@ public class StorageServiceImpl implements IStorageService {
             @Override
             public void afterCommit() {
                 //发送socket请求
-                WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPOS.get(0).getStorageHeadId(), CommonConstant.FLAG_STORAGE));
+                WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPOS.get(0).getStorageHeadId(), CommonConstant.FLAG_STORAGE, CommonConstant.TYPE_LIST_DOING));
             }
         });
 
@@ -421,7 +421,7 @@ public class StorageServiceImpl implements IStorageService {
             @Override
             public void afterCommit() {
                 //发送socket消息
-                WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
+                WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE, CommonConstant.TYPE_LIST_DOING));
             }
         });
 
@@ -602,7 +602,7 @@ public class StorageServiceImpl implements IStorageService {
                 if (storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED)) {
                     WebSocketServer.sendAllMsg(WebSocketVO.createTitleVO(storageHeadPO.getSourceNo() + "入库订单已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
                 } else {
-                    WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
+                    WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE, CommonConstant.TYPE_LIST_DOING));
                 }
                 log.info("进行入库备料区后，发送socket请求");
             }
@@ -708,7 +708,7 @@ public class StorageServiceImpl implements IStorageService {
                 if (storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED)) {
                     WebSocketServer.sendAllMsg(WebSocketVO.createTitleVO(storageHeadPO.getSourceNo() + "入库订单已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
                 } else {
-                    WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
+                    WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE, CommonConstant.TYPE_LIST_DOING));
                 }
                 log.info("发送socket请求-------------------------");
             }
@@ -818,7 +818,7 @@ public class StorageServiceImpl implements IStorageService {
                 if (storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED)) {
                     WebSocketServer.sendAllMsg(WebSocketVO.createTitleVO(storageHeadPO.getSourceNo() + "入库订单已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
                 } else {
-                    WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
+                    WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE, CommonConstant.TYPE_LIST_DOING));
                 }
                 log.info("进行入库备料区后，发送socket请求");
             }
@@ -992,7 +992,7 @@ public class StorageServiceImpl implements IStorageService {
             @Override
             public void afterCommit() {
                 //发送socket请求
-                WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(finalStorageHeadId, CommonConstant.FLAG_STORAGE));
+                WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(finalStorageHeadId, CommonConstant.FLAG_STORAGE, CommonConstant.TYPE_LIST_DOING));
                 log.info("进行备料区入成品区，发送socket请求-----");
             }
         });
@@ -1048,7 +1048,7 @@ public class StorageServiceImpl implements IStorageService {
             @Override
             public void afterCommit() {
                 //发送socket请求
-                WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageDetailPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
+                WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageDetailPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE, CommonConstant.TYPE_LIST_DOING));
                 log.info("进行库内平移，发送socket请求-----");
             }
         });
@@ -1087,7 +1087,7 @@ public class StorageServiceImpl implements IStorageService {
             @Override
             public void afterCommit() {
                 //发送socket请求
-                WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageDetailPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
+                WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageDetailPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE, CommonConstant.TYPE_LIST_DOING));
                 log.info("原产区到原产区，发送socket请求-----");
             }
         });
