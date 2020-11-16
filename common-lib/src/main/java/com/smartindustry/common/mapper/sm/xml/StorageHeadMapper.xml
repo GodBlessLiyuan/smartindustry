@@ -352,6 +352,7 @@
     <if test="type == 4">
       and sh.status = 3 and sh.source_no not in (select distinct produce_order_id from wo_package)
     </if>
+    order by sh.creat_time asc
   </select>
 
     <select id="queryPrepareNo" parameterType="java.util.Date" resultMap="BaseResultMap">
