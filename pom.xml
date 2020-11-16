@@ -21,6 +21,7 @@
         <module>workbenchmanage</module>
         <module>bigdatamanage</module>
         <module>datasynchronize</module>
+        <module>miniprogram</module>
     </modules>
 
     <name>smartindustry</name>
