@@ -149,4 +149,13 @@ public interface IStorageService {
      */
     ResultVO finishedOriginToOrigin(HttpSession session, String mrfid, String lrfid);
 
+    /**
+     * @Description 警告测试
+     * @Param
+     * @Return
+     * @Author AnHongxu.
+     * @Date 2020/11/14
+     * @Time 16:40
+     */
+    ResultVO testWarn(Byte type,String imei);
 }

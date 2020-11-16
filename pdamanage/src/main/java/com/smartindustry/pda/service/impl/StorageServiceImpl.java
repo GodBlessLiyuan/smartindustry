@@ -1144,5 +1144,37 @@ public class StorageServiceImpl implements IStorageService {
         });
         return ResultVO.ok();
     }
+
+    /**
+     * @Description 告警测试
+     * @Param
+     * @Return
+     * @Author AnHongxu.
+     * @Date 2020/11/16
+     * @Time 16:40
+     */
+    @Override
+    public ResultVO testWarn(Byte type, String imei) {
+        if (type.equals((byte) 1)) {
+            if (imei == null) {
+                WebSocketServer.sendAllMsg(WebSocketVO.createTitleVO("作业错误警告提示全部发送：--------测试---------", CommonConstant.TYPE_TITLE_WARN));
+            } else {
+                WebSocketServer.sendMsg(imei, WebSocketVO.createTitleVO(imei + "作业错误警告提示单发：--------测试---------", CommonConstant.TYPE_TITLE_WARN));
+            }
+            log.info("告警！发送socket请求-----测试！-----");
+            return ResultVO.ok().setData("告警！发送socket请求-----测试！------");
+        } else if (type.equals((byte) 2)) {
+            WebSocketServer.sendAllMsg(WebSocketVO.createTitleVO("取消警告！", CommonConstant.TYPE_TITLE_VANISH));
+            if (imei == null) {
+                WebSocketServer.sendAllMsg(WebSocketVO.createTitleVO("全部取消告警：--------测试---------", CommonConstant.TYPE_TITLE_VANISH));
+            } else {
+                WebSocketServer.sendMsg(imei, WebSocketVO.createTitleVO(imei + "取消告警单发：--------测试---------", CommonConstant.TYPE_TITLE_VANISH));
+            }
+            log.info("取消警告！发送socket请求-----测试！-----");
+            return ResultVO.ok().setData("取消告警！发送socket请求-----测试！------");
+        } else {
+            return new ResultVO(2222, "太2了，你没有传参！！！");
+        }
+    }
 }
 
