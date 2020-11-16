@@ -21,6 +21,17 @@ public class WebSocketVO implements Serializable {
     private ShowVO show;
     private TitleVO title;
 
+    public static WebSocketVO createAll(Long hid, Byte status, Byte type,String msg, Byte msgType){
+        WebSocketVO vo = new WebSocketVO();
+        ShowVO showVO = new ShowVO(hid, status, type);
+        vo.setShow(showVO);
+        TitleVO titleVO = new TitleVO();
+        titleVO.setMsg(msg);
+        titleVO.setType(msgType);
+        vo.setTitle(titleVO);
+        return vo;
+    }
+
     public static WebSocketVO createShowVO(Long hid, Byte status, Byte type) {
         WebSocketVO vo = new WebSocketVO();
         ShowVO showVO = new ShowVO(hid, status, type);
