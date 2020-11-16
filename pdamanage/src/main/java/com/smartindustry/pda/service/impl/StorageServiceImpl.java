@@ -420,7 +420,16 @@ public class StorageServiceImpl implements IStorageService {
             @Override
             public void afterCommit() {
                 //发送socket消息
-                Byte type = storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED) ? CommonConstant.TYPE_LIST_DONE : CommonConstant.TYPE_LIST_DOING;
+                // 叉车信息
+                Byte type = null;
+                List<ForkliftPO> pos = forkliftMapper.queryByShid(storageHeadPO.getStorageHeadId());
+                if (pos.size() > 0) {
+                    type = CommonConstant.TYPE_LIST_DOING;
+                } else if (storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED)) {
+                    type = CommonConstant.TYPE_LIST_DONE;
+                } else {
+                    type = CommonConstant.TYPE_LIST_TODO;
+                }
                 WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE, type));
             }
         });
@@ -600,7 +609,16 @@ public class StorageServiceImpl implements IStorageService {
             @Override
             public void afterCommit() {
                 //发送socket请求
-                Byte type = storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED) ? CommonConstant.TYPE_LIST_DONE : CommonConstant.TYPE_LIST_DOING;
+                // 叉车信息
+                Byte type = null;
+                List<ForkliftPO> pos = forkliftMapper.queryByShid(storageHeadPO.getStorageHeadId());
+                if (pos.size() > 0) {
+                    type = CommonConstant.TYPE_LIST_DOING;
+                } else if (storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED)) {
+                    type = CommonConstant.TYPE_LIST_DONE;
+                } else {
+                    type = CommonConstant.TYPE_LIST_TODO;
+                }
                 if (storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED)) {
                     WebSocketServer.sendAllMsg(WebSocketVO.createTitleVO(storageHeadPO.getSourceNo() + "入库订单已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
                 } else {
@@ -707,7 +725,16 @@ public class StorageServiceImpl implements IStorageService {
             @Override
             public void afterCommit() {
                 //发送socket请求
-                Byte type = storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED) ? CommonConstant.TYPE_LIST_DONE : CommonConstant.TYPE_LIST_DOING;
+                // 叉车信息
+                Byte type = null;
+                List<ForkliftPO> pos = forkliftMapper.queryByShid(storageHeadPO.getStorageHeadId());
+                if (pos.size() > 0) {
+                    type = CommonConstant.TYPE_LIST_DOING;
+                } else if (storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED)) {
+                    type = CommonConstant.TYPE_LIST_DONE;
+                } else {
+                    type = CommonConstant.TYPE_LIST_TODO;
+                }
                 if (storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED)) {
                     WebSocketServer.sendAllMsg(WebSocketVO.createTitleVO(storageHeadPO.getSourceNo() + "入库订单已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
                 } else {
@@ -818,7 +845,16 @@ public class StorageServiceImpl implements IStorageService {
             @Override
             public void afterCommit() {
                 //发送socket请求
-                Byte type = storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED) ? CommonConstant.TYPE_LIST_DONE : CommonConstant.TYPE_LIST_DOING;
+                // 叉车信息
+                Byte type = null;
+                List<ForkliftPO> pos = forkliftMapper.queryByShid(storageHeadPO.getStorageHeadId());
+                if (pos.size() > 0) {
+                    type = CommonConstant.TYPE_LIST_DOING;
+                } else if (storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED)) {
+                    type = CommonConstant.TYPE_LIST_DONE;
+                } else {
+                    type = CommonConstant.TYPE_LIST_TODO;
+                }
                 if (storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED)) {
                     WebSocketServer.sendAllMsg(WebSocketVO.createTitleVO(storageHeadPO.getSourceNo() + "入库订单已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
                 } else {
@@ -1053,7 +1089,16 @@ public class StorageServiceImpl implements IStorageService {
             @Override
             public void afterCommit() {
                 //发送socket请求
-                Byte type = storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED) ? CommonConstant.TYPE_LIST_DONE : CommonConstant.TYPE_LIST_DOING;
+                // 叉车信息
+                Byte type = null;
+                List<ForkliftPO> pos = forkliftMapper.queryByShid(storageHeadPO.getStorageHeadId());
+                if (pos.size() > 0) {
+                    type = CommonConstant.TYPE_LIST_DOING;
+                } else if (storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED)) {
+                    type = CommonConstant.TYPE_LIST_DONE;
+                } else {
+                    type = CommonConstant.TYPE_LIST_TODO;
+                }
                 WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageDetailPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE, type));
                 log.info("进行库内平移，发送socket请求-----");
             }
