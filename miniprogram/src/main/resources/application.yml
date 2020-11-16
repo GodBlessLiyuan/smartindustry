@@ -1,0 +1,55 @@
+server:
+  port: 8013
+spring:
+  application:
+    name: miniprogram
+  jackson:
+    serialization:
+      indent-output: true
+      fail-on-empty-beans: true
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+08
+  datasource:
+    url: jdbc:mysql://192.168.10.3:3306/smartyinghong?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    username: root
+    password: 1234qwer
+  servlet:
+    multipart:
+      enabled: true #是否启用http上传处理
+      max-request-size: 100MB #最大请求文件的大小
+      max-file-size: 100MB #设置单个文件最大长度
+  security:
+    user:
+      name: vbooster
+      password: 123456a
+  redis:
+    database: 1
+    host: 192.168.10.3
+    port: 6379
+    password: 123456
+mybatis:
+  mapper-locations: com/smartindustry/common/mapper/**/*.xml
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@localhost:8030/eureka/
+logging:
+  level:
+    com:
+      smartindustry:
+        common:
+          mapper: debug
+# 微信API相关
+miniProgram:
+  appId: wxcbba7c2d472daea2
+  appSecret: 7df533951a6bb7f9fa626e425e2985ad
+  accessTokenRequest: https://api.weixin.qq.com/cgi-bin/token
+  accessTokenTime: 2
+  serverToken: godinsec
+
+vbooster:
+  wx:
+    checkToken: ANVLSFJodnfzaaqlqjlasd
+  file:
+    localBasePath: D:\\testFile
+    fipublicBasePath: http://192.168.10.3

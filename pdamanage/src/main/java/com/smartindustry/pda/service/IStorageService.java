@@ -78,7 +78,7 @@ public interface IStorageService {
      * @param mrfid
      * @return
      */
-    ResultVO chooseMaterialShow(String mrfid);
+    ResultVO chooseMaterialShow(HttpSession session, String mrfid);
 
     /**
      * 备料区入库提示选择那种物料确认
@@ -87,9 +87,6 @@ public interface IStorageService {
      * @return
      */
     ResultVO chooseMaterialConfirm(HttpSession session, StorageDTO dto);
-
-
-
 
 
     /**
@@ -141,6 +138,7 @@ public interface IStorageService {
      * @Time 16:40
      */
     ResultVO finishedMove(HttpSession session, String mrfid, String lrfid, Byte ltype);
+
     /**
      * @Description 原产品放下货物动作
      * @Param

@@ -266,6 +266,8 @@ public class CommonServiceImpl implements ICommonService {
             detailPO.setStorageStatus(CommonConstant.STATUS_RFID_OUTBOUND_SALE);
             storageDetailMapper.updateByPrimaryKey(detailPO);
 
+            WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(outboundForkliftPO.getOutboundHeadId(), CommonConstant.FLAG_OUTBOUND));
+
             return ResultVO.ok().setData("出库，叉起物料");
         }
         if (CommonConstant.RFID_OUTBOUND_RETURN.equals(status)) {
@@ -290,23 +292,24 @@ public class CommonServiceImpl implements ICommonService {
 
             OutboundHeadPO headPO = outboundHeadMapper.selectByPrimaryKey(outboundForkliftPO.getOutboundHeadId());
             headPO.setOutboundNum(headPO.getOutboundNum().add(BigDecimal.ONE));
+
+            List<OutboundForkliftBO> ofBOs = outboundForkliftMapper.queryByOhid(headPO.getOutboundHeadId());
+            List<String> imeis = new ArrayList<>();
+            for (OutboundForkliftBO ofBO : ofBOs) {
+                imeis.add(ofBO.getImeiNo());
+            }
+
             if (headPO.getExpectNum().equals(headPO.getOutboundNum())) {
                 // 出库完成
                 headPO.setStatus((byte) 1);
                 headPO.setOutboundTime(new Date());
-                // 发送消息
-                List<OutboundForkliftBO> ofBOs = outboundForkliftMapper.queryByOhid(headPO.getOutboundHeadId());
-                List<String> imeis = new ArrayList<>();
-                for (OutboundForkliftBO ofBO : ofBOs) {
-                    imeis.add(ofBO.getImeiNo());
-                }
 
                 outboundForkliftMapper.deleteByOhid(headPO.getOutboundHeadId());
 
                 // websocket
                 WebSocketServer.sendMsg(imeis, WebSocketVO.createTitleVO("业务单号：" + headPO.getSourceNo() + "（销售出库），已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
             } else {
-                WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(headPO.getOutboundHeadId(), CommonConstant.FLAG_OUTBOUND));
+                WebSocketServer.sendMsg(imeis, WebSocketVO.createShowVO(headPO.getOutboundHeadId(), CommonConstant.FLAG_OUTBOUND));
             }
 
             outboundHeadMapper.updateByPrimaryKey(headPO);

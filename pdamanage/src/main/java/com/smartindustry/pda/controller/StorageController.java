@@ -104,8 +104,8 @@ public class StorageController {
      * @return
      */
     @PostMapping("cmshow")
-    public ResultVO chooseMaterialShow(@RequestBody StorageDTO dto) {
-        return storageService.chooseMaterialShow(dto.getMrfid());
+    public ResultVO chooseMaterialShow(HttpSession session, @RequestBody StorageDTO dto) {
+        return storageService.chooseMaterialShow(session, dto.getMrfid());
     }
 
     /**
@@ -117,7 +117,6 @@ public class StorageController {
     public ResultVO chooseMaterialComfirm(HttpSession session, @RequestBody StorageDTO dto) {
         return storageService.chooseMaterialConfirm(session, dto);
     }
-
 
 
     /**
