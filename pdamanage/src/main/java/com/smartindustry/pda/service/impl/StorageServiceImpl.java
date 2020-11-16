@@ -1,5 +1,6 @@
 package com.smartindustry.pda.service.impl;
 
+import com.mysql.cj.Session;
 import com.smartindustry.common.bo.si.LocationBO;
 import com.smartindustry.common.bo.sm.StorageBodyBO;
 import com.smartindustry.common.bo.sm.StorageHeadBO;
@@ -16,7 +17,6 @@ import com.smartindustry.common.pojo.sm.*;
 import com.smartindustry.common.pojo.wo.PackagePO;
 import com.smartindustry.common.pojo.wo.ProduceOrderPO;
 import com.smartindustry.common.vo.ResultVO;
-import com.smartindustry.pda.PdaApplication;
 import com.smartindustry.pda.config.RfidConfig;
 import com.smartindustry.pda.constant.CommonConstant;
 import com.smartindustry.pda.constant.StorageConstant;
@@ -29,7 +29,6 @@ import com.smartindustry.pda.util.StorageNoUtil;
 import com.smartindustry.pda.vo.StorageDetailVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronizationAdapter;
@@ -326,7 +325,7 @@ public class StorageServiceImpl implements IStorageService {
             @Override
             public void afterCommit() {
                 //发送socket消息
-                WebSocketServer.sendAllMsg(WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
+                WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
             }
         });
 
@@ -374,7 +373,7 @@ public class StorageServiceImpl implements IStorageService {
             @Override
             public void afterCommit() {
                 //发送socket请求
-                WebSocketServer.sendAllMsg(WebSocketVO.createShowVO(storageHeadPOS.get(0).getStorageHeadId(), CommonConstant.FLAG_STORAGE));
+                WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPOS.get(0).getStorageHeadId(), CommonConstant.FLAG_STORAGE));
             }
         });
 
@@ -422,7 +421,7 @@ public class StorageServiceImpl implements IStorageService {
             @Override
             public void afterCommit() {
                 //发送socket消息
-                WebSocketServer.sendAllMsg(WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
+                WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
             }
         });
 
@@ -438,12 +437,17 @@ public class StorageServiceImpl implements IStorageService {
      * @Time 9:39
      */
     @Override
-    public ResultVO chooseMaterialShow(String mrfid) {
+    public ResultVO chooseMaterialShow(HttpSession session, String mrfid) {
+        String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
+        if (null == imei) {
+            //为获取到session中的imei
+            return new ResultVO(1001);
+        }
         // 根据栈板rfid查询入库单
         StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(mrfid);
         StorageHeadPO storageHeadPO = storageHeadMapper.selectByPrimaryKey(storageDetailPO.getStorageHeadId());
         List<MaterialPO> pos = storageBodyMapper.queryMaterial(storageHeadPO.getStorageHeadId());
-        sendChooseMaterialShowMsg(pos);
+        sendChooseMaterialShowMsg(pos, imei);
         return ResultVO.ok();
     }
 
@@ -486,7 +490,7 @@ public class StorageServiceImpl implements IStorageService {
      *
      * @param materialPOS
      */
-    private void sendChooseMaterialShowMsg(List<MaterialPO> materialPOS) {
+    private void sendChooseMaterialShowMsg(List<MaterialPO> materialPOS, String imei) {
         WebSocketVO vo = new WebSocketVO();
         WebSocketVO.TitleVO titleVO = new WebSocketVO.TitleVO();
         titleVO.setTip("备料区入库提示");
@@ -502,7 +506,7 @@ public class StorageServiceImpl implements IStorageService {
         }
         titleVO.setMvos(materialVOS);
         vo.setTitle(titleVO);
-        WebSocketServer.sendAllMsg(vo);
+        WebSocketServer.sendMsg(imei, vo);
     }
 
     /**
@@ -595,7 +599,7 @@ public class StorageServiceImpl implements IStorageService {
             @Override
             public void afterCommit() {
                 //发送socket请求
-                WebSocketServer.sendAllMsg(WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
+                WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
                 log.info("进行入库备料区后，发送socket请求");
             }
         });
@@ -697,7 +701,7 @@ public class StorageServiceImpl implements IStorageService {
             @Override
             public void afterCommit() {
                 //发送socket请求
-                WebSocketServer.sendAllMsg(WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
+                WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
                 log.info("发送socket请求-------------------------");
             }
         });
@@ -716,7 +720,11 @@ public class StorageServiceImpl implements IStorageService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ResultVO finishedOriginToSpareArea(HttpSession session, String mrfid, String lrfid) {
-
+        // 当前叉车信息
+        //String imei = "863958040755311";
+        String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
+        // 根据imei查询出叉车id
+        ForkliftPO forkliftPO = forkliftMapper.queryByImei(imei);
         // 根据栈板rfid查询入库单
         StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(mrfid);
         StorageHeadPO storageHeadPO = storageHeadMapper.selectByPrimaryKey(storageDetailPO.getStorageHeadId());
@@ -726,15 +734,9 @@ public class StorageServiceImpl implements IStorageService {
             return new ResultVO(1001);
         }
         if (pos.size() > 1) {
-            sendChooseMaterialShowMsg(pos);
+            sendChooseMaterialShowMsg(pos, imei);
             return ResultVO.ok();
         }
-        // 当前叉车信息
-        //String imei = "863958040755311";
-        String imei = (String) session.getAttribute(CommonConstant.SESSION_IMEI);
-        // 根据imei查询出叉车id
-        ForkliftPO forkliftPO = forkliftMapper.queryByImei(imei);
-
         // 查询当前储位的基本信息
         LocationBO locationBO = locationMapper.queryByRfid(lrfid);
         //# 叉车运送到备货区,rfid 和 入库单解绑,也就是删除其生产来源单号
@@ -805,7 +807,7 @@ public class StorageServiceImpl implements IStorageService {
             @Override
             public void afterCommit() {
                 //发送socket请求
-                WebSocketServer.sendAllMsg(WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
+                WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
                 log.info("进行入库备料区后，发送socket请求");
             }
         });
@@ -978,7 +980,7 @@ public class StorageServiceImpl implements IStorageService {
             @Override
             public void afterCommit() {
                 //发送socket请求
-                WebSocketServer.sendAllMsg(WebSocketVO.createShowVO(finalStorageHeadId, CommonConstant.FLAG_STORAGE));
+                WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(finalStorageHeadId, CommonConstant.FLAG_STORAGE));
                 log.info("进行备料区入成品区，发送socket请求-----");
             }
         });
@@ -1034,7 +1036,7 @@ public class StorageServiceImpl implements IStorageService {
             @Override
             public void afterCommit() {
                 //发送socket请求
-                WebSocketServer.sendAllMsg(WebSocketVO.createShowVO(storageDetailPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
+                WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageDetailPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
                 log.info("进行库内平移，发送socket请求-----");
             }
         });
@@ -1073,7 +1075,7 @@ public class StorageServiceImpl implements IStorageService {
             @Override
             public void afterCommit() {
                 //发送socket请求
-                WebSocketServer.sendAllMsg(WebSocketVO.createShowVO(storageDetailPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
+                WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageDetailPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
                 log.info("原产区到原产区，发送socket请求-----");
             }
         });
