@@ -1,12 +1,37 @@
 server:
   port: 8034
 spring:
-  profiles:
-    include: common
   application:
     name: authoritymanage
   jackson:
     default-property-inclusion: non_null
+    serialization:
+      indent-output: true
+      fail-on-empty-beans: true
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+08
+  datasource:
+#    url: jdbc:mysql://39.97.253.38:3306/smartyinghong?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+#    username: root
+#    password: '!qaZXSw2'
+    url: jdbc:mysql://192.168.10.3:3306/smartyinghong?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    username: root
+    password: 1234qwer
+    #    driver-class-name: com.mysql.cj.jdbc.Driver
+  servlet:
+    multipart:
+      enabled: true #是否启用http上传处理
+      max-request-size: 100MB #最大请求文件的大小
+      max-file-size: 100MB #设置单个文件最大长度
+  security:
+    user:
+      name: vbooster
+      password: 123456a
+  redis:
+    database: 1
+    host: 192.168.10.3
+    port: 6379
+    password: 123456
 logging:
   level:
     com:
@@ -14,3 +39,24 @@ logging:
         common:
           mapper: debug
   config: classpath:logback-spring-test.xml
+mybatis:
+  mapper-locations: com/smartindustry/common/mapper/**/*.xml
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@localhost:8030/eureka/
+
+config:
+  file:
+    localPath: D:\\testFile
+    publicPath: http://dev.smartindustry.vbooster.cn
+    tmpPath: E:\\tmp\\
+
+# token配置
+token:
+  # 令牌自定义标识
+  header: Authorization
+  # 令牌密钥
+  secret: abcdefghijklmnopqrstuvwxyz
+  # 令牌有效期（默认30分钟）
+  expireTime: 3000000

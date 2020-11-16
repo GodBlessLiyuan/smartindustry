@@ -21,13 +21,6 @@ public class MaterialInventoryPO implements Serializable {
     private Long materialId;
 
     /**
-     * 库存状态 : 1 正常
-2 缺料
-3 满仓
-     */
-    private Byte status;
-
-    /**
      * 库存下限
      */
     private BigDecimal lowerLimit;
