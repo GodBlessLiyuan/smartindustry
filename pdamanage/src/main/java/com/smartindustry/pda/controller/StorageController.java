@@ -3,7 +3,6 @@ package com.smartindustry.pda.controller;
 import com.smartindustry.common.vo.ResultVO;
 import com.smartindustry.pda.dto.OperateDTO;
 import com.smartindustry.pda.dto.StorageDTO;
-import com.smartindustry.pda.service.IOutboundService;
 import com.smartindustry.pda.service.IStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 /**
  * @ Author     ：AnHongxu.
@@ -25,8 +25,6 @@ import javax.servlet.http.HttpSession;
 public class StorageController {
     @Autowired
     private IStorageService storageService;
-    @Autowired
-    private IOutboundService finishOutboundService;
 
     /**
      * mes系统构建生产订单后，调用wms接口生成入库单
