@@ -106,7 +106,7 @@
         <include refid="BO_Column_List"/>
         from om_outbound_forklift oof
         left join si_forklift f on oof.forklift_id = f.forklift_id
-        where f.dr = 1
+        where f.dr = 1 and outbound_head_id = #{ohid,jdbcType=BIGINT}
     </select>
 
     <resultMap id="mapResult" type="java.util.HashMap">
