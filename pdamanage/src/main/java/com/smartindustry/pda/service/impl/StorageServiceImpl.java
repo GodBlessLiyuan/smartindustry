@@ -599,7 +599,11 @@ public class StorageServiceImpl implements IStorageService {
             @Override
             public void afterCommit() {
                 //发送socket请求
-                WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
+                if (storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED)) {
+                    WebSocketServer.sendAllMsg(WebSocketVO.createTitleVO(storageHeadPO.getSourceNo() + "入库订单已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
+                } else {
+                    WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
+                }
                 log.info("进行入库备料区后，发送socket请求");
             }
         });
@@ -701,7 +705,11 @@ public class StorageServiceImpl implements IStorageService {
             @Override
             public void afterCommit() {
                 //发送socket请求
-                WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
+                if (storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED)) {
+                    WebSocketServer.sendAllMsg(WebSocketVO.createTitleVO(storageHeadPO.getSourceNo() + "入库订单已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
+                } else {
+                    WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
+                }
                 log.info("发送socket请求-------------------------");
             }
         });
@@ -807,7 +815,11 @@ public class StorageServiceImpl implements IStorageService {
             @Override
             public void afterCommit() {
                 //发送socket请求
-                WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
+                if (storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED)) {
+                    WebSocketServer.sendAllMsg(WebSocketVO.createTitleVO(storageHeadPO.getSourceNo() + "入库订单已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
+                } else {
+                    WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE));
+                }
                 log.info("进行入库备料区后，发送socket请求");
             }
         });
