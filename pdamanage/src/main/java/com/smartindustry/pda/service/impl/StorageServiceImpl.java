@@ -1,6 +1,5 @@
 package com.smartindustry.pda.service.impl;
 
-import com.mysql.cj.Session;
 import com.smartindustry.common.bo.si.LocationBO;
 import com.smartindustry.common.bo.sm.StorageBodyBO;
 import com.smartindustry.common.bo.sm.StorageHeadBO;
@@ -421,7 +420,17 @@ public class StorageServiceImpl implements IStorageService {
             @Override
             public void afterCommit() {
                 //发送socket消息
-                WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE, CommonConstant.TYPE_LIST_DOING));
+                // 叉车信息
+                Byte type = null;
+                List<ForkliftPO> pos = forkliftMapper.queryByShid(storageHeadPO.getStorageHeadId());
+                if (pos.size() > 0) {
+                    type = CommonConstant.TYPE_LIST_DOING;
+                } else if (storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED)) {
+                    type = CommonConstant.TYPE_LIST_DONE;
+                } else {
+                    type = CommonConstant.TYPE_LIST_TODO;
+                }
+                WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE, type));
             }
         });
 
@@ -595,14 +604,25 @@ public class StorageServiceImpl implements IStorageService {
         locationMapper.updateByPrimaryKey(locationPO);
         log.info("进行入库备料区后，更新库位信息数量+1" + locationPO.toString());
         //}
+
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
             @Override
             public void afterCommit() {
                 //发送socket请求
+                // 叉车信息
+                Byte type = null;
+                List<ForkliftPO> pos = forkliftMapper.queryByShid(storageHeadPO.getStorageHeadId());
+                if (pos.size() > 0) {
+                    type = CommonConstant.TYPE_LIST_DOING;
+                } else if (storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED)) {
+                    type = CommonConstant.TYPE_LIST_DONE;
+                } else {
+                    type = CommonConstant.TYPE_LIST_TODO;
+                }
                 if (storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED)) {
                     WebSocketServer.sendAllMsg(WebSocketVO.createTitleVO(storageHeadPO.getSourceNo() + "入库订单已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
                 } else {
-                    WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE, CommonConstant.TYPE_LIST_DOING));
+                    WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE, type));
                 }
                 log.info("进行入库备料区后，发送socket请求");
             }
@@ -705,10 +725,20 @@ public class StorageServiceImpl implements IStorageService {
             @Override
             public void afterCommit() {
                 //发送socket请求
+                // 叉车信息
+                Byte type = null;
+                List<ForkliftPO> pos = forkliftMapper.queryByShid(storageHeadPO.getStorageHeadId());
+                if (pos.size() > 0) {
+                    type = CommonConstant.TYPE_LIST_DOING;
+                } else if (storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED)) {
+                    type = CommonConstant.TYPE_LIST_DONE;
+                } else {
+                    type = CommonConstant.TYPE_LIST_TODO;
+                }
                 if (storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED)) {
                     WebSocketServer.sendAllMsg(WebSocketVO.createTitleVO(storageHeadPO.getSourceNo() + "入库订单已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
                 } else {
-                    WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE, CommonConstant.TYPE_LIST_DOING));
+                    WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE, type));
                 }
                 log.info("发送socket请求-------------------------");
             }
@@ -815,10 +845,20 @@ public class StorageServiceImpl implements IStorageService {
             @Override
             public void afterCommit() {
                 //发送socket请求
+                // 叉车信息
+                Byte type = null;
+                List<ForkliftPO> pos = forkliftMapper.queryByShid(storageHeadPO.getStorageHeadId());
+                if (pos.size() > 0) {
+                    type = CommonConstant.TYPE_LIST_DOING;
+                } else if (storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED)) {
+                    type = CommonConstant.TYPE_LIST_DONE;
+                } else {
+                    type = CommonConstant.TYPE_LIST_TODO;
+                }
                 if (storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED)) {
                     WebSocketServer.sendAllMsg(WebSocketVO.createTitleVO(storageHeadPO.getSourceNo() + "入库订单已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
                 } else {
-                    WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE, CommonConstant.TYPE_LIST_DOING));
+                    WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE, type));
                 }
                 log.info("进行入库备料区后，发送socket请求");
             }
@@ -1019,6 +1059,7 @@ public class StorageServiceImpl implements IStorageService {
         ForkliftPO forkliftPO = forkliftMapper.queryByImei(imei);
         // 根据栈板rfid查询之前的入库单详情记录
         StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(mrfid);
+        StorageHeadPO storageHeadPO = storageHeadMapper.selectByPrimaryKey(storageDetailPO.getStorageHeadId());
         // 查询当前储位的基本信息
         LocationBO locationBO = locationMapper.queryByRfid(lrfid);
         //更新库位
@@ -1048,7 +1089,17 @@ public class StorageServiceImpl implements IStorageService {
             @Override
             public void afterCommit() {
                 //发送socket请求
-                WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageDetailPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE, CommonConstant.TYPE_LIST_DOING));
+                // 叉车信息
+                Byte type = null;
+                List<ForkliftPO> pos = forkliftMapper.queryByShid(storageHeadPO.getStorageHeadId());
+                if (pos.size() > 0) {
+                    type = CommonConstant.TYPE_LIST_DOING;
+                } else if (storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED)) {
+                    type = CommonConstant.TYPE_LIST_DONE;
+                } else {
+                    type = CommonConstant.TYPE_LIST_TODO;
+                }
+                WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageDetailPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE, type));
                 log.info("进行库内平移，发送socket请求-----");
             }
         });
