@@ -736,7 +736,8 @@ public class StorageServiceImpl implements IStorageService {
                     type = CommonConstant.TYPE_LIST_TODO;
                 }
                 if (storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED)) {
-                    WebSocketServer.sendAllMsg(WebSocketVO.createTitleVO(storageHeadPO.getSourceNo() + "入库订单已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
+                    WebSocketServer.sendAllMsg(WebSocketVO.createAll(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE, CommonConstant.TYPE_LIST_DONE, storageHeadPO.getSourceNo() + "入库订单已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
+                    //WebSocketServer.sendAllMsg(WebSocketVO.createTitleVO(storageHeadPO.getSourceNo() + "入库订单已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
                 } else {
                     WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE, type));
                 }
@@ -856,7 +857,8 @@ public class StorageServiceImpl implements IStorageService {
                     type = CommonConstant.TYPE_LIST_TODO;
                 }
                 if (storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED)) {
-                    WebSocketServer.sendAllMsg(WebSocketVO.createTitleVO(storageHeadPO.getSourceNo() + "入库订单已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
+                    WebSocketServer.sendAllMsg(WebSocketVO.createAll(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE, CommonConstant.TYPE_LIST_DONE, storageHeadPO.getSourceNo() + "入库订单已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
+                    //WebSocketServer.sendAllMsg(WebSocketVO.createTitleVO(storageHeadPO.getSourceNo() + "入库订单已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
                 } else {
                     WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE, type));
                 }
