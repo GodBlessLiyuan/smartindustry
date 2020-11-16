@@ -323,7 +323,7 @@
         <if test="type == 3">
             and oh.status = 1
         </if>
-        order by oh.creat_time asc
+        order by oh.create_time asc
     </select>
     <select id="queryByOhid" parameterType="java.lang.Long" resultMap="PdaResultMap">
         select
