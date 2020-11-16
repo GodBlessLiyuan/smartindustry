@@ -192,10 +192,10 @@ INSERT INTO `am_authority` VALUES (321, '货位档案-新增', 'bm:wm:loc:insert
 INSERT INTO `am_authority` VALUES (322, '货位档案-查看', 'bm:wm:loc:queryinfo', 2, 236);
 INSERT INTO `am_authority` VALUES (323, '货位档案-修改', 'bm:wm:loc:update', 2, 236);
 INSERT INTO `am_authority` VALUES (324, '货位档案-删除', 'bm:wm:loc:delete', 2, 236);
-INSERT INTO `am_authority` VALUES (1000, 'WMS系统', 'wms', 3, 0);
-INSERT INTO `am_authority` VALUES (2000, 'MES系统', 'mes', 3, 0);
+INSERT INTO `am_authority` VALUES (1000, 'WMS系统', 'wms', 3, null);
+INSERT INTO `am_authority` VALUES (2000, 'MES系统', 'mes', 3, null);
 INSERT INTO `am_authority` VALUES (3000, 'ERP系统', 'erp', 3, 0);
-INSERT INTO `am_authority` VALUES (4000, 'MDM系统', 'mdm', 3, 0);
+INSERT INTO `am_authority` VALUES (4000, 'MDM系统', 'mdm', 3, null);
 
 
 
