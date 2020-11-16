@@ -422,12 +422,12 @@
     select
     <include refid="Storage_Column_List"/>
     from sm_storage_head sh
-    left join sm_storage_detail sd on sh.storage_head_id = sd.storage_head_id
+    left join sm_storage_detail sd on sh.storage_head_id = sd.storage_head_id and sd.storage_status = 1
     left join si_location l on sd.location_id = l.location_id
     left join si_material m on l.material_id = m.material_id
     left join si_warehouse w on l.warehouse_id = w.warehouse_id
     left join dd_measure_unit mu on m.measure_unit_id = mu.measure_unit_id
-    where sh.dr = 1 and sh.storage_head_id = #{shid,jdbcType=BIGINT} and sd.storage_status = 1
+    where sh.dr = 1 and sh.storage_head_id = #{shid,jdbcType=BIGINT}
     group by sd.storage_head_id,sd.location_id
   </select>
 
