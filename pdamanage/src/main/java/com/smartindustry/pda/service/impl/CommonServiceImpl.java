@@ -266,7 +266,7 @@ public class CommonServiceImpl implements ICommonService {
             detailPO.setStorageStatus(CommonConstant.STATUS_RFID_OUTBOUND_SALE);
             storageDetailMapper.updateByPrimaryKey(detailPO);
 
-            WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(outboundForkliftPO.getOutboundHeadId(), CommonConstant.FLAG_OUTBOUND));
+            WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(outboundForkliftPO.getOutboundHeadId(), CommonConstant.FLAG_OUTBOUND, CommonConstant.TYPE_LIST_DOING));
 
             return ResultVO.ok().setData("出库，叉起物料");
         }
@@ -299,6 +299,7 @@ public class CommonServiceImpl implements ICommonService {
                 imeis.add(ofBO.getImeiNo());
             }
 
+            WebSocketVO socketVO = new WebSocketVO();
             if (headPO.getExpectNum().equals(headPO.getOutboundNum())) {
                 // 出库完成
                 headPO.setStatus((byte) 1);
@@ -307,10 +308,14 @@ public class CommonServiceImpl implements ICommonService {
                 outboundForkliftMapper.deleteByOhid(headPO.getOutboundHeadId());
 
                 // websocket
-                WebSocketServer.sendMsg(imeis, WebSocketVO.createTitleVO("业务单号：" + headPO.getSourceNo() + "（销售出库），已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
-            } else {
-                WebSocketServer.sendMsg(imeis, WebSocketVO.createShowVO(headPO.getOutboundHeadId(), CommonConstant.FLAG_OUTBOUND));
+                WebSocketVO.TitleVO titleVO = new WebSocketVO.TitleVO();
+                titleVO.setMsg("业务单号：" + headPO.getSourceNo() + "（销售出库），已完成作业任务，任务关闭");
+                titleVO.setType(CommonConstant.TYPE_TITLE_INTO);
+                socketVO.setTitle(titleVO);
             }
+
+            socketVO.setShow(new WebSocketVO.ShowVO(headPO.getOutboundHeadId(), CommonConstant.FLAG_OUTBOUND, headPO.getExpectNum().equals(headPO.getOutboundNum()) ? CommonConstant.TYPE_LIST_DONE : CommonConstant.TYPE_LIST_DOING));
+            WebSocketServer.sendMsg(imeis, socketVO);
 
             outboundHeadMapper.updateByPrimaryKey(headPO);
 
