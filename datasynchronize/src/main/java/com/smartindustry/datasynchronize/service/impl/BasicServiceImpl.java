@@ -22,6 +22,7 @@ import com.smartindustry.datasynchronize.service.IBasicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.util.DigestUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -268,7 +269,7 @@ public class BasicServiceImpl implements IBasicService {
             po.setUserCode(ep.getOperatorNo());
             po.setName(ep.getOperatorName());
             po.setUsername(ep.getOperatorName());
-            po.setPassword(ep.getPassword());
+            po.setPassword(DigestUtils.md5DigestAsHex(ep.getPassword().getBytes()));
             po.setStatus((byte)1);
             po.setCreateTime(Calendar.getInstance().getTime());
             po.setDr((byte)1);
