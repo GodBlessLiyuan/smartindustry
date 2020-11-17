@@ -2,6 +2,7 @@ package com.smartindustry.pda.service.impl;
 
 import com.smartindustry.common.bo.si.LocationBO;
 import com.smartindustry.common.bo.sm.StorageBodyBO;
+import com.smartindustry.common.bo.sm.StorageForkliftBO;
 import com.smartindustry.common.bo.sm.StorageHeadBO;
 import com.smartindustry.common.mapper.si.ForkliftMapper;
 import com.smartindustry.common.mapper.si.LocationMapper;
@@ -538,8 +539,13 @@ public class StorageServiceImpl implements IStorageService {
         String mrfid = (String) session.getAttribute(CommonConstant.SESSION_MRFID);
         StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(mrfid);
         StorageHeadPO storageHeadPO = storageHeadMapper.selectByPrimaryKey(storageDetailPO.getStorageHeadId());
+        //查询当前执行该入库单的的所有imei
+        List<StorageForkliftBO> sfBOs = storageForkliftMapper.queryByShid(storageHeadPO.getStorageHeadId());
+        List<String> imeis = new ArrayList<>();
+        for (StorageForkliftBO sfBO : sfBOs) {
+            imeis.add(sfBO.getImeiNo());
+        }
         // 查询当前储位的基本信息
-        //String lrfid = (String) session.getAttribute(CommonConstant.SESSION_LRFID);
         LocationPO locationPO = locationMapper.queryByType(CommonConstant.LOCATION_TYPE_PREPARE);
         //# 叉车运送到备货区,rfid 和 入库单解绑,也就是删除其生产来源单号
         //if (locationBO.getLocationTypeId().equals(StorageConstant.TYPE_PREPARATION_AREA) && storageHeadPO.getSourceType().equals(StorageConstant.TYPE_PRODUCT_STORAGE)) {
@@ -620,7 +626,7 @@ public class StorageServiceImpl implements IStorageService {
                     type = CommonConstant.TYPE_LIST_TODO;
                 }
                 if (storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED)) {
-                    WebSocketServer.sendAllMsg(WebSocketVO.createTitleVO(storageHeadPO.getSourceNo() + "入库订单已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
+                    WebSocketServer.sendMsg(imeis, WebSocketVO.createAll(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE, CommonConstant.TYPE_LIST_DONE, storageHeadPO.getSourceNo() + "入库订单已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
                 } else {
                     WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE, type));
                 }
@@ -652,6 +658,12 @@ public class StorageServiceImpl implements IStorageService {
         // 根据栈板rfid查询入库单
         StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(mrfid);
         StorageHeadPO storageHeadPO = storageHeadMapper.selectByPrimaryKey(storageDetailPO.getStorageHeadId());
+        //查询当前执行该入库单的的所有imei
+        List<StorageForkliftBO> sfBOs = storageForkliftMapper.queryByShid(storageHeadPO.getStorageHeadId());
+        List<String> imeis = new ArrayList<>();
+        for (StorageForkliftBO sfBO : sfBOs) {
+            imeis.add(sfBO.getImeiNo());
+        }
         // 查询当前储位的基本信息
         LocationBO locationBO = locationMapper.queryByRfid(lrfid);
         log.info("取到的locationBO为：---------------" + locationBO.toString());
@@ -736,8 +748,7 @@ public class StorageServiceImpl implements IStorageService {
                     type = CommonConstant.TYPE_LIST_TODO;
                 }
                 if (storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED)) {
-                    WebSocketServer.sendAllMsg(WebSocketVO.createAll(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE, CommonConstant.TYPE_LIST_DONE, storageHeadPO.getSourceNo() + "入库订单已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
-                    //WebSocketServer.sendAllMsg(WebSocketVO.createTitleVO(storageHeadPO.getSourceNo() + "入库订单已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
+                    WebSocketServer.sendMsg(imeis, WebSocketVO.createAll(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE, CommonConstant.TYPE_LIST_DONE, storageHeadPO.getSourceNo() + "入库订单已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
                 } else {
                     WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE, type));
                 }
@@ -767,6 +778,12 @@ public class StorageServiceImpl implements IStorageService {
         // 根据栈板rfid查询入库单
         StorageDetailPO storageDetailPO = storageDetailMapper.queryByRfid(mrfid);
         StorageHeadPO storageHeadPO = storageHeadMapper.selectByPrimaryKey(storageDetailPO.getStorageHeadId());
+        //查询当前执行该入库单的的所有imei
+        List<StorageForkliftBO> sfBOs = storageForkliftMapper.queryByShid(storageHeadPO.getStorageHeadId());
+        List<String> imeis = new ArrayList<>();
+        for (StorageForkliftBO sfBO : sfBOs) {
+            imeis.add(sfBO.getImeiNo());
+        }
         List<MaterialPO> pos = storageBodyMapper.queryMaterial(storageHeadPO.getStorageHeadId());
         if (pos.size() == 0) {
             //查不到盖body的物料信息
@@ -857,8 +874,7 @@ public class StorageServiceImpl implements IStorageService {
                     type = CommonConstant.TYPE_LIST_TODO;
                 }
                 if (storageHeadPO.getStatus().equals(StorageConstant.STATUS_STORED)) {
-                    WebSocketServer.sendAllMsg(WebSocketVO.createAll(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE, CommonConstant.TYPE_LIST_DONE, storageHeadPO.getSourceNo() + "入库订单已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
-                    //WebSocketServer.sendAllMsg(WebSocketVO.createTitleVO(storageHeadPO.getSourceNo() + "入库订单已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
+                    WebSocketServer.sendMsg(imeis, WebSocketVO.createAll(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE, CommonConstant.TYPE_LIST_DONE, storageHeadPO.getSourceNo() + "入库订单已完成作业任务，任务关闭", CommonConstant.TYPE_TITLE_INTO));
                 } else {
                     WebSocketServer.sendMsg(imei, WebSocketVO.createShowVO(storageHeadPO.getStorageHeadId(), CommonConstant.FLAG_STORAGE, type));
                 }
@@ -924,19 +940,6 @@ public class StorageServiceImpl implements IStorageService {
             storageDetailPO.setPreparation((byte) 1);
             storageDetailMapper.updateByPrimaryKey(storageDetailPO);
             log.info("进行备料区入成品区，更新详情记录表变为已经不在备料区了-----" + storageDetailPO.toString());
-            //添加入库记录
-            /*StorageDetailPO poForStorage = new StorageDetailPO();
-            poForStorage.setStorageHeadId(storageBodyPO.getStorageHeadId());
-            poForStorage.setLocationId(locationBO.getLocationId());
-            poForStorage.setMaterialId(storageDetailPO.getMaterialId());
-            poForStorage.setStorageNum(BigDecimal.ONE);
-            poForStorage.setStorageTime(new Date());
-            poForStorage.setRfid(mrfid);
-            poForStorage.setStorageStatus(StorageConstant.STATUS_STORED);
-            poForStorage.setPreparation(StorageConstant.Preparation_NO);
-            storageDetailMapper.insertSelective(poForStorage);
-            log.info("进行备料区入成品区，添加一条备料区入成品区的详细记录-----" + poForStorage.toString());*/
-            //更新入库单的状态
             if (storageHeadPO.getStorageNum().compareTo(BigDecimal.ONE) == 0) {
                 //插入入单执行操作
                 storageRecordMapper.insert(new StorageRecordPO(storageHeadPO.getStorageHeadId(), forkliftPO.getForkliftId(), StorageConstant.OPERATE_NAME_EXECUTE));
@@ -982,18 +985,6 @@ public class StorageServiceImpl implements IStorageService {
             storageDetailPO.setPreparation((byte) 1);
             storageDetailMapper.updateByPrimaryKey(storageDetailPO);
             log.info("进行备料区入成品区，更新详情记录表变为已经不在备料区了-----" + storageDetailPO.toString());
-            //添加入库记录
-           /* StorageDetailPO poForStorage = new StorageDetailPO();
-            poForStorage.setStorageHeadId(storageHeadPO.getStorageHeadId());
-            poForStorage.setLocationId(locationBO.getLocationId());
-            poForStorage.setMaterialId(storageDetailPO.getMaterialId());
-            poForStorage.setStorageNum(BigDecimal.ONE);
-            poForStorage.setStorageTime(new Date());
-            poForStorage.setRfid(mrfid);
-            poForStorage.setStorageStatus(StorageConstant.STATUS_STORED);
-            poForStorage.setPreparation(StorageConstant.Preparation_NO);
-            storageDetailMapper.insertSelective(poForStorage);
-            log.info("进行备料区入成品区，添加一条新的记录-----" + poForStorage.toString());*/
             //更新入库单的状态
             if (storageHeadPO.getStorageNum().compareTo(BigDecimal.ONE) == 0) {
                 //插入入单执行操作
