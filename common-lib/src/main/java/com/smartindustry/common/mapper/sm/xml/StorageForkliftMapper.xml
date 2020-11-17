@@ -99,4 +99,19 @@
     where forklift_id = #{fid,jdbcType=BIGINT}
   </select>
 
+  <sql id="BO_Column_List">
+        sf.storage_forklift_id, sf.storage_head_id, sf.forklift_id, sf.rfid,
+        f.imei_no
+    </sql>
+  <resultMap id="BOResultMap" type="com.smartindustry.common.bo.sm.StorageForkliftBO"
+             extends="BaseResultMap">
+    <result column="imei_no" jdbcType="CHAR" property="imeiNo"/>
+  </resultMap>
+  <select id="queryByShid" parameterType="java.lang.Long" resultMap="BOResultMap">
+    select
+    <include refid="BO_Column_List"/>
+    from sm_storage_forklift sf
+    left join si_forklift f on sf.forklift_id = f.forklift_id
+    where f.dr = 1 and storage_head_id = #{shid,jdbcType=BIGINT}
+  </select>
 </mapper>
